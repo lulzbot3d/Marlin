@@ -51,7 +51,7 @@
  *
  */
 
-#define LULZBOT_FW_VERSION ".7" // Change this with each update
+#define LULZBOT_FW_VERSION ".8" // Change this with each update
 
 #if ( \
     !defined(LULZBOT_Gladiola_Mini) && \
@@ -662,7 +662,6 @@
         "M400\n"                 /* Finish moves */ \
         "M906 Z960\n"            /* Restore default current */ \
         "M211 S1\n"              /* Turn soft endstops back on */ \
-        "M400\n"                 /* Finish moves */ \
         "G28\n"                  /* Rehome */ \
         "M117 Leveling done.\n"  /* Set LCD status */
 
@@ -670,19 +669,15 @@
     #define LULZBOT_MENU_AXIS_LEVELING_COMMANDS \
         "M117 Leveling X Axis\n" /* Set LCD status */ \
         "G28\n"                  /* Home Axis */ \
-        "G0 X-10 Y-10 F9999\n"   /* Move toolhead to the left-front */ \
-        "G0 Z5 F6000\n"          /* Move to bottom of printer */ \
-        "G91\n"                  /* Set relative motion mode */ \
+        "M400\n"                 /* Finish moves */ \
+        "M121\n"                 /* Turn off hardware endstops */ \
         "M211 S0\n"              /* Turn off soft endstops */ \
+        "M906 Z725\n"            /* Lower current to 725mA */ \
+        "G1 Z312\n"              /* Skip steppers on top */ \
         "M400\n"                 /* Finish moves */ \
-        "M906 Z600\n"            /* Lower current to 600mA */ \
-        "G0 Z-15 F500\n"         /* Skip steppers against lower Z mounts */ \
-        "G0 Z5 F500\n"           /* Move Z-Axis up a bit */ \
-        "G90\n"                  /* Return to absolute mode */ \
-        "M400\n"                 /* Finish moves */ \
-        "M906 Z960\n"            /* Restore default current */ \
-        "M211 S1\n"              /* Turn soft endstops back on */ \
-        "M400\n"                 /* Finish moves */ \
+        "M906 Z960\n"            /* Restore current to 960mA */ \
+        "M211 S1\n"              /* Turn on soft endstops */ \
+        "M120\n"                 /* Turn on hardware endstops */ \
         "G28\n"                  /* Rehome */ \
         "M117 Leveling done.\n"  /* Set LCD status */
 #endif

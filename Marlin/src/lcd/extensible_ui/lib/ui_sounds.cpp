@@ -31,7 +31,7 @@
 /******************* TINY INTERVAL CLASS ***********************/
 
 bool tiny_timer_t::elapsed(tiny_time_t duration) {
-  uint8_t now = tiny_time_t::tiny_time(UI::safe_millis());
+  uint8_t now = tiny_time_t::tiny_time(ExtUI::safe_millis());
   uint8_t elapsed = now - _start;
   if(elapsed >= duration._duration) {
     return true;
@@ -41,7 +41,7 @@ bool tiny_timer_t::elapsed(tiny_time_t duration) {
 }
 
 void tiny_timer_t::start() {
-  _start = tiny_time_t::tiny_time(UI::safe_millis());
+  _start = tiny_time_t::tiny_time(ExtUI::safe_millis());
 }
 
 /******************* SOUND HELPER CLASS ************************/
@@ -83,7 +83,7 @@ namespace FTDI {
       uint8_t v;
       for(v = saved_volume; v >= decay_step; v -= decay_step) {
         CLCD::mem_write_8(REG_VOL_SOUND, v);
-        UI:delay_us(delay_uS);
+        ExtUI:delay_us(delay_uS);
       }
     #endif
 
@@ -95,10 +95,10 @@ namespace FTDI {
       // Fade up volume to full volume once note is struck
       for(;v <= (saved_volume-decay_step); v += decay_step) {
         CLCD::mem_write_8(REG_VOL_SOUND, v);
-        UI:delay_us(delay_uS);
+        ExtUI:delay_us(delay_uS);
       }
       CLCD::mem_write_8(REG_VOL_SOUND, saved_volume);
-      UI:delay_us(delay_uS);
+      ExtUI:delay_us(delay_uS);
     #endif
   }
 
@@ -131,7 +131,7 @@ namespace FTDI {
     while(has_more_notes()) {
       onIdle();
       #if defined(EXTENSIBLE_UI)
-        UI::yield();
+        ExtUI::yield();
       #endif
     }
   }
@@ -163,7 +163,7 @@ namespace FTDI {
   }
 } // namespace FTDI
 
-namespace UI {
+namespace ExtUI {
   void onPlayTone(const uint16_t frequency, const uint16_t duration) {
     FTDI::sound.play_tone(frequency, duration);
   }

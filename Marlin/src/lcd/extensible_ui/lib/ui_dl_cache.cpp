@@ -90,7 +90,7 @@ bool DLCache::wait_until_idle() {
       return false;
     }
     #if defined(USE_MARLIN_IO)
-      UI::yield();
+      ExtUI::yield();
     #endif
   } while(CLCD::CommandFifo::is_processing());
   return true;

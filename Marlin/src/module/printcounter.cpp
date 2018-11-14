@@ -112,7 +112,7 @@ void PrintCounter::saveStats() {
   persistentStore.access_finish();
 
   #if ENABLED(EXTENSIBLE_UI) && ENABLED(LULZBOT_PRINTCOUNTER)
-    UI::onStoreSettings();
+    ExtUI::onStoreSettings();
   #endif
 }
 

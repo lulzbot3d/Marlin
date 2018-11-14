@@ -70,7 +70,7 @@ static union {
   } FilesScreen;
   struct {
     uint8_t increment; // Must match ValueAdjusters.
-    float e_rel[UI::extruderCount];
+    float e_rel[ExtUI::extruderCount];
   } MoveAxisScreen;
 } screen_data;
 
@@ -300,7 +300,7 @@ void AboutScreen::onEntry() {
 }
 
 void AboutScreen::onRedraw(draw_mode_t what) {
-  using namespace UI;
+  using namespace ExtUI;
   CommandProcessor cmd;
   cmd.cmd(CLEAR_COLOR_RGB(Theme::background));
   cmd.cmd(CLEAR(true,true,true));
@@ -336,7 +336,7 @@ bool AboutScreen::onTouchEnd(uint8_t tag) {
 #define GRID_ROWS 7
 
 void StatisticsScreen::onRedraw(draw_mode_t what) {
-  using namespace UI;
+  using namespace ExtUI;
   CommandProcessor cmd;
 
   if(what & BACKGROUND) {
@@ -465,7 +465,7 @@ void RestoreFailsafeScreen::onRedraw(draw_mode_t what) {
 bool RestoreFailsafeScreen::onTouchEnd(uint8_t tag) {
   switch(tag) {
     case 1:
-      UI::enqueueCommands(F("M502"));
+      ExtUI::enqueueCommands(F("M502"));
       AlertBoxScreen::show(F("Factory settings restored."));
       // Remove RestoreFailsafeScreen from the stack
       // so the alert box doesn't return to it.
@@ -489,7 +489,7 @@ void SaveSettingsScreen::onRedraw(draw_mode_t what) {
 bool SaveSettingsScreen::onTouchEnd(uint8_t tag) {
   switch(tag) {
     case 1:
-      UI::enqueueCommands(F("M500"));
+      ExtUI::enqueueCommands(F("M500"));
       AlertBoxScreen::show(F("Settings saved!"));
       // Remove SaveSettingsScreen from the stack
       // so the alert box doesn't return to me.
@@ -521,7 +521,7 @@ bool ConfirmAbortPrint::onTouchEnd(uint8_t tag) {
   switch(tag) {
     case 1:
       GOTO_PREVIOUS();
-      UI::stopPrint();
+      ExtUI::stopPrint();
       return true;
     default:
       return DialogBoxBaseClass::onTouchEnd(tag);
@@ -542,7 +542,7 @@ void ConfirmAutoCalibration::onRedraw(draw_mode_t what) {
 }
 
 bool ConfirmAutoCalibration::onTouchEnd(uint8_t tag) {
-  using namespace UI;
+  using namespace ExtUI;
 
   switch(tag) {
     case 1:
@@ -653,7 +653,7 @@ void StatusScreen::draw_axis_position(draw_mode_t what) {
   }
 
   if(what & FOREGROUND) {
-    using namespace UI;
+    using namespace ExtUI;
     char x_str[15];
     char y_str[15];
     char z_str[15];
@@ -749,7 +749,7 @@ void StatusScreen::draw_temperature(draw_mode_t what) {
   }
 
   if(what & FOREGROUND) {
-    using namespace UI;
+    using namespace ExtUI;
     char e0_str[15];
     char e1_str[15];
     char bed_str[15];
@@ -799,7 +799,7 @@ void StatusScreen::draw_temperature(draw_mode_t what) {
 }
 
 void StatusScreen::draw_progress(draw_mode_t what) {
-  using namespace UI;
+  using namespace ExtUI;
   CommandProcessor cmd;
 
   if(what & BACKGROUND) {
@@ -845,7 +845,7 @@ void StatusScreen::draw_interaction_buttons(draw_mode_t what) {
   #define GRID_COLS 4
 
   if(what & FOREGROUND) {
-    using namespace UI;
+    using namespace ExtUI;
     CommandProcessor cmd;
     cmd
        .font(Theme::font_medium)
@@ -953,7 +953,7 @@ void StatusScreen::onIdle() {
 }
 
 bool StatusScreen::onTouchEnd(uint8_t tag) {
-  using namespace UI;
+  using namespace ExtUI;
 
   switch(tag) {
     case 1:
@@ -1057,7 +1057,7 @@ void MenuScreen::onRedraw(draw_mode_t what) {
 }
 
 bool MenuScreen::onTouchEnd(uint8_t tag) {
-  using namespace UI;
+  using namespace ExtUI;
 
   switch(tag) {
     case 1:  GOTO_PREVIOUS();                                         break;
@@ -1099,7 +1099,7 @@ void TuneScreen::onRedraw(draw_mode_t what) {
   #endif
 
   if(what & FOREGROUND) {
-    using namespace UI;
+    using namespace ExtUI;
 
     CommandProcessor cmd;
     default_button_colors();
@@ -1151,7 +1151,7 @@ void TuneScreen::onRedraw(draw_mode_t what) {
 }
 
 bool TuneScreen::onTouchEnd(uint8_t tag) {
-  using namespace UI;
+  using namespace ExtUI;
   switch(tag) {
     case 1:  GOTO_PREVIOUS();                    break;
     case 2:  GOTO_SCREEN(TemperatureScreen);     break;
@@ -1160,8 +1160,8 @@ bool TuneScreen::onTouchEnd(uint8_t tag) {
     case 4:  GOTO_SCREEN(ZOffsetScreen);         break;
     #endif
     case 5:  GOTO_SCREEN(MaxFeedrateScreen);     break;
-    case 6:  UI::pausePrint();  GOTO_SCREEN(StatusScreen); break;
-    case 7:  UI::resumePrint(); GOTO_SCREEN(StatusScreen); break;
+    case 6:  ExtUI::pausePrint();  GOTO_SCREEN(StatusScreen); break;
+    case 7:  ExtUI::resumePrint(); GOTO_SCREEN(StatusScreen); break;
     case 8:  GOTO_SCREEN(FilamentOptionsScreen); break;
     default:
       return false;
@@ -1266,7 +1266,7 @@ void AdvancedSettingsScreen::onRedraw(draw_mode_t what) {
 }
 
 bool AdvancedSettingsScreen::onTouchEnd(uint8_t tag) {
-  using namespace UI;
+  using namespace ExtUI;
 
   switch(tag) {
     case 1: SaveSettingsScreen::promptToSaveSettings(); break;
@@ -1322,12 +1322,12 @@ void ChangeFilamentScreen::drawTempGradient(uint16_t x, uint16_t y, uint16_t w, 
 }
 
 void ChangeFilamentScreen::onEntry() {
-  screen_data.ChangeFilamentScreen.e_tag = UI::getActiveTool() + 9;
+  screen_data.ChangeFilamentScreen.e_tag = ExtUI::getActiveTool() + 9;
   screen_data.ChangeFilamentScreen.t_tag = 0;
 }
 
 void ChangeFilamentScreen::onRedraw(draw_mode_t what) {
-  using namespace UI;
+  using namespace ExtUI;
   CommandProcessor cmd;
 
   #if defined(USE_PORTRAIT_ORIENTATION)
@@ -1470,17 +1470,17 @@ uint8_t ChangeFilamentScreen::getSoftenTemp() {
   }
 }
 
-UI::extruder_t ChangeFilamentScreen::getExtruder() {
+ExtUI::extruder_t ChangeFilamentScreen::getExtruder() {
   switch(screen_data.ChangeFilamentScreen.e_tag) {
-    case 13: return UI::E3;
-    case 12: return UI::E2;
-    case 11: return UI::E1;
-    default: return UI::E0;
+    case 13: return ExtUI::E3;
+    case 12: return ExtUI::E2;
+    case 11: return ExtUI::E1;
+    default: return ExtUI::E0;
   }
 }
 
 bool ChangeFilamentScreen::onTouchEnd(uint8_t tag) {
-  using namespace UI;
+  using namespace ExtUI;
   switch(tag) {
     case 1:  GOTO_PREVIOUS();                      break;
     case 2:
@@ -1836,14 +1836,14 @@ void MoveAxisScreen::onEntry() {
   // ourselves. The relative distances are reset to zero whenever this
   // screen is entered.
 
-  for(uint8_t i = 0; i < UI::extruderCount; i++) {
+  for(uint8_t i = 0; i < ExtUI::extruderCount; i++) {
     screen_data.MoveAxisScreen.e_rel[i] = 0;
   }
   ValueAdjusters::onEntry();
 }
 
 void MoveAxisScreen::onRedraw(draw_mode_t what) {
-  using namespace UI;
+  using namespace ExtUI;
   widgets_t w(what);
   w.precision(1);
   w.units(PSTR("mm"));
@@ -1869,7 +1869,7 @@ void MoveAxisScreen::onRedraw(draw_mode_t what) {
 }
 
 bool MoveAxisScreen::onTouchHeld(uint8_t tag) {
-  using namespace UI;
+  using namespace ExtUI;
   #define UI_INCREMENT_AXIS(axis) setManualFeedrate(axis, increment); UI_INCREMENT(AxisPosition_mm, axis);
   #define UI_DECREMENT_AXIS(axis) setManualFeedrate(axis, increment); UI_DECREMENT(AxisPosition_mm, axis);
   const float increment = getIncrement();
@@ -1915,12 +1915,12 @@ float MoveAxisScreen::getManualFeedrate(uint8_t axis, float increment_mm) {
   return min(max_manual_feedrate[axis], abs(increment_mm * TOUCH_REPEATS_PER_SECOND * 0.80));
 }
 
-void MoveAxisScreen::setManualFeedrate(UI::axis_t axis, float increment_mm) {
-  UI::setFeedrate_mm_s(getManualFeedrate(X_AXIS + (axis - UI::X), increment_mm));
+void MoveAxisScreen::setManualFeedrate(ExtUI::axis_t axis, float increment_mm) {
+  ExtUI::setFeedrate_mm_s(getManualFeedrate(X_AXIS + (axis - ExtUI::X), increment_mm));
 }
 
-void MoveAxisScreen::setManualFeedrate(UI::extruder_t extruder, float increment_mm) {
-  UI::setFeedrate_mm_s(getManualFeedrate(E_AXIS, increment_mm));
+void MoveAxisScreen::setManualFeedrate(ExtUI::extruder_t extruder, float increment_mm) {
+  ExtUI::setFeedrate_mm_s(getManualFeedrate(E_AXIS, increment_mm));
 }
 
 void MoveAxisScreen::onIdle() {
@@ -1934,7 +1934,7 @@ void MoveAxisScreen::onIdle() {
 /******************************* TEMPERATURE SCREEN ******************************/
 
 void TemperatureScreen::onRedraw(draw_mode_t what) {
-  using namespace UI;
+  using namespace ExtUI;
   widgets_t w(what);
   w.precision(0).color(Theme::temp).units(PSTR("C"));
   w.heading(         PSTR("Temperature:"));
@@ -1957,7 +1957,7 @@ void TemperatureScreen::onRedraw(draw_mode_t what) {
 }
 
 bool TemperatureScreen::onTouchHeld(uint8_t tag) {
-  using namespace UI;
+  using namespace ExtUI;
   const float increment = getIncrement();
   switch(tag) {
     case 20: UI_DECREMENT(TargetTemp_celsius, BED); break;
@@ -1987,7 +1987,7 @@ bool TemperatureScreen::onTouchHeld(uint8_t tag) {
 /******************************* STEPS SCREEN ******************************/
 
 void StepsScreen::onRedraw(draw_mode_t what) {
-  using namespace UI;
+  using namespace ExtUI;
   widgets_t w(what);
   w.precision(0);
   w.units(PSTR("st/mm"));
@@ -2011,7 +2011,7 @@ void StepsScreen::onRedraw(draw_mode_t what) {
 }
 
 bool StepsScreen::onTouchHeld(uint8_t tag) {
-  using namespace UI;
+  using namespace ExtUI;
   const float increment = getIncrement();
   switch(tag) {
     case  2: UI_DECREMENT(AxisSteps_per_mm, X);  break;
@@ -2048,7 +2048,7 @@ bool StepsScreen::onTouchHeld(uint8_t tag) {
     w.precision(2, true).units(PSTR("mm"));
 
     w.heading(                          PSTR("Z Offset"));
-    w.color(Theme::z_axis).adjuster(4,  PSTR("Z Offset:"), UI::getZOffset_mm());
+    w.color(Theme::z_axis).adjuster(4,  PSTR("Z Offset:"), ExtUI::getZOffset_mm());
     w.increments();
   }
 
@@ -2079,14 +2079,14 @@ bool StepsScreen::onTouchHeld(uint8_t tag) {
 
 #if HOTENDS > 1
   void NozzleOffsetScreen::onRedraw(draw_mode_t what) {
-    using namespace UI;
+    using namespace ExtUI;
     widgets_t w(what);
     w.precision(2).units(PSTR("mm"));
 
     w.heading(                          PSTR("Nozzle Offset"));
-    w.color(Theme::x_axis).adjuster(2,  PSTR("X:"), UI::getNozzleOffset_mm(X, E1));
-    w.color(Theme::y_axis).adjuster(4,  PSTR("Y:"), UI::getNozzleOffset_mm(Y, E1));
-    w.color(Theme::z_axis).adjuster(6,  PSTR("Z:"), UI::getNozzleOffset_mm(Z, E1));
+    w.color(Theme::x_axis).adjuster(2,  PSTR("X:"), ExtUI::getNozzleOffset_mm(X, E1));
+    w.color(Theme::y_axis).adjuster(4,  PSTR("Y:"), ExtUI::getNozzleOffset_mm(Y, E1));
+    w.color(Theme::z_axis).adjuster(6,  PSTR("Z:"), ExtUI::getNozzleOffset_mm(Z, E1));
     #if ENABLED(LULZBOT_CALIBRATION_GCODE)
     w.button(8, PSTR("Measure automatically"));
     #endif
@@ -2094,7 +2094,7 @@ bool StepsScreen::onTouchHeld(uint8_t tag) {
   }
 
   bool NozzleOffsetScreen::onTouchHeld(uint8_t tag) {
-    using namespace UI;
+    using namespace ExtUI;
     const float increment = getIncrement();
     switch(tag) {
       case  2: UI_DECREMENT(NozzleOffset_mm, X, E1); break;
@@ -2117,24 +2117,24 @@ bool StepsScreen::onTouchHeld(uint8_t tag) {
 
 #if ENABLED(BACKLASH_GCODE)
   void BacklashCompensationScreen::onRedraw(draw_mode_t what) {
-    using namespace UI;
+    using namespace ExtUI;
     widgets_t w(what);
     w.precision(2).units(PSTR("mm"));
     w.heading(                          PSTR("Axis Backlash"));
-    w.color(Theme::x_axis).adjuster(2,  PSTR("X:"), UI::getAxisBacklash_mm(X));
-    w.color(Theme::y_axis).adjuster(4,  PSTR("Y:"), UI::getAxisBacklash_mm(Y));
-    w.color(Theme::z_axis).adjuster(6,  PSTR("Z:"), UI::getAxisBacklash_mm(Z));
+    w.color(Theme::x_axis).adjuster(2,  PSTR("X:"), ExtUI::getAxisBacklash_mm(X));
+    w.color(Theme::y_axis).adjuster(4,  PSTR("Y:"), ExtUI::getAxisBacklash_mm(Y));
+    w.color(Theme::z_axis).adjuster(6,  PSTR("Z:"), ExtUI::getAxisBacklash_mm(Z));
     #if ENABLED(LULZBOT_CALIBRATION_GCODE)
     w.button(12, PSTR("Measure automatically"));
     #endif
-    w.color(Theme::other ).adjuster(8,  PSTR("Smoothing:"),  UI::getBacklashSmoothing_mm());
+    w.color(Theme::other ).adjuster(8,  PSTR("Smoothing:"),  ExtUI::getBacklashSmoothing_mm());
     w.precision(0).units(PSTR("%"))
-                          .adjuster(10, PSTR("Correction:"), UI::getBacklashCorrection_percent());
+                          .adjuster(10, PSTR("Correction:"), ExtUI::getBacklashCorrection_percent());
     w.precision(2).increments();
   }
 
   bool BacklashCompensationScreen::onTouchHeld(uint8_t tag) {
-    using namespace UI;
+    using namespace ExtUI;
     const float increment = getIncrement();
     switch(tag) {
       case  2:  UI_DECREMENT(AxisBacklash_mm, X); break;
@@ -2164,7 +2164,7 @@ void MaxFeedrateScreen::onRedraw(draw_mode_t what) {
   w.precision(0).units(PSTR("%"));
 
   w.heading(PSTR("Print Speed"));
-  w.adjuster(4,  PSTR("Speed"), UI::getFeedrate_percent());
+  w.adjuster(4,  PSTR("Speed"), ExtUI::getFeedrate_percent());
   w.increments();
 }
 
@@ -2182,31 +2182,31 @@ bool MaxFeedrateScreen::onTouchHeld(uint8_t tag) {
 /***************************** MAX VELOCITY SCREEN ****************************/
 
 void MaxVelocityScreen::onRedraw(draw_mode_t what) {
-  using namespace UI;
+  using namespace ExtUI;
   widgets_t w(what);
   w.precision(0);
   w.units(PSTR("mm/s"));
   w.heading(                                PSTR("Maximum Velocity"));
-  w.color(Theme::x_axis)     .adjuster(  2, PSTR("X:"),  UI::getAxisMaxFeedrate_mm_s(X) );
-  w.color(Theme::y_axis)     .adjuster(  4, PSTR("Y:"),  UI::getAxisMaxFeedrate_mm_s(Y) );
-  w.color(Theme::z_axis)     .adjuster(  6, PSTR("Z:"),  UI::getAxisMaxFeedrate_mm_s(Z) );
+  w.color(Theme::x_axis)     .adjuster(  2, PSTR("X:"),  ExtUI::getAxisMaxFeedrate_mm_s(X) );
+  w.color(Theme::y_axis)     .adjuster(  4, PSTR("Y:"),  ExtUI::getAxisMaxFeedrate_mm_s(Y) );
+  w.color(Theme::z_axis)     .adjuster(  6, PSTR("Z:"),  ExtUI::getAxisMaxFeedrate_mm_s(Z) );
   #if EXTRUDERS == 1 || DISABLED(DISTINCT_E_FACTORS)
-    w.color(Theme::e_axis)   .adjuster(  8, PSTR("E:"),  UI::getAxisMaxFeedrate_mm_s(E0) );
+    w.color(Theme::e_axis)   .adjuster(  8, PSTR("E:"),  ExtUI::getAxisMaxFeedrate_mm_s(E0) );
   #elif EXTRUDERS > 1
-    w.color(Theme::e_axis)   .adjuster(  8, PSTR("E1:"), UI::getAxisMaxFeedrate_mm_s(E0) );
-    w.color(Theme::e_axis)   .adjuster( 10, PSTR("E2:"), UI::getAxisMaxFeedrate_mm_s(E1) );
+    w.color(Theme::e_axis)   .adjuster(  8, PSTR("E1:"), ExtUI::getAxisMaxFeedrate_mm_s(E0) );
+    w.color(Theme::e_axis)   .adjuster( 10, PSTR("E2:"), ExtUI::getAxisMaxFeedrate_mm_s(E1) );
     #if EXTRUDERS > 2
-      w.color(Theme::e_axis) .adjuster( 12, PSTR("E3:"), UI::getAxisMaxFeedrate_mm_s(E2) );
+      w.color(Theme::e_axis) .adjuster( 12, PSTR("E3:"), ExtUI::getAxisMaxFeedrate_mm_s(E2) );
     #endif
     #if EXTRUDERS > 3
-      w.color(Theme::e_axis) .adjuster( 14, PSTR("E4:"), UI::getAxisMaxFeedrate_mm_s(E3) );
+      w.color(Theme::e_axis) .adjuster( 14, PSTR("E4:"), ExtUI::getAxisMaxFeedrate_mm_s(E3) );
     #endif
   #endif
   w.increments();
 }
 
 bool MaxVelocityScreen::onTouchHeld(uint8_t tag) {
-  using namespace UI;
+  using namespace ExtUI;
   const float increment = getIncrement();
   switch(tag) {
     case  2: UI_DECREMENT(AxisMaxFeedrate_mm_s, X); break;
@@ -2238,31 +2238,31 @@ bool MaxVelocityScreen::onTouchHeld(uint8_t tag) {
 /***************************** MAX ACCELERATION SCREEN ****************************/
 
 void MaxAccelerationScreen::onRedraw(draw_mode_t what) {
-  using namespace UI;
+  using namespace ExtUI;
   widgets_t w(what);
   w.precision(0);
   w.units(PSTR("mm/s^2"));
   w.heading(                             PSTR("Maximum Acceleration"));
-  w.color(Theme::x_axis)  .adjuster(  2, PSTR("X:"),  UI::getAxisMaxAcceleration_mm_s2(X) );
-  w.color(Theme::y_axis)  .adjuster(  4, PSTR("Y:"),  UI::getAxisMaxAcceleration_mm_s2(Y) );
-  w.color(Theme::z_axis)  .adjuster(  6, PSTR("Z:"),  UI::getAxisMaxAcceleration_mm_s2(Z) );
+  w.color(Theme::x_axis)  .adjuster(  2, PSTR("X:"),  ExtUI::getAxisMaxAcceleration_mm_s2(X) );
+  w.color(Theme::y_axis)  .adjuster(  4, PSTR("Y:"),  ExtUI::getAxisMaxAcceleration_mm_s2(Y) );
+  w.color(Theme::z_axis)  .adjuster(  6, PSTR("Z:"),  ExtUI::getAxisMaxAcceleration_mm_s2(Z) );
   #if EXTRUDERS == 1 || DISABLED(DISTINCT_E_FACTORS)
-    w.color(Theme::e_axis) .adjuster( 8, PSTR("E:"),  UI::getAxisMaxAcceleration_mm_s2(E0) );
+    w.color(Theme::e_axis) .adjuster( 8, PSTR("E:"),  ExtUI::getAxisMaxAcceleration_mm_s2(E0) );
   #elif EXTRUDERS > 1
-    w.color(Theme::e_axis) .adjuster( 8, PSTR("E1:"), UI::getAxisMaxAcceleration_mm_s2(E0) );
-    w.color(Theme::e_axis) .adjuster(10, PSTR("E2:"), UI::getAxisMaxAcceleration_mm_s2(E1) );
+    w.color(Theme::e_axis) .adjuster( 8, PSTR("E1:"), ExtUI::getAxisMaxAcceleration_mm_s2(E0) );
+    w.color(Theme::e_axis) .adjuster(10, PSTR("E2:"), ExtUI::getAxisMaxAcceleration_mm_s2(E1) );
     #if EXTRUDERS > 2
-    w.color(Theme::e_axis) .adjuster(12, PSTR("E3:"), UI::getAxisMaxAcceleration_mm_s2(E2) );
+    w.color(Theme::e_axis) .adjuster(12, PSTR("E3:"), ExtUI::getAxisMaxAcceleration_mm_s2(E2) );
     #endif
     #if EXTRUDERS > 3
-    w.color(Theme::e_axis) .adjuster(14, PSTR("E4:"), UI::getAxisMaxAcceleration_mm_s2(E3) );
+    w.color(Theme::e_axis) .adjuster(14, PSTR("E4:"), ExtUI::getAxisMaxAcceleration_mm_s2(E3) );
     #endif
   #endif
   w.increments();
 }
 
 bool MaxAccelerationScreen::onTouchHeld(uint8_t tag) {
-  using namespace UI;
+  using namespace ExtUI;
   const float increment = getIncrement();
   switch(tag) {
     case  2: UI_DECREMENT(AxisMaxAcceleration_mm_s2, X ); break;
@@ -2299,9 +2299,9 @@ void DefaultAccelerationScreen::onRedraw(draw_mode_t what) {
   w.units(PSTR("mm/s^2"));
   w.heading(                             PSTR("Default Acceleration"));
   w.color(Theme::other);
-  w.adjuster(  2, PSTR("Printing:"),   UI::getPrintingAcceleration_mm_s2() );
-  w.adjuster(  4, PSTR("Travel:"),     UI::getTravelAcceleration_mm_s2() );
-  w.adjuster(  6, PSTR("Retraction:"), UI::getRetractAcceleration_mm_s2() );
+  w.adjuster(  2, PSTR("Printing:"),   ExtUI::getPrintingAcceleration_mm_s2() );
+  w.adjuster(  4, PSTR("Travel:"),     ExtUI::getTravelAcceleration_mm_s2() );
+  w.adjuster(  6, PSTR("Retraction:"), ExtUI::getRetractAcceleration_mm_s2() );
   w.increments();
   w.button(    8, PSTR("Set Axis Maximum"));
 }
@@ -2330,7 +2330,7 @@ bool DefaultAccelerationScreen::onTouchHeld(uint8_t tag) {
     w.precision(2);
     w.units(PSTR("mm"));
     w.heading(                          PSTR("Junction Deviation"));
-    w.color(Theme::other) .adjuster( 2, PSTR(""), UI::getJunctionDeviation_mm() );
+    w.color(Theme::other) .adjuster( 2, PSTR(""), ExtUI::getJunctionDeviation_mm() );
     w.increments();
   }
 
@@ -2351,20 +2351,20 @@ bool DefaultAccelerationScreen::onTouchHeld(uint8_t tag) {
 
 #if DISABLED(JUNCTION_DEVIATION)
   void JerkScreen::onRedraw(draw_mode_t what) {
-    using namespace UI;
+    using namespace ExtUI;
     widgets_t w(what);
     w.precision(1);
     w.units(PSTR("mm/s"));
     w.heading(                           PSTR("Maximum Jerk"));
-    w.color(Theme::x_axis) .adjuster( 2, PSTR("X:"), UI::getAxisMaxJerk_mm_s(X) );
-    w.color(Theme::y_axis) .adjuster( 4, PSTR("Y:"), UI::getAxisMaxJerk_mm_s(Y) );
-    w.color(Theme::z_axis) .adjuster( 6, PSTR("Z:"), UI::getAxisMaxJerk_mm_s(Z) );
-    w.color(Theme::e_axis) .adjuster( 8, PSTR("E:"), UI::getAxisMaxJerk_mm_s(E0) );
+    w.color(Theme::x_axis) .adjuster( 2, PSTR("X:"), ExtUI::getAxisMaxJerk_mm_s(X) );
+    w.color(Theme::y_axis) .adjuster( 4, PSTR("Y:"), ExtUI::getAxisMaxJerk_mm_s(Y) );
+    w.color(Theme::z_axis) .adjuster( 6, PSTR("Z:"), ExtUI::getAxisMaxJerk_mm_s(Z) );
+    w.color(Theme::e_axis) .adjuster( 8, PSTR("E:"), ExtUI::getAxisMaxJerk_mm_s(E0) );
     w.increments();
   }
 
   bool JerkScreen::onTouchHeld(uint8_t tag) {
-    using namespace UI;
+    using namespace ExtUI;
     const float increment = getIncrement();
     switch(tag) {
       case  2: UI_DECREMENT(AxisMaxJerk_mm_s, X); break;
@@ -2386,20 +2386,20 @@ bool DefaultAccelerationScreen::onTouchHeld(uint8_t tag) {
 
 #if ENABLED(LIN_ADVANCE) || ENABLED(FILAMENT_RUNOUT_SENSOR)
   void FilamentOptionsScreen::onRedraw(draw_mode_t what) {
-    using namespace UI;
+    using namespace ExtUI;
     widgets_t w(what);
     w.precision(1).color(Theme::e_axis);
     #if ENABLED(LIN_ADVANCE)
       w.heading(             PSTR("Linear Advance:"));
       #if EXTRUDERS == 1
-        w.adjuster(       2, PSTR("K:"),    UI::getLinearAdvance_mm_mm_s(E0) );
+        w.adjuster(       2, PSTR("K:"),    ExtUI::getLinearAdvance_mm_mm_s(E0) );
       #else
-        w.adjuster(       2, PSTR("K E1:"), UI::getLinearAdvance_mm_mm_s(E0) );
-        w.adjuster(       4, PSTR("K E2:"), UI::getLinearAdvance_mm_mm_s(E1) );
+        w.adjuster(       2, PSTR("K E1:"), ExtUI::getLinearAdvance_mm_mm_s(E0) );
+        w.adjuster(       4, PSTR("K E2:"), ExtUI::getLinearAdvance_mm_mm_s(E1) );
         #if EXTRUDERS > 2
-          w.adjuster(     6, PSTR("K E3:"), UI::getLinearAdvance_mm_mm_s(E2) );
+          w.adjuster(     6, PSTR("K E3:"), ExtUI::getLinearAdvance_mm_mm_s(E2) );
           #if EXTRUDERS > 3
-            w.adjuster(   8, PSTR("K E4:"), UI::getLinearAdvance_mm_mm_s(E3) );
+            w.adjuster(   8, PSTR("K E4:"), ExtUI::getLinearAdvance_mm_mm_s(E3) );
           #endif
         #endif
       #endif
@@ -2409,13 +2409,13 @@ bool DefaultAccelerationScreen::onTouchHeld(uint8_t tag) {
       w.heading( PSTR("Runout Detection:"));
       #if defined(FILAMENT_RUNOUT_DISTANCE_MM)
         w.units(PSTR("mm"));
-        if(UI::getFilamentRunoutEnabled()) {
-          w.adjuster( 10, PSTR("Distance:"), UI::getFilamentRunoutDistance_mm() );
+        if(ExtUI::getFilamentRunoutEnabled()) {
+          w.adjuster( 10, PSTR("Distance:"), ExtUI::getFilamentRunoutDistance_mm() );
         } else {
           w.adjuster( 10, PSTR("Distance:"), PSTR("disabled") );
         }
       #else
-        w.adjuster(   10, PSTR("Status:"), UI::getFilamentRunoutEnabled() ? PSTR("enabled") : PSTR("disabled") );
+        w.adjuster(   10, PSTR("Status:"), ExtUI::getFilamentRunoutEnabled() ? PSTR("enabled") : PSTR("disabled") );
       #endif
     #endif
       w.heading(PSTR(""));
@@ -2423,7 +2423,7 @@ bool DefaultAccelerationScreen::onTouchHeld(uint8_t tag) {
   }
 
   bool FilamentOptionsScreen::onTouchHeld(uint8_t tag) {
-    using namespace UI;
+    using namespace ExtUI;
     const float increment = getIncrement();
     switch(tag) {
       case  2: UI_DECREMENT(LinearAdvance_mm_mm_s, E0); break;
@@ -2445,8 +2445,8 @@ bool DefaultAccelerationScreen::onTouchHeld(uint8_t tag) {
           case  10: UI_DECREMENT(FilamentRunoutDistance_mm); break;
           case  11: UI_INCREMENT(FilamentRunoutDistance_mm); break;
         #else
-          case  10: UI::setFilamentRunoutEnabled(false); break;
-          case  11: UI::setFilamentRunoutEnabled(true);  break;
+          case  10: ExtUI::setFilamentRunoutEnabled(false); break;
+          case  11: ExtUI::setFilamentRunoutEnabled(true);  break;
         #endif
       #endif
       default:
@@ -2486,7 +2486,7 @@ void InterfaceSettingsScreen::onEntry() {
 }
 
 void InterfaceSettingsScreen::onRedraw(draw_mode_t what) {
-  using namespace UI;
+  using namespace ExtUI;
   CommandProcessor cmd;
 
   if(what & BACKGROUND) {
@@ -2602,7 +2602,7 @@ void InterfaceSettingsScreen::onIdle() {
 }
 
 void InterfaceSettingsScreen::defaultSettings() {
-  using namespace UI;
+  using namespace ExtUI;
 
   LockScreen::passcode = 0;
   FTDI::SoundPlayer::set_volume(255);
@@ -2627,7 +2627,7 @@ void InterfaceSettingsScreen::defaultSettings() {
 }
 
 void InterfaceSettingsScreen::saveSettings() {
-  using namespace UI;
+  using namespace ExtUI;
 
   persistent_data_t      data;
   data.magic_word        = data.MAGIC_WORD;
@@ -2673,7 +2673,7 @@ void InterfaceSettingsScreen::saveSettings() {
 }
 
 void InterfaceSettingsScreen::loadSettings() {
-  using namespace UI;
+  using namespace ExtUI;
 
   persistent_data_t data;
   UIFlashStorage::read_config_data(&data, sizeof(data));
@@ -2768,7 +2768,7 @@ void InterfaceSoundsScreen::defaultSettings() {
 }
 
 void InterfaceSoundsScreen::onRedraw(draw_mode_t what) {
-  using namespace UI;
+  using namespace ExtUI;
   CommandProcessor cmd;
 
   if(what & BACKGROUND) {
@@ -3052,13 +3052,13 @@ void FilesScreen::onEntry() {
 }
 
 const char *FilesScreen::getSelectedShortFilename() {
-  UI::FileList files;
+  ExtUI::FileList files;
   files.seek(getFileForTag(screen_data.FilesScreen.selected_tag), true);
   return files.shortFilename();
 }
 
 void FilesScreen::drawSelectedFile() {
-  UI::FileList files;
+  ExtUI::FileList files;
   files.seek(getFileForTag(screen_data.FilesScreen.selected_tag), true);
   screen_data.FilesScreen.flags.is_dir = files.isDir();
   drawFileButton(files.filename(), screen_data.FilesScreen.selected_tag, screen_data.FilesScreen.flags.is_dir, true);
@@ -3091,7 +3091,7 @@ void FilesScreen::drawFileButton(const char* filename, uint8_t tag, bool is_dir,
 }
 
 void FilesScreen::drawFileList() {
-  UI::FileList files;
+  ExtUI::FileList files;
   screen_data.FilesScreen.num_page = max(1,(ceil)(float(files.count()) / files_per_page));
   screen_data.FilesScreen.cur_page = min(screen_data.FilesScreen.cur_page, screen_data.FilesScreen.num_page-1);
   screen_data.FilesScreen.flags.is_root  = files.isAtRootDir();
@@ -3207,20 +3207,20 @@ bool FilesScreen::onTouchEnd(uint8_t tag) {
       }
       break;
     case 243:
-      UI::printFile(getSelectedShortFilename());
+      ExtUI::printFile(getSelectedShortFilename());
       StatusScreen::setStatusMessage(PSTR("Print Starting"));
       GOTO_SCREEN(StatusScreen);
       return true;
     case 244:
       {
-        UI::FileList files;
+        ExtUI::FileList files;
         files.changeDir(getSelectedShortFilename());
         gotoPage(0);
       }
       break;
     case 245:
       {
-        UI::FileList files;
+        ExtUI::FileList files;
         files.upDir();
         gotoPage(0);
       }
@@ -3360,7 +3360,7 @@ void WidgetsScreen::onEntry() {
 }
 
 void WidgetsScreen::onRedraw(draw_mode_t what) {
-  using namespace UI;
+  using namespace ExtUI;
   CommandProcessor cmd;
   cmd.cmd(CLEAR_COLOR_RGB(Theme::background))
      .cmd(CLEAR(true,true,true));
@@ -3596,7 +3596,7 @@ void MediaPlayerScreen::playStream(void *obj, media_streamer_func_t *data_stream
       if(nBytes == -1) break;
 
       if(millis() - t > 10) {
-        UI::yield();
+        ExtUI::yield();
         watchdog_reset();
         t = millis();
       }
@@ -3607,7 +3607,7 @@ void MediaPlayerScreen::playStream(void *obj, media_streamer_func_t *data_stream
       timeouts = 20;
       do {
         if(millis() - t > 10) {
-          UI::yield();
+          ExtUI::yield();
           watchdog_reset();
           t = millis();
           timeouts--;
@@ -3641,7 +3641,7 @@ void MediaPlayerScreen::playStream(void *obj, media_streamer_func_t *data_stream
 
 /***************************** MARLIN CALLBACKS  ***************************/
 
-namespace UI {
+namespace ExtUI {
   void onPrinterKilled(const char* lcd_msg) {
     KillScreen::show(progmem_str(lcd_msg));
   }

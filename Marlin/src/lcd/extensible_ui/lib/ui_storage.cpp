@@ -403,7 +403,7 @@ bool UIFlashStorage::is_present = false;
         break;
 
       #if ENABLED(EXTENSIBLE_UI)
-        UI::yield();
+        ExtUI::yield();
       #endif
     }
 
@@ -443,7 +443,7 @@ bool UIFlashStorage::is_present = false;
       addr += nBytes;
       if(nBytes != write_page_size) break;
       #if ENABLED(EXTENSIBLE_UI)
-        UI::yield();
+        ExtUI::yield();
       #endif
     };
 

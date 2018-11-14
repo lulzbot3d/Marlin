@@ -292,7 +292,7 @@ class AdvancedSettingsScreen : public BaseScreen, public CachedScreen<ADVANCED_S
 class ChangeFilamentScreen : public BaseScreen, public CachedScreen<CHANGE_FILAMENT_SCREEN_CACHE> {
   private:
     static uint8_t getSoftenTemp();
-    static UI::extruder_t getExtruder();
+    static ExtUI::extruder_t getExtruder();
     static void drawTempGradient(uint16_t x, uint16_t y, uint16_t w, uint16_t h);
     static uint32_t getTempColor(uint32_t temp);
   public:
@@ -344,8 +344,8 @@ class MoveAxisScreen : public ValueAdjusters, public CachedScreen<MOVE_AXIS_SCRE
   private:
     static float getManualFeedrate(uint8_t axis, float increment_mm);
   public:
-    static void setManualFeedrate(UI::axis_t axis, float increment_mm);
-    static void setManualFeedrate(UI::extruder_t extruder, float increment_mm);
+    static void setManualFeedrate(ExtUI::axis_t axis, float increment_mm);
+    static void setManualFeedrate(ExtUI::extruder_t extruder, float increment_mm);
 
     static void onEntry();
     static void onRedraw(draw_mode_t what);

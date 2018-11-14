@@ -80,9 +80,9 @@ bool is_touch_held() {
   return pressed_tag != 0;
 }
 
-namespace UI {
+namespace ExtUI {
   void onStartup() {
-    using namespace UI;
+    using namespace ExtUI;
 
     CLCD::init();
     DLCache::init();

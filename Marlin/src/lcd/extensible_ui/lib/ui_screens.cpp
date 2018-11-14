@@ -3577,7 +3577,7 @@ void MediaPlayerScreen::playStream(void *obj, media_streamer_func_t *data_stream
        .execute()
        .cmd(CMD_DLSTART)
        .mediafifo(fifo_start, fifo_size)
-       .playvideo(OPT_FULLSCREEN | OPT_MEDIAFIFO | OPT_NOTEAR)
+       .playvideo(OPT_FULLSCREEN | OPT_MEDIAFIFO | OPT_NOTEAR | OPT_SOUND)
        .cmd(DL::DL_DISPLAY)
        .cmd(CMD_SWAP)
        .execute();

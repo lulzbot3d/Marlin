@@ -117,7 +117,7 @@ LULZBOT_EXTRAS=-DLULZBOT_$(MODEL) -DTOOLHEAD_$(TOOLHEAD) -DCONFIGURATION_LULZBOT
 
 ifeq ($(MODEL),Quiver_TAZ7)
   # UltiMachine Archim2 (with TMC2130 drivers)
-	HARDWARE_MOTHERBOARD=1590
+	HARDWARE_MOTHERBOARD=1592
 endif
 
 ############################################################################

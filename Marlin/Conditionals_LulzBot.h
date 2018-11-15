@@ -51,7 +51,7 @@
  *
  */
 
-#define LULZBOT_FW_VERSION ".10" // Change this with each update
+#define LULZBOT_FW_VERSION ".11" // Change this with each update
 
 #if ( \
     !defined(LULZBOT_Gladiola_Mini) && \
@@ -1595,9 +1595,6 @@
 
     // In Marlin 1.1.9, an unnecessary purge is happening after a resume from a pause.
     #define LULZBOT_ADVANCED_PAUSE_PURGE_WORKAROUND
-
-    // Hide the status message after a resume
-    #define LULZBOT_PAUSED_MESSAGE_WORKAROUND
 #endif
 
 #if defined(LULZBOT_IS_MINI)

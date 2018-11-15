@@ -913,6 +913,11 @@ void StatusScreen::setStatusMessage(const char * const message) {
   draw_interaction_buttons(BACKGROUND);
   storeBackground();
 
+  #if defined(UI_FRAMEWORK_DEBUG)
+    SERIAL_ECHO_START();
+    SERIAL_ECHOLNPAIR("New status message: ", message);
+  #endif
+
   if(AT_SCREEN(StatusScreen)) {
     current_screen.onRefresh();
   }
@@ -1160,8 +1165,8 @@ bool TuneScreen::onTouchEnd(uint8_t tag) {
     case 4:  GOTO_SCREEN(ZOffsetScreen);         break;
     #endif
     case 5:  GOTO_SCREEN(MaxFeedrateScreen);     break;
-    case 6:  ExtUI::pausePrint();  GOTO_SCREEN(StatusScreen); break;
-    case 7:  ExtUI::resumePrint(); GOTO_SCREEN(StatusScreen); break;
+    case 6:  sound.play(twinkle, PLAY_ASYNCHRONOUS); ExtUI::pausePrint();  GOTO_SCREEN(StatusScreen); break;
+    case 7:  sound.play(twinkle, PLAY_ASYNCHRONOUS); ExtUI::resumePrint(); GOTO_SCREEN(StatusScreen); break;
     case 8:  GOTO_SCREEN(FilamentOptionsScreen); break;
     default:
       return false;

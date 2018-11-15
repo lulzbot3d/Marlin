@@ -599,13 +599,15 @@ namespace ExtUI {
 
   void resumePrint() {
     #if ENABLED(SDSUPPORT)
+      ExtUI::onStatusChanged(PSTR(MSG_FILAMENT_CHANGE_RESUME_1));
       #if ENABLED(PARK_HEAD_ON_PAUSE)
-        enqueue_and_echo_commands_P(PSTR("M24"));
+        wait_for_heatup = wait_for_user = false;
+        enqueue_and_echo_commands_P(PSTR("M24\nM117 " MSG_PRINTING));
       #else
         card.startFileprint();
         print_job_timer.start();
+        ExtUI::onStatusChanged(PSTR(MSG_PRINTING));
       #endif
-      ExtUI::onStatusChanged(PSTR(MSG_PRINTING));
     #endif
   }
 

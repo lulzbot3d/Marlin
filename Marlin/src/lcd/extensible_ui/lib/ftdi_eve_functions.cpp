@@ -1109,6 +1109,8 @@ void CLCD::default_touch_transform() {
     cmd.setrotate(0);
     #endif
     cmd.execute();
+  #elif defined(USE_PORTRAIT_ORIENTATION) || defined(USE_MIRRORED_ORIENTATION)
+    #error PORTRAIT or MIRRORER orientation not supported on the FT800
   #endif
 
   #if defined(USE_FTDI_FT800) &&  defined(USE_INVERTED_ORIENTATION)

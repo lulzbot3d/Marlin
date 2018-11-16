@@ -61,9 +61,9 @@
 #if ENABLED(SDSUPPORT)
   #include "../../sd/cardreader.h"
   #include "../../feature/emergency_parser.h"
-  #define IFSD(A,B) (A)
+  #define IFSD(A,B) A
 #else
-  #define IFSD(A,B) (B)
+  #define IFSD(A,B) B
 #endif
 
 #if ENABLED(PRINTCOUNTER)
@@ -137,7 +137,7 @@ namespace ExtUI {
   #else
 
     // TODO: Implement for AVR
-    FORCE_INLINE uint32_t safe_millis() { return millis(); }
+    uint32_t safe_millis() { return millis(); }
 
   #endif
 
@@ -287,12 +287,14 @@ namespace ExtUI {
   }
 
   void setActiveTool(const extruder_t extruder, bool no_move) {
-    const uint8_t e = extruder - E0;
-    #if DO_SWITCH_EXTRUDER || ENABLED(SWITCHING_NOZZLE) || ENABLED(PARKING_EXTRUDER)
-      if (e != active_extruder)
-        tool_change(e, 0, no_move);
+    #if EXTRUDERS > 1
+      const uint8_t e = extruder - E0;
+      #if DO_SWITCH_EXTRUDER || ENABLED(SWITCHING_NOZZLE) || ENABLED(PARKING_EXTRUDER)
+        if (e != active_extruder)
+          tool_change(e, 0, no_move);
+      #endif
+      active_extruder = e;
     #endif
-    active_extruder = e;
   }
 
   extruder_t getActiveTool() {
@@ -579,7 +581,7 @@ namespace ExtUI {
   }
 
   bool isPrinting() {
-    return (planner.movesplanned() || IS_SD_PRINTING() || isPrintingFromMedia());
+    return (planner.movesplanned() || isPrintingFromMedia() || IFSD(IS_SD_PRINTING(), false));
   }
 
   bool isMediaInserted() {
@@ -634,6 +636,8 @@ namespace ExtUI {
 
       card.getfilename_sorted(nr);
       return card.filename && card.filename[0] != '\0';
+    #else
+      return false;
     #endif
   }
 

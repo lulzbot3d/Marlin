@@ -492,8 +492,8 @@ bool UIFlashStorage::is_present = false;
   void UIFlashStorage::initialize()                                           {}
   void UIFlashStorage::write_config_data(const void *data, size_t size)       {}
   bool UIFlashStorage::verify_config_data(const void *, size_t)               {return false;}
-  bool UIFlashStorage::read_config_data(void *data, size_t size)              {}
-  UIFlashStorage::error_t UIFlashStorage::write_media_file(progmem_str filename, uint8_t slot) {}
+  bool UIFlashStorage::read_config_data(void *data, size_t size)              {return false;}
+  UIFlashStorage::error_t UIFlashStorage::write_media_file(progmem_str filename, uint8_t slot) {return FILE_NOT_FOUND;}
   void UIFlashStorage::erase_chip()                                           {}
 
   bool UIFlashStorage::BootMediaReader::isAvailable(uint32_t slot)            {return false;}

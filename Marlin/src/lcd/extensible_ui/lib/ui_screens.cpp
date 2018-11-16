@@ -249,7 +249,7 @@ void BaseScreen::default_button_colors() {
 void BaseScreen::onIdle() {
   #if defined(MENU_TIMEOUT)
     const uint32_t elapsed = millis() - last_interaction;
-    if(elapsed > MENU_TIMEOUT * 1000) {
+    if(elapsed > uint32_t(MENU_TIMEOUT) * 1000) {
       GOTO_SCREEN(StatusScreen);
       reset_menu_timeout();
     }
@@ -348,17 +348,17 @@ void StatisticsScreen::onRedraw(draw_mode_t what) {
        .font(Theme::font_medium)
        .text(BTN_POS(1,1), BTN_SIZE(4,1), F("Printer Statistics"))
        .font(Theme::font_small)
-       .tag(0).text      (BTN_POS(1,2), BTN_SIZE(2,1), F("Total Prints:"),     OPT_RIGHTX | OPT_CENTERY)
-              .text      (BTN_POS(1,3), BTN_SIZE(2,1), F("Finished Prints:"),  OPT_RIGHTX | OPT_CENTERY)
-              .text      (BTN_POS(1,4), BTN_SIZE(2,1), F("Total Print Time:"), OPT_RIGHTX | OPT_CENTERY)
-              .text      (BTN_POS(1,5), BTN_SIZE(2,1), F("Longest Print:"),    OPT_RIGHTX | OPT_CENTERY)
-              .text      (BTN_POS(1,6), BTN_SIZE(2,1), F("Filament Used:"),    OPT_RIGHTX | OPT_CENTERY)
-
-              .text      (BTN_POS(3,2), BTN_SIZE(2,1), getTotalPrints_str(buffer))
-              .text      (BTN_POS(3,3), BTN_SIZE(2,1), getFinishedPrints_str(buffer))
-              .text      (BTN_POS(3,4), BTN_SIZE(2,1), getTotalPrintTime_str(buffer))
-              .text      (BTN_POS(3,5), BTN_SIZE(2,1), getLongestPrint_str(buffer))
-              .text      (BTN_POS(3,6), BTN_SIZE(2,1), getFilamentUsed_str(buffer));
+       .tag(0)
+       .text      (BTN_POS(1,2), BTN_SIZE(2,1), F("Total Prints:"),     OPT_RIGHTX | OPT_CENTERY)
+       .text      (BTN_POS(1,3), BTN_SIZE(2,1), F("Finished Prints:"),  OPT_RIGHTX | OPT_CENTERY)
+       .text      (BTN_POS(1,4), BTN_SIZE(2,1), F("Total Print Time:"), OPT_RIGHTX | OPT_CENTERY)
+       .text      (BTN_POS(1,5), BTN_SIZE(2,1), F("Longest Print:"),    OPT_RIGHTX | OPT_CENTERY)
+       .text      (BTN_POS(1,6), BTN_SIZE(2,1), F("Filament Used:"),    OPT_RIGHTX | OPT_CENTERY);
+    cmd.text      (BTN_POS(3,2), BTN_SIZE(2,1), getTotalPrints_str(buffer));
+    cmd.text      (BTN_POS(3,3), BTN_SIZE(2,1), getFinishedPrints_str(buffer));
+    cmd.text      (BTN_POS(3,4), BTN_SIZE(2,1), getTotalPrintTime_str(buffer));
+    cmd.text      (BTN_POS(3,5), BTN_SIZE(2,1), getLongestPrint_str(buffer));
+    cmd.text      (BTN_POS(3,6), BTN_SIZE(2,1), getFilamentUsed_str(buffer));
   }
 
   if(what & FOREGROUND) {
@@ -1403,7 +1403,9 @@ void ChangeFilamentScreen::onRedraw(draw_mode_t what) {
     const uint32_t tog3  = screen_data.ChangeFilamentScreen.t_tag == 3  ? STYLE_LIGHT_BTN : 0;
     const uint32_t tog4  = screen_data.ChangeFilamentScreen.t_tag == 4  ? STYLE_LIGHT_BTN : 0;
     const uint32_t tog10 = screen_data.ChangeFilamentScreen.e_tag == 10 ? STYLE_LIGHT_BTN : 0;
+    #if HOTENDS > 1
     const uint32_t tog11 = screen_data.ChangeFilamentScreen.e_tag == 11 ? STYLE_LIGHT_BTN : 0;
+    #endif
 
     cmd.font(Theme::font_large)
        .tag(10).style(tog10)               .button (BTN_POS(1,2), BTN_SIZE(1,1), F("1"))
@@ -2722,48 +2724,61 @@ void InterfaceSettingsScreen::loadSettings() {
 
 /************************* INTERFACE SOUNDS SCREEN ********************/
 
+class SoundChoices {
+  private:
+    static PROGMEM const struct sound_list_t {
+      const char *const PROGMEM name;
+      const FTDI::SoundPlayer::sound_t* data;
+    } sound_list[];
+  public:
+    static const uint8_t n;
+    static inline const char* name(uint8_t val) {
+      return (const char* ) pgm_read_ptr_near(&sound_list[val].name);
+    }
+    static inline FTDI::SoundPlayer::sound_t* data(uint8_t val) {
+      return (FTDI::SoundPlayer::sound_t*) pgm_read_ptr_near(&sound_list[val].data);
+    }
+};
+
+const SoundChoices::sound_list_t SoundChoices::sound_list[] = {
+  {"Silence",      FTDI::silence},
+  {"Twinkle",      FTDI::twinkle},
+  {"Chimes",       FTDI::chimes},
+  {"Fanfare",      FTDI::fanfare},
+  {"Sad Trombone", FTDI::sad_trombone},
+  {"Big Band",     FTDI::big_band},
+  {"Beeping",      FTDI::beeping},
+  {"Alarm",        FTDI::alarm},
+  {"Warble",       FTDI::warble},
+  {"Carousel",     FTDI::carousel},
+  {"Beats",        FTDI::beats},
+  {"Bach Joy",     FTDI::js_bach_joy},
+  {"Bach Toccata", FTDI::js_bach_toccata}
+};
+
+const uint8_t SoundChoices::n = N_ELEMENTS(SoundChoices::sound_list);
+
 uint8_t InterfaceSoundsScreen::event_sounds[];
 
-struct sound_info_t {
-  const PROGMEM char *const                 name;
-  const PROGMEM FTDI::SoundPlayer::sound_t* data;
-};
-
-const sound_info_t sound_list[] = {
-  {PSTR("Silence"),      FTDI::silence},
-  {PSTR("Twinkle"),      FTDI::twinkle},
-  {PSTR("Chimes"),       FTDI::chimes},
-  {PSTR("Fanfare"),      FTDI::fanfare},
-  {PSTR("Sad Trombone"), FTDI::sad_trombone},
-  {PSTR("Big Band"),     FTDI::big_band},
-  {PSTR("Beeping"),      FTDI::beeping},
-  {PSTR("Alarm"),        FTDI::alarm},
-  {PSTR("Warble"),       FTDI::warble},
-  {PSTR("Carousel"),     FTDI::carousel},
-  {PSTR("Beats"),        FTDI::beats},
-  {PSTR("Bach Joy"),     FTDI::js_bach_joy},
-  {PSTR("Bach Toccata"), FTDI::js_bach_toccata}
-};
-
 const char* InterfaceSoundsScreen::getSoundSelection(event_t event) {
-  return sound_list[event_sounds[event]].name;
+  return SoundChoices::name(event_sounds[event]);
 }
 
 void InterfaceSoundsScreen::toggleSoundSelection(event_t event) {
-  event_sounds[event] = (event_sounds[event]+1) % N_ELEMENTS(sound_list);
+  event_sounds[event] = (event_sounds[event]+1) % SoundChoices::n;
   playEventSound(event);
 }
 
 void InterfaceSoundsScreen::setSoundSelection(event_t event, const FTDI::SoundPlayer::sound_t* sound) {
-  for(uint8_t i = 0; i < N_ELEMENTS(sound_list); i++) {
-    if(sound_list[i].data == sound) {
+  for(uint8_t i = 0; i < SoundChoices::n; i++) {
+    if(SoundChoices::data(i) == sound) {
       event_sounds[event] = i;
     }
   }
 }
 
 void InterfaceSoundsScreen::playEventSound(event_t event, FTDI::play_mode_t mode) {
-  sound.play(sound_list[event_sounds[event]].data, mode);
+  sound.play(SoundChoices::data(event_sounds[event]), mode);
 }
 
 void InterfaceSoundsScreen::defaultSettings() {

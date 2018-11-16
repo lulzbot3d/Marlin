@@ -122,7 +122,7 @@ class CommandProcessor : public CLCD::CommandFifo {
       }
       return false;
     }
-    
+
     typedef bool btn_style_func_t(uint8_t tag, uint8_t &style, uint16_t &options, bool post);
 
     static btn_style_func_t  *_btn_style_callback;
@@ -169,13 +169,17 @@ class CommandProcessor : public CLCD::CommandFifo {
   public:
     inline CommandProcessor& bitmap_size(uint8_t filter, uint8_t wrapx, uint8_t wrapy, uint16_t width, uint16_t height) {
       cmd(FTDI::BITMAP_SIZE(filter, wrapx, wrapy, width, height));
-      cmd(FTDI::BITMAP_SIZE_H(width >> 9, height >> 9));
+      #if defined(USE_FTDI_FT810)
+        cmd(FTDI::BITMAP_SIZE_H(width >> 9, height >> 9));
+      #endif
       return *this;
     }
 
     inline CommandProcessor& bitmap_layout(uint8_t format, uint16_t linestride, uint16_t height) {
       cmd(FTDI::BITMAP_LAYOUT(format, linestride, height));
-      cmd(FTDI::BITMAP_LAYOUT_H(linestride >> 10, height >> 9));
+      #if defined(USE_FTDI_FT810)
+        cmd(FTDI::BITMAP_LAYOUT_H(linestride >> 10, height >> 9));
+      #endif
       return *this;
     }
 

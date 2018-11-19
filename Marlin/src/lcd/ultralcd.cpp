@@ -25,12 +25,12 @@
 // These displays all share the MarlinUI class
 #if HAS_SPI_LCD || ENABLED(MALYAN_LCD) || ENABLED(EXTENSIBLE_UI)
   #include "ultralcd.h"
-  #if ENABLED(SDSUPPORT)
-    #include "../sd/cardreader.h"
-  #endif
   MarlinUI ui;
   #if ENABLED(SDSUPPORT)
     #include "../sd/cardreader.h"
+  #endif
+  #if ENABLED(EXTENSIBLE_UI)
+    #define START_OF_UTF8_CHAR(C) (((C) & 0xC0u) != 0x80u)
   #endif
 #endif
 
@@ -81,17 +81,22 @@
   #else
     #define MAX_MESSAGE_LENGTH CHARSIZE * 2 * (LCD_WIDTH)
   #endif
+#elif ENABLED(EXTENSIBLE_UI)
+  #define MAX_MESSAGE_LENGTH 63
 #else
   #define MAX_MESSAGE_LENGTH CHARSIZE * (LCD_WIDTH)
+#endif
+
+#if HAS_SPI_LCD || ENABLED(EXTENSIBLE_UI)
+  uint8_t MarlinUI::status_message_level; // = 0
+  char MarlinUI::status_message[MAX_MESSAGE_LENGTH + 1];
 #endif
 
 #if HAS_LCD_MENU && LCD_TIMEOUT_TO_STATUS
   bool MarlinUI::defer_return_to_status;
 #endif
 
-char MarlinUI::status_message[MAX_MESSAGE_LENGTH + 1];
 uint8_t MarlinUI::lcd_status_update_delay = 1; // First update one loop delayed
-uint8_t MarlinUI::status_message_level; // = 0
 
 #if ENABLED(FILAMENT_LCD_DISPLAY) && ENABLED(SDSUPPORT)
   millis_t MarlinUI::next_filament_display; // = 0
@@ -115,9 +120,37 @@ millis_t next_button_update_ms;
 
 #if HAS_LCD_MENU
   #include "menu/menu.h"
+  #include "../sd/cardreader.h"
 
-  #if ENABLED(SDSUPPORT) && ENABLED(SCROLL_LONG_FILENAMES)
-    uint8_t MarlinUI::filename_scroll_pos, MarlinUI::filename_scroll_max;
+  #if ENABLED(SDSUPPORT)
+
+    #if ENABLED(SCROLL_LONG_FILENAMES)
+      uint8_t MarlinUI::filename_scroll_pos, MarlinUI::filename_scroll_max;
+    #endif
+
+    const char * const MarlinUI::scrolled_filename(CardReader &theCard, const uint8_t maxlen, uint8_t hash, const bool doScroll) {
+      const char *outstr = theCard.longest_filename();
+      if (theCard.longFilename[0]) {
+        #if ENABLED(SCROLL_LONG_FILENAMES)
+          if (doScroll) {
+            for (uint8_t l = FILENAME_LENGTH; l--;)
+              hash = ((hash << 1) | (hash >> 7)) ^ theCard.filename[l];      // rotate, xor
+            static uint8_t filename_scroll_hash;
+            if (filename_scroll_hash != hash) {                              // If the hash changed...
+              filename_scroll_hash = hash;                                   // Save the new hash
+              filename_scroll_max = MAX(0, utf8_strlen(theCard.longFilename) - maxlen); // Update the scroll limit
+              filename_scroll_pos = 0;                                       // Reset scroll to the start
+              lcd_status_update_delay = 8;                                   // Don't scroll right away
+            }
+            outstr += filename_scroll_pos;
+          }
+        #else
+          theCard.longFilename[maxlen] = '\0'; // cutoff at screen edge
+        #endif
+      }
+      return outstr;
+    }
+
   #endif
 
   screenFunc_t MarlinUI::currentScreen; // Initialized in CTOR
@@ -161,7 +194,7 @@ void MarlinUI::init() {
 
   init_lcd();
 
-  #if HAS_DIGITAL_ENCODER
+  #if HAS_DIGITAL_BUTTONS
 
     #if BUTTON_EXISTS(EN1)
       SET_INPUT_PULLUP(BTN_EN1);
@@ -171,12 +204,6 @@ void MarlinUI::init() {
     #endif
     #if BUTTON_EXISTS(ENC)
       SET_INPUT_PULLUP(BTN_ENC);
-    #endif
-
-    #if ENABLED(REPRAPWORLD_KEYPAD) && DISABLED(ADC_KEYPAD)
-      SET_OUTPUT(SHIFT_CLK);
-      OUT_WRITE(SHIFT_LD, HIGH);
-      SET_INPUT_PULLUP(SHIFT_OUT);
     #endif
 
     #if BUTTON_EXISTS(UP)
@@ -192,19 +219,27 @@ void MarlinUI::init() {
       SET_INPUT(BTN_RT);
     #endif
 
-  #else // !HAS_DIGITAL_ENCODER
+  #endif // !HAS_DIGITAL_BUTTONS
+
+  #if HAS_SHIFT_ENCODER
 
     #if ENABLED(SR_LCD_2W_NL) // Non latching 2 wire shift register
+
       SET_OUTPUT(SR_DATA_PIN);
       SET_OUTPUT(SR_CLK_PIN);
+
     #elif defined(SHIFT_CLK)
+
       SET_OUTPUT(SHIFT_CLK);
       OUT_WRITE(SHIFT_LD, HIGH);
-      OUT_WRITE(SHIFT_EN, LOW);
+      #if defined(SHIFT_EN) && SHIFT_EN >= 0
+        OUT_WRITE(SHIFT_EN, LOW);
+      #endif
       SET_INPUT_PULLUP(SHIFT_OUT);
-    #endif // SR_LCD_2W_NL
 
-  #endif // !HAS_DIGITAL_ENCODER
+    #endif
+
+  #endif // HAS_SHIFT_ENCODER
 
   #if ENABLED(SDSUPPORT) && PIN_EXISTS(SD_DETECT)
     SET_INPUT_PULLUP(SD_DETECT_PIN);
@@ -237,11 +272,11 @@ bool MarlinUI::get_blink() {
 ///////////// Keypad Handling //////////////
 ////////////////////////////////////////////
 
-#if ENABLED(REPRAPWORLD_KEYPAD)
+#if ENABLED(REPRAPWORLD_KEYPAD) && HAS_ENCODER_ACTION
 
-  volatile uint8_t MarlinUI::buttons_reprapworld_keypad;
+  volatile uint8_t MarlinUI::keypad_buttons;
 
-  #if DISABLED(ADC_KEYPAD) && HAS_LCD_MENU
+  #if HAS_LCD_MENU && !HAS_ADC_BUTTONS
 
     void lcd_move_x();
     void lcd_move_y();
@@ -262,29 +297,30 @@ bool MarlinUI::get_blink() {
 
   bool MarlinUI::handle_keypad() {
 
-    #if ENABLED(ADC_KEYPAD)
+    #if HAS_ADC_BUTTONS
 
       #define ADC_MIN_KEY_DELAY 100
-      if (buttons_reprapworld_keypad) {
+      if (keypad_buttons) {
         #if HAS_ENCODER_ACTION
           refresh(LCDVIEW_REDRAW_NOW);
           if (encoderDirection == -1) { // side effect which signals we are inside a menu
             #if HAS_LCD_MENU
-              if      (RRK(EN_REPRAPWORLD_KEYPAD_DOWN))   encoderPosition -= ENCODER_STEPS_PER_MENU_ITEM;
-              else if (RRK(EN_REPRAPWORLD_KEYPAD_UP))     encoderPosition += ENCODER_STEPS_PER_MENU_ITEM;
+              if      (RRK(EN_REPRAPWORLD_KEYPAD_DOWN))   encoderPosition += ENCODER_STEPS_PER_MENU_ITEM;
+              else if (RRK(EN_REPRAPWORLD_KEYPAD_UP))     encoderPosition -= ENCODER_STEPS_PER_MENU_ITEM;
               else if (RRK(EN_REPRAPWORLD_KEYPAD_LEFT))   { MenuItem_back::action(); quick_feedback(); }
               else if (RRK(EN_REPRAPWORLD_KEYPAD_RIGHT))  { return_to_status(); quick_feedback(); }
             #endif
           }
-          else if (RRK(EN_REPRAPWORLD_KEYPAD_DOWN))     encoderPosition += ENCODER_PULSES_PER_STEP;
-          else if (RRK(EN_REPRAPWORLD_KEYPAD_UP))       encoderPosition -= ENCODER_PULSES_PER_STEP;
+          else if (RRK(EN_REPRAPWORLD_KEYPAD_DOWN))     encoderPosition -= ENCODER_PULSES_PER_STEP;
+          else if (RRK(EN_REPRAPWORLD_KEYPAD_UP))       encoderPosition += ENCODER_PULSES_PER_STEP;
+          else if (RRK(EN_REPRAPWORLD_KEYPAD_LEFT))     { MenuItem_back::action(); quick_feedback(); }
           else if (RRK(EN_REPRAPWORLD_KEYPAD_RIGHT))    encoderPosition = 0;
         #endif
         next_button_update_ms = millis() + ADC_MIN_KEY_DELAY;
         return true;
       }
 
-    #else // !ADC_KEYPAD
+    #else // !HAS_ADC_BUTTONS
 
       static uint8_t keypad_debounce = 0;
 
@@ -374,7 +410,9 @@ void MarlinUI::status_screen() {
     // share the same line on the display.
     //
 
-    millis_t ms = millis();
+    #if DISABLED(PROGRESS_MSG_ONCE) || (PROGRESS_MSG_EXPIRE > 0)
+      millis_t ms = millis();
+    #endif
 
     // If the message will blink rather than expire...
     #if DISABLED(PROGRESS_MSG_ONCE)
@@ -418,7 +456,7 @@ void MarlinUI::status_screen() {
 
   #endif // HAS_LCD_MENU
 
-  #if ENABLED(ULTIPANEL_FEEDMULTIPLY)
+  #if ENABLED(ULTIPANEL_FEEDMULTIPLY) && HAS_ENCODER_ACTION
 
     const int16_t new_frm = feedrate_percentage + (int32_t)encoderPosition;
     // Dead zone at 100% feedrate
@@ -450,7 +488,7 @@ void MarlinUI::status_screen() {
 
 void MarlinUI::kill_screen(PGM_P lcd_msg) {
   init();
-  setalertstatusPGM(lcd_msg);
+  set_alert_status_P(lcd_msg);
   draw_kill_screen();
 }
 
@@ -649,11 +687,11 @@ void MarlinUI::update() {
         if (old_sd_status == 2)
           card.beginautostart();  // Initial boot
         else
-          setstatusPGM(PSTR(MSG_SD_INSERTED));
+          set_status_P(PSTR(MSG_SD_INSERTED));
       }
       else {
         card.release();
-        if (old_sd_status != 2) setstatusPGM(PSTR(MSG_SD_REMOVED));
+        if (old_sd_status != 2) set_status_P(PSTR(MSG_SD_REMOVED));
       }
 
       refresh();
@@ -661,13 +699,6 @@ void MarlinUI::update() {
     }
 
   #endif // SDSUPPORT && SD_DETECT_PIN
-
-  #if ENABLED(POWER_LOSS_RECOVERY)
-    if (job_recovery_commands_count && job_recovery_phase == JOB_RECOVERY_IDLE) {
-      goto_screen(menu_job_recovery);
-      job_recovery_phase = JOB_RECOVERY_MAYBE; // Waiting for a response
-    }
-  #endif
 
   const millis_t ms = millis();
   if (ELAPSED(ms, next_lcd_update_ms)
@@ -690,17 +721,12 @@ void MarlinUI::update() {
 
       #if ENABLED(REPRAPWORLD_KEYPAD)
 
-        if (
-          #if ENABLED(ADC_KEYPAD)
-            handle_keypad()
-          #else
-            handle_keypad()
-          #endif
-        ) {
+        if (handle_keypad()) {
           #if HAS_LCD_MENU && LCD_TIMEOUT_TO_STATUS
             return_to_status_ms = ms + LCD_TIMEOUT_TO_STATUS;
           #endif
         }
+
       #endif
 
       const float abs_diff = ABS(encoderDiff);
@@ -796,8 +822,8 @@ void MarlinUI::update() {
           break;
       } // switch
 
-      #if ENABLED(ADC_KEYPAD)
-        buttons_reprapworld_keypad = 0;
+      #if HAS_ADC_BUTTONS
+        keypad_buttons = 0;
       #endif
 
       #if HAS_GRAPHICAL_LCD
@@ -868,7 +894,7 @@ void MarlinUI::update() {
   } // ELAPSED(ms, next_lcd_update_ms)
 }
 
-#if ENABLED(ADC_KEYPAD)
+#if HAS_ADC_BUTTONS
 
   typedef struct {
     uint16_t ADCKeyValueMin, ADCKeyValueMax;
@@ -905,7 +931,7 @@ void MarlinUI::update() {
 
 #if HAS_ENCODER_ACTION
 
-  #if DISABLED(ADC_KEYPAD) && (ENABLED(REPRAPWORLD_KEYPAD) || !HAS_DIGITAL_ENCODER)
+  #if DISABLED(ADC_KEYPAD) && (ENABLED(REPRAPWORLD_KEYPAD) || !HAS_DIGITAL_BUTTONS)
 
     /**
      * Setup Rotary Encoder Bit Values (for two pin encoders to indicate movement)
@@ -926,42 +952,43 @@ void MarlinUI::update() {
 
   #endif
 
-  #if defined(EN_A) && defined(EN_B)
-    #define encrot0 0
-    #define encrot1 2
-    #define encrot2 3
-    #define encrot3 1
-  #endif
-
   /**
    * Read encoder buttons from the hardware registers
    * Warning: This function is called from interrupt context!
    */
   void MarlinUI::update_buttons() {
-    static uint8_t lastEncoderBits;
     const millis_t now = millis();
     if (ELAPSED(now, next_button_update_ms)) {
 
-      #if HAS_DIGITAL_ENCODER
-        uint8_t newbutton = 0;
+      #if HAS_DIGITAL_BUTTONS
 
-        #if BUTTON_EXISTS(EN1)
-          if (BUTTON_PRESSED(EN1)) newbutton |= EN_A;
-        #endif
-        #if BUTTON_EXISTS(EN2)
-          if (BUTTON_PRESSED(EN2)) newbutton |= EN_B;
-        #endif
-        #if BUTTON_EXISTS(ENC)
-          if (BUTTON_PRESSED(ENC)) newbutton |= EN_C;
-        #endif
-        #if BUTTON_EXISTS(BACK)
-          if (BUTTON_PRESSED(BACK)) newbutton |= EN_D;
+        #if BUTTON_EXISTS(EN1) || BUTTON_EXISTS(EN2) || BUTTON_EXISTS(ENC) || BUTTON_EXISTS(BACK)
+
+          uint8_t newbutton = 0;
+
+          #if BUTTON_EXISTS(EN1)
+            if (BUTTON_PRESSED(EN1)) newbutton |= EN_A;
+          #endif
+          #if BUTTON_EXISTS(EN2)
+            if (BUTTON_PRESSED(EN2)) newbutton |= EN_B;
+          #endif
+          #if BUTTON_EXISTS(ENC)
+            if (BUTTON_PRESSED(ENC)) newbutton |= EN_C;
+          #endif
+          #if BUTTON_EXISTS(BACK)
+            if (BUTTON_PRESSED(BACK)) newbutton |= EN_D;
+          #endif
+
+        #else
+
+          constexpr uint8_t newbutton = 0;
+
         #endif
 
         //
         // Directional buttons
         //
-        #if LCD_HAS_DIRECTIONAL_BUTTONS
+        #if BUTTON_EXISTS(UP) || BUTTON_EXISTS(DWN) || BUTTON_EXISTS(LFT) || BUTTON_EXISTS(RT)
 
           const int8_t pulses = (ENCODER_PULSES_PER_STEP) * encoderDirection;
 
@@ -993,60 +1020,69 @@ void MarlinUI::update() {
             }
           #endif
 
-        #endif // LCD_HAS_DIRECTIONAL_BUTTONS
+        #endif // UP || DWN || LFT || RT
 
-        #if ENABLED(ADC_KEYPAD)
-
-          buttons = 0;
-          if (buttons_reprapworld_keypad == 0) {
-            uint8_t newbutton_reprapworld_keypad = get_ADC_keyValue();
-            if (WITHIN(newbutton_reprapworld_keypad, 1, 8))
-              buttons_reprapworld_keypad = _BV(newbutton_reprapworld_keypad - 1);
-          }
-
-        #else
-
-          buttons = newbutton
-            #if ENABLED(LCD_HAS_SLOW_BUTTONS)
-              | slow_buttons
-            #endif
-          ;
-
-          #if ENABLED(REPRAPWORLD_KEYPAD)
-            GET_SHIFT_BUTTON_STATES(buttons_reprapworld_keypad);
+        buttons = newbutton
+          #if ENABLED(LCD_HAS_SLOW_BUTTONS)
+            | slow_buttons
           #endif
+        ;
 
-        #endif
+      #elif HAS_ADC_BUTTONS
 
-      #else // !HAS_DIGITAL_ENCODER
+        buttons = 0;
+        if (keypad_buttons == 0) {
+          const uint8_t b = get_ADC_keyValue();
+          if (WITHIN(b, 1, 8)) keypad_buttons = _BV(b - 1);
+        }
 
-        GET_SHIFT_BUTTON_STATES(buttons);
+      #endif
+
+      #if HAS_SHIFT_ENCODER
+
+        GET_SHIFT_BUTTON_STATES(
+          #if ENABLED(REPRAPWORLD_KEYPAD)
+            keypad_buttons
+          #else
+            buttons
+          #endif
+        );
 
       #endif
 
     } // next_button_update_ms
 
-    // Manage encoder rotation
-    #define ENCODER_SPIN(_E1, _E2) switch (lastEncoderBits) { case _E1: encoderDiff += encoderDirection; break; case _E2: encoderDiff -= encoderDirection; }
+    #if HAS_ENCODER_WHEEL
+      static uint8_t lastEncoderBits;
 
-    uint8_t enc = 0;
-    if (buttons & EN_A) enc |= B01;
-    if (buttons & EN_B) enc |= B10;
-    if (enc != lastEncoderBits) {
-      switch (enc) {
-        case encrot0: ENCODER_SPIN(encrot3, encrot1); break;
-        case encrot1: ENCODER_SPIN(encrot0, encrot2); break;
-        case encrot2: ENCODER_SPIN(encrot1, encrot3); break;
-        case encrot3: ENCODER_SPIN(encrot2, encrot0); break;
+      #define encrot0 0
+      #define encrot1 2
+      #define encrot2 3
+      #define encrot3 1
+
+      // Manage encoder rotation
+      #define ENCODER_SPIN(_E1, _E2) switch (lastEncoderBits) { case _E1: encoderDiff += encoderDirection; break; case _E2: encoderDiff -= encoderDirection; }
+
+      uint8_t enc = 0;
+      if (buttons & EN_A) enc |= B01;
+      if (buttons & EN_B) enc |= B10;
+      if (enc != lastEncoderBits) {
+        switch (enc) {
+          case encrot0: ENCODER_SPIN(encrot3, encrot1); break;
+          case encrot1: ENCODER_SPIN(encrot0, encrot2); break;
+          case encrot2: ENCODER_SPIN(encrot1, encrot3); break;
+          case encrot3: ENCODER_SPIN(encrot2, encrot0); break;
+        }
+        if (external_control) {
+          #if ENABLED(AUTO_BED_LEVELING_UBL)
+            ubl.encoder_diff = encoderDiff;   // Make encoder rotation available to UBL G29 mesh editing.
+          #endif
+          encoderDiff = 0;                    // Hide the encoder event from the current screen handler.
+        }
+        lastEncoderBits = enc;
       }
-      if (external_control) {
-        #if ENABLED(AUTO_BED_LEVELING_UBL)
-          ubl.encoder_diff = encoderDiff;   // Make encoder rotation available to UBL G29 mesh editing.
-        #endif
-        encoderDiff = 0;                    // Hide the encoder event from the current screen handler.
-      }
-      lastEncoderBits = enc;
-    }
+
+    #endif // HAS_ENCODER_WHEEL
   }
 
   #if ENABLED(LCD_HAS_SLOW_BUTTONS)
@@ -1068,110 +1104,118 @@ void MarlinUI::update() {
 
 #endif // HAS_ENCODER_ACTION
 
-////////////////////////////////////////////
-/////////////// Status Line ////////////////
-////////////////////////////////////////////
-
-void MarlinUI::finishstatus(const bool persist) {
-
-  #if !(ENABLED(LCD_PROGRESS_BAR) && (PROGRESS_MSG_EXPIRE > 0))
-    UNUSED(persist);
-  #endif
-
-  #if ENABLED(LCD_PROGRESS_BAR)
-    progress_bar_ms = millis();
-    #if PROGRESS_MSG_EXPIRE > 0
-      expire_status_ms = persist ? 0 : progress_bar_ms + PROGRESS_MSG_EXPIRE;
-    #endif
-  #endif
-
-  #if ENABLED(FILAMENT_LCD_DISPLAY) && ENABLED(SDSUPPORT)
-    next_filament_display = millis() + 5000UL; // Show status message for 5s
-  #endif
-
-  #if ENABLED(STATUS_MESSAGE_SCROLLING)
-    status_scroll_offset = 0;
-  #endif
-
-  refresh();
-}
-
-bool MarlinUI::has_status() { return (status_message[0] != '\0'); }
-
-void MarlinUI::setstatus(const char * const message, const bool persist) {
-  if (status_message_level > 0) return;
-
-  // Here we have a problem. The message is encoded in UTF8, so
-  // arbitrarily cutting it will be a problem. We MUST be sure
-  // that there is no cutting in the middle of a multibyte character!
-
-  // Get a pointer to the null terminator
-  const char* pend = message + strlen(message);
-
-  //  If length of supplied UTF8 string is greater than
-  // our buffer size, start cutting whole UTF8 chars
-  while ((pend - message) > MAX_MESSAGE_LENGTH) {
-    --pend;
-    while (!START_OF_UTF8_CHAR(*pend)) --pend;
-  };
-
-  // At this point, we have the proper cut point. Use it
-  uint8_t maxLen = pend - message;
-  strncpy(status_message, message, maxLen);
-  status_message[maxLen] = '\0';
-
-  finishstatus(persist);
-}
-
-#include <stdarg.h>
-
-void MarlinUI::status_printf_P(const uint8_t level, PGM_P const fmt, ...) {
-  if (level < status_message_level) return;
-  status_message_level = level;
-  va_list args;
-  va_start(args, fmt);
-  vsnprintf_P(status_message, MAX_MESSAGE_LENGTH, fmt, args);
-  va_end(args);
-  finishstatus(level > 0);
-}
-
-void MarlinUI::setstatusPGM(PGM_P const message, int8_t level) {
-  if (level < 0) level = status_message_level = 0;
-  if (level < status_message_level) return;
-  status_message_level = level;
-
-  // Here we have a problem. The message is encoded in UTF8, so
-  // arbitrarily cutting it will be a problem. We MUST be sure
-  // that there is no cutting in the middle of a multibyte character!
-
-  // Get a pointer to the null terminator
-  PGM_P pend = message + strlen_P(message);
-
-  //  If length of supplied UTF8 string is greater than
-  // our buffer size, start cutting whole UTF8 chars
-  while ((pend - message) > MAX_MESSAGE_LENGTH) {
-    --pend;
-    while (!START_OF_UTF8_CHAR(pgm_read_byte(pend))) --pend;
-  };
-
-  // At this point, we have the proper cut point. Use it
-  uint8_t maxLen = pend - message;
-  strncpy_P(status_message, message, maxLen);
-  status_message[maxLen] = '\0';
-
-  finishstatus(level > 0);
-}
-
-void MarlinUI::setalertstatusPGM(PGM_P const message) {
-  setstatusPGM(message, 1);
-  #if HAS_LCD_MENU
-    return_to_status();
-  #endif
-}
-
 #endif // HAS_SPI_LCD
 
 #if HAS_SPI_LCD || ENABLED(EXTENSIBLE_UI)
+
+  #if ENABLED(EXTENSIBLE_UI)
+    #include "extensible_ui/ui_api.h"
+  #endif
+
+  ////////////////////////////////////////////
+  /////////////// Status Line ////////////////
+  ////////////////////////////////////////////
+
+  void MarlinUI::finishstatus(const bool persist) {
+
+    #if !(ENABLED(LCD_PROGRESS_BAR) && (PROGRESS_MSG_EXPIRE > 0))
+      UNUSED(persist);
+    #endif
+
+    #if ENABLED(LCD_PROGRESS_BAR)
+      progress_bar_ms = millis();
+      #if PROGRESS_MSG_EXPIRE > 0
+        expire_status_ms = persist ? 0 : progress_bar_ms + PROGRESS_MSG_EXPIRE;
+      #endif
+    #endif
+
+    #if ENABLED(FILAMENT_LCD_DISPLAY) && ENABLED(SDSUPPORT)
+      next_filament_display = millis() + 5000UL; // Show status message for 5s
+    #endif
+
+    #if ENABLED(STATUS_MESSAGE_SCROLLING)
+      status_scroll_offset = 0;
+    #endif
+
+    #if ENABLED(EXTENSIBLE_UI)
+      ExtUI::onStatusChanged(status_message);
+    #endif
+
+    refresh();
+  }
+
+  bool MarlinUI::has_status() { return (status_message[0] != '\0'); }
+
+  void MarlinUI::set_status(const char * const message, const bool persist) {
+    if (status_message_level > 0) return;
+
+    // Here we have a problem. The message is encoded in UTF8, so
+    // arbitrarily cutting it will be a problem. We MUST be sure
+    // that there is no cutting in the middle of a multibyte character!
+
+    // Get a pointer to the null terminator
+    const char* pend = message + strlen(message);
+
+    //  If length of supplied UTF8 string is greater than
+    // our buffer size, start cutting whole UTF8 chars
+    while ((pend - message) > MAX_MESSAGE_LENGTH) {
+      --pend;
+      while (!START_OF_UTF8_CHAR(*pend)) --pend;
+    };
+
+    // At this point, we have the proper cut point. Use it
+    uint8_t maxLen = pend - message;
+    strncpy(status_message, message, maxLen);
+    status_message[maxLen] = '\0';
+
+    finishstatus(persist);
+  }
+
+  #include <stdarg.h>
+
+  void MarlinUI::status_printf_P(const uint8_t level, PGM_P const fmt, ...) {
+    if (level < status_message_level) return;
+    status_message_level = level;
+    va_list args;
+    va_start(args, fmt);
+    vsnprintf_P(status_message, MAX_MESSAGE_LENGTH, fmt, args);
+    va_end(args);
+    finishstatus(level > 0);
+  }
+
+  void MarlinUI::set_status_P(PGM_P const message, int8_t level) {
+    if (level < 0) level = status_message_level = 0;
+    if (level < status_message_level) return;
+    status_message_level = level;
+
+    // Here we have a problem. The message is encoded in UTF8, so
+    // arbitrarily cutting it will be a problem. We MUST be sure
+    // that there is no cutting in the middle of a multibyte character!
+
+    // Get a pointer to the null terminator
+    PGM_P pend = message + strlen_P(message);
+
+    //  If length of supplied UTF8 string is greater than
+    // our buffer size, start cutting whole UTF8 chars
+    while ((pend - message) > MAX_MESSAGE_LENGTH) {
+      --pend;
+      while (!START_OF_UTF8_CHAR(pgm_read_byte(pend))) --pend;
+    };
+
+    // At this point, we have the proper cut point. Use it
+    uint8_t maxLen = pend - message;
+    strncpy_P(status_message, message, maxLen);
+    status_message[maxLen] = '\0';
+
+    finishstatus(level > 0);
+  }
+
+  void MarlinUI::set_alert_status_P(PGM_P const message) {
+    set_status_P(message, 1);
+    #if HAS_LCD_MENU
+      return_to_status();
+    #endif
+  }
 
   #include "../module/printcounter.h"
 
@@ -1187,14 +1231,14 @@ void MarlinUI::setalertstatusPGM(PGM_P const message) {
       msg = paused;
     #if ENABLED(SDSUPPORT)
       else if (IS_SD_PRINTING())
-        return setstatus(card.longest_filename(), true);
+        return set_status(card.longest_filename(), true);
     #endif
     else if (print_job_timer.isRunning())
       msg = printing;
     else
       msg = welcome;
 
-    setstatusPGM(msg, -1);
+    set_status_P(msg, -1);
   }
 
 #endif

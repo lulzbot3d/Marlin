@@ -94,6 +94,7 @@ static struct {
 } flags;
 
 namespace ExtUI {
+
   #ifdef __SAM3X8E__
     /**
      * Implement a special millis() to allow time measurement
@@ -139,7 +140,7 @@ namespace ExtUI {
     // TODO: Implement for AVR
     uint32_t safe_millis() { return millis(); }
 
-  #endif
+  #endif // __SAM3X8E__
 
   void delay_us(unsigned long us) {
     DELAY_US(us);
@@ -535,24 +536,26 @@ namespace ExtUI {
 
   float getFeedrate_percent() { return feedrate_percentage; }
 
-  void enqueueCommands(progmem_str gcode) {
-    enqueue_and_echo_commands_P((PGM_P)gcode);
+  void enqueueCommands_P(PGM_P const gcode) {
+    enqueue_and_echo_commands_P(gcode);
   }
 
   bool isAxisPositionKnown(const axis_t axis) {
     return TEST(axis_known_position, axis);
   }
 
-  progmem_str getFirmwareName_str() {
-    return F("Marlin " SHORT_BUILD_VERSION);
+  PGM_P getFirmwareName_str() {
+    static const char firmware_name[] PROGMEM = "Marlin " SHORT_BUILD_VERSION;
+    return firmware_name;
   }
 
   void setTargetTemp_celsius(float value, const heater_t heater) {
     #if HAS_HEATED_BED
-    if (heater == BED)
-      thermalManager.setTargetBed(clamp(value,0,200));
+      if (heater == BED)
+        thermalManager.setTargetBed(clamp(value,0,200));
+      else
     #endif
-      thermalManager.setTargetHotend(clamp(value,0,500), heater - H0);
+        thermalManager.setTargetHotend(clamp(value,0,500), heater - H0);
   }
 
   void setTargetTemp_celsius(float value, const extruder_t extruder) {
@@ -577,7 +580,7 @@ namespace ExtUI {
   }
 
   bool isPrintingFromMedia() {
-    return IFSD(card.cardOK && card.isFileOpen(), false);
+    return IFSD(card.flag.cardOK && card.isFileOpen(), false);
   }
 
   bool isPrinting() {
@@ -585,7 +588,7 @@ namespace ExtUI {
   }
 
   bool isMediaInserted() {
-    return IFSD(IS_SD_INSERTED() && card.cardOK, false);
+    return IFSD(IS_SD_INSERTED() && card.flag.cardOK, false);
   }
 
   void pausePrint() {
@@ -595,16 +598,16 @@ namespace ExtUI {
       #if ENABLED(PARK_HEAD_ON_PAUSE)
         enqueue_and_echo_commands_P(PSTR("M125"));
       #endif
-      ExtUI::onStatusChanged(PSTR(MSG_PRINT_PAUSED));
+      ui.set_status_P(PSTR(MSG_PRINT_PAUSED));
     #endif
   }
 
   void resumePrint() {
     #if ENABLED(SDSUPPORT)
-      ExtUI::onStatusChanged(PSTR(MSG_FILAMENT_CHANGE_RESUME_1));
+      ui.set_status_P(PSTR(MSG_FILAMENT_CHANGE_RESUME_1));
       #if ENABLED(PARK_HEAD_ON_PAUSE)
         wait_for_heatup = wait_for_user = false;
-        enqueue_and_echo_commands_P(PSTR("M24\nM117 " MSG_PRINTING));
+        enqueue_and_echo_commands_P(PSTR("M24"));
       #else
         card.startFileprint();
         print_job_timer.start();
@@ -616,8 +619,8 @@ namespace ExtUI {
   void stopPrint() {
     #if ENABLED(SDSUPPORT)
       wait_for_heatup = wait_for_user = false;
-      card.abort_sd_printing = true;
-      ExtUI::onStatusChanged(PSTR(MSG_PRINT_ABORTED));
+      card.flag.abort_sd_printing = true;
+      ui.set_status_P(PSTR(MSG_PRINT_ABORTED));
     #endif
   }
 
@@ -625,7 +628,7 @@ namespace ExtUI {
 
   void FileList::refresh() { num_files = 0xFFFF; }
 
-  bool FileList::seek(uint16_t pos, bool skip_range_check) {
+  bool FileList::seek(const uint16_t pos, const bool skip_range_check) {
     #if ENABLED(SDSUPPORT)
       if (!skip_range_check && pos > (count() - 1)) return false;
       const uint16_t nr =
@@ -654,7 +657,7 @@ namespace ExtUI {
   }
 
   bool FileList::isDir() {
-    return IFSD(card.filenameIsDir, false);
+    return IFSD(card.flag.filenameIsDir, false);
   }
 
   uint16_t FileList::count() {
@@ -677,7 +680,7 @@ namespace ExtUI {
     #endif
   }
 
-  void FileList::changeDir(const char *dirname) {
+  void FileList::changeDir(const char * const dirname) {
     #if ENABLED(SDSUPPORT)
       card.chdir(dirname);
       num_files = 0xFFFF;
@@ -703,13 +706,13 @@ void MarlinUI::update() {
       last_sd_status = sd_status;
       if (sd_status) {
         card.initsd();
-        if (card.cardOK)
+        if (card.flag.cardOK)
           ExtUI::onMediaInserted();
         else
           ExtUI::onMediaError();
       }
       else {
-        const bool ok = card.cardOK;
+        const bool ok = card.flag.cardOK;
         card.release();
         if (ok) ExtUI::onMediaRemoved();
       }
@@ -717,20 +720,6 @@ void MarlinUI::update() {
   #endif // SDSUPPORT
   ExtUI::_processManualMoveToDestination();
   ExtUI::onIdle();
-}
-
-void MarlinUI::setstatus(const char * const message, const bool persist/*=false*/)  { ExtUI::onStatusChanged(message); }
-void MarlinUI::setstatusPGM(PGM_P const message, int8_t level/*=0*/)                { ExtUI::onStatusChanged((progmem_str)message); }
-void MarlinUI::setalertstatusPGM(PGM_P const message)                               { setstatusPGM(message, 0); }
-
-void MarlinUI::status_printf_P(const uint8_t level, const char * const fmt, ...) {
-  char buff[64];
-  va_list args;
-  va_start(args, fmt);
-  vsnprintf_P(buff, sizeof(buff), fmt, args);
-  va_end(args);
-  buff[63] = '\0';
-  ExtUI::onStatusChanged(buff);
 }
 
 void MarlinUI::kill_screen(PGM_P const msg) {

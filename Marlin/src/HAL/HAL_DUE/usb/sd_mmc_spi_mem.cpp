@@ -22,7 +22,7 @@ Ctrl_status sd_mmc_spi_test_unit_ready(void) {
   #if defined(LULZBOT_DISABLE_DUE_SD_MMC)
     return CTRL_NO_PRESENT;
   #endif
-  if (!IS_SD_INSERTED() || IS_SD_PRINTING() || IS_SD_FILE_OPEN() || !card.cardOK)
+  if (!IS_SD_INSERTED() || IS_SD_PRINTING() || IS_SD_FILE_OPEN() || !card.flag.cardOK)
     return CTRL_NO_PRESENT;
   return CTRL_GOOD;
 }
@@ -30,7 +30,7 @@ Ctrl_status sd_mmc_spi_test_unit_ready(void) {
 // NOTE: This function is defined as returning the address of the last block
 // in the card, which is cardSize() - 1
 Ctrl_status sd_mmc_spi_read_capacity(uint32_t *nb_sector) {
-  if (!IS_SD_INSERTED() || IS_SD_PRINTING() || IS_SD_FILE_OPEN() || !card.cardOK)
+  if (!IS_SD_INSERTED() || IS_SD_PRINTING() || IS_SD_FILE_OPEN() || !card.flag.cardOK)
     return CTRL_NO_PRESENT;
   *nb_sector = card.getSd2Card().cardSize() - 1;
   return CTRL_GOOD;
@@ -45,7 +45,7 @@ bool sd_mmc_spi_wr_protect(void) {
 }
 
 bool sd_mmc_spi_removal(void) {
-  if (!IS_SD_INSERTED() || IS_SD_PRINTING() || IS_SD_FILE_OPEN() || !card.cardOK)
+  if (!IS_SD_INSERTED() || IS_SD_PRINTING() || IS_SD_FILE_OPEN() || !card.flag.cardOK)
     return true;
   return false;
 }
@@ -67,7 +67,7 @@ Ctrl_status sd_mmc_spi_usb_read_10(uint32_t addr, uint16_t nb_sector) {
   #if defined(LULZBOT_DISABLE_DUE_SD_MMC)
     return CTRL_NO_PRESENT;
   #endif
-  if (!IS_SD_INSERTED() || IS_SD_PRINTING() || IS_SD_FILE_OPEN() || !card.cardOK)
+  if (!IS_SD_INSERTED() || IS_SD_PRINTING() || IS_SD_FILE_OPEN() || !card.flag.cardOK)
     return CTRL_NO_PRESENT;
 
   #ifdef DEBUG_MMC
@@ -104,7 +104,7 @@ Ctrl_status sd_mmc_spi_usb_write_10(uint32_t addr, uint16_t nb_sector) {
   #if defined(LULZBOT_DISABLE_DUE_SD_MMC)
     return CTRL_NO_PRESENT;
   #endif
-  if (!IS_SD_INSERTED() || IS_SD_PRINTING() || IS_SD_FILE_OPEN() || !card.cardOK)
+  if (!IS_SD_INSERTED() || IS_SD_PRINTING() || IS_SD_FILE_OPEN() || !card.flag.cardOK)
     return CTRL_NO_PRESENT;
 
   #ifdef DEBUG_MMC

@@ -465,7 +465,7 @@ void RestoreFailsafeScreen::onRedraw(draw_mode_t what) {
 bool RestoreFailsafeScreen::onTouchEnd(uint8_t tag) {
   switch(tag) {
     case 1:
-      ExtUI::enqueueCommands(F("M502"));
+      ExtUI::enqueueCommands_P(PSTR("M502"));
       AlertBoxScreen::show(F("Factory settings restored."));
       // Remove RestoreFailsafeScreen from the stack
       // so the alert box doesn't return to it.
@@ -489,7 +489,7 @@ void SaveSettingsScreen::onRedraw(draw_mode_t what) {
 bool SaveSettingsScreen::onTouchEnd(uint8_t tag) {
   switch(tag) {
     case 1:
-      ExtUI::enqueueCommands(F("M500"));
+      ExtUI::enqueueCommands_P(PSTR("M500"));
       AlertBoxScreen::show(F("Settings saved!"));
       // Remove SaveSettingsScreen from the stack
       // so the alert box doesn't return to me.
@@ -547,7 +547,7 @@ bool ConfirmAutoCalibration::onTouchEnd(uint8_t tag) {
   switch(tag) {
     case 1:
       GOTO_SCREEN(StatusScreen);
-      enqueueCommands(F("G28\nG425"));
+      enqueueCommands_P(PSTR("G28\nG425"));
       return true;
     default:
       return DialogBoxBaseClass::onTouchEnd(tag);
@@ -1066,12 +1066,12 @@ bool MenuScreen::onTouchEnd(uint8_t tag) {
 
   switch(tag) {
     case 1:  GOTO_PREVIOUS();                                         break;
-    case 2:  enqueueCommands(F("G28"));                               break;
+    case 2:  enqueueCommands_P(PSTR("G28"));                               break;
     #if defined(LULZBOT_MENU_AXIS_LEVELING_COMMANDS)
-    case 3:  enqueueCommands(F(LULZBOT_MENU_AXIS_LEVELING_COMMANDS)); break;
+    case 3:  enqueueCommands_P(PSTR(LULZBOT_MENU_AXIS_LEVELING_COMMANDS)); break;
     #endif
     case 4:  GOTO_SCREEN(MoveAxisScreen);                             break;
-    case 5:  enqueueCommands(F("M84"));                               break;
+    case 5:  enqueueCommands_P(PSTR("M84"));                               break;
     case 6:  GOTO_SCREEN(TemperatureScreen);                          break;
     case 7:  GOTO_SCREEN(ChangeFilamentScreen);                       break;
     case 8:  GOTO_SCREEN(AdvancedSettingsScreen);                     break;
@@ -1902,10 +1902,10 @@ bool MoveAxisScreen::onTouchHeld(uint8_t tag) {
     case 14: UI_DECREMENT_AXIS(E3); screen_data.MoveAxisScreen.e_rel[3] -= increment; break;
     case 15: UI_INCREMENT_AXIS(E3); screen_data.MoveAxisScreen.e_rel[3] += increment; break;
     #endif
-    case 20: enqueueCommands(F("G28 X")); break;
-    case 21: enqueueCommands(F("G28 Y")); break;
-    case 22: enqueueCommands(F("G28 Z")); break;
-    case 23: enqueueCommands(F("G28"));   break;
+    case 20: enqueueCommands_P(PSTR("G28 X")); break;
+    case 21: enqueueCommands_P(PSTR("G28 Y")); break;
+    case 22: enqueueCommands_P(PSTR("G28 Z")); break;
+    case 23: enqueueCommands_P(PSTR("G28"));   break;
     default:
       return false;
   }

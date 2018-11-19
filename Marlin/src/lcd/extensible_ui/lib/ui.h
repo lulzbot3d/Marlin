@@ -25,8 +25,8 @@
 #include "../ui_api.h"
 #include "ui_config.h"
 
-#if defined(MMM_TO_MMS)
-    // If MMM_TO_MMS exists, then we are being
+#if defined(__MARLIN_FIRMWARE__)
+    // If __MARLIN_FIRMWARE__ exists, then we are being
     // compiled inside Marlin.
     #define USE_MARLIN_IO
 #else

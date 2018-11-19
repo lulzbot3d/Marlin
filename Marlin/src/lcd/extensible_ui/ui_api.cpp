@@ -61,9 +61,9 @@
 #if ENABLED(SDSUPPORT)
   #include "../../sd/cardreader.h"
   #include "../../feature/emergency_parser.h"
-  #define IFSD(A,B) A
+  #define IFSD(A,B) (A)
 #else
-  #define IFSD(A,B) B
+  #define IFSD(A,B) (B)
 #endif
 
 #if ENABLED(PRINTCOUNTER)
@@ -134,12 +134,6 @@ namespace ExtUI {
       // The ms count is
       return (uint32_t)(currTime / (F_CPU / 8000));
     }
-
-  #else
-
-    // TODO: Implement for AVR
-    uint32_t safe_millis() { return millis(); }
-
   #endif // __SAM3X8E__
 
   void delay_us(unsigned long us) {
@@ -611,7 +605,6 @@ namespace ExtUI {
       #else
         card.startFileprint();
         print_job_timer.start();
-        ExtUI::onStatusChanged(PSTR(MSG_PRINTING));
       #endif
     #endif
   }

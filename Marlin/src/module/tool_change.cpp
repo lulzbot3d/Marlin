@@ -615,8 +615,9 @@ void tool_change(const uint8_t tmp_extruder, const float fr_mm_s/*=0.0*/, bool n
 
       #endif
 
+      set_destination_from_current();
+
       if (!no_move) {
-        set_destination_from_current();
         #if DISABLED(SWITCHING_NOZZLE) && DISABLED(LULZBOT_SWITCHING_NOZZLE_NO_Z_LIFT)
           // Do a small lift to avoid the workpiece in the move back (below)
           #if ENABLED(TOOLCHANGE_PARK)
@@ -650,7 +651,7 @@ void tool_change(const uint8_t tmp_extruder, const float fr_mm_s/*=0.0*/, bool n
         parking_extruder_tool_change(tmp_extruder, no_move);
       #elif ENABLED(SWITCHING_TOOLHEAD) // Switching Toolhead
         switching_toolhead_tool_change(tmp_extruder, fr_mm_s, no_move);
-      #elif ENABLED(SWITCHING_NOZZLE)
+      #elif ENABLED(SWITCHING_NOZZLE) && !defined(LULZBOT_SWITCHING_NOZZLE_NO_Z_LIFT)
         // Always raise by a configured distance to avoid workpiece
         current_position[Z_AXIS] += MAX(-zdiff, 0.0) + toolchange_settings.z_raise;
         #if HAS_SOFTWARE_ENDSTOPS

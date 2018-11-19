@@ -197,9 +197,9 @@ void menu_main() {
 
   #if defined(LULZBOT_SD_MENU_ON_BOTTOM)
   #if ENABLED(SDSUPPORT)
-    if (card.cardOK) {
+    if (card.flag.cardOK) {
       if (card.isFileOpen()) {
-        if (card.sdprinting)
+        if (IS_SD_PRINTING())
           MENU_ITEM(function, MSG_PAUSE_PRINT, lcd_sdcard_pause);
         else
           MENU_ITEM(function, MSG_RESUME_PRINT, lcd_sdcard_resume);

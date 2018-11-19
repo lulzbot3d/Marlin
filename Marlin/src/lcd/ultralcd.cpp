@@ -35,6 +35,26 @@
 #endif
 
 #if HAS_SPI_LCD
+  #if ENABLED(STATUS_MESSAGE_SCROLLING)
+    uint8_t MarlinUI::status_scroll_offset; // = 0
+    #if LONG_FILENAME_LENGTH > CHARSIZE * 2 * (LCD_WIDTH)
+      #define MAX_MESSAGE_LENGTH LONG_FILENAME_LENGTH
+    #else
+      #define MAX_MESSAGE_LENGTH CHARSIZE * 2 * (LCD_WIDTH)
+    #endif
+  #else
+    #define MAX_MESSAGE_LENGTH CHARSIZE * (LCD_WIDTH)
+  #endif
+#elif ENABLED(EXTENSIBLE_UI)
+  #define MAX_MESSAGE_LENGTH 63
+#endif
+
+#if MAX_MESSAGE_LENGTH
+  uint8_t MarlinUI::status_message_level; // = 0
+  char MarlinUI::status_message[MAX_MESSAGE_LENGTH + 1];
+#endif
+
+#if HAS_SPI_LCD
 
 #if HAS_GRAPHICAL_LCD
   #include "dogm/ultralcd_DOGM.h"
@@ -72,24 +92,6 @@
 
 #if ENABLED(SDSUPPORT) && PIN_EXISTS(SD_DETECT)
   uint8_t lcd_sd_status;
-#endif
-
-#if ENABLED(STATUS_MESSAGE_SCROLLING)
-  uint8_t MarlinUI::status_scroll_offset; // = 0
-  #if LONG_FILENAME_LENGTH > CHARSIZE * 2 * (LCD_WIDTH)
-    #define MAX_MESSAGE_LENGTH LONG_FILENAME_LENGTH
-  #else
-    #define MAX_MESSAGE_LENGTH CHARSIZE * 2 * (LCD_WIDTH)
-  #endif
-#elif ENABLED(EXTENSIBLE_UI)
-  #define MAX_MESSAGE_LENGTH 63
-#else
-  #define MAX_MESSAGE_LENGTH CHARSIZE * (LCD_WIDTH)
-#endif
-
-#if HAS_SPI_LCD || ENABLED(EXTENSIBLE_UI)
-  uint8_t MarlinUI::status_message_level; // = 0
-  char MarlinUI::status_message[MAX_MESSAGE_LENGTH + 1];
 #endif
 
 #if HAS_LCD_MENU && LCD_TIMEOUT_TO_STATUS

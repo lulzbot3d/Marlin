@@ -139,9 +139,9 @@ void GcodeSuite::G425() {
   if(parser.seen('T')) calibrate_toolhead_offset(m, parser.value_int());
 
   if(parser.seen('V')) {
-    ui.setstatus(PSTR("Finding calibration cube"));
+    ui.set_status_P(PSTR("Finding calibration cube"));
     probe_cube(m, true);
-    ui.setstatus(PSTR("Measuring"));
+    ui.set_status_P(PSTR("Measuring"));
     probe_cube(m);
     SERIAL_ECHOLNPGM("Calibration cube results: ");
     SERIAL_EOL();
@@ -181,7 +181,7 @@ static void calibrate_all() {
 
   set_nozzle(m, 0);
 
-  ui.setstatus(PSTR("Finding calibration cube"));
+  ui.set_status_P(PSTR("Finding calibration cube"));
   probe_cube(m, true);
 
   SERIAL_ECHOLNPGM("Approximate center of cube:");
@@ -189,7 +189,7 @@ static void calibrate_all() {
   SERIAL_EOL();
 
   #if ENABLED(BACKLASH_GCODE)
-    ui.setstatus(PSTR("Measuring backlash"));
+    ui.set_status_P(PSTR("Measuring backlash"));
     calibrate_backlash(m);
     SERIAL_ECHOLNPGM("Backlash before correction:");
     report_measured_backlash(m);
@@ -205,7 +205,7 @@ static void calibrate_all() {
   SERIAL_EOL();
 
   // Apply offset to toolhead one
-  ui.setstatus(PSTR("Centering nozzle"));
+  ui.set_status_P(PSTR("Centering nozzle"));
   calibrate_toolhead_offset(m, 0);
   #if ENABLED(BACKLASH_GCODE)
     SERIAL_ECHOLNPGM("Backlash after correction (T0):");
@@ -226,7 +226,7 @@ static void calibrate_all() {
     set_nozzle(m, e);
 
     // Apply offset to toolhead two
-    ui.setstatus(PSTR("Centering nozzle"));
+    ui.set_status_P(PSTR("Centering nozzle"));
     calibrate_toolhead_offset(m, 1);
     #if ENABLED(BACKLASH_GCODE)
     SERIAL_ECHOPAIR("Backlash after correction (T", e);
@@ -244,7 +244,7 @@ static void calibrate_all() {
   #endif
 
   park_above_cube(m);
-  ui.setstatus(PSTR("Calibration done."));
+  ui.set_status_P(PSTR("Calibration done."));
 
   #if ENABLED(BACKLASH_GCODE)
     backlash_correction   = saved_backlash_correction;

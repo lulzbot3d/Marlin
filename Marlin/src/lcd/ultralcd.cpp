@@ -49,7 +49,7 @@
   #define MAX_MESSAGE_LENGTH 63
 #endif
 
-#if MAX_MESSAGE_LENGTH
+#ifdef MAX_MESSAGE_LENGTH
   uint8_t MarlinUI::status_message_level; // = 0
   char MarlinUI::status_message[MAX_MESSAGE_LENGTH + 1];
 #endif
@@ -130,7 +130,7 @@ millis_t next_button_update_ms;
       uint8_t MarlinUI::filename_scroll_pos, MarlinUI::filename_scroll_max;
     #endif
 
-    const char * const MarlinUI::scrolled_filename(CardReader &theCard, const uint8_t maxlen, uint8_t hash, const bool doScroll) {
+    const char * MarlinUI::scrolled_filename(CardReader &theCard, const uint8_t maxlen, uint8_t hash, const bool doScroll) {
       const char *outstr = theCard.longest_filename();
       if (theCard.longFilename[0]) {
         #if ENABLED(SCROLL_LONG_FILENAMES)
@@ -840,13 +840,13 @@ void MarlinUI::update() {
         #endif
 
         if (do_u8g_loop) {
-          if (!drawing_screen) {                        // If not already drawing pages
-            u8g.firstPage();                            // Start the first page
-            drawing_screen = first_page = true;         // Flag as drawing pages
+          if (!drawing_screen) {                // If not already drawing pages
+            u8g.firstPage();                    // Start the first page
+            drawing_screen = first_page = true; // Flag as drawing pages
           }
-          set_font(FONT_MENU);                       // Setup font for every page draw
-          u8g.setColorIndex(1);                         // And reset the color
-          run_current_screen();                         // Draw and process the current screen
+          set_font(FONT_MENU);                  // Setup font for every page draw
+          u8g.setColorIndex(1);                 // And reset the color
+          run_current_screen();                 // Draw and process the current screen
           first_page = false;
 
           // The screen handler can clear drawing_screen for an action that changes the screen.

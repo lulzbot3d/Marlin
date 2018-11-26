@@ -1175,17 +1175,10 @@ void Temperature::init() {
     #endif
   #endif
 
-  #if defined(LULZBOT_FAST_PWM_CONTROLLER_FAN_WORKAROUND) && HAS_CONTROLLER_FAN
-    SET_OUTPUT(CONTROLLER_FAN_PIN);
-    #if ENABLED(FAST_PWM_FAN)
-      setPwmFrequency(CONTROLLER_FAN_PIN, LULZBOT_FAST_PWM_SCALE); // No prescaling. Pwm frequency = F_CPU/256/8
-    #endif
-  #endif
-
   #if ENABLED(USE_CONTROLLER_FAN)
     SET_OUTPUT(CONTROLLER_FAN_PIN);
     #if ENABLED(FAST_PWM_FAN)
-      setPwmFrequency(CONTROLLER_FAN_PIN, 1); // No prescaling. Pwm frequency = F_CPU/256/8
+      setPwmFrequency(CONTROLLER_FAN_PIN, LULZBOT_FAST_PWM_SCALE); // No prescaling. Pwm frequency = F_CPU/256/8
     #endif
   #endif
 

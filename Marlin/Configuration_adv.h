@@ -572,12 +572,8 @@
  *    M908 - BQ_ZUM_MEGA_3D, RAMBO, PRINTRBOARD_REVF, RIGIDBOARD_V2 & SCOOVO_X9H
  *    M909, M910 & LCD - only PRINTRBOARD_REVF & RIGIDBOARD_V2
  */
-#if defined(LULZBOT_PWM_MOTOR_CURRENT)
 #define PWM_MOTOR_CURRENT LULZBOT_PWM_MOTOR_CURRENT // Values in milliamps
-#endif
-#if defined(LULZBOT_DIGIPOT_MOTOR_CURRENT)
 #define DIGIPOT_MOTOR_CURRENT LULZBOT_DIGIPOT_MOTOR_CURRENT // Values 0-255 (RAMBO 135 = ~0.75A, 185 = ~1A)
-#endif
 //#define DAC_MOTOR_CURRENT_DEFAULT { 70, 80, 90, 80 }    // Default drive percent - X, Y, Z, E axis
 
 // Use an I2C based DIGIPOT (e.g., Azteeg X3 Pro)

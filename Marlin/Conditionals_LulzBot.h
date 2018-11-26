@@ -52,7 +52,7 @@
  *
  */
 
-#define LULZBOT_FW_VERSION ".15" // Change this with each update
+#define LULZBOT_FW_VERSION ".16" // Change this with each update
 
 #if ( \
     !defined(LULZBOT_Gladiola_Mini) && \
@@ -1288,13 +1288,6 @@
 #elif defined(LULZBOT_IS_TAZ)
     #define LULZBOT_CONTROLLERFAN_SPEED         255
 #endif
-
-// As of Marlin 1.1.5, FAST_PWM_FAN adjusts the frequencies for
-// all fans except the controller fan. This workaround allows
-// the controller fan PWM freq to be adjusted to 122Hz (this
-// may not be necessary, but since the Pelonis fan likes 122Hz,
-// we are trying to keep all the fan frequencies at that).
-#define LULZBOT_FAST_PWM_CONTROLLER_FAN_WORKAROUND
 
 /******************************* AXIS TRAVEL LIMITS *****************************/
 

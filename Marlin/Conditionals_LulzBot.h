@@ -52,7 +52,7 @@
  *
  */
 
-#define LULZBOT_FW_VERSION ".16" // Change this with each update
+#define LULZBOT_FW_VERSION ".17" // Change this with each update
 
 #if ( \
     !defined(LULZBOT_Gladiola_Mini) && \
@@ -270,7 +270,8 @@
 #define LULZBOT_STARTUP \
     LULZBOT_ENABLE_Z_MOTOR_ON_STARTUP \
     LULZBOT_ENABLE_PROBE_PINS(false) \
-    LULZBOT_TURN_OFF_UNUSED_PINS
+    LULZBOT_TURN_OFF_UNUSED_PINS \
+    LULZBOT_INIT_ACTIVE_EXTRUDER
 
 /************************* EXPERIMENTAL FEATURES ******************************/
 
@@ -1035,6 +1036,7 @@
     #define LULZBOT_E_STEPS                         420
     #define LULZBOT_X_MAX_ENDSTOP_INVERTING         LULZBOT_NO_ENDSTOP
     #define LULZBOT_E3D_Titan_Aero_V6
+    #define LULZBOT_INIT_ACTIVE_EXTRUDER            enqueue_and_echo_commands_P("T1\nT0");
 #endif /* TOOLHEAD_Quiver_DualExtruder */
 
 #if defined(TOOLHEAD_Devel_1Servo1Motor)
@@ -1077,6 +1079,10 @@
     #define LULZBOT_X_MAX_ENDSTOP_INVERTING         LULZBOT_NO_ENDSTOP
     #define LULZBOT_E3D_Titan_Aero_V6
 #endif /* TOOLHEAD_Devel_ServoDual */
+
+#ifndef LULZBOT_INIT_ACTIVE_EXTRUDER
+    #define LULZBOT_INIT_ACTIVE_EXTRUDER
+#endif
 
 /************** AUTO-CALIBRATION (BACKLASH AND NOZZLE OFFSET) ****************/
 

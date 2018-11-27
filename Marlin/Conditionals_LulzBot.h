@@ -52,7 +52,7 @@
  *
  */
 
-#define LULZBOT_FW_VERSION ".17" // Change this with each update
+#define LULZBOT_FW_VERSION ".19" // Change this with each update
 
 #if ( \
     !defined(LULZBOT_Gladiola_Mini) && \
@@ -1704,6 +1704,12 @@
         #define LULZBOT_Z_PROBE_LOW_POINT   -4
     #endif
 
+    #define LULZBOT_WIPE_SEQUENCE_GCODE \
+        "M109 R170\n"                         /* Wait for wipe temp */ \
+        "M117 Rewiping nozzle\n"              /* Status message */ \
+        "G12 P0 S12 T0\n"                     /* Wipe nozzle */ \
+        "M104 S160\n"                         /* Drop to probe temp */
+
     #if defined(TOOLHEAD_Yellowfin_DualExtruderV3)
         // The Dual V3 has a wider wipe pad and both nozzles need to be
         // brought to temp at once.
@@ -1713,28 +1719,16 @@
         #define LULZBOT_REWIPE_E0 \
             "M109 R170 T0\n"                      /* Wait for wipe temp */ \
             "M109 R170 T1\n"                      /* Wait for wipe temp */ \
-            "G12 P0 S4 T0\n"                      /* Wipe nozzle while hot */ \
-            "M104 S160 T0\n"                      /* Drop to probe temp during wipe */ \
-            "M104 S160 T1\n"                      /* Drop to probe temp during wipe */ \
-            "M106 S255\n"                         /* Turn on fan to aid with cooling */ \
-            "G4 S5\n"                             /* Wait for temperature to drop */ \
-            "G12 P0 S4 T0\n"                      /* Wipe nozzle while cooling */ \
-            "G4 S5\n"                             /* Wait for temperature to drop */ \
-            "G12 P0 S4 T0\n"                      /* Wipe nozzle while cooling */ \
-            "M107\n"                              /* Turn off fan */
+            "G12 P0 S12 T0\n"                     /* Wipe nozzle */ \
+            "M104 S160 T0\n"                      /* Drop to probe temp */ \
+            "M104 S160 T1\n"                      /* Drop to probe temp */
     #else
         #define LULZBOT_PREHEAT_E0 \
             "M104 S170 T0\n"                      /* Preheat to wipe temp */
         #define LULZBOT_REWIPE_E0 \
             "M109 R170 T0\n"                      /* Wait for wipe temp */ \
-            "G12 P0 S4 T0\n"                      /* Wipe nozzle while hot */ \
-            "M104 S160\n"                         /* Drop to probe temp during wipe */ \
-            "M106 S255\n"                         /* Turn on fan to aid with cooling */ \
-            "G4 S5\n"                             /* Wait for temperature to drop */ \
-            "G12 P0 S4 T0\n"                      /* Wipe nozzle while cooling */ \
-            "G4 S5\n"                             /* Wait for temperature to drop */ \
-            "G12 P0 S4 T0\n"                      /* Wipe nozzle while cooling */ \
-            "M107\n"                              /* Turn off fan */
+            "G12 P0 S12 T0\n"                     /* Wipe nozzle */ \
+            "M104 S160\n"                         /* Drop to probe temp */
     #endif
 
     #if defined(LULZBOT_Quiver_TAZ7) && defined(TOOLHEAD_Quiver_DualExtruder)
@@ -1746,25 +1740,20 @@
             "G1 X300 Y100 F5000\n"                /* Move E2 above second wiper pad */ \
             "G1 Z1\n"                             /* Push nozzle into wiper */ \
             "M109 R170\n"                         /* Wait for wipe temp */ \
-            "M106 S255\n"                         /* Turn on fan to aid with cooling */ \
             "G1 X301 Y105 F4000\n"                /* Slow wipe */ \
             "G1 X301 Y33  F4000\n"                /* Slow wipe */ \
             "G1 X301 Y105 F4000\n"                /* Slow wipe */ \
             "G1 X301 Y33  F4000\n"                /* Slow wipe */ \
-            "M104 S160\n"                         /* Drop to probe temp during wipe */ \
-            "M106 S255\n"                         /* Turn on fan to aid with cooling */ \
-            "G4 S5\n"                             /* Wait for temperature to drop */ \
             "G1 X301 Y105 F4000\n"                /* Slow wipe */ \
             "G1 X301 Y33  F4000\n"                /* Slow wipe */ \
             "G1 X301 Y105 F4000\n"                /* Slow wipe */ \
             "G1 X301 Y33  F4000\n"                /* Slow wipe */ \
-            "G4 S5\n"                             /* Wait for temperature to drop */ \
             "G1 X301 Y105 F4000\n"                /* Slow wipe */ \
             "G1 X301 Y33  F4000\n"                /* Slow wipe */ \
             "G1 X301 Y105 F4000\n"                /* Slow wipe */ \
             "G1 X301 Y33  F4000\n"                /* Slow wipe */ \
-            "M107\n"                              /* Turn off fan */ \
             "G1 Z5\n"                             /* Raise nozzle */ \
+            "M104 S160\n"                         /* Drop to probe temp */ \
             "G0 X150 F5000\n"                     /* Move over to switch extruders */ \
             "T0\n"                                /* Switch to first extruder */
     #else
@@ -2036,11 +2025,6 @@
     #define LULZBOT_MENU_HOLLOW_FRAME_DISABLE
     #define LULZBOT_USE_SMALL_INFOFONT
     #if defined(LULZBOT_USE_AUTOLEVELING)
-        #define LULZBOT_BABYSTEPPING
-        #define LULZBOT_BABYSTEP_ZPROBE_OFFSET
-        #if EXTRUDERS > 1
-            #define LULZBOT_BABYSTEP_HOTEND_Z_OFFSET
-        #endif
         #define LULZBOT_MENU_BED_LEVELING_GCODE "G28 XY\nM109 S175\nG28 Z\nM109 R145\nG12\nG29\nM104 S0"
     #endif
     #define LULZBOT_SHOW_CUSTOM_BOOTSCREEN

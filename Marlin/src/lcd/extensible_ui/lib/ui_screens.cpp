@@ -1420,7 +1420,7 @@ void ChangeFilamentScreen::onRedraw(draw_mode_t what) {
 
     #if defined(USE_PORTRAIT_ORIENTATION)
     if(!e_ok) cmd.cmd(COLOR_RGB(Theme::background)).rectangle(BTN_POS(1,3), BTN_SIZE(2,7)).cmd(COLOR_RGB(0xFFFFFF));
-    if(!t_ok) cmd.cmd(COLOR_RGB(Theme::background)).rectangle(BTN_POS(1,8), BTN_SIZE(2,2)).cmd(COLOR_RGB(0xFFFFFF));
+    if(!t_ok) cmd.cmd(COLOR_RGB(Theme::background)).rectangle(BTN_POS(1,8), BTN_SIZE(2,3)).cmd(COLOR_RGB(0xFFFFFF));
     #else
     if(!e_ok) cmd.cmd(COLOR_RGB(Theme::background)).rectangle(BTN_POS(1,3), BTN_SIZE(2,7))
                                                    .rectangle(BTN_POS(3,1), BTN_SIZE(2,2)).cmd(COLOR_RGB(0xFFFFFF));
@@ -1493,6 +1493,7 @@ bool ChangeFilamentScreen::onTouchEnd(uint8_t tag) {
     case 2:
     case 3:
     case 4:
+      // Change temperature
       screen_data.ChangeFilamentScreen.t_tag = tag;
       setTargetTemp_celsius(getSoftenTemp(), getExtruder());
       break;
@@ -1500,8 +1501,10 @@ bool ChangeFilamentScreen::onTouchEnd(uint8_t tag) {
     case 8: screen_data.ChangeFilamentScreen.repeat_tag = (screen_data.ChangeFilamentScreen.repeat_tag == 8) ? 0 : 8; break;
     case 10:
     case 11:
-      screen_data.ChangeFilamentScreen.e_tag = tag;
-      screen_data.ChangeFilamentScreen.t_tag = 0;
+      // Change extruder
+      screen_data.ChangeFilamentScreen.e_tag      = tag;
+      screen_data.ChangeFilamentScreen.t_tag      = 0;
+      screen_data.ChangeFilamentScreen.repeat_tag = 0;
       setActiveTool(getExtruder(), true);
       break;
     case 15: GOTO_SCREEN(TemperatureScreen); break;
@@ -1510,6 +1513,7 @@ bool ChangeFilamentScreen::onTouchEnd(uint8_t tag) {
 }
 
 bool ChangeFilamentScreen::onTouchHeld(uint8_t tag) {
+  if(ExtUI::isMoving()) return false; // Don't allow moves to accumulate
   constexpr float increment = 1;
   #define UI_INCREMENT_AXIS(axis) MoveAxisScreen::setManualFeedrate(axis, increment); UI_INCREMENT(AxisPosition_mm, axis);
   #define UI_DECREMENT_AXIS(axis) MoveAxisScreen::setManualFeedrate(axis, increment); UI_DECREMENT(AxisPosition_mm, axis);
@@ -1525,7 +1529,6 @@ bool ChangeFilamentScreen::onTouchHeld(uint8_t tag) {
 
 void ChangeFilamentScreen::onIdle() {
   if(screen_data.ChangeFilamentScreen.repeat_tag) onTouchHeld(screen_data.ChangeFilamentScreen.repeat_tag);
-
   if(refresh_timer.elapsed(STATUS_UPDATE_INTERVAL)) {
     onRefresh();
     refresh_timer.start();

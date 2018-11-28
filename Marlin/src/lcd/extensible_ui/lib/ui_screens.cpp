@@ -1429,8 +1429,8 @@ void ChangeFilamentScreen::onRedraw(draw_mode_t what) {
 
     if(e_ok && !t_ok) reset_menu_timeout();
 
-    const uint16_t tag7_opt = screen_data.ChangeFilamentScreen.repeat_tag == 7 ? OPT_FLAT : OPT_3D;
-    const uint16_t tag8_opt = screen_data.ChangeFilamentScreen.repeat_tag == 8 ? OPT_FLAT : OPT_3D;
+    const uint16_t tag7_style = screen_data.ChangeFilamentScreen.repeat_tag == 7 ? STYLE_LIGHT_BTN : 0;
+    const uint16_t tag8_style = screen_data.ChangeFilamentScreen.repeat_tag == 8 ? STYLE_LIGHT_BTN : 0;
 
     #if defined(USE_PORTRAIT_ORIENTATION)
       cmd.font(Theme::font_large)
@@ -1450,18 +1450,18 @@ void ChangeFilamentScreen::onRedraw(draw_mode_t what) {
 
     #if defined(USE_PORTRAIT_ORIENTATION)
        .font(Theme::font_large)
-       .tag(5)                .enabled(t_ok) .button (BTN_POS(1,9),  BTN_SIZE(1,1), F("Momentary"))
-       .tag(6)                .enabled(t_ok) .button (BTN_POS(2,9),  BTN_SIZE(1,1), F("Momentary"))
-       .tag(7)                .enabled(t_ok) .button (BTN_POS(1,10), BTN_SIZE(1,1), F("Continuous"), tag7_opt)
-       .tag(8)                .enabled(t_ok) .button (BTN_POS(2,10), BTN_SIZE(1,1), F("Continuous"), tag8_opt)
-       .tag(1)                               .button (BTN_POS(1,11), BTN_SIZE(2,1), F("Back"));
+       .tag(5)                  .enabled(t_ok).button (BTN_POS(1,9),  BTN_SIZE(1,1), F("Momentary"))
+       .tag(6)                  .enabled(t_ok).button (BTN_POS(2,9),  BTN_SIZE(1,1), F("Momentary"))
+       .tag(7).style(tag7_style).enabled(t_ok).button (BTN_POS(1,10), BTN_SIZE(1,1), F("Continuous"))
+       .tag(8).style(tag8_style).enabled(t_ok).button (BTN_POS(2,10), BTN_SIZE(1,1), F("Continuous"))
+       .tag(1).style(STYLE_LIGHT_BTN)         .button (BTN_POS(1,11), BTN_SIZE(2,1), F("Back"));
     #else
        .font(Theme::font_medium)
-       .tag(5)                .enabled(t_ok) .button (BTN_POS(3,4), BTN_SIZE(1,1), F("Momentary"))
-       .tag(6)                .enabled(t_ok) .button (BTN_POS(4,4), BTN_SIZE(1,1), F("Momentary"))
-       .tag(7)                .enabled(t_ok) .button (BTN_POS(3,5), BTN_SIZE(1,1), F("Continuous"), tag7_opt)
-       .tag(8)                .enabled(t_ok) .button (BTN_POS(4,5), BTN_SIZE(1,1), F("Continuous"), tag8_opt)
-       .tag(1)                               .button (BTN_POS(3,6), BTN_SIZE(2,1), F("Back"));
+       .tag(5)                  .enabled(t_ok).button (BTN_POS(3,4), BTN_SIZE(1,1), F("Momentary"))
+       .tag(6)                  .enabled(t_ok).button (BTN_POS(4,4), BTN_SIZE(1,1), F("Momentary"))
+       .tag(7).style(tag7_style).enabled(t_ok).button (BTN_POS(3,5), BTN_SIZE(1,1), F("Continuous"))
+       .tag(8).style(tag8_style).enabled(t_ok).button (BTN_POS(4,5), BTN_SIZE(1,1), F("Continuous"))
+       .tag(1).style(STYLE_LIGHT_BTN)         .button (BTN_POS(3,6), BTN_SIZE(2,1), F("Back"));
     #endif
   }
   #undef GRID_COLS
@@ -2060,6 +2060,9 @@ bool StepsScreen::onTouchHeld(uint8_t tag) {
     w.heading(                          PSTR("Z Offset"));
     w.color(Theme::z_axis).adjuster(4,  PSTR("Z Offset:"), ExtUI::getZOffset_mm());
     w.increments();
+    w.heading(PSTR("First Layer:"));
+    w.button(5, PSTR("Thicker"));
+    w.button(4, PSTR("Thinner"));
   }
 
   bool ZOffsetScreen::onTouchHeld(uint8_t tag) {

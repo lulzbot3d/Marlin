@@ -52,7 +52,7 @@
  *
  */
 
-#define LULZBOT_FW_VERSION ".23" // Change this with each update
+#define LULZBOT_FW_VERSION ".24" // Change this with each update
 
 #if ( \
     !defined(LULZBOT_Gladiola_Mini) && \
@@ -189,7 +189,6 @@
     #define LULZBOT_USE_AUTOLEVELING
     #define LULZBOT_SENSORLESS_HOMING
     #define LULZBOT_USE_NORMALLY_CLOSED_ENDSTOPS
-    //#define LULZBOT_ENDSTOP_INTERRUPTS_FEATURE
     #define LULZBOT_USE_Z_BELT
     #define LULZBOT_BACKLASH_COMPENSATION
     #define LULZBOT_USE_TMC_STEALTHCHOP_Z
@@ -204,6 +203,7 @@
     #define LULZBOT_CALIBRATION_GCODE
     #define LULZBOT_HAS_CALIBRATION_CUBE
     #define LULZBOT_FILAMENT_RUNOUT_SENSOR
+    #define LULZBOT_BACKUP_EEPROM_INFORMATION
 #endif
 
 #if defined(LULZBOT_Prototype_DemoCLCD)

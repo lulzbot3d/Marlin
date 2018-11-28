@@ -489,15 +489,19 @@ class InterfaceSettingsScreen : public BaseScreen, public CachedScreen<INTERFACE
       uint32_t touch_transform_e;
       uint32_t touch_transform_f;
       uint8_t event_sounds[InterfaceSoundsScreen::NUM_EVENTS];
-      #if ENABLED(LULZBOT_PRINTCOUNTER)
-        // Keep a backup of the print counter information in SPI EEPROM
-        // since the emulated EEPROM on the Due HAL does not survive
-        // a reflash.
-        uint16_t total_prints;
-        uint16_t finished_prints;
-        uint32_t total_print_time;
-        uint32_t longest_print;
-        float    total_filament_used;
+      #if ENABLED(LULZBOT_BACKUP_EEPROM_INFORMATION)
+        #if ENABLED(PRINTCOUNTER)
+          // Keep a backup of the print counter information in SPI EEPROM
+          // since the emulated EEPROM on the Due HAL does not survive
+          // a reflash.
+          uint16_t total_prints;
+          uint16_t finished_prints;
+          uint32_t total_print_time;
+          uint32_t longest_print;
+          float    total_filament_used;
+        #endif
+        float    nozzle_offsets_mm[XYZ];
+        float    nozzle_z_offset;
       #endif
       // TODO: The following should really be stored in the EEPROM
       #if ENABLED(BACKLASH_GCODE)

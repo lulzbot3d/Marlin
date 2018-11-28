@@ -69,7 +69,7 @@ static union {
     uint8_t  cur_page;
   } FilesScreen;
   struct {
-    uint8_t increment; // Must match ValueAdjusters.
+    struct ValueAdjusters; // Must match ValueAdjusters
     float e_rel[ExtUI::extruderCount];
   } MoveAxisScreen;
 } screen_data;
@@ -2655,16 +2655,22 @@ void InterfaceSettingsScreen::saveSettings() {
   data.touch_transform_d = CLCD::mem_read_32(REG_TOUCH_TRANSFORM_D);
   data.touch_transform_e = CLCD::mem_read_32(REG_TOUCH_TRANSFORM_E);
   data.touch_transform_f = CLCD::mem_read_32(REG_TOUCH_TRANSFORM_F);
-  #if ENABLED(LULZBOT_PRINTCOUNTER)
-    // Keep a backup of the print counter information in SPI EEPROM
-    // since the emulated EEPROM on the Due HAL does not survive
-    // a reflash.
-    printStatistics* stats   = print_job_timer.getStatsPtr();
-    data.total_prints        = stats->totalPrints;
-    data.finished_prints     = stats->finishedPrints;
-    data.total_print_time    = stats->printTime;
-    data.longest_print       = stats->longestPrint;
-    data.total_filament_used = stats->filamentUsed;
+  #if ENABLED(LULZBOT_BACKUP_EEPROM_INFORMATION)
+    #if ENABLED(PRINTCOUNTER)
+      // Keep a backup of the print counter information in SPI EEPROM
+      // since the emulated EEPROM on the Due HAL does not survive
+      // a reflash.
+      printStatistics* stats   = print_job_timer.getStatsPtr();
+      data.total_prints        = stats->totalPrints;
+      data.finished_prints     = stats->finishedPrints;
+      data.total_print_time    = stats->printTime;
+      data.longest_print       = stats->longestPrint;
+      data.total_filament_used = stats->filamentUsed;
+    #endif
+    data.nozzle_offsets_mm[X_AXIS] = getNozzleOffset_mm(X, E1);
+    data.nozzle_offsets_mm[Y_AXIS] = getNozzleOffset_mm(Y, E1);
+    data.nozzle_offsets_mm[Z_AXIS] = getNozzleOffset_mm(Z, E1);
+    data.nozzle_z_offset           = getZOffset_mm();
   #endif
   // TODO: This really should be moved to the EEPROM
   #if ENABLED(BACKLASH_GCODE)
@@ -2701,13 +2707,19 @@ void InterfaceSettingsScreen::loadSettings() {
     CLCD::mem_write_32(REG_TOUCH_TRANSFORM_D, data.touch_transform_d);
     CLCD::mem_write_32(REG_TOUCH_TRANSFORM_E, data.touch_transform_e);
     CLCD::mem_write_32(REG_TOUCH_TRANSFORM_F, data.touch_transform_f);
-    #if ENABLED(LULZBOT_PRINTCOUNTER)
-      printStatistics* stats   = print_job_timer.getStatsPtr();
-      stats->totalPrints       = max(stats->totalPrints,    data.total_prints);
-      stats->finishedPrints    = max(stats->finishedPrints, data.finished_prints);
-      stats->printTime         = max(stats->printTime,      data.total_print_time);
-      stats->longestPrint      = max(stats->longestPrint,   data.longest_print);
-      stats->filamentUsed      = max(stats->filamentUsed,   data.total_filament_used);
+    #if ENABLED(LULZBOT_BACKUP_EEPROM_INFORMATION)
+      #if ENABLED(PRINTCOUNTER)
+        printStatistics* stats   = print_job_timer.getStatsPtr();
+        stats->totalPrints       = max(stats->totalPrints,    data.total_prints);
+        stats->finishedPrints    = max(stats->finishedPrints, data.finished_prints);
+        stats->printTime         = max(stats->printTime,      data.total_print_time);
+        stats->longestPrint      = max(stats->longestPrint,   data.longest_print);
+        stats->filamentUsed      = max(stats->filamentUsed,   data.total_filament_used);
+      #endif
+      setNozzleOffset_mm(data.nozzle_offsets_mm[X_AXIS], X, E1);
+      setNozzleOffset_mm(data.nozzle_offsets_mm[Y_AXIS], Y, E1);
+      setNozzleOffset_mm(data.nozzle_offsets_mm[Z_AXIS], Z, E1);
+      setZOffset_mm(data.nozzle_z_offset);
     #endif
     // TODO: This really should be moved to the EEPROM
     #if ENABLED(BACKLASH_GCODE)

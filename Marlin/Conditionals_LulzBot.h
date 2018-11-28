@@ -52,7 +52,7 @@
  *
  */
 
-#define LULZBOT_FW_VERSION ".22" // Change this with each update
+#define LULZBOT_FW_VERSION ".23" // Change this with each update
 
 #if ( \
     !defined(LULZBOT_Gladiola_Mini) && \
@@ -692,7 +692,7 @@
 #elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT)
     #define LULZBOT_MENU_AXIS_LEVELING_COMMANDS \
         "M117 Leveling X Axis\n" /* Set LCD status */ \
-        "G28\n"                  /* Home Axis */ \
+        "G28 Z0\n"               /* Home Axis */ \
         "M400\n"                 /* Finish moves */ \
         "M121\n"                 /* Turn off hardware endstops */ \
         "M211 S0\n"              /* Turn off soft endstops */ \
@@ -702,7 +702,7 @@
         "M906 Z960\n"            /* Restore current to 960mA */ \
         "M211 S1\n"              /* Turn on soft endstops */ \
         "M120\n"                 /* Turn on hardware endstops */ \
-        "G28\n"                  /* Rehome */ \
+        "G28 Z0\n"               /* Rehome */ \
         "M117 Leveling done.\n"  /* Set LCD status */
 #endif
 
@@ -1400,7 +1400,6 @@
     #define LULZBOT_USE_ZMAX_PLUG
 #endif
 
-#define LULZBOT_ENDSTOPS_ALWAYS_ON_DEFAULT
 #define LULZBOT_ABORT_ON_ENDSTOP_HIT_FEATURE_ENABLED
 
 // Workaround for bug in Marlin 1.1.5 where motion is stopped a X or Y = 0,

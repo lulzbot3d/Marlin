@@ -304,8 +304,14 @@ class ChangeFilamentScreen : public BaseScreen, public CachedScreen<CHANGE_FILAM
 };
 
 class ValueAdjusters : public BaseScreen {
-  protected:
+  public:
+    enum precision_default_t {
+      DEFAULT_LOWEST,
+      DEFAULT_MIDRANGE,
+      DEFAULT_HIGHEST
+    };
 
+  protected:
     class widgets_t {
       private:
         draw_mode_t _what;
@@ -322,7 +328,7 @@ class ValueAdjusters : public BaseScreen {
 
         inline widgets_t &color(uint32_t color)       {_color = color; return *this;}
         inline widgets_t &units(const char *units)    {_units = units; return *this;}
-        inline widgets_t &precision(uint8_t decimals, bool prefer_smallest = false);
+        inline widgets_t &precision(uint8_t decimals, precision_default_t initial = DEFAULT_LOWEST);
 
         void heading       (const char *label);
         void adjuster_sram_val (uint8_t tag, const char *label, const char *value, bool is_enabled = true);

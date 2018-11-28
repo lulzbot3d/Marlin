@@ -1622,10 +1622,10 @@ ValueAdjusters::widgets_t::widgets_t(draw_mode_t what) : _what(what) {
   _units = PSTR("");
 }
 
-ValueAdjusters::widgets_t &ValueAdjusters::widgets_t::precision(uint8_t decimals, bool prefer_smallest) {
+ValueAdjusters::widgets_t &ValueAdjusters::widgets_t::precision(uint8_t decimals, precision_default_t initial) {
   _decimals = decimals;
   if(screen_data.ValueAdjusters.increment == 0) {
-    screen_data.ValueAdjusters.increment = (prefer_smallest ? 243: 245) - _decimals;
+    screen_data.ValueAdjusters.increment = 243 + (initial - DEFAULT_LOWEST) - _decimals;
   }
   return *this;
 }
@@ -2055,14 +2055,14 @@ bool StepsScreen::onTouchHeld(uint8_t tag) {
 #if HAS_BED_PROBE
   void ZOffsetScreen::onRedraw(draw_mode_t what) {
     widgets_t w(what);
-    w.precision(2, true).units(PSTR("mm"));
+    w.precision(2, ValueAdjusters::DEFAULT_MIDRANGE).units(PSTR("mm"));
 
     w.heading(                          PSTR("Z Offset"));
     w.color(Theme::z_axis).adjuster(4,  PSTR("Z Offset:"), ExtUI::getZOffset_mm());
     w.increments();
-    w.heading(PSTR("First Layer:"));
-    w.button(5, PSTR("Thicker"));
-    w.button(4, PSTR("Thinner"));
+    w.heading(PSTR("First Layer Height:"));
+    w.button(5, PSTR("More (Thicker)"));
+    w.button(4, PSTR("Less (Thinner)"));
   }
 
   bool ZOffsetScreen::onTouchHeld(uint8_t tag) {

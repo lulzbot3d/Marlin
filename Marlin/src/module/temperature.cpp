@@ -1926,7 +1926,7 @@ void Temperature::isr() {
     ;
 
     /**
-     * Standard PWM modulation
+     * Standard heater PWM modulation
      */
     if (pwm_count_tmp >= 127) {
       pwm_count_tmp -= 127;

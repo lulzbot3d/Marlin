@@ -1180,7 +1180,7 @@ void Planner::check_axes_activity() {
   if (has_blocks_queued()) {
 
     #if FAN_COUNT > 0
-      for (uint8_t i = 0; i < FAN_COUNT; i++)
+      FANS_LOOP(i)
         tail_fan_speed[i] = block_buffer[block_buffer_tail].fan_speed[i];
     #endif
 
@@ -1203,7 +1203,7 @@ void Planner::check_axes_activity() {
   }
   else {
     #if FAN_COUNT > 0
-      for (uint8_t i = 0; i < FAN_COUNT; i++) tail_fan_speed[i] = fan_speed[i];
+      FANS_LOOP(i) tail_fan_speed[i] = fan_speed[i];
     #endif
 
     #if ENABLED(BARICUDA)
@@ -1919,7 +1919,7 @@ bool Planner::_populate_block(block_t * const block, bool split_move,
   #endif
 
   #if FAN_COUNT > 0
-    for (uint8_t i = 0; i < FAN_COUNT; i++) block->fan_speed[i] = fan_speed[i];
+    FANS_LOOP(i) block->fan_speed[i] = fan_speed[i];
   #endif
 
   #if ENABLED(BARICUDA)

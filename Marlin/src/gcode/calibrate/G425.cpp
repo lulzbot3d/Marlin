@@ -168,11 +168,13 @@ static void set_nozzle(measurements_t &m, uint8_t extruder) {
 }
 
 static void reset_nozzle_offsets() {
-  hotend_offset[X_AXIS][0] = 0;
-  hotend_offset[Y_AXIS][0] = 0;
-  hotend_offset[Z_AXIS][0] = 0;
-  constexpr float tmp4[XYZ][HOTENDS] = { HOTEND_OFFSET_X, HOTEND_OFFSET_Y, HOTEND_OFFSET_Z };
-  LOOP_XYZ(i) HOTEND_LOOP() hotend_offset[i][e] = tmp4[i][e];
+  #if HOTENDS > 1
+    hotend_offset[X_AXIS][0] = 0;
+    hotend_offset[Y_AXIS][0] = 0;
+    hotend_offset[Z_AXIS][0] = 0;
+    constexpr float tmp4[XYZ][HOTENDS] = { HOTEND_OFFSET_X, HOTEND_OFFSET_Y, HOTEND_OFFSET_Z };
+    LOOP_XYZ(i) HOTEND_LOOP() hotend_offset[i][e] = tmp4[i][e];
+  #endif
 }
 
 static void calibrate_all() {

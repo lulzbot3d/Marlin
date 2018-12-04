@@ -69,9 +69,16 @@ static union {
     uint8_t  cur_page;
   } FilesScreen;
   struct {
-    struct ValueAdjusters; // Must match ValueAdjusters
+    struct ValueAdjusters placeholder;
     float e_rel[ExtUI::extruderCount];
   } MoveAxisScreen;
+#if ENABLED(BABYSTEPPING)
+  struct {
+    struct ValueAdjusters placeholder;
+    float rel[XYZ];
+    bool  link_nozzles;
+  } AdjustOffsetsScreen;
+#endif
 } screen_data;
 
 /******************************* MENU SCREEN TABLE ******************************/
@@ -92,6 +99,9 @@ SCREEN_TABLE {
   DECL_SCREEN(StatusScreen),
   DECL_SCREEN(MenuScreen),
   DECL_SCREEN(TuneScreen),
+#if ENABLED(BABYSTEPPING)
+  DECL_SCREEN(AdjustOffsetsScreen),
+#endif
   DECL_SCREEN(MoveAxisScreen),
   DECL_SCREEN(AdvancedSettingsScreen),
   DECL_SCREEN(StepsScreen),
@@ -1112,33 +1122,45 @@ void TuneScreen::onRedraw(draw_mode_t what) {
     #if defined(USE_PORTRAIT_ORIENTATION)
        .tag(2).enabled(1)      .button( BTN_POS(1,1), BTN_SIZE(2,1), F("Temperature"))
        .tag(3).enabled(1)      .button( BTN_POS(1,2), BTN_SIZE(2,1), F("Change Filament"))
-       .tag(8).enabled(1)      .button( BTN_POS(1,6), BTN_SIZE(2,1), F("Filament Options"))
-       .tag(4)
-      #if HAS_BED_PROBE
-        .enabled(1)
+       .tag(8).enabled(1)      .button( BTN_POS(1,3), BTN_SIZE(2,1), F("Filament Options"))
+      #if ENABLED(BABYSTEPPING)
+       .tag(4).enabled(1)      .button( BTN_POS(1,4), BTN_SIZE(2,1), F("Tune Offsets"))
       #else
-        .enabled(0)
+        #if ENABLED(HAS_BED_PROBE)
+          .enabled(1)
+        #else
+          .enabled(0)
+        #endif
+       .tag(4)                 .button( BTN_POS(1,4), BTN_SIZE(2,1), F("Tune Z-Offset"))
       #endif
-                               .button( BTN_POS(1,3), BTN_SIZE(2,1), F("Z Offset"))
-       .tag(5).enabled(1)      .button( BTN_POS(1,4), BTN_SIZE(2,1), F("Print Speed"))
+       .tag(5).enabled(1)      .button( BTN_POS(1,5), BTN_SIZE(2,1), F("Print Speed"))
        .tag(isPrintingFromMediaPaused() ? 7 : 6)
       #if ENABLED(SDSUPPORT)
         .enabled(1)
       #else
         .enabled(0)
       #endif
-                                .button( BTN_POS(1,5), BTN_SIZE(2,1), isPrintingFromMediaPaused() ? F("Resume Print") : F("Pause Print"))
-       .tag(1).style(STYLE_LIGHT_BTN) .button( BTN_POS(1,7), BTN_SIZE(2,1), F("Back"));
+                               .button( BTN_POS(1,6), BTN_SIZE(2,1), isPrintingFromMediaPaused() ? F("Resume Print") : F("Pause Print"))
+       .tag(1).style(STYLE_LIGHT_BTN)
+                               .button( BTN_POS(1,7), BTN_SIZE(2,1), F("Back"));
     #else
        .tag(2).enabled(1)      .button( BTN_POS(1,1), BTN_SIZE(1,1), F("Temperature"))
        .tag(3).enabled(1)      .button( BTN_POS(1,2), BTN_SIZE(1,1), F("Change Filament"))
-       .tag(4)
-      #if HAS_BED_PROBE
+      #if ENABLED(BABYSTEPPING)
        .enabled(1)
       #else
        .enabled(0)
       #endif
-                               .button( BTN_POS(2,1), BTN_SIZE(1,1), F("Z Offset"))
+        #if ENABLED(BABYSTEPPING)
+          .tag(4)              .button( BTN_POS(2,1), BTN_SIZE(1,1), F("Tune Offsets"))
+        #else
+          #if ENABLED(HAS_BED_PROBE)
+            .enabled(1)
+          #else
+            .enabled(0)
+          #endif
+          .tag(4)              .button( BTN_POS(1,4), BTN_SIZE(2,1), F("Tune Z-Offset"))
+        #endif
        .tag(5).enabled(1)      .button( BTN_POS(2,2), BTN_SIZE(1,1), F("Print Speed"))
        .tag(isPrintingFromMediaPaused() ? 7 : 6)
       #if ENABLED(SDSUPPORT)
@@ -1161,9 +1183,15 @@ bool TuneScreen::onTouchEnd(uint8_t tag) {
     case 1:  GOTO_PREVIOUS();                    break;
     case 2:  GOTO_SCREEN(TemperatureScreen);     break;
     case 3:  GOTO_SCREEN(ChangeFilamentScreen);  break;
-    #if HAS_BED_PROBE
-    case 4:  GOTO_SCREEN(ZOffsetScreen);         break;
-    #endif
+    case 4:
+      #if ENABLED(BABYSTEPPING)
+        GOTO_SCREEN(AdjustOffsetsScreen);
+      #else
+        #if ENABLED(HAS_BED_PROBE)
+          GOTO_SCREEN(ZOffsetScreen);
+        #endif
+      #endif
+      break;
     case 5:  GOTO_SCREEN(MaxFeedrateScreen);     break;
     case 6:  sound.play(twinkle, PLAY_ASYNCHRONOUS); ExtUI::pausePrint();  GOTO_SCREEN(StatusScreen); break;
     case 7:  sound.play(twinkle, PLAY_ASYNCHRONOUS); ExtUI::resumePrint(); GOTO_SCREEN(StatusScreen); break;
@@ -1765,16 +1793,64 @@ void ValueAdjusters::widgets_t::adjuster(uint8_t tag, const char *label, float v
   }
 }
 
-void ValueAdjusters::widgets_t::button(uint8_t tag, const char *label) {
+void ValueAdjusters::widgets_t::button(uint8_t tag, const char *label, bool is_enabled) {
   if(_what & FOREGROUND) {
     CommandProcessor cmd;
-    cmd.tag(tag)
+    cmd.tag(is_enabled ? tag   : 0)
+       .enabled(is_enabled)
     #if defined(USE_PORTRAIT_ORIENTATION)
        .font(Theme::font_small)
     #else
        .font(Theme::font_medium)
     #endif
     .button(BTN_POS(5,_line), BTN_SIZE(9,1), progmem_str(label));
+  }
+
+  _line++;
+}
+
+void ValueAdjusters::widgets_t::two_buttons(uint8_t tag1, const char *label1, uint8_t tag2, const char *label2, bool is_enabled) {
+  if(_what & FOREGROUND) {
+    CommandProcessor cmd;
+    cmd.enabled(is_enabled)
+    #if defined(USE_PORTRAIT_ORIENTATION)
+       .font(Theme::font_small)
+    #else
+       .font(Theme::font_medium)
+    #endif
+    .tag(is_enabled ? tag1: 0).button(BTN_POS(5,_line),   BTN_SIZE(4.5,1), progmem_str(label1))
+    .tag(is_enabled ? tag2: 0).button(BTN_POS(9.5,_line), BTN_SIZE(4.5,1), progmem_str(label2));
+  }
+
+  _line++;
+}
+
+void ValueAdjusters::widgets_t::toggle(uint8_t tag, const char *label, const char *text, bool value, bool is_enabled) {
+  if(_what & BACKGROUND) {
+    CommandProcessor cmd;
+    cmd.fgcolor(Theme::background)
+       .tag(0)
+    #if defined(USE_PORTRAIT_ORIENTATION)
+       .font(Theme::font_small).button( BTN_POS(5, _line),  BTN_SIZE(4,1), progmem_str(label), OPT_FLAT);
+    #else
+       .font(Theme::font_medium).button( BTN_POS(15,1),     BTN_SIZE(4,1), progmem_str(label), OPT_FLAT);
+    #endif
+  }
+
+  if(_what & FOREGROUND) {
+    CommandProcessor cmd;
+    cmd.tag(is_enabled ? tag   : 0)
+       .enabled(is_enabled)
+    #if defined(USE_PORTRAIT_ORIENTATION)
+       .font(Theme::font_small)
+    #else
+       .font(Theme::font_medium)
+    #endif
+    #if defined(USE_PORTRAIT_ORIENTATION)
+      .toggle(BTN_POS(9,_line), BTN_SIZE(5,1), progmem_str(text), value);
+    #else
+      .toggle(BTN_POS(5,_line), BTN_SIZE(9,1), progmem_str(text), value);
+    #endif
   }
 
   _line++;
@@ -2060,9 +2136,6 @@ bool StepsScreen::onTouchHeld(uint8_t tag) {
     w.heading(                          PSTR("Z Offset"));
     w.color(Theme::z_axis).adjuster(4,  PSTR("Z Offset:"), ExtUI::getZOffset_mm());
     w.increments();
-    w.heading(PSTR("First Layer Height:"));
-    w.button(5, PSTR("More (Thicker)"));
-    w.button(4, PSTR("Less (Thinner)"));
   }
 
   bool ZOffsetScreen::onTouchHeld(uint8_t tag) {
@@ -2075,22 +2148,21 @@ bool StepsScreen::onTouchHeld(uint8_t tag) {
     }
     return true;
   }
-
-  bool ZOffsetScreen::onTouchEnd(uint8_t tag) {
-    if(tag == 1 && !IS_PARENT_SCREEN(AdvancedSettingsScreen)) {
-      /* The AdvancedSettingsScreen will prompt the user to
-         save settings; any other parent, do it here */
-      SaveSettingsScreen::promptToSaveSettings();
-      return true;
-    } else {
-      return ValueAdjusters::onTouchEnd(tag);
-    }
-  }
 #endif // HAS_BED_PROBE
 
 /***************************** NOZZLE OFFSET SCREEN ***************************/
 
 #if HOTENDS > 1
+  void NozzleOffsetScreen::onEntry() {
+    using namespace ExtUI;
+
+    // Since we don't allow the user to edit the offsets for E0,
+    // make sure they are all zero.
+    normalizeNozzleOffset(X);
+    normalizeNozzleOffset(Y);
+    normalizeNozzleOffset(Z);
+  }
+
   void NozzleOffsetScreen::onRedraw(draw_mode_t what) {
     using namespace ExtUI;
     widgets_t w(what);
@@ -2101,7 +2173,7 @@ bool StepsScreen::onTouchHeld(uint8_t tag) {
     w.color(Theme::y_axis).adjuster(4,  PSTR("Y:"), ExtUI::getNozzleOffset_mm(Y, E1));
     w.color(Theme::z_axis).adjuster(6,  PSTR("Z:"), ExtUI::getNozzleOffset_mm(Z, E1));
     #if ENABLED(LULZBOT_CALIBRATION_GCODE)
-    w.button(8, PSTR("Measure automatically"));
+    w.button(8, PSTR("Measure automatically"), !isPrinting());
     #endif
     w.increments();
   }
@@ -2125,6 +2197,60 @@ bool StepsScreen::onTouchHeld(uint8_t tag) {
     return true;
   }
 #endif // HOTENDS > 1
+
+/***************************** ADJUST OFFSETS SCREEN ***************************/
+
+#if ENABLED(BABYSTEPPING)
+  void AdjustOffsetsScreen::onEntry() {
+    screen_data.AdjustOffsetsScreen.link_nozzles = true;
+    LOOP_XYZ(i) {
+      screen_data.AdjustOffsetsScreen.rel[i] = 0;
+    }
+    ValueAdjusters::onEntry();
+  }
+
+  void AdjustOffsetsScreen::onRedraw(draw_mode_t what) {
+    using namespace ExtUI;
+    widgets_t w(what);
+    w.precision(2, ValueAdjusters::DEFAULT_MIDRANGE).units(PSTR("mm"));
+
+    w.heading(                          PSTR("Adjust Offsets"));
+    #if ENABLED(BABYSTEP_XY)
+    w.color(Theme::x_axis).adjuster(2,  PSTR("X:"), screen_data.AdjustOffsetsScreen.rel[0]);
+    w.color(Theme::y_axis).adjuster(4,  PSTR("Y:"), screen_data.AdjustOffsetsScreen.rel[1]);
+    #endif
+    w.color(Theme::z_axis).adjuster(6,  PSTR("Z:"), screen_data.AdjustOffsetsScreen.rel[2]);
+    w.increments();
+    w.toggle  (8,  PSTR("Link Nozzles:"), PSTR("no\xFFyes"), screen_data.AdjustOffsetsScreen.link_nozzles, PSTR("Yes\nNo"));
+  }
+
+  bool AdjustOffsetsScreen::onTouchHeld(uint8_t tag) {
+    using namespace ExtUI;
+    const float inc  = getIncrement();
+    const bool  link = screen_data.AdjustOffsetsScreen.link_nozzles;
+    switch(tag) {
+      case  2: babystepAxis_mm(-inc, X, link); screen_data.AdjustOffsetsScreen.rel[0] -= inc; break;
+      case  3: babystepAxis_mm( inc, X, link); screen_data.AdjustOffsetsScreen.rel[0] += inc; break;
+      case  4: babystepAxis_mm(-inc, Y, link); screen_data.AdjustOffsetsScreen.rel[1] -= inc; break;
+      case  5: babystepAxis_mm( inc, Y, link); screen_data.AdjustOffsetsScreen.rel[1] += inc; break;
+      case  6: babystepAxis_mm(-inc, Z, link); screen_data.AdjustOffsetsScreen.rel[2] -= inc; break;
+      case  7: babystepAxis_mm( inc, Z, link); screen_data.AdjustOffsetsScreen.rel[2] += inc; break;
+      case  8: screen_data.AdjustOffsetsScreen.link_nozzles = !link; break;
+      default:
+        return false;
+    }
+    return true;
+  }
+
+  bool AdjustOffsetsScreen::onTouchEnd(uint8_t tag) {
+    if(tag == 1) {
+      SaveSettingsScreen::promptToSaveSettings();
+      return true;
+    } else {
+      return ValueAdjusters::onTouchEnd(tag);
+    }
+  }
+#endif // ENABLED(BABYSTEPPING)
 
 /************************* BACKLASH COMPENSATION SCREEN **********************/
 

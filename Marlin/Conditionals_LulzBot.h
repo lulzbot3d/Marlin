@@ -52,7 +52,7 @@
  *
  */
 
-#define LULZBOT_FW_VERSION ".25" // Change this with each update
+#define LULZBOT_FW_VERSION ".26" // Change this with each update
 
 #if ( \
     !defined(LULZBOT_Gladiola_Mini) && \
@@ -2114,7 +2114,8 @@
 #if defined(LULZBOT_USE_AUTOLEVELING) && (defined(LULZBOT_USE_LCD_DISPLAY) || defined(LULZBOT_USE_TOUCH_UI))
     #define LULZBOT_BABYSTEPPING
     #define LULZBOT_BABYSTEP_ZPROBE_OFFSET
-    #if EXTRUDERS > 1
+    #define LULZBOT_BABYSTEP_XY
+    #if LULZBOT_EXTRUDERS > 1
         #define LULZBOT_BABYSTEP_HOTEND_Z_OFFSET
     #endif
 #endif

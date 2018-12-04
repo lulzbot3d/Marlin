@@ -39,6 +39,7 @@ enum {
   STATUS_SCREEN_CACHE,
   MENU_SCREEN_CACHE,
   TUNE_SCREEN_CACHE,
+  ADJUST_OFFSETS_SCREEN_CACHE,
   ALERT_BOX_CACHE,
   SPINNER_CACHE,
   ADVANCED_SETTINGS_SCREEN_CACHE,
@@ -331,10 +332,12 @@ class ValueAdjusters : public BaseScreen {
         inline widgets_t &precision(uint8_t decimals, precision_default_t initial = DEFAULT_HIGHEST);
 
         void heading       (const char *label);
-        void adjuster_sram_val (uint8_t tag, const char *label, const char *value, bool is_enabled = true);
-        void adjuster          (uint8_t tag, const char *label, const char *value, bool is_enabled = true);
-        void adjuster          (uint8_t tag, const char *label, float value=0,     bool is_enabled = true);
-        void button            (uint8_t tag, const char *label);
+        void adjuster_sram_val (uint8_t tag, const char *label, const char *value,  bool is_enabled = true);
+        void adjuster          (uint8_t tag, const char *label, const char *value,  bool is_enabled = true);
+        void adjuster          (uint8_t tag, const char *label, float value=0,      bool is_enabled = true);
+        void button            (uint8_t tag, const char *label,                     bool is_enabled = true);
+        void two_buttons       (uint8_t tag1, const char *label1, uint8_t tag2, const char *label2, bool is_enabled = true);
+        void toggle            (uint8_t tag, const char *label, const char *text, bool value, bool is_enabled = true);
         void home_buttons      (uint8_t tag);
         void increments        ();
     };
@@ -370,14 +373,24 @@ class StepsScreen : public ValueAdjusters, public CachedScreen<STEPS_SCREEN_CACH
     public:
       static void onRedraw(draw_mode_t what);
       static bool onTouchHeld(uint8_t tag);
-      static bool onTouchEnd(uint8_t tag);
   };
 #endif
 
 #if HOTENDS > 1
   class NozzleOffsetScreen : public ValueAdjusters, public CachedScreen<NOZZLE_OFFSET_SCREEN_CACHE> {
     public:
+      static void onEntry();
       static void onRedraw(draw_mode_t what);
+      static bool onTouchHeld(uint8_t tag);
+  };
+#endif
+
+#if ENABLED(BABYSTEPPING)
+  class AdjustOffsetsScreen : public ValueAdjusters, public CachedScreen<ADJUST_OFFSETS_SCREEN_CACHE> {
+    public:
+      static void onEntry();
+      static void onRedraw(draw_mode_t what);
+      static bool onTouchEnd(uint8_t tag);
       static bool onTouchHeld(uint8_t tag);
   };
 #endif

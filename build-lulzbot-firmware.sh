@@ -308,6 +308,8 @@ locate_tools ARM_TOOLS_PATH arm-none-eabi
 check_tools $AVR_TOOLS_PATH avr
 check_tools $ARM_TOOLS_PATH arm-none-eabi
 
+MAKE_FLAGS="$MAKE_FLAGS -j $(grep -c ^processor /proc/cpuinfo)"
+
 rm -rf build
 mkdir  build
 

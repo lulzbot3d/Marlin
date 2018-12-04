@@ -1124,14 +1124,14 @@ void TuneScreen::onRedraw(draw_mode_t what) {
        .tag(3).enabled(1)      .button( BTN_POS(1,2), BTN_SIZE(2,1), F("Change Filament"))
        .tag(8).enabled(1)      .button( BTN_POS(1,3), BTN_SIZE(2,1), F("Filament Options"))
       #if ENABLED(BABYSTEPPING)
-       .tag(4).enabled(1)      .button( BTN_POS(1,4), BTN_SIZE(2,1), F("Tune Offsets"))
+       .tag(4).enabled(1)      .button( BTN_POS(1,4), BTN_SIZE(2,1), F("Adjust Offsets"))
       #else
         #if ENABLED(HAS_BED_PROBE)
           .enabled(1)
         #else
           .enabled(0)
         #endif
-       .tag(4)                 .button( BTN_POS(1,4), BTN_SIZE(2,1), F("Tune Z-Offset"))
+       .tag(4)                 .button( BTN_POS(1,4), BTN_SIZE(2,1), F("Adjust Z-Offset"))
       #endif
        .tag(5).enabled(1)      .button( BTN_POS(1,5), BTN_SIZE(2,1), F("Print Speed"))
        .tag(isPrintingFromMediaPaused() ? 7 : 6)
@@ -1152,14 +1152,14 @@ void TuneScreen::onRedraw(draw_mode_t what) {
        .enabled(0)
       #endif
         #if ENABLED(BABYSTEPPING)
-          .tag(4)              .button( BTN_POS(2,1), BTN_SIZE(1,1), F("Tune Offsets"))
+          .tag(4)              .button( BTN_POS(2,1), BTN_SIZE(1,1), F("Adjust Offsets"))
         #else
           #if ENABLED(HAS_BED_PROBE)
             .enabled(1)
           #else
             .enabled(0)
           #endif
-          .tag(4)              .button( BTN_POS(1,4), BTN_SIZE(2,1), F("Tune Z-Offset"))
+          .tag(4)              .button( BTN_POS(1,4), BTN_SIZE(2,1), F("Adjust Z-Offset"))
         #endif
        .tag(5).enabled(1)      .button( BTN_POS(2,2), BTN_SIZE(1,1), F("Print Speed"))
        .tag(isPrintingFromMediaPaused() ? 7 : 6)

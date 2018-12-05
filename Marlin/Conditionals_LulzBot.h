@@ -52,7 +52,7 @@
  *
  */
 
-#define LULZBOT_FW_VERSION ".29" // Change this with each update
+#define LULZBOT_FW_VERSION ".30" // Change this with each update
 
 #if ( \
     !defined(LULZBOT_Gladiola_Mini) && \
@@ -521,12 +521,6 @@
     #define LULZBOT_BACK_PROBE_BED_POSITION       168
     #define LULZBOT_FRONT_PROBE_BED_POSITION       -4
 
-#elif defined(LULZBOT_USE_AUTOLEVELING) && defined(LULZBOT_TAZ_BED) && defined(LULZBOT_USE_Z_BELT)
-    #define LULZBOT_LEFT_PROBE_BED_POSITION        -3
-    #define LULZBOT_RIGHT_PROBE_BED_POSITION      297
-    #define LULZBOT_BACK_PROBE_BED_POSITION       293
-    #define LULZBOT_FRONT_PROBE_BED_POSITION       -7
-
 #elif defined(LULZBOT_USE_AUTOLEVELING) && defined(LULZBOT_MINI_BED)
     // In order to work with the Gladiola printers, we need to
     // perform the probe right against the left and front endstops.
@@ -787,7 +781,7 @@
 
 #if defined(TOOLHEAD_Tilapia_SingleExtruder)
     #define LULZBOT_LCD_TOOLHEAD_NAME          "Single Extruder"
-//          16 chars max                            ^^^^^^^^^^^^^^^
+//          16 chars max                        ^^^^^^^^^^^^^^^
     #define LULZBOT_M115_EXTRUDER_TYPE         "SingleExtruder"
     #define LULZBOT_MOTOR_CURRENT_E            750 // mA
     #define LULZBOT_X_MAX_ENDSTOP_INVERTING    LULZBOT_NORMALLY_CLOSED_ENDSTOP
@@ -798,7 +792,7 @@
 #if defined(TOOLHEAD_Angelfish_Aerostruder)
     // Prototype Aero for TAZ
     #define LULZBOT_LCD_TOOLHEAD_NAME          "Aerostruder"
-//          16 chars max                       ^^^^^^^^^^^^^^^
+//          16 chars max                        ^^^^^^^^^^^^^^^
     #define LULZBOT_M115_EXTRUDER_TYPE         "Aerostruder"
     #define LULZBOT_MOTOR_CURRENT_E            875 // mA
     #define LULZBOT_X_MAX_ENDSTOP_INVERTING    LULZBOT_NORMALLY_CLOSED_ENDSTOP
@@ -807,8 +801,8 @@
 #endif /* TOOLHEAD_Angelfish_Aerostruder */
 
 #if defined(TOOLHEAD_Kanyu_Flexystruder)
-    #define LULZBOT_LCD_TOOLHEAD_NAME              "Flexystruder"
-//          16 chars max                            ^^^^^^^^^^^^^^^
+    #define LULZBOT_LCD_TOOLHEAD_NAME          "Flexystruder"
+//          16 chars max                        ^^^^^^^^^^^^^^^
     #define LULZBOT_M115_EXTRUDER_TYPE         "Flexystruder"
     #define LULZBOT_MOTOR_CURRENT_E            410 // mA
     #define LULZBOT_EXTRUDERS                  1
@@ -828,8 +822,8 @@
 #endif /* TOOLHEAD_Kanyu_Flexystruder */
 
 #if defined(TOOLHEAD_Opah_Moarstruder)
-    #define LULZBOT_LCD_TOOLHEAD_NAME              "MOARstruder"
-//          16 chars max                            ^^^^^^^^^^^^^^^
+    #define LULZBOT_LCD_TOOLHEAD_NAME          "MOARstruder"
+//          16 chars max                        ^^^^^^^^^^^^^^^
     #define LULZBOT_M115_EXTRUDER_TYPE         "MOARstruder"
     #define LULZBOT_DEFAULT_ACCELERATION       250
     #define LULZBOT_DEFAULT_TRAVEL_ACCELERATION 250
@@ -1132,7 +1126,7 @@
 #elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT)
     #ifdef LULZBOT_CALIBRATE_ON_CUBE
         #define CALIBRATION_CUBE_DIMENSIONS              {  10.0,  10.0,  10.0} // mm
-        #define CALIBRATION_CUBE_CENTER                  { 265.4, -17.1, -3.85} // mm
+        #define CALIBRATION_CUBE_CENTER                  { 258.4, -19.1, -3.85} // mm
         #define CALIBRATION_CUBE_TOP_CENTER_MEASUREMENT
         #define CALIBRATION_CUBE_RIGHT_SIDE_MEASUREMENT
         #define CALIBRATION_CUBE_FRONT_SIDE_MEASUREMENT
@@ -1331,10 +1325,10 @@
     #define LULZBOT_STANDARD_Y_BED_SIZE        275
 
 #elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT)
-    #define LULZBOT_STANDARD_X_MAX_POS         305
-    #define LULZBOT_STANDARD_X_MIN_POS         -15
-    #define LULZBOT_STANDARD_Y_MAX_POS         303
-    #define LULZBOT_STANDARD_Y_MIN_POS         -25
+    #define LULZBOT_STANDARD_X_MAX_POS         299
+    #define LULZBOT_STANDARD_X_MIN_POS         -21
+    #define LULZBOT_STANDARD_Y_MAX_POS         301
+    #define LULZBOT_STANDARD_Y_MIN_POS         -27
 
     #define LULZBOT_STANDARD_X_BED_SIZE        280
     #define LULZBOT_STANDARD_Y_BED_SIZE        280
@@ -1665,14 +1659,6 @@
     #define LULZBOT_STANDARD_WIPE_Y2                       172
     #define LULZBOT_STANDARD_WIPE_Z                       -0.5
 
-#elif defined(LULZBOT_USE_AUTOLEVELING) && defined(LULZBOT_TAZ_BED) && defined(LULZBOT_USE_Z_BELT)
-    // TAZ has a vertical wiping pad on the left side of the bed
-    #define LULZBOT_STANDARD_WIPE_X1                      -14
-    #define LULZBOT_STANDARD_WIPE_X2                      -14
-    #define LULZBOT_STANDARD_WIPE_Y1                       105
-    #define LULZBOT_STANDARD_WIPE_Y2                       33
-    #define LULZBOT_STANDARD_WIPE_Z                        3
-
 #elif defined(LULZBOT_USE_AUTOLEVELING) && defined(LULZBOT_TAZ_BED)
     // TAZ has a vertical wiping pad on the left side of the bed
     #define LULZBOT_STANDARD_WIPE_X1                      -16
@@ -1745,21 +1731,21 @@
         #define LULZBOT_REWIPE_E1 \
             "G0 X150 F5000\n"                     /* Move over to switch extruders */ \
             "T1\n"                                /* Switch to second extruder */ \
-            "G1 X300 Y100 F5000\n"                /* Move E2 above second wiper pad */ \
+            "G1 X294 Y95 F5000\n"                 /* Move E2 above second wiper pad */ \
             "G1 Z1\n"                             /* Push nozzle into wiper */ \
             "M109 R170\n"                         /* Wait for wipe temp */ \
-            "G1 X301 Y105 F4000\n"                /* Slow wipe */ \
-            "G1 X301 Y33  F4000\n"                /* Slow wipe */ \
-            "G1 X301 Y105 F4000\n"                /* Slow wipe */ \
-            "G1 X301 Y33  F4000\n"                /* Slow wipe */ \
-            "G1 X301 Y105 F4000\n"                /* Slow wipe */ \
-            "G1 X301 Y33  F4000\n"                /* Slow wipe */ \
-            "G1 X301 Y105 F4000\n"                /* Slow wipe */ \
-            "G1 X301 Y33  F4000\n"                /* Slow wipe */ \
-            "G1 X301 Y105 F4000\n"                /* Slow wipe */ \
-            "G1 X301 Y33  F4000\n"                /* Slow wipe */ \
-            "G1 X301 Y105 F4000\n"                /* Slow wipe */ \
-            "G1 X301 Y33  F4000\n"                /* Slow wipe */ \
+            "G1 X294 Y95 F4000\n"                 /* Slow wipe */ \
+            "G1 X294 Y25 F4000\n"                 /* Slow wipe */ \
+            "G1 X294 Y95 F4000\n"                 /* Slow wipe */ \
+            "G1 X294 Y25 F4000\n"                 /* Slow wipe */ \
+            "G1 X294 Y95 F4000\n"                 /* Slow wipe */ \
+            "G1 X294 Y25 F4000\n"                 /* Slow wipe */ \
+            "G1 X294 Y95 F4000\n"                 /* Slow wipe */ \
+            "G1 X294 Y25 F4000\n"                 /* Slow wipe */ \
+            "G1 X294 Y95 F4000\n"                 /* Slow wipe */ \
+            "G1 X294 Y25 F4000\n"                 /* Slow wipe */ \
+            "G1 X294 Y95 F4000\n"                 /* Slow wipe */ \
+            "G1 X294 Y25 F4000\n"                 /* Slow wipe */ \
             "G1 Z5\n"                             /* Raise nozzle */ \
             "M104 S160\n"                         /* Drop to probe temp */ \
             "G0 X150 F5000\n"                     /* Move over to switch extruders */ \

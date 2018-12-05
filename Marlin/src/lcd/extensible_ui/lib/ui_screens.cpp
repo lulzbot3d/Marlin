@@ -1832,10 +1832,11 @@ void ValueAdjusters::widgets_t::toggle(uint8_t tag, const char *label, const cha
     CommandProcessor cmd;
     cmd.fgcolor(Theme::background)
        .tag(0)
+       .font(Theme::font_small)
     #if defined(USE_PORTRAIT_ORIENTATION)
-       .font(Theme::font_small).button( BTN_POS(1, _line),  BTN_SIZE(8,1), progmem_str(label), OPT_FLAT);
+       .button( BTN_POS(1, _line), BTN_SIZE( 8,1), progmem_str(label), OPT_FLAT);
     #else
-       .font(Theme::font_medium).button( BTN_POS(15,1),     BTN_SIZE(4,1), progmem_str(label), OPT_FLAT);
+       .button( BTN_POS(1, _line), BTN_SIZE(10,1), progmem_str(label), OPT_FLAT);
     #endif
   }
 
@@ -1843,15 +1844,11 @@ void ValueAdjusters::widgets_t::toggle(uint8_t tag, const char *label, const cha
     CommandProcessor cmd;
     cmd.tag(is_enabled ? tag   : 0)
        .enabled(is_enabled)
-    #if defined(USE_PORTRAIT_ORIENTATION)
        .font(Theme::font_small)
-    #else
-       .font(Theme::font_medium)
-    #endif
     #if defined(USE_PORTRAIT_ORIENTATION)
-      .toggle(BTN_POS(9,_line), BTN_SIZE(5,1), progmem_str(text), value);
+      .toggle(BTN_POS( 9,_line), BTN_SIZE(5,1), progmem_str(text), value);
     #else
-      .toggle(BTN_POS(5,_line), BTN_SIZE(9,1), progmem_str(text), value);
+      .toggle(BTN_POS(10,_line), BTN_SIZE(4,1), progmem_str(text), value);
     #endif
   }
 
@@ -2204,7 +2201,9 @@ bool StepsScreen::onTouchHeld(uint8_t tag) {
 
 #if ENABLED(BABYSTEPPING)
   void AdjustOffsetsScreen::onEntry() {
-    screen_data.AdjustOffsetsScreen.link_nozzles = true;
+    #if EXTRUDERS > 1
+      screen_data.AdjustOffsetsScreen.link_nozzles = true;
+    #endif
     LOOP_XYZ(i) {
       screen_data.AdjustOffsetsScreen.rel[i] = 0;
     }
@@ -2243,7 +2242,9 @@ bool StepsScreen::onTouchHeld(uint8_t tag) {
       case  5: babystepAxis_mm( inc, Y, link); screen_data.AdjustOffsetsScreen.rel[1] += inc; break;
       case  6: babystepAxis_mm(-inc, Z, link); screen_data.AdjustOffsetsScreen.rel[2] -= inc; break;
       case  7: babystepAxis_mm( inc, Z, link); screen_data.AdjustOffsetsScreen.rel[2] += inc; break;
-      case  8: screen_data.AdjustOffsetsScreen.link_nozzles = !link; break;
+      #if EXTRUDERS > 1
+        case  8: screen_data.AdjustOffsetsScreen.link_nozzles = !link; break;
+      #endif
       default:
         return false;
     }
@@ -2801,9 +2802,11 @@ void InterfaceSettingsScreen::saveSettings() {
       data.longest_print       = stats->longestPrint;
       data.total_filament_used = stats->filamentUsed;
     #endif
-    data.nozzle_offsets_mm[X_AXIS] = getNozzleOffset_mm(X, E1);
-    data.nozzle_offsets_mm[Y_AXIS] = getNozzleOffset_mm(Y, E1);
-    data.nozzle_offsets_mm[Z_AXIS] = getNozzleOffset_mm(Z, E1);
+    #if EXTRUDERS > 1
+      data.nozzle_offsets_mm[X_AXIS] = getNozzleOffset_mm(X, E1);
+      data.nozzle_offsets_mm[Y_AXIS] = getNozzleOffset_mm(Y, E1);
+      data.nozzle_offsets_mm[Z_AXIS] = getNozzleOffset_mm(Z, E1);
+    #endif
     data.nozzle_z_offset           = getZOffset_mm();
   #endif
   // TODO: This really should be moved to the EEPROM
@@ -2850,9 +2853,11 @@ void InterfaceSettingsScreen::loadSettings() {
         stats->longestPrint      = max(stats->longestPrint,   data.longest_print);
         stats->filamentUsed      = max(stats->filamentUsed,   data.total_filament_used);
       #endif
-      setNozzleOffset_mm(data.nozzle_offsets_mm[X_AXIS], X, E1);
-      setNozzleOffset_mm(data.nozzle_offsets_mm[Y_AXIS], Y, E1);
-      setNozzleOffset_mm(data.nozzle_offsets_mm[Z_AXIS], Z, E1);
+      #if EXTRUDERS > 1
+        setNozzleOffset_mm(data.nozzle_offsets_mm[X_AXIS], X, E1);
+        setNozzleOffset_mm(data.nozzle_offsets_mm[Y_AXIS], Y, E1);
+        setNozzleOffset_mm(data.nozzle_offsets_mm[Z_AXIS], Z, E1);
+      #endif
       setZOffset_mm(data.nozzle_z_offset);
     #endif
     // TODO: This really should be moved to the EEPROM

@@ -52,7 +52,7 @@
  *
  */
 
-#define LULZBOT_FW_VERSION ".28" // Change this with each update
+#define LULZBOT_FW_VERSION ".29" // Change this with each update
 
 #if ( \
     !defined(LULZBOT_Gladiola_Mini) && \
@@ -214,7 +214,7 @@
     #define LULZBOT_MINI_BED
     #define LULZBOT_USE_TOUCH_UI
     #define LULZBOT_USE_HIGH_RES
-    #define LULZBOT_USE_PORTRAIT_UI
+    //#define LULZBOT_USE_PORTRAIT_UI
     #define LULZBOT_TWO_PIECE_BED
     #define LULZBOT_USE_AUTOLEVELING
     #define LULZBOT_SENSORLESS_HOMING
@@ -1447,7 +1447,7 @@
 
 #if defined(LULZBOT_FILAMENT_RUNOUT_SENSOR)
     #define LULZBOT_FILAMENT_RUNOUT_SENSOR
-    #define LULZBOT_NUM_RUNOUT_SENSORS 2
+    #define LULZBOT_NUM_RUNOUT_SENSORS LULZBOT_EXTRUDERS
     #define LULZBOT_FILAMENT_RUNOUT_SCRIPT "M117 Filament ran out\nM25\n"
 
     #define LULZBOT_RUNOUT_DISTANCE_MM 4
@@ -1541,13 +1541,22 @@
                 LULZBOT_TMC_INIT(stepperE0) \
             }
     #else
-        #define LULZBOT_TMC_ADV { \
-                LULZBOT_TMC_INIT(stepperX) \
-                LULZBOT_TMC_INIT(stepperY) \
-                LULZBOT_TMC_INIT(stepperZ) \
-                LULZBOT_TMC_INIT(stepperE0) \
-                LULZBOT_TMC_INIT(stepperE1) \
-            }
+        #if LULZBOT_EXTRUDERS == 1
+            #define LULZBOT_TMC_ADV { \
+                    LULZBOT_TMC_INIT(stepperX) \
+                    LULZBOT_TMC_INIT(stepperY) \
+                    LULZBOT_TMC_INIT(stepperZ) \
+                    LULZBOT_TMC_INIT(stepperE0) \
+                }
+        #else
+            #define LULZBOT_TMC_ADV { \
+                    LULZBOT_TMC_INIT(stepperX) \
+                    LULZBOT_TMC_INIT(stepperY) \
+                    LULZBOT_TMC_INIT(stepperZ) \
+                    LULZBOT_TMC_INIT(stepperE0) \
+                    LULZBOT_TMC_INIT(stepperE1) \
+                }
+        #endif
     #endif
 #endif
 

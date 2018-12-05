@@ -16,17 +16,19 @@
 ####
 # The following variables list the models and toolheads to build for:
 
+UNIVERSAL_TOOLHEADS="AchemonSphinx_SmallLayer CecropiaSilk_SingleExtruderAeroV2 BandedTiger_HardenedSteel DingyCutworm_HardenedSteelPlus"
+
 MINI_MODELS="Gladiola_Mini Gladiola_MiniLCD"
-MINI_TOOLHEADS="Gladiola_SingleExtruder Albatross_Flexystruder Finch_Aerostruder AchemonSphinx_SmallLayer CecropiaSilk_SingleExtruderAeroV2 BandedTiger_HardenedSteel DingyCutworm_HardenedSteelPlus"
+MINI_TOOLHEADS="Gladiola_SingleExtruder Albatross_Flexystruder Finch_Aerostruder $UNIVERSAL_TOOLHEADS"
 
 TAZ_MODELS="Juniper_TAZ5 Oliveoil_TAZ6"
-TAZ_TOOLHEADS="Tilapia_SingleExtruder Kanyu_Flexystruder Opah_Moarstruder Javelin_DualExtruderV2 Longfin_FlexyDually Yellowfin_DualExtruderV3 Angelfish_Aerostruder AchemonSphinx_SmallLayer CecropiaSilk_SingleExtruderAeroV2 BandedTiger_HardenedSteel DingyCutworm_HardenedSteelPlus"
+TAZ_TOOLHEADS="Tilapia_SingleExtruder Kanyu_Flexystruder Opah_Moarstruder Javelin_DualExtruderV2 Longfin_FlexyDually Yellowfin_DualExtruderV3 Angelfish_Aerostruder $UNIVERSAL_TOOLHEADS"
 
 TAZ7_MODELS="Quiver_TAZ7"
-TAZ7_TOOLHEADS="Quiver_DualExtruder"
+TAZ7_TOOLHEADS="Quiver_DualExtruder $UNIVERSAL_TOOLHEADS"
 
 MINI2_MODELS="Hibiscus_Mini2"
-MINI2_TOOLHEADS="AchemonSphinx_SmallLayer CecropiaSilk_SingleExtruderAeroV2 BandedTiger_HardenedSteel DingyCutworm_HardenedSteelPlus"
+MINI2_TOOLHEADS="$UNIVERSAL_TOOLHEADS"
 
 #TAZ7_MODELS="Quiver_TAZ7"
 #TAZ7_TOOLHEADS="Angelfish_Aerostruder"

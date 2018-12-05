@@ -76,7 +76,9 @@ static union {
   struct {
     struct ValueAdjusters placeholder;
     float rel[XYZ];
-    bool  link_nozzles;
+    #if EXTRUDERS > 1
+      bool  link_nozzles;
+    #endif
   } AdjustOffsetsScreen;
 #endif
 } screen_data;
@@ -1831,7 +1833,7 @@ void ValueAdjusters::widgets_t::toggle(uint8_t tag, const char *label, const cha
     cmd.fgcolor(Theme::background)
        .tag(0)
     #if defined(USE_PORTRAIT_ORIENTATION)
-       .font(Theme::font_small).button( BTN_POS(5, _line),  BTN_SIZE(4,1), progmem_str(label), OPT_FLAT);
+       .font(Theme::font_small).button( BTN_POS(1, _line),  BTN_SIZE(8,1), progmem_str(label), OPT_FLAT);
     #else
        .font(Theme::font_medium).button( BTN_POS(15,1),     BTN_SIZE(4,1), progmem_str(label), OPT_FLAT);
     #endif
@@ -2221,13 +2223,19 @@ bool StepsScreen::onTouchHeld(uint8_t tag) {
     #endif
     w.color(Theme::z_axis).adjuster(6,  PSTR("Z:"), screen_data.AdjustOffsetsScreen.rel[2]);
     w.increments();
-    w.toggle  (8,  PSTR("Link Nozzles:"), PSTR("no\xFFyes"), screen_data.AdjustOffsetsScreen.link_nozzles, PSTR("Yes\nNo"));
+    #if EXTRUDERS > 1
+      w.toggle  (8,  PSTR("Adjust Nozzles Together:"), PSTR("no\xFFyes"), screen_data.AdjustOffsetsScreen.link_nozzles, PSTR("Yes\nNo"));
+    #endif
   }
 
   bool AdjustOffsetsScreen::onTouchHeld(uint8_t tag) {
     using namespace ExtUI;
     const float inc  = getIncrement();
-    const bool  link = screen_data.AdjustOffsetsScreen.link_nozzles;
+    #if EXTRUDERS > 1
+      const bool  link = screen_data.AdjustOffsetsScreen.link_nozzles;
+    #else
+      constexpr bool link = true;
+    #endif
     switch(tag) {
       case  2: babystepAxis_mm(-inc, X, link); screen_data.AdjustOffsetsScreen.rel[0] -= inc; break;
       case  3: babystepAxis_mm( inc, X, link); screen_data.AdjustOffsetsScreen.rel[0] += inc; break;

@@ -1819,7 +1819,7 @@
             vector_3 norm = vector_3::cross(bp[0]-bp[1],bp[1]-bp[2]); \
             float a = norm.x, b = norm.y, c = norm.z, d = -bp[0].x*a -bp[0].y*b -bp[0].z*c; \
             float dist = abs(a * bp[3].x + b * bp[3].y + c * bp[3].z + d)/sqrt( a*a + b*b + c*c ); \
-            SERIAL_PROTOCOLLNPAIR("4th probe point, distance from plane: ", dist); \
+            SERIAL_ECHOPAIR("4th probe point, distance from plane: ", dist); \
             SERIAL_EOL(); \
         }
 #else

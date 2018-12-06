@@ -56,6 +56,29 @@ usage() {
 }
 
 ####
+# compile_dependencies <printer>
+#
+# Compiles dependencies for the specific printer
+#
+compile_dependencies() {
+  printer=$1   ; shift 1
+
+  case $printer in
+    Quiver_TAZ7)
+      ARCHIM_SRC="ArduinoAddons/arduino-1.8.5/packages/ultimachine/hardware/sam/1.6.9-b"
+      ARCHIM_LIB="$ARCHIM_SRC/variants/archim/libsam_sam3x8e_gcc_rel.a"
+      if [ ! -f $ARCHIM_LIB ]; then
+        (cd "$ARCHIM_SRC/system/libsam/build_gcc"; ARM_GCC_TOOLCHAIN="$gcc_path" make)
+        mv -f $ARCHIM_SRC/variants/arduino_due_x/* $ARCHIM_SRC/variants/archim
+      else
+        echo Using cached $ARCHIM_LIB
+      fi
+      ;;
+    *) ;;
+  esac
+}
+
+####
 # compile_firmware <printer> <toolhead> [makeopts]
 #
 # Compiles firmware for the specified printer and toolhead
@@ -134,6 +157,7 @@ build_firmware() {
   printer=$1   ; shift 1
   toolhead=$1  ; shift 1
   get_arch_info $printer
+  compile_dependencies $printer
   if [ $MAKE_HASHES ]; then
     generate_bare_checksum $printer $toolhead
   fi

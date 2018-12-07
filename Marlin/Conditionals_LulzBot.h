@@ -52,7 +52,7 @@
  *
  */
 
-#define LULZBOT_FW_VERSION ".31" // Change this with each update
+#define LULZBOT_FW_VERSION ".32" // Change this with each update
 
 #if ( \
     !defined(LULZBOT_Gladiola_Mini) && \
@@ -1036,7 +1036,7 @@
     #define LULZBOT_SWITCHING_NOZZLE_SERVO_ANGLES   { 55,   120}
     #define LULZBOT_SWITCHING_NOZZLE_OPPOSING_SERVOS
     #define LULZBOT_SWITCHING_NOZZLE_NO_Z_LIFT
-    #define LULZBOT_HOTEND_OFFSET_X                 {0.0, 45}
+    #define LULZBOT_HOTEND_OFFSET_X                 {0.0, 43}
     #define LULZBOT_HOTEND_OFFSET_Y                 {0.0,  0}
     #define LULZBOT_E_STEPS                         420
     #define LULZBOT_X_MAX_ENDSTOP_INVERTING         LULZBOT_NO_ENDSTOP
@@ -1339,7 +1339,7 @@
     #define LULZBOT_STANDARD_Y_BED_SIZE        275
 
 #elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT)
-    #define LULZBOT_STANDARD_X_MAX_POS         314
+    #define LULZBOT_STANDARD_X_MAX_POS         320
     #define LULZBOT_STANDARD_X_MIN_POS          -6
     #define LULZBOT_STANDARD_Y_MAX_POS         310
     #define LULZBOT_STANDARD_Y_MIN_POS         -18
@@ -1864,9 +1864,9 @@
 #if defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT)
     // These values specify the maximum current, but actual
     // currents may be lower when used with COOLCONF
-    #define LULZBOT_MOTOR_CURRENT_X              950    // mA
-    #define LULZBOT_MOTOR_CURRENT_Y              950    // mA
-    #define LULZBOT_MOTOR_CURRENT_Z              960    // mA
+    #define LULZBOT_MOTOR_CURRENT_X              975    // mA
+    #define LULZBOT_MOTOR_CURRENT_Y              975    // mA
+    #define LULZBOT_MOTOR_CURRENT_Z              975    // mA
 
 #elif defined(LULZBOT_IS_MINI) && defined(LULZBOT_USE_Z_BELT)
     // These values specify the maximum current, but actual

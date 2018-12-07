@@ -52,7 +52,7 @@
  *
  */
 
-#define LULZBOT_FW_VERSION ".30" // Change this with each update
+#define LULZBOT_FW_VERSION ".31" // Change this with each update
 
 #if ( \
     !defined(LULZBOT_Gladiola_Mini) && \
@@ -516,32 +516,32 @@
 /*********************** AUTOLEVELING / BED PROBE *******************************/
 
 #if defined(LULZBOT_USE_AUTOLEVELING) && defined(LULZBOT_MINI_BED) && defined(LULZBOT_USE_Z_BELT)
-    #define LULZBOT_LEFT_PROBE_BED_POSITION        -3
-    #define LULZBOT_RIGHT_PROBE_BED_POSITION      163
-    #define LULZBOT_BACK_PROBE_BED_POSITION       168
-    #define LULZBOT_FRONT_PROBE_BED_POSITION       -4
+    #define LULZBOT_STANDARD_LEFT_PROBE_BED_POSITION        -3
+    #define LULZBOT_STANDARD_RIGHT_PROBE_BED_POSITION      163
+    #define LULZBOT_STANDARD_BACK_PROBE_BED_POSITION       168
+    #define LULZBOT_STANDARD_FRONT_PROBE_BED_POSITION       -4
 
 #elif defined(LULZBOT_USE_AUTOLEVELING) && defined(LULZBOT_MINI_BED)
     // In order to work with the Gladiola printers, we need to
     // perform the probe right against the left and front endstops.
     // This is extremely problematic and leads to other problems
     // which are corrected for in the start GCODE.
-    #define LULZBOT_LEFT_PROBE_BED_POSITION      LULZBOT_X_MIN_POS
-    #define LULZBOT_FRONT_PROBE_BED_POSITION     LULZBOT_Y_MIN_POS
+    #define LULZBOT_STANDARD_LEFT_PROBE_BED_POSITION      LULZBOT_X_MIN_POS
+    #define LULZBOT_STANDARD_FRONT_PROBE_BED_POSITION     LULZBOT_Y_MIN_POS
 
     // The Gladiola has the probe points spaced further apart than
     // earlier models. Since Gladiola FW has to work on earlier
     // printers, we need to add a workaround because G29 hits the
     // endstops and shifts the coordinate system around.
-    #define LULZBOT_RIGHT_PROBE_BED_POSITION     161
-    #define LULZBOT_BACK_PROBE_BED_POSITION      161
+    #define LULZBOT_STANDARD_RIGHT_PROBE_BED_POSITION     161
+    #define LULZBOT_STANDARD_BACK_PROBE_BED_POSITION      161
     #define LULZBOT_USE_PRE_GLADIOLA_G29_WORKAROUND
 
 #elif defined(LULZBOT_USE_AUTOLEVELING) && defined(LULZBOT_TAZ_BED)
-    #define LULZBOT_LEFT_PROBE_BED_POSITION       -9
-    #define LULZBOT_RIGHT_PROBE_BED_POSITION     288
-    #define LULZBOT_BACK_PROBE_BED_POSITION      289
-    #define LULZBOT_FRONT_PROBE_BED_POSITION      -9
+    #define LULZBOT_STANDARD_LEFT_PROBE_BED_POSITION       -9
+    #define LULZBOT_STANDARD_RIGHT_PROBE_BED_POSITION     288
+    #define LULZBOT_STANDARD_BACK_PROBE_BED_POSITION      289
+    #define LULZBOT_STANDARD_FRONT_PROBE_BED_POSITION      -9
 #endif
 
 #if defined(LULZBOT_USE_AUTOLEVELING)
@@ -914,14 +914,14 @@
     #undef  LULZBOT_Z_CLEARANCE_BETWEEN_PROBES
     #define LULZBOT_Z_CLEARANCE_BETWEEN_PROBES     10
     // Move the rear homing position back to avoid the Z homing adaptor
-    #undef  LULZBOT_BACK_PROBE_BED_POSITION
-    #define LULZBOT_BACK_PROBE_BED_POSITION       291
+    #undef  LULZBOT_STANDARD_BACK_PROBE_BED_POSITION
+    #define LULZBOT_STANDARD_BACK_PROBE_BED_POSITION       291
     // Adjust so left nozzle probes on the left washers;
     // right nozzles on the right nozzle.
-    #undef  LULZBOT_LEFT_PROBE_BED_POSITION
-    #define LULZBOT_LEFT_PROBE_BED_POSITION        -3
-    #undef  LULZBOT_RIGHT_PROBE_BED_POSITION
-    #define LULZBOT_RIGHT_PROBE_BED_POSITION      282
+    #undef  LULZBOT_STANDARD_LEFT_PROBE_BED_POSITION
+    #define LULZBOT_STANDARD_LEFT_PROBE_BED_POSITION        -3
+    #undef  LULZBOT_STANDARD_RIGHT_PROBE_BED_POSITION
+    #define LULZBOT_STANDARD_RIGHT_PROBE_BED_POSITION      282
     #define LULZBOT_X_MAX_ENDSTOP_INVERTING       LULZBOT_NORMALLY_CLOSED_ENDSTOP
     #define LULZBOT_SWAP_EXTRUDERS
     #undef  LULZBOT_INVERT_E1_DIR
@@ -998,7 +998,7 @@
 
 /*********************************** TAZ 7 TOOLHEADS ************************/
 
-#if defined(TOOLHEAD_Quiver_DualExtruder) || defined(TOOLHEAD_Devel_1Servo1Motor) || defined(TOOLHEAD_Devel_1Servo2Motor)
+#if defined(TOOLHEAD_Devel_1Servo1Motor) || defined(TOOLHEAD_Devel_1Servo2Motor)
     #define LULZBOT_EXTRUDERS                  2
     #define LULZBOT_TOOLHEAD_X_MAX_ADJ         0
     #define LULZBOT_TOOLHEAD_X_MIN_ADJ         0
@@ -1019,6 +1019,17 @@
     #define LULZBOT_LCD_TOOLHEAD_NAME              "Quivering Aeros"
 //          16 chars max                            ^^^^^^^^^^^^^^^
     #define LULZBOT_M115_EXTRUDER_TYPE             "AerostruderDual"
+    #define LULZBOT_TOOLHEAD_X_MAX_ADJ              -20
+    #define LULZBOT_TOOLHEAD_X_MIN_ADJ              -20
+    #define LULZBOT_TOOLHEAD_Y_MAX_ADJ              -19
+    #define LULZBOT_TOOLHEAD_Y_MIN_ADJ              -19
+    #define LULZBOT_TOOLHEAD_Z_MAX_ADJ              -7
+    #define LULZBOT_TOOLHEAD_Z_MIN_ADJ              -7
+    #define LULZBOT_TOOLHEAD_WIPE_X1_ADJ            0
+    #define LULZBOT_TOOLHEAD_WIPE_X2_ADJ            0
+    #define LULZBOT_TOOLHEAD_WIPE_Y1_ADJ            0
+    #define LULZBOT_TOOLHEAD_WIPE_Y2_ADJ            0
+    #define LULZBOT_EXTRUDERS                       2
     #define LULZBOT_NUM_SERVOS                      2
     #define LULZBOT_SERVO_DELAY                     {1000, 1000}
     #define LULZBOT_SWITCHING_NOZZLE
@@ -1031,6 +1042,9 @@
     #define LULZBOT_X_MAX_ENDSTOP_INVERTING         LULZBOT_NO_ENDSTOP
     #define LULZBOT_E3D_Titan_Aero_V6
     #define LULZBOT_INIT_ACTIVE_EXTRUDER            enqueue_and_echo_commands_P("T1\nT0");
+    #define LULZBOT_TEMP_SENSOR_1              5
+    #define LULZBOT_MOTOR_CURRENT_E0           960 // mA
+    #define LULZBOT_MOTOR_CURRENT_E1           960 // mA
 #endif /* TOOLHEAD_Quiver_DualExtruder */
 
 #if defined(TOOLHEAD_Devel_1Servo1Motor)
@@ -1325,10 +1339,10 @@
     #define LULZBOT_STANDARD_Y_BED_SIZE        275
 
 #elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT)
-    #define LULZBOT_STANDARD_X_MAX_POS         299
-    #define LULZBOT_STANDARD_X_MIN_POS         -21
-    #define LULZBOT_STANDARD_Y_MAX_POS         301
-    #define LULZBOT_STANDARD_Y_MIN_POS         -27
+    #define LULZBOT_STANDARD_X_MAX_POS         314
+    #define LULZBOT_STANDARD_X_MIN_POS          -6
+    #define LULZBOT_STANDARD_Y_MAX_POS         310
+    #define LULZBOT_STANDARD_Y_MIN_POS         -18
 
     #define LULZBOT_STANDARD_X_BED_SIZE        280
     #define LULZBOT_STANDARD_Y_BED_SIZE        280
@@ -1361,7 +1375,7 @@
 
 #elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT)
     #define LULZBOT_STANDARD_Z_MIN_POS          -2
-    #define LULZBOT_STANDARD_Z_MAX_POS         292
+    #define LULZBOT_STANDARD_Z_MAX_POS         298
 #endif
 
 #define LULZBOT_X_MAX_POS (LULZBOT_STANDARD_X_MAX_POS + LULZBOT_TOOLHEAD_X_MAX_ADJ)
@@ -1373,6 +1387,11 @@
 
 #define LULZBOT_X_BED_SIZE min(LULZBOT_X_MAX_POS, LULZBOT_STANDARD_X_BED_SIZE)
 #define LULZBOT_Y_BED_SIZE min(LULZBOT_Y_MAX_POS, LULZBOT_STANDARD_Y_BED_SIZE)
+
+#define LULZBOT_LEFT_PROBE_BED_POSITION    max(LULZBOT_STANDARD_LEFT_PROBE_BED_POSITION,  LULZBOT_X_MIN_POS)
+#define LULZBOT_RIGHT_PROBE_BED_POSITION   min(LULZBOT_STANDARD_RIGHT_PROBE_BED_POSITION, LULZBOT_X_MAX_POS)
+#define LULZBOT_BACK_PROBE_BED_POSITION    min(LULZBOT_STANDARD_BACK_PROBE_BED_POSITION,  LULZBOT_Y_MAX_POS)
+#define LULZBOT_FRONT_PROBE_BED_POSITION   min(LULZBOT_STANDARD_FRONT_PROBE_BED_POSITION, LULZBOT_Y_MIN_POS)
 
 /**************************** ENDSTOP CONFIGURATION ****************************/
 
@@ -1666,19 +1685,56 @@
     #define LULZBOT_STANDARD_WIPE_Y1                       95
     #define LULZBOT_STANDARD_WIPE_Y2                       25
     #define LULZBOT_STANDARD_WIPE_Z                        1
+
+    #if defined(LULZBOT_Quiver_TAZ7)
+        // The Quiver has an wipe pad on the opposite side of the bed.
+        #define LULZBOT_OPPOSITE_WIPE_X1                   294
+        #define LULZBOT_OPPOSITE_WIPE_X2                   294
+        #define LULZBOT_OPPOSITE_WIPE_Y1                    95
+        #define LULZBOT_OPPOSITE_WIPE_Y2                    25
+        #define LULZBOT_OPPOSITE_WIPE_Z                      1
+    #endif
 #endif
 
-#define LULZBOT_NOZZLE_CLEAN_START_POINT { \
-    LULZBOT_STANDARD_WIPE_X1 + LULZBOT_TOOLHEAD_WIPE_X1_ADJ, \
-    LULZBOT_STANDARD_WIPE_Y1 + LULZBOT_TOOLHEAD_WIPE_Y1_ADJ, \
-    LULZBOT_STANDARD_WIPE_Z \
+#define _LULZBOT_NOZZLE_CLEAN_START_POINT(side) { \
+    LULZBOT_ ## side ## _WIPE_X1 + LULZBOT_TOOLHEAD_WIPE_X1_ADJ, \
+    LULZBOT_ ## side ## _WIPE_Y1 + LULZBOT_TOOLHEAD_WIPE_Y1_ADJ, \
+    LULZBOT_ ## side ## _WIPE_Z \
 }
 
-#define LULZBOT_NOZZLE_CLEAN_END_POINT   { \
-    LULZBOT_STANDARD_WIPE_X2 + LULZBOT_TOOLHEAD_WIPE_X2_ADJ, \
-    LULZBOT_STANDARD_WIPE_Y2 + LULZBOT_TOOLHEAD_WIPE_Y2_ADJ, \
-    LULZBOT_STANDARD_WIPE_Z \
+#define _LULZBOT_NOZZLE_CLEAN_END_POINT(side)   { \
+    LULZBOT_ ## side ## _WIPE_X2 + LULZBOT_TOOLHEAD_WIPE_X2_ADJ, \
+    LULZBOT_ ## side ## _WIPE_Y2 + LULZBOT_TOOLHEAD_WIPE_Y2_ADJ, \
+    LULZBOT_ ## side ## _WIPE_Z \
 }
+
+#define _LULZBOT_WIPE_GCODE(x,y1,y2,z) \
+    "G1 X" #x " Y" #y2 " F5000\n"                 /* Move above second wiper pad */ \
+    "G1 Z1\n"                                     /* Push nozzle into wiper */ \
+    "M109 R170\n"                                 /* Wait for wipe temp */ \
+    "G1 X" #x " Y" #y2 " F4000\n"                 /* Slow wipe */ \
+    "G1 X" #x " Y" #y1 " F4000\n"                 /* Slow wipe */ \
+    "G1 X" #x " Y" #y2 " F4000\n"                 /* Slow wipe */ \
+    "G1 X" #x " Y" #y1 " F4000\n"                 /* Slow wipe */ \
+    "G1 X" #x " Y" #y2 " F4000\n"                 /* Slow wipe */ \
+    "G1 X" #x " Y" #y1 " F4000\n"                 /* Slow wipe */ \
+    "G1 X" #x " Y" #y2 " F4000\n"                 /* Slow wipe */ \
+    "G1 X" #x " Y" #y1 " F4000\n"                 /* Slow wipe */ \
+    "G1 X" #x " Y" #y2 " F4000\n"                 /* Slow wipe */ \
+    "G1 X" #x " Y" #y1 " F4000\n"                 /* Slow wipe */ \
+    "G1 X" #x " Y" #y2 " F4000\n"                 /* Slow wipe */ \
+    "G1 X" #x " Y" #y1 " F4000\n"                 /* Slow wipe */ \
+    "G1 Z5\n"
+
+#define LULZBOT_WIPE_GCODE(side) _LULZBOT_WIPE_GCODE(LULZBOT_ ## side ## _WIPE_X1, LULZBOT_ ## side ## _WIPE_Y1, LULZBOT_ ## side ## _WIPE_Y2, LULZBOT_ ## side ## _WIPE_Z )
+
+#if defined(LULZBOT_Quiver_TAZ7) && LULZBOT_EXTRUDERS == 1
+    #define LULZBOT_NOZZLE_CLEAN_START_POINT _LULZBOT_NOZZLE_CLEAN_START_POINT(OPPOSITE)
+    #define LULZBOT_NOZZLE_CLEAN_END_POINT   _LULZBOT_NOZZLE_CLEAN_END_POINT(OPPOSITE)
+#else
+    #define LULZBOT_NOZZLE_CLEAN_START_POINT _LULZBOT_NOZZLE_CLEAN_START_POINT(STANDARD)
+    #define LULZBOT_NOZZLE_CLEAN_END_POINT   _LULZBOT_NOZZLE_CLEAN_END_POINT(STANDARD)
+#endif
 
 /*************************** REWIPE FUNCTIONALITY *******************************/
 
@@ -1698,69 +1754,36 @@
         #define LULZBOT_Z_PROBE_LOW_POINT   -4
     #endif
 
-    #define LULZBOT_WIPE_SEQUENCE_GCODE \
-        "M109 R170\n"                         /* Wait for wipe temp */ \
-        "M117 Rewiping nozzle\n"              /* Status message */ \
-        "G12 P0 S12 T0\n"                     /* Wipe nozzle */ \
-        "M104 S160\n"                         /* Drop to probe temp */
-
-    #if defined(TOOLHEAD_Yellowfin_DualExtruderV3)
-        // The Dual V3 has a wider wipe pad and both nozzles need to be
-        // brought to temp at once.
-        #define LULZBOT_PREHEAT_E0 \
-            "M104 S170 T0\n"                      /* Preheat to wipe temp */ \
-            "M104 S170 T1\n"                      /* Preheat to wipe temp */
-        #define LULZBOT_REWIPE_E0 \
-            "M109 R170 T0\n"                      /* Wait for wipe temp */ \
-            "M109 R170 T1\n"                      /* Wait for wipe temp */ \
-            "G12 P0 S12 T0\n"                     /* Wipe nozzle */ \
-            "M104 S160 T0\n"                      /* Drop to probe temp */ \
-            "M104 S160 T1\n"                      /* Drop to probe temp */
+    #if EXTRUDERS == 1
+        #define LULZBOT_WIPE_HEAT_TEMP  "M104 S170 T0\n"               /* Preheat to wipe temp */
+        #define LULZBOT_WIPE_WAIT_TEMP  "M104 R170 T0\n"               /* Wait for wipe temp */
+        #define LULZBOT_WIPE_DONE_TEMP  "M104 S160 T0\n"               /* Drop to probe temp */
     #else
-        #define LULZBOT_PREHEAT_E0 \
-            "M104 S170 T0\n"                      /* Preheat to wipe temp */
-        #define LULZBOT_REWIPE_E0 \
-            "M109 R170 T0\n"                      /* Wait for wipe temp */ \
-            "G12 P0 S12 T0\n"                     /* Wipe nozzle */ \
-            "M104 S160\n"                         /* Drop to probe temp */
+        #define LULZBOT_WIPE_HEAT_TEMP  "M104 S170 T0\nM104 S170 T1\n" /* Preheat to wipe temp */
+        #define LULZBOT_WIPE_WAIT_TEMP  "M104 R170 T0\nM104 R170 T1\n" /* Wait for wipe temp */
+        #define LULZBOT_WIPE_DONE_TEMP  "M104 S160 T0\nM104 S160 T1\n" /* Drop to probe temp */
     #endif
 
+    #define LULZBOT_REWIPE_E0 "G12 P0 S12 T0\n"   /* Wipe nozzle */
+
     #if defined(LULZBOT_Quiver_TAZ7) && defined(TOOLHEAD_Quiver_DualExtruder)
-        #define LULZBOT_PREHEAT_E1 \
-            "M104 S170 T1\n"                      /* Preheat to wipe temp */
         #define LULZBOT_REWIPE_E1 \
             "G0 X150 F5000\n"                     /* Move over to switch extruders */ \
             "T1\n"                                /* Switch to second extruder */ \
-            "G1 X294 Y95 F5000\n"                 /* Move E2 above second wiper pad */ \
-            "G1 Z1\n"                             /* Push nozzle into wiper */ \
-            "M109 R170\n"                         /* Wait for wipe temp */ \
-            "G1 X294 Y95 F4000\n"                 /* Slow wipe */ \
-            "G1 X294 Y25 F4000\n"                 /* Slow wipe */ \
-            "G1 X294 Y95 F4000\n"                 /* Slow wipe */ \
-            "G1 X294 Y25 F4000\n"                 /* Slow wipe */ \
-            "G1 X294 Y95 F4000\n"                 /* Slow wipe */ \
-            "G1 X294 Y25 F4000\n"                 /* Slow wipe */ \
-            "G1 X294 Y95 F4000\n"                 /* Slow wipe */ \
-            "G1 X294 Y25 F4000\n"                 /* Slow wipe */ \
-            "G1 X294 Y95 F4000\n"                 /* Slow wipe */ \
-            "G1 X294 Y25 F4000\n"                 /* Slow wipe */ \
-            "G1 X294 Y95 F4000\n"                 /* Slow wipe */ \
-            "G1 X294 Y25 F4000\n"                 /* Slow wipe */ \
-            "G1 Z5\n"                             /* Raise nozzle */ \
-            "M104 S160\n"                         /* Drop to probe temp */ \
+            LULZBOT_WIPE_GCODE(OPPOSITE)          /* Wipe on the rightmost pad */ \
             "G0 X150 F5000\n"                     /* Move over to switch extruders */ \
             "T0\n"                                /* Switch to first extruder */
     #else
-        #define LULZBOT_PREHEAT_E1
         #define LULZBOT_REWIPE_E1
     #endif
 
     #define LULZBOT_WIPE_SEQUENCE_COMMANDS \
-        LULZBOT_PREHEAT_E0                        /* Preheat first extruder */ \
-        LULZBOT_PREHEAT_E1                        /* Preheat second extruder */ \
+        LULZBOT_WIPE_HEAT_TEMP                    /* Preheat extruders */ \
+        LULZBOT_WIPE_WAIT_TEMP                    /* Wait for wipe temp */ \
         "M117 Rewiping nozzle\n"                  /* Status message */ \
         LULZBOT_REWIPE_E0                         /* Wipe first extruder */ \
-        LULZBOT_REWIPE_E1                         /* Wipe second extruder */
+        LULZBOT_REWIPE_E1                         /* Wipe second extruder */ \
+        LULZBOT_WIPE_DONE_TEMP                    /* Drop to probe temp */
 
     #if defined(LULZBOT_USE_Z_BELT)
         #define LULZBOT_G29_RECOVER_COMMANDS \

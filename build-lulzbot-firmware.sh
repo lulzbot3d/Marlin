@@ -172,6 +172,7 @@ build_firmware() {
     return
   fi
   mv Marlin/applet/*.$format build
+  chmod a-x build/*
   if [ $GENERATE_CONFIG ]; then
     build_config $printer $toolhead
     mv Marlin/applet/*.config build

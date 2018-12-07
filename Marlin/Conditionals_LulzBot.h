@@ -52,7 +52,7 @@
  *
  */
 
-#define LULZBOT_FW_VERSION ".33" // Change this with each update
+#define LULZBOT_FW_VERSION ".34" // Change this with each update
 
 #if ( \
     !defined(LULZBOT_Gladiola_Mini) && \
@@ -1463,7 +1463,7 @@
     #define LULZBOT_NUM_RUNOUT_SENSORS LULZBOT_EXTRUDERS
     #define LULZBOT_FILAMENT_RUNOUT_SCRIPT "M117 Filament ran out\nM25\n"
 
-    #define LULZBOT_RUNOUT_DISTANCE_MM 4
+    #define LULZBOT_RUNOUT_DISTANCE_MM 14
     #define LULZBOT_FILAMENT_MOTION_SENSOR
 
     #define LULZBOT_FILAMENT_RUNOUT_SENSOR_DEBUG

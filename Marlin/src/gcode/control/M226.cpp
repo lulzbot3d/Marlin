@@ -24,6 +24,27 @@
 #include "../../Marlin.h" // for pin_is_protected and idle()
 #include "../../module/stepper.h"
 
+#if defined(LULZBOT_M226_PINS_WORKAROUND)
+ #include "../../module/endstops.h"
+ bool _digitalRead(const int pin_number) {
+   LULZBOT_ENABLE_PROBE_PINS(true);
+   delayMicroseconds(10);
+   bool val;
+   switch(pin_number) {
+    #if HAS_Z_MIN
+     case Z_MIN_PIN: val = READ(Z_MIN_PIN) != Z_MIN_ENDSTOP_INVERTING; break;
+    #endif
+    #if HAS_Z_MIN_PROBE_PIN
+     case Z_MIN_PROBE_PIN: val = READ(Z_MIN_PROBE_PIN) != Z_MIN_PROBE_ENDSTOP_INVERTING;  break;
+    #endif
+    default: val = digitalRead(pin_number); break;
+   }
+   LULZBOT_ENABLE_PROBE_PINS(false);
+   return val;
+ }
+ #define digitalRead _digitalRead
+#endif
+
 /**
  * M226: Wait until the specified pin reaches the state required (M226 P<pin> S<state>)
  */

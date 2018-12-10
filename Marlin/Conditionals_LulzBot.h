@@ -52,7 +52,7 @@
  *
  */
 
-#define LULZBOT_FW_VERSION ".35" // Change this with each update
+#define LULZBOT_FW_VERSION ".36" // Change this with each update
 
 #if ( \
     !defined(LULZBOT_Gladiola_Mini) && \
@@ -312,6 +312,7 @@
     #define LULZBOT_CONTROLLER_FAN_PIN            FAN1_PIN
     #define LULZBOT_SERIAL_PORT                   -1
     #define LULZBOT_SPI_SPEED                     SPI_SIXTEENTH_SPEED
+    #define LULZBOT_M226_PINS_WORKAROUND
 
 #elif defined(LULZBOT_USE_EINSY_RETRO)
     // Experimental Mini retrofitted with EinsyRambo from UltiMachine
@@ -2000,8 +2001,13 @@
     #endif
 
 #elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_SCREW)
-    #define LULZBOT_DEFAULT_MAX_FEEDRATE          {300, 300, 3, 25}      // (mm/sec)
-    #define LULZBOT_DEFAULT_MAX_ACCELERATION      {9000,9000,100,9000}
+    #if LULZBOT_EXTRUDERS > 1 && defined(LULZBOT_DISTINCT_E_FACTORS)
+        #define LULZBOT_DEFAULT_MAX_FEEDRATE          {300, 300, 3, 25, 25}      // (mm/sec)
+        #define LULZBOT_DEFAULT_MAX_ACCELERATION      {9000,9000,100,9000, 9000}
+    #else
+        #define LULZBOT_DEFAULT_MAX_FEEDRATE          {300, 300, 3, 25}      // (mm/sec)
+        #define LULZBOT_DEFAULT_MAX_ACCELERATION      {9000,9000,100,9000}
+    #endif
     #define LULZBOT_Z_STEPS                       1600
     #define LULZBOT_Z_MICROSTEPS                  16
 

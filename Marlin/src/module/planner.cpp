@@ -1597,8 +1597,8 @@ void Planner::synchronize() {
       if (!changed_dir) return;
     #endif
 
-    const bool positive[XYZ] = {  da > 0,  db > 0, dc > 0 };
-    const bool non_zero[XYZ] = { da != 0, db != 0, dc != 0 };
+    const bool positive[XYZ] = {  da > 0,  db > 0, dc > 0 },
+               non_zero[XYZ] = { da != 0, db != 0, dc != 0 };
     bool made_adjustment = false;
 
     LOOP_XYZ(i) {
@@ -1875,7 +1875,7 @@ bool Planner::_populate_block(block_t * const block, bool split_move,
     #if ENABLED(LULZBOT_CALIBRATION_GCODE) && MIN_STEPS_PER_SEGMENT > 1
     && !no_min_steps
     #endif
-  ) {
+    ) {
     block->millimeters = ABS(delta_mm[E_AXIS]);
   }
   else {
@@ -1883,16 +1883,16 @@ bool Planner::_populate_block(block_t * const block, bool split_move,
       block->millimeters = millimeters;
     else
       block->millimeters = SQRT(
-      #if CORE_IS_XY
-        sq(delta_mm[X_HEAD]) + sq(delta_mm[Y_HEAD]) + sq(delta_mm[Z_AXIS])
-      #elif CORE_IS_XZ
-        sq(delta_mm[X_HEAD]) + sq(delta_mm[Y_AXIS]) + sq(delta_mm[Z_HEAD])
-      #elif CORE_IS_YZ
-        sq(delta_mm[X_AXIS]) + sq(delta_mm[Y_HEAD]) + sq(delta_mm[Z_HEAD])
-      #else
-        sq(delta_mm[X_AXIS]) + sq(delta_mm[Y_AXIS]) + sq(delta_mm[Z_AXIS])
-      #endif
-    );
+        #if CORE_IS_XY
+          sq(delta_mm[X_HEAD]) + sq(delta_mm[Y_HEAD]) + sq(delta_mm[Z_AXIS])
+        #elif CORE_IS_XZ
+          sq(delta_mm[X_HEAD]) + sq(delta_mm[Y_AXIS]) + sq(delta_mm[Z_HEAD])
+        #elif CORE_IS_YZ
+          sq(delta_mm[X_AXIS]) + sq(delta_mm[Y_HEAD]) + sq(delta_mm[Z_HEAD])
+        #else
+          sq(delta_mm[X_AXIS]) + sq(delta_mm[Y_AXIS]) + sq(delta_mm[Z_AXIS])
+        #endif
+      );
 
     #if ENABLED(BACKLASH_COMPENSATION)
       // If we make it here, at least one of the axes has more steps than

@@ -52,7 +52,7 @@
  *
  */
 
-#define LULZBOT_FW_VERSION ".34" // Change this with each update
+#define LULZBOT_FW_VERSION ".35" // Change this with each update
 
 #if ( \
     !defined(LULZBOT_Gladiola_Mini) && \
@@ -166,7 +166,7 @@
     #define LULZBOT_USE_AUTOLEVELING
     #define LULZBOT_SENSORLESS_HOMING
     #define LULZBOT_USE_NORMALLY_CLOSED_ENDSTOPS
-    #define LULZBOT_USE_TMC_STEALTHCHOP_Z
+    #define LULZBOT_STEALTHCHOP_Z
     #define LULZBOT_USE_TMC_HYBRID_THRESHOLD
     #define LULZBOT_USE_Z_BELT
     #define LULZBOT_BACKLASH_COMPENSATION
@@ -191,7 +191,7 @@
     #define LULZBOT_USE_NORMALLY_CLOSED_ENDSTOPS
     #define LULZBOT_USE_Z_BELT
     #define LULZBOT_BACKLASH_COMPENSATION
-    #define LULZBOT_USE_TMC_STEALTHCHOP_Z
+    #define LULZBOT_STEALTHCHOP_Z
     #define LULZBOT_USE_TMC_HYBRID_THRESHOLD
     #define LULZBOT_BAUDRATE 250000
     #define LULZBOT_PRINTCOUNTER
@@ -219,7 +219,7 @@
     #define LULZBOT_USE_AUTOLEVELING
     #define LULZBOT_SENSORLESS_HOMING
     #define LULZBOT_USE_NORMALLY_CLOSED_ENDSTOPS
-    #define LULZBOT_USE_TMC_STEALTHCHOP_Z
+    #define LULZBOT_STEALTHCHOP_Z
     #define LULZBOT_USE_TMC_HYBRID_THRESHOLD
     #define LULZBOT_USE_Z_BELT
     #define LULZBOT_BAUDRATE 250000
@@ -1500,9 +1500,7 @@
     #endif
 
     // If true, use STEALTHCHOP, otherwise use COOLSTEP
-    #if defined(LULZBOT_USE_TMC_STEALTHCHOP_XY) || defined(LULZBOT_USE_TMC_STEALTHCHOP_Z)
-        #define LULZBOT_STEALTHCHOP
-
+    #if defined(LULZBOT_STEALTHCHOP_XY) || defined(LULZBOT_STEALTHCHOP_Z)
         // According to Jason at UltiMachine, setting the lower the
         // stealth freq the cooler the motor drivers will operate.
         #define LULZBOT_STEALTH_FREQ 0

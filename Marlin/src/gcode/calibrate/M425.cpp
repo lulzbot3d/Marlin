@@ -34,7 +34,7 @@ float backlash_distance_mm[XYZ] = BACKLASH_DISTANCE_MM,
 #endif
 
 #if ENABLED(MEASURE_BACKLASH_WHEN_PROBING)
-  float backlash_measured_mm [XYZ] = { 0 };
+  float backlash_measured_mm[XYZ] = { 0 };
   uint8_t backlash_measured_num[XYZ] = { 0 };
 #endif
 
@@ -97,8 +97,8 @@ void GcodeSuite::M425() {
       SERIAL_CHAR(' ');
       SERIAL_CHAR(axis_codes[a]);
       SERIAL_ECHO(backlash_distance_mm[a]);
+      SERIAL_EOL();
     }
-    SERIAL_EOL();
 
     #ifdef BACKLASH_SMOOTHING_MM
       SERIAL_ECHOLNPAIR("  Smoothing (mm):                 S", backlash_smoothing_mm);

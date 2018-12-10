@@ -709,13 +709,13 @@ private:
     static void M412();
   #endif
 
-  #if ENABLED(BACKLASH_GCODE)
-    static void M425();
-  #endif
-
   #if HAS_LEVELING
     static void M420();
     static void M421();
+  #endif
+
+  #if ENABLED(BACKLASH_GCODE)
+    static void M425();
   #endif
 
   #if HAS_M206_COMMAND
@@ -796,9 +796,7 @@ private:
   #endif
 
   #if HAS_TRINAMIC
-    #if ENABLED(TMC_DEBUG)
-      static void M122();
-    #endif
+    static void M122();
     static void M906();
     #if ENABLED(MONITOR_DRIVER_STATUS)
       static void M911();

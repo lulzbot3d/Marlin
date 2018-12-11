@@ -49,8 +49,8 @@
 //   UNCERTAIN - Measurement may be uncertain due to backlash
 //   CERTAIN   - Measurement obtained with backlash compensation
 //
-#define CALIBRATION_MEASUREMENT_UNKNOWN          10.0                    // mm
-#define CALIBRATION_MEASUREMENT_UNCERTAIN         2.0                    // mm
+#define CALIBRATION_MEASUREMENT_UNKNOWN           5.0                    // mm
+#define CALIBRATION_MEASUREMENT_UNCERTAIN         1.0                    // mm
 #define CALIBRATION_MEASUREMENT_CERTAIN           0.5                    // mm
 
 #include "../gcode.h"
@@ -231,11 +231,14 @@ static void calibrate_all() {
   SERIAL_EOL();
 
   for (uint8_t e = 1; e < HOTENDS; e++) {
-    m.confidence[X_AXIS] = CALIBRATION_MEASUREMENT_UNCERTAIN;
-    m.confidence[Y_AXIS] = CALIBRATION_MEASUREMENT_UNCERTAIN;
-    m.confidence[Z_AXIS] = CALIBRATION_MEASUREMENT_UNCERTAIN;
+    m.confidence[X_AXIS] = CALIBRATION_MEASUREMENT_UNKNOWN;
+    m.confidence[Y_AXIS] = CALIBRATION_MEASUREMENT_UNKNOWN;
+    m.confidence[Z_AXIS] = CALIBRATION_MEASUREMENT_UNKNOWN;
 
     set_nozzle(m, e);
+
+    ui.set_status_P(PSTR("Finding calibration cube"));
+    probe_cube(m, true);
 
     // Apply offset to toolhead two
     ui.set_status_P(PSTR("Centering nozzle"));
@@ -615,7 +618,7 @@ float measure(const AxisEnum axis, const int dir, const bool stopping_state, flo
   float resolution, feedrate, limit;
 
   if(fast) {
-    resolution = 0.25;
+    resolution = 0.20;
     feedrate   = CALIBRATION_FAST_FEEDRATE;
     limit      = 50;
   } else {

@@ -52,7 +52,7 @@
  *
  */
 
-#define LULZBOT_FW_VERSION ".36" // Change this with each update
+#define LULZBOT_FW_VERSION ".37" // Change this with each update
 
 #if ( \
     !defined(LULZBOT_Gladiola_Mini) && \
@@ -1141,7 +1141,7 @@
 #elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT)
     #ifdef LULZBOT_CALIBRATE_ON_CUBE
         #define CALIBRATION_CUBE_DIMENSIONS              {  10.0,  10.0,  10.0} // mm
-        #define CALIBRATION_CUBE_CENTER                  { 258.4, -19.1, -3.85} // mm
+        #define CALIBRATION_CUBE_CENTER                  { 261.5, -20.4, -1.60} // mm
         #define CALIBRATION_CUBE_TOP_CENTER_MEASUREMENT
         #define CALIBRATION_CUBE_RIGHT_SIDE_MEASUREMENT
         #define CALIBRATION_CUBE_FRONT_SIDE_MEASUREMENT
@@ -1340,10 +1340,10 @@
     #define LULZBOT_STANDARD_Y_BED_SIZE        275
 
 #elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT)
-    #define LULZBOT_STANDARD_X_MAX_POS         320
-    #define LULZBOT_STANDARD_X_MIN_POS          -6
-    #define LULZBOT_STANDARD_Y_MAX_POS         310
-    #define LULZBOT_STANDARD_Y_MIN_POS         -18
+    #define LULZBOT_STANDARD_X_MAX_POS         319
+    #define LULZBOT_STANDARD_X_MIN_POS          -7
+    #define LULZBOT_STANDARD_Y_MAX_POS         311
+    #define LULZBOT_STANDARD_Y_MIN_POS         -17
 
     #define LULZBOT_STANDARD_X_BED_SIZE        280
     #define LULZBOT_STANDARD_Y_BED_SIZE        280
@@ -1376,7 +1376,7 @@
 
 #elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT)
     #define LULZBOT_STANDARD_Z_MIN_POS          -2
-    #define LULZBOT_STANDARD_Z_MAX_POS         298
+    #define LULZBOT_STANDARD_Z_MAX_POS         299
 #endif
 
 #define LULZBOT_X_MAX_POS (LULZBOT_STANDARD_X_MAX_POS + LULZBOT_TOOLHEAD_X_MAX_ADJ)
@@ -1687,8 +1687,8 @@
 
     #if defined(LULZBOT_Quiver_TAZ7)
         // The Quiver has an wipe pad on the opposite side of the bed.
-        #define LULZBOT_OPPOSITE_WIPE_X1                   294
-        #define LULZBOT_OPPOSITE_WIPE_X2                   294
+        #define LULZBOT_OPPOSITE_WIPE_X1                   296
+        #define LULZBOT_OPPOSITE_WIPE_X2                   296
         #define LULZBOT_OPPOSITE_WIPE_Y1                    95
         #define LULZBOT_OPPOSITE_WIPE_Y2                    25
         #define LULZBOT_OPPOSITE_WIPE_Z                      1

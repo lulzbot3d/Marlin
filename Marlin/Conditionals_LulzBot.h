@@ -52,7 +52,7 @@
  *
  */
 
-#define LULZBOT_FW_VERSION ".37" // Change this with each update
+#define LULZBOT_FW_VERSION ".38" // Change this with each update
 
 #if ( \
     !defined(LULZBOT_Gladiola_Mini) && \
@@ -111,7 +111,7 @@
     #define LULZBOT_LCD_MACHINE_NAME "Mini"
     #define LULZBOT_IS_MINI
     #define LULZBOT_MINI_BED
-    #define LULZBOT_USE_LCD_DISPLAY
+    #define LULZBOT_USE_REPRAP_LCD_DISPLAY
     #define LULZBOT_USE_AUTOLEVELING
     #define LULZBOT_USE_MIN_ENDSTOPS
     #define LULZBOT_USE_MAX_ENDSTOPS
@@ -128,7 +128,7 @@
     #define LULZBOT_LCD_MACHINE_NAME "TAZ 5"
     #define LULZBOT_IS_TAZ
     #define LULZBOT_TAZ_BED
-    #define LULZBOT_USE_LCD_DISPLAY
+    #define LULZBOT_USE_REPRAP_LCD_DISPLAY
     #define LULZBOT_USE_MIN_ENDSTOPS
     #define LULZBOT_USE_NORMALLY_OPEN_ENDSTOPS
     #define LULZBOT_USE_Z_SCREW
@@ -142,7 +142,7 @@
     #define LULZBOT_LCD_MACHINE_NAME "TAZ 6"
     #define LULZBOT_IS_TAZ
     #define LULZBOT_TAZ_BED
-    #define LULZBOT_USE_LCD_DISPLAY
+    #define LULZBOT_USE_REPRAP_LCD_DISPLAY
     #define LULZBOT_USE_AUTOLEVELING
     #define LULZBOT_USE_MIN_ENDSTOPS
     #define LULZBOT_USE_MAX_ENDSTOPS
@@ -161,7 +161,7 @@
     #define LULZBOT_IS_MINI
     #define LULZBOT_MINI_BED
     #define LULZBOT_USE_EINSY_RETRO
-    #define LULZBOT_USE_LCD_DISPLAY
+    #define LULZBOT_USE_REPRAP_LCD_DISPLAY
     #define LULZBOT_TWO_PIECE_BED
     #define LULZBOT_USE_AUTOLEVELING
     #define LULZBOT_SENSORLESS_HOMING
@@ -1608,7 +1608,7 @@
 
 /************************** ADVANCED PAUSE / FILAMENT CHANGE ***********************/
 
-#if defined(LULZBOT_USE_LCD_DISPLAY) || defined(LULZBOT_USE_TOUCH_UI)
+#if defined(LULZBOT_USE_REPRAP_LCD_DISPLAY) || defined(LULZBOT_USE_TOUCH_UI)
     #define LULZBOT_ADVANCED_PAUSE_FEATURE
     #define LULZBOT_FILAMENT_CHANGE_FAST_LOAD_FEEDRATE LULZBOT_MANUAL_FEEDRATE_E
     #define LULZBOT_FILAMENT_CHANGE_FAST_LOAD_LENGTH 40
@@ -2018,7 +2018,7 @@
     #define LULZBOT_Z_MICROSTEPS                  16
 #endif
 
-#if defined(LULZBOT_USE_LCD_DISPLAY)
+#if defined(LULZBOT_USE_REPRAP_LCD_DISPLAY)
     #if defined(LULZBOT_USE_Z_BELT)
         #define LULZBOT_MANUAL_FEEDRATE_Z 40
     #else
@@ -2039,7 +2039,7 @@
 
 /*********************************** LCD OPTIONS *******************************/
 
-#if defined(LULZBOT_USE_LCD_DISPLAY)
+#if defined(LULZBOT_USE_REPRAP_LCD_DISPLAY)
     #define LULZBOT_REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
     #define LULZBOT_SDSUPPORT
     #define LULZBOT_XYZ_HOLLOW_FRAME_DISABLE
@@ -2110,6 +2110,8 @@
     #define LULZBOT_DISABLE_SD_DETECT_INVERTED
     #undef  LULZBOT_REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
     #define LULZBOT_DISABLE_DUE_SD_MMC
+    #define LULZBOT_LCD_SET_PROGRESS_MANUALLY
+    #define LULZBOT_COOLING_MESSAGES
 #endif
 
 #if defined(LULZBOT_SDSUPPORT_DEBUG)
@@ -2133,7 +2135,7 @@
     #define MSG_SD_REMOVED  "Media removed"
 #endif
 
-#if defined(LULZBOT_USE_AUTOLEVELING) && (defined(LULZBOT_USE_LCD_DISPLAY) || defined(LULZBOT_USE_TOUCH_UI))
+#if defined(LULZBOT_USE_AUTOLEVELING) && (defined(LULZBOT_USE_REPRAP_LCD_DISPLAY) || defined(LULZBOT_USE_TOUCH_UI))
     #define LULZBOT_BABYSTEPPING
     #define LULZBOT_BABYSTEP_ZPROBE_OFFSET
     #define LULZBOT_BABYSTEP_XY
@@ -2175,7 +2177,7 @@
 /* The following goes in "configuration_store.cpp", before and after
  * "EEPROM_WRITE(zprobe_zoffset)" and "EEPROM_READ(zprobe_zoffset)"
  */
-#if defined(LULZBOT_USE_AUTOLEVELING) && defined(LULZBOT_USE_LCD_DISPLAY)
+#if defined(LULZBOT_USE_AUTOLEVELING) && defined(LULZBOT_USE_REPRAP_LCD_DISPLAY)
     #define LULZBOT_EEPROM_BEFORE_ZOFFSET \
         const uint16_t eeprom_saved_crc = working_crc; \
         eeprom_zoffset_index = eeprom_index;

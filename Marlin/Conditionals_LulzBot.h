@@ -52,7 +52,7 @@
  *
  */
 
-#define LULZBOT_FW_VERSION ".39" // Change this with each update
+#define LULZBOT_FW_VERSION ".40" // Change this with each update
 
 #if ( \
     !defined(LULZBOT_Gladiola_Mini) && \
@@ -266,6 +266,14 @@
 // never clears that message. The following causes
 // Marlin to print a new message when the axis are homed
 #define LULZBOT_HOMING_MESSAGE_WORKAROUND
+
+/* Marlin 2.0.x seems to have a bug with the babystepping
+ * implementation. This workaround does it as part of the
+ * backlash compensation code.
+ */
+#if defined(LULZBOT_USE_ARCHIM2)
+    #define LULZBOT_BABYSTEP_WORKAROUND
+#endif
 
 #define LULZBOT_STARTUP \
     LULZBOT_ENABLE_Z_MOTOR_ON_STARTUP \

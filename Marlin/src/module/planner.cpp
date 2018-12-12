@@ -1545,6 +1545,28 @@ void Planner::synchronize() {
   ) idle();
 }
 
+#if defined(LULZBOT_BABYSTEP_WORKAROUND)
+  void add_babystep_steps(const int32_t da, const int32_t db, const int32_t dc, const uint8_t dm, block_t * const block, float (&delta_mm)[ABCE]) {
+      const bool positive[XYZ] = {  da > 0,  db > 0, dc > 0 },
+                 non_zero[XYZ] = { da != 0, db != 0, dc != 0 };
+
+      bool made_adjustment = false;
+
+      LOOP_XYZ(i) {
+        if (Temperature::babystepsTodo[i] != 0 && non_zero[i] && positive[i] == (Temperature::babystepsTodo[i] > 0)) {
+            block->steps[i] += ABS(Temperature::babystepsTodo[i]);
+            Temperature::babystepsTodo[i] = 0;
+            delta_mm[i] = (positive[i] ? 1.0f : -1.0f) * block->steps[i] * Planner::steps_to_mm[i];
+            made_adjustment = true;
+        }
+      }
+
+      // If any of the axes were adjusted, recompute block->millimeters
+      if (made_adjustment)
+        block->millimeters = SQRT(sq(delta_mm[X_AXIS]) + sq(delta_mm[Y_AXIS]) + sq(delta_mm[Z_AXIS]));
+  }
+#endif
+
 /**
  * The following implements axis backlash correction. To minimize seams
  * on the printed part, the backlash correction only adds steps to the
@@ -1577,6 +1599,10 @@ void Planner::synchronize() {
     if (db == 0) CBI(changed_dir, Y_AXIS);
     if (dc == 0) CBI(changed_dir, Z_AXIS);
     last_direction_bits ^= changed_dir;
+
+    #if defined(LULZBOT_BABYSTEP_WORKAROUND)
+      add_babystep_steps(da, db, dc, dm, block, delta_mm);
+    #endif
 
     if (backlash_correction == 0) return;
 

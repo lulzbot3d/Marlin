@@ -75,7 +75,7 @@ static union {
 #if ENABLED(BABYSTEPPING)
   struct {
     struct ValueAdjusters placeholder;
-    float rel[XYZ];
+    int16_t rel[XYZ];
     #if EXTRUDERS > 1
       bool  link_nozzles;
     #endif
@@ -2217,10 +2217,10 @@ bool StepsScreen::onTouchHeld(uint8_t tag) {
 
     w.heading(                          PSTR("Adjust Offsets"));
     #if ENABLED(BABYSTEP_XY)
-    w.color(Theme::x_axis).adjuster(2,  PSTR("X:"), screen_data.AdjustOffsetsScreen.rel[0]);
-    w.color(Theme::y_axis).adjuster(4,  PSTR("Y:"), screen_data.AdjustOffsetsScreen.rel[1]);
+    w.color(Theme::x_axis).adjuster(2,  PSTR("X:"), screen_data.AdjustOffsetsScreen.rel[0] / getAxisSteps_per_mm(X));
+    w.color(Theme::y_axis).adjuster(4,  PSTR("Y:"), screen_data.AdjustOffsetsScreen.rel[1] / getAxisSteps_per_mm(Y));
     #endif
-    w.color(Theme::z_axis).adjuster(6,  PSTR("Z:"), screen_data.AdjustOffsetsScreen.rel[2]);
+    w.color(Theme::z_axis).adjuster(6,  PSTR("Z:"), screen_data.AdjustOffsetsScreen.rel[2] / getAxisSteps_per_mm(Z));
     w.increments();
     #if EXTRUDERS > 1
       w.toggle  (8,  PSTR("Adjust Nozzles Together:"), PSTR("no\xFFyes"), screen_data.AdjustOffsetsScreen.link_nozzles, PSTR("Yes\nNo"));
@@ -2235,13 +2235,14 @@ bool StepsScreen::onTouchHeld(uint8_t tag) {
     #else
       constexpr bool link = true;
     #endif
+    int16_t steps;
     switch(tag) {
-      case  2: babystepAxis_mm(-inc, X, link); screen_data.AdjustOffsetsScreen.rel[0] -= inc; break;
-      case  3: babystepAxis_mm( inc, X, link); screen_data.AdjustOffsetsScreen.rel[0] += inc; break;
-      case  4: babystepAxis_mm(-inc, Y, link); screen_data.AdjustOffsetsScreen.rel[1] -= inc; break;
-      case  5: babystepAxis_mm( inc, Y, link); screen_data.AdjustOffsetsScreen.rel[1] += inc; break;
-      case  6: babystepAxis_mm(-inc, Z, link); screen_data.AdjustOffsetsScreen.rel[2] -= inc; break;
-      case  7: babystepAxis_mm( inc, Z, link); screen_data.AdjustOffsetsScreen.rel[2] += inc; break;
+      case  2: steps = mmToWholeSteps(inc, X); smartAdjustAxis_steps(-steps, X, link); screen_data.AdjustOffsetsScreen.rel[0] -= steps; break;
+      case  3: steps = mmToWholeSteps(inc, X); smartAdjustAxis_steps( steps, X, link); screen_data.AdjustOffsetsScreen.rel[0] += steps; break;
+      case  4: steps = mmToWholeSteps(inc, Y); smartAdjustAxis_steps(-steps, Y, link); screen_data.AdjustOffsetsScreen.rel[1] -= steps; break;
+      case  5: steps = mmToWholeSteps(inc, Y); smartAdjustAxis_steps( steps, Y, link); screen_data.AdjustOffsetsScreen.rel[1] += steps; break;
+      case  6: steps = mmToWholeSteps(inc, Z); smartAdjustAxis_steps(-steps, Z, link); screen_data.AdjustOffsetsScreen.rel[2] -= steps; break;
+      case  7: steps = mmToWholeSteps(inc, Z); smartAdjustAxis_steps( steps, Z, link); screen_data.AdjustOffsetsScreen.rel[2] += steps; break;
       #if EXTRUDERS > 1
         case  8: screen_data.AdjustOffsetsScreen.link_nozzles = !link; break;
       #endif

@@ -63,16 +63,14 @@ usage() {
 compile_dependencies() {
   printer=$1   ; shift 1
 
+  get_arch_info $printer
+
   case $printer in
     Quiver_TAZ7)
       ARCHIM_SRC="ArduinoAddons/arduino-1.8.5/packages/ultimachine/hardware/sam/1.6.9-b"
-      ARCHIM_LIB="$ARCHIM_SRC/variants/archim/libsam_sam3x8e_gcc_rel.a"
-      if [ ! -f $ARCHIM_LIB ]; then
-        (cd "$ARCHIM_SRC/system/libsam/build_gcc"; ARM_GCC_TOOLCHAIN="$gcc_path" make)
-        mv -f $ARCHIM_SRC/variants/arduino_due_x/* $ARCHIM_SRC/variants/archim
-      else
-        echo Using cached $ARCHIM_LIB
-      fi
+      (cd "$ARCHIM_SRC/system/libsam/build_gcc"; ARM_GCC_TOOLCHAIN="$gcc_path" make)
+      cp -u $ARCHIM_SRC/variants/arduino_due_x/libsam_sam3x8e_gcc_rel.a     $ARCHIM_SRC/variants/archim/libsam_sam3x8e_gcc_rel.a
+      cp -u $ARCHIM_SRC/variants/arduino_due_x/libsam_sam3x8e_gcc_rel.a.txt $ARCHIM_SRC/variants/archim/libsam_sam3x8e_gcc_rel.a.txt
       ;;
     *) ;;
   esac
@@ -157,7 +155,6 @@ build_firmware() {
   printer=$1   ; shift 1
   toolhead=$1  ; shift 1
   get_arch_info $printer
-  compile_dependencies $printer
   if [ $MAKE_HASHES ]; then
     generate_bare_checksum $printer $toolhead
   fi
@@ -342,8 +339,10 @@ mkdir  build
 
 if [ $# -eq 2 ]
 then
+  compile_dependencies $1
   build_firmware $1 $2
 else
+  compile_dependencies Quiver_TAZ7
   build_for_mini
   build_for_taz
 fi

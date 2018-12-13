@@ -8,7 +8,7 @@
 
   This library is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
   See the GNU Lesser General Public License for more details.
 
   You should have received a copy of the GNU Lesser General Public
@@ -121,12 +121,12 @@ extern char* ltoa( long value, char *string, int radix )
   return string;
 }
 
-extern char* utoa( unsigned long value, char *string, int radix )
+extern char* utoa( unsigned int value, char *string, int radix )
 {
   return ultoa( value, string, radix ) ;
 }
 
-extern char* ultoa( unsigned long value, char *string, int radix )
+extern char* ultoa( unsigned int value, char *string, int radix )
 {
   char tmp[33];
   char *tp = tmp;
@@ -143,7 +143,7 @@ extern char* ultoa( unsigned long value, char *string, int radix )
   {
     return 0;
   }
- 
+
   while (v || tp == tmp)
   {
     i = v % radix;
@@ -156,7 +156,7 @@ extern char* ultoa( unsigned long value, char *string, int radix )
 
   sp = string;
 
- 
+
   while (tp > tmp)
     *sp++ = *--tp;
   *sp = 0;

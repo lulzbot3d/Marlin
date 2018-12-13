@@ -9,7 +9,7 @@ echo "Increment version to $NEXT_VERSION?"
 select yn in "Yes" "No"; do
   case $yn in
     Yes)
-      sed -i "s/#define LULZBOT_FW_VERSION \".\d+\"/#define LULZBOT_FW_VERSION \".$NEXT_VERSION\"/" Marlin/Conditionals_LulzBot.h
+      sed -i "s/#define LULZBOT_FW_VERSION \".[0-9]\\+\"/#define LULZBOT_FW_VERSION \".$NEXT_VERSION\"/" Marlin/Conditionals_LulzBot.h
       git add Marlin/Conditionals_LulzBot.h
       git commit -m "Change version number" -m "Changed version number to $THEIR_VERSION.$NEXT_VERSION"
       git tag v$THEIR_VERSION.$NEXT_VERSION HEAD

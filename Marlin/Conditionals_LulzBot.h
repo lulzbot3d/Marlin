@@ -52,7 +52,7 @@
  *
  */
 
-#define LULZBOT_FW_VERSION ".42" // Change this with each update
+#define LULZBOT_FW_VERSION ".43" // Change this with each update
 
 #if ( \
     !defined(LULZBOT_Gladiola_Mini) && \
@@ -1715,7 +1715,7 @@
     LULZBOT_ ## side ## _WIPE_Z \
 }
 
-#define _LULZBOT_WIPE_GCODE(x,y1,y2,z) \
+#define __LULZBOT_WIPE_GCODE(x,y1,y2,z) \
     "G1 X" #x " Y" #y2 " F5000\n"                 /* Move above second wiper pad */ \
     "G1 Z1\n"                                     /* Push nozzle into wiper */ \
     "M109 R170\n"                                 /* Wait for wipe temp */ \
@@ -1731,9 +1731,14 @@
     "G1 X" #x " Y" #y1 " F4000\n"                 /* Slow wipe */ \
     "G1 X" #x " Y" #y2 " F4000\n"                 /* Slow wipe */ \
     "G1 X" #x " Y" #y1 " F4000\n"                 /* Slow wipe */ \
-    "G1 Z5\n"
+    "G1 Z5\n"                                     /* Raise nozzle */
 
-#define LULZBOT_WIPE_GCODE(side) _LULZBOT_WIPE_GCODE(LULZBOT_ ## side ## _WIPE_X1, LULZBOT_ ## side ## _WIPE_Y1, LULZBOT_ ## side ## _WIPE_Y2, LULZBOT_ ## side ## _WIPE_Z )
+#define _LULZBOT_WIPE_GCODE(x,y1,y2,z) __LULZBOT_WIPE_GCODE(x,y1,y2,z)
+
+#define LULZBOT_WIPE_GCODE(side) _LULZBOT_WIPE_GCODE(LULZBOT_ ## side ## _WIPE_X1, \
+                                                     LULZBOT_ ## side ## _WIPE_Y1, \
+                                                     LULZBOT_ ## side ## _WIPE_Y2, \
+                                                     LULZBOT_ ## side ## _WIPE_Z )
 
 #if defined(LULZBOT_Quiver_TAZ7) && LULZBOT_EXTRUDERS == 1
     #define LULZBOT_NOZZLE_CLEAN_START_POINT _LULZBOT_NOZZLE_CLEAN_START_POINT(OPPOSITE)
@@ -1775,6 +1780,7 @@
 
     #if defined(LULZBOT_Quiver_TAZ7) && defined(TOOLHEAD_Quiver_DualExtruder)
         #define LULZBOT_REWIPE_E1 \
+            "G0 Z5\n"                             /* Raise nozzle */ \
             "G0 X150 F5000\n"                     /* Move over to switch extruders */ \
             "T1\n"                                /* Switch to second extruder */ \
             LULZBOT_WIPE_GCODE(OPPOSITE)          /* Wipe on the rightmost pad */ \

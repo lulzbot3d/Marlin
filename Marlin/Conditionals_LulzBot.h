@@ -52,7 +52,7 @@
  *
  */
 
-#define LULZBOT_FW_VERSION ".43" // Change this with each update
+#define LULZBOT_FW_VERSION ".44" // Change this with each update
 
 #if ( \
     !defined(LULZBOT_Gladiola_Mini) && \
@@ -204,6 +204,7 @@
     #define LULZBOT_HAS_CALIBRATION_CUBE
     #define LULZBOT_FILAMENT_RUNOUT_SENSOR
     #define LULZBOT_BACKUP_EEPROM_INFORMATION
+    #define LULZBOT_USB_READ_ERROR_IS_FATAL
 #endif
 
 #if defined(LULZBOT_Prototype_DemoCLCD)

@@ -1997,7 +1997,7 @@ float MoveAxisScreen::getManualFeedrate(uint8_t axis, float increment_mm) {
   // being held down, this allows enough margin for the planner to
   // connect segments and even out the motion.
   constexpr float max_manual_feedrate[XYZE] = MAX_MANUAL_FEEDRATE;
-  return min(max_manual_feedrate[axis], abs(increment_mm * TOUCH_REPEATS_PER_SECOND * 0.80));
+  return min(max_manual_feedrate[axis]/60, abs(increment_mm * TOUCH_REPEATS_PER_SECOND * 0.80));
 }
 
 void MoveAxisScreen::setManualFeedrate(ExtUI::axis_t axis, float increment_mm) {

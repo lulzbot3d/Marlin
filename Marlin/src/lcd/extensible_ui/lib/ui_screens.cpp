@@ -545,8 +545,8 @@ bool ConfirmAbortPrint::onTouchEnd(uint8_t tag) {
 #if ENABLED(LULZBOT_CALIBRATION_GCODE)
 void ConfirmAutoCalibration::onRedraw(draw_mode_t what) {
   drawMessage(
-    F("Make sure the hot ends are warm and"),
-    F("thoroughly clean before proceeding."),
+    F("This process will adjust the"),
+    F("backlash and nozzle offsets."),
     F("Continue with auto-calibration?"),
     Theme::font_small
   );
@@ -559,7 +559,7 @@ bool ConfirmAutoCalibration::onTouchEnd(uint8_t tag) {
   switch(tag) {
     case 1:
       GOTO_SCREEN(StatusScreen);
-      enqueueCommands_P(PSTR("G28\nG425"));
+      enqueueCommands_P(PSTR(LULZBOT_CALIBRATION_SCRIPT));
       return true;
     default:
       return DialogBoxBaseClass::onTouchEnd(tag);

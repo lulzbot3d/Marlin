@@ -52,7 +52,7 @@
  *
  */
 
-#define LULZBOT_FW_VERSION ".47" // Change this with each update
+#define LULZBOT_FW_VERSION ".48" // Change this with each update
 
 #if ( \
     !defined(LULZBOT_Gladiola_Mini) && \
@@ -1159,6 +1159,17 @@
     #endif
 #endif
 
+#if defined(LULZBOT_CALIBRATION_GCODE)
+    #define LULZBOT_CALIBRATION_SCRIPT \
+        "M117 Starting Auto-Calibration\n"   /* Status message */ \
+        "G28\n"                              /* Auto-Home */ \
+        LULZBOT_MENU_AXIS_LEVELING_COMMANDS  /* Level X-Axis */ \
+        LULZBOT_WIPE_SEQUENCE_COMMANDS       /* Wipe the Nozzles */ \
+        "G425\n"                             /* Calibrate Nozzles */ \
+        "M500\n"                             /* Save settings */ \
+        "M117 Calibration data saved"        /* Status message */
+#endif
+
 /*************************** TEMPERATURE SETTINGS *****************************/
 
 #define LULZBOT_TEMP_SENSOR_0                        5
@@ -1769,12 +1780,12 @@
 
     #if EXTRUDERS == 1
         #define LULZBOT_WIPE_HEAT_TEMP  "M104 S170 T0\n"               /* Preheat to wipe temp */
-        #define LULZBOT_WIPE_WAIT_TEMP  "M104 R170 T0\n"               /* Wait for wipe temp */
-        #define LULZBOT_WIPE_DONE_TEMP  "M104 S160 T0\n"               /* Drop to probe temp */
+        #define LULZBOT_WIPE_WAIT_TEMP  "M109 R170 T0\n"               /* Wait for wipe temp */
+        #define LULZBOT_WIPE_DONE_TEMP  "M109 R160 T0\n"               /* Drop to probe temp */
     #else
         #define LULZBOT_WIPE_HEAT_TEMP  "M104 S170 T0\nM104 S170 T1\n" /* Preheat to wipe temp */
-        #define LULZBOT_WIPE_WAIT_TEMP  "M104 R170 T0\nM104 R170 T1\n" /* Wait for wipe temp */
-        #define LULZBOT_WIPE_DONE_TEMP  "M104 S160 T0\nM104 S160 T1\n" /* Drop to probe temp */
+        #define LULZBOT_WIPE_WAIT_TEMP  "M109 R170 T0\nM109 R170 T1\n" /* Wait for wipe temp */
+        #define LULZBOT_WIPE_DONE_TEMP  "M109 R160 T0\nM109 R160 T1\n" /* Drop to probe temp */
     #endif
 
     #define LULZBOT_REWIPE_E0 "G12 P0 S12 T0\n"   /* Wipe nozzle */
@@ -1793,6 +1804,7 @@
 
     #define LULZBOT_WIPE_SEQUENCE_COMMANDS \
         LULZBOT_WIPE_HEAT_TEMP                    /* Preheat extruders */ \
+        "M117 Heating nozzle\n"                   /* Status message */ \
         LULZBOT_WIPE_WAIT_TEMP                    /* Wait for wipe temp */ \
         "M117 Rewiping nozzle\n"                  /* Status message */ \
         LULZBOT_REWIPE_E0                         /* Wipe first extruder */ \
@@ -1801,7 +1813,6 @@
 
     #if defined(LULZBOT_USE_Z_BELT)
         #define LULZBOT_G29_RECOVER_COMMANDS \
-            "M104 S170\n"                         /* Begin heating to wipe temp */ \
             LULZBOT_MENU_AXIS_LEVELING_COMMANDS   /* Level X axis */ \
             LULZBOT_WIPE_SEQUENCE_COMMANDS        /* Perform wipe sequence */ \
             "M109 R160\n"                         /* Setting probing temperature */ \
@@ -1809,7 +1820,6 @@
 
     #elif defined(LULZBOT_USE_PRE_GLADIOLA_G29_WORKAROUND)
         #define LULZBOT_G29_RECOVER_COMMANDS \
-            "M104 S170\n"                         /* Begin heating to wipe temp */ \
             "M121\n"                              /* Turn off endstops so we can move */ \
             "G0 Z10\n"                            /* Raise nozzle */ \
             "G28 X0 Y0\n"                         /* G29 on older minis shifts the coordinate system */ \
@@ -1819,7 +1829,6 @@
 
     #else
         #define LULZBOT_G29_RECOVER_COMMANDS \
-            "M104 S170\n"                         /* Begin heating to wipe temp */ \
             "G0 Z10\n"                            /* Raise nozzle */ \
             LULZBOT_WIPE_SEQUENCE_COMMANDS        /* Perform wipe sequence */ \
             "M109 R160\n"                         /* Set probing temperature */ \

@@ -252,13 +252,14 @@ static void calibrate_all() {
 
   SERIAL_EOL();
 
-  set_nozzle(m, 0);
+  move_to(X_AXIS, 150);
+
   #if HOTENDS > 1
+  set_nozzle(m, 0);
   normalize_nozzle_offsets();
   report_relative_nozzle_offsets();
   #endif
 
-  park_above_cube(m);
   ui.set_status_P(PSTR("Calibration done."));
 
   #if ENABLED(BACKLASH_GCODE)

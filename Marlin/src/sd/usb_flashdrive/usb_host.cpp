@@ -96,11 +96,14 @@ uint8_t MAX3421e::gpioRd() {
 
 // reset MAX3421e. Returns false if PLL failed to stabilize 1 second after reset
 bool MAX3421e::reset() {
-  regWr(rUSBCTL, bmCHIPRES);
-  regWr(rUSBCTL, 0x00);
-  for (uint8_t i = 100; i--;) {
-    if (regRd(rUSBIRQ) & bmOSCOKIRQ) return true;
-    delay(10);
+  for (uint8_t j = 5; j--;) {
+    regWr(rUSBCTL, bmCHIPRES);
+    regWr(rUSBCTL, 0x00);
+    for (uint8_t i = 100; i--;) {
+      if (regRd(rUSBIRQ) & bmOSCOKIRQ) return true;
+      delay(10);
+    }
+    SERIAL_ECHOLNPGM("OSCOKIRQ hasn't asserted in time. Retrying...");
   }
   return false;
 }

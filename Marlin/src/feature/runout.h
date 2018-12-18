@@ -97,6 +97,10 @@ class TFilamentMonitor : public FilamentMonitorBase {
           #if ENABLED(EXTENSIBLE_UI)
             ExtUI::onFilamentRunout();
           #endif
+          #ifdef LULZBOT_ACTION_ON_FILAMENT_RUNOUT
+            SERIAL_ECHOLNPGM("//action:" LULZBOT_ACTION_ON_FILAMENT_RUNOUT);
+            if(IS_SD_PRINTING())
+          #endif
           enqueue_and_echo_commands_P(PSTR(FILAMENT_RUNOUT_SCRIPT));
           planner.synchronize();
         }

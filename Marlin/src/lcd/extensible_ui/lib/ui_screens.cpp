@@ -318,17 +318,18 @@ void AboutScreen::onRedraw(draw_mode_t what) {
   cmd.cmd(CLEAR(true,true,true));
 
   #define GRID_COLS 4
-  #define GRID_ROWS 8
+  #define GRID_ROWS 9
 
   #if defined(LULZBOT_LCD_MACHINE_NAME) && defined(LULZBOT_LCD_TOOLHEAD_NAME)
   cmd.tag(0).font(Theme::font_medium).text(  BTN_POS(1,2), BTN_SIZE(4,1), F(LULZBOT_LCD_MACHINE_NAME "  (" LULZBOT_LCD_TOOLHEAD_NAME ")"))
   #else
   cmd       .font(Theme::font_large) .text(  BTN_POS(1,2), BTN_SIZE(4,1), F("Color Touch Panel"))
   #endif
-     .tag(2).font(Theme::font_medium).text(  BTN_POS(1,3), BTN_SIZE(4,1), F("(c) 2018 Aleph Objects, Inc."))
+     .tag(2).font(Theme::font_medium).text(  BTN_POS(1,3), BTN_SIZE(4,1), F("(C) 2018 Aleph Objects, Inc."))
+                                     .text(  BTN_POS(1,4), BTN_SIZE(4,1), F("www.lulzbot.com"))
 
-     .tag(0)                         .text(  BTN_POS(1,5), BTN_SIZE(4,1), getFirmwareName_str())
-     .tag(1)                         .button(BTN_POS(2,7), BTN_SIZE(2,1), F("Okay"));
+     .tag(0)                         .text(  BTN_POS(1,6), BTN_SIZE(4,1), getFirmwareName_str())
+     .tag(1)                         .button(BTN_POS(2,8), BTN_SIZE(2,1), F("Okay"));
 
   #undef GRID_COLS
   #undef GRID_ROWS
@@ -775,7 +776,7 @@ void StatusScreen::draw_temperature(draw_mode_t what) {
 
     sprintf_P(
       bed_str,
-      PSTR("%-3d / %-3d  " ),
+      PSTR("%-3d / %-3d C" ),
       ROUND(getActualTemp_celsius(BED)),
       ROUND(getTargetTemp_celsius(BED))
     );
@@ -1038,7 +1039,7 @@ void MenuScreen::onRedraw(draw_mode_t what) {
          .enabled(0)
         #endif
         .tag(9).button( BTN_POS(1,7), BTN_SIZE(2,1), F("Printer Statistics"))
-        .tag(10).button( BTN_POS(1,6), BTN_SIZE(2,1), F("About Firmware"))
+        .tag(10).button( BTN_POS(1,6), BTN_SIZE(2,1), F("About Printer"))
         .style(STYLE_LIGHT_BTN)
         .tag(1).button( BTN_POS(1,8), BTN_SIZE(2,1), F("Back"));
       #undef GRID_COLS
@@ -1064,7 +1065,7 @@ void MenuScreen::onRedraw(draw_mode_t what) {
          .enabled(0)
         #endif
         .tag(9).button( BTN_POS(2,4), BTN_SIZE(1,1), F("Printer Statistics"))
-        .tag(10).button( BTN_POS(1,5), BTN_SIZE(1,1), F("About Firmware"))
+        .tag(10).button( BTN_POS(1,5), BTN_SIZE(1,1), F("About Printer"))
         .style(STYLE_LIGHT_BTN)
         .tag(1).button( BTN_POS(2,5), BTN_SIZE(1,1), F("Back"));
       #undef GRID_COLS
@@ -1078,12 +1079,12 @@ bool MenuScreen::onTouchEnd(uint8_t tag) {
 
   switch(tag) {
     case 1:  GOTO_PREVIOUS();                                         break;
-    case 2:  enqueueCommands_P(PSTR("G28"));                               break;
+    case 2:  enqueueCommands_P(PSTR("G28"));                          break;
     #if defined(LULZBOT_MENU_AXIS_LEVELING_COMMANDS)
     case 3:  enqueueCommands_P(PSTR(LULZBOT_MENU_AXIS_LEVELING_COMMANDS)); break;
     #endif
     case 4:  GOTO_SCREEN(MoveAxisScreen);                             break;
-    case 5:  enqueueCommands_P(PSTR("M84"));                               break;
+    case 5:  enqueueCommands_P(PSTR("M84"));                          break;
     case 6:  GOTO_SCREEN(TemperatureScreen);                          break;
     case 7:  GOTO_SCREEN(ChangeFilamentScreen);                       break;
     case 8:  GOTO_SCREEN(AdvancedSettingsScreen);                     break;
@@ -1444,7 +1445,8 @@ void ChangeFilamentScreen::onRedraw(draw_mode_t what) {
     #else
        .style(tog11)
     #endif
-       .tag(11)               .button (BTN_POS(2,2), BTN_SIZE(1,1), F("2"));
+       .tag(11)               .button (BTN_POS(2,2), BTN_SIZE(1,1), F("2"))
+       .style(0);
 
     // Mask out areas if the related functionality must be disabled.
 
@@ -1470,6 +1472,7 @@ void ChangeFilamentScreen::onRedraw(draw_mode_t what) {
        .tag(2) .style(tog2) .enabled(e_ok) .button (BTN_POS(2,6), BTN_SIZE(1,1), F( STRINGIFY(LOW_TEMP)  "C (PLA)"))
        .tag(3) .style(tog3) .enabled(e_ok) .button (BTN_POS(2,5), BTN_SIZE(1,1), F( STRINGIFY(MED_TEMP)  "C (ABS)"))
        .tag(4) .style(tog4) .enabled(e_ok) .button (BTN_POS(2,4), BTN_SIZE(1,1), F( STRINGIFY(HIGH_TEMP) "C (High)"))
+       .style(0)
 
     // Add tags to color gradient
     .cmd(COLOR_MASK(0,0,0,0))

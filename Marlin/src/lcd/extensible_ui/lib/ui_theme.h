@@ -41,6 +41,10 @@ namespace Theme {
 
   constexpr uint32_t background    = theme_darkest;
 
+  constexpr uint32_t text_enabled  = 0xFFFFFF;
+  constexpr uint32_t text_disabled = theme_dark;
+
+
   constexpr uint32_t x_axis        = COLOR_CORRECTION(0xFF0000);
   constexpr uint32_t y_axis        = COLOR_CORRECTION(0x00BB00);
   constexpr uint32_t z_axis        = COLOR_CORRECTION(0x0000FF);

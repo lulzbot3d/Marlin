@@ -1384,19 +1384,13 @@ void ChangeFilamentScreen::onRedraw(draw_mode_t what) {
        .font(Theme::font_medium)
     #endif
        .text(BTN_POS(1,1), BTN_SIZE(2,1), F("Extruder Selection:"))
-       .text(BTN_POS(1,3), BTN_SIZE(2,1), F("Removal Temp:"))
     #if defined(USE_PORTRAIT_ORIENTATION)
-
        .text(BTN_POS(1,7), BTN_SIZE(1,1), F("Current Temp:"))
-       .text(BTN_POS(1,8), BTN_SIZE(1,1), F("Unload:"))
-       .text(BTN_POS(2,8), BTN_SIZE(1,1), F("Load:"));
     #else
-
        .text(BTN_POS(3,1), BTN_SIZE(2,1), F("Current Temp:"))
-       .text(BTN_POS(3,3), BTN_SIZE(1,1), F("Unload:"))
-       .text(BTN_POS(4,3), BTN_SIZE(1,1), F("Load:"));
+       .font(Theme::font_small)
     #endif
-
+       .text(BTN_POS(1,3), BTN_SIZE(2,1), F("Removal Temp:"));
     drawTempGradient(BTN_POS(1,4), BTN_SIZE(1,3));
   }
 
@@ -1428,7 +1422,6 @@ void ChangeFilamentScreen::onRedraw(draw_mode_t what) {
 
     default_button_colors();
 
-    const bool e_ok = screen_data.ChangeFilamentScreen.e_tag != 0;
     const bool t_ok = getActualTemp_celsius(getExtruder()) > getSoftenTemp() - 10;
 
     const uint32_t tog2  = screen_data.ChangeFilamentScreen.t_tag == 2  ? STYLE_LIGHT_BTN : 0;
@@ -1439,7 +1432,11 @@ void ChangeFilamentScreen::onRedraw(draw_mode_t what) {
     const uint32_t tog11 = screen_data.ChangeFilamentScreen.e_tag == 11 ? STYLE_LIGHT_BTN : 0;
     #endif
 
-    cmd.font(Theme::font_large)
+    #if defined(USE_PORTRAIT_ORIENTATION)
+      cmd.font(Theme::font_large)
+    #else
+      cmd.font(Theme::font_medium)
+    #endif
        .tag(10).style(tog10)               .button (BTN_POS(1,2), BTN_SIZE(1,1), F("1"))
     #if HOTENDS < 2
        .enabled(false)
@@ -1449,18 +1446,7 @@ void ChangeFilamentScreen::onRedraw(draw_mode_t what) {
        .tag(11)               .button (BTN_POS(2,2), BTN_SIZE(1,1), F("2"))
        .style(0);
 
-    // Mask out areas if the related functionality must be disabled.
-
-    #if defined(USE_PORTRAIT_ORIENTATION)
-    if(!e_ok) cmd.cmd(COLOR_RGB(Theme::background)).rectangle(BTN_POS(1,3), BTN_SIZE(2,7)).cmd(COLOR_RGB(0xFFFFFF));
-    if(!t_ok) cmd.cmd(COLOR_RGB(Theme::background)).rectangle(BTN_POS(1,8), BTN_SIZE(2,3)).cmd(COLOR_RGB(0xFFFFFF));
-    #else
-    if(!e_ok) cmd.cmd(COLOR_RGB(Theme::background)).rectangle(BTN_POS(1,3), BTN_SIZE(2,7))
-                                                   .rectangle(BTN_POS(3,1), BTN_SIZE(2,2)).cmd(COLOR_RGB(0xFFFFFF));
-    if(!t_ok) cmd.cmd(COLOR_RGB(Theme::background)).rectangle(BTN_POS(3,3), BTN_SIZE(2,3)).cmd(COLOR_RGB(0xFFFFFF));
-    #endif
-
-    if(e_ok && !t_ok) reset_menu_timeout();
+    if(!t_ok) reset_menu_timeout();
 
     const uint16_t tag7_style = screen_data.ChangeFilamentScreen.repeat_tag == 7 ? STYLE_LIGHT_BTN : 0;
     const uint16_t tag8_style = screen_data.ChangeFilamentScreen.repeat_tag == 8 ? STYLE_LIGHT_BTN : 0;
@@ -1470,9 +1456,9 @@ void ChangeFilamentScreen::onRedraw(draw_mode_t what) {
     #else
       cmd.font(Theme::font_small)
     #endif
-       .tag(2) .style(tog2) .enabled(e_ok) .button (BTN_POS(2,6), BTN_SIZE(1,1), F( STRINGIFY(LOW_TEMP)  "C (PLA)"))
-       .tag(3) .style(tog3) .enabled(e_ok) .button (BTN_POS(2,5), BTN_SIZE(1,1), F( STRINGIFY(MED_TEMP)  "C (ABS)"))
-       .tag(4) .style(tog4) .enabled(e_ok) .button (BTN_POS(2,4), BTN_SIZE(1,1), F( STRINGIFY(HIGH_TEMP) "C (High)"))
+       .tag(2) .style(tog2) .button (BTN_POS(2,6), BTN_SIZE(1,1), F( STRINGIFY(LOW_TEMP)  "C (PLA)"))
+       .tag(3) .style(tog3) .button (BTN_POS(2,5), BTN_SIZE(1,1), F( STRINGIFY(MED_TEMP)  "C (ABS)"))
+       .tag(4) .style(tog4) .button (BTN_POS(2,4), BTN_SIZE(1,1), F( STRINGIFY(HIGH_TEMP) "C (High)"))
        .style(0)
 
     // Add tags to color gradient
@@ -1482,19 +1468,25 @@ void ChangeFilamentScreen::onRedraw(draw_mode_t what) {
     .tag(4) .rectangle(BTN_POS(1,4), BTN_SIZE(1,1))
     .cmd(COLOR_MASK(1,1,1,1))
 
+    .cmd(COLOR_RGB(t_ok ? Theme::text_enabled : Theme::text_disabled))
     #if defined(USE_PORTRAIT_ORIENTATION)
        .font(Theme::font_large)
+                                              .text   (BTN_POS(1,8),  BTN_SIZE(1,1), F("Unload"))
+                                              .text   (BTN_POS(2,8),  BTN_SIZE(1,1), F("Load/Extrude"))
        .tag(5)                  .enabled(t_ok).button (BTN_POS(1,9),  BTN_SIZE(1,1), F("Momentary"))
        .tag(6)                  .enabled(t_ok).button (BTN_POS(2,9),  BTN_SIZE(1,1), F("Momentary"))
        .tag(7).style(tag7_style).enabled(t_ok).button (BTN_POS(1,10), BTN_SIZE(1,1), F("Continuous"))
        .tag(8).style(tag8_style).enabled(t_ok).button (BTN_POS(2,10), BTN_SIZE(1,1), F("Continuous"))
        .tag(1).style(STYLE_LIGHT_BTN)         .button (BTN_POS(1,11), BTN_SIZE(2,1), F("Back"));
     #else
-       .font(Theme::font_medium)
+       .font(Theme::font_small)
+                                              .text   (BTN_POS(3,3), BTN_SIZE(1,1), F("Unload"))
+                                              .text   (BTN_POS(4,3), BTN_SIZE(1,1), F("Load/Extrude"))
        .tag(5)                  .enabled(t_ok).button (BTN_POS(3,4), BTN_SIZE(1,1), F("Momentary"))
        .tag(6)                  .enabled(t_ok).button (BTN_POS(4,4), BTN_SIZE(1,1), F("Momentary"))
        .tag(7).style(tag7_style).enabled(t_ok).button (BTN_POS(3,5), BTN_SIZE(1,1), F("Continuous"))
        .tag(8).style(tag8_style).enabled(t_ok).button (BTN_POS(4,5), BTN_SIZE(1,1), F("Continuous"))
+       .font(Theme::font_medium)
        .tag(1).style(STYLE_LIGHT_BTN)         .button (BTN_POS(3,6), BTN_SIZE(2,1), F("Back"));
     #endif
   }
@@ -2251,14 +2243,22 @@ bool StepsScreen::onTouchHeld(uint8_t tag) {
     w.toggle  (9,  PSTR("Show Offsets:"), PSTR("no\xFFyes"), screen_data.AdjustOffsetsScreen.show_offsets, PSTR("Yes\nNo"));
 
     if(screen_data.AdjustOffsetsScreen.show_offsets) {
-      char str[20];
-      sprintf_P(str, PSTR("%.2f mm"), getZOffset_mm());
+      char str[19], num1[7];
+      dtostrf(getZOffset_mm(), 4, 2, num1);
+      sprintf_P(str, PSTR("%s mm"), num1);
+
       w.draw_mode(BOTH);
       w.color(Theme::other);
       w.text_field  (0,  PSTR("Z Offset"), str);
 
-      sprintf_P(str, PSTR("%.2f; %.2f; %.2f mm"), getNozzleOffset_mm(X, E1), getNozzleOffset_mm(Y, E1), getNozzleOffset_mm(Z, E1));
-      w.text_field  (0,  PSTR("Noz. Offset"), str);
+      #if EXTRUDERS > 1
+        char num2[7], num3[7];
+        dtostrf(getNozzleOffset_mm(X, E1), 4, 2, num1);
+        dtostrf(getNozzleOffset_mm(Y, E1), 4, 2, num2);
+        dtostrf(getNozzleOffset_mm(Z, E1), 4, 2, num3);
+        sprintf_P(str, PSTR("%s; %s; %s mm"), num1, num2, num3);
+        w.text_field  (0,  PSTR("Noz. Offset"), str);
+      #endif
     }
   }
 
@@ -2692,8 +2692,10 @@ void InterfaceSettingsScreen::onRedraw(draw_mode_t what) {
        .font(Theme::font_small)
        .tag(0).text      (BTN_POS(1,2), BTN_SIZE(2,1), F("Screen brightness:"), OPT_RIGHTX | OPT_CENTERY)
               .text      (BTN_POS(1,3), BTN_SIZE(2,1), F("Sound volume:"),      OPT_RIGHTX | OPT_CENTERY)
-              .text      (BTN_POS(1,4), BTN_SIZE(2,1), F("Screen lock:"),       OPT_RIGHTX | OPT_CENTERY)
-              .text      (BTN_POS(1,5), BTN_SIZE(2,1), F("Boot animation:"),    OPT_RIGHTX | OPT_CENTERY);
+              .text      (BTN_POS(1,4), BTN_SIZE(2,1), F("Screen lock:"),       OPT_RIGHTX | OPT_CENTERY);
+      #ifdef SPI_FLASH_SS
+        cmd   .text      (BTN_POS(1,5), BTN_SIZE(2,1), F("Boot animation:"),    OPT_RIGHTX | OPT_CENTERY);
+      #endif
     #undef EDGE_R
     #define EDGE_R 0
   }

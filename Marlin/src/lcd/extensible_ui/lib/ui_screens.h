@@ -330,12 +330,14 @@ class ValueAdjusters : public BaseScreen {
         inline widgets_t &color(uint32_t color)       {_color = color; return *this;}
         inline widgets_t &units(const char *units)    {_units = units; return *this;}
         inline widgets_t &precision(uint8_t decimals, precision_default_t initial = DEFAULT_HIGHEST);
+        inline widgets_t &draw_mode(draw_mode_t what) {_what = what; return *this;}
 
         void heading       (const char *label);
         void adjuster_sram_val (uint8_t tag, const char *label, const char *value,  bool is_enabled = true);
         void adjuster          (uint8_t tag, const char *label, const char *value,  bool is_enabled = true);
         void adjuster          (uint8_t tag, const char *label, float value=0,      bool is_enabled = true);
         void button            (uint8_t tag, const char *label,                     bool is_enabled = true);
+        void text_field        (uint8_t tag, const char *label, const char *value,  bool is_enabled = true);
         void two_buttons       (uint8_t tag1, const char *label1, uint8_t tag2, const char *label2, bool is_enabled = true);
         void toggle            (uint8_t tag, const char *label, const char *text, bool value, bool is_enabled = true);
         void home_buttons      (uint8_t tag);

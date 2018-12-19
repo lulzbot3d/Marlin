@@ -79,6 +79,7 @@ static union {
     #if EXTRUDERS > 1
       bool  link_nozzles;
     #endif
+    bool show_offsets;
   } AdjustOffsetsScreen;
 #endif
 } screen_data;
@@ -1127,7 +1128,7 @@ void TuneScreen::onRedraw(draw_mode_t what) {
        .tag(3).enabled(1)      .button( BTN_POS(1,2), BTN_SIZE(2,1), F("Change Filament"))
        .tag(8).enabled(1)      .button( BTN_POS(1,3), BTN_SIZE(2,1), F("Filament Options"))
       #if ENABLED(BABYSTEPPING)
-       .tag(4).enabled(1)      .button( BTN_POS(1,4), BTN_SIZE(2,1), F("Adjust Offsets"))
+       .tag(4).enabled(1)      .button( BTN_POS(1,4), BTN_SIZE(2,1), F("Nudge Nozzle"))
       #else
         #if ENABLED(HAS_BED_PROBE)
           .enabled(1)
@@ -1155,7 +1156,7 @@ void TuneScreen::onRedraw(draw_mode_t what) {
        .enabled(0)
       #endif
         #if ENABLED(BABYSTEPPING)
-          .tag(4)              .button( BTN_POS(2,1), BTN_SIZE(1,1), F("Adjust Offsets"))
+          .tag(4)              .button( BTN_POS(2,1), BTN_SIZE(1,1), F("Nudge Nozzle"))
         #else
           #if ENABLED(HAS_BED_PROBE)
             .enabled(1)
@@ -1814,6 +1815,24 @@ void ValueAdjusters::widgets_t::button(uint8_t tag, const char *label, bool is_e
   _line++;
 }
 
+void ValueAdjusters::widgets_t::text_field(uint8_t tag, const char *label, const char *value, bool is_enabled) {
+  CommandProcessor cmd;
+
+  if(_what & BACKGROUND) {
+    cmd.enabled(1)
+       .font(Theme::font_small)
+       .fgcolor(_color)            .tag(0).button( BTN_POS(5,_line), BTN_SIZE(9,1), F(""),               OPT_FLAT)
+       .fgcolor(Theme::background) .tag(0).button( BTN_POS(1,_line), BTN_SIZE(4,1), (progmem_str) label, OPT_FLAT);
+  }
+
+  if(_what & FOREGROUND) {
+    cmd.font(Theme::font_medium)
+       .tag(tag).font(Theme::font_small).text ( BTN_POS(5,_line), BTN_SIZE(9,1), is_enabled ? value : "-");
+  }
+
+  _line++;
+}
+
 void ValueAdjusters::widgets_t::two_buttons(uint8_t tag1, const char *label1, uint8_t tag2, const char *label2, bool is_enabled) {
   if(_what & FOREGROUND) {
     CommandProcessor cmd;
@@ -2204,6 +2223,7 @@ bool StepsScreen::onTouchHeld(uint8_t tag) {
 
 #if ENABLED(BABYSTEPPING)
   void AdjustOffsetsScreen::onEntry() {
+    screen_data.AdjustOffsetsScreen.show_offsets = false;
     #if EXTRUDERS > 1
       screen_data.AdjustOffsetsScreen.link_nozzles = true;
     #endif
@@ -2218,7 +2238,7 @@ bool StepsScreen::onTouchHeld(uint8_t tag) {
     widgets_t w(what);
     w.precision(2, ValueAdjusters::DEFAULT_MIDRANGE).units(PSTR("mm"));
 
-    w.heading(                          PSTR("Adjust Offsets"));
+    w.heading(                          PSTR("Nudge Nozzle"));
     #if ENABLED(BABYSTEP_XY)
     w.color(Theme::x_axis).adjuster(2,  PSTR("X:"), screen_data.AdjustOffsetsScreen.rel[0] / getAxisSteps_per_mm(X));
     w.color(Theme::y_axis).adjuster(4,  PSTR("Y:"), screen_data.AdjustOffsetsScreen.rel[1] / getAxisSteps_per_mm(Y));
@@ -2226,8 +2246,20 @@ bool StepsScreen::onTouchHeld(uint8_t tag) {
     w.color(Theme::z_axis).adjuster(6,  PSTR("Z:"), screen_data.AdjustOffsetsScreen.rel[2] / getAxisSteps_per_mm(Z));
     w.increments();
     #if EXTRUDERS > 1
-      w.toggle  (8,  PSTR("Adjust Nozzles Together:"), PSTR("no\xFFyes"), screen_data.AdjustOffsetsScreen.link_nozzles, PSTR("Yes\nNo"));
+      w.toggle  (8,  PSTR("Adjust Both Nozzles:"), PSTR("no\xFFyes"), screen_data.AdjustOffsetsScreen.link_nozzles, PSTR("Yes\nNo"));
     #endif
+    w.toggle  (9,  PSTR("Show Offsets:"), PSTR("no\xFFyes"), screen_data.AdjustOffsetsScreen.show_offsets, PSTR("Yes\nNo"));
+
+    if(screen_data.AdjustOffsetsScreen.show_offsets) {
+      char str[20];
+      sprintf_P(str, PSTR("%.2f mm"), getZOffset_mm());
+      w.draw_mode(BOTH);
+      w.color(Theme::other);
+      w.text_field  (0,  PSTR("Z Offset"), str);
+
+      sprintf_P(str, PSTR("%.2f; %.2f; %.2f mm"), getNozzleOffset_mm(X, E1), getNozzleOffset_mm(Y, E1), getNozzleOffset_mm(Z, E1));
+      w.text_field  (0,  PSTR("Noz. Offset"), str);
+    }
   }
 
   bool AdjustOffsetsScreen::onTouchHeld(uint8_t tag) {
@@ -2249,6 +2281,7 @@ bool StepsScreen::onTouchHeld(uint8_t tag) {
       #if EXTRUDERS > 1
         case  8: screen_data.AdjustOffsetsScreen.link_nozzles = !link; break;
       #endif
+      case  9: screen_data.AdjustOffsetsScreen.show_offsets = !screen_data.AdjustOffsetsScreen.show_offsets; break;
       default:
         return false;
     }

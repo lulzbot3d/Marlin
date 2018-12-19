@@ -1162,6 +1162,7 @@
 #if defined(LULZBOT_CALIBRATION_GCODE)
     #define LULZBOT_CALIBRATION_SCRIPT \
         "M117 Starting Auto-Calibration\n"   /* Status message */ \
+        "T0\n"                               /* Switch to first nozzle */ \
         "G28\n"                              /* Auto-Home */ \
         LULZBOT_MENU_AXIS_LEVELING_COMMANDS  /* Level X-Axis */ \
         LULZBOT_WIPE_SEQUENCE_COMMANDS       /* Wipe the Nozzles */ \
@@ -1790,7 +1791,7 @@
         #define LULZBOT_WIPE_DONE_TEMP  "M109 R160 T0\nM109 R160 T1\n" /* Drop to probe temp */
     #endif
 
-    #define LULZBOT_REWIPE_E0 "G12 P0 S12 T0\n"   /* Wipe nozzle */
+    #define LULZBOT_REWIPE_E0 "T0\nG12 P0 S12 T0\n"   /* Wipe nozzle */
 
     #if defined(LULZBOT_Quiver_TAZ7) && defined(TOOLHEAD_Quiver_DualExtruder)
         #define LULZBOT_REWIPE_E1 \

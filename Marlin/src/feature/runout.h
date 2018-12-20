@@ -99,7 +99,9 @@ class TFilamentMonitor : public FilamentMonitorBase {
           #endif
           #ifdef LULZBOT_ACTION_ON_FILAMENT_RUNOUT
             SERIAL_ECHOLNPGM("//action:" LULZBOT_ACTION_ON_FILAMENT_RUNOUT);
-            if(IS_SD_PRINTING())
+            if(!IS_SD_PRINTING())
+              reset();
+            else
           #endif
           enqueue_and_echo_commands_P(PSTR(FILAMENT_RUNOUT_SCRIPT));
           planner.synchronize();

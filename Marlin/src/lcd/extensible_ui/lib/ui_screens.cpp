@@ -2037,6 +2037,7 @@ void TemperatureScreen::onRedraw(draw_mode_t what) {
   widgets_t w(what);
   w.precision(0).color(Theme::temp).units(PSTR("C"));
   w.heading(         PSTR("Temperature:"));
+  w.button(30, PSTR("Cooldown (All Off)"));
   #if HOTENDS == 1
     w.adjuster(   2, PSTR("Hot End:"),   getTargetTemp_celsius(E0));
   #else
@@ -2049,9 +2050,13 @@ void TemperatureScreen::onRedraw(draw_mode_t what) {
       w.adjuster( 8, PSTR("Hot End 4:"), getTargetTemp_celsius(E3));
     #endif
   #endif
-  w.adjuster(    20, PSTR("Bed:"),       getTargetTemp_celsius(BED));
-  w.color(Theme::fan_speed).units(PSTR("%"));
-  w.adjuster(    10, PSTR("Fan Speed:"), getFan_percent(FAN0));
+  #if HAS_HEATED_BED
+    w.adjuster(    20, PSTR("Bed:"),     getTargetTemp_celsius(BED));
+  #endif
+  #if FAN_COUNT > 0
+    w.color(Theme::fan_speed).units(PSTR("%"));
+    w.adjuster(    10, PSTR("Fan Speed:"), getFan_percent(FAN0));
+  #endif
   w.increments();
 }
 
@@ -2075,8 +2080,28 @@ bool TemperatureScreen::onTouchHeld(uint8_t tag) {
     case  8: UI_DECREMENT(TargetTemp_celsius, E3); break;
     case  9: UI_INCREMENT(TargetTemp_celsius, E3); break;
     #endif
+    #if FAN_COUNT > 0
     case 10: UI_DECREMENT(Fan_percent, FAN0);      break;
     case 11: UI_INCREMENT(Fan_percent, FAN0);      break;
+    #endif
+    case 30:
+      setTargetTemp_celsius(0,E0);
+      #if HOTENDS > 1
+        setTargetTemp_celsius(0,E1);
+        #if HOTENDS > 2
+          setTargetTemp_celsius(0,E2);
+          #if HOTENDS > 3
+            setTargetTemp_celsius(0,E4);
+          #endif
+        #endif
+      #endif
+      #if HAS_HEATED_BED
+        setTargetTemp_celsius(0,BED);
+      #endif
+      #if FAN_COUNT > 0
+        setFan_percent(0,FAN0);
+      #endif
+      break;
     default:
       return false;
   }

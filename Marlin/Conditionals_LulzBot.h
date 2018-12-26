@@ -700,8 +700,8 @@
         "M400\n"                 /* Finish moves */ \
         "M121\n"                 /* Turn off hardware endstops */ \
         "M211 S0\n"              /* Turn off soft endstops */ \
-        "M906 Z725\n"            /* Lower current to 725mA */ \
-        "G1 Z312\n"              /* Skip steppers on top */ \
+        "M906 Z800\n"            /* Lower current to 800mA */ \
+        "G1 Z312 F250\n"         /* Skip steppers on top */ \
         "M400\n"                 /* Finish moves */ \
         "M906 Z960\n"            /* Restore current to 960mA */ \
         "M211 S1\n"              /* Turn on soft endstops */ \

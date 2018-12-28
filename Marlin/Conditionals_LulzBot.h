@@ -1788,7 +1788,7 @@
     #else
         #define LULZBOT_WIPE_HEAT_TEMP  "M104 S170 T0\nM104 S170 T1\n" /* Preheat to wipe temp */
         #define LULZBOT_WIPE_WAIT_TEMP  "M109 R170 T0\nM109 R170 T1\n" /* Wait for wipe temp */
-        #define LULZBOT_WIPE_DONE_TEMP  "M109 R160 T0\nM109 R160 T1\n" /* Drop to probe temp */
+        #define LULZBOT_WIPE_DONE_TEMP  "M109 R160 T0\nM109 R160 T1\n" /* Wait for probe temp */
     #endif
 
     #define LULZBOT_REWIPE_E0 "T0\nG12 P0 S12 T0\n"   /* Wipe nozzle */
@@ -1812,7 +1812,10 @@
         "M117 Rewiping nozzle\n"                  /* Status message */ \
         LULZBOT_REWIPE_E0                         /* Wipe first extruder */ \
         LULZBOT_REWIPE_E1                         /* Wipe second extruder */ \
-        LULZBOT_WIPE_DONE_TEMP                    /* Drop to probe temp */
+        "M106 S255 \n"                            /* Turn on fan to blow away fuzzies */ \
+        "G4 S3\n"                                 /* Wait 3 seconds */ \
+        LULZBOT_WIPE_DONE_TEMP                    /* Drop to probe temp */ \
+        "M107\n"                                  /* Turn off fan */
 
     #if defined(LULZBOT_USE_Z_BELT)
         #define LULZBOT_G29_RECOVER_COMMANDS \

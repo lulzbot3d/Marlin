@@ -526,7 +526,7 @@ void SaveSettingsScreen::promptToSaveSettings() {
 void ConfirmAbortPrint::onRedraw(draw_mode_t what) {
   drawMessage(
     F("Are you sure you want"),
-    F("to stop the print?")
+    F("to cancel the print?")
   );
   drawYesNoButtons();
 }
@@ -534,7 +534,7 @@ void ConfirmAbortPrint::onRedraw(draw_mode_t what) {
 bool ConfirmAbortPrint::onTouchEnd(uint8_t tag) {
   switch(tag) {
     case 1:
-      GOTO_PREVIOUS();
+      GOTO_SCREEN(StatusScreen);
       ExtUI::stopPrint();
       return true;
     default:
@@ -619,7 +619,7 @@ void KillScreen::show(progmem_str message) {
 
 /*********************************** STATUS SCREEN ******************************/
 #if defined(USE_PORTRAIT_ORIENTATION)
-  #define GRID_ROWS 9
+  #define GRID_ROWS 8
 #else
   #define GRID_ROWS 8
 #endif
@@ -861,31 +861,24 @@ void StatusScreen::draw_interaction_buttons(draw_mode_t what) {
   if(what & FOREGROUND) {
     using namespace ExtUI;
     CommandProcessor cmd;
-    cmd
-       .font(Theme::font_medium)
-       .enabled(isMediaInserted())
+    cmd.font(Theme::font_medium)
+       .enabled(isMediaInserted() && !isPrintingFromMedia())
       #if defined(USE_PORTRAIT_ORIENTATION)
-         .tag(3).button( BTN_POS(1,9), BTN_SIZE(2,1),
+         .tag(3).button( BTN_POS(1,8), BTN_SIZE(2,1),
       #else
-         .tag(3).button( BTN_POS(3,7), BTN_SIZE(1,2),
+         .tag(3).button( BTN_POS(1,7), BTN_SIZE(2,2),
       #endif
+      isPrintingFromMedia() ? F("Printing") :
       #if ENABLED(USB_FLASH_DRIVE_SUPPORT)
         F("USB Drive"))
       #else
         F("SD Card"))
       #endif
-       .style(STYLE_RED_BTN)
-       .enabled(isPrintingFromMedia())
-    #if defined(USE_PORTRAIT_ORIENTATION)
-       .tag(1).button( BTN_POS(1,8), BTN_SIZE(4,1), F("STOP"))
-    #else
-       .tag(1).button( BTN_POS(1,7), BTN_SIZE(2,2), F("STOP"))
-    #endif
-       .style(STYLE_LIGHT_BTN)
+      .style(STYLE_LIGHT_BTN)
       #if defined(USE_PORTRAIT_ORIENTATION)
-       .tag(4).button( BTN_POS(3,9), BTN_SIZE(2,1), F("MENU"));
+       .tag(4).button( BTN_POS(3,8), BTN_SIZE(2,1), F("MENU"));
       #else
-       .tag(4).button( BTN_POS(4,7), BTN_SIZE(1,2), F("MENU"));
+       .tag(4).button( BTN_POS(3,7), BTN_SIZE(2,2), F("MENU"));
     #endif
   }
 
@@ -975,13 +968,7 @@ bool StatusScreen::onTouchEnd(uint8_t tag) {
   using namespace ExtUI;
 
   switch(tag) {
-    case 1:
-      #if defined(UI_FRAMEWORK_DEBUG)
-          SERIAL_ECHO_START(); SERIAL_ECHOLNPGM("Aborting print");
-      #endif
-      GOTO_SCREEN(ConfirmAbortPrint);
-      break;
-    case 3:  GOTO_SCREEN(FilesScreen);       break;
+    case 3: GOTO_SCREEN(FilesScreen); break;
     case 4:
       if(isPrinting()) {
         GOTO_SCREEN(TuneScreen);
@@ -1110,7 +1097,7 @@ void TuneScreen::onRedraw(draw_mode_t what) {
   }
 
   #if defined(USE_PORTRAIT_ORIENTATION)
-    #define GRID_ROWS 7
+    #define GRID_ROWS 8
     #define GRID_COLS 2
   #else
     #define GRID_ROWS 4
@@ -1140,41 +1127,53 @@ void TuneScreen::onRedraw(draw_mode_t what) {
        .tag(5).enabled(1)      .button( BTN_POS(1,5), BTN_SIZE(2,1), F("Print Speed"))
        .tag(isPrintingFromMediaPaused() ? 7 : 6)
       #if ENABLED(SDSUPPORT)
-        .enabled(1)
+        .enabled(isPrintingFromMedia())
       #else
         .enabled(0)
       #endif
-                               .button( BTN_POS(1,6), BTN_SIZE(2,1), isPrintingFromMediaPaused() ? F("Resume Print") : F("Pause Print"))
-       .tag(1).style(STYLE_LIGHT_BTN)
-                               .button( BTN_POS(1,7), BTN_SIZE(2,1), F("Back"));
+        .button( BTN_POS(1,6), BTN_SIZE(2,1), isPrintingFromMediaPaused() ? F("Resume Print") : F("Pause Print"))
+      #if ENABLED(SDSUPPORT)
+        .enabled(isPrintingFromMedia())
+      #else
+        .enabled(0)
+      #endif
+      .tag(8)             .button( BTN_POS(1,7), BTN_SIZE(2,1), F("Cancel Print"))
+      .tag(1).style(STYLE_LIGHT_BTN)
+                          .button( BTN_POS(1,8), BTN_SIZE(2,1), F("Back"));
     #else
-       .tag(2).enabled(1)      .button( BTN_POS(1,1), BTN_SIZE(1,1), F("Temperature"))
-       .tag(3).enabled(1)      .button( BTN_POS(1,2), BTN_SIZE(1,1), F("Change Filament"))
+       .tag(2).enabled(1) .button( BTN_POS(1,1), BTN_SIZE(1,1), F("Temperature"))
+       .tag(3).enabled(1) .button( BTN_POS(1,2), BTN_SIZE(1,1), F("Change Filament"))
       #if ENABLED(BABYSTEPPING)
        .enabled(1)
       #else
        .enabled(0)
       #endif
         #if ENABLED(BABYSTEPPING)
-          .tag(4)              .button( BTN_POS(2,1), BTN_SIZE(1,1), F("Nudge Nozzle"))
+          .tag(4)         .button( BTN_POS(2,1), BTN_SIZE(1,1), F("Nudge Nozzle"))
         #else
           #if ENABLED(HAS_BED_PROBE)
             .enabled(1)
           #else
             .enabled(0)
           #endif
-          .tag(4)              .button( BTN_POS(1,4), BTN_SIZE(2,1), F("Adjust Z-Offset"))
+          .tag(4)         .button( BTN_POS(1,4), BTN_SIZE(2,1), F("Adjust Z-Offset"))
         #endif
-       .tag(5).enabled(1)      .button( BTN_POS(2,2), BTN_SIZE(1,1), F("Print Speed"))
+       .tag(5).enabled(1) .button( BTN_POS(2,2), BTN_SIZE(1,1), F("Print Speed"))
        .tag(isPrintingFromMediaPaused() ? 7 : 6)
       #if ENABLED(SDSUPPORT)
-        .enabled(1)
+        .enabled(isPrintingFromMedia())
       #else
         .enabled(0)
       #endif
-                               .button( BTN_POS(1,3), BTN_SIZE(1,1), isPrintingFromMediaPaused() ? F("Resume Print") : F("Pause Print"))
-       .tag(8).enabled(1)      .button( BTN_POS(2,3), BTN_SIZE(1,1), F("Filament Options"))
-       .tag(1).style(STYLE_LIGHT_BTN) .button( BTN_POS(1,4), BTN_SIZE(2,1), F("Back"));
+                          .button( BTN_POS(1,3), BTN_SIZE(1,1), isPrintingFromMediaPaused() ? F("Resume Print") : F("Pause Print"))
+      #if ENABLED(SDSUPPORT)
+        .enabled(isPrintingFromMedia())
+      #else
+        .enabled(0)
+      #endif
+       .tag(8).           .button( BTN_POS(2,3), BTN_SIZE(1,1), F("Cancel Print"))
+       .tag(9).enabled(1) .button( BTN_POS(1,4), BTN_SIZE(1,1), F("Filament Options"))
+       .tag(1).style(STYLE_LIGHT_BTN) .button( BTN_POS(2,4), BTN_SIZE(1,1), F("Back"));
     #endif
   }
   #undef GRID_COLS
@@ -1199,7 +1198,8 @@ bool TuneScreen::onTouchEnd(uint8_t tag) {
     case 5:  GOTO_SCREEN(MaxFeedrateScreen);     break;
     case 6:  sound.play(twinkle, PLAY_ASYNCHRONOUS); ExtUI::pausePrint();  GOTO_SCREEN(StatusScreen); break;
     case 7:  sound.play(twinkle, PLAY_ASYNCHRONOUS); ExtUI::resumePrint(); GOTO_SCREEN(StatusScreen); break;
-    case 8:  GOTO_SCREEN(FilamentOptionsScreen); break;
+    case 8:  GOTO_SCREEN(ConfirmAbortPrint);     break;
+    case 9:  GOTO_SCREEN(FilamentOptionsScreen); break;
     default:
       return false;
   }

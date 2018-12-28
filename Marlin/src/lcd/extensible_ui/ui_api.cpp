@@ -486,13 +486,9 @@ namespace ExtUI {
             if (e != active_extruder)
               hotend_offset[axis][e] += mm;
 
-          #if ENABLED(BABYSTEP_ZPROBE_OFFSET)
-            // Transfer any Z offset in the zeroth hotend to zprobe_zoffset
-            if (axis == Z) {
-              zprobe_zoffset += hotend_offset[Z_AXIS][0];
-              normalizeNozzleOffset(Z);
-            }
-          #endif
+          normalizeNozzleOffset(X);
+          normalizeNozzleOffset(Y);
+          normalizeNozzleOffset(Z);
         }
       #else
         UNUSED(linked_nozzles);

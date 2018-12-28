@@ -1361,6 +1361,7 @@ void ChangeFilamentScreen::drawTempGradient(uint16_t x, uint16_t y, uint16_t w, 
 void ChangeFilamentScreen::onEntry() {
   screen_data.ChangeFilamentScreen.e_tag = ExtUI::getActiveTool() + 10;
   screen_data.ChangeFilamentScreen.t_tag = 0;
+  screen_data.ChangeFilamentScreen.repeat_tag = 0;
 }
 
 void ChangeFilamentScreen::onRedraw(draw_mode_t what) {

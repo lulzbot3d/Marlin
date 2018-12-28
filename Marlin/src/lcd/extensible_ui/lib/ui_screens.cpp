@@ -1113,7 +1113,7 @@ void TuneScreen::onRedraw(draw_mode_t what) {
     #if defined(USE_PORTRAIT_ORIENTATION)
        .tag(2).enabled(1)      .button( BTN_POS(1,1), BTN_SIZE(2,1), F("Temperature"))
        .tag(3).enabled(1)      .button( BTN_POS(1,2), BTN_SIZE(2,1), F("Change Filament"))
-       .tag(8).enabled(1)      .button( BTN_POS(1,3), BTN_SIZE(2,1), F("Filament Options"))
+       .tag(9).enabled(1)      .button( BTN_POS(1,3), BTN_SIZE(2,1), F("Filament Options"))
       #if ENABLED(BABYSTEPPING)
        .tag(4).enabled(1)      .button( BTN_POS(1,4), BTN_SIZE(2,1), F("Nudge Nozzle"))
       #else

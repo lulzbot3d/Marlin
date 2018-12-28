@@ -686,6 +686,14 @@
 #define DEFAULT_RETRACT_ACCELERATION  3000    // E acceleration for retracts
 #define DEFAULT_TRAVEL_ACCELERATION   LULZBOT_DEFAULT_TRAVEL_ACCELERATION    // X, Y, Z acceleration for travel (non printing) moves
 
+//
+// Use Junction Deviation instead of traditional Jerk Limiting
+//
+#define JUNCTION_DEVIATION LULZBOT_JUNCTION_DEVIATION
+#if ENABLED(JUNCTION_DEVIATION)
+  #define JUNCTION_DEVIATION_MM 0.02  // (mm) Distance from real junction edge
+#endif
+
 /**
  * Default Jerk (mm/s)
  * Override with M205 X Y Z E
@@ -694,10 +702,13 @@
  * When changing speed and direction, if the difference is less than the
  * value set here, it may happen instantaneously.
  */
-#define DEFAULT_XJERK                 LULZBOT_DEFAULT_XJERK
-#define DEFAULT_YJERK                 LULZBOT_DEFAULT_YJERK
-#define DEFAULT_ZJERK                 LULZBOT_DEFAULT_ZJERK
-#define DEFAULT_EJERK                 LULZBOT_DEFAULT_EJERK
+#if DISABLED(JUNCTION_DEVIATION)
+  #define DEFAULT_XJERK LULZBOT_DEFAULT_XJERK
+  #define DEFAULT_YJERK LULZBOT_DEFAULT_YJERK
+  #define DEFAULT_ZJERK LULZBOT_DEFAULT_ZJERK
+#endif
+
+#define DEFAULT_EJERK LULZBOT_DEFAULT_EJERK  // May be used by Linear Advance
 
 /**
  * S-Curve Acceleration

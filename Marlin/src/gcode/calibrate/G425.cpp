@@ -111,9 +111,8 @@ static void report_measured_nozzle_dimensions(const measurements_t &m);
 #if HOTENDS > 1
 static void report_relative_nozzle_offsets();
 static void normalize_nozzle_offsets();
-#endif
-
 static void park_above_cube(measurements_t &m);
+#endif
 static void probe_cube(measurements_t &m, bool fast = false);
 static void move_to(
   const AxisEnum a1,           const float p1,
@@ -416,6 +415,7 @@ static void report_measured_nozzle_dimensions(const measurements_t &m) {
   #endif
 }
 
+#if HOTENDS > 1
 static void park_above_cube(measurements_t &m) {
   constexpr float dimensions[XYZ] = CALIBRATION_CUBE_DIMENSIONS;
 
@@ -425,6 +425,7 @@ static void park_above_cube(measurements_t &m) {
   // Move to center of cube in XY
   move_to(X_AXIS, m.center[X_AXIS], Y_AXIS, m.center[Y_AXIS]);
 }
+#endif
 
 inline void adjust_confidence(measurements_t &m, AxisEnum axis) {
     m.confidence[axis] = (backlash_correction != 0)

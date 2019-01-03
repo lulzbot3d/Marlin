@@ -338,12 +338,12 @@ class Planner {
       volatile static uint32_t block_buffer_runtime_us; //Theoretical block buffer runtime in µs
     #endif
 
-    #if ENABLED(LULZBOT_BABYSTEP_IN_PLANNER)
-      static void make_babystep_correction(const int32_t da, const int32_t db, const int32_t dc, const uint8_t dm, block_t * const block);
+    #if ENABLED(BACKLASH_COMPENSATION)
+      static void add_backlash_correction_steps(const int32_t da, const int32_t db, const int32_t dc, const uint8_t dm, block_t * const block);
     #endif
 
-    #if ENABLED(BACKLASH_COMPENSATION)
-      static void make_backlash_correction(const int32_t da, const int32_t db, const int32_t dc, const uint8_t dm, block_t * const block);
+    #if ENABLED(LULZBOT_BABYSTEP_IN_PLANNER)
+      static void add_babystep_correction_steps(const int32_t da, const int32_t db, const int32_t dc, const uint8_t dm, block_t * const block);
     #endif
 
   public:

@@ -19,26 +19,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#pragma once
 
 /**
- * HAL for stm32duino.com based on Libmaple and compatible (STM32F1)
+ * VORON Design v2 pin assignments
+ * See https://github.com/mzbotreprap/VORON/blob/master/Firmware/Marlin/pins_RAMPS_VORON.h
  */
 
-#include <libmaple/iwdg.h>
+#define BOARD_NAME "VORON Design v2"
 
-/**
- *  The watchdog clock is 40Khz. We need a 4 seconds interval, so use a /256 preescaler and
- *  625 reload value (counts down to 0)
- *  use 1250 for 8 seconds
- */
-#define STM32F1_WD_RELOAD 625
+#define RAMPS_D8_PIN       11
 
-// Arduino STM32F1 core now has watchdog support
+#include "pins_RAMPS.h"
 
-// Initialize watchdog with a 4 second countdown time
-void watchdog_init();
+//
+// Heaters / Fans
+//
+#undef FAN_PIN
+#define FAN_PIN             5   // Using the pin for the controller fan since controller fan is always on.
+#define CONTROLLER_FAN_PIN  8
+#define ORIG_E0_AUTO_FAN_PIN 6  // Servo pin 6 for E3D Fan
+#define ORIG_E1_AUTO_FAN_PIN 6  // Servo pin 6 for E3D Fan (same pin for both extruders since it's the same fan)
 
-// Reset watchdog. MUST be called at least every 4 seconds after the
-// first watchdog_init or STM32F1 will reset.
-void watchdog_reset();
+//
+// LCDs and Controllers
+//
+#undef BEEPER_PIN

@@ -29,10 +29,6 @@
 
 #if ENABLED(LULZBOT_CALIBRATION_GCODE)
 
-#if MIN_STEPS_PER_SEGMENT > 1
-  bool no_min_steps = false;
-#endif
-
 #define CALIBRATION_MEASUREMENT_RESOLUTION       0.01                    // mm
 #define CALIBRATION_MEASUREMENT_LIMIT            5.0                     // mm
 
@@ -444,10 +440,6 @@ static void probe_cube(measurements_t &m, bool fast) {
   const bool saved_soft_endstops_enabled = soft_endstops_enabled;
   soft_endstops_enabled = false;
 
-  #if MIN_STEPS_PER_SEGMENT > 1
-    no_min_steps = true;
-  #endif
-
   #ifdef CALIBRATION_CUBE_TOP_CENTER_MEASUREMENT
     // Move to safe distance above cube/washer
     move_to(Z_AXIS, m.center[Z_AXIS] + dimensions[Z_AXIS]/2 + m.confidence[Z_AXIS]);
@@ -558,10 +550,6 @@ static void probe_cube(measurements_t &m, bool fast) {
     m.cube_back = measure(Y_AXIS, -1, true, &m.backlash_yb, fast);
     m.center    [Y_AXIS] = m.cube_back - dimensions[Y_AXIS]/2 - m.nozzle_tip_radius;
     adjust_confidence(m, Y_AXIS);
-  #endif
-
-  #if MIN_STEPS_PER_SEGMENT > 1
-    no_min_steps = false;
   #endif
 
   #if HAS_X_CENTER

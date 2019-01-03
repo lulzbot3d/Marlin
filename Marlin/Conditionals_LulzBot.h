@@ -2059,6 +2059,12 @@
     #define LULZBOT_DEFAULT_AXIS_STEPS_PER_UNIT   {LULZBOT_XY_STEPS,LULZBOT_XY_STEPS,LULZBOT_Z_STEPS,LULZBOT_E_STEPS}
 #endif
 
+#if defined(LULZBOT_USE_ARCHIM2)
+    #define LULZBOT_MIN_STEPS_PER_SEGMENT 1
+#else
+    #define LULZBOT_MIN_STEPS_PER_SEGMENT 6
+#endif
+
 /*********************************** LCD OPTIONS *******************************/
 
 #if defined(LULZBOT_USE_REPRAP_LCD_DISPLAY)

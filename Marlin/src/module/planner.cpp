@@ -1641,10 +1641,6 @@ void Planner::synchronize() {
   }
 #endif // BACKLASH_COMPENSATION
 
-#if ENABLED(LULZBOT_CALIBRATION_GCODE) && MIN_STEPS_PER_SEGMENT > 1
-  extern bool no_min_steps;
-#endif
-
 /**
  * Planner::_buffer_steps
  *
@@ -1874,11 +1870,7 @@ bool Planner::_populate_block(block_t * const block, bool split_move,
   #endif
   delta_mm[E_AXIS] = esteps_float * steps_to_mm[E_AXIS_N(extruder)];
 
-  if (block->steps[A_AXIS] < MIN_STEPS_PER_SEGMENT && block->steps[B_AXIS] < MIN_STEPS_PER_SEGMENT && block->steps[C_AXIS] < MIN_STEPS_PER_SEGMENT
-    #if ENABLED(LULZBOT_CALIBRATION_GCODE) && MIN_STEPS_PER_SEGMENT > 1
-    && !no_min_steps
-    #endif
-    ) {
+  if (block->steps[A_AXIS] < MIN_STEPS_PER_SEGMENT && block->steps[B_AXIS] < MIN_STEPS_PER_SEGMENT && block->steps[C_AXIS] < MIN_STEPS_PER_SEGMENT) {
     if (millimeters)
       block->millimeters = millimeters;
     else
@@ -1915,11 +1907,7 @@ bool Planner::_populate_block(block_t * const block, bool split_move,
   block->step_event_count = MAX(block->steps[A_AXIS], block->steps[B_AXIS], block->steps[C_AXIS], esteps);
 
   // Bail if this is a zero-length block
-  #if ENABLED(LULZBOT_CALIBRATION_GCODE) && MIN_STEPS_PER_SEGMENT > 1
-  if ((block->step_event_count < MIN_STEPS_PER_SEGMENT && !no_min_steps) || block->step_event_count == 0) return false;
-  #else
   if (block->step_event_count < MIN_STEPS_PER_SEGMENT) return false;
-  #endif
 
   #if ENABLED(MIXING_EXTRUDER)
     MIXER_POPULATE_BLOCK();

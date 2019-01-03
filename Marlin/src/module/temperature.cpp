@@ -2339,7 +2339,7 @@ void Temperature::isr() {
   // Additional ~1KHz Tasks
   //
 
-  #if ENABLED(BABYSTEPPING) && !defined(LULZBOT_BABYSTEP_WORKAROUND)
+  #if ENABLED(BABYSTEPPING) && DISABLED(LULZBOT_BABYSTEP_IN_PLANNER)
     LOOP_XYZ(axis) {
       const int16_t curTodo = babystepsTodo[axis]; // get rid of volatile for performance
       if (curTodo) {
@@ -2478,7 +2478,7 @@ void Temperature::isr() {
     void Temperature::set_heating_message(const uint8_t e) {
       const bool heating = isHeatingHotend(e);
       #if HOTENDS > 1
-        ui.status_printf_P(0, heating ? PSTR(LULZBOT_EXTRUDER_STR " %i " MSG_HEATING) : PSTR(LULZBOT_EXTRUDER_STR "%i " MSG_COOLING), int(e + 1));
+        ui.status_printf_P(0, heating ? PSTR(LULZBOT_EXTRUDER_STR " %i " MSG_HEATING) : PSTR(LULZBOT_EXTRUDER_STR " %i " MSG_COOLING), int(e + 1));
       #else
         ui.set_status_P(heating ? PSTR(LULZBOT_EXTRUDER_STR " " MSG_HEATING) : PSTR(LULZBOT_EXTRUDER_STR " " MSG_COOLING));
       #endif

@@ -1545,25 +1545,15 @@ void Planner::synchronize() {
   ) idle();
 }
 
-#if defined(LULZBOT_BABYSTEP_WORKAROUND)
-  void add_babystep_steps(const int32_t da, const int32_t db, const int32_t dc, const uint8_t dm, block_t * const block, float (&delta_mm)[ABCE]) {
-      const bool positive[XYZ] = {  da > 0,  db > 0, dc > 0 },
-                 non_zero[XYZ] = { da != 0, db != 0, dc != 0 };
-
-      bool made_adjustment = false;
-
-      LOOP_XYZ(i) {
-        if (Temperature::babystepsTodo[i] != 0 && non_zero[i] && positive[i] == (Temperature::babystepsTodo[i] > 0)) {
-            block->steps[i] += ABS(Temperature::babystepsTodo[i]);
-            Temperature::babystepsTodo[i] = 0;
-            delta_mm[i] = (positive[i] ? 1.0f : -1.0f) * block->steps[i] * Planner::steps_to_mm[i];
-            made_adjustment = true;
+#if ENABLED(LULZBOT_BABYSTEP_IN_PLANNER)
+  void Planner::make_babystep_correction(const int32_t da, const int32_t db, const int32_t dc, const uint8_t dm, block_t * const block) {
+      LOOP_XYZ(axis) {
+        const int16_t correction = Temperature::babystepsTodo[axis]; // get rid of volatile for performance
+        if (correction && TEST(dm,axis) == (correction > 0)) {
+            block->steps[axis] += ABS(correction);
+            Temperature::babystepsTodo[axis] -= correction;
         }
       }
-
-      // If any of the axes were adjusted, recompute block->millimeters
-      if (made_adjustment)
-        block->millimeters = SQRT(sq(delta_mm[X_AXIS]) + sq(delta_mm[Y_AXIS]) + sq(delta_mm[Z_AXIS]));
   }
 #endif
 
@@ -1591,7 +1581,7 @@ void Planner::synchronize() {
     #endif
   #endif
 
-  void Planner::add_backlash_correction_steps(const int32_t da, const int32_t db, const int32_t dc, const uint8_t dm, block_t * const block, float (&delta_mm)[ABCE]) {
+  void Planner::make_backlash_correction(const int32_t da, const int32_t db, const int32_t dc, const uint8_t dm, block_t * const block) {
     static uint8_t last_direction_bits;
     uint8_t changed_dir = last_direction_bits ^ dm;
     // Ignore direction change if no steps are taken in that direction
@@ -1599,10 +1589,6 @@ void Planner::synchronize() {
     if (db == 0) CBI(changed_dir, Y_AXIS);
     if (dc == 0) CBI(changed_dir, Z_AXIS);
     last_direction_bits ^= changed_dir;
-
-    #if defined(LULZBOT_BABYSTEP_WORKAROUND)
-      add_babystep_steps(da, db, dc, dm, block, delta_mm);
-    #endif
 
     if (backlash_correction == 0) return;
 
@@ -1623,46 +1609,35 @@ void Planner::synchronize() {
       if (!changed_dir) return;
     #endif
 
-    const bool positive[XYZ] = {  da > 0,  db > 0, dc > 0 };
-    #ifdef BACKLASH_SMOOTHING_MM
-      const bool non_zero[XYZ] = { da != 0, db != 0, dc != 0 };
-    #endif
-    bool made_adjustment = false;
-
-    LOOP_XYZ(i) {
-      if (backlash_distance_mm[i]) {
+    LOOP_XYZ(axis) {
+      if (backlash_distance_mm[axis]) {
+        const bool positive = TEST(dm,axis);
         // When an axis changes direction, add axis backlash to the residual error
-        if (TEST(changed_dir, i))
-          residual_error[i] += backlash_correction * (positive[i] ? 1.0f : -1.0f) * backlash_distance_mm[i] * planner.settings.axis_steps_per_mm[i];
+        if (TEST(changed_dir, axis))
+          residual_error[axis] += backlash_correction * (positive ? 1.0f : -1.0f) * backlash_distance_mm[axis] * planner.settings.axis_steps_per_mm[axis];
 
         // Decide how much of the residual error to correct in this segment
-        int32_t error_correction = residual_error[i];
+        int32_t correction = residual_error[axis];
         #ifdef BACKLASH_SMOOTHING_MM
-          if (error_correction && backlash_smoothing_mm != 0) {
+          if (correction && backlash_smoothing_mm != 0) {
             // Take up a portion of the residual_error in this segment, but only when
             // the current segment travels in the same direction as the correction
-            if (non_zero[i] && positive[i] == (error_correction > 0)) {
+            if (positive == (correction > 0)) {
               if (segment_proportion == 0)
                 segment_proportion = MIN(1.0f, block->millimeters / backlash_smoothing_mm);
-              error_correction *= segment_proportion;
+              correction *= segment_proportion;
             }
             else
-              error_correction = 0; // Don't take up any backlash in this segment, as it would subtract steps
+              correction = 0; // Don't take up any backlash in this segment, as it would subtract steps
           }
         #endif
         // Making a correction reduces the residual error and modifies delta_mm
-        if (error_correction) {
-          block->steps[i] += ABS(error_correction);
-          residual_error[i] -= error_correction;
-          delta_mm[i] = (positive[i] ? 1.0f : -1.0f) * block->steps[i] * steps_to_mm[i];
-          made_adjustment = true;
+        if (correction) {
+          block->steps[axis] += ABS(correction);
+          residual_error[axis] -= correction;
         }
       }
     }
-
-    // If any of the axes were adjusted, recompute block->millimeters
-    if (made_adjustment)
-      block->millimeters = SQRT(sq(delta_mm[X_AXIS]) + sq(delta_mm[Y_AXIS]) + sq(delta_mm[Z_AXIS]));
   }
 #endif // BACKLASH_COMPENSATION
 
@@ -1904,29 +1879,35 @@ bool Planner::_populate_block(block_t * const block, bool split_move,
     && !no_min_steps
     #endif
     ) {
-    block->millimeters = ABS(delta_mm[E_AXIS]);
-  }
-  else {
     if (millimeters)
       block->millimeters = millimeters;
     else
       block->millimeters = SQRT(
-        #if CORE_IS_XY
-          sq(delta_mm[X_HEAD]) + sq(delta_mm[Y_HEAD]) + sq(delta_mm[Z_AXIS])
-        #elif CORE_IS_XZ
-          sq(delta_mm[X_HEAD]) + sq(delta_mm[Y_AXIS]) + sq(delta_mm[Z_HEAD])
-        #elif CORE_IS_YZ
-          sq(delta_mm[X_AXIS]) + sq(delta_mm[Y_HEAD]) + sq(delta_mm[Z_HEAD])
-        #else
-          sq(delta_mm[X_AXIS]) + sq(delta_mm[Y_AXIS]) + sq(delta_mm[Z_AXIS])
-        #endif
-      );
+      #if CORE_IS_XY
+        sq(delta_mm[X_HEAD]) + sq(delta_mm[Y_HEAD]) + sq(delta_mm[Z_AXIS])
+      #elif CORE_IS_XZ
+        sq(delta_mm[X_HEAD]) + sq(delta_mm[Y_AXIS]) + sq(delta_mm[Z_HEAD])
+      #elif CORE_IS_YZ
+        sq(delta_mm[X_AXIS]) + sq(delta_mm[Y_HEAD]) + sq(delta_mm[Z_HEAD])
+      #else
+        sq(delta_mm[X_AXIS]) + sq(delta_mm[Y_AXIS]) + sq(delta_mm[Z_AXIS])
+      #endif
+    );
 
+    /**
+     * If we make it here, at least one of the axes has more steps than
+     * MIN_STEPS_PER_SEGMENT, ensuring the segment won't get dropped as
+     * a zero-length segment. It is important to not apply corrections
+     * to blocks that would get dropped!
+     *
+     * The correction functions are permitted to add steps to an axis,
+     * but they should *never* remove steps!
+     */
     #if ENABLED(BACKLASH_COMPENSATION)
-      // If we make it here, at least one of the axes has more steps than
-      // MIN_STEPS_PER_SEGMENT, so the segment won't get dropped by Marlin
-      // and it is okay to add steps for backlash correction.
-      add_backlash_correction_steps(da, db, dc, dm, block, delta_mm);
+      make_backlash_correction(da, db, dc, dm, block);
+    #endif
+    #if ENABLED(LULZBOT_BABYSTEP_IN_PLANNER)
+      make_babystep_correction(da, db, dc, dm, block);
     #endif
   }
 

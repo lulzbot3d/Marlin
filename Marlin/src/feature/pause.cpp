@@ -477,6 +477,11 @@ void wait_for_confirmation(const bool is_reload/*=false*/, const int8_t max_beep
       // Wait for the heaters to reach the target temperatures
       ensure_safe_temperature();
 
+      #if !defined(LULZBOT_NO_CONFIRM_REHEAT_AFTER_PAUSING)
+        nozzle_timed_out = false;
+        break;
+      #endif
+
       // Show the prompt to continue
       show_continue_prompt(is_reload);
 

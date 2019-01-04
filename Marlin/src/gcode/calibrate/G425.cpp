@@ -247,8 +247,6 @@ static void calibrate_all() {
 
   SERIAL_EOL();
 
-  move_to(X_AXIS, 150);
-
   #if HOTENDS > 1
   set_nozzle(m, 0);
   normalize_nozzle_offsets();
@@ -256,6 +254,7 @@ static void calibrate_all() {
   #endif
 
   ui.set_status_P(PSTR("Calibration done."));
+  move_to(X_AXIS, 150); // Park nozzle away from cube
 
   #if ENABLED(BACKLASH_GCODE)
     backlash_correction   = saved_backlash_correction;

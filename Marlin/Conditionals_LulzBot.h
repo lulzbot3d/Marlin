@@ -1317,6 +1317,11 @@
     #define LULZBOT_CONTROLLERFAN_SPEED         255
 #endif
 
+/* On Marlin 2.0.x, there currently is a bug where if EXTRUDERS > FAN_COUNT,
+ * switching to T1 causes M106 to no longer control the extruder fan.
+ */
+#define LULZBOT_SECOND_FAN_WORKAROUND
+
 /******************************* AXIS TRAVEL LIMITS *****************************/
 
 /* Define min and max travel limits based on the printer model using a standard

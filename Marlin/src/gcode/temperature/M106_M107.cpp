@@ -47,7 +47,11 @@
  *           3-255 = Set the speed for use with T2
  */
 void GcodeSuite::M106() {
+  #if defined(LULZBOT_SECOND_FAN_WORKAROUND)
+  const uint8_t p = parser.byteval('P', MIN(active_extruder, FAN_COUNT-1));
+  #else
   const uint8_t p = parser.byteval('P', active_extruder);
+  #endif
 
   if (p < MIN(EXTRUDERS, FAN_COUNT)) {
     uint16_t s = parser.ushortval('S', 255);

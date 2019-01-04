@@ -95,10 +95,10 @@ class TFilamentMonitor : public FilamentMonitorBase {
         if (ran_out) {
           filament_ran_out = true;
           #if ENABLED(EXTENSIBLE_UI)
-            ExtUI::onFilamentRunout();
+            ExtUI::onFilamentRunout(ExtUI::getActiveTool());
           #endif
           #ifdef LULZBOT_ACTION_ON_FILAMENT_RUNOUT
-            SERIAL_ECHOLNPGM("//action:" LULZBOT_ACTION_ON_FILAMENT_RUNOUT);
+            SERIAL_ECHOLNPAIR("//action:" LULZBOT_ACTION_ON_FILAMENT_RUNOUT " ", active_extruder);
             if(!IS_SD_PRINTING())
               reset();
             else

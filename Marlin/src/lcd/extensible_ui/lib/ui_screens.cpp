@@ -3925,7 +3925,10 @@ namespace ExtUI {
   void onPrintTimerPaused() {
   }
 
-  void onFilamentRunout() {
+  void onFilamentRunout(const extruder_t extruder) {
+    char lcd_msg[30];
+    sprintf_P(lcd_msg, PSTR("Extruder %d Filament Error"), extruder + 1);
+    StatusScreen::setStatusMessage(lcd_msg);
     InterfaceSoundsScreen::playEventSound(InterfaceSoundsScreen::PRINTING_FAILED);
   }
 

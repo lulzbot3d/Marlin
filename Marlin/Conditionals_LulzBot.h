@@ -1487,7 +1487,7 @@
 
     #define LULZBOT_FILAMENT_RUNOUT_SENSOR_DEBUG
 
-    #define LULZBOT_ACTION_ON_FILAMENT_RUNOUT "filament_runout"
+    #define LULZBOT_ACTION_ON_FILAMENT_RUNOUT "pause: filament_runout"
 #endif
 
 /******************************* MOTOR DRIVER TYPE ******************************/

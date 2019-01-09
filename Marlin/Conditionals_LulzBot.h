@@ -731,6 +731,7 @@
     #define LULZBOT_TOOLHEAD_WIPE_Y2_ADJ       0
 
     #if defined(LULZBOT_USE_EINSY_RETRO) || \
+        defined(LULZBOT_USE_ARCHIM2) || \
         defined(TOOLHEAD_CecropiaSilk_SingleExtruderAeroV2) || \
         defined(TOOLHEAD_AchemonSphinx_SmallLayer) || \
         defined(TOOLHEAD_BandedTiger_HardenedSteel) || \

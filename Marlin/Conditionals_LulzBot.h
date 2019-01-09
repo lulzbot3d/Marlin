@@ -730,7 +730,11 @@
     #define LULZBOT_TOOLHEAD_WIPE_Y1_ADJ       0
     #define LULZBOT_TOOLHEAD_WIPE_Y2_ADJ       0
 
-    #if defined(LULZBOT_USE_EINSY_RETRO)
+    #if defined(LULZBOT_USE_EINSY_RETRO) || \
+        defined(TOOLHEAD_CecropiaSilk_SingleExtruderAeroV2) || \
+        defined(TOOLHEAD_AchemonSphinx_SmallLayer) || \
+        defined(TOOLHEAD_BandedTiger_HardenedSteel) || \
+        defined(TOOLHEAD_DingyCutworm_HardenedSteelPlus)
         #define LULZBOT_MOTOR_CURRENT_E          960 // mA
     #else
         #define LULZBOT_MOTOR_CURRENT_E         1250 // mA

@@ -1113,7 +1113,12 @@ void TuneScreen::onRedraw(draw_mode_t what) {
     #if defined(USE_PORTRAIT_ORIENTATION)
        .tag(2).enabled(1)      .button( BTN_POS(1,1), BTN_SIZE(2,1), F("Temperature"))
        .tag(3).enabled(1)      .button( BTN_POS(1,2), BTN_SIZE(2,1), F("Change Filament"))
-       .tag(9).enabled(1)      .button( BTN_POS(1,3), BTN_SIZE(2,1), F("Filament Options"))
+       #if ENABLED(LIN_ADVANCE) || ENABLED(FILAMENT_RUNOUT_SENSOR)
+          .enabled(1)
+        #else
+          .enabled(0)
+        #endif
+       .tag(9).button( BTN_POS(1,3), BTN_SIZE(2,1), F("Filament Options"))
       #if ENABLED(BABYSTEPPING)
        .tag(4).enabled(1)      .button( BTN_POS(1,4), BTN_SIZE(2,1), F("Nudge Nozzle"))
       #else
@@ -1172,7 +1177,12 @@ void TuneScreen::onRedraw(draw_mode_t what) {
         .enabled(0)
       #endif
        .tag(8).           .button( BTN_POS(2,3), BTN_SIZE(1,1), F("Cancel Print"))
-       .tag(9).enabled(1) .button( BTN_POS(1,4), BTN_SIZE(1,1), F("Filament Options"))
+       #if ENABLED(LIN_ADVANCE) || ENABLED(FILAMENT_RUNOUT_SENSOR)
+          .enabled(1)
+        #else
+          .enabled(0)
+        #endif
+       .tag(9).button( BTN_POS(1,4), BTN_SIZE(1,1), F("Filament Options"))
        .tag(1).style(STYLE_LIGHT_BTN) .button( BTN_POS(2,4), BTN_SIZE(1,1), F("Back"));
     #endif
   }
@@ -1199,7 +1209,9 @@ bool TuneScreen::onTouchEnd(uint8_t tag) {
     case 6:  sound.play(twinkle, PLAY_ASYNCHRONOUS); ExtUI::pausePrint();  GOTO_SCREEN(StatusScreen); break;
     case 7:  sound.play(twinkle, PLAY_ASYNCHRONOUS); ExtUI::resumePrint(); GOTO_SCREEN(StatusScreen); break;
     case 8:  GOTO_SCREEN(ConfirmAbortPrint);     break;
+    #if ENABLED(LIN_ADVANCE) || ENABLED(FILAMENT_RUNOUT_SENSOR)
     case 9:  GOTO_SCREEN(FilamentOptionsScreen); break;
+    #endif
     default:
       return false;
   }

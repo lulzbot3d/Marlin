@@ -492,7 +492,7 @@ private:
     static void M49();
   #endif
 
-  #if ENABLED(LCD_SET_PROGRESS_MANUALLY) && (ENABLED(ULTRA_LCD) || ENABLED(EXTENSIBLE_UI))
+  #if ENABLED(LCD_SET_PROGRESS_MANUALLY)
     static void M73();
   #endif
 

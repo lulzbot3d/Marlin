@@ -2649,17 +2649,19 @@ bool DefaultAccelerationScreen::onTouchHeld(uint8_t tag) {
     using namespace ExtUI;
     const float increment = getIncrement();
     switch(tag) {
-      case  2: UI_DECREMENT(LinearAdvance_mm_mm_s, E0); break;
-      case  3: UI_INCREMENT(LinearAdvance_mm_mm_s, E0); break;
-      #if EXTRUDERS > 1
-        case  4: UI_DECREMENT(LinearAdvance_mm_mm_s, E1);  break;
-        case  5: UI_INCREMENT(LinearAdvance_mm_mm_s, E1); break;
-        #if EXTRUDERS > 2
-          case  6: UI_DECREMENT(LinearAdvance_mm_mm_s, E2);  break;
-          case  7: UI_INCREMENT(LinearAdvance_mm_mm_s, E2);  break;
-          #if EXTRUDERS > 3
-            case  8: UI_DECREMENT(LinearAdvance_mm_mm_s, E3);  break;
-            case  9: UI_INCREMENT(LinearAdvance_mm_mm_s, E3);  break;
+    #if ENABLED(LIN_ADVANCE)
+        case  2: UI_DECREMENT(LinearAdvance_mm_mm_s, E0); break;
+        case  3: UI_INCREMENT(LinearAdvance_mm_mm_s, E0); break;
+        #if EXTRUDERS > 1
+          case  4: UI_DECREMENT(LinearAdvance_mm_mm_s, E1);  break;
+          case  5: UI_INCREMENT(LinearAdvance_mm_mm_s, E1); break;
+          #if EXTRUDERS > 2
+            case  6: UI_DECREMENT(LinearAdvance_mm_mm_s, E2);  break;
+            case  7: UI_INCREMENT(LinearAdvance_mm_mm_s, E2);  break;
+            #if EXTRUDERS > 3
+              case  8: UI_DECREMENT(LinearAdvance_mm_mm_s, E3);  break;
+              case  9: UI_INCREMENT(LinearAdvance_mm_mm_s, E3);  break;
+            #endif
           #endif
         #endif
       #endif

@@ -484,7 +484,7 @@ namespace ExtUI {
         if (!linked_nozzles) {
           HOTEND_LOOP()
             if (e != active_extruder)
-              hotend_offset[axis][e] -= mm;
+              hotend_offset[axis][e] += mm;
 
           normalizeNozzleOffset(X);
           normalizeNozzleOffset(Y);

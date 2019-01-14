@@ -48,6 +48,11 @@
   void move_nozzle_servo(const uint8_t e);
 #endif
 
+#if ENABLED(LULZBOT_SWITCHING_NOZZLE_OPPOSING_SERVOS)
+  void lower_nozzle(const uint8_t e);
+  void raise_nozzle(const uint8_t e);
+#endif
+
 #if ENABLED(PARKING_EXTRUDER)
 
   #if ENABLED(PARKING_EXTRUDER_SOLENOIDS_INVERT)

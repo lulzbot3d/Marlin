@@ -915,7 +915,10 @@ void setup() {
     move_extruder_servo(0);   // Initialize extruder servo
   #endif
 
-  #if ENABLED(SWITCHING_NOZZLE)
+  #if ENABLED(LULZBOT_SWITCHING_NOZZLE_OPPOSING_SERVOS)
+    lower_nozzle(0);
+    raise_nozzle(1);
+  #elif ENABLED(SWITCHING_NOZZLE)
     move_nozzle_servo(0);     // Initialize nozzle servo
   #endif
 

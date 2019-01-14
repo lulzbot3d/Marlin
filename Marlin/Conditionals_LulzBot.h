@@ -167,7 +167,7 @@
     #define LULZBOT_SENSORLESS_HOMING
     #define LULZBOT_USE_NORMALLY_CLOSED_ENDSTOPS
     #define LULZBOT_STEALTHCHOP_Z
-    #define LULZBOT_USE_TMC_HYBRID_THRESHOLD
+    #define LULZBOT_HYBRID_THRESHOLD
     #define LULZBOT_USE_Z_BELT
     #define LULZBOT_BACKLASH_COMPENSATION
     #define LULZBOT_BAUDRATE 250000
@@ -192,7 +192,7 @@
     #define LULZBOT_USE_Z_BELT
     #define LULZBOT_BACKLASH_COMPENSATION
     #define LULZBOT_STEALTHCHOP_Z
-    #define LULZBOT_USE_TMC_HYBRID_THRESHOLD
+    #define LULZBOT_HYBRID_THRESHOLD
     #define LULZBOT_BAUDRATE 250000
     #define LULZBOT_PRINTCOUNTER
     #define LULZBOT_MACHINE_UUID "a952577d-8722-483a-999d-acdc9e772b7b"
@@ -221,7 +221,7 @@
     #define LULZBOT_SENSORLESS_HOMING
     #define LULZBOT_USE_NORMALLY_CLOSED_ENDSTOPS
     #define LULZBOT_STEALTHCHOP_Z
-    #define LULZBOT_USE_TMC_HYBRID_THRESHOLD
+    #define LULZBOT_HYBRID_THRESHOLD
     #define LULZBOT_USE_Z_BELT
     #define LULZBOT_BAUDRATE 250000
     #define LULZBOT_PRINTCOUNTER
@@ -1100,22 +1100,12 @@
 #if    defined(LULZBOT_HAS_CALIBRATION_CUBE)
     #define LULZBOT_CALIBRATE_ON_CUBE
 
-#elif defined(LULZBOT_IS_MINI) && defined(LULZBOT_USE_Z_BELT)
+#elif defined(LULZBOT_IS_MINI)
     #define LULZBOT_CALIBRATE_ON_BACK_RIGHT_WASHER
-
 #endif
 
-#if defined(LULZBOT_IS_MINI) && defined(LULZBOT_USE_Z_BELT)
-    #if defined(LULZBOT_CALIBRATE_ON_CUBE)
-        #define CALIBRATION_CUBE_DIMENSIONS              {       10, 10, 10}  // mm
-        #define CALIBRATION_CUBE_CENTER                  {11.3, 178.9, -3.8}  // mm
-        #define CALIBRATION_CUBE_TOP_CENTER_MEASUREMENT
-        #define CALIBRATION_CUBE_RIGHT_SIDE_MEASUREMENT
-        #define CALIBRATION_CUBE_FRONT_SIDE_MEASUREMENT
-        #define CALIBRATION_CUBE_LEFT_SIDE_MEASUREMENT
-        #define CALIBRATION_CUBE_BACK_SIDE_MEASUREMENT
-
-    #elif defined(LULZBOT_CALIBRATE_ON_FRONT_LEFT_WASHER)
+#if defined(LULZBOT_IS_MINI)
+    #if defined(LULZBOT_CALIBRATE_ON_FRONT_LEFT_WASHER)
         #define CALIBRATION_CUBE_DIMENSIONS              {22.0,   22.0,  1.5} // mm
         #define CALIBRATION_CUBE_CENTER                  {-8.9,   -7.6,  0}   // mm
         #define CALIBRATION_CUBE_RIGHT_SIDE_MEASUREMENT
@@ -1418,6 +1408,8 @@
 #if defined(LULZBOT_USE_MIN_ENDSTOPS)
     #define LULZBOT_USE_XMIN_PLUG
     #define LULZBOT_USE_YMIN_PLUG
+#endif
+#if defined(LULZBOT_USE_MIN_ENDSTOPS) || defined(LULZBOT_Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN)
     #define LULZBOT_USE_ZMIN_PLUG
 #endif
 
@@ -1521,13 +1513,10 @@
         // According to Jason at UltiMachine, setting the lower the
         // stealth freq the cooler the motor drivers will operate.
         #define LULZBOT_STEALTH_FREQ 0
-
-        #if defined(LULZBOT_USE_TMC_HYBRID_THRESHOLD)
-            #define LULZBOT_Y_HYBRID_THRESHOLD 72
-            #define LULZBOT_X_HYBRID_THRESHOLD 72
-            #define LULZBOT_HYBRID_THRESHOLD
-        #endif
     #endif
+
+    #define LULZBOT_Y_HYBRID_THRESHOLD 72
+    #define LULZBOT_X_HYBRID_THRESHOLD 72
 
     #define LULZBOT_TMC_INIT(st) \
         st.shaft(LULZBOT_SHAFT_DIR); \
@@ -1883,14 +1872,14 @@
 
 // Values for XYZ vary by printer model, values for E vary by toolhead.
 
-#if defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT)
+#if defined(LULZBOT_IS_TAZ) && (defined(LULZBOT_USE_Z_BELT) || defined(LULZBOT_USE_ARCHIM2))
     // These values specify the maximum current, but actual
     // currents may be lower when used with COOLCONF
     #define LULZBOT_MOTOR_CURRENT_X              975    // mA
     #define LULZBOT_MOTOR_CURRENT_Y              975    // mA
     #define LULZBOT_MOTOR_CURRENT_Z              975    // mA
 
-#elif defined(LULZBOT_IS_MINI) && defined(LULZBOT_USE_Z_BELT)
+#elif defined(LULZBOT_IS_MINI) && (defined(LULZBOT_USE_Z_BELT) || defined(LULZBOT_USE_EINSY_RETRO))
     // These values specify the maximum current, but actual
     // currents may be lower when used with COOLCONF
     #define LULZBOT_MOTOR_CURRENT_X               920    // mA
@@ -1917,8 +1906,13 @@
     // Neither define LULZBOT_PWM_MOTOR_CURRENT nor LULZBOT_DIGIPOT_MOTOR_CURRENT,
     // as the current is set in Configuration_adv.h under the HAVE_TMC2130 block
 
-    #define LULZBOT_X_CURRENT  LULZBOT_MOTOR_CURRENT_X
-    #define LULZBOT_Y_CURRENT  LULZBOT_MOTOR_CURRENT_Y
+    #if defined(LULZBOT_MOTOR_CURRENT_XY)
+        #define LULZBOT_X_CURRENT  LULZBOT_MOTOR_CURRENT_XY
+        #define LULZBOT_Y_CURRENT  LULZBOT_MOTOR_CURRENT_XY
+    #else
+        #define LULZBOT_X_CURRENT  LULZBOT_MOTOR_CURRENT_X
+        #define LULZBOT_Y_CURRENT  LULZBOT_MOTOR_CURRENT_Y
+    #endif
     #define LULZBOT_Z_CURRENT  LULZBOT_MOTOR_CURRENT_Z
     #if LULZBOT_EXTRUDERS == 1
         #define LULZBOT_E0_CURRENT LULZBOT_MOTOR_CURRENT_E

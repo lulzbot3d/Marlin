@@ -2334,6 +2334,10 @@ bool StepsScreen::onTouchHeld(uint8_t tag) {
       return ValueAdjusters::onTouchEnd(tag);
     }
   }
+
+  void AdjustOffsetsScreen::onIdle() {
+    reset_menu_timeout();
+  }
 #endif // ENABLED(BABYSTEPPING)
 
 /************************* BACKLASH COMPENSATION SCREEN **********************/

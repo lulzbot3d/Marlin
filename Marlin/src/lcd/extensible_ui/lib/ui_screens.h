@@ -394,6 +394,7 @@ class StepsScreen : public ValueAdjusters, public CachedScreen<STEPS_SCREEN_CACH
       static void onRedraw(draw_mode_t what);
       static bool onTouchEnd(uint8_t tag);
       static bool onTouchHeld(uint8_t tag);
+      static void onIdle();
   };
 #endif
 

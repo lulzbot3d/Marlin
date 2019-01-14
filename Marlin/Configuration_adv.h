@@ -79,7 +79,7 @@
   #define THERMAL_PROTECTION_PERIOD LULZBOT_THERMAL_PROTECTION_PERIOD // Seconds
   #define THERMAL_PROTECTION_HYSTERESIS LULZBOT_THERMAL_PROTECTION_HYSTERESIS // Degrees Celsius
 
-  //#define ADAPTIVE_FAN_SLOWING              // Slow part cooling fan if temperature drops
+  #define ADAPTIVE_FAN_SLOWING LULZBOT_ADAPTIVE_FAN_SLOWING // Slow part cooling fan if temperature drops
 
   /**
    * Whenever an M104, M109, or M303 increases the target temperature, the

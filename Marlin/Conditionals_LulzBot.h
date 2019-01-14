@@ -272,7 +272,7 @@
     LULZBOT_ENABLE_Z_MOTOR_ON_STARTUP \
     LULZBOT_ENABLE_PROBE_PINS(false) \
     LULZBOT_TURN_OFF_UNUSED_PINS \
-    LULZBOT_INIT_ACTIVE_EXTRUDER
+    /*LULZBOT_INIT_ACTIVE_EXTRUDER*/
 
 /************************* EXPERIMENTAL FEATURES ******************************/
 
@@ -281,7 +281,9 @@
 
     //#define LULZBOT_JUNCTION_DEVIATION
     //#define LULZBOT_S_CURVE_ACCELERATION
+
     #define LULZBOT_GCODE_MACROS
+    #define LULZBOT_ADAPTIVE_FAN_SLOWING
 #endif
 
 #if defined(LULZBOT_USE_STATUS_LED)
@@ -1322,11 +1324,6 @@
     #define LULZBOT_CONTROLLERFAN_SPEED         255
 #endif
 
-/* On Marlin 2.0.x, there currently is a bug where if EXTRUDERS > FAN_COUNT,
- * switching to T1 causes M106 to no longer control the extruder fan.
- */
-#define LULZBOT_SECOND_FAN_WORKAROUND
-
 /******************************* AXIS TRAVEL LIMITS *****************************/
 
 /* Define min and max travel limits based on the printer model using a standard
@@ -2109,7 +2106,6 @@
     #define LULZBOT_HIDE_PREHEAT_CHOICES
     #define LULZBOT_HIDE_INITIALIZE_EEPROM
     #define LULZBOT_ABOUT_FIRMWARE_MENU
-    #define LULZBOT_SD_MENU_ON_BOTTOM
     #define LULZBOT_NO_BED_LEVELING_IN_LCD
     #define LULZBOT_PRECISION_ESTEP
     #if defined(LULZBOT_USE_Z_SCREW)

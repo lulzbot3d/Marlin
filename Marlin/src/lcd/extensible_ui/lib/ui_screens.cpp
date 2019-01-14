@@ -772,7 +772,7 @@ void StatusScreen::draw_temperature(draw_mode_t what) {
     sprintf_P(
       fan_str,
       PSTR("%-3d %%"),
-      int8_t(getFan_percent(FAN0))
+      int8_t(getActualFan_percent(FAN0))
     );
 
     sprintf_P(
@@ -2068,7 +2068,7 @@ void TemperatureScreen::onRedraw(draw_mode_t what) {
   #endif
   #if FAN_COUNT > 0
     w.color(Theme::fan_speed).units(PSTR("%"));
-    w.adjuster(    10, PSTR("Fan Speed:"), getFan_percent(FAN0));
+    w.adjuster(    10, PSTR("Fan Speed:"), getTargetFan_percent(FAN0));
   #endif
   w.increments();
 }
@@ -2094,8 +2094,8 @@ bool TemperatureScreen::onTouchHeld(uint8_t tag) {
     case  9: UI_INCREMENT(TargetTemp_celsius, E3); break;
     #endif
     #if FAN_COUNT > 0
-    case 10: UI_DECREMENT(Fan_percent, FAN0);      break;
-    case 11: UI_INCREMENT(Fan_percent, FAN0);      break;
+    case 10: UI_DECREMENT(TargetFan_percent, FAN0);      break;
+    case 11: UI_INCREMENT(TargetFan_percent, FAN0);      break;
     #endif
     case 30:
       setTargetTemp_celsius(0,E0);
@@ -2112,7 +2112,7 @@ bool TemperatureScreen::onTouchHeld(uint8_t tag) {
         setTargetTemp_celsius(0,BED);
       #endif
       #if FAN_COUNT > 0
-        setFan_percent(0,FAN0);
+        setTargetFan_percent(0,FAN0);
       #endif
       break;
     default:

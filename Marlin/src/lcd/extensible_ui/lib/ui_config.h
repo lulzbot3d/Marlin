@@ -89,6 +89,9 @@
 // Enable this to debug the event framework
 //#define UI_FRAMEWORK_DEBUG
 
+// Enable the developer's menu and screens
+#define DEVELOPER_SCREENS
+
 // Maximum feed rate for manual extrusion (mm/s)
 #define MAX_MANUAL_FEEDRATE LULZBOT_MAX_MANUAL_FEEDRATE
 

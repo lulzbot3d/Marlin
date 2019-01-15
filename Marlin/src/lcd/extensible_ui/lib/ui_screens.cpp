@@ -135,10 +135,13 @@ SCREEN_TABLE {
   DECL_SCREEN(InterfaceSoundsScreen),
   DECL_SCREEN(LockScreen),
   DECL_SCREEN(FilesScreen),
+#if ENABLED(DEVELOPER_SCREENS)
   DECL_SCREEN(DeveloperScreen),
   DECL_SCREEN(EraseSPIFlashScreen),
   DECL_SCREEN(WidgetsScreen),
   DECL_SCREEN(CalibrationRegistersScreen),
+  DECL_SCREEN(DiagnosticsScreen),
+#endif
   DECL_SCREEN(MediaPlayerScreen),
 };
 
@@ -339,7 +342,9 @@ void AboutScreen::onRedraw(draw_mode_t what) {
 bool AboutScreen::onTouchEnd(uint8_t tag) {
   switch(tag) {
     case 1:        GOTO_PREVIOUS();              return true;
+#if ENABLED(DEVELOPER_SCREENS)
     case 2:        GOTO_SCREEN(DeveloperScreen); return true;
+#endif
     default:                                     return false;
   }
 }
@@ -3496,292 +3501,408 @@ bool FilesScreen::onTouchEnd(uint8_t tag) {
 
 /******************************* DEVELOPER MENU *****************************/
 
-void DeveloperScreen::onRedraw(draw_mode_t what) {
-  if(what & BACKGROUND) {
-    CommandProcessor cmd;
-    cmd.cmd(CLEAR_COLOR_RGB(Theme::background))
-       .cmd(CLEAR(true,true,true))
-       .font(Theme::font_medium);
+#if ENABLED(DEVELOPER_SCREENS)
+  void DeveloperScreen::onRedraw(draw_mode_t what) {
+    if(what & BACKGROUND) {
+      CommandProcessor cmd;
+      cmd.cmd(CLEAR_COLOR_RGB(Theme::background))
+         .cmd(CLEAR(true,true,true))
+         .font(Theme::font_medium);
 
-    default_button_colors();
+      default_button_colors();
 
-    #ifdef SPI_FLASH_SS
-    constexpr bool has_flash = true;
-    #else
-    constexpr bool has_flash = false;
-    #endif
+      #ifdef SPI_FLASH_SS
+      constexpr bool has_flash = true;
+      #else
+      constexpr bool has_flash = false;
+      #endif
 
-    #if ENABLED(SDSUPPORT)
-    constexpr bool has_media = true;
-    #else
-    constexpr bool has_media = false;
-    #endif
+      #if ENABLED(SDSUPPORT)
+      constexpr bool has_media = true;
+      #else
+      constexpr bool has_media = false;
+      #endif
 
-    #if defined(USE_PORTRAIT_ORIENTATION)
-      #define GRID_ROWS 9
-      #define GRID_COLS 1
-      cmd.font(Theme::font_large)         .text  ( BTN_POS(1,1), BTN_SIZE(1,1), F("Developer Menu"))
-         .tag(2).font(Theme::font_medium) .button( BTN_POS(1,2), BTN_SIZE(1,1), F("Show All Widgets"))
-         .tag(3)                          .button( BTN_POS(1,3), BTN_SIZE(1,1), F("Show Touch Registers"))
-         .tag(4)                          .button( BTN_POS(1,4), BTN_SIZE(1,1), F("Play Song"))
-         .tag(5).enabled(has_media)       .button( BTN_POS(1,5), BTN_SIZE(1,1), F("Play Video from Media"))
-         .tag(6).enabled(has_flash)       .button( BTN_POS(1,6), BTN_SIZE(1,1), F("Play Video from SPI Flash"))
-         .tag(7).enabled(has_flash)       .button( BTN_POS(1,7), BTN_SIZE(1,1), F("Load Video to SPI Flash"))
-         .tag(8).enabled(has_flash)       .button( BTN_POS(1,8), BTN_SIZE(1,1), F("Erase SPI Flash"))
-         .tag(1).style(STYLE_LIGHT_BTN)   .button( BTN_POS(1,9), BTN_SIZE(1,1), F("Back"));
-      #undef GRID_COLS
-      #undef GRID_ROWS
-    #else
-      #define GRID_ROWS 5
-      #define GRID_COLS 2
-      cmd.font(Theme::font_medium)        .text  ( BTN_POS(1,1), BTN_SIZE(2,1), F("Developer Menu"))
-         .tag(2).font(Theme::font_small)  .button( BTN_POS(1,2), BTN_SIZE(1,1), F("Show All Widgets"))
-         .tag(3)                          .button( BTN_POS(1,3), BTN_SIZE(1,1), F("Show Touch Registers"))
-         .tag(4)                          .button( BTN_POS(1,4), BTN_SIZE(1,1), F("Play Song"))
-         .tag(5).enabled(has_media)       .button( BTN_POS(2,2), BTN_SIZE(1,1), F("Play Video from Media"))
-         .tag(6).enabled(has_flash)       .button( BTN_POS(2,3), BTN_SIZE(1,1), F("Play Video from SPI Flash"))
-         .tag(7).enabled(has_flash)       .button( BTN_POS(2,4), BTN_SIZE(1,1), F("Load Video to SPI Flash"))
-         .tag(8).enabled(has_flash)       .button( BTN_POS(2,5), BTN_SIZE(1,1), F("Erase SPI Flash"))
-         .tag(1).style(STYLE_LIGHT_BTN)   .button( BTN_POS(1,5), BTN_SIZE(1,1), F("Back"));
-      #undef GRID_COLS
-      #undef GRID_ROWS
-    #endif
-  }
-}
-
-bool DeveloperScreen::onTouchEnd(uint8_t tag) {
-  switch(tag) {
-    case 1:  GOTO_PREVIOUS();                            break;
-    case 2:  GOTO_SCREEN(WidgetsScreen);                 break;
-    case 3:  GOTO_SCREEN(CalibrationRegistersScreen);    break;
-    case 4:  sound.play(js_bach_joy, PLAY_ASYNCHRONOUS); break;
-    #if ENABLED(SDSUPPORT)
-    case 5: if(!MediaPlayerScreen::playCardMedia()) AlertBoxScreen::showError(F("Cannot open STARTUP.AVI")); break;
-    #endif
-    #ifdef SPI_FLASH_SS
-    case 6: if(!MediaPlayerScreen::playBootMedia()) AlertBoxScreen::showError(F("No boot media available")); break;
-    case 7:
-    {
-      SpinnerScreen::show(F("Saving..."));
-      UIFlashStorage::error_t res = UIFlashStorage::write_media_file(F("STARTUP.AVI"));
-      SpinnerScreen::hide();
-      switch(res) {
-        case UIFlashStorage::SUCCESS:         AlertBoxScreen::show(     F("File copied!")); break;
-        case UIFlashStorage::READ_ERROR:      AlertBoxScreen::showError(F("Failed to read file")); break;
-        case UIFlashStorage::VERIFY_ERROR:    AlertBoxScreen::showError(F("Failed to verify file")); break;
-        case UIFlashStorage::FILE_NOT_FOUND:  AlertBoxScreen::showError(F("Cannot open STARTUP.AVI")); break;
-        case UIFlashStorage::WOULD_OVERWRITE: AlertBoxScreen::showError(F("Cannot overwrite existing media.")); break;
-      }
-      break;
+      #if defined(USE_PORTRAIT_ORIENTATION)
+        #define GRID_ROWS 10
+        #define GRID_COLS 1
+        cmd.font(Theme::font_large)         .text  ( BTN_POS(1,1), BTN_SIZE(1,1), F("Developer Menu"))
+           .tag(2).font(Theme::font_medium) .button( BTN_POS(1,2), BTN_SIZE(1,1), F("Show All Widgets"))
+           .tag(3)                          .button( BTN_POS(1,3), BTN_SIZE(1,1), F("Show Touch Registers"))
+           .tag(9)                          .button( BTN_POS(1,4), BTN_SIZE(1,1), F("Show Pin States"))
+           .tag(4)                          .button( BTN_POS(1,5), BTN_SIZE(1,1), F("Play Song"))
+           .tag(5).enabled(has_media)       .button( BTN_POS(1,6), BTN_SIZE(1,1), F("Play Video from Media"))
+           .tag(6).enabled(has_flash)       .button( BTN_POS(1,7), BTN_SIZE(1,1), F("Play Video from SPI Flash"))
+           .tag(7).enabled(has_flash)       .button( BTN_POS(1,8), BTN_SIZE(1,1), F("Load Video to SPI Flash"))
+           .tag(8).enabled(has_flash)       .button( BTN_POS(1,9), BTN_SIZE(1,1), F("Erase SPI Flash"))
+           .tag(1).style(STYLE_LIGHT_BTN)   .button( BTN_POS(1,10), BTN_SIZE(1,1), F("Back"));
+        #undef GRID_COLS
+        #undef GRID_ROWS
+      #else
+        #define GRID_ROWS 5
+        #define GRID_COLS 2
+        cmd.font(Theme::font_medium)        .text  ( BTN_POS(1,1), BTN_SIZE(2,1), F("Developer Menu"))
+           .tag(2).font(Theme::font_small)  .button( BTN_POS(1,2), BTN_SIZE(1,1), F("Show All Widgets"))
+           .tag(3)                          .button( BTN_POS(1,3), BTN_SIZE(1,1), F("Show Touch Registers"))
+           .tag(4)                          .button( BTN_POS(1,4), BTN_SIZE(1,1), F("Play Song"))
+           .tag(5).enabled(has_media)       .button( BTN_POS(2,2), BTN_SIZE(1,1), F("Play Video from Media"))
+           .tag(6).enabled(has_flash)       .button( BTN_POS(2,3), BTN_SIZE(1,1), F("Play Video from SPI Flash"))
+           .tag(7).enabled(has_flash)       .button( BTN_POS(2,4), BTN_SIZE(1,1), F("Load Video to SPI Flash"))
+           .tag(8).enabled(has_flash)       .button( BTN_POS(2,5), BTN_SIZE(1,1), F("Erase SPI Flash"))
+           .tag(1).style(STYLE_LIGHT_BTN)   .button( BTN_POS(1,5), BTN_SIZE(1,1), F("Back"));
+        #undef GRID_COLS
+        #undef GRID_ROWS
+      #endif
     }
-    case 8: GOTO_SCREEN(EraseSPIFlashScreen); break;
-    #endif
-    default: return false;
   }
-  return true;
-}
+
+  bool DeveloperScreen::onTouchEnd(uint8_t tag) {
+    switch(tag) {
+      case 1:  GOTO_PREVIOUS();                            break;
+      case 2:  GOTO_SCREEN(WidgetsScreen);                 break;
+      case 3:  GOTO_SCREEN(CalibrationRegistersScreen);    break;
+      case 4:  sound.play(js_bach_joy, PLAY_ASYNCHRONOUS); break;
+      #if ENABLED(SDSUPPORT)
+      case 5: if(!MediaPlayerScreen::playCardMedia()) AlertBoxScreen::showError(F("Cannot open STARTUP.AVI")); break;
+      #endif
+      #ifdef SPI_FLASH_SS
+      case 6: if(!MediaPlayerScreen::playBootMedia()) AlertBoxScreen::showError(F("No boot media available")); break;
+      case 7:
+      {
+        SpinnerScreen::show(F("Saving..."));
+        UIFlashStorage::error_t res = UIFlashStorage::write_media_file(F("STARTUP.AVI"));
+        SpinnerScreen::hide();
+        switch(res) {
+          case UIFlashStorage::SUCCESS:         AlertBoxScreen::show(     F("File copied!")); break;
+          case UIFlashStorage::READ_ERROR:      AlertBoxScreen::showError(F("Failed to read file")); break;
+          case UIFlashStorage::VERIFY_ERROR:    AlertBoxScreen::showError(F("Failed to verify file")); break;
+          case UIFlashStorage::FILE_NOT_FOUND:  AlertBoxScreen::showError(F("Cannot open STARTUP.AVI")); break;
+          case UIFlashStorage::WOULD_OVERWRITE: AlertBoxScreen::showError(F("Cannot overwrite existing media.")); break;
+        }
+        break;
+      }
+      case 8: GOTO_SCREEN(EraseSPIFlashScreen); break;
+      #endif
+      case 9: GOTO_SCREEN(DiagnosticsScreen); break;
+      default: return false;
+    }
+    return true;
+  }
+#endif
 
 /**************************** ERASE SPI FLASH SCREEN ***************************/
 
-void EraseSPIFlashScreen::onRedraw(draw_mode_t what) {
-  drawMessage(
-    F("Are you sure?"),
-    F("SPI flash will be erased.")
-  );
-  drawYesNoButtons();
-}
-
-bool EraseSPIFlashScreen::onTouchEnd(uint8_t tag) {
-  switch(tag) {
-    case 1:
-      SpinnerScreen::show(F("Erasing..."));
-      UIFlashStorage::erase_chip();
-      SpinnerScreen::hide();
-      AlertBoxScreen::show(F("SPI flash erased"));
-      // Remove EraseSPIFlashScreen from the stack
-      // so the alert box doesn't return to me.
-      current_screen.forget();
-      return true;
-    default:
-      return DialogBoxBaseClass::onTouchEnd(tag);
+#if ENABLED(DEVELOPER_SCREENS)
+  void EraseSPIFlashScreen::onRedraw(draw_mode_t what) {
+    drawMessage(
+      F("Are you sure?"),
+      F("SPI flash will be erased.")
+    );
+    drawYesNoButtons();
   }
-}
+
+  bool EraseSPIFlashScreen::onTouchEnd(uint8_t tag) {
+    switch(tag) {
+      case 1:
+        SpinnerScreen::show(F("Erasing..."));
+        UIFlashStorage::erase_chip();
+        SpinnerScreen::hide();
+        AlertBoxScreen::show(F("SPI flash erased"));
+        // Remove EraseSPIFlashScreen from the stack
+        // so the alert box doesn't return to me.
+        current_screen.forget();
+        return true;
+      default:
+        return DialogBoxBaseClass::onTouchEnd(tag);
+    }
+  }
+#endif
 
 /***************************** WIDGET DEMO SCREEN ***************************/
 
-uint16_t dial_val;
-uint16_t slider_val;
-bool     show_grid;
+#if ENABLED(DEVELOPER_SCREENS)
+  uint16_t dial_val;
+  uint16_t slider_val;
+  bool     show_grid;
 
-void WidgetsScreen::onEntry() {
-  BaseScreen::onEntry();
-  CLCD::turn_on_backlight();
-  FTDI::SoundPlayer::set_volume(255);
-}
-
-void WidgetsScreen::onRedraw(draw_mode_t what) {
-  using namespace ExtUI;
-  CommandProcessor cmd;
-  cmd.cmd(CLEAR_COLOR_RGB(Theme::background))
-     .cmd(CLEAR(true,true,true));
-
-  cmd.bgcolor(Theme::theme_dark);
-
-  #if defined(USE_PORTRAIT_ORIENTATION)
-    #define GRID_COLS 3
-    #define GRID_ROWS 8
-    cmd.font(Theme::font_large)
-              .text      (BTN_POS(1,1),  BTN_SIZE(3,1), F("Sample Widgets"))
-       .tag(2).dial      (BTN_POS(1,2),  BTN_SIZE(1,2), dial_val)
-       .tag(0).clock     (BTN_POS(1,4),  BTN_SIZE(1,2), 3, 30, 45, 0)
-              .gauge     (BTN_POS(1,6),  BTN_SIZE(1,2), 5, 4, slider_val,  0xFFFFU)
-
-       .font(Theme::font_medium)
-       .tag(4).slider    (BTN_POS(2,3),  BTN_SIZE(2,1), slider_val,        0xFFFFU)
-       .tag(5).progress  (BTN_POS(2,4),  BTN_SIZE(2,1), slider_val,        0xFFFFU)
-       .tag(6).scrollbar (BTN_POS(2,5),  BTN_SIZE(2,1), slider_val, 1000,  0xFFFFU)
-
-       .font(Theme::font_small)
-       .tag(0).text      (BTN_POS(2,6),  BTN_SIZE(1,1), F("Show grid:"))
-       .tag(7).toggle    (BTN_POS(3,6),  BTN_SIZE(1,1), F("no\xFFyes"), show_grid)
-
-       .font(Theme::font_medium)
-       .tag(1).button    (BTN_POS(1, 8), BTN_SIZE(1,1), F("Back"))
-              .button    (BTN_POS(2, 8), BTN_SIZE(1,1), F("1"))
-              .button    (BTN_POS(3, 8), BTN_SIZE(1,1), F("2"));
-  #else
-    #define GRID_COLS 4
-    #define GRID_ROWS 8
-
-    cmd.font(Theme::font_large)
-              .text      (BTN_POS(1,1),  BTN_SIZE(4,1), F("Sample Widgets"))
-       .tag(2).dial      (BTN_POS(1,2),  BTN_SIZE(1,3), dial_val)
-       .tag(3).dial      (BTN_POS(1,5),  BTN_SIZE(1,3), slider_val)
-       .tag(0).clock     (BTN_POS(2,2),  BTN_SIZE(1,3), 3, 30, 45, 0)
-              .gauge     (BTN_POS(2,5),  BTN_SIZE(1,3), 5, 4, slider_val,  0xFFFFU)
-
-       .font(Theme::font_medium)
-       .tag(4).slider    (BTN_POS(3,3),  BTN_SIZE(2,1), slider_val,        0xFFFFU)
-       .tag(5).progress  (BTN_POS(3,4),  BTN_SIZE(2,1), slider_val,        0xFFFFU)
-       .tag(6).scrollbar (BTN_POS(3,5),  BTN_SIZE(2,1), slider_val, 1000,  0xFFFFU)
-
-       .font(Theme::font_small)
-       .tag(0).text      (BTN_POS(3,6),  BTN_SIZE(1,1), F("Show grid:"))
-       .tag(7).toggle    (BTN_POS(4,6),  BTN_SIZE(1,1), F("no\xFFyes"), show_grid)
-
-       .font(Theme::font_medium)
-       .tag(1).button    (BTN_POS(1, 8), BTN_SIZE(2,1), F("Back"))
-              .button    (BTN_POS(3, 8), BTN_SIZE(1,1), F("1"))
-              .button    (BTN_POS(4, 8), BTN_SIZE(1,1), F("2"));
-  #endif
-
-  if(show_grid) DRAW_LAYOUT_GRID
-}
-
-bool WidgetsScreen::onTouchStart(uint8_t tag) {
-  CommandProcessor cmd;
-  switch(tag) {
-    case 1: GOTO_PREVIOUS();                                               break;
-  #if defined(USE_PORTRAIT_ORIENTATION)
-    case 2: cmd.track_circular (BTN_POS(1,2), BTN_SIZE(1,2), 2).execute(); break;
-    case 4: cmd.track_linear   (BTN_POS(2,3), BTN_SIZE(2,1), 4).execute(); break;
-    case 5: cmd.track_linear   (BTN_POS(2,4), BTN_SIZE(2,1), 5).execute(); break;
-    case 6: cmd.track_linear   (BTN_POS(2,5), BTN_SIZE(2,1), 6).execute(); break;
-  #else
-    case 2: cmd.track_circular (BTN_POS(1,2), BTN_SIZE(1,3), 2).execute(); break;
-    case 3: cmd.track_circular (BTN_POS(1,5), BTN_SIZE(1,3), 3).execute(); break;
-    case 4: cmd.track_linear   (BTN_POS(3,3), BTN_SIZE(2,1), 4).execute(); break;
-    case 5: cmd.track_linear   (BTN_POS(3,4), BTN_SIZE(2,1), 5).execute(); break;
-    case 6: cmd.track_linear   (BTN_POS(3,5), BTN_SIZE(2,1), 6).execute(); break;
-  #endif
-    case 7: show_grid = !show_grid; break;
-    default:
-      return false;
+  void WidgetsScreen::onEntry() {
+    BaseScreen::onEntry();
+    CLCD::turn_on_backlight();
+    FTDI::SoundPlayer::set_volume(255);
   }
 
-  #undef GRID_COLS
-  #undef GRID_ROWS
-
-  return true;
-}
-
-void WidgetsScreen::onIdle() {
-  if(refresh_timer.elapsed(TOUCH_UPDATE_INTERVAL)) {
-    refresh_timer.start();
-
-    uint16_t value;
+  void WidgetsScreen::onRedraw(draw_mode_t what) {
+    using namespace ExtUI;
     CommandProcessor cmd;
-    switch(cmd.track_tag(value)) {
-      case 1:
-        dial_val   = value; break;
-      case 2:
-      case 3:
-      case 4:
-      case 5:
-        slider_val = value; break;
-      default:
-        return;
-    }
-    onRefresh();
+    cmd.cmd(CLEAR_COLOR_RGB(Theme::background))
+       .cmd(CLEAR(true,true,true));
+
+    cmd.bgcolor(Theme::theme_dark);
+
+    #if defined(USE_PORTRAIT_ORIENTATION)
+      #define GRID_COLS 3
+      #define GRID_ROWS 8
+      cmd.font(Theme::font_large)
+                .text      (BTN_POS(1,1),  BTN_SIZE(3,1), F("Sample Widgets"))
+         .tag(2).dial      (BTN_POS(1,2),  BTN_SIZE(1,2), dial_val)
+         .tag(0).clock     (BTN_POS(1,4),  BTN_SIZE(1,2), 3, 30, 45, 0)
+                .gauge     (BTN_POS(1,6),  BTN_SIZE(1,2), 5, 4, slider_val,  0xFFFFU)
+
+         .font(Theme::font_medium)
+         .tag(4).slider    (BTN_POS(2,3),  BTN_SIZE(2,1), slider_val,        0xFFFFU)
+         .tag(5).progress  (BTN_POS(2,4),  BTN_SIZE(2,1), slider_val,        0xFFFFU)
+         .tag(6).scrollbar (BTN_POS(2,5),  BTN_SIZE(2,1), slider_val, 1000,  0xFFFFU)
+
+         .font(Theme::font_small)
+         .tag(0).text      (BTN_POS(2,6),  BTN_SIZE(1,1), F("Show grid:"))
+         .tag(7).toggle    (BTN_POS(3,6),  BTN_SIZE(1,1), F("no\xFFyes"), show_grid)
+
+         .font(Theme::font_medium)
+         .tag(1).button    (BTN_POS(1, 8), BTN_SIZE(1,1), F("Back"))
+                .button    (BTN_POS(2, 8), BTN_SIZE(1,1), F("1"))
+                .button    (BTN_POS(3, 8), BTN_SIZE(1,1), F("2"));
+    #else
+      #define GRID_COLS 4
+      #define GRID_ROWS 8
+
+      cmd.font(Theme::font_large)
+                .text      (BTN_POS(1,1),  BTN_SIZE(4,1), F("Sample Widgets"))
+         .tag(2).dial      (BTN_POS(1,2),  BTN_SIZE(1,3), dial_val)
+         .tag(3).dial      (BTN_POS(1,5),  BTN_SIZE(1,3), slider_val)
+         .tag(0).clock     (BTN_POS(2,2),  BTN_SIZE(1,3), 3, 30, 45, 0)
+                .gauge     (BTN_POS(2,5),  BTN_SIZE(1,3), 5, 4, slider_val,  0xFFFFU)
+
+         .font(Theme::font_medium)
+         .tag(4).slider    (BTN_POS(3,3),  BTN_SIZE(2,1), slider_val,        0xFFFFU)
+         .tag(5).progress  (BTN_POS(3,4),  BTN_SIZE(2,1), slider_val,        0xFFFFU)
+         .tag(6).scrollbar (BTN_POS(3,5),  BTN_SIZE(2,1), slider_val, 1000,  0xFFFFU)
+
+         .font(Theme::font_small)
+         .tag(0).text      (BTN_POS(3,6),  BTN_SIZE(1,1), F("Show grid:"))
+         .tag(7).toggle    (BTN_POS(4,6),  BTN_SIZE(1,1), F("no\xFFyes"), show_grid)
+
+         .font(Theme::font_medium)
+         .tag(1).button    (BTN_POS(1, 8), BTN_SIZE(2,1), F("Back"))
+                .button    (BTN_POS(3, 8), BTN_SIZE(1,1), F("1"))
+                .button    (BTN_POS(4, 8), BTN_SIZE(1,1), F("2"));
+    #endif
+
+    if(show_grid) DRAW_LAYOUT_GRID
   }
-  BaseScreen::onIdle();
-}
+
+  bool WidgetsScreen::onTouchStart(uint8_t tag) {
+    CommandProcessor cmd;
+    switch(tag) {
+      case 1: GOTO_PREVIOUS();                                               break;
+    #if defined(USE_PORTRAIT_ORIENTATION)
+      case 2: cmd.track_circular (BTN_POS(1,2), BTN_SIZE(1,2), 2).execute(); break;
+      case 4: cmd.track_linear   (BTN_POS(2,3), BTN_SIZE(2,1), 4).execute(); break;
+      case 5: cmd.track_linear   (BTN_POS(2,4), BTN_SIZE(2,1), 5).execute(); break;
+      case 6: cmd.track_linear   (BTN_POS(2,5), BTN_SIZE(2,1), 6).execute(); break;
+    #else
+      case 2: cmd.track_circular (BTN_POS(1,2), BTN_SIZE(1,3), 2).execute(); break;
+      case 3: cmd.track_circular (BTN_POS(1,5), BTN_SIZE(1,3), 3).execute(); break;
+      case 4: cmd.track_linear   (BTN_POS(3,3), BTN_SIZE(2,1), 4).execute(); break;
+      case 5: cmd.track_linear   (BTN_POS(3,4), BTN_SIZE(2,1), 5).execute(); break;
+      case 6: cmd.track_linear   (BTN_POS(3,5), BTN_SIZE(2,1), 6).execute(); break;
+    #endif
+      case 7: show_grid = !show_grid; break;
+      default:
+        return false;
+    }
+
+    #undef GRID_COLS
+    #undef GRID_ROWS
+
+    return true;
+  }
+
+  void WidgetsScreen::onIdle() {
+    if(refresh_timer.elapsed(TOUCH_UPDATE_INTERVAL)) {
+      refresh_timer.start();
+
+      uint16_t value;
+      CommandProcessor cmd;
+      switch(cmd.track_tag(value)) {
+        case 1:
+          dial_val   = value; break;
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+          slider_val = value; break;
+        default:
+          return;
+      }
+      onRefresh();
+    }
+    BaseScreen::onIdle();
+  }
+#endif
 
 /*************** DEVELOPER MENU: CALIBRATION REGISTERS SCREEN **********************/
 
-void CalibrationRegistersScreen::onRedraw(draw_mode_t what) {
-  const uint32_t T_Transform_A = CLCD::mem_read_32(REG_TOUCH_TRANSFORM_A);
-  const uint32_t T_Transform_B = CLCD::mem_read_32(REG_TOUCH_TRANSFORM_B);
-  const uint32_t T_Transform_C = CLCD::mem_read_32(REG_TOUCH_TRANSFORM_C);
-  const uint32_t T_Transform_D = CLCD::mem_read_32(REG_TOUCH_TRANSFORM_D);
-  const uint32_t T_Transform_E = CLCD::mem_read_32(REG_TOUCH_TRANSFORM_E);
-  const uint32_t T_Transform_F = CLCD::mem_read_32(REG_TOUCH_TRANSFORM_F);
-  char b[20];
+#if ENABLED(DEVELOPER_SCREENS)
+  void CalibrationRegistersScreen::onRedraw(draw_mode_t what) {
+    const uint32_t T_Transform_A = CLCD::mem_read_32(REG_TOUCH_TRANSFORM_A);
+    const uint32_t T_Transform_B = CLCD::mem_read_32(REG_TOUCH_TRANSFORM_B);
+    const uint32_t T_Transform_C = CLCD::mem_read_32(REG_TOUCH_TRANSFORM_C);
+    const uint32_t T_Transform_D = CLCD::mem_read_32(REG_TOUCH_TRANSFORM_D);
+    const uint32_t T_Transform_E = CLCD::mem_read_32(REG_TOUCH_TRANSFORM_E);
+    const uint32_t T_Transform_F = CLCD::mem_read_32(REG_TOUCH_TRANSFORM_F);
+    char b[20];
 
-  CommandProcessor cmd;
-  cmd.cmd(CLEAR_COLOR_RGB(Theme::background))
-     .cmd(CLEAR(true,true,true));
+    CommandProcessor cmd;
+    cmd.cmd(CLEAR_COLOR_RGB(Theme::background))
+       .cmd(CLEAR(true,true,true));
 
-  #define GRID_ROWS 7
-  #define GRID_COLS 2
-  cmd.tag(0)
-     .font(28)
-     .fgcolor(Theme::transformA)  .button( BTN_POS(1,1), BTN_SIZE(1,1), F("TOUCH TRANSFORM_A"))
-     .fgcolor(Theme::transformB)  .button( BTN_POS(1,2), BTN_SIZE(1,1), F("TOUCH TRANSFORM_B"))
-     .fgcolor(Theme::transformC)  .button( BTN_POS(1,3), BTN_SIZE(1,1), F("TOUCH TRANSFORM_C"))
-     .fgcolor(Theme::transformD)  .button( BTN_POS(1,4), BTN_SIZE(1,1), F("TOUCH TRANSFORM_D"))
-     .fgcolor(Theme::transformE)  .button( BTN_POS(1,5), BTN_SIZE(1,1), F("TOUCH TRANSFORM_E"))
-     .fgcolor(Theme::transformF)  .button( BTN_POS(1,6), BTN_SIZE(1,1), F("TOUCH TRANSFORM_F"))
+    #define GRID_ROWS 7
+    #define GRID_COLS 2
+    cmd.tag(0)
+       .font(28)
+       .fgcolor(Theme::transformA)  .button( BTN_POS(1,1), BTN_SIZE(1,1), F("TOUCH TRANSFORM_A"))
+       .fgcolor(Theme::transformB)  .button( BTN_POS(1,2), BTN_SIZE(1,1), F("TOUCH TRANSFORM_B"))
+       .fgcolor(Theme::transformC)  .button( BTN_POS(1,3), BTN_SIZE(1,1), F("TOUCH TRANSFORM_C"))
+       .fgcolor(Theme::transformD)  .button( BTN_POS(1,4), BTN_SIZE(1,1), F("TOUCH TRANSFORM_D"))
+       .fgcolor(Theme::transformE)  .button( BTN_POS(1,5), BTN_SIZE(1,1), F("TOUCH TRANSFORM_E"))
+       .fgcolor(Theme::transformF)  .button( BTN_POS(1,6), BTN_SIZE(1,1), F("TOUCH TRANSFORM_F"))
 
-     .fgcolor(Theme::transformVal).button( BTN_POS(2,1), BTN_SIZE(1,1), F(""), OPT_FLAT)
-     .fgcolor(Theme::transformVal).button( BTN_POS(2,2), BTN_SIZE(1,1), F(""), OPT_FLAT)
-     .fgcolor(Theme::transformVal).button( BTN_POS(2,3), BTN_SIZE(1,1), F(""), OPT_FLAT)
-     .fgcolor(Theme::transformVal).button( BTN_POS(2,4), BTN_SIZE(1,1), F(""), OPT_FLAT)
-     .fgcolor(Theme::transformVal).button( BTN_POS(2,5), BTN_SIZE(1,1), F(""), OPT_FLAT)
-     .fgcolor(Theme::transformVal).button( BTN_POS(2,6), BTN_SIZE(1,1), F(""), OPT_FLAT);
+       .fgcolor(Theme::transformVal).button( BTN_POS(2,1), BTN_SIZE(1,1), F(""), OPT_FLAT)
+       .fgcolor(Theme::transformVal).button( BTN_POS(2,2), BTN_SIZE(1,1), F(""), OPT_FLAT)
+       .fgcolor(Theme::transformVal).button( BTN_POS(2,3), BTN_SIZE(1,1), F(""), OPT_FLAT)
+       .fgcolor(Theme::transformVal).button( BTN_POS(2,4), BTN_SIZE(1,1), F(""), OPT_FLAT)
+       .fgcolor(Theme::transformVal).button( BTN_POS(2,5), BTN_SIZE(1,1), F(""), OPT_FLAT)
+       .fgcolor(Theme::transformVal).button( BTN_POS(2,6), BTN_SIZE(1,1), F(""), OPT_FLAT);
 
-  sprintf_P(b, PSTR("0x%08lX"), T_Transform_A); cmd.font(28).text  ( BTN_POS(2,1), BTN_SIZE(1,1), b);
-  sprintf_P(b, PSTR("0x%08lX"), T_Transform_B); cmd.font(28).text  ( BTN_POS(2,2), BTN_SIZE(1,1), b);
-  sprintf_P(b, PSTR("0x%08lX"), T_Transform_C); cmd.font(28).text  ( BTN_POS(2,3), BTN_SIZE(1,1), b);
-  sprintf_P(b, PSTR("0x%08lX"), T_Transform_D); cmd.font(28).text  ( BTN_POS(2,4), BTN_SIZE(1,1), b);
-  sprintf_P(b, PSTR("0x%08lX"), T_Transform_E); cmd.font(28).text  ( BTN_POS(2,5), BTN_SIZE(1,1), b);
-  sprintf_P(b, PSTR("0x%08lX"), T_Transform_F); cmd.font(28).text  ( BTN_POS(2,6), BTN_SIZE(1,1), b);
+    sprintf_P(b, PSTR("0x%08lX"), T_Transform_A); cmd.font(28).text  ( BTN_POS(2,1), BTN_SIZE(1,1), b);
+    sprintf_P(b, PSTR("0x%08lX"), T_Transform_B); cmd.font(28).text  ( BTN_POS(2,2), BTN_SIZE(1,1), b);
+    sprintf_P(b, PSTR("0x%08lX"), T_Transform_C); cmd.font(28).text  ( BTN_POS(2,3), BTN_SIZE(1,1), b);
+    sprintf_P(b, PSTR("0x%08lX"), T_Transform_D); cmd.font(28).text  ( BTN_POS(2,4), BTN_SIZE(1,1), b);
+    sprintf_P(b, PSTR("0x%08lX"), T_Transform_E); cmd.font(28).text  ( BTN_POS(2,5), BTN_SIZE(1,1), b);
+    sprintf_P(b, PSTR("0x%08lX"), T_Transform_F); cmd.font(28).text  ( BTN_POS(2,6), BTN_SIZE(1,1), b);
 
-  cmd.style(STYLE_LIGHT_BTN).tag(1).font(Theme::font_medium).button( BTN_POS(2,7), BTN_SIZE(1,1), F("Back"));
-  #undef GRID_COLS
-  #undef GRID_ROWS
-}
-
-bool CalibrationRegistersScreen::onTouchEnd(uint8_t tag) {
-  switch(tag) {
-    case 1:        GOTO_PREVIOUS();                 break;
-    default:
-      return false;
+    cmd.style(STYLE_LIGHT_BTN).tag(1).font(Theme::font_medium).button( BTN_POS(2,7), BTN_SIZE(1,1), F("Back"));
+    #undef GRID_COLS
+    #undef GRID_ROWS
   }
-  return true;
-}
 
-/***************************** MEDIA DEMO SCREEN ***************************/
+  bool CalibrationRegistersScreen::onTouchEnd(uint8_t tag) {
+    switch(tag) {
+      case 1:        GOTO_PREVIOUS();                 break;
+      default:
+        return false;
+    }
+    return true;
+  }
+#endif
+
+/****************** DEVELOPER MENU: DIAGNOSTICS SCREEN *************************/
+
+#if ENABLED(DEVELOPER_SCREENS)
+  #if defined(LULZBOT_ENABLE_PROBE_PINS)
+    #include "../../../module/endstops.h"
+  #endif
+
+  void DiagnosticsScreen::onEntry() {
+    BaseScreen::onEntry();
+    #if defined(LULZBOT_ENABLE_PROBE_PINS)
+      LULZBOT_ENABLE_PROBE_PINS(true)
+    #endif
+  }
+
+  void DiagnosticsScreen::onExit() {
+    BaseScreen::onExit();
+    #if defined(LULZBOT_ENABLE_PROBE_PINS)
+      LULZBOT_ENABLE_PROBE_PINS(true)
+    #endif
+  }
+
+  void DiagnosticsScreen::onRedraw(draw_mode_t what) {
+    CommandProcessor cmd;
+    cmd.cmd(CLEAR_COLOR_RGB(Theme::background))
+       .cmd(CLEAR(true,true,true));
+
+    #define GRID_ROWS 5
+    #define GRID_COLS 3
+
+    #define PIN_BTN(X,Y,PIN)          button(BTN_POS(X,Y), BTN_SIZE(1,1), F(#PIN))
+    #define PIN_ENABLED(PIN,INV,X,Y)  cmd.enabled(1).style(READ(PIN##_PIN) != INV ? STYLE_RED_BTN : 0).PIN_BTN(X,Y,PIN);
+    #define PIN_DISABLED(PIN,INV,X,Y) cmd.enabled(0).PIN_BTN(X,Y,PIN);
+
+    cmd.font(Theme::font_large).text(BTN_POS(1,1),  BTN_SIZE(3,1), F("Pin States")).font(26);
+    #if PIN_EXISTS(X_MAX)
+      PIN_ENABLED (X_MAX,X_MAX_ENDSTOP_INVERTING,1,2)
+    #else
+      PIN_DISABLED(X_MAX,X_MAX_ENDSTOP_INVERTING,1,2)
+    #endif
+    #if PIN_EXISTS(Y_MAX)
+      PIN_ENABLED (Y_MAX,Y_MAX_ENDSTOP_INVERTING,2,2)
+    #else
+      PIN_DISABLED(Y_MAX,Y_MAX_ENDSTOP_INVERTING,2,2)
+    #endif
+    #if PIN_EXISTS(Z_MAX)
+      PIN_ENABLED (Z_MAX,Z_MAX_ENDSTOP_INVERTING,3,2)
+    #else
+      PIN_DISABLED(Z_MAX,Z_MAX_ENDSTOP_INVERTING,3,2)
+    #endif
+    #if PIN_EXISTS(X_MIN)
+      PIN_ENABLED (X_MIN,X_MIN_ENDSTOP_INVERTING,1,3)
+    #else
+      PIN_DISABLED(X_MIN,X_MIN_ENDSTOP_INVERTING,1,3)
+    #endif
+    #if PIN_EXISTS(Y_MIN)
+      PIN_ENABLED (Y_MIN,Y_MIN_ENDSTOP_INVERTING,2,3)
+    #else
+      PIN_DISABLED(Y_MIN,Y_MIN_ENDSTOP_INVERTING,2,3)
+    #endif
+    #if PIN_EXISTS(Z_MIN)
+      PIN_ENABLED (Z_MIN,Z_MIN_ENDSTOP_INVERTING,3,3)
+    #else
+      PIN_DISABLED(Z_MIN,Z_MIN_ENDSTOP_INVERTING,3,3)
+    #endif
+    #if PIN_EXISTS(FIL_RUNOUT)
+      PIN_ENABLED (FIL_RUNOUT,FIL_RUNOUT_INVERTING,1,4)
+    #else
+      PIN_DISABLED(FIL_RUNOUT,FIL_RUNOUT_INVERTING,1,4)
+    #endif
+    #if PIN_EXISTS(FIL_RUNOUT2)
+      PIN_ENABLED (FIL_RUNOUT2,FIL_RUNOUT_INVERTING,2,4)
+    #else
+      PIN_DISABLED(FIL_RUNOUT2,FIL_RUNOUT_INVERTING,2,4)
+    #endif
+    #if PIN_EXISTS(Z_MIN_PROBE)
+      PIN_ENABLED (Z_MIN_PROBE,Z_MIN_PROBE_ENDSTOP_INVERTING,3,4)
+    #else
+      PIN_DISABLED(Z_MIN_PROBE,Z_MIN_PROBE_ENDSTOP_INVERTING,3,4)
+    #endif
+
+    cmd.style(STYLE_LIGHT_BTN).tag(1).font(Theme::font_medium).button( BTN_POS(1,5), BTN_SIZE(3,1), F("Back"));
+    #undef GRID_COLS
+    #undef GRID_ROWS
+  }
+
+  bool DiagnosticsScreen::onTouchEnd(uint8_t tag) {
+    switch(tag) {
+      case 1:        GOTO_PREVIOUS();                 break;
+      default:
+        return false;
+    }
+    return true;
+  }
+
+  void DiagnosticsScreen::onIdle() {
+    constexpr uint32_t DIAGNOSTICS_UPDATE_INTERVAL = 100;
+
+    if(refresh_timer.elapsed(DIAGNOSTICS_UPDATE_INTERVAL)) {
+      onRefresh();
+      refresh_timer.start();
+      reset_menu_timeout();
+    }
+    BaseScreen::onIdle();
+  }
+#endif
+
+/***************************** MEDIA PLAYER SCREEN ***************************/
 
 void MediaPlayerScreen::onEntry() {
   BaseScreen::onEntry();

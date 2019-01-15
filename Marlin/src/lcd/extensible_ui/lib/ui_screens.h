@@ -598,25 +598,36 @@ class FilesScreen : public BaseScreen, public CachedScreen<FILES_SCREEN_CACHE, F
     static bool onTouchEnd(uint8_t tag);
 };
 
-class DeveloperScreen : public BaseScreen, public UncachedScreen {
-  public:
-    static void onRedraw(draw_mode_t what);
-    static bool onTouchEnd(uint8_t tag);
-};
+#if ENABLED(DEVELOPER_SCREENS)
+  class DeveloperScreen : public BaseScreen, public UncachedScreen {
+    public:
+      static void onRedraw(draw_mode_t what);
+      static bool onTouchEnd(uint8_t tag);
+  };
 
-class EraseSPIFlashScreen : public DialogBoxBaseClass, public UncachedScreen {
-  public:
-    static void onRedraw(draw_mode_t what);
-    static bool onTouchEnd(uint8_t tag);
-};
+  class EraseSPIFlashScreen : public DialogBoxBaseClass, public UncachedScreen {
+    public:
+      static void onRedraw(draw_mode_t what);
+      static bool onTouchEnd(uint8_t tag);
+  };
 
-class WidgetsScreen : public BaseScreen, public UncachedScreen {
-  public:
-    static void onEntry();
-    static void onRedraw(draw_mode_t what);
-    static bool onTouchStart(uint8_t tag);
-    static void onIdle();
-};
+  class WidgetsScreen : public BaseScreen, public UncachedScreen {
+    public:
+      static void onEntry();
+      static void onRedraw(draw_mode_t what);
+      static bool onTouchStart(uint8_t tag);
+      static void onIdle();
+  };
+
+  class DiagnosticsScreen : public BaseScreen, public UncachedScreen {
+    public:
+      static void onEntry();
+      static void onExit();
+      static void onRedraw(draw_mode_t what);
+      static bool onTouchEnd(uint8_t tag);
+      static void onIdle();
+  };
+#endif
 
 class MediaPlayerScreen : public BaseScreen, public UncachedScreen {
   private:

@@ -916,6 +916,7 @@ void setup() {
   #endif
 
   #if ENABLED(LULZBOT_SWITCHING_NOZZLE_OPPOSING_SERVOS)
+    GcodeSuite::process_subcommands_now_P("G28 Z");
     lower_nozzle(0);
     raise_nozzle(1);
   #elif ENABLED(SWITCHING_NOZZLE)

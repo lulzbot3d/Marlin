@@ -81,9 +81,7 @@
     !defined(TOOLHEAD_Longfin_FlexyDually) && \
     !defined(TOOLHEAD_Yellowfin_DualExtruderV3) && \
     !defined(TOOLHEAD_Angelfish_Aerostruder) && \
-    !defined(TOOLHEAD_Quiver_DualExtruder) && \
-    !defined(TOOLHEAD_Devel_1Servo1Motor) && \
-    !defined(TOOLHEAD_Devel_1Servo2Motor) \
+    !defined(TOOLHEAD_Quiver_DualExtruder) \
 )
     #error Must specify toolhead. Please see "Configuration_LulzBot.h" for directions.
 #endif
@@ -1006,94 +1004,36 @@
 
 /*********************************** TAZ 7 TOOLHEADS ************************/
 
-#if defined(TOOLHEAD_Devel_1Servo1Motor) || defined(TOOLHEAD_Devel_1Servo2Motor)
-    #define LULZBOT_EXTRUDERS                  2
-    #define LULZBOT_TOOLHEAD_X_MAX_ADJ         0
-    #define LULZBOT_TOOLHEAD_X_MIN_ADJ         0
-    #define LULZBOT_TOOLHEAD_Y_MAX_ADJ         0
-    #define LULZBOT_TOOLHEAD_Y_MIN_ADJ         0
-    #define LULZBOT_TOOLHEAD_Z_MAX_ADJ         0
-    #define LULZBOT_TOOLHEAD_Z_MIN_ADJ         0
-    #define LULZBOT_TOOLHEAD_WIPE_X1_ADJ       0
-    #define LULZBOT_TOOLHEAD_WIPE_X2_ADJ       0
-    #define LULZBOT_TOOLHEAD_WIPE_Y1_ADJ       0
-    #define LULZBOT_TOOLHEAD_WIPE_Y2_ADJ       0
-    #define LULZBOT_TEMP_SENSOR_1              5
-    #define LULZBOT_MOTOR_CURRENT_E0           960 // mA
-    #define LULZBOT_MOTOR_CURRENT_E1           960 // mA
-#endif /* TOOLHEAD_Quiver_DualExtruder || TOOLHEAD_Devel_1Servo1Motor || TOOLHEAD_Devel_1Servo2Motor */
-
 #if defined(TOOLHEAD_Quiver_DualExtruder)
     #define LULZBOT_LCD_TOOLHEAD_NAME              "Quivering Aeros"
 //          16 chars max                            ^^^^^^^^^^^^^^^
     #define LULZBOT_M115_EXTRUDER_TYPE             "AerostruderDual"
-    #define LULZBOT_TOOLHEAD_X_MAX_ADJ              -20
-    #define LULZBOT_TOOLHEAD_X_MIN_ADJ              -20
-    #define LULZBOT_TOOLHEAD_Y_MAX_ADJ              -19
-    #define LULZBOT_TOOLHEAD_Y_MIN_ADJ              -19
-    #define LULZBOT_TOOLHEAD_Z_MAX_ADJ              -7
-    #define LULZBOT_TOOLHEAD_Z_MIN_ADJ              -7
+    #define LULZBOT_TOOLHEAD_X_MAX_ADJ             -20
+    #define LULZBOT_TOOLHEAD_X_MIN_ADJ             -20
+    #define LULZBOT_TOOLHEAD_Y_MAX_ADJ             -19
+    #define LULZBOT_TOOLHEAD_Y_MIN_ADJ             -19
+    #define LULZBOT_TOOLHEAD_Z_MAX_ADJ             -7
+    #define LULZBOT_TOOLHEAD_Z_MIN_ADJ             -7
     #define LULZBOT_TOOLHEAD_WIPE_X1_ADJ            0
     #define LULZBOT_TOOLHEAD_WIPE_X2_ADJ            0
     #define LULZBOT_TOOLHEAD_WIPE_Y1_ADJ            0
     #define LULZBOT_TOOLHEAD_WIPE_Y2_ADJ            0
     #define LULZBOT_EXTRUDERS                       2
     #define LULZBOT_NUM_SERVOS                      2
-    #define LULZBOT_SERVO_DELAY                     {1000, 1000}
+    #define LULZBOT_SERVO_DELAY                    {1000, 1000}
     #define LULZBOT_SWITCHING_NOZZLE
-    #define LULZBOT_SWITCHING_NOZZLE_SERVO_ANGLES   { 55,   120}
+    #define LULZBOT_SWITCHING_NOZZLE_SERVO_ANGLES  { 55,   120}
     #define LULZBOT_SWITCHING_NOZZLE_OPPOSING_SERVOS
     #define LULZBOT_SWITCHING_NOZZLE_NO_Z_LIFT
-    #define LULZBOT_HOTEND_OFFSET_X                 {0.0, 43}
-    #define LULZBOT_HOTEND_OFFSET_Y                 {0.0,  0}
-    #define LULZBOT_E_STEPS                         420
-    #define LULZBOT_X_MAX_ENDSTOP_INVERTING         LULZBOT_NO_ENDSTOP
+    #define LULZBOT_HOTEND_OFFSET_X                {0.0, 43}
+    #define LULZBOT_HOTEND_OFFSET_Y                {0.0,  0}
+    #define LULZBOT_E_STEPS                        420
+    #define LULZBOT_X_MAX_ENDSTOP_INVERTING        LULZBOT_NO_ENDSTOP
     #define LULZBOT_E3D_Titan_Aero_V6
-    #define LULZBOT_TEMP_SENSOR_1              5
-    #define LULZBOT_MOTOR_CURRENT_E0           960 // mA
-    #define LULZBOT_MOTOR_CURRENT_E1           960 // mA
+    #define LULZBOT_TEMP_SENSOR_1                  5
+    #define LULZBOT_MOTOR_CURRENT_E0               960 // mA
+    #define LULZBOT_MOTOR_CURRENT_E1               960 // mA
 #endif /* TOOLHEAD_Quiver_DualExtruder */
-
-#if defined(TOOLHEAD_Devel_1Servo1Motor)
-    // Experimental dual nozzle using a servo
-    #define LULZBOT_LCD_TOOLHEAD_NAME              "S1M1 McStruder"
-//          16 chars max                            ^^^^^^^^^^^^^^^
-    #define LULZBOT_M115_EXTRUDER_TYPE             "S1M1 McStruder"
-    #define LULZBOT_NUM_SERVOS                     1
-    #define LULZBOT_SWITCHING_EXTRUDER
-    #define LULZBOT_SWITCHING_NOZZLE_SERVO_ANGLES   { 30, 60} // Hitec HS-5245MG
-    #define LULZBOT_SWITCHING_NOZZLE
-    #undef  LULZBOT_TOOLHEAD_X_MIN_ADJ
-    #define LULZBOT_TOOLHEAD_X_MIN_ADJ              -27
-    #undef  LULZBOT_TOOLHEAD_Y_MAX_ADJ
-    #define LULZBOT_TOOLHEAD_Y_MAX_ADJ              -5
-    #define LULZBOT_SERVO_DELAY                     {300}
-    #define LULZBOT_E_STEPS                         420
-    #define LULZBOT_X_MAX_ENDSTOP_INVERTING         LULZBOT_NO_ENDSTOP
-    #undef  LULZBOT_INVERT_E0_DIR
-    #define LULZBOT_INVERT_E0_DIR                   false
-    #define LULZBOT_AO_Hexagon
-
-    // Workaround for bug in Marlin
-    #define LULZBOT_DISABLE_INACTIVE_EXTRUDER       false
-#endif /* TOOLHEAD_Devel_ServoDual */
-
-#if defined(TOOLHEAD_Devel_1Servo2Motor)
-    // Experimental dual nozzle using two motors and one servos
-    #define LULZBOT_LCD_TOOLHEAD_NAME              "S1M2 McStruder"
-//          16 chars max                            ^^^^^^^^^^^^^^^
-    #define LULZBOT_M115_EXTRUDER_TYPE             "S1M2 McStruder"
-    #define LULZBOT_NUM_SERVOS                      1
-    #define LULZBOT_SWITCHING_NOZZLE
-    #define LULZBOT_SWITCHING_NOZZLE_SERVO_ANGLES   { 30, 60} // Hitec HS-5245MG
-    #define LULZBOT_SERVO_DELAY                     {300}
-    //#define LULZBOT_HOTEND_OFFSET_X                 {0.0, 44.5}
-    //#define LULZBOT_HOTEND_OFFSET_Y                 {0.0, -0.5}
-    #define LULZBOT_NO_MOVE_ON_TOOLHEAD_CHANGE
-    #define LULZBOT_E_STEPS                         420
-    #define LULZBOT_X_MAX_ENDSTOP_INVERTING         LULZBOT_NO_ENDSTOP
-    #define LULZBOT_E3D_Titan_Aero_V6
-#endif /* TOOLHEAD_Devel_ServoDual */
 
 /************** AUTO-CALIBRATION (BACKLASH AND NOZZLE OFFSET) ****************/
 

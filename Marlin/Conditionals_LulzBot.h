@@ -1,5 +1,28 @@
+/**************************
+ * Conditionals_Lulzbot.h *
+ **************************/
+
+/****************************************************************************
+ *   Written By Marcio Teixeira 2018 - Aleph Objects, Inc.                  *
+ *                                                                          *
+ *   This program is free software: you can redistribute it and/or modify   *
+ *   it under the terms of the GNU General Public License as published by   *
+ *   the Free Software Foundation, either version 3 of the License, or      *
+ *   (at your option) any later version.                                    *
+ *                                                                          *
+ *   This program is distributed in the hope that it will be useful,        *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+ *   GNU General Public License for more details.                           *
+ *                                                                          *
+ *   To view a copy of the GNU General Public License, go to the following  *
+ *   location: <http://www.gnu.org/licenses/>.                              *
+ ****************************************************************************/
+
 #ifndef CONDITIONALS_LULZBOT
 #define CONDITIONALS_LULZBOT
+
+#include "src/Lulzbot_Extras.h"
 
 /* We define LULZBOT_ macros based on which printer or toolhead we are
  * building for, these macros are then placed where appropriate in the
@@ -21,7 +44,7 @@
  *   4. CUSTOMIZED VERSION STRING AND URL
  *   5. MOTHERBOARD AND PIN CONFIGURATION
  *   6. HOMING & AXIS DIRECTIONS
- *   7. EMI MITIGATION
+ *   7. STARTUP ROUTINE
  *   8. STEPPER INACTIVITY TIMEOUT
  *   9. AUTOLEVELING / BED PROBE
  *  10. COMMON TOOLHEADS PARAMETERS
@@ -266,11 +289,6 @@
 // Marlin to print a new message when the axis are homed
 #define LULZBOT_HOMING_MESSAGE_WORKAROUND
 
-#define LULZBOT_STARTUP \
-    LULZBOT_ENABLE_Z_MOTOR_ON_STARTUP \
-    LULZBOT_ENABLE_PROBE_PINS(false) \
-    LULZBOT_TURN_OFF_UNUSED_PINS
-
 /************************* EXPERIMENTAL FEATURES ******************************/
 
 #if defined(LULZBOT_USE_EXPERIMENTAL_FEATURES)
@@ -335,28 +353,9 @@
     #define LULZBOT_SPI_SPEED                     SPI_FULL_SPEED
 #endif
 
-/******************************** EMI MITIGATION *******************************/
+/******************************* STARTUP ROUTINE ********************************/
 
-#define LULZBOT_EMI_SHUTOFF(pin)             SET_OUTPUT(pin); WRITE(pin, LOW);
-
-#if defined(LULZBOT_USE_ARCHIM2)
-    #define LULZBOT_TURN_OFF_UNUSED_PINS \
-        LULZBOT_EMI_SHUTOFF(GPIO_PB1_J20_5) \
-        LULZBOT_EMI_SHUTOFF(GPIO_PB0_J20_6) \
-        LULZBOT_EMI_SHUTOFF(GPIO_PB3_J20_7) \
-        LULZBOT_EMI_SHUTOFF(GPIO_PB2_J20_8) \
-        LULZBOT_EMI_SHUTOFF(GPIO_PB6_J20_9) \
-        LULZBOT_EMI_SHUTOFF(GPIO_PB5_J20_10) \
-        LULZBOT_EMI_SHUTOFF(GPIO_PB8_J20_11) \
-        LULZBOT_EMI_SHUTOFF(GPIO_PB4_J20_12) \
-        LULZBOT_EMI_SHUTOFF(GPIO_PB9_J20_13) \
-        LULZBOT_EMI_SHUTOFF(GPIO_PB7_J20_14) \
-        LULZBOT_EMI_SHUTOFF(GPIO_PB14_J20_17) \
-        LULZBOT_EMI_SHUTOFF(GPIO_PA18_J20_21) \
-        LULZBOT_EMI_SHUTOFF(GPIO_PA17_J20_22)
-#else
-    #define LULZBOT_TURN_OFF_UNUSED_PINS
-#endif
+#define LULZBOT_STARTUP lulzbot_startup(); // Defined in Lulzbot_Extras.cpp
 
 /*********************** HOMING & AXIS DIRECTIONS ******************************/
 
@@ -506,12 +505,10 @@
     #define LULZBOT_DISABLE_INACTIVE_Z false
     #define LULZBOT_SD_FINISHED_STEPPERRELEASE false
     #define LULZBOT_SD_FINISHED_RELEASECOMMAND "M84 X Y E"
-    #define LULZBOT_ENABLE_Z_MOTOR_ON_STARTUP enable_Z();
 #else
     #define LULZBOT_DISABLE_INACTIVE_Z true
     #define LULZBOT_SD_FINISHED_STEPPERRELEASE true
     #define LULZBOT_SD_FINISHED_RELEASECOMMAND "M84 X Y Z E"
-    #define LULZBOT_ENABLE_Z_MOTOR_ON_STARTUP
 #endif
 
 /*********************** AUTOLEVELING / BED PROBE *******************************/
@@ -620,42 +617,7 @@
     #define LULZBOT_EXTRUDER_MOTOR_SHUTOFF_ON_PROBE(probing)
 #endif
 
-/* Enable the probe pins only only when homing/probing,
- * as this helps reduce EMI by grounding the lines.
- *
- * On Mini:
- *   Z_MIN_PIN are the bed washers.
- *
- * On TAZ:
- *   Z_MIN_PIN corresponds to the Z-Home push button.
- *   Z_MIN_PROBE_PIN are the bed washers.
- */
-#define LULZBOT_SET_PIN_STATE(pin, enable) \
-    if(enable) { \
-        /* Set as inputs with pull-up resistor */ \
-        SET_INPUT(pin); \
-        WRITE(pin, HIGH); \
-        delay(5); /* The bed acts as a capacitor and takes a while to charge up */ \
-    } else { \
-        LULZBOT_EMI_SHUTOFF(pin); \
-    }
-
-#if defined(LULZBOT_USE_AUTOLEVELING) && !defined(LULZBOT_USE_HOME_BUTTON)
-    #define LULZBOT_ENABLE_PROBE_PINS(enable) { \
-        endstops.enable_z_probe(enable); \
-        LULZBOT_SET_PIN_STATE(Z_MIN_PIN, enable) \
-        LULZBOT_EXTRUDER_MOTOR_SHUTOFF_ON_PROBE(enable) \
-    }
-
-#elif defined(LULZBOT_USE_AUTOLEVELING) && defined(LULZBOT_USE_HOME_BUTTON)
-    #define LULZBOT_ENABLE_PROBE_PINS(enable) { \
-        endstops.enable_z_probe(enable); \
-        LULZBOT_SET_PIN_STATE(Z_MIN_PIN, enable) \
-        LULZBOT_SET_PIN_STATE(LULZBOT_Z_MIN_PROBE_PIN, enable) \
-    }
-#else
-    #define LULZBOT_ENABLE_PROBE_PINS(enable)
-#endif
+#define LULZBOT_ENABLE_PROBE_PINS(enable) enable_probe_pins(enable);
 
 /* Make it so M42 S<state> controls the state of the
  * probe lines. This is useful for troubleshooting. */
@@ -1088,7 +1050,7 @@
         "T0\n"                               /* Switch to first nozzle */ \
         "G28\n"                              /* Auto-Home */ \
         LULZBOT_MENU_AXIS_LEVELING_COMMANDS  /* Level X-Axis */ \
-        LULZBOT_WIPE_SEQUENCE_COMMANDS       /* Wipe the Nozzles */ \
+        "G12\n"                              /* Wipe the Nozzles */ \
         "G425\n"                             /* Calibrate Nozzles */ \
         "M500\n"                             /* Save settings */ \
         "M117 Calibration data saved"        /* Status message */
@@ -1713,7 +1675,12 @@
         #define LULZBOT_WIPE_DONE_TEMP  "M109 R160 T0\nM109 R160 T1\n" /* Wait for probe temp */
     #endif
 
-    #define LULZBOT_REWIPE_E0 "T0\nG12 P0 S12 T0\n"   /* Wipe nozzle */
+    #if defined(LULZBOT_Quiver_TAZ7) && LULZBOT_EXTRUDERS == 1
+        // When using a single toolhead on Quiver, wipe on the right pad.
+        #define LULZBOT_REWIPE_E0 LULZBOT_WIPE_GCODE(RIGHT)            /* Wipe nozzle */
+    #else
+        #define LULZBOT_REWIPE_E0 "T0\n" LULZBOT_WIPE_GCODE(STANDARD)  /* Wipe nozzle */
+    #endif
 
     #if defined(LULZBOT_Quiver_TAZ7) && defined(TOOLHEAD_Quiver_DualExtruder)
         #define LULZBOT_REWIPE_E1 \
@@ -1729,6 +1696,7 @@
 
     #define LULZBOT_WIPE_SEQUENCE_COMMANDS \
         LULZBOT_WIPE_HEAT_TEMP                    /* Preheat extruders */ \
+        "G28 O1\n"                                /* Home if needed */ \
         "M117 Heating nozzle\n"                   /* Status message */ \
         LULZBOT_WIPE_WAIT_TEMP                    /* Wait for wipe temp */ \
         "M117 Rewiping nozzle\n"                  /* Status message */ \
@@ -1742,7 +1710,7 @@
     #if defined(LULZBOT_USE_Z_BELT)
         #define LULZBOT_G29_RECOVER_COMMANDS \
             LULZBOT_MENU_AXIS_LEVELING_COMMANDS   /* Level X axis */ \
-            LULZBOT_WIPE_SEQUENCE_COMMANDS        /* Perform wipe sequence */ \
+            "G12\n"                               /* Perform wipe sequence */ \
             "M109 R160\n"                         /* Setting probing temperature */ \
             "M117 Probing bed"                    /* Status message */
 
@@ -1751,14 +1719,14 @@
             "M121\n"                              /* Turn off endstops so we can move */ \
             "G0 Z10\n"                            /* Raise nozzle */ \
             "G28 X0 Y0\n"                         /* G29 on older minis shifts the coordinate system */ \
-            LULZBOT_WIPE_SEQUENCE_COMMANDS        /* Perform wipe sequence */ \
+            "G12\n"                               /* Perform wipe sequence */ \
             "M109 R160\n"                         /* Setting probing temperature */ \
             "M117 Probing bed"                    /* Status message */
 
     #else
         #define LULZBOT_G29_RECOVER_COMMANDS \
             "G0 Z10\n"                            /* Raise nozzle */ \
-            LULZBOT_WIPE_SEQUENCE_COMMANDS        /* Perform wipe sequence */ \
+            "G12\n"                               /* Perform wipe sequence */ \
             "M109 R160\n"                         /* Set probing temperature */ \
             "M117 Probing bed"                    /* Status message */
     #endif

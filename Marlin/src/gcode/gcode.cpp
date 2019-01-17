@@ -38,13 +38,6 @@ GcodeSuite gcode;
 
 #include "../Marlin.h" // for idle() and suspend_auto_report
 
-#if defined(LULZBOT_G29_RETRY_AND_RECOVER)
-  #include "../module/endstops.h"
-  #include "../module/stepper.h"
-  #include "../lcd/ultralcd.h"
-  #include "../libs/buzzer.h"
-#endif
-
 millis_t GcodeSuite::previous_move_ms;
 
 bool GcodeSuite::axis_relative_modes[] = AXIS_RELATIVE_MODES;

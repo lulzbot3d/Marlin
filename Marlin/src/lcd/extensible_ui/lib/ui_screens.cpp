@@ -332,7 +332,7 @@ void AboutScreen::onRedraw(draw_mode_t what) {
      .tag(2).font(Theme::font_medium).text(  BTN_POS(1,3), BTN_SIZE(4,1), F("(C) 2018 Aleph Objects, Inc."))
                                      .text(  BTN_POS(1,4), BTN_SIZE(4,1), F("www.lulzbot.com"))
 
-     .tag(0)                         .text(  BTN_POS(1,6), BTN_SIZE(4,1), getFirmwareName_str())
+     .tag(0)                         .text(  BTN_POS(1,6), BTN_SIZE(4,1), progmem_str(getFirmwareName_str()))
      .tag(1)                         .button(BTN_POS(2,8), BTN_SIZE(2,1), F("Okay"));
 
   #undef GRID_COLS
@@ -1015,12 +1015,12 @@ void MenuScreen::onRedraw(draw_mode_t what) {
       #define GRID_ROWS 8
       #define GRID_COLS 2
         .tag(2).button( BTN_POS(1,1), BTN_SIZE(1,1), F("Auto Home"))
-        #if defined(LULZBOT_MENU_AXIS_LEVELING_COMMANDS)
+        #if defined(NOZZLE_CLEAN_FEATURE)
          .enabled(1)
         #else
          .enabled(0)
         #endif
-        .tag(3).button( BTN_POS(2,1), BTN_SIZE(1,1), F("Level X Axis"))
+        .tag(3).button( BTN_POS(2,1), BTN_SIZE(1,1), F("Clean Nozzle"))
         .tag(4).button( BTN_POS(1,2), BTN_SIZE(1,1), F("Move Axis"))
         .tag(5).button( BTN_POS(2,2), BTN_SIZE(1,1), F("Motors Off"))
         .tag(6).button( BTN_POS(1,3), BTN_SIZE(2,1), F("Temperature"))
@@ -1041,12 +1041,12 @@ void MenuScreen::onRedraw(draw_mode_t what) {
       #define GRID_ROWS 5
       #define GRID_COLS 2
         .tag(2).button( BTN_POS(1,1), BTN_SIZE(1,1), F("Auto Home"))
-        #if defined(LULZBOT_MENU_AXIS_LEVELING_COMMANDS)
+        #if ENABLED(NOZZLE_CLEAN_FEATURE)
          .enabled(1)
         #else
          .enabled(0)
         #endif
-        .tag(3).button( BTN_POS(2,1), BTN_SIZE(1,1), F("Level X Axis"))
+        .tag(3).button( BTN_POS(2,1), BTN_SIZE(1,1), F("Clean Nozzle"))
         .tag(4).button( BTN_POS(1,2), BTN_SIZE(1,1), F("Move Axis"))
         .tag(5).button( BTN_POS(2,2), BTN_SIZE(1,1), F("Motors Off"))
         .tag(6).button( BTN_POS(1,3), BTN_SIZE(1,1), F("Temperature"))
@@ -1073,8 +1073,8 @@ bool MenuScreen::onTouchEnd(uint8_t tag) {
   switch(tag) {
     case 1:  GOTO_PREVIOUS();                                         break;
     case 2:  enqueueCommands_P(PSTR("G28"));                          break;
-    #if defined(LULZBOT_MENU_AXIS_LEVELING_COMMANDS)
-    case 3:  enqueueCommands_P(PSTR(LULZBOT_MENU_AXIS_LEVELING_COMMANDS)); break;
+    #if ENABLED(NOZZLE_CLEAN_FEATURE)
+    case 3:  enqueueCommands_P(PSTR("G12")); GOTO_SCREEN(StatusScreen); break;
     #endif
     case 4:  GOTO_SCREEN(MoveAxisScreen);                             break;
     case 5:  enqueueCommands_P(PSTR("M84"));                          break;
@@ -1150,7 +1150,7 @@ void TuneScreen::onRedraw(draw_mode_t what) {
       .tag(8)             .button( BTN_POS(1,7), BTN_SIZE(2,1), F("Cancel Print"))
       .tag(1).style(STYLE_LIGHT_BTN)
                           .button( BTN_POS(1,8), BTN_SIZE(2,1), F("Back"));
-    #else
+    #else // USE_PORTRAIT_ORIENTATION
        .tag(2).enabled(1) .button( BTN_POS(1,1), BTN_SIZE(1,1), F("Temperature"))
        .tag(3).enabled(1) .button( BTN_POS(1,2), BTN_SIZE(1,1), F("Change Filament"))
       #if ENABLED(BABYSTEPPING)
@@ -1181,7 +1181,7 @@ void TuneScreen::onRedraw(draw_mode_t what) {
       #else
         .enabled(0)
       #endif
-       .tag(8).           .button( BTN_POS(2,3), BTN_SIZE(1,1), F("Cancel Print"))
+       .tag(8).           button( BTN_POS(2,3), BTN_SIZE(1,1), F("Cancel Print"))
        #if ENABLED(LIN_ADVANCE) || ENABLED(FILAMENT_RUNOUT_SENSOR)
           .enabled(1)
         #else
@@ -1441,6 +1441,16 @@ void ChangeFilamentScreen::onRedraw(draw_mode_t what) {
     default_button_colors();
 
     const bool t_ok = getActualTemp_celsius(getExtruder()) > getSoftenTemp() - 10;
+
+    if(screen_data.ChangeFilamentScreen.t_tag) {
+      if(t_ok) {
+        cmd.cmd(COLOR_RGB(0xFF0000)).text(BTN_POS(1,4), BTN_SIZE(1,1), F("Caution:"));
+        default_button_colors();
+        cmd.text(BTN_POS(1,6), BTN_SIZE(1,1), F("Hot!"));
+      } else {
+        cmd.text(BTN_POS(1,6), BTN_SIZE(1,1), F("Heating..."));
+      }
+    }
 
     const uint32_t tog2  = screen_data.ChangeFilamentScreen.t_tag == 2  ? STYLE_LIGHT_BTN : 0;
     const uint32_t tog3  = screen_data.ChangeFilamentScreen.t_tag == 3  ? STYLE_LIGHT_BTN : 0;
@@ -3539,17 +3549,18 @@ bool FilesScreen::onTouchEnd(uint8_t tag) {
         #undef GRID_COLS
         #undef GRID_ROWS
       #else
-        #define GRID_ROWS 5
+        #define GRID_ROWS 6
         #define GRID_COLS 2
         cmd.font(Theme::font_medium)        .text  ( BTN_POS(1,1), BTN_SIZE(2,1), F("Developer Menu"))
            .tag(2).font(Theme::font_small)  .button( BTN_POS(1,2), BTN_SIZE(1,1), F("Show All Widgets"))
            .tag(3)                          .button( BTN_POS(1,3), BTN_SIZE(1,1), F("Show Touch Registers"))
-           .tag(4)                          .button( BTN_POS(1,4), BTN_SIZE(1,1), F("Play Song"))
+           .tag(9)                          .button( BTN_POS(1,4), BTN_SIZE(1,1), F("Show Pin States"))
+           .tag(4)                          .button( BTN_POS(1,5), BTN_SIZE(1,1), F("Play Song"))
            .tag(5).enabled(has_media)       .button( BTN_POS(2,2), BTN_SIZE(1,1), F("Play Video from Media"))
            .tag(6).enabled(has_flash)       .button( BTN_POS(2,3), BTN_SIZE(1,1), F("Play Video from SPI Flash"))
            .tag(7).enabled(has_flash)       .button( BTN_POS(2,4), BTN_SIZE(1,1), F("Load Video to SPI Flash"))
            .tag(8).enabled(has_flash)       .button( BTN_POS(2,5), BTN_SIZE(1,1), F("Erase SPI Flash"))
-           .tag(1).style(STYLE_LIGHT_BTN)   .button( BTN_POS(1,5), BTN_SIZE(1,1), F("Back"));
+           .tag(1).style(STYLE_LIGHT_BTN)   .button( BTN_POS(1,6), BTN_SIZE(2,1), F("Back"));
         #undef GRID_COLS
         #undef GRID_ROWS
       #endif
@@ -3799,10 +3810,6 @@ bool FilesScreen::onTouchEnd(uint8_t tag) {
 /****************** DEVELOPER MENU: DIAGNOSTICS SCREEN *************************/
 
 #if ENABLED(DEVELOPER_SCREENS)
-  #if defined(LULZBOT_ENABLE_PROBE_PINS)
-    #include "../../../module/endstops.h"
-  #endif
-
   void DiagnosticsScreen::onEntry() {
     BaseScreen::onEntry();
     #if defined(LULZBOT_ENABLE_PROBE_PINS)

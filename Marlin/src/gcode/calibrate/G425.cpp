@@ -186,7 +186,9 @@ static void calibrate_all() {
 
   set_nozzle(m, 0);
 
-  reset_nozzle_offsets(); // Start up with default nozzle offsets
+  #if HOTENDS > 1
+    reset_nozzle_offsets(); // Start up with default nozzle offsets
+  #endif
 
   ui.set_status_P(PSTR("Finding calibration cube"));
   probe_cube(m, true);
@@ -239,18 +241,18 @@ static void calibrate_all() {
     ui.set_status_P(PSTR("Centering nozzle"));
     calibrate_toolhead_offset(m, 1);
     #if ENABLED(BACKLASH_GCODE)
-    SERIAL_ECHOPAIR("Backlash after correction (T", e);
-    SERIAL_ECHOLNPGM("):");
-    report_measured_backlash(m);
+      SERIAL_ECHOPAIR("Backlash after correction (T", e);
+      SERIAL_ECHOLNPGM("):");
+      report_measured_backlash(m);
     #endif
   }
 
   SERIAL_EOL();
 
   #if HOTENDS > 1
-  set_nozzle(m, 0);
-  normalize_nozzle_offsets();
-  report_relative_nozzle_offsets();
+    set_nozzle(m, 0);
+    normalize_nozzle_offsets();
+    report_relative_nozzle_offsets();
   #endif
 
   ui.set_status_P(PSTR("Calibration done."));
@@ -566,9 +568,16 @@ static void probe_cube(measurements_t &m, bool fast) {
   #endif
 
   constexpr float assumed_center[XYZ] = CALIBRATION_CUBE_CENTER;
+  m.error[X_AXIS] = 0;
+  m.error[Y_AXIS] = 0;
+  m.error[Z_AXIS] = 0;
 
-  m.error[X_AXIS] = assumed_center[X_AXIS] - m.center[X_AXIS];
-  m.error[Y_AXIS] = assumed_center[Y_AXIS] - m.center[Y_AXIS];
+  #if HAS_X_CENTER
+    m.error[X_AXIS] = assumed_center[X_AXIS] - m.center[X_AXIS];
+  #endif
+  #if HAS_Y_CENTER
+    m.error[Y_AXIS] = assumed_center[Y_AXIS] - m.center[Y_AXIS];
+  #endif
   m.error[Z_AXIS] = assumed_center[Z_AXIS] - m.center[Z_AXIS];
 
   soft_endstops_enabled = saved_soft_endstops_enabled;

@@ -51,7 +51,7 @@
  *  11. MINI TOOLHEADS
  *  12. TAZ 4/5/6 TOOLHEADS
  *  13. UNIVERSAL TOOLHEADS
- *  14. TAZ 7 TOOLHEADS
+ *  14. TAZ PRO TOOLHEADS
  *  15. AUTO-CALIBRATION (BACKLASH AND NOZZLE OFFSET)
  *  16. TEMPERATURE SETTINGS
  *  17. HEATING ELEMENTS
@@ -80,10 +80,10 @@
 #if ( \
     !defined(LULZBOT_Gladiola_Mini) && \
     !defined(LULZBOT_Gladiola_MiniLCD) && \
+    !defined(LULZBOT_Hibiscus_Mini2) && \
     !defined(LULZBOT_Juniper_TAZ5) && \
     !defined(LULZBOT_Oliveoil_TAZ6) && \
-    !defined(LULZBOT_Hibiscus_Mini2) && \
-    !defined(LULZBOT_Quiver_TAZ7) && \
+    !defined(LULZBOT_Quiver_TAZPro) && \
     !defined(LULZBOT_Prototype_DemoCLCD) \
 )
     #error Must specify printer model. Please see "Configuration_LulzBot.h" for directions.
@@ -198,9 +198,9 @@
     #define LULZBOT_USE_EXPERIMENTAL_FEATURES
 #endif
 
-#if defined(LULZBOT_Quiver_TAZ7)
+#if defined(LULZBOT_Quiver_TAZPro)
     #define LULZBOT_CUSTOM_MACHINE_NAME "LulzBot Quiver"
-    #define LULZBOT_LCD_MACHINE_NAME "TAZ 7"
+    #define LULZBOT_LCD_MACHINE_NAME "TAZ Pro"
     #define LULZBOT_IS_TAZ
     #define LULZBOT_TAZ_BED
     #define LULZBOT_TWO_PIECE_BED
@@ -414,7 +414,7 @@
     #define LULZBOT_Z_MIN_USES_Z_PROBE_ENABLED
 
 #else
-    // The Mini and TAZ 7+ lack a home button and probe using the Z_MIN pin.
+    // The Mini and TAZ Pro lack a home button and probe using the Z_MIN pin.
     #define LULZBOT_Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN
 #endif
 
@@ -962,14 +962,14 @@
     #endif
 #endif
 
-/*********************************** TAZ 7 TOOLHEADS ************************/
+/*********************************** TAZ PRO TOOLHEADS ************************/
 
 #if defined(TOOLHEAD_Quiver_DualExtruder)
     #define LULZBOT_LCD_TOOLHEAD_NAME              "Quivering Aeros"
 //          16 chars max                            ^^^^^^^^^^^^^^^
     #define LULZBOT_M115_EXTRUDER_TYPE             "AerostruderDual"
-    #define LULZBOT_TOOLHEAD_X_MAX_ADJ             -20
-    #define LULZBOT_TOOLHEAD_X_MIN_ADJ             -20
+    #define LULZBOT_TOOLHEAD_X_MAX_ADJ             -21
+    #define LULZBOT_TOOLHEAD_X_MIN_ADJ             -21
     #define LULZBOT_TOOLHEAD_Y_MAX_ADJ             -21
     #define LULZBOT_TOOLHEAD_Y_MIN_ADJ             -21
     #define LULZBOT_TOOLHEAD_Z_MAX_ADJ             -7
@@ -1034,13 +1034,16 @@
         #define LULZBOT_CALIBRATION_GCODE
     #endif
 
-#elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT) && defined(TOOLHEAD_Quiver_DualExtruder)
+#elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT)
     #ifdef LULZBOT_CALIBRATE_ON_CUBE
         #define CALIBRATION_CUBE_DIMENSIONS              {  10.0,  10.0,  10.0} // mm
         #define CALIBRATION_CUBE_CENTER                  { 264.0, -22.0,  -2.0} // mm
+
         #define CALIBRATION_CUBE_TOP_CENTER_MEASUREMENT
         #define CALIBRATION_CUBE_RIGHT_SIDE_MEASUREMENT
-        #define CALIBRATION_CUBE_FRONT_SIDE_MEASUREMENT
+        #if defined(TOOLHEAD_Quiver_DualExtruder)
+            #define CALIBRATION_CUBE_FRONT_SIDE_MEASUREMENT
+        #endif
         #define CALIBRATION_CUBE_LEFT_SIDE_MEASUREMENT
         #define CALIBRATION_CUBE_BACK_SIDE_MEASUREMENT
         #define LULZBOT_CALIBRATION_GCODE
@@ -1051,6 +1054,7 @@
     #define LULZBOT_CALIBRATION_SCRIPT \
         "M117 Starting Auto-Calibration\n"   /* Status message */ \
         "T0\n"                               /* Switch to first nozzle */ \
+        "M218 T1 X43 Y0 Z0\n"                /* Restore default nozzle offset */ \
         "G28\n"                              /* Auto-Home */ \
         LULZBOT_MENU_AXIS_LEVELING_COMMANDS  /* Level X-Axis */ \
         "G12\n"                              /* Wipe the Nozzles */ \
@@ -1160,7 +1164,7 @@
   #define LULZBOT_DEFAULT_bedKi                 17
   #define LULZBOT_DEFAULT_bedKd                 378
 
-// Modular two piece bed (TAZ 7+)
+// Modular two piece bed (Mini 2/TAZ Pro)
 #elif defined(LULZBOT_TAZ_BED) && defined(LULZBOT_TWO_PIECE_BED)
   #define LULZBOT_DEFAULT_bedKp                 286.02
   #define LULZBOT_DEFAULT_bedKi                 54.55
@@ -1249,8 +1253,8 @@
     #define LULZBOT_STANDARD_Y_BED_SIZE        275
 
 #elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT)
-    #define LULZBOT_STANDARD_X_MAX_POS         320
-    #define LULZBOT_STANDARD_X_MIN_POS          -6
+    #define LULZBOT_STANDARD_X_MAX_POS         321
+    #define LULZBOT_STANDARD_X_MIN_POS          -5
     #define LULZBOT_STANDARD_Y_MAX_POS         311
     #define LULZBOT_STANDARD_Y_MIN_POS         -17
 
@@ -1595,10 +1599,10 @@
     #define LULZBOT_LEFT_WIPE_Y2                       25
     #define LULZBOT_LEFT_WIPE_Z                        1
 
-    #if defined(LULZBOT_Quiver_TAZ7)
+    #if defined(LULZBOT_Quiver_TAZPro)
         // The Quiver has an wipe pad on the right side of the bed.
-        #define LULZBOT_RIGHT_WIPE_X1                   296
-        #define LULZBOT_RIGHT_WIPE_X2                   296
+        #define LULZBOT_RIGHT_WIPE_X1                   298
+        #define LULZBOT_RIGHT_WIPE_X2                   298
         #define LULZBOT_RIGHT_WIPE_Y1                    95
         #define LULZBOT_RIGHT_WIPE_Y2                    25
         #define LULZBOT_RIGHT_WIPE_Z                      1
@@ -1642,7 +1646,7 @@
                                                      LULZBOT_ ## side ## _WIPE_Y2, \
                                                      LULZBOT_ ## side ## _WIPE_Z )
 
-#if defined(LULZBOT_Quiver_TAZ7) && LULZBOT_EXTRUDERS == 1
+#if defined(LULZBOT_Quiver_TAZPro) && LULZBOT_EXTRUDERS == 1
     #define LULZBOT_NOZZLE_CLEAN_START_POINT _LULZBOT_NOZZLE_CLEAN_START_POINT(RIGHT)
     #define LULZBOT_NOZZLE_CLEAN_END_POINT   _LULZBOT_NOZZLE_CLEAN_END_POINT(RIGHT)
 #else
@@ -1680,14 +1684,14 @@
         #define LULZBOT_WIPE_DONE_TEMP  "M109 R160 T0\nM109 R160 T1\n" /* Wait for probe temp */
     #endif
 
-    #if defined(LULZBOT_Quiver_TAZ7) && LULZBOT_EXTRUDERS == 1
+    #if defined(LULZBOT_Quiver_TAZPro) && LULZBOT_EXTRUDERS == 1
         // When using a single toolhead on Quiver, wipe on the right pad.
         #define LULZBOT_REWIPE_E0 LULZBOT_WIPE_GCODE(RIGHT)            /* Wipe nozzle */
     #else
-        #define LULZBOT_REWIPE_E0 "T0\n" LULZBOT_WIPE_GCODE(LEFT)  /* Wipe nozzle */
+        #define LULZBOT_REWIPE_E0 "T0\n" LULZBOT_WIPE_GCODE(LEFT)      /* Wipe nozzle */
     #endif
 
-    #if defined(LULZBOT_Quiver_TAZ7) && defined(TOOLHEAD_Quiver_DualExtruder)
+    #if defined(LULZBOT_Quiver_TAZPro) && defined(TOOLHEAD_Quiver_DualExtruder)
         #define LULZBOT_REWIPE_E1 \
             "G0 Z5\n"                             /* Raise nozzle */ \
             "G0 X150 F5000\n"                     /* Move over to switch extruders */ \
@@ -1700,7 +1704,7 @@
     #endif
 
     #define LULZBOT_WIPE_SEQUENCE_COMMANDS \
-        "M117 Hot end heating...\n"               /* Status message */ \
+        "M117 Hot End Heating...\n"               /* Status message */ \
         LULZBOT_WIPE_HEAT_TEMP                    /* Preheat extruders */ \
         "G28 O1\n"                                /* Home if needed */ \
         LULZBOT_WIPE_WAIT_TEMP                    /* Wait for wipe temp */ \
@@ -1876,7 +1880,7 @@
     // Older printers had a fudge factor for ABS shrinkage.
     #define LULZBOT_XY_STEPS                      100.5
 #else
-    // In the Mini 2 and TAZ 7 going forward, use true XY steps.
+    // In the Mini 2 and TAZ Pro going forward, use true XY steps.
     #define LULZBOT_XY_STEPS                      100
 #endif
 

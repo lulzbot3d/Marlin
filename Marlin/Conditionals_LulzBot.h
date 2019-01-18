@@ -196,7 +196,6 @@
     #define LULZBOT_MACHINE_UUID "e5502411-d46d-421d-ba3a-a20126d7930f"
     #define LULZBOT_LIGHTWEIGHT_UI
     #define LULZBOT_USE_EXPERIMENTAL_FEATURES
-    #define LULZBOT_CALIBRATION_GCODE
 #endif
 
 #if defined(LULZBOT_Quiver_TAZ7)
@@ -221,7 +220,6 @@
     #define LULZBOT_USB_FLASH_DRIVE_SUPPORT
     #define LULZBOT_SDSUPPORT
     #define LULZBOT_SDSUPPORT_DEBUG
-    #define LULZBOT_CALIBRATION_GCODE
     #define LULZBOT_HAS_CALIBRATION_CUBE
     #define LULZBOT_FILAMENT_RUNOUT_SENSOR
     #define LULZBOT_BACKUP_EEPROM_INFORMATION
@@ -972,8 +970,8 @@
     #define LULZBOT_M115_EXTRUDER_TYPE             "AerostruderDual"
     #define LULZBOT_TOOLHEAD_X_MAX_ADJ             -20
     #define LULZBOT_TOOLHEAD_X_MIN_ADJ             -20
-    #define LULZBOT_TOOLHEAD_Y_MAX_ADJ             -19
-    #define LULZBOT_TOOLHEAD_Y_MIN_ADJ             -19
+    #define LULZBOT_TOOLHEAD_Y_MAX_ADJ             -21
+    #define LULZBOT_TOOLHEAD_Y_MIN_ADJ             -21
     #define LULZBOT_TOOLHEAD_Z_MAX_ADJ             -7
     #define LULZBOT_TOOLHEAD_Z_MIN_ADJ             -7
     #define LULZBOT_TOOLHEAD_WIPE_X1_ADJ            0
@@ -999,7 +997,7 @@
 
 /************** AUTO-CALIBRATION (BACKLASH AND NOZZLE OFFSET) ****************/
 
-#if    defined(LULZBOT_HAS_CALIBRATION_CUBE)
+#if defined(LULZBOT_HAS_CALIBRATION_CUBE)
     #define LULZBOT_CALIBRATE_ON_CUBE
 
 #elif defined(LULZBOT_IS_MINI)
@@ -1012,35 +1010,40 @@
         #define CALIBRATION_CUBE_CENTER                  {-8.9,   -7.6,  0}   // mm
         #define CALIBRATION_CUBE_RIGHT_SIDE_MEASUREMENT
         #define CALIBRATION_CUBE_BACK_SIDE_MEASUREMENT
+        #define LULZBOT_CALIBRATION_GCODE
 
     #elif defined(LULZBOT_CALIBRATE_ON_FRONT_RIGHT_WASHER)
         #define CALIBRATION_CUBE_DIMENSIONS              { 22.0,   22.0, 1.5} // mm
         #define CALIBRATION_CUBE_CENTER                  {169.5,   -7.6, 0}   // mm
         #define CALIBRATION_CUBE_LEFT_SIDE_MEASUREMENT
         #define CALIBRATION_CUBE_BACK_SIDE_MEASUREMENT
+        #define LULZBOT_CALIBRATION_GCODE
 
     #elif defined(LULZBOT_CALIBRATE_ON_BACK_LEFT_WASHER)
         #define CALIBRATION_CUBE_DIMENSIONS              { 22.0,   22.0, 1.5} // mm
         #define CALIBRATION_CUBE_CENTER                  { -8.9,  171.3, 0}   // mm
         #define CALIBRATION_CUBE_RIGHT_SIDE_MEASUREMENT
         #define CALIBRATION_CUBE_FRONT_SIDE_MEASUREMENT
+        #define LULZBOT_CALIBRATION_GCODE
 
     #elif defined(LULZBOT_CALIBRATE_ON_BACK_RIGHT_WASHER)
         #define CALIBRATION_CUBE_DIMENSIONS              { 22.0,   22.0, 1.5} // mm
         #define CALIBRATION_CUBE_CENTER                  {169.5,  171.3, 0}   // mm
         #define CALIBRATION_CUBE_LEFT_SIDE_MEASUREMENT
         #define CALIBRATION_CUBE_FRONT_SIDE_MEASUREMENT
+        #define LULZBOT_CALIBRATION_GCODE
     #endif
 
-#elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT)
+#elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT) && defined(TOOLHEAD_Quiver_DualExtruder)
     #ifdef LULZBOT_CALIBRATE_ON_CUBE
         #define CALIBRATION_CUBE_DIMENSIONS              {  10.0,  10.0,  10.0} // mm
-        #define CALIBRATION_CUBE_CENTER                  { 261.5, -20.4, -1.60} // mm
+        #define CALIBRATION_CUBE_CENTER                  { 264.0, -22.0,  -2.0} // mm
         #define CALIBRATION_CUBE_TOP_CENTER_MEASUREMENT
         #define CALIBRATION_CUBE_RIGHT_SIDE_MEASUREMENT
         #define CALIBRATION_CUBE_FRONT_SIDE_MEASUREMENT
         #define CALIBRATION_CUBE_LEFT_SIDE_MEASUREMENT
         #define CALIBRATION_CUBE_BACK_SIDE_MEASUREMENT
+        #define LULZBOT_CALIBRATION_GCODE
     #endif
 #endif
 
@@ -1246,8 +1249,8 @@
     #define LULZBOT_STANDARD_Y_BED_SIZE        275
 
 #elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT)
-    #define LULZBOT_STANDARD_X_MAX_POS         319
-    #define LULZBOT_STANDARD_X_MIN_POS          -7
+    #define LULZBOT_STANDARD_X_MAX_POS         320
+    #define LULZBOT_STANDARD_X_MIN_POS          -6
     #define LULZBOT_STANDARD_Y_MAX_POS         311
     #define LULZBOT_STANDARD_Y_MIN_POS         -17
 
@@ -1570,35 +1573,35 @@
 // Nozzle wiping points (varies by toolhead, as the nozzle position varies)
 #if defined(LULZBOT_USE_AUTOLEVELING) && defined(LULZBOT_MINI_BED) && defined(LULZBOT_USE_Z_BELT)
     // Mini has a horizontal wiping pad on the back of the bed
-    #define LULZBOT_STANDARD_WIPE_X1                       45
-    #define LULZBOT_STANDARD_WIPE_X2                       115
-    #define LULZBOT_STANDARD_WIPE_Y1                       174
-    #define LULZBOT_STANDARD_WIPE_Y2                       174
-    #define LULZBOT_STANDARD_WIPE_Z                        1
+    #define LULZBOT_LEFT_WIPE_X1                       45
+    #define LULZBOT_LEFT_WIPE_X2                       115
+    #define LULZBOT_LEFT_WIPE_Y1                       174
+    #define LULZBOT_LEFT_WIPE_Y2                       174
+    #define LULZBOT_LEFT_WIPE_Z                        1
 
 #elif defined(LULZBOT_USE_AUTOLEVELING) && defined(LULZBOT_MINI_BED) && defined(LULZBOT_USE_Z_SCREW)
     // Mini has a horizontal wiping pad on the back of the bed
-    #define LULZBOT_STANDARD_WIPE_X1                       45
-    #define LULZBOT_STANDARD_WIPE_X2                       115
-    #define LULZBOT_STANDARD_WIPE_Y1                       172
-    #define LULZBOT_STANDARD_WIPE_Y2                       172
-    #define LULZBOT_STANDARD_WIPE_Z                       -0.5
+    #define LULZBOT_LEFT_WIPE_X1                       45
+    #define LULZBOT_LEFT_WIPE_X2                       115
+    #define LULZBOT_LEFT_WIPE_Y1                       172
+    #define LULZBOT_LEFT_WIPE_Y2                       172
+    #define LULZBOT_LEFT_WIPE_Z                       -0.5
 
 #elif defined(LULZBOT_USE_AUTOLEVELING) && defined(LULZBOT_TAZ_BED)
     // TAZ has a vertical wiping pad on the left side of the bed
-    #define LULZBOT_STANDARD_WIPE_X1                      -16
-    #define LULZBOT_STANDARD_WIPE_X2                      -16
-    #define LULZBOT_STANDARD_WIPE_Y1                       95
-    #define LULZBOT_STANDARD_WIPE_Y2                       25
-    #define LULZBOT_STANDARD_WIPE_Z                        1
+    #define LULZBOT_LEFT_WIPE_X1                      -16
+    #define LULZBOT_LEFT_WIPE_X2                      -16
+    #define LULZBOT_LEFT_WIPE_Y1                       95
+    #define LULZBOT_LEFT_WIPE_Y2                       25
+    #define LULZBOT_LEFT_WIPE_Z                        1
 
     #if defined(LULZBOT_Quiver_TAZ7)
-        // The Quiver has an wipe pad on the opposite side of the bed.
-        #define LULZBOT_OPPOSITE_WIPE_X1                   296
-        #define LULZBOT_OPPOSITE_WIPE_X2                   296
-        #define LULZBOT_OPPOSITE_WIPE_Y1                    95
-        #define LULZBOT_OPPOSITE_WIPE_Y2                    25
-        #define LULZBOT_OPPOSITE_WIPE_Z                      1
+        // The Quiver has an wipe pad on the right side of the bed.
+        #define LULZBOT_RIGHT_WIPE_X1                   296
+        #define LULZBOT_RIGHT_WIPE_X2                   296
+        #define LULZBOT_RIGHT_WIPE_Y1                    95
+        #define LULZBOT_RIGHT_WIPE_Y2                    25
+        #define LULZBOT_RIGHT_WIPE_Z                      1
     #endif
 #endif
 
@@ -1630,7 +1633,7 @@
     "G1 X" #x " Y" #y1 " F4000\n"                 /* Slow wipe */ \
     "G1 X" #x " Y" #y2 " F4000\n"                 /* Slow wipe */ \
     "G1 X" #x " Y" #y1 " F4000\n"                 /* Slow wipe */ \
-    "G1 Z5\n"                                     /* Raise nozzle */
+    "G1 Z25\n"                                    /* Raise nozzle */
 
 #define _LULZBOT_WIPE_GCODE(x,y1,y2,z) __LULZBOT_WIPE_GCODE(x,y1,y2,z)
 
@@ -1640,16 +1643,18 @@
                                                      LULZBOT_ ## side ## _WIPE_Z )
 
 #if defined(LULZBOT_Quiver_TAZ7) && LULZBOT_EXTRUDERS == 1
-    #define LULZBOT_NOZZLE_CLEAN_START_POINT _LULZBOT_NOZZLE_CLEAN_START_POINT(OPPOSITE)
-    #define LULZBOT_NOZZLE_CLEAN_END_POINT   _LULZBOT_NOZZLE_CLEAN_END_POINT(OPPOSITE)
+    #define LULZBOT_NOZZLE_CLEAN_START_POINT _LULZBOT_NOZZLE_CLEAN_START_POINT(RIGHT)
+    #define LULZBOT_NOZZLE_CLEAN_END_POINT   _LULZBOT_NOZZLE_CLEAN_END_POINT(RIGHT)
 #else
-    #define LULZBOT_NOZZLE_CLEAN_START_POINT _LULZBOT_NOZZLE_CLEAN_START_POINT(STANDARD)
-    #define LULZBOT_NOZZLE_CLEAN_END_POINT   _LULZBOT_NOZZLE_CLEAN_END_POINT(STANDARD)
+    #define LULZBOT_NOZZLE_CLEAN_START_POINT _LULZBOT_NOZZLE_CLEAN_START_POINT(LEFT)
+    #define LULZBOT_NOZZLE_CLEAN_END_POINT   _LULZBOT_NOZZLE_CLEAN_END_POINT(LEFT)
 #endif
 
 /*************************** REWIPE FUNCTIONALITY *******************************/
 
 #if defined(LULZBOT_USE_AUTOLEVELING)
+    //#define LULZBOT_DEBUG_MACROS // Uncomment to debug macro expansions
+
     #define LULZBOT_G29_RETRY_AND_RECOVER
     #define LULZBOT_G29_MAX_RETRIES      3
     #define LULZBOT_G29_HALT_ON_FAILURE
@@ -1665,7 +1670,7 @@
         #define LULZBOT_Z_PROBE_LOW_POINT   -4
     #endif
 
-    #if EXTRUDERS == 1
+    #if LULZBOT_EXTRUDERS == 1
         #define LULZBOT_WIPE_HEAT_TEMP  "M104 S170 T0\n"               /* Preheat to wipe temp */
         #define LULZBOT_WIPE_WAIT_TEMP  "M109 R170 T0\n"               /* Wait for wipe temp */
         #define LULZBOT_WIPE_DONE_TEMP  "M109 R160 T0\n"               /* Drop to probe temp */
@@ -1679,7 +1684,7 @@
         // When using a single toolhead on Quiver, wipe on the right pad.
         #define LULZBOT_REWIPE_E0 LULZBOT_WIPE_GCODE(RIGHT)            /* Wipe nozzle */
     #else
-        #define LULZBOT_REWIPE_E0 "T0\n" LULZBOT_WIPE_GCODE(STANDARD)  /* Wipe nozzle */
+        #define LULZBOT_REWIPE_E0 "T0\n" LULZBOT_WIPE_GCODE(LEFT)  /* Wipe nozzle */
     #endif
 
     #if defined(LULZBOT_Quiver_TAZ7) && defined(TOOLHEAD_Quiver_DualExtruder)
@@ -1687,7 +1692,7 @@
             "G0 Z5\n"                             /* Raise nozzle */ \
             "G0 X150 F5000\n"                     /* Move over to switch extruders */ \
             "T1\n"                                /* Switch to second extruder */ \
-            LULZBOT_WIPE_GCODE(OPPOSITE)          /* Wipe on the rightmost pad */ \
+            LULZBOT_WIPE_GCODE(RIGHT)             /* Wipe on the rightmost pad */ \
             "G0 X150 F5000\n"                     /* Move over to switch extruders */ \
             "T0\n"                                /* Switch to first extruder */
     #else
@@ -1695,9 +1700,9 @@
     #endif
 
     #define LULZBOT_WIPE_SEQUENCE_COMMANDS \
+        "M117 Hot end heating...\n"               /* Status message */ \
         LULZBOT_WIPE_HEAT_TEMP                    /* Preheat extruders */ \
         "G28 O1\n"                                /* Home if needed */ \
-        "M117 Heating nozzle\n"                   /* Status message */ \
         LULZBOT_WIPE_WAIT_TEMP                    /* Wait for wipe temp */ \
         "M117 Rewiping nozzle\n"                  /* Status message */ \
         LULZBOT_REWIPE_E0                         /* Wipe first extruder */ \
@@ -1744,6 +1749,13 @@
 
     #define LULZBOT_G29_SUCCESS_COMMANDS \
             "M117 Probe successful\n"             /* Status message */
+
+    #if defined(LULZBOT_DEBUG_MACROS)
+        #pragma message("\n\nLULZBOT_WIPE_SEQUENCE_COMMANDS:\n\n" LULZBOT_WIPE_SEQUENCE_COMMANDS "\n\n")
+        #pragma message("\n\nLULZBOT_G29_RECOVER_COMMANDS:\n\n"   LULZBOT_G29_RECOVER_COMMANDS "\n\n")
+        #pragma message("\n\nLULZBOT_G29_FAILURE_COMMANDS:\n\n"   LULZBOT_G29_FAILURE_COMMANDS "\n\n")
+        #error Dump complete
+    #endif
 #endif
 
 /******************************** PROBE QUALITY CHECK *************************/

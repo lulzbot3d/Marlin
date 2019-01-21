@@ -72,7 +72,7 @@ Ctrl_status sd_mmc_spi_usb_read_10(uint32_t addr, uint16_t nb_sector) {
 
   #ifdef DEBUG_MMC
     char buffer[80];
-    sprintf(buffer, "SDRD: %d @ 0x%08x\n", nb_sector, addr);
+    sprintf_P(buffer, PSTR("SDRD: %d @ 0x%08x\n"), nb_sector, addr);
     SERIAL_ECHO_P(0, buffer);
   #endif
 
@@ -109,7 +109,7 @@ Ctrl_status sd_mmc_spi_usb_write_10(uint32_t addr, uint16_t nb_sector) {
 
   #ifdef DEBUG_MMC
     char buffer[80];
-    sprintf(buffer, "SDWR: %d @ 0x%08x\n", nb_sector, addr);
+    sprintf_P(buffer, PSTR("SDWR: %d @ 0x%08x\n"), nb_sector, addr);
     SERIAL_ECHO_P(0, buffer);
   #endif
 

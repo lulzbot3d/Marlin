@@ -115,11 +115,6 @@ HASH = $(shell git rev-parse --verify HEAD --short)
 HEX_FILENAME=Marlin_$(MODEL)_$(TOOLHEAD)_$(VERSION)$(REVISION)_$(HASH)
 LULZBOT_EXTRAS=-DLULZBOT_$(MODEL) -DTOOLHEAD_$(TOOLHEAD) -DCONFIGURATION_LULZBOT -Wfatal-errors
 
-ifeq ($(MODEL),Quiver_TAZPro)
-  # UltiMachine Archim2 (with TMC2130 drivers)
-	HARDWARE_MOTHERBOARD=1592
-endif
-
 ############################################################################
 # Below here nothing should be changed...
 

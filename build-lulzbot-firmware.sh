@@ -66,7 +66,7 @@ compile_dependencies() {
   get_arch_info $printer
 
   case $printer in
-    Quiver_TAZPro)
+    Quiver_TAZPro | Hibiscus_Mini2)
       ARCHIM_SRC="ArduinoAddons/arduino-1.8.5/packages/ultimachine/hardware/sam/1.6.9-b"
       (cd "$ARCHIM_SRC/system/libsam/build_gcc"; ARM_GCC_TOOLCHAIN="$gcc_path" make)
       cp -u $ARCHIM_SRC/variants/arduino_due_x/libsam_sam3x8e_gcc_rel.a     $ARCHIM_SRC/variants/archim/libsam_sam3x8e_gcc_rel.a
@@ -87,10 +87,12 @@ get_arch_info() {
     Quiver_TAZPro)
       gcc_path=$ARM_TOOLS_PATH
       format=bin
+      HARDWARE_MOTHERBOARD=1592
       ;;
     *)
       gcc_path=$AVR_TOOLS_PATH
       format=hex
+      HARDWARE_MOTHERBOARD=301
       ;;
   esac
 }
@@ -104,7 +106,7 @@ compile_firmware() {
   printer=$1   ; shift 1
   toolhead=$1  ; shift 1
   # Build the firmware
-  (cd Marlin; make clean; make $MAKE_FLAGS AVR_TOOLS_PATH=${gcc_path}/ MODEL=${printer} TOOLHEAD=${toolhead} $*) || exit
+  (cd Marlin; make clean; make $MAKE_FLAGS HARDWARE_MOTHERBOARD=${HARDWARE_MOTHERBOARD} AVR_TOOLS_PATH=${gcc_path}/ MODEL=${printer} TOOLHEAD=${toolhead} $*) || exit
 }
 
 ####

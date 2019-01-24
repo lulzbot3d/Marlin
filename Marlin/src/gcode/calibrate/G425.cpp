@@ -379,7 +379,7 @@ static void calibrate_toolhead(measurements_t &m, float confidence, uint8_t extr
   #endif
 
   /* Correct for positional error, so the cube
-  /* is at the known actual spot */
+   * is at the known actual spot */
   planner.synchronize();
   #if HAS_X_CENTER
     current_position[X_AXIS] += m.error[X_AXIS];

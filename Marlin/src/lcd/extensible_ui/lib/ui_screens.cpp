@@ -327,7 +327,7 @@ void AboutScreen::onRedraw(draw_mode_t what) {
   #if defined(LULZBOT_LCD_MACHINE_NAME) && defined(LULZBOT_LCD_TOOLHEAD_NAME)
   cmd.tag(0).font(Theme::font_medium).text(  BTN_POS(1,2), BTN_SIZE(4,1), F(LULZBOT_LCD_MACHINE_NAME "  (" LULZBOT_LCD_TOOLHEAD_NAME ")"))
   #else
-  cmd       .font(Theme::font_large) .text(  BTN_POS(1,2), BTN_SIZE(4,1), F("Color Touch Panel"))
+  cmd.tag(0).font(Theme::font_large) .text(  BTN_POS(1,2), BTN_SIZE(4,1), F("Color Touch Panel"))
   #endif
      .tag(2).font(Theme::font_medium).text(  BTN_POS(1,3), BTN_SIZE(4,1), F("(C) 2018 Aleph Objects, Inc."))
                                      .text(  BTN_POS(1,4), BTN_SIZE(4,1), F("www.lulzbot.com"))
@@ -363,6 +363,7 @@ void StatisticsScreen::onRedraw(draw_mode_t what) {
 
     cmd.cmd(CLEAR_COLOR_RGB(Theme::background))
        .cmd(CLEAR(true,true,true))
+       .tag(0)
 
        .font(Theme::font_medium)
        .text(BTN_POS(1,1), BTN_SIZE(4,1), F("Printer Statistics"))
@@ -408,7 +409,8 @@ void DialogBoxBaseClass::drawMessage(const progmem_str line1, const progmem_str 
   CommandProcessor cmd;
   cmd.cmd(CMD_DLSTART)
      .cmd(CLEAR_COLOR_RGB(Theme::background))
-     .cmd(CLEAR(true,true,true));
+     .cmd(CLEAR(true,true,true))
+     .tag(0);
   cmd.font(font ? font : Theme::font_large);
   for(uint8_t line = 0; line < n_lines; line++) {
     cmd.text  ( BTN_POS(1,3-n_lines/2+line), BTN_SIZE(2,1), lines[line]);
@@ -602,7 +604,8 @@ void KillScreen::show(progmem_str message) {
 
   cmd.cmd(CMD_DLSTART)
      .cmd(CLEAR_COLOR_RGB(Theme::background))
-     .cmd(CLEAR(true,true,true));
+     .cmd(CLEAR(true,true,true))
+     .tag(0);
 
   #define GRID_COLS 4
   #define GRID_ROWS 8
@@ -1396,6 +1399,7 @@ void ChangeFilamentScreen::onRedraw(draw_mode_t what) {
   if(what & BACKGROUND) {
     cmd.cmd(CLEAR_COLOR_RGB(Theme::background))
        .cmd(CLEAR(true,true,true))
+       .tag(0)
     #if defined(USE_PORTRAIT_ORIENTATION)
        .font(Theme::font_large)
     #else
@@ -1499,7 +1503,7 @@ void ChangeFilamentScreen::onRedraw(draw_mode_t what) {
     .cmd(COLOR_RGB(t_ok ? Theme::text_enabled : Theme::text_disabled))
     #if defined(USE_PORTRAIT_ORIENTATION)
        .font(Theme::font_large)
-                                              .text   (BTN_POS(1,8),  BTN_SIZE(1,1), F("Unload"))
+       .tag(0)                                .text   (BTN_POS(1,8),  BTN_SIZE(1,1), F("Unload"))
                                               .text   (BTN_POS(2,8),  BTN_SIZE(1,1), F("Load/Extrude"))
        .tag(5)                  .enabled(t_ok).button (BTN_POS(1,9),  BTN_SIZE(1,1), F("Momentary"))
        .tag(6)                  .enabled(t_ok).button (BTN_POS(2,9),  BTN_SIZE(1,1), F("Momentary"))
@@ -1508,7 +1512,7 @@ void ChangeFilamentScreen::onRedraw(draw_mode_t what) {
        .tag(1).style(STYLE_LIGHT_BTN)         .button (BTN_POS(1,11), BTN_SIZE(2,1), F("Back"));
     #else
        .font(Theme::font_small)
-                                              .text   (BTN_POS(3,3), BTN_SIZE(1,1), F("Unload"))
+       .tag(0)                                .text   (BTN_POS(3,3), BTN_SIZE(1,1), F("Unload"))
                                               .text   (BTN_POS(4,3), BTN_SIZE(1,1), F("Load/Extrude"))
        .tag(5)                  .enabled(t_ok).button (BTN_POS(3,4), BTN_SIZE(1,1), F("Momentary"))
        .tag(6)                  .enabled(t_ok).button (BTN_POS(4,4), BTN_SIZE(1,1), F("Momentary"))
@@ -2736,6 +2740,7 @@ void InterfaceSettingsScreen::onRedraw(draw_mode_t what) {
   if(what & BACKGROUND) {
     cmd.cmd(CLEAR_COLOR_RGB(Theme::background))
        .cmd(CLEAR(true,true,true))
+       .tag(0)
 
     #define GRID_COLS 4
     #if defined(USE_PORTRAIT_ORIENTATION)
@@ -3049,6 +3054,7 @@ void InterfaceSoundsScreen::onRedraw(draw_mode_t what) {
   if(what & BACKGROUND) {
     cmd.cmd(CLEAR_COLOR_RGB(Theme::background))
        .cmd(CLEAR(true,true,true))
+       .tag(0)
 
     #define GRID_COLS 4
     #define GRID_ROWS 9
@@ -3152,7 +3158,8 @@ void LockScreen::onRedraw(draw_mode_t what) {
 
   if(what & BACKGROUND) {
     cmd.cmd(CLEAR_COLOR_RGB(Theme::background))
-       .cmd(CLEAR(true,true,true));
+       .cmd(CLEAR(true,true,true))
+       .tag(0);
   }
 
   if(what & FOREGROUND) {
@@ -3517,7 +3524,8 @@ bool FilesScreen::onTouchEnd(uint8_t tag) {
       CommandProcessor cmd;
       cmd.cmd(CLEAR_COLOR_RGB(Theme::background))
          .cmd(CLEAR(true,true,true))
-         .font(Theme::font_medium);
+         .font(Theme::font_medium)
+         .tag(0);
 
       default_button_colors();
 
@@ -3646,7 +3654,8 @@ bool FilesScreen::onTouchEnd(uint8_t tag) {
     using namespace ExtUI;
     CommandProcessor cmd;
     cmd.cmd(CLEAR_COLOR_RGB(Theme::background))
-       .cmd(CLEAR(true,true,true));
+       .cmd(CLEAR(true,true,true))
+       .tag(0);
 
     cmd.bgcolor(Theme::theme_dark);
 
@@ -3765,7 +3774,8 @@ bool FilesScreen::onTouchEnd(uint8_t tag) {
 
     CommandProcessor cmd;
     cmd.cmd(CLEAR_COLOR_RGB(Theme::background))
-       .cmd(CLEAR(true,true,true));
+       .cmd(CLEAR(true,true,true))
+       .tag(0);
 
     #define GRID_ROWS 7
     #define GRID_COLS 2
@@ -3827,7 +3837,8 @@ bool FilesScreen::onTouchEnd(uint8_t tag) {
   void DiagnosticsScreen::onRedraw(draw_mode_t what) {
     CommandProcessor cmd;
     cmd.cmd(CLEAR_COLOR_RGB(Theme::background))
-       .cmd(CLEAR(true,true,true));
+       .cmd(CLEAR(true,true,true))
+       .tag(0);
 
     #define GRID_ROWS 5
     #define GRID_COLS 3

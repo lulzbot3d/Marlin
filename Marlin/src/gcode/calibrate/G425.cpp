@@ -262,7 +262,9 @@ static void calibrate_all() {
   #endif
 
   // Cycle the toolheads so the servos settle into their "natural" positions
-  HOTEND_LOOP() set_nozzle(m, e);
+  #if HOTENDS > 1
+    HOTEND_LOOP() set_nozzle(m, e);
+  #endif
 
   // Do a slow and precise calibration of the toolheads
   calibrate_all_toolheads(m, CALIBRATION_MEASUREMENT_UNCERTAIN);
@@ -351,7 +353,9 @@ static void calibrate_toolhead(measurements_t &m, float confidence, uint8_t extr
 
   const bool fast = confidence == CALIBRATION_MEASUREMENT_UNKNOWN;
 
-  set_nozzle(m, extruder);
+  #if HOTENDS > 1
+    set_nozzle(m, extruder);
+  #endif
 
   ui.set_status_P(fast ? PSTR("Finding calibration cube") : PSTR("Centering nozzle"));
   probe_cube(m, confidence);

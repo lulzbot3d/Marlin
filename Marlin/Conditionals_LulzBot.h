@@ -314,10 +314,13 @@
 #if defined(LULZBOT_MASK_VERSION)
     #undef  LULZBOT_FW_VERSION
     #define LULZBOT_FW_VERSION ".xx"
+    #define LULZBOT_STRING_DISTRIBUTION_DATE __DATE__ __TIME__
+#else
+    #define LULZBOT_STRING_DISTRIBUTION_DATE ""
 #endif
 
 #define LULZBOT_DETAILED_BUILD_VERSION " FIRMWARE_VERSION:" SHORT_BUILD_VERSION LULZBOT_FW_VERSION " EXTRUDER_TYPE:" LULZBOT_M115_EXTRUDER_TYPE
-#define LULZBOT_STRING_DISTRIBUTION_DATE __DATE__ __TIME__
+
 #define LULZBOT_SOURCE_CODE_URL "https://code.alephobjects.com/diffusion/MARLIN"
 
 /******************** MOTHERBOARD AND PIN CONFIGURATION ***********************/
@@ -648,16 +651,6 @@
     #define LULZBOT_MENU_AXIS_LEVELING_COMMANDS \
         "M117 Leveling X Axis\n" /* Set LCD status */ \
         "G28 Z0\n"               /* Home Axis */ \
-        "M400\n"                 /* Finish moves */ \
-        "M121\n"                 /* Turn off hardware endstops */ \
-        "M211 S0\n"              /* Turn off soft endstops */ \
-        "M906 Z800\n"            /* Lower current to 800mA */ \
-        "G1 Z312 F250\n"         /* Skip steppers on top */ \
-        "M400\n"                 /* Finish moves */ \
-        "M906 Z960\n"            /* Restore current to 960mA */ \
-        "M211 S1\n"              /* Turn on soft endstops */ \
-        "M120\n"                 /* Turn on hardware endstops */ \
-        "G28 Z0\n"               /* Rehome */ \
         "M117 Leveling done.\n"  /* Set LCD status */
 #endif
 

@@ -121,11 +121,12 @@
     if (parser.seen('V')) {
       ui.set_status_P(PSTR("Measuring nozzle center"));
       probe_cube(m, uncertainty);
+      SERIAL_EOL();
       report_measured_faces(m);
       report_measured_center(m);
       report_measured_backlash(m);
-      report_measured_positional_error(m);
       report_measured_nozzle_dimensions(m);
+      report_measured_positional_error(m);
       #if HOTENDS > 1
         normalize_hotend_offsets();
         report_hotend_offsets();
@@ -448,7 +449,7 @@
   }
 
   static void report_measured_positional_error(const measurements_t &m) {
-    SERIAL_ECHOLNPAIR(  "T", active_extruder);
+    SERIAL_ECHOPAIR(  "T", active_extruder);
     SERIAL_ECHOLNPGM(" Positional Error:");
     #if HAS_X_CENTER
       SERIAL_ECHOLNPAIR("  X: ", m.pos_error[X_AXIS]);
@@ -488,12 +489,12 @@
   #endif
 
   static void report_measured_nozzle_dimensions(const measurements_t &m) {
-    SERIAL_ECHOLNPGM("Nozzle Dimensions:");
+    SERIAL_ECHOLNPGM("Nozzle Tip Outer Dimensions:");
     #if HAS_X_CENTER
-      SERIAL_ECHOLNPAIR("  Width: ", m.nozzle_outer_dimension[X_AXIS]);
+      SERIAL_ECHOLNPAIR("  X: ", m.nozzle_outer_dimension[X_AXIS]);
     #endif
     #if HAS_Y_CENTER
-      SERIAL_ECHOLNPAIR("  Depth: ", m.nozzle_outer_dimension[Y_AXIS]);
+      SERIAL_ECHOLNPAIR("  Y: ", m.nozzle_outer_dimension[Y_AXIS]);
     #endif
     SERIAL_EOL();
   }

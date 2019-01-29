@@ -945,22 +945,22 @@
 #define G29_RETRY_AND_RECOVER LULZBOT_G29_RETRY_AND_RECOVER
 #if ENABLED(G29_RETRY_AND_RECOVER)
   #define G29_MAX_RETRIES     LULZBOT_G29_MAX_RETRIES
-  #define G29_HALT_ON_FAILURE LULZBOT_G29_HALT_ON_FAILURE
+  #define PROBE_HALT_ON_FAILURE LULZBOT_PROBE_HALT_ON_FAILURE
   /**
    * Specify the GCODE commands that will be executed when leveling succeeds,
    * between attempts, and after the maximum number of retries have been tried.
    */
-  #define G29_SUCCESS_COMMANDS LULZBOT_G29_SUCCESS_COMMANDS
-  #define G29_RECOVER_COMMANDS LULZBOT_G29_RECOVER_COMMANDS
-  #define G29_FAILURE_COMMANDS LULZBOT_G29_FAILURE_COMMANDS
+  #define PROBE_SUCCESS_COMMANDS LULZBOT_PROBE_SUCCESS_COMMANDS
+  #define PROBE_RECOVER_COMMANDS LULZBOT_PROBE_RECOVER_COMMANDS
+  #define PROBE_FAILURE_COMMANDS LULZBOT_PROBE_FAILURE_COMMANDS
 
   /**
    * Specify an action command to send to the host on a recovery attempt or failure.
    * Will be sent in the form '//action:ACTION_ON_G29_FAILURE', e.g. '//action:probe_failed'.
    * The host must be configured to handle the action command.
    */
-  #define G29_ACTION_ON_RECOVER "probe_rewipe"
-  #define G29_ACTION_ON_FAILURE "probe_failed"
+  #define ACTION_ON_PROBE_RECOVER "probe_rewipe"
+  #define ACTION_ON_PROBE_FAILURE "probe_failed"
 #endif
 
 // @section extras
@@ -1951,11 +1951,24 @@
  * Specify an action command to send to the host on pause and resume.
  * Will be sent in the form '//action:ACTION_ON_PAUSE', e.g. '//action:pause'.
  * The host must be configured to handle the action command.
+ *
+ *   PAUSE / RESUME : Used in non-parking scenarios where the host handles the
+ *                    action while Marlin continues to process G-Code. (M24/M25)
+ *
+ * PAUSED / RESUMED : Used in scenarios where Marlin handles pause and filament-
+ *                    change actions and the host needs to stop sending commands
+ *                    until the machine is ready to resume. (M125/M600)
+ *
+ *           CANCEL : Instructs the host to abort the print job. Used when the
+ *                    print is canceled from the LCD menu.
  */
 #if defined(LULZBOT_ACTION_ON_PAUSE_AND_RESUME)
-#define ACTION_ON_PAUSE "pause"
-#define ACTION_ON_RESUME "resume"
+#define ACTION_ON_PAUSE   "pause"
+#define ACTION_ON_RESUME  "resume"
 #endif
+//#define ACTION_ON_PAUSED  "paused"
+//#define ACTION_ON_RESUMED "resumed"
+//#define ACTION_ON_CANCEL  "cancel"
 
 //===========================================================================
 //====================== I2C Position Encoder Settings ======================

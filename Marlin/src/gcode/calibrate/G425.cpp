@@ -65,7 +65,7 @@
   enum side_t : uint8_t {TOP, RIGHT, FRONT, LEFT, BACK, NUM_SIDES};
 
   struct measurements_t {
-    static constexpr float dimensions[XYZ]  = CALIBRATION_CUBE_DIMENSIONS;
+    static const float dimensions[XYZ];
     static constexpr float true_center[XYZ] = CALIBRATION_CUBE_CENTER;
     float cube_center[XYZ] = CALIBRATION_CUBE_CENTER;
     float cube_side[NUM_SIDES];
@@ -75,6 +75,8 @@
 
     float nozzle_outer_dimension[2] = {CALIBRATION_NOZZLE_OUTER_DIAMETER, CALIBRATION_NOZZLE_OUTER_DIAMETER};
   };
+
+  const float measurements_t::dimensions[]  = CALIBRATION_CUBE_DIMENSIONS;
 
   static void calibrate_all();
   static void calibrate_backlash(measurements_t &m, float uncertainty);
@@ -620,7 +622,7 @@
     #if HAS_Y_CENTER
       m.true_center[Y_AXIS] - m.cube_center[Y_AXIS];
     #else
-      0
+      0;
     #endif
     m.pos_error[Z_AXIS] = m.true_center[Z_AXIS] - m.cube_center[Z_AXIS];
   }

@@ -97,13 +97,21 @@ class TFilamentMonitor : public FilamentMonitorBase {
           #if ENABLED(EXTENSIBLE_UI)
             ExtUI::onFilamentRunout(ExtUI::getActiveTool());
           #endif
-          #ifdef LULZBOT_ACTION_ON_FILAMENT_RUNOUT
-            SERIAL_ECHOLNPAIR("//action:" LULZBOT_ACTION_ON_FILAMENT_RUNOUT " ", active_extruder);
-            if(!IS_SD_PRINTING())
+          #ifdef ACTION_ON_FILAMENT_RUNOUT
+            #if NUM_RUNOUT_SENSORS > 1
+              host_action_filament_runout(false);
+              SERIAL_CHAR(' ');
+              SERIAL_ECHOLN(int(active_extruder));
+            #else
+              host_action_filament_runout();
+            #endif
+            if (!IS_SD_PRINTING())
               reset();
             else
           #endif
-          enqueue_and_echo_commands_P(PSTR(FILAMENT_RUNOUT_SCRIPT));
+            {
+              enqueue_and_echo_commands_P(PSTR(FILAMENT_RUNOUT_SCRIPT));
+            }
           planner.synchronize();
         }
       }

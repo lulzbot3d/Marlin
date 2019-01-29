@@ -1446,14 +1446,13 @@ void ChangeFilamentScreen::onRedraw(draw_mode_t what) {
 
     const bool t_ok = getActualTemp_celsius(getExtruder()) > getSoftenTemp() - 10;
 
-    if(screen_data.ChangeFilamentScreen.t_tag) {
-      if(t_ok) {
-        cmd.cmd(COLOR_RGB(0xFF0000)).text(BTN_POS(1,4), BTN_SIZE(1,1), F("Caution:"));
-        default_button_colors();
-        cmd.text(BTN_POS(1,6), BTN_SIZE(1,1), F("Hot!"));
-      } else {
-        cmd.text(BTN_POS(1,6), BTN_SIZE(1,1), F("Heating..."));
-      }
+    if(screen_data.ChangeFilamentScreen.t_tag && !t_ok) {
+      cmd.text(BTN_POS(1,6), BTN_SIZE(1,1), F("Heating..."));
+    } else if(getActualTemp_celsius(getExtruder()) > 100) {
+      cmd.cmd(COLOR_RGB(0xFF0000))
+         .text(BTN_POS(1,4), BTN_SIZE(1,1), F("Caution:"));
+      default_button_colors();
+      cmd.text(BTN_POS(1,6), BTN_SIZE(1,1), F("Hot!"));
     }
 
     const uint32_t tog2  = screen_data.ChangeFilamentScreen.t_tag == 2  ? STYLE_LIGHT_BTN : 0;

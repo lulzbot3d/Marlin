@@ -4046,12 +4046,14 @@ namespace ExtUI {
   }
 
   void onMediaInserted() {
-    StatusScreen::setStatusMessage(F(MSG_SD_INSERTED));
+    if(AT_SCREEN(StatusScreen))
+      StatusScreen::setStatusMessage(F(MSG_SD_INSERTED));
     sound.play(media_inserted, PLAY_ASYNCHRONOUS);
   }
 
   void onMediaRemoved() {
-    StatusScreen::setStatusMessage(F(MSG_SD_REMOVED));
+    if(AT_SCREEN(StatusScreen))
+      StatusScreen::setStatusMessage(F(MSG_SD_REMOVED));
     sound.play(media_removed, PLAY_ASYNCHRONOUS);
     if(AT_SCREEN(FilesScreen)) {
       GOTO_SCREEN(StatusScreen)

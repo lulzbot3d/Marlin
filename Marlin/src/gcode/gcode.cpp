@@ -132,8 +132,8 @@ void GcodeSuite::dwell(millis_t time) {
     #endif
     while (G29()) { // G29 should return true for failed probes ONLY
       if (retries--) {
-        #ifdef G29_ACTION_ON_RECOVER
-          host_action(PSTR(G29_ACTION_ON_RECOVER));
+        #ifdef ACTION_ON_G29_RECOVER
+          host_action_probe_recover();
         #endif
         #ifdef G29_RECOVER_COMMANDS
           process_subcommands_now_P(PSTR(G29_RECOVER_COMMANDS));
@@ -146,8 +146,8 @@ void GcodeSuite::dwell(millis_t time) {
         #ifdef G29_FAILURE_COMMANDS
           process_subcommands_now_P(PSTR(G29_FAILURE_COMMANDS));
         #endif
-        #ifdef G29_ACTION_ON_FAILURE
-          host_action(PSTR(G29_ACTION_ON_FAILURE));
+        #ifdef ACTION_ON_G29_FAILURE
+          host_action_probe_failure();
         #endif
         #if ENABLED(G29_HALT_ON_FAILURE)
           kill(PSTR(MSG_ERR_PROBING_FAILED));

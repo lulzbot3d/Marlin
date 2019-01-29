@@ -945,22 +945,22 @@
 #define G29_RETRY_AND_RECOVER LULZBOT_G29_RETRY_AND_RECOVER
 #if ENABLED(G29_RETRY_AND_RECOVER)
   #define G29_MAX_RETRIES     LULZBOT_G29_MAX_RETRIES
-  #define PROBE_HALT_ON_FAILURE LULZBOT_PROBE_HALT_ON_FAILURE
+  #define G29_HALT_ON_FAILURE LULZBOT_G29_HALT_ON_FAILURE
   /**
    * Specify the GCODE commands that will be executed when leveling succeeds,
    * between attempts, and after the maximum number of retries have been tried.
    */
-  #define PROBE_SUCCESS_COMMANDS LULZBOT_PROBE_SUCCESS_COMMANDS
-  #define PROBE_RECOVER_COMMANDS LULZBOT_PROBE_RECOVER_COMMANDS
-  #define PROBE_FAILURE_COMMANDS LULZBOT_PROBE_FAILURE_COMMANDS
+  #define G29_SUCCESS_COMMANDS LULZBOT_G29_SUCCESS_COMMANDS
+  #define G29_RECOVER_COMMANDS LULZBOT_G29_RECOVER_COMMANDS
+  #define G29_FAILURE_COMMANDS LULZBOT_G29_FAILURE_COMMANDS
 
   /**
    * Specify an action command to send to the host on a recovery attempt or failure.
    * Will be sent in the form '//action:ACTION_ON_G29_FAILURE', e.g. '//action:probe_failed'.
    * The host must be configured to handle the action command.
    */
-  #define ACTION_ON_PROBE_RECOVER "probe_rewipe"
-  #define ACTION_ON_PROBE_FAILURE "probe_failed"
+  #define ACTION_ON_G29_RECOVER "probe_rewipe"
+  #define ACTION_ON_G29_FAILURE "probe_failed"
 #endif
 
 // @section extras

@@ -2096,9 +2096,10 @@
     #if LULZBOT_EXTRUDERS > 1
         #define LULZBOT_BABYSTEP_HOTEND_Z_OFFSET
     #endif
-    #if defined(LULZBOT_USE_ARCHIM2)
-        #define LULZBOT_BABYSTEP_IN_PLANNER
-    #endif
+    // Commented out workaround to see if MINIMUM_STEPPER_PULSE is an effective fix
+    //#if defined(LULZBOT_USE_ARCHIM2)
+    //    #define LULZBOT_BABYSTEP_IN_PLANNER
+    //#endif
 #endif
 
 /***************************** CUSTOM SPLASH SCREEN *****************************/

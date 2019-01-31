@@ -3590,6 +3590,7 @@ bool FilesScreen::onTouchEnd(uint8_t tag) {
         SpinnerScreen::show(F("Saving..."));
         UIFlashStorage::error_t res = UIFlashStorage::write_media_file(F("STARTUP.AVI"));
         SpinnerScreen::hide();
+        reset_menu_timeout();
         switch(res) {
           case UIFlashStorage::SUCCESS:         AlertBoxScreen::show(     F("File copied!")); break;
           case UIFlashStorage::READ_ERROR:      AlertBoxScreen::showError(F("Failed to read file")); break;

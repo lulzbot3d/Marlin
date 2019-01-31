@@ -61,7 +61,8 @@ void lcd_pause() {
 void lcd_resume() {
   #if ENABLED(SDSUPPORT)
     if (card.isPaused()) enqueue_and_echo_commands_P(PSTR("M24"));
-  #elif defined(ACTION_ON_RESUME)
+  #endif
+  #ifdef ACTION_ON_RESUME
     host_action_resume();
   #endif
 }
@@ -136,9 +137,6 @@ void menu_main() {
     MENU_ITEM(function, MSG_PAUSE_PRINT, lcd_pause);
     #if ENABLED(SDSUPPORT) || defined(ACTION_ON_CANCEL)
       MENU_ITEM(submenu, MSG_STOP_PRINT, menu_abort_confirm);
-    #endif
-    #if !defined(ACTION_ON_RESUME) && ENABLED(SDSUPPORT)
-      if (card.isFileOpen())
     #endif
     MENU_ITEM(submenu, MSG_TUNE, menu_tune);
   }

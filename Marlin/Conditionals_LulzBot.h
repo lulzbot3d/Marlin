@@ -1362,8 +1362,8 @@
 
 // Enable linear advance, but leave K at zero so
 // it is not used unless the user requests it.
-//#define LULZBOT_LIN_ADVANCE
-//#define LULZBOT_LIN_ADVANCE_K 0.0
+#define LULZBOT_LIN_ADVANCE
+#define LULZBOT_LIN_ADVANCE_K 0.0
 
 #define LULZBOT_NO_VOLUMETRICS
 
@@ -1386,6 +1386,19 @@
     #define LULZBOT_DRIVER_TYPE  TMC2130
 #else
     #define LULZBOT_DRIVER_TYPE  A4988
+#endif
+
+/* Workaround for E stepper not working on Archim 2.0
+ *   https://github.com/MarlinFirmware/Marlin/issues/13040
+ */
+#if defined(LULZBOT_USE_EINSY_RETRO)
+    // On AVR, it is okay to use the default (0) for TRINAMICS
+    #define LULZBOT_MINIMUM_STEPPER_PULSE 0
+#else
+    // For the Archim, setting this to the default (0) for TRINAMICS causes
+    // the E stepper not to advance when LIN_ADVANCE is enabled, so force
+    // the stepper pulse to 1 to match the other drivers.
+    #define LULZBOT_MINIMUM_STEPPER_PULSE  1
 #endif
 
 #define LULZBOT_X_DRIVER_TYPE  LULZBOT_DRIVER_TYPE

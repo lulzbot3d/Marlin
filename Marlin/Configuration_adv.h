@@ -1014,7 +1014,7 @@
  *
  * Override the default value based on the driver type set in Configuration.h.
  */
-//#define MINIMUM_STEPPER_PULSE 2
+#define MINIMUM_STEPPER_PULSE LULZBOT_MINIMUM_STEPPER_PULSE
 
 /**
  * Maximum stepping rate (in Hz) the stepper driver allows

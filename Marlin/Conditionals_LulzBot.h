@@ -319,7 +319,7 @@
     #define LULZBOT_STRING_DISTRIBUTION_DATE ""
 #endif
 
-#define LULZBOT_DETAILED_BUILD_VERSION " FIRMWARE_VERSION:" SHORT_BUILD_VERSION LULZBOT_FW_VERSION " EXTRUDER_TYPE:" LULZBOT_M115_EXTRUDER_TYPE
+#define LULZBOT_DETAILED_BUILD_VERSION " FIRMWARE_VERSION:" SHORT_BUILD_VERSION " EXTRUDER_TYPE:" LULZBOT_M115_EXTRUDER_TYPE
 
 #define LULZBOT_SOURCE_CODE_URL "https://code.alephobjects.com/diffusion/MARLIN"
 
@@ -2117,7 +2117,7 @@
             u8g.drawStr(59,41,"LulzBot.com"); \
             u8g.setFont(u8g_font_5x8); \
             u8g.drawStr(61,62,"v"); \
-            u8g.drawStr(66,62,SHORT_BUILD_VERSION LULZBOT_FW_VERSION); \
+            u8g.drawStr(66,62,SHORT_BUILD_VERSION); \
         } while( u8g.nextPage() ); \
         safe_delay(CUSTOM_BOOTSCREEN_TIMEOUT); \
         u8g.setFont(MENU_FONT_NAME); \

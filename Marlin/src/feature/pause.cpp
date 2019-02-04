@@ -38,11 +38,11 @@
 #include "../module/temperature.h"
 
 #if ENABLED(FWRETRACT)
-  #include "../feature/fwretract.h"
+  #include "fwretract.h"
 #endif
 
 #if ENABLED(FILAMENT_RUNOUT_SENSOR)
-  #include "../feature/runout.h"
+  #include "runout.h"
 #endif
 
 #include "../lcd/ultralcd.h"
@@ -232,11 +232,9 @@ bool load_filament(const float &slow_load_length/*=0*/, const float &fast_load_l
       #endif
 
       // Keep looping if "Purge More" was selected
-    } while (
+    } while (false
       #if HAS_LCD_MENU
-        show_lcd && advanced_pause_menu_response == ADVANCED_PAUSE_RESPONSE_EXTRUDE_MORE
-      #else
-        0
+        && show_lcd && advanced_pause_menu_response == ADVANCED_PAUSE_RESPONSE_EXTRUDE_MORE
       #endif
     );
 
@@ -527,11 +525,11 @@ void wait_for_confirmation(const bool is_reload/*=false*/, const int8_t max_beep
  */
 void resume_print(const float &slow_load_length/*=0*/, const float &fast_load_length/*=0*/, const float &purge_length/*=ADVANCED_PAUSE_PURGE_LENGTH*/, const int8_t max_beep_count/*=0*/ DXC_ARGS) {
   /*
-  SERIAL_ECHOPGM("start of resume_print()\n");
+  SERIAL_ECHOLNPGM("start of resume_print()");
   SERIAL_ECHOPAIR("\ndual_x_carriage_mode:", dual_x_carriage_mode);
   SERIAL_ECHOPAIR("\nextruder_duplication_enabled:", extruder_duplication_enabled);
   SERIAL_ECHOPAIR("\nactive_extruder:", active_extruder);
-  SERIAL_ECHOPGM("\n\n");
+  SERIAL_ECHOLNPGM("\n");
   //*/
 
   if (!did_pause_print) return;

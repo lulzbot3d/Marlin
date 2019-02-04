@@ -426,6 +426,7 @@
 #define HOTEND_LOOP() for (int8_t e = 0; e < HOTENDS; e++)
 
 #define DO_SWITCH_EXTRUDER (ENABLED(SWITCHING_EXTRUDER) && (DISABLED(SWITCHING_NOZZLE) || SWITCHING_EXTRUDER_SERVO_NR != SWITCHING_NOZZLE_SERVO_NR))
+#define SWITCHING_NOZZLE_TWO_SERVOS defined(SWITCHING_NOZZLE_E1_SERVO_NR)
 
 #define HAS_HOTEND_OFFSET (HOTENDS > 1)
 
@@ -534,3 +535,16 @@
 #define IS_CARTESIAN !IS_KINEMATIC
 
 #define HAS_ACTION_COMMANDS (defined(ACTION_ON_KILL) || defined(ACTION_ON_PAUSE) || defined(ACTION_ON_PAUSED) || defined(ACTION_ON_RESUME) || defined(ACTION_ON_RESUMED) || defined(ACTION_ON_CANCEL) || defined(ACTION_ON_G29_RECOVER) || defined(ACTION_ON_G29_FAILURE) || defined(ACTION_ON_FILAMENT_RUNOUT))
+
+#ifndef INVERT_X_DIR
+  #define INVERT_X_DIR false
+#endif
+#ifndef INVERT_Y_DIR
+  #define INVERT_Y_DIR false
+#endif
+#ifndef INVERT_Z_DIR
+  #define INVERT_Z_DIR false
+#endif
+#ifndef INVERT_E_DIR
+  #define INVERT_E_DIR false
+#endif

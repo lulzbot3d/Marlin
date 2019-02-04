@@ -47,7 +47,7 @@
 #endif
 
 #if ENABLED(SWITCHING_EXTRUDER) || ENABLED(SWITCHING_NOZZLE) || ENABLED(SWITCHING_TOOLHEAD)
-  #include "../module/servo.h"
+  #include "servo.h"
 #endif
 
 #if ENABLED(EXT_SOLENOID) && DISABLED(PARKING_EXTRUDER)
@@ -114,11 +114,30 @@
 #endif
 
 #if ENABLED(SWITCHING_NOZZLE)
-  void move_nozzle_servo(const uint8_t e) {
-    planner.synchronize();
-    MOVE_SERVO(SWITCHING_NOZZLE_SERVO_NR, servo_angles[SWITCHING_NOZZLE_SERVO_NR][e]);
-    safe_delay(500);
-  }
+
+  #if SWITCHING_NOZZLE_TWO_SERVOS
+
+    inline void _move_nozzle_servo(const uint8_t e, const uint8_t angle_index) {
+      constexpr int8_t  sns_index[2] = { SWITCHING_NOZZLE_SERVO_NR, SWITCHING_NOZZLE_E1_SERVO_NR };
+      constexpr int16_t sns_angles[2] = SWITCHING_NOZZLE_SERVO_ANGLES;
+      planner.synchronize();
+      MOVE_SERVO(sns_index[e], sns_angles[angle_index]);
+      safe_delay(500);
+    }
+
+    void lower_nozzle(const uint8_t e) { _move_nozzle_servo(e, 0); }
+    void raise_nozzle(const uint8_t e) { _move_nozzle_servo(e, 1); }
+
+  #else
+
+    void move_nozzle_servo(const uint8_t angle_index) {
+      planner.synchronize();
+      MOVE_SERVO(SWITCHING_NOZZLE_SERVO_NR, servo_angles[SWITCHING_NOZZLE_SERVO_NR][e]);
+      safe_delay(500);
+    }
+
+  #endif
+
 #endif // SWITCHING_NOZZLE
 
 #if ENABLED(PARKING_EXTRUDER)
@@ -521,9 +540,9 @@ void tool_change(const uint8_t tmp_extruder, const float fr_mm_s/*=0.0*/, bool n
     if (tmp_extruder >= MIXING_VIRTUAL_TOOLS)
       return invalid_extruder_error(tmp_extruder);
 
-    #if MIXING_VIRTUAL_TOOLS >  1
+    #if MIXING_VIRTUAL_TOOLS > 1
       // T0-Tnnn: Switch virtual tool by changing the index to the mix
-      mixer.T(uint_fast8_t(tmp_extruder));
+      mixer.T(tmp_extruder);
     #endif
 
   #elif ENABLED(PRUSA_MMU2)
@@ -531,7 +550,6 @@ void tool_change(const uint8_t tmp_extruder, const float fr_mm_s/*=0.0*/, bool n
     UNUSED(fr_mm_s); UNUSED(no_move);
 
     mmu2.toolChange(tmp_extruder);
-
 
   #elif EXTRUDERS < 2
 
@@ -601,7 +619,7 @@ void tool_change(const uint8_t tmp_extruder, const float fr_mm_s/*=0.0*/, bool n
 
     if (tmp_extruder != active_extruder) {
 
-      #if ENABLED(LULZBOT_SWITCHING_NOZZLE_OPPOSING_SERVOS)
+      #if SWITCHING_NOZZLE_TWO_SERVOS
         raise_nozzle(active_extruder);
       #endif
 
@@ -663,8 +681,9 @@ void tool_change(const uint8_t tmp_extruder, const float fr_mm_s/*=0.0*/, bool n
         parking_extruder_tool_change(tmp_extruder, no_move);
       #elif ENABLED(SWITCHING_TOOLHEAD) // Switching Toolhead
         switching_toolhead_tool_change(tmp_extruder, fr_mm_s, no_move);
-      #elif ENABLED(SWITCHING_NOZZLE) && !defined(LULZBOT_SWITCHING_NOZZLE_NO_Z_LIFT)
-        // Always raise by a configured distance to avoid workpiece
+      #elif ENABLED(SWITCHING_NOZZLE) && !SWITCHING_NOZZLE_TWO_SERVOS
+        // Raise by a configured distance to avoid workpiece, except with
+        // SWITCHING_NOZZLE_TWO_SERVOS, as both nozzles will lift instead.
         current_position[Z_AXIS] += MAX(-zdiff, 0.0) + toolchange_settings.z_raise;
         #if HAS_SOFTWARE_ENDSTOPS
           NOMORE(current_position[Z_AXIS], soft_endstop_max[Z_AXIS]);
@@ -754,6 +773,10 @@ void tool_change(const uint8_t tmp_extruder, const float fr_mm_s/*=0.0*/, bool n
       #endif
       #if ENABLED(PRUSA_MMU2)
         mmu2.toolChange(tmp_extruder);
+      #endif
+
+      #if SWITCHING_NOZZLE_TWO_SERVOS
+        lower_nozzle(active_extruder);
       #endif
     } // (tmp_extruder != active_extruder)
 

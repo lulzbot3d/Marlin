@@ -974,12 +974,15 @@ void setup() {
     move_extruder_servo(0);   // Initialize extruder servo
   #endif
 
-  #if ENABLED(LULZBOT_SWITCHING_NOZZLE_OPPOSING_SERVOS)
-    GcodeSuite::process_subcommands_now_P("G28 Z");
-    lower_nozzle(0);
-    raise_nozzle(1);
-  #elif ENABLED(SWITCHING_NOZZLE)
-    move_nozzle_servo(0);     // Initialize nozzle servo
+  #if ENABLED(SWITCHING_NOZZLE)
+    // Initialize nozzle servo(s)
+    #if SWITCHING_NOZZLE_TWO_SERVOS
+      GcodeSuite::process_subcommands_now_P("G28 Z");
+      lower_nozzle(0);
+      raise_nozzle(1);
+    #else
+      move_nozzle_servo(0);
+    #endif
   #endif
 
   #if ENABLED(PARKING_EXTRUDER)

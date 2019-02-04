@@ -226,7 +226,7 @@ class ConfirmAbortPrint : public DialogBoxBaseClass, public UncachedScreen {
     static bool onTouchEnd(uint8_t tag);
 };
 
-#if ENABLED(LULZBOT_CALIBRATION_GCODE)
+#if ENABLED(CALIBRATION_GCODE)
 class ConfirmAutoCalibration : public DialogBoxBaseClass, public UncachedScreen {
   public:
     static void onRedraw(draw_mode_t what);

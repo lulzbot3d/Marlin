@@ -94,7 +94,7 @@ SCREEN_TABLE {
   DECL_SCREEN(RestoreFailsafeScreen),
   DECL_SCREEN(SaveSettingsScreen),
   DECL_SCREEN(ConfirmAbortPrint),
-#if ENABLED(LULZBOT_CALIBRATION_GCODE)
+#if ENABLED(CALIBRATION_GCODE)
   DECL_SCREEN(ConfirmAutoCalibration),
 #endif
   DECL_SCREEN(SpinnerScreen),
@@ -551,7 +551,7 @@ bool ConfirmAbortPrint::onTouchEnd(uint8_t tag) {
 
 /**************** CONFIRM AUTO-CALIBRATION SCREEN *******************/
 
-#if ENABLED(LULZBOT_CALIBRATION_GCODE)
+#if ENABLED(CALIBRATION_GCODE)
 void ConfirmAutoCalibration::onRedraw(draw_mode_t what) {
   drawMessage(
     F("This process will adjust the"),
@@ -2241,7 +2241,7 @@ bool StepsScreen::onTouchHeld(uint8_t tag) {
     w.color(Theme::x_axis).adjuster(2,  PSTR("X:"), ExtUI::getNozzleOffset_mm(X, E1));
     w.color(Theme::y_axis).adjuster(4,  PSTR("Y:"), ExtUI::getNozzleOffset_mm(Y, E1));
     w.color(Theme::z_axis).adjuster(6,  PSTR("Z:"), ExtUI::getNozzleOffset_mm(Z, E1));
-    #if ENABLED(LULZBOT_CALIBRATION_GCODE)
+    #if ENABLED(CALIBRATION_GCODE)
     w.button(8, PSTR("Measure automatically"), !isPrinting());
     #endif
     w.increments();
@@ -2257,7 +2257,7 @@ bool StepsScreen::onTouchHeld(uint8_t tag) {
       case  5: UI_INCREMENT(NozzleOffset_mm, Y, E1); break;
       case  6: UI_DECREMENT(NozzleOffset_mm, Z, E1); break;
       case  7: UI_INCREMENT(NozzleOffset_mm, Z, E1); break;
-      #if ENABLED(LULZBOT_CALIBRATION_GCODE)
+      #if ENABLED(CALIBRATION_GCODE)
       case  8: GOTO_SCREEN(ConfirmAutoCalibration); return true;
       #endif
       default:
@@ -2369,7 +2369,7 @@ bool StepsScreen::onTouchHeld(uint8_t tag) {
     w.color(Theme::x_axis).adjuster(2,  PSTR("X:"), ExtUI::getAxisBacklash_mm(X));
     w.color(Theme::y_axis).adjuster(4,  PSTR("Y:"), ExtUI::getAxisBacklash_mm(Y));
     w.color(Theme::z_axis).adjuster(6,  PSTR("Z:"), ExtUI::getAxisBacklash_mm(Z));
-    #if ENABLED(LULZBOT_CALIBRATION_GCODE)
+    #if ENABLED(CALIBRATION_GCODE)
     w.button(12, PSTR("Measure automatically"));
     #endif
     w.color(Theme::other ).adjuster(8,  PSTR("Smoothing:"),  ExtUI::getBacklashSmoothing_mm());
@@ -2392,7 +2392,7 @@ bool StepsScreen::onTouchHeld(uint8_t tag) {
       case  9:  UI_INCREMENT(BacklashSmoothing_mm); break;
       case  10: UI_DECREMENT_BY(BacklashCorrection_percent, increment*100);  break;
       case  11: UI_INCREMENT_BY(BacklashCorrection_percent, increment*100);  break;
-      #if ENABLED(LULZBOT_CALIBRATION_GCODE)
+      #if ENABLED(CALIBRATION_GCODE)
       case  12:  GOTO_SCREEN(ConfirmAutoCalibration); return true;
       #endif
       default:

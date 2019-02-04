@@ -68,10 +68,6 @@ class Endstops {
       typedef uint8_t esbits_t;
     #endif
 
-    #if defined(LULZBOT_BACKOFF_AFTER_HOME)
-      static bool are_endstops_enabled_globally() {return enabled_globally;}
-    #endif
-
   private:
     static bool enabled, enabled_globally;
     static esbits_t live_state;
@@ -100,6 +96,8 @@ class Endstops {
         #endif
       );
     }
+
+    static inline bool global_enabled() { return enabled_globally; }
 
     /**
      * Periodic call to poll endstops if required. Called from temperature ISR

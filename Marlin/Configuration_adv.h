@@ -547,16 +547,28 @@
   #define CALIBRATION_NOZZLE_TIP_HEIGHT          1.0  // mm
   #define CALIBRATION_NOZZLE_OUTER_DIAMETER      2.0  // mm
 
+  // Uncomment the following to enable reporting (required for
+  // "G425 V", but takes up PROGMEM).
+  #define CALIBRATION_CUBE_REPORTING LULZBOT_CALIBRATION_CUBE_REPORTING
+
   // The true location and dimension the cube/bolt/washer on the bed.
-  #define CALIBRATION_CUBE_CENTER             { 264.0, -22.0,  -2.0} // mm
-  #define CALIBRATION_CUBE_DIMENSIONS         {  10.0,  10.0,  10.0} // mm
+  #define CALIBRATION_CUBE_CENTER LULZBOT_CALIBRATION_CUBE_CENTER // mm
+  #define CALIBRATION_CUBE_DIMENSIONS LULZBOT_CALIBRATION_CUBE_DIMENSIONS // mm
 
   // Comment out any sides which are unreachable by the probe. For best
   // auto-calibration results, all sides must be reachable.
-  #define CALIBRATION_CUBE_MEASURE_RIGHT
-  #define CALIBRATION_CUBE_MEASURE_FRONT
-  #define CALIBRATION_CUBE_MEASURE_LEFT
-  #define CALIBRATION_CUBE_MEASURE_BACK
+  #if defined(LULZBOT_CALIBRATION_CUBE_MEASURE_RIGHT)
+    #define CALIBRATION_CUBE_MEASURE_RIGHT
+  #endif
+  #if defined(LULZBOT_CALIBRATION_CUBE_MEASURE_FRONT)
+    #define CALIBRATION_CUBE_MEASURE_FRONT
+  #endif
+  #if defined(LULZBOT_CALIBRATION_CUBE_MEASURE_LEFT)
+    #define CALIBRATION_CUBE_MEASURE_LEFT
+  #endif
+  #if defined(LULZBOT_CALIBRATION_CUBE_MEASURE_BACK)
+    #define CALIBRATION_CUBE_MEASURE_BACK
+  #endif
 
   // Probing at the exact top center only works if the center is flat. If
   // probing on a screwhead or hollow washer, probe near the edges.

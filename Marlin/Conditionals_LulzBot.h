@@ -477,7 +477,7 @@
             constexpr int x = LULZBOT_BACKOFF_X_POS; \
             constexpr int y = LULZBOT_BACKOFF_Y_POS; \
             constexpr int z = LULZBOT_BACKOFF_Z_POS; \
-            const bool saved_endstop_state = Endstops::are_endstops_enabled_globally(); \
+            const bool saved_endstop_state = Endstops::global_enabled(); \
             Endstops::enable_globally(false); \
             do_blocking_move_to_z  ((home_all || homeZ) ? z : current_position[Z_AXIS], LULZBOT_BACKOFF_FEEDRATE); \
             do_blocking_move_to_xy ((home_all || homeX) ? x : current_position[X_AXIS], \
@@ -1000,46 +1000,46 @@
 
 #if defined(LULZBOT_IS_MINI)
     #if defined(LULZBOT_CALIBRATE_ON_FRONT_LEFT_WASHER)
-        #define CALIBRATION_CUBE_DIMENSIONS              {22.0,   22.0,  1.5} // mm
-        #define CALIBRATION_CUBE_CENTER                  {-8.9,   -7.6,  0}   // mm
-        #define CALIBRATION_CUBE_RIGHT_SIDE_MEASUREMENT
-        #define CALIBRATION_CUBE_BACK_SIDE_MEASUREMENT
+        #define LULZBOT_CALIBRATION_CUBE_DIMENSIONS              {22.0,   22.0,  1.5} // mm
+        #define LULZBOT_CALIBRATION_CUBE_CENTER                  {-8.9,   -7.6,  0}   // mm
+        #define LULZBOT_CALIBRATION_CUBE_MEASURE_RIGHT
+        #define LULZBOT_CALIBRATION_CUBE_MEASURE_BACK
         #define LULZBOT_CALIBRATION_GCODE
 
     #elif defined(LULZBOT_CALIBRATE_ON_FRONT_RIGHT_WASHER)
-        #define CALIBRATION_CUBE_DIMENSIONS              { 22.0,   22.0, 1.5} // mm
-        #define CALIBRATION_CUBE_CENTER                  {169.5,   -7.6, 0}   // mm
-        #define CALIBRATION_CUBE_LEFT_SIDE_MEASUREMENT
-        #define CALIBRATION_CUBE_BACK_SIDE_MEASUREMENT
+        #define LULZBOT_CALIBRATION_CUBE_DIMENSIONS              { 22.0,   22.0, 1.5} // mm
+        #define LULZBOT_CALIBRATION_CUBE_CENTER                  {169.5,   -7.6, 0}   // mm
+        #define LULZBOT_CALIBRATION_CUBE_MEASURE_LEFT
+        #define LULZBOT_CALIBRATION_CUBE_MEASURE_BACK
         #define LULZBOT_CALIBRATION_GCODE
 
     #elif defined(LULZBOT_CALIBRATE_ON_BACK_LEFT_WASHER)
-        #define CALIBRATION_CUBE_DIMENSIONS              { 22.0,   22.0, 1.5} // mm
-        #define CALIBRATION_CUBE_CENTER                  { -8.9,  171.3, 0}   // mm
-        #define CALIBRATION_CUBE_RIGHT_SIDE_MEASUREMENT
-        #define CALIBRATION_CUBE_FRONT_SIDE_MEASUREMENT
+        #define LULZBOT_CALIBRATION_CUBE_DIMENSIONS              { 22.0,   22.0, 1.5} // mm
+        #define LULZBOT_CALIBRATION_CUBE_CENTER                  { -8.9,  171.3, 0}   // mm
+        #define LULZBOT_CALIBRATION_CUBE_MEASURE_RIGHT
+        #define LULZBOT_CALIBRATION_CUBE_MEASURE_FRONT
         #define LULZBOT_CALIBRATION_GCODE
 
     #elif defined(LULZBOT_CALIBRATE_ON_BACK_RIGHT_WASHER)
-        #define CALIBRATION_CUBE_DIMENSIONS              { 22.0,   22.0, 1.5} // mm
-        #define CALIBRATION_CUBE_CENTER                  {169.5,  171.3, 0}   // mm
-        #define CALIBRATION_CUBE_LEFT_SIDE_MEASUREMENT
-        #define CALIBRATION_CUBE_FRONT_SIDE_MEASUREMENT
+        #define LULZBOT_CALIBRATION_CUBE_DIMENSIONS              { 22.0,   22.0, 1.5} // mm
+        #define LULZBOT_CALIBRATION_CUBE_CENTER                  {169.5,  171.3, 0}   // mm
+        #define LULZBOT_CALIBRATION_CUBE_MEASURE_LEFT
+        #define LULZBOT_CALIBRATION_CUBE_MEASURE_FRONT
         #define LULZBOT_CALIBRATION_GCODE
     #endif
 
 #elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT)
     #ifdef LULZBOT_CALIBRATE_ON_CUBE
-        #define CALIBRATION_CUBE_DIMENSIONS              {  10.0,  10.0,  10.0} // mm
-        #define CALIBRATION_CUBE_CENTER                  { 264.0, -22.0,  -2.0} // mm
+        #define LULZBOT_CALIBRATION_CUBE_DIMENSIONS              {  10.0,  10.0,  10.0} // mm
+        #define LULZBOT_CALIBRATION_CUBE_CENTER                  { 264.0, -22.0,  -2.0} // mm
 
-        #define CALIBRATION_CUBE_TOP_CENTER_MEASUREMENT
-        #define CALIBRATION_CUBE_RIGHT_SIDE_MEASUREMENT
+        #define LULZBOT_CALIBRATION_CUBE_TOP_CENTER_MEASUREMENT
+        #define LULZBOT_CALIBRATION_CUBE_MEASURE_RIGHT
         #if defined(TOOLHEAD_Quiver_DualExtruder)
-            #define CALIBRATION_CUBE_FRONT_SIDE_MEASUREMENT
+            #define LULZBOT_CALIBRATION_CUBE_MEASURE_FRONT
         #endif
-        #define CALIBRATION_CUBE_LEFT_SIDE_MEASUREMENT
-        #define CALIBRATION_CUBE_BACK_SIDE_MEASUREMENT
+        #define LULZBOT_CALIBRATION_CUBE_MEASURE_LEFT
+        #define LULZBOT_CALIBRATION_CUBE_MEASURE_BACK
         #define LULZBOT_CALIBRATION_GCODE
     #endif
 #endif
@@ -1052,10 +1052,13 @@
         "G28\n"                              /* Auto-Home */ \
         LULZBOT_MENU_AXIS_LEVELING_COMMANDS  /* Level X-Axis */ \
         "G12\n"                              /* Wipe the Nozzles */ \
+        "M117 Calibrating..."                /* Status message */ \
         "G425\n"                             /* Calibrate Nozzles */ \
         "M500\n"                             /* Save settings */ \
         "M117 Calibration data saved"        /* Status message */
 #endif
+
+#define LULZBOT_CALIBRATION_CUBE_REPORTING
 
 /*************************** TEMPERATURE SETTINGS *****************************/
 

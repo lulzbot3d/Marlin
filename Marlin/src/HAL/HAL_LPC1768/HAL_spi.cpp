@@ -221,7 +221,7 @@
 
 void SPIClass::begin() { spiBegin(); }
 
-void SPIClass::beginTransaction(const SPISettings cfg) {
+void SPIClass::beginTransaction(SPISettings cfg) {
   uint8_t spiRate;
   switch (cfg.spiRate()) {
     case 8000000: spiRate = 0 ;break;
@@ -239,7 +239,7 @@ void SPIClass::beginTransaction(const SPISettings cfg) {
 uint8_t SPIClass::transfer(const uint8_t B) { return spiTransfer(B); }
 
 uint16_t SPIClass::transfer16(const uint16_t data) {
-  return (transfer((data >> 8) & 0xFF) << 8);
+  return (transfer((data >> 8) & 0xFF) << 8)
        | (transfer(data & 0xFF) & 0xFF);
 }
 

@@ -99,20 +99,6 @@
 
 #endif // DO_SWITCH_EXTRUDER
 
-#if ENABLED(LULZBOT_SWITCHING_NOZZLE_OPPOSING_SERVOS)
-  void lower_nozzle(const uint8_t e) {
-    constexpr int16_t angles[2] = SWITCHING_NOZZLE_SERVO_ANGLES;
-    planner.synchronize();
-    MOVE_SERVO(e, angles[0]);
-  }
-
-  void raise_nozzle(const uint8_t e) {
-    constexpr int16_t angles[2] = SWITCHING_NOZZLE_SERVO_ANGLES;
-    planner.synchronize();
-    MOVE_SERVO(e, angles[1]);
-  }
-#endif
-
 #if ENABLED(SWITCHING_NOZZLE)
 
   #if SWITCHING_NOZZLE_TWO_SERVOS
@@ -768,9 +754,6 @@ void tool_change(const uint8_t tmp_extruder, const float fr_mm_s/*=0.0*/, bool n
         }
       #endif
 
-      #if ENABLED(LULZBOT_SWITCHING_NOZZLE_OPPOSING_SERVOS)
-        lower_nozzle(active_extruder);
-      #endif
       #if ENABLED(PRUSA_MMU2)
         mmu2.toolChange(tmp_extruder);
       #endif

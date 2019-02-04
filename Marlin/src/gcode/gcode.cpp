@@ -279,7 +279,7 @@ void GcodeSuite::process_parsed_command(
         case 42: G42(); break;                                    // G42: Coordinated move to a mesh point
       #endif
 
-      #if ENABLED(LULZBOT_CALIBRATION_GCODE)
+      #if ENABLED(CALIBRATION_GCODE)
         case 425:
           LULZBOT_ENABLE_PROBE_PINS(true);
           G425();                                                 // G425: Perform calibration with calibration cube

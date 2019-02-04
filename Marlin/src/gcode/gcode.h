@@ -435,7 +435,7 @@ private:
 
   static void G92();
 
-  #if ENABLED(LULZBOT_CALIBRATION_GCODE)
+  #if ENABLED(CALIBRATION_GCODE)
     static void G425();
   #endif
 

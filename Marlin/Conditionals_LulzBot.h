@@ -1000,46 +1000,46 @@
 
 #if defined(LULZBOT_IS_MINI)
     #if defined(LULZBOT_CALIBRATE_ON_FRONT_LEFT_WASHER)
-        #define LULZBOT_CALIBRATION_CUBE_DIMENSIONS              {22.0,   22.0,  1.5} // mm
-        #define LULZBOT_CALIBRATION_CUBE_CENTER                  {-8.9,   -7.6,  0}   // mm
-        #define LULZBOT_CALIBRATION_CUBE_MEASURE_RIGHT
-        #define LULZBOT_CALIBRATION_CUBE_MEASURE_BACK
+        #define LULZBOT_CALIBRATION_OBJECT_DIMENSIONS              {22.0,   22.0,  1.5} // mm
+        #define LULZBOT_CALIBRATION_OBJECT_CENTER                  {-8.9,   -7.6,  0}   // mm
+        #define LULZBOT_CALIBRATION_MEASURE_RIGHT
+        #define LULZBOT_CALIBRATION_MEASURE_BACK
         #define LULZBOT_CALIBRATION_GCODE
 
     #elif defined(LULZBOT_CALIBRATE_ON_FRONT_RIGHT_WASHER)
-        #define LULZBOT_CALIBRATION_CUBE_DIMENSIONS              { 22.0,   22.0, 1.5} // mm
-        #define LULZBOT_CALIBRATION_CUBE_CENTER                  {169.5,   -7.6, 0}   // mm
-        #define LULZBOT_CALIBRATION_CUBE_MEASURE_LEFT
-        #define LULZBOT_CALIBRATION_CUBE_MEASURE_BACK
+        #define LULZBOT_CALIBRATION_OBJECT_DIMENSIONS              { 22.0,   22.0, 1.5} // mm
+        #define LULZBOT_CALIBRATION_OBJECT_CENTER                  {169.5,   -7.6, 0}   // mm
+        #define LULZBOT_CALIBRATION_MEASURE_LEFT
+        #define LULZBOT_CALIBRATION_MEASURE_BACK
         #define LULZBOT_CALIBRATION_GCODE
 
     #elif defined(LULZBOT_CALIBRATE_ON_BACK_LEFT_WASHER)
-        #define LULZBOT_CALIBRATION_CUBE_DIMENSIONS              { 22.0,   22.0, 1.5} // mm
-        #define LULZBOT_CALIBRATION_CUBE_CENTER                  { -8.9,  171.3, 0}   // mm
-        #define LULZBOT_CALIBRATION_CUBE_MEASURE_RIGHT
-        #define LULZBOT_CALIBRATION_CUBE_MEASURE_FRONT
+        #define LULZBOT_CALIBRATION_OBJECT_DIMENSIONS              { 22.0,   22.0, 1.5} // mm
+        #define LULZBOT_CALIBRATION_OBJECT_CENTER                  { -8.9,  171.3, 0}   // mm
+        #define LULZBOT_CALIBRATION_MEASURE_RIGHT
+        #define LULZBOT_CALIBRATION_MEASURE_FRONT
         #define LULZBOT_CALIBRATION_GCODE
 
     #elif defined(LULZBOT_CALIBRATE_ON_BACK_RIGHT_WASHER)
-        #define LULZBOT_CALIBRATION_CUBE_DIMENSIONS              { 22.0,   22.0, 1.5} // mm
-        #define LULZBOT_CALIBRATION_CUBE_CENTER                  {169.5,  171.3, 0}   // mm
-        #define LULZBOT_CALIBRATION_CUBE_MEASURE_LEFT
-        #define LULZBOT_CALIBRATION_CUBE_MEASURE_FRONT
+        #define LULZBOT_CALIBRATION_OBJECT_DIMENSIONS              { 22.0,   22.0, 1.5} // mm
+        #define LULZBOT_CALIBRATION_OBJECT_CENTER                  {169.5,  171.3, 0}   // mm
+        #define LULZBOT_CALIBRATION_MEASURE_LEFT
+        #define LULZBOT_CALIBRATION_MEASURE_FRONT
         #define LULZBOT_CALIBRATION_GCODE
     #endif
 
 #elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT)
     #ifdef LULZBOT_CALIBRATE_ON_CUBE
-        #define LULZBOT_CALIBRATION_CUBE_DIMENSIONS              {  10.0,  10.0,  10.0} // mm
-        #define LULZBOT_CALIBRATION_CUBE_CENTER                  { 264.0, -22.0,  -2.0} // mm
+        #define LULZBOT_CALIBRATION_OBJECT_DIMENSIONS              {  10.0,  10.0,  10.0} // mm
+        #define LULZBOT_CALIBRATION_OBJECT_CENTER                  { 264.0, -22.0,  -2.0} // mm
 
-        #define LULZBOT_CALIBRATION_CUBE_TOP_CENTER_MEASUREMENT
-        #define LULZBOT_CALIBRATION_CUBE_MEASURE_RIGHT
+        #define LULZBOT_CALIBRATION_OBJECT_TOP_CENTER_MEASUREMENT
+        #define LULZBOT_CALIBRATION_MEASURE_RIGHT
         #if defined(TOOLHEAD_Quiver_DualExtruder)
-            #define LULZBOT_CALIBRATION_CUBE_MEASURE_FRONT
+            #define LULZBOT_CALIBRATION_MEASURE_FRONT
         #endif
-        #define LULZBOT_CALIBRATION_CUBE_MEASURE_LEFT
-        #define LULZBOT_CALIBRATION_CUBE_MEASURE_BACK
+        #define LULZBOT_CALIBRATION_MEASURE_LEFT
+        #define LULZBOT_CALIBRATION_MEASURE_BACK
         #define LULZBOT_CALIBRATION_GCODE
     #endif
 #endif
@@ -1058,7 +1058,7 @@
         "M117 Calibration data saved"        /* Status message */
 #endif
 
-#define LULZBOT_CALIBRATION_CUBE_REPORTING
+#define LULZBOT_CALIBRATION_REPORTING
 
 /*************************** TEMPERATURE SETTINGS *****************************/
 

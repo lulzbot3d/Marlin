@@ -32,10 +32,10 @@
 #include "../../module/endstops.h"
 
 /**
- * G425 backs away from the cube by various distances depending
- * on the user's confidence level:
+ * G425 backs away from the calibration object by various distances
+ * depending on the confidence level:
  *
- *   UNKNOWN   - No real notion on where the cube is on the bed
+ *   UNKNOWN   - No real notion on where the calibration object is on the bed
  *   UNCERTAIN - Measurement may be uncertain due to backlash
  *   CERTAIN   - Measurement obtained with backlash compensation
  */
@@ -50,8 +50,8 @@
   #define CALIBRATION_MEASUREMENT_CERTAIN   0.5 // mm
 #endif
 
-#define HAS_X_CENTER (ENABLED(CALIBRATION_CUBE_MEASURE_LEFT)  && ENABLED(CALIBRATION_CUBE_MEASURE_RIGHT))
-#define HAS_Y_CENTER (ENABLED(CALIBRATION_CUBE_MEASURE_FRONT) && ENABLED(CALIBRATION_CUBE_MEASURE_BACK))
+#define HAS_X_CENTER (ENABLED(CALIBRATION_MEASURE_LEFT)  && ENABLED(CALIBRATION_MEASURE_RIGHT))
+#define HAS_Y_CENTER (ENABLED(CALIBRATION_MEASURE_FRONT) && ENABLED(CALIBRATION_MEASURE_BACK))
 
 #if ENABLED(BACKLASH_GCODE)
   extern float backlash_distance_mm[], backlash_correction, backlash_smoothing_mm;
@@ -61,9 +61,9 @@ enum side_t : uint8_t { TOP, RIGHT, FRONT, LEFT, BACK, NUM_SIDES };
 
 struct measurements_t {
   static const float dimensions[XYZ];
-  static const float true_center[XYZ]; // This cannot be constexpr since it is accessed by index in probe_cube_side
-  float cube_center[XYZ] = CALIBRATION_CUBE_CENTER;
-  float cube_side[NUM_SIDES];
+  static const float true_center[XYZ]; // This cannot be constexpr since it is accessed by index in probe_side
+  float obj_center[XYZ] = CALIBRATION_OBJECT_CENTER;
+  float obj_side[NUM_SIDES];
 
   float backlash[NUM_SIDES];
   float pos_error[XYZ];
@@ -71,9 +71,9 @@ struct measurements_t {
   float nozzle_outer_dimension[2] = {CALIBRATION_NOZZLE_OUTER_DIAMETER, CALIBRATION_NOZZLE_OUTER_DIAMETER};
 };
 
-const float measurements_t::true_center[XYZ] = CALIBRATION_CUBE_CENTER;
+const float measurements_t::true_center[XYZ] = CALIBRATION_OBJECT_CENTER;
 
-const float measurements_t::dimensions[]  = CALIBRATION_CUBE_DIMENSIONS;
+const float measurements_t::dimensions[]  = CALIBRATION_OBJECT_DIMENSIONS;
 
 /**
  * A class to save and change the endstop state,
@@ -130,24 +130,24 @@ inline void move_to(
 }
 
 /**
- * Move to the exact center above the calibration cube
+ * Move to the exact center above the calibration object
  *
  *   m                  in     - Measurement record
- *   uncertainty        in     - How far away from the cube top to park
+ *   uncertainty        in     - How far away from the object top to park
  */
-inline void park_above_cube(measurements_t &m, const float uncertainty) {
-  /* Move to safe distance above cube */
-  move_to(Z_AXIS, m.cube_center[Z_AXIS] + m.dimensions[Z_AXIS] / 2 + uncertainty);
+inline void park_above_object(measurements_t &m, const float uncertainty) {
+  /* Move to safe distance above calibration object */
+  move_to(Z_AXIS, m.obj_center[Z_AXIS] + m.dimensions[Z_AXIS] / 2 + uncertainty);
 
-  /* Move to center of cube in XY */
-  move_to(X_AXIS, m.cube_center[X_AXIS], Y_AXIS, m.cube_center[Y_AXIS]);
+  /* Move to center of calibration object in XY */
+  move_to(X_AXIS, m.obj_center[X_AXIS], Y_AXIS, m.obj_center[Y_AXIS]);
 }
 
 #if HOTENDS > 1
 
   inline void set_nozzle(measurements_t &m, const uint8_t extruder) {
     if (extruder != active_extruder) {
-      park_above_cube(m, CALIBRATION_MEASUREMENT_UNKNOWN);
+      park_above_object(m, CALIBRATION_MEASUREMENT_UNKNOWN);
       tool_change(extruder);
     }
   }
@@ -170,8 +170,10 @@ inline void park_above_cube(measurements_t &m, const float uncertainty) {
 
 #endif // HOTENDS > 1
 
-inline bool read_probe_value() {
-  #if ENABLED(Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN)
+inline bool read_calibration_pin() {
+  #if HAS_CALIBRATION_PIN
+    return (READ(CALIBRATION_PIN) != CALIBRATION_PIN_INVERTING);
+  #elif ENABLED(Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN)
     return (READ(Z_MIN_PIN) != Z_MIN_ENDSTOP_INVERTING);
   #else
     return (READ(Z_MIN_PROBE_PIN) != Z_MIN_PROBE_ENDSTOP_INVERTING);
@@ -197,7 +199,7 @@ float measuring_movement(const AxisEnum axis, const int dir, const bool stop_sta
     destination[axis] += dir * step;
     do_blocking_move_to(destination[X_AXIS], destination[Y_AXIS], destination[Z_AXIS], mms);
     planner.synchronize();
-    if (read_probe_value() == stop_state)
+    if (read_calibration_pin() == stop_state)
       break;
   }
   return destination[axis];
@@ -232,25 +234,25 @@ inline float measure(const AxisEnum axis, const int dir, const bool stop_state, 
 }
 
 /**
- * Probe one side of the calibration cube
+ * Probe one side of the calibration object
  *
- *   m                  in/out - Measurement record, m.cube_center and m.cube_side will be updated.
- *   uncertainty        in     - How far away from the cube to begin probing
+ *   m                  in/out - Measurement record, m.obj_center and m.obj_side will be updated.
+ *   uncertainty        in     - How far away from the calibration object to begin probing
  *   side               in     - Side of probe where probe will occur
- *   probe_top_at_edge  in     - When probing sides, probe top of cube nearest edge
+ *   probe_top_at_edge  in     - When probing sides, probe top of calibration object nearest edge
  *                               to find out height of edge
  */
-inline void probe_cube_side(measurements_t &m, const float uncertainty, const side_t side, const bool probe_top_at_edge=false) {
+inline void probe_side(measurements_t &m, const float uncertainty, const side_t side, const bool probe_top_at_edge=false) {
   AxisEnum axis;
   float dir;
 
-  park_above_cube(m, uncertainty);
+  park_above_object(m, uncertainty);
 
   switch(side) {
     case TOP: {
       const float measurement = measure(Z_AXIS, -1, true, &m.backlash[TOP], uncertainty);
-      m.cube_center[Z_AXIS] = measurement - m.dimensions[Z_AXIS] / 2;
-      m.cube_side[TOP] = measurement;
+      m.obj_center[Z_AXIS] = measurement - m.dimensions[Z_AXIS] / 2;
+      m.obj_side[TOP] = measurement;
       return;
     }
     case RIGHT: axis = X_AXIS; dir = -1; break;
@@ -263,132 +265,132 @@ inline void probe_cube_side(measurements_t &m, const float uncertainty, const si
 
   if (probe_top_at_edge) {
     // Probe top nearest the side we are probing
-    move_to(axis, m.cube_center[axis] + (-dir) * (m.dimensions[axis] / 2 - m.nozzle_outer_dimension[axis]));
-    m.cube_side[TOP] = measure(Z_AXIS, -1, true, &m.backlash[TOP], uncertainty);
-    m.cube_center[Z_AXIS] = m.cube_side[TOP] - m.dimensions[Z_AXIS] / 2;
+    move_to(axis, m.obj_center[axis] + (-dir) * (m.dimensions[axis] / 2 - m.nozzle_outer_dimension[axis]));
+    m.obj_side[TOP] = measure(Z_AXIS, -1, true, &m.backlash[TOP], uncertainty);
+    m.obj_center[Z_AXIS] = m.obj_side[TOP] - m.dimensions[Z_AXIS] / 2;
   }
 
-  // Move to safe distance to the side of the cube
-  move_to(axis, m.cube_center[axis] + (-dir) * (m.dimensions[axis] / 2 + m.nozzle_outer_dimension[axis] / 2 + uncertainty));
+  // Move to safe distance to the side of the calibration object
+  move_to(axis, m.obj_center[axis] + (-dir) * (m.dimensions[axis] / 2 + m.nozzle_outer_dimension[axis] / 2 + uncertainty));
 
-  // Plunge below the side of the cube and measure
-  move_to(Z_AXIS, m.cube_side[TOP] - CALIBRATION_NOZZLE_TIP_HEIGHT * 0.7);
+  // Plunge below the side of the calibration object and measure
+  move_to(Z_AXIS, m.obj_side[TOP] - CALIBRATION_NOZZLE_TIP_HEIGHT * 0.7);
   const float measurement = measure(axis, dir, true, &m.backlash[side], uncertainty);
-  m.cube_center[axis] = measurement + dir * (m.dimensions[axis] / 2 + m.nozzle_outer_dimension[axis] / 2);
-  m.cube_side[side] = measurement;
+  m.obj_center[axis] = measurement + dir * (m.dimensions[axis] / 2 + m.nozzle_outer_dimension[axis] / 2);
+  m.obj_side[side] = measurement;
 }
 
 /**
- * Probe all sides of the calibration cube
+ * Probe all sides of the calibration calibration object
  *
  *   m                  in/out - Measurement record: center, backlash and error values be updated.
- *   uncertainty        in     - How far away from the cube to begin probing
+ *   uncertainty        in     - How far away from the calibration object to begin probing
  */
-inline void probe_cube(measurements_t &m, const float uncertainty) {
+inline void probe_sides(measurements_t &m, const float uncertainty) {
   TEMPORARY_ENDSTOP_STATE(false);
 
-  #ifdef CALIBRATION_CUBE_PROBE_AT_TOP_EDGES
+  #ifdef CALIBRATION_MEASURE_AT_TOP_EDGES
     constexpr bool probe_top_at_edge = true;
   #else
     /* Probing at the exact center only works if the center is flat. Probing on a washer
      * or bolt will require probing the top near the side edges, away from the center.
      */
     constexpr bool probe_top_at_edge = false;
-    probe_cube_side(m, uncertainty, TOP);
+    probe_side(m, uncertainty, TOP);
   #endif
 
-  #ifdef CALIBRATION_CUBE_MEASURE_RIGHT
-    probe_cube_side(m, uncertainty, RIGHT, probe_top_at_edge);
+  #ifdef CALIBRATION_MEASURE_RIGHT
+    probe_side(m, uncertainty, RIGHT, probe_top_at_edge);
   #endif
-  #ifdef CALIBRATION_CUBE_MEASURE_FRONT
-    probe_cube_side(m, uncertainty, FRONT, probe_top_at_edge);
+  #ifdef CALIBRATION_MEASURE_FRONT
+    probe_side(m, uncertainty, FRONT, probe_top_at_edge);
   #endif
-  #ifdef CALIBRATION_CUBE_MEASURE_LEFT
-    probe_cube_side(m, uncertainty, LEFT,  probe_top_at_edge);
+  #ifdef CALIBRATION_MEASURE_LEFT
+    probe_side(m, uncertainty, LEFT,  probe_top_at_edge);
   #endif
-  #ifdef CALIBRATION_CUBE_MEASURE_BACK
-    probe_cube_side(m, uncertainty, BACK,  probe_top_at_edge);
+  #ifdef CALIBRATION_MEASURE_BACK
+    probe_side(m, uncertainty, BACK,  probe_top_at_edge);
   #endif
 
-  /* Compute the measured center of the cube. */
+  /* Compute the measured center of the calibration object. */
   #if HAS_X_CENTER
-    m.cube_center[X_AXIS] = (m.cube_side[LEFT] + m.cube_side[RIGHT]) / 2;
+    m.obj_center[X_AXIS] = (m.obj_side[LEFT] + m.obj_side[RIGHT]) / 2;
   #endif
   #if HAS_Y_CENTER
-    m.cube_center[Y_AXIS] = (m.cube_side[FRONT] + m.cube_side[BACK]) / 2;
+    m.obj_center[Y_AXIS] = (m.obj_side[FRONT] + m.obj_side[BACK]) / 2;
   #endif
 
   /* Compute the outside diameter of the nozzle at the height
-   * at which it makes contact with the cube */
+   * at which it makes contact with the calibration object */
   #if HAS_X_CENTER
-    m.nozzle_outer_dimension[X_AXIS] = m.cube_side[RIGHT] - m.cube_side[LEFT] - m.dimensions[X_AXIS];
+    m.nozzle_outer_dimension[X_AXIS] = m.obj_side[RIGHT] - m.obj_side[LEFT] - m.dimensions[X_AXIS];
   #endif
   #if HAS_Y_CENTER
-    m.nozzle_outer_dimension[Y_AXIS] = m.cube_side[BACK]  - m.cube_side[FRONT] - m.dimensions[Y_AXIS];
+    m.nozzle_outer_dimension[Y_AXIS] = m.obj_side[BACK]  - m.obj_side[FRONT] - m.dimensions[Y_AXIS];
   #endif
 
-  park_above_cube(m, uncertainty);
+  park_above_object(m, uncertainty);
 
-  /* The positional error is the difference between the known cube
-   * location and the measured cube location */
+  /* The positional error is the difference between the known calibration
+   * object location and the measured calibration object location */
   m.pos_error[X_AXIS] =
   #if HAS_X_CENTER
-    m.true_center[X_AXIS] - m.cube_center[X_AXIS];
+    m.true_center[X_AXIS] - m.obj_center[X_AXIS];
   #else
     0;
   #endif
   m.pos_error[Y_AXIS] =
   #if HAS_Y_CENTER
-    m.true_center[Y_AXIS] - m.cube_center[Y_AXIS];
+    m.true_center[Y_AXIS] - m.obj_center[Y_AXIS];
   #else
     0;
   #endif
-  m.pos_error[Z_AXIS] = m.true_center[Z_AXIS] - m.cube_center[Z_AXIS];
+  m.pos_error[Z_AXIS] = m.true_center[Z_AXIS] - m.obj_center[Z_AXIS];
 }
 
-#if ENABLED(CALIBRATION_CUBE_REPORTING)
+#if ENABLED(CALIBRATION_REPORTING)
   inline void report_measured_faces(const measurements_t &m) {
-    SERIAL_ECHOLNPGM("Cube Sides:");
-    SERIAL_ECHOLNPAIR("  Top: ", m.cube_side[TOP]);
-    #if ENABLED(CALIBRATION_CUBE_MEASURE_LEFT)
-      SERIAL_ECHOLNPAIR("  Left: ", m.cube_side[LEFT]);
+    SERIAL_ECHOLNPGM("Sides:");
+    SERIAL_ECHOLNPAIR("  Top: ", m.obj_side[TOP]);
+    #if ENABLED(CALIBRATION_MEASURE_LEFT)
+      SERIAL_ECHOLNPAIR("  Left: ", m.obj_side[LEFT]);
     #endif
-    #if ENABLED(CALIBRATION_CUBE_MEASURE_RIGHT)
-      SERIAL_ECHOLNPAIR("  Right: ", m.cube_side[RIGHT]);
+    #if ENABLED(CALIBRATION_MEASURE_RIGHT)
+      SERIAL_ECHOLNPAIR("  Right: ", m.obj_side[RIGHT]);
     #endif
-    #if ENABLED(CALIBRATION_CUBE_MEASURE_FRONT)
-      SERIAL_ECHOLNPAIR("  Front: ", m.cube_side[FRONT]);
+    #if ENABLED(CALIBRATION_MEASURE_FRONT)
+      SERIAL_ECHOLNPAIR("  Front: ", m.obj_side[FRONT]);
     #endif
-    #if ENABLED(CALIBRATION_CUBE_MEASURE_BACK)
-      SERIAL_ECHOLNPAIR("  Back: ", m.cube_side[BACK]);
+    #if ENABLED(CALIBRATION_MEASURE_BACK)
+      SERIAL_ECHOLNPAIR("  Back: ", m.obj_side[BACK]);
     #endif
     SERIAL_EOL();
   }
 
   inline void report_measured_center(const measurements_t &m) {
-    SERIAL_ECHOLNPGM("Cube Center:");
+    SERIAL_ECHOLNPGM("Center:");
     #if HAS_X_CENTER
-      SERIAL_ECHOLNPAIR(" X", m.cube_center[X_AXIS]);
+      SERIAL_ECHOLNPAIR(" X", m.obj_center[X_AXIS]);
     #endif
     #if HAS_Y_CENTER
-      SERIAL_ECHOLNPAIR(" Y", m.cube_center[Y_AXIS]);
+      SERIAL_ECHOLNPAIR(" Y", m.obj_center[Y_AXIS]);
     #endif
-    SERIAL_ECHOLNPAIR(" Z", m.cube_center[Z_AXIS]);
+    SERIAL_ECHOLNPAIR(" Z", m.obj_center[Z_AXIS]);
     SERIAL_EOL();
   }
 
   inline void report_measured_backlash(const measurements_t &m) {
     SERIAL_ECHOLNPGM("Backlash:");
-    #if ENABLED(CALIBRATION_CUBE_MEASURE_LEFT)
+    #if ENABLED(CALIBRATION_MEASURE_LEFT)
       SERIAL_ECHOLNPAIR("  Left: ", m.backlash[LEFT]);
     #endif
-    #if ENABLED(CALIBRATION_CUBE_MEASURE_RIGHT)
+    #if ENABLED(CALIBRATION_MEASURE_RIGHT)
       SERIAL_ECHOLNPAIR("  Right: ", m.backlash[RIGHT]);
     #endif
-    #if ENABLED(CALIBRATION_CUBE_MEASURE_FRONT)
+    #if ENABLED(CALIBRATION_MEASURE_FRONT)
       SERIAL_ECHOLNPAIR("  Front: ", m.backlash[FRONT]);
     #endif
-    #if ENABLED(CALIBRATION_CUBE_MEASURE_BACK)
+    #if ENABLED(CALIBRATION_MEASURE_BACK)
       SERIAL_ECHOLNPAIR("  Back: ", m.backlash[BACK]);
     #endif
     SERIAL_ECHOLNPAIR("  Top: ", m.backlash[TOP]);
@@ -435,13 +437,13 @@ inline void probe_cube(measurements_t &m, const float uncertainty) {
       }
     }
   #endif
-#endif // CALIBRATION_CUBE_REPORTING
+#endif // CALIBRATION_REPORTING
 
 /**
- * Probe around the calibration cube to measure backlash
+ * Probe around the calibration object to measure backlash
  *
  *   m              in/out - Measurement record, updated with new readings
- *   uncertainty    in     - How far away from the cube to begin probing
+ *   uncertainty    in     - How far away from the object to begin probing
  */
 inline void calibrate_backlash(measurements_t &m, const float uncertainty) {
   // Backlash compensation should be off while measuring backlash
@@ -450,22 +452,22 @@ inline void calibrate_backlash(measurements_t &m, const float uncertainty) {
     // New scope for TEMPORARY_ENDSTOP_STATE
     TEMPORARY_ENDSTOP_STATE(false);
 
-    probe_cube(m, uncertainty);
+    probe_sides(m, uncertainty);
 
     #if ENABLED(BACKLASH_GCODE)
       #if HAS_X_CENTER
         backlash_distance_mm[X_AXIS] = (m.backlash[LEFT] + m.backlash[RIGHT]) / 2;
-      #elif ENABLED(CALIBRATION_CUBE_MEASURE_LEFT)
+      #elif ENABLED(CALIBRATION_MEASURE_LEFT)
         backlash_distance_mm[X_AXIS] = m.backlash[LEFT];
-      #elif ENABLED(CALIBRATION_CUBE_MEASURE_RIGHT)
+      #elif ENABLED(CALIBRATION_MEASURE_RIGHT)
         backlash_distance_mm[X_AXIS] = m.backlash[RIGHT];
       #endif
 
       #if HAS_Y_CENTER
         backlash_distance_mm[Y_AXIS] = (m.backlash[FRONT] + m.backlash[BACK]) / 2;
-      #elif ENABLED(CALIBRATION_CUBE_MEASURE_FRONT)
+      #elif ENABLED(CALIBRATION_MEASURE_FRONT)
         backlash_distance_mm[Y_AXIS] = m.backlash[FRONT];
-      #elif ENABLED(CALIBRATION_CUBE_MEASURE_BACK)
+      #elif ENABLED(CALIBRATION_MEASURE_BACK)
         backlash_distance_mm[Y_AXIS] = m.backlash[BACK];
       #endif
 
@@ -496,16 +498,16 @@ inline void calibrate_backlash(measurements_t &m, const float uncertainty) {
 
 inline void update_measurements(measurements_t &m, const AxisEnum axis) {
   current_position[axis] += m.pos_error[axis];
-  m.cube_center[axis] = m.true_center[axis];
+  m.obj_center[axis] = m.true_center[axis];
   m.pos_error[axis] = 0;
 }
 
 /**
- * Probe around the calibration cube. Adjust the position and toolhead offset
- * using the deviation from the known position of the calibration cube.
+ * Probe around the calibration object. Adjust the position and toolhead offset
+ * using the deviation from the known position of the calibration object.
  *
  *   m              in/out - Measurement record, updated with new readings
- *   uncertainty    in     - How far away from the cube to begin probing
+ *   uncertainty    in     - How far away from the object to begin probing
  *   extruder       in     - What extruder to probe
  *
  * Prerequisites:
@@ -518,7 +520,7 @@ inline void calibrate_toolhead(measurements_t &m, const float uncertainty, const
     set_nozzle(m, extruder);
   #endif
 
-  probe_cube(m, uncertainty);
+  probe_sides(m, uncertainty);
 
   /* Adjust the hotend offset */
   #if HOTENDS > 1
@@ -533,7 +535,7 @@ inline void calibrate_toolhead(measurements_t &m, const float uncertainty, const
     normalize_hotend_offsets();
   #endif
 
-  // Correct for positional error, so the cube
+  // Correct for positional error, so the object
   // is at the known actual spot
   planner.synchronize();
   #if HAS_X_CENTER
@@ -548,11 +550,11 @@ inline void calibrate_toolhead(measurements_t &m, const float uncertainty, const
 }
 
 /**
- * Probe around the calibration cube for all toolheads, adjusting the coordinate
+ * Probe around the calibration object for all toolheads, adjusting the coordinate
  * system for the first nozzle and the nozzle offset for subsequent nozzles.
  *
  *   m              in/out - Measurement record, updated with new readings
- *   uncertainty    in     - How far away from the cube to begin probing
+ *   uncertainty    in     - How far away from the object to begin probing
  */
 inline void calibrate_all_toolheads(measurements_t &m, const float uncertainty) {
   TEMPORARY_ENDSTOP_STATE(true);
@@ -568,13 +570,13 @@ inline void calibrate_all_toolheads(measurements_t &m, const float uncertainty) 
 /**
  * Perform a full auto-calibration routine:
  *
- *   1) For each nozzle, touches top and sides of cube to determine cube position and
+ *   1) For each nozzle, touches top and sides of object to determine object position and
  *      nozzle offsets. Do a fast but rough search over a wider area.
- *   2) With the first nozzle, touch top and sides of cube to determine backlash values
+ *   2) With the first nozzle, touch top and sides of object to determine backlash values
  *      for all axis (if BACKLASH_GCODE is enabled)
- *   3) For each nozzle, touches top and sides of cube slowly to determine precise
- *      position of cube. Adjust coordinate system and nozzle offsets so probed cube
- *      location corresponds to known cube location with a high degree of precision.
+ *   3) For each nozzle, touches top and sides of object slowly to determine precise
+ *      position of object. Adjust coordinate system and nozzle offsets so probed object
+ *      location corresponds to known object location with a high degree of precision.
  */
 inline void calibrate_all() {
   measurements_t m;
@@ -600,16 +602,16 @@ inline void calibrate_all() {
   /* Do a slow and precise calibration of the toolheads */
   calibrate_all_toolheads(m, CALIBRATION_MEASUREMENT_UNCERTAIN);
 
-  move_to(X_AXIS, 150); // Park nozzle away from cube
+  move_to(X_AXIS, 150); // Park nozzle away from calibration object
 }
 
 /**
- * G425: Perform calibration with calibration cube.
+ * G425: Perform calibration with calibration object.
  *
  *   B           - Perform calibration of backlash only.
  *   T<extruder> - Perform calibration of toolhead only.
- *   V           - Probe cube and print position, error, backlash and hotend offset.
- *   U           - Uncertainty, how far to start probe away from the cube (mm)
+ *   V           - Probe object and print position, error, backlash and hotend offset.
+ *   U           - Uncertainty, how far to start probe away from the object (mm)
  *
  *   no args     - Perform entire calibration sequence (backlash + position on all toolheads)
  */
@@ -624,9 +626,9 @@ void GcodeSuite::G425() {
     calibrate_backlash(m, uncertainty);
   else if (parser.seen('T'))
     calibrate_toolhead(m, uncertainty, parser.has_value() ? parser.value_int() : active_extruder);
-  #if ENABLED(CALIBRATION_CUBE_REPORTING)
+  #if ENABLED(CALIBRATION_REPORTING)
     else if (parser.seen('V')) {
-      probe_cube(m, uncertainty);
+      probe_sides(m, uncertainty);
       SERIAL_EOL();
       report_measured_faces(m);
       report_measured_center(m);

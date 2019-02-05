@@ -528,15 +528,16 @@
  * Enable G425 to run automatic calibration using an electrically-
  * conductive cube, bolt, or washer mounted on the bed.
  *
- * G425 uses the probe to touch the top and sides of a cube/bolt/washer
- * on the bed and measure and/or correct positional offsets, axis backlash
+ * G425 uses the probe to touch the top and sides of the calibration object
+ * on the bed and measures and/or correct positional offsets, axis backlash
  * and hotend offsets.
  *
- * Note: HOTEND_OFFSET and CALIBRATION_CUBE_CENTER must be set to within
- *       ±5mm of true values for G425 to succeed.
+ * Note: HOTEND_OFFSET and CALIBRATION_OBJECT_CENTER must be set to within
+ *       Â±5mm of true values for G425 to succeed.
  */
 #define CALIBRATION_GCODE LULZBOT_CALIBRATION_GCODE
 #if ENABLED(CALIBRATION_GCODE)
+
   #define CALIBRATION_MEASUREMENT_RESOLUTION     0.01 // mm
 
   #define CALIBRATION_FEEDRATE_SLOW             60    // mm/m
@@ -547,32 +548,39 @@
   #define CALIBRATION_NOZZLE_TIP_HEIGHT          1.0  // mm
   #define CALIBRATION_NOZZLE_OUTER_DIAMETER      2.0  // mm
 
-  // Uncomment the following to enable reporting (required for
-  // "G425 V", but takes up PROGMEM).
-  #define CALIBRATION_CUBE_REPORTING LULZBOT_CALIBRATION_CUBE_REPORTING
+  // Uncomment to enable reporting (required for "G425 V", but consumes PROGMEM).
+  #define CALIBRATION_REPORTING LULZBOT_CALIBRATION_REPORTING
 
   // The true location and dimension the cube/bolt/washer on the bed.
-  #define CALIBRATION_CUBE_CENTER LULZBOT_CALIBRATION_CUBE_CENTER // mm
-  #define CALIBRATION_CUBE_DIMENSIONS LULZBOT_CALIBRATION_CUBE_DIMENSIONS // mm
+  #define CALIBRATION_OBJECT_CENTER     LULZBOT_CALIBRATION_OBJECT_CENTER // mm
+  #define CALIBRATION_OBJECT_DIMENSIONS LULZBOT_CALIBRATION_OBJECT_DIMENSIONS // mm
 
   // Comment out any sides which are unreachable by the probe. For best
   // auto-calibration results, all sides must be reachable.
-  #if defined(LULZBOT_CALIBRATION_CUBE_MEASURE_RIGHT)
-    #define CALIBRATION_CUBE_MEASURE_RIGHT
+  #if defined(LULZBOT_CALIBRATION_MEASURE_RIGHT)
+    #define CALIBRATION_MEASURE_RIGHT
   #endif
-  #if defined(LULZBOT_CALIBRATION_CUBE_MEASURE_FRONT)
-    #define CALIBRATION_CUBE_MEASURE_FRONT
+  #if defined(LULZBOT_CALIBRATION_MEASURE_FRONT)
+    #define CALIBRATION_MEASURE_FRONT
   #endif
-  #if defined(LULZBOT_CALIBRATION_CUBE_MEASURE_LEFT)
-    #define CALIBRATION_CUBE_MEASURE_LEFT
+  #if defined(LULZBOT_CALIBRATION_MEASURE_LEFT)
+    #define CALIBRATION_MEASURE_LEFT
   #endif
-  #if defined(LULZBOT_CALIBRATION_CUBE_MEASURE_BACK)
-    #define CALIBRATION_CUBE_MEASURE_BACK
+  #if defined(LULZBOT_CALIBRATION_MEASURE_BACK)
+    #define CALIBRATION_MEASURE_BACK
   #endif
 
   // Probing at the exact top center only works if the center is flat. If
   // probing on a screwhead or hollow washer, probe near the edges.
-  //#define CALIBRATION_CUBE_PROBE_AT_TOP_EDGES
+  //#define CALIBRATION_MEASURE_AT_TOP_EDGES
+
+  // Define pin which is read during calibration
+  #ifndef CALIBRATION_PIN
+    #define CALIBRATION_PIN -1 // Override in pins.h or set to -1 to use your Z endstop
+    #define CALIBRATION_PIN_INVERTING false // set to true to invert the pin
+    //#define CALIBRATION_PIN_PULLDOWN
+    #define CALIBRATION_PIN_PULLUP
+  #endif
 #endif
 
 /**

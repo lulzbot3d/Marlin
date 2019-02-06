@@ -75,33 +75,18 @@ const float measurements_t::true_center[XYZ] = CALIBRATION_OBJECT_CENTER;
 
 const float measurements_t::dimensions[]  = CALIBRATION_OBJECT_DIMENSIONS;
 
-/**
- * A class to save and change the endstop state,
- * then restore it when it goes out of scope.
- */
-class TemporaryGlobalEndstopsState {
-  bool saved;
+#define TEMPORARY_ENDSTOP_STATE(enable) REMEMBER(tes, soft_endstops_enabled, enable); TemporaryGlobalEndstopsState tges(enable)
 
-  public:
-    TemporaryGlobalEndstopsState(bool enable) : saved(endstops.global_enabled()) {
-      endstops.enable_globally(enable);
-    }
-    ~TemporaryGlobalEndstopsState() {endstops.enable_globally(saved);}
-};
-
-#define TEMPORARY_ENDSTOP_STATE(enable) \
-    REMEMBER(soft_endstops_enabled, enable); \
-    TemporaryGlobalEndstopsState g(enable);
-
-#if ENABLED(BACKLASH_GCODE) && defined(BACKLASH_SMOOTHING_MM)
-  #define TEMPORARY_BACKLASH_STATE(enable) \
-    REMEMBER(backlash_correction, enable); \
-    REMEMBER(backlash_smoothing_mm, 0);
-#elif  ENABLED(BACKLASH_GCODE)
-  #define TEMPORARY_BACKLASH_STATE(enable) \
-    REMEMBER(backlash_correction, enable);
+#if ENABLED(BACKLASH_GCODE)
+  #define TEMPORARY_BACKLASH_STATE(enable) REMEMBER(tbst, backlash_correction, enable)
 #else
   #define TEMPORARY_BACKLASH_STATE(enable)
+#endif
+
+#if ENABLED(BACKLASH_GCODE) && defined(BACKLASH_SMOOTHING_MM)
+  #define TEMPORARY_BACKLASH_SMOOTHING(value) REMEMBER(tbsm, backlash_smoothing_mm, value)
+#else
+  #define TEMPORARY_BACKLASH_SMOOTHING(value)
 #endif
 
 /**
@@ -449,8 +434,9 @@ inline void calibrate_backlash(measurements_t &m, const float uncertainty) {
   // Backlash compensation should be off while measuring backlash
 
   {
-    // New scope for TEMPORARY_ENDSTOP_STATE
-    TEMPORARY_ENDSTOP_STATE(false);
+    // New scope for TEMPORARY_BACKLASH_STATE
+    TEMPORARY_BACKLASH_STATE(false);
+    TEMPORARY_BACKLASH_SMOOTHING(0);
 
     probe_sides(m, uncertainty);
 
@@ -480,8 +466,9 @@ inline void calibrate_backlash(measurements_t &m, const float uncertainty) {
     // directions to take up any backlash
 
     {
-      // New scope for TEMPORARY_ENDSTOP_STATE
-      TEMPORARY_ENDSTOP_STATE(false);
+      // New scope for TEMPORARY_BACKLASH_STATE
+      TEMPORARY_BACKLASH_STATE(true);
+      TEMPORARY_BACKLASH_SMOOTHING(0);
       move_to(
         X_AXIS, current_position[X_AXIS] + 3,
         Y_AXIS, current_position[Y_AXIS] + 3,
@@ -514,7 +501,8 @@ inline void update_measurements(measurements_t &m, const AxisEnum axis) {
  *    - Call calibrate_backlash() beforehand for best accuracy
  */
 inline void calibrate_toolhead(measurements_t &m, const float uncertainty, const uint8_t extruder) {
-  TEMPORARY_ENDSTOP_STATE(true);
+  TEMPORARY_BACKLASH_STATE(true);
+  TEMPORARY_BACKLASH_SMOOTHING(0);
 
   #if HOTENDS > 1
     set_nozzle(m, extruder);
@@ -557,7 +545,8 @@ inline void calibrate_toolhead(measurements_t &m, const float uncertainty, const
  *   uncertainty    in     - How far away from the object to begin probing
  */
 inline void calibrate_all_toolheads(measurements_t &m, const float uncertainty) {
-  TEMPORARY_ENDSTOP_STATE(true);
+  TEMPORARY_BACKLASH_STATE(true);
+  TEMPORARY_BACKLASH_SMOOTHING(0);
 
   HOTEND_LOOP() calibrate_toolhead(m, uncertainty, e);
 
@@ -570,11 +559,11 @@ inline void calibrate_all_toolheads(measurements_t &m, const float uncertainty) 
 /**
  * Perform a full auto-calibration routine:
  *
- *   1) For each nozzle, touches top and sides of object to determine object position and
+ *   1) For each nozzle, touch top and sides of object to determine object position and
  *      nozzle offsets. Do a fast but rough search over a wider area.
  *   2) With the first nozzle, touch top and sides of object to determine backlash values
  *      for all axis (if BACKLASH_GCODE is enabled)
- *   3) For each nozzle, touches top and sides of object slowly to determine precise
+ *   3) For each nozzle, touch top and sides of object slowly to determine precise
  *      position of object. Adjust coordinate system and nozzle offsets so probed object
  *      location corresponds to known object location with a high degree of precision.
  */
@@ -585,7 +574,9 @@ inline void calibrate_all() {
     reset_nozzle_offsets();
   #endif
 
-  TEMPORARY_ENDSTOP_STATE(true);
+  TEMPORARY_BACKLASH_STATE(true);
+  TEMPORARY_BACKLASH_SMOOTHING(0);
+
 
   /* Do a fast and rough calibration of the toolheads */
   calibrate_all_toolheads(m, CALIBRATION_MEASUREMENT_UNKNOWN);

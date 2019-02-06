@@ -1052,7 +1052,7 @@
         "G28\n"                              /* Auto-Home */ \
         LULZBOT_MENU_AXIS_LEVELING_COMMANDS  /* Level X-Axis */ \
         "G12\n"                              /* Wipe the Nozzles */ \
-        "M117 Calibrating..."                /* Status message */ \
+        "M117 Calibrating...\n"              /* Status message */ \
         "G425\n"                             /* Calibrate Nozzles */ \
         "M500\n"                             /* Save settings */ \
         "M117 Calibration data saved"        /* Status message */

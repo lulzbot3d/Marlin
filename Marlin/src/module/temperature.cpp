@@ -2476,7 +2476,7 @@ void Temperature::isr() {
   // Additional ~1KHz Tasks
   //
 
-  #if ENABLED(BABYSTEPPING) && DISABLED(LULZBOT_BABYSTEP_IN_PLANNER)
+  #if ENABLED(BABYSTEPPING)
     LOOP_XYZ(axis) {
       const int16_t curTodo = babystepsTodo[axis]; // get rid of volatile for performance
       if (curTodo) {

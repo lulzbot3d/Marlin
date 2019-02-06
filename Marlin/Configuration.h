@@ -1382,7 +1382,7 @@
 // When enabled Marlin will send a busy status message to the host
 // every couple of seconds when it can't accept commands.
 //
-//#define HOST_KEEPALIVE_FEATURE LULZBOT_HOST_KEEPALIVE_FEATURE_DISABLED // Disable this if your host doesn't like keepalive messages
+#define HOST_KEEPALIVE_FEATURE        // Disable this if your host doesn't like keepalive messages
 #define DEFAULT_KEEPALIVE_INTERVAL 2  // Number of seconds between "busy" messages. Set with M113.
 #define BUSY_WHILE_HEATING            // Some hosts require "busy" messages even during heating
 
@@ -1602,15 +1602,6 @@
  * Use CRC checks and retries on the SD communication.
  */
 #define SD_CHECK_AND_RETRY LULZBOT_SD_CHECK_AND_RETRY
-
-/**
- * This option allows Marlin to read USB thumb drives using an
- * Arudino USB Host Shield or a compatible MAX3421E interface.
- * The USB thumb drive will appear to Marlin as an SD card.
- *
- * You must also enable SDSUPPORT when enabling this option.
- */
-#define USE_USB_STICK LULZBOT_USE_USB_STICK
 
 /**
  * LCD Menu Items

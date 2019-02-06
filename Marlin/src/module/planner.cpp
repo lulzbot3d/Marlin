@@ -1545,19 +1545,6 @@ void Planner::synchronize() {
   ) idle();
 }
 
-#if ENABLED(LULZBOT_BABYSTEP_IN_PLANNER)
-  void Planner::add_babystep_correction_steps(const int32_t da, const int32_t db, const int32_t dc, const uint8_t dm, block_t * const block) {
-      LOOP_XYZ(axis) {
-        const int16_t correction = Temperature::babystepsTodo[axis]; // get rid of volatile for performance
-        const bool reversing = TEST(dm,axis);
-        if (correction && (reversing == (correction < 0))) {
-            block->steps[axis] += ABS(correction);
-            Temperature::babystepsTodo[axis] -= correction;
-        }
-      }
-  }
-#endif
-
 /**
  * The following implements axis backlash correction. To minimize seams
  * on the printed part, the backlash correction only adds steps to the
@@ -1902,9 +1889,6 @@ bool Planner::_populate_block(block_t * const block, bool split_move,
      */
     #if ENABLED(BACKLASH_COMPENSATION)
       add_backlash_correction_steps(da, db, dc, dm, block);
-    #endif
-    #if ENABLED(LULZBOT_BABYSTEP_IN_PLANNER)
-      add_babystep_correction_steps(da, db, dc, dm, block);
     #endif
   }
 

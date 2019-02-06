@@ -317,7 +317,7 @@ void disable_all_steppers() {
 
 #if HAS_ACTION_COMMANDS
 
-  void host_action(const char * const pstr, const bool eol=true) {
+  void host_action(const char * const pstr, const bool eol) {
     SERIAL_ECHOPGM("//action:");
     serialprintPGM(pstr);
     if (eol) SERIAL_EOL();
@@ -343,12 +343,6 @@ void disable_all_steppers() {
   #endif
   #ifdef ACTION_ON_FILAMENT_RUNOUT
     void host_action_filament_runout(const bool eol/*=true*/) { host_action(PSTR(ACTION_ON_FILAMENT_RUNOUT), eol); }
-  #endif
-  #ifdef ACTION_ON_G29_FAILURE
-    void host_action_probe_failure() { host_action(PSTR(ACTION_ON_G29_FAILURE)); }
-  #endif
-  #ifdef ACTION_ON_G29_RECOVER
-    void host_action_probe_recover() { host_action(PSTR(ACTION_ON_G29_RECOVER)); }
   #endif
 #endif // HAS_ACTION_COMMANDS
 

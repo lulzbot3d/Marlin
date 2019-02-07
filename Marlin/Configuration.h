@@ -1299,7 +1299,9 @@
 #define HOMING_FEEDRATE_Z  LULZBOT_HOMING_FEEDRATE_Z
 
 // Validate that endstops are triggered on homing moves
-#define VALIDATE_HOMING_ENDSTOPS
+#if defined(LULZBOT_VALIDATE_HOMING_ENDSTOPS)
+  #define VALIDATE_HOMING_ENDSTOPS
+#endif
 
 // @section calibrate
 

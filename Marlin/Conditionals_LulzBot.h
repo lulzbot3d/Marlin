@@ -333,6 +333,11 @@
     #define LULZBOT_SPI_SPEED                     SPI_SIXTEENTH_SPEED
     #define LULZBOT_M226_PINS_WORKAROUND
 
+    // Force Archim to use same USB ID as Mini-Rambo and Rambo when flashed
+    // NOTE: While in "erase" (bootloader) mode, the ID will be 03eb:6124
+    #define LULZBOT_USB_DEVICE_VENDOR_ID          0x27b1
+    #define LULZBOT_USB_DEVICE_PRODUCT_ID         0x0001
+
 #elif defined(LULZBOT_USE_EINSY_RETRO)
     // Experimental Mini retrofitted with EinsyRambo from UltiMachine
     #define LULZBOT_MOTHERBOARD                   BOARD_EINSY_RETRO

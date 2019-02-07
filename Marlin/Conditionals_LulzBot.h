@@ -75,7 +75,7 @@
  *
  */
 
-#define LULZBOT_FW_VERSION ".82" // Change this with each update
+#define LULZBOT_FW_VERSION ".83" // Change this with each update
 
 #if ( \
     !defined(LULZBOT_Gladiola_Mini) && \
@@ -224,6 +224,7 @@
     #define LULZBOT_FILAMENT_RUNOUT_SENSOR
     #define LULZBOT_BACKUP_EEPROM_INFORMATION
     #define LULZBOT_USB_READ_ERROR_IS_FATAL
+    #define LULZBOT_AXIS_LEVELING_USING_DUAL_Z_ENDSTOPS
 #endif
 
 #if defined(LULZBOT_Prototype_DemoCLCD)
@@ -492,6 +493,14 @@
 #if !defined(LULZBOT_USE_MAX_ENDSTOPS) && !defined(LULZBOT_Juniper_TAZ5)
     #define LULZBOT_NO_MOTION_BEFORE_HOMING
 #endif
+
+/* If the printer uses dual Z endstops for X axis leveling,
+ * supress the homing endstop validation as it often leads
+ * to false errors */
+#ifndef LULZBOT_AXIS_LEVELING_USING_DUAL_Z_ENDSTOPS
+    #define LULZBOT_VALIDATE_HOMING_ENDSTOPS
+#endif
+
 
 /************************ STEPPER INACTIVITY TIMEOUT ****************************/
 

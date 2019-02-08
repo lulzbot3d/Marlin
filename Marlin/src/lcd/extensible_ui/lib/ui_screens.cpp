@@ -3878,12 +3878,12 @@ bool FilesScreen::onTouchEnd(uint8_t tag) {
     #else
       PIN_DISABLED(Z_MIN,Z_MIN_ENDSTOP_INVERTING,3,3)
     #endif
-    #if PIN_EXISTS(FIL_RUNOUT)
-      PIN_ENABLED (FIL_RUNOUT,FIL_RUNOUT_INVERTING,1,4)
+    #if ENABLED(FILAMENT_RUNOUT_SENSOR) && PIN_EXISTS(FIL_RUNOUT)
+      PIN_ENABLED (FIL_RUNOUT, FIL_RUNOUT_INVERTING,1,4)
     #else
-      PIN_DISABLED(FIL_RUNOUT,FIL_RUNOUT_INVERTING,1,4)
+      PIN_DISABLED(FIL_RUNOUT, FIL_RUNOUT_INVERTING,1,4)
     #endif
-    #if PIN_EXISTS(FIL_RUNOUT2)
+    #if ENABLED(FILAMENT_RUNOUT_SENSOR) && PIN_EXISTS(FIL_RUNOUT2)
       PIN_ENABLED (FIL_RUNOUT2,FIL_RUNOUT_INVERTING,2,4)
     #else
       PIN_DISABLED(FIL_RUNOUT2,FIL_RUNOUT_INVERTING,2,4)
@@ -3932,17 +3932,19 @@ void MediaPlayerScreen::onRedraw(draw_mode_t what) {
 }
 
 bool MediaPlayerScreen::playCardMedia() {
-  char fname[15];
-  strcpy_P(fname, PSTR("STARTUP.AVI"));
+  #if ENABLED(SDSUPPORT)
+    char fname[15];
+    strcpy_P(fname, PSTR("STARTUP.AVI"));
 
-  MediaFileReader reader;
-  if(!reader.open(fname))
-    return false;
+    MediaFileReader reader;
+    if(!reader.open(fname))
+      return false;
 
-  SERIAL_ECHO_START();
-  SERIAL_ECHOLNPGM("Starting to play STARTUP.AVI");
-  playStream(&reader, MediaFileReader::read);
-  reader.close();
+    SERIAL_ECHO_START();
+    SERIAL_ECHOLNPGM("Starting to play STARTUP.AVI");
+    playStream(&reader, MediaFileReader::read);
+    reader.close();
+  #endif
   return true;
 }
 

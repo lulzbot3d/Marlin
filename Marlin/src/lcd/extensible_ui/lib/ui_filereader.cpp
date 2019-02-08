@@ -25,32 +25,39 @@
 #include "ui_filereader.h"
 
 #if ENABLED(EXTENSIBLE_UI)
+  #if ENABLED(SDSUPPORT)
+    bool MediaFileReader::open(const char* filename) {
+      card.init(SPI_SPEED, SDSS);
+      volume.init(&card);
+      root.openRoot(&volume);
+      return file.open(&root, filename, O_READ);
+    }
 
-bool MediaFileReader::open(const char* filename) {
-  card.init(SPI_SPEED, SDSS);
-  volume.init(&card);
-  root.openRoot(&volume);
-  return file.open(&root, filename, O_READ);
-}
+    int16_t MediaFileReader::read(void *buff, size_t bytes) {
+      return file.read(buff, bytes);
+    }
 
-int16_t MediaFileReader::read(void *buff, size_t bytes) {
-  return file.read(buff, bytes);
-}
+    void MediaFileReader::close() {
+      file.close();
+    }
 
-void MediaFileReader::close() {
-  file.close();
-}
+    uint32_t MediaFileReader::size() {
+      return file.fileSize();
+    }
 
-uint32_t MediaFileReader::size() {
-  return file.fileSize();
-}
+    void MediaFileReader::rewind() {
+      file.rewind();
+    }
 
-void MediaFileReader::rewind() {
-  file.rewind();
-}
-
-int16_t MediaFileReader::read(void *obj, void *buff, size_t bytes) {
-  return reinterpret_cast<MediaFileReader*>(obj)->read(buff, bytes);
-}
-
+    int16_t MediaFileReader::read(void *obj, void *buff, size_t bytes) {
+      return reinterpret_cast<MediaFileReader*>(obj)->read(buff, bytes);
+    }
+  #else
+    bool MediaFileReader::open(const char*)               {return -1;}
+    int16_t MediaFileReader::read(void *, size_t)         {return 0;}
+    void MediaFileReader::close()                         {}
+    uint32_t MediaFileReader::size()                      {return 0;}
+    void MediaFileReader::rewind()                        {}
+    int16_t MediaFileReader::read(void *, void *, size_t) {return 0;}
+  #endif
 #endif // EXTENSIBLE_UI

@@ -28,9 +28,11 @@
 
 class MediaFileReader {
   private:
-    Sd2Card  card;
-    SdVolume volume;
-    SdFile   root, file;
+    #if ENABLED(SDSUPPORT)
+      Sd2Card  card;
+      SdVolume volume;
+      SdFile   root, file;
+    #endif
 
   public:
     bool open(const char* filename);

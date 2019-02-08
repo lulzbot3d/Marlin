@@ -366,94 +366,99 @@ bool UIFlashStorage::is_present = false;
     return size;
   }
 
-  /* Writes a media file into a slot. Media files must be written sequentially following
-   * by a chip erase and it is not possible to overwrite files. */
+  /* Writes a media file from the SD card/USB flash drive into a slot on the SPI Flash. Media
+   * files must be written sequentially following by a chip erase and it is not possible to
+   * overwrite files. */
   UIFlashStorage::error_t UIFlashStorage::write_media_file(progmem_str filename, uint8_t slot) {
-    uint32_t addr;
-    uint8_t buff[write_page_size];
+    #if ENABLED(SDSUPPORT)
+      uint32_t addr;
+      uint8_t buff[write_page_size];
 
-    strcpy_P( (char*) buff, (const char*) filename);
+      strcpy_P( (char*) buff, (const char*) filename);
 
-    MediaFileReader reader;
-    if(!reader.open((char*) buff)) {
-      SERIAL_ECHO_START(); SERIAL_ECHOLNPGM("Unable to find media file");
-      return FILE_NOT_FOUND;
-    }
-
-    if(get_media_file_size(slot) != 0xFFFFFFFFUL) {
-      SERIAL_ECHO_START(); SERIAL_ECHOLNPGM("Media file already exists");
-      return WOULD_OVERWRITE;
-    }
-
-    SERIAL_ECHO_START(); SERIAL_ECHOPGM("Writing SPI Flash...");
-
-    set_media_file_size(slot, reader.size());
-    addr = get_media_file_start(slot);
-
-    // Write out the file itself
-    for(;;) {
-      const int16_t nBytes = reader.read(buff, write_page_size);
-      if(nBytes == -1) {
-        SERIAL_ECHOLNPGM("Failed to read from file");
-        return READ_ERROR;
+      MediaFileReader reader;
+      if(!reader.open((char*) buff)) {
+        SERIAL_ECHO_START(); SERIAL_ECHOLNPGM("Unable to find media file");
+        return FILE_NOT_FOUND;
       }
 
-      addr = write(addr, buff, nBytes);
-      if(nBytes != write_page_size)
-        break;
-
-      #if ENABLED(EXTENSIBLE_UI)
-        ExtUI::yield();
-      #endif
-    }
-
-    SERIAL_ECHOLNPGM("DONE");
-
-    SERIAL_ECHO_START(); SERIAL_ECHOPGM("Verifying SPI Flash...");
-
-    bool verifyOk = true;
-
-    // Verify the file index
-
-    if(get_media_file_start(slot+1) != (get_media_file_start(slot) + reader.size())) {
-      SERIAL_ECHOLNPGM("File index verification failed. ");
-      verifyOk = false;
-    }
-
-    // Verify the file itself
-    addr = get_media_file_start(slot);
-    reader.rewind();
-
-    while(verifyOk) {
-      const int16_t nBytes = reader.read(buff, write_page_size);
-      if(nBytes == -1) {
-        SERIAL_ECHOPGM("Failed to read from file");
-        verifyOk = false;
-        break;
+      if(get_media_file_size(slot) != 0xFFFFFFFFUL) {
+        SERIAL_ECHO_START(); SERIAL_ECHOLNPGM("Media file already exists");
+        return WOULD_OVERWRITE;
       }
 
-      spi_read_begin(addr);
-      if(!spi_verify_bulk(buff, nBytes)) {
-        verifyOk = false;
-        spi_read_end();
-        break;
+      SERIAL_ECHO_START(); SERIAL_ECHOPGM("Writing SPI Flash...");
+
+      set_media_file_size(slot, reader.size());
+      addr = get_media_file_start(slot);
+
+      // Write out the file itself
+      for(;;) {
+        const int16_t nBytes = reader.read(buff, write_page_size);
+        if(nBytes == -1) {
+          SERIAL_ECHOLNPGM("Failed to read from file");
+          return READ_ERROR;
+        }
+
+        addr = write(addr, buff, nBytes);
+        if(nBytes != write_page_size)
+          break;
+
+        #if ENABLED(EXTENSIBLE_UI)
+          ExtUI::yield();
+        #endif
       }
-      spi_read_end();
 
-      addr += nBytes;
-      if(nBytes != write_page_size) break;
-      #if ENABLED(EXTENSIBLE_UI)
-        ExtUI::yield();
-      #endif
-    };
-
-    if(verifyOk) {
       SERIAL_ECHOLNPGM("DONE");
-      return SUCCESS;
-    } else {
-      SERIAL_ECHOLNPGM("FAIL");
+
+      SERIAL_ECHO_START(); SERIAL_ECHOPGM("Verifying SPI Flash...");
+
+      bool verifyOk = true;
+
+      // Verify the file index
+
+      if(get_media_file_start(slot+1) != (get_media_file_start(slot) + reader.size())) {
+        SERIAL_ECHOLNPGM("File index verification failed. ");
+        verifyOk = false;
+      }
+
+      // Verify the file itself
+      addr = get_media_file_start(slot);
+      reader.rewind();
+
+      while(verifyOk) {
+        const int16_t nBytes = reader.read(buff, write_page_size);
+        if(nBytes == -1) {
+          SERIAL_ECHOPGM("Failed to read from file");
+          verifyOk = false;
+          break;
+        }
+
+        spi_read_begin(addr);
+        if(!spi_verify_bulk(buff, nBytes)) {
+          verifyOk = false;
+          spi_read_end();
+          break;
+        }
+        spi_read_end();
+
+        addr += nBytes;
+        if(nBytes != write_page_size) break;
+        #if ENABLED(EXTENSIBLE_UI)
+          ExtUI::yield();
+        #endif
+      };
+
+      if(verifyOk) {
+        SERIAL_ECHOLNPGM("DONE");
+        return SUCCESS;
+      } else {
+        SERIAL_ECHOLNPGM("FAIL");
+        return VERIFY_ERROR;
+      }
+    #else
       return VERIFY_ERROR;
-    }
+    #endif // ENABLED(SDSUPPORT)
   }
 
   bool UIFlashStorage::BootMediaReader::isAvailable(uint32_t slot) {

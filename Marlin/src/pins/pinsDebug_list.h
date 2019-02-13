@@ -1,6 +1,6 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (C) 2016 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (C) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
  * Copyright (C) 2011 Camiel Gubbels / Erik van der Zalm
@@ -604,6 +604,12 @@
 #endif
 #if PIN_EXISTS(MOTOR_CURRENT_PWM_E)
   REPORT_NAME_DIGITAL(__LINE__, MOTOR_CURRENT_PWM_E_PIN)
+#endif
+#if PIN_EXISTS(MOTOR_CURRENT_PWM_X)
+  REPORT_NAME_DIGITAL(__LINE__, MOTOR_CURRENT_PWM_X_PIN)
+#endif
+#if PIN_EXISTS(MOTOR_CURRENT_PWM_Y)
+  REPORT_NAME_DIGITAL(__LINE__, MOTOR_CURRENT_PWM_Y_PIN)
 #endif
 #if PIN_EXISTS(MOTOR_CURRENT_PWM_XY)
   REPORT_NAME_DIGITAL(__LINE__, MOTOR_CURRENT_PWM_XY_PIN)

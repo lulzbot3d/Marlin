@@ -1,7 +1,6 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (C) 2016 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
- * Copyright (C) 2017 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (C) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
  * Copyright (C) 2011 Camiel Gubbels / Erik van der Zalm
@@ -29,8 +28,8 @@
   #error "Oops! Make sure you have the LPC1768 environment selected in your IDE."
 #endif
 
-#define BOARD_NAME          "Smoothieboard"
-#define DEFAULT_WEBSITE_URL "http://smoothieware.org/smoothieboard"
+#define BOARD_NAME        "Smoothieboard"
+#define BOARD_WEBSITE_URL "http://smoothieware.org/smoothieboard"
 
 #undef F_CPU
 #define F_CPU 120000000

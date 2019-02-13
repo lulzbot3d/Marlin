@@ -1,6 +1,6 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (C) 2016 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (C) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
  * Copyright (C) 2011 Camiel Gubbels / Erik van der Zalm
@@ -131,6 +131,10 @@ void menu_led();
   }
 #endif
 
+#if ENABLED(MIXING_EXTRUDER)
+  void menu_mixer();
+#endif
+
 void menu_main() {
   START_MENU();
   MENU_BACK(MSG_WATCH);
@@ -182,12 +186,17 @@ void menu_main() {
     #endif
 
     MENU_ITEM(submenu, MSG_MOTION, menu_motion);
-    MENU_ITEM(submenu, MSG_TEMPERATURE, menu_temperature);
-
-    #if ENABLED(MMU2_MENUS)
-      MENU_ITEM(submenu, MSG_MMU2_MENU, menu_mmu2);
-    #endif
   }
+
+  MENU_ITEM(submenu, MSG_TEMPERATURE, menu_temperature);
+
+  #if ENABLED(MIXING_EXTRUDER)
+    MENU_ITEM(submenu, MSG_MIXER, menu_mixer);
+  #endif
+
+  #if ENABLED(MMU2_MENUS)
+    if (!busy) MENU_ITEM(submenu, MSG_MMU2_MENU, menu_mmu2);
+  #endif
 
   MENU_ITEM(submenu, MSG_CONFIGURATION, menu_configuration);
 

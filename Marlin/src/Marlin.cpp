@@ -347,12 +347,18 @@ void disable_all_steppers() {
       host_action_prompt_show();
     #endif
 
+    #if defined(LULZBOT_RUNOUT_HANDLING_WORKAROUNDS)
+      if(IS_SD_PRINTING()) {
+        runout.host_handling = false;
+      } else {
+        // Let Cura handle the runout
+        runout.host_handling = true;
+        runout.reset();
+      }
+    #endif
+
     #if ENABLED(HOST_ACTION_COMMANDS)
-      #if defined(LULZBOT_RUNOUT_HANDLING_WORKAROUNDS)
-      if(
-      #else
       if (!runout.host_handling
-      #endif
         && ( strstr(FILAMENT_RUNOUT_SCRIPT, "M600")
           || strstr(FILAMENT_RUNOUT_SCRIPT, "M125")
           #if ENABLED(ADVANCED_PAUSE_FEATURE)
@@ -365,14 +371,10 @@ void disable_all_steppers() {
       else {
         // Legacy Repetier command for use until newer version supports standard dialog
         // To be removed later when pause command also triggers dialog
-        #ifdef ACTION_ON_FILAMENT_RUNOUT || LULZBOT_RUNOUT_HANDLING_WORKAROUNDS
+        #ifdef ACTION_ON_FILAMENT_RUNOUT
           host_action(PSTR(ACTION_ON_FILAMENT_RUNOUT " T"), false);
           SERIAL_CHAR(tool);
           SERIAL_EOL();
-        #endif
-
-        #if defined(LULZBOT_RUNOUT_HANDLING_WORKAROUNDS)
-          runout.reset();
         #endif
 
         host_action_pause(false);
@@ -380,7 +382,6 @@ void disable_all_steppers() {
       SERIAL_ECHOPGM(" " ACTION_REASON_ON_FILAMENT_RUNOUT " ");
       SERIAL_CHAR(tool);
       SERIAL_EOL();
-
     #endif // HOST_ACTION_COMMANDS
 
     if (!runout.host_handling)

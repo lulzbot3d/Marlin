@@ -533,6 +533,9 @@ private:
     static void M108();
     static void M112();
     static void M410();
+    #if ENABLED(HOST_PROMPT_SUPPORT)
+      static void M876();
+    #endif
   #endif
 
   static void M109();
@@ -720,7 +723,7 @@ private:
     static void M407();
   #endif
 
-  #if ENABLED(FILAMENT_RUNOUT_SENSOR)
+  #if HAS_FILAMENT_SENSOR
     static void M412();
   #endif
 

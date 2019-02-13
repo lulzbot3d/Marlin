@@ -1393,6 +1393,8 @@
     #define LULZBOT_FILAMENT_MOTION_SENSOR
 
     #define LULZBOT_ACTION_ON_FILAMENT_RUNOUT "pause: filament_runout"
+
+    #define LULZBOT_RUNOUT_HANDLING_WORKAROUNDS
 #endif
 
 /******************************* MOTOR DRIVER TYPE ******************************/
@@ -1580,8 +1582,6 @@
     // Match the purge location of the v3 dual so a single tray can be used.
     #define LULZBOT_NOZZLE_PARK_POINT { 100, (LULZBOT_Y_MAX_POS -  1), 20 }
 #endif
-
-#define LULZBOT_ACTION_ON_PAUSE_AND_RESUME
 
 #if defined(LULZBOT_IS_MINI)
     #define LULZBOT_AFTER_ABORT_PRINT_ACTION GcodeSuite::process_subcommands_now_P(PSTR("G28 Z\nG0 X80 Y190 F3000\nM117 Print aborted."));

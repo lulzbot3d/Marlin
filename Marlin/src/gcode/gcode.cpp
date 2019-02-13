@@ -36,6 +36,10 @@ GcodeSuite gcode;
   #include "../module/printcounter.h"
 #endif
 
+#if ENABLED(HOST_PROMPT_SUPPORT)
+  #include "../feature/host_actions.h"
+#endif
+
 #include "../Marlin.h" // for idle() and suspend_auto_report
 
 millis_t GcodeSuite::previous_move_ms;
@@ -131,33 +135,23 @@ void GcodeSuite::dwell(millis_t time) {
       LULZBOT_ENABLE_PROBE_PINS(true);
     #endif
     while (G29()) { // G29 should return true for failed probes ONLY
-      if (retries--) {
-        #ifdef G29_ACTION_ON_RECOVER
-          host_action(PSTR(G29_ACTION_ON_RECOVER));
-        #endif
-        #ifdef G29_RECOVER_COMMANDS
-          process_subcommands_now_P(PSTR(G29_RECOVER_COMMANDS));
-        #endif
-      }
+      if (retries--) event_probe_recover();
       else {
         #if defined(LULZBOT_ENABLE_PROBE_PINS)
           LULZBOT_ENABLE_PROBE_PINS(false);
         #endif
-        #ifdef G29_FAILURE_COMMANDS
-          process_subcommands_now_P(PSTR(G29_FAILURE_COMMANDS));
-        #endif
-        #ifdef G29_ACTION_ON_FAILURE
-          host_action(PSTR(G29_ACTION_ON_FAILURE));
-        #endif
-        #if ENABLED(G29_HALT_ON_FAILURE)
-          kill(PSTR(MSG_ERR_PROBING_FAILED));
-        #endif
+        event_probe_failure();
         return;
       }
+      #if defined(LULZBOT_ENABLE_PROBE_PINS)
+        LULZBOT_ENABLE_PROBE_PINS(false);
+      #endif
     }
-    #if defined(LULZBOT_ENABLE_PROBE_PINS)
-      LULZBOT_ENABLE_PROBE_PINS(false);
+
+    #if ENABLED(HOST_PROMPT_SUPPORT)
+      if (host_prompt_reason == PROMPT_G29_RETRY) host_action_prompt_end();
     #endif
+
     #ifdef G29_SUCCESS_COMMANDS
       process_subcommands_now_P(PSTR(G29_SUCCESS_COMMANDS));
     #endif
@@ -378,8 +372,15 @@ void GcodeSuite::process_parsed_command(
         case 108: M108(); break;                                  // M108: Cancel Waiting
         case 112: M112(); break;                                  // M112: Emergency Stop
         case 410: M410(); break;                                  // M410: Quickstop - Abort all the planned moves.
+        #if ENABLED(HOST_PROMPT_SUPPORT)
+          case 876: M876(); break;                                  // M876: Handle Host prompt responses
+        #endif
       #else
-        case 108: case 112: case 410: break;
+        case 108: case 112: case 410:
+        #if ENABLED(HOST_PROMPT_SUPPORT)
+          case 876:
+        #endif
+        break;
       #endif
 
       #if ENABLED(HOST_KEEPALIVE_FEATURE)
@@ -596,7 +597,7 @@ void GcodeSuite::process_parsed_command(
         case 407: M407(); break;                                  // M407: Display measured filament diameter
       #endif
 
-      #if ENABLED(FILAMENT_RUNOUT_SENSOR)
+      #if HAS_FILAMENT_SENSOR
         case 412: M412(); break;                                  // M412: Enable/Disable filament runout detection
       #endif
 

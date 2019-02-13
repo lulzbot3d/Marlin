@@ -26,14 +26,18 @@
 
 #include "../inc/MarlinConfigPre.h"
 
-#if ENABLED(FILAMENT_RUNOUT_SENSOR)
+#if HAS_FILAMENT_SENSOR
 
 #include "runout.h"
 
 FilamentMonitor runout;
 
 bool FilamentMonitorBase::enabled = true,
-     FilamentMonitorBase::filament_ran_out; // = false
+     FilamentMonitorBase::filament_ran_out;  // = false
+
+#if ENABLED(HOST_ACTION_COMMANDS)
+  bool FilamentMonitorBase::host_handling; // = false
+#endif
 
 /**
  * Called by FilamentSensorSwitch::run when filament is detected.
@@ -54,4 +58,4 @@ void FilamentSensorBase::filament_present(const uint8_t extruder) {
   int8_t RunoutResponseDebounced::runout_count; // = 0
 #endif
 
-#endif // FILAMENT_RUNOUT_SENSOR
+#endif // HAS_FILAMENT_SENSOR

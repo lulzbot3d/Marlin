@@ -42,9 +42,17 @@
   #include "../../sd/cardreader.h"
 #endif
 
+#if ENABLED(HOST_ACTION_COMMANDS)
+  #include "../../feature/host_actions.h"
+#endif
+
 void lcd_pause() {
   #if ENABLED(POWER_LOSS_RECOVERY)
     if (recovery.enabled) recovery.save(true, false);
+  #endif
+
+  #if ENABLED(HOST_PROMPT_SUPPORT)
+    host_prompt_open(PROMPT_PAUSE_RESUME, PSTR("UI Pause"), PSTR("Resume"));
   #endif
 
   #if ENABLED(PARK_HEAD_ON_PAUSE)
@@ -74,6 +82,9 @@ void lcd_stop() {
   #endif
   #ifdef ACTION_ON_CANCEL
     host_action_cancel();
+  #endif
+  #if ENABLED(HOST_PROMPT_SUPPORT)
+    host_prompt_open(PROMPT_INFO, PSTR("UI Abort"));
   #endif
   ui.set_status_P(PSTR(MSG_PRINT_ABORTED), -1);
   ui.return_to_status();
@@ -135,6 +146,18 @@ void menu_led();
   void menu_mixer();
 #endif
 
+#if HAS_SERVICE_INTERVALS && ENABLED(PRINTCOUNTER)
+  #if SERVICE_INTERVAL_1 > 0
+    void menu_service1();
+  #endif
+  #if SERVICE_INTERVAL_2 > 0
+    void menu_service2();
+  #endif
+  #if SERVICE_INTERVAL_3 > 0
+    void menu_service3();
+  #endif
+#endif
+
 void menu_main() {
   START_MENU();
   MENU_BACK(MSG_WATCH);
@@ -178,9 +201,9 @@ void menu_main() {
       }
     #endif // !HAS_ENCODER_WHEEL && SDSUPPORT
 
-    #if ENABLED(SDSUPPORT) || defined(ACTION_ON_RESUME)
-      #if ENABLED(SDSUPPORT)
-        if (card.isFileOpen() && card.isPaused())
+    #if ENABLED(SDSUPPORT) || ENABLED(HOST_ACTION_COMMANDS)
+      #if DISABLED(HOST_ACTION_COMMANDS)
+        if (card_open && card.isPaused())
       #endif
           MENU_ITEM(function, MSG_RESUME_PRINT, lcd_resume);
     #endif
@@ -264,6 +287,18 @@ void menu_main() {
       MENU_ITEM(function, MSG_NO_CARD, NULL);
     }
   #endif // HAS_ENCODER_WHEEL && SDSUPPORT
+
+  #if HAS_SERVICE_INTERVALS && ENABLED(PRINTCOUNTER)
+    #if SERVICE_INTERVAL_1 > 0
+      MENU_ITEM(submenu, SERVICE_NAME_1, menu_service1);
+    #endif
+    #if SERVICE_INTERVAL_2 > 0
+      MENU_ITEM(submenu, SERVICE_NAME_2, menu_service2);
+    #endif
+    #if SERVICE_INTERVAL_3 > 0
+      MENU_ITEM(submenu, SERVICE_NAME_3, menu_service3);
+    #endif
+  #endif
 
   END_MENU();
 }

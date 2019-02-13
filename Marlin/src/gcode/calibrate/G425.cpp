@@ -271,12 +271,12 @@ inline void probe_side(measurements_t &m, const float uncertainty, const side_t 
   }
 
   // Move to safe distance to the side of the calibration object
-  move_to(axis, m.obj_center[axis] + (-dir) * (m.dimensions[axis] / 2 + m.nozzle_outer_dimension[axis] / 2 + uncertainty));
+  move_to(axis, m.obj_center[axis] + (-dir) * (dimensions[axis] / 2 + m.nozzle_outer_dimension[axis] / 2 + uncertainty));
 
   // Plunge below the side of the calibration object and measure
   move_to(Z_AXIS, m.obj_side[TOP] - CALIBRATION_NOZZLE_TIP_HEIGHT * 0.7);
   const float measurement = measure(axis, dir, true, &m.backlash[side], uncertainty);
-  m.obj_center[axis] = measurement + dir * (m.dimensions[axis] / 2 + m.nozzle_outer_dimension[axis] / 2);
+  m.obj_center[axis] = measurement + dir * (dimensions[axis] / 2 + m.nozzle_outer_dimension[axis] / 2);
   m.obj_side[side] = measurement;
 }
 

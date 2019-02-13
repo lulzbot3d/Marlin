@@ -621,6 +621,7 @@ inline void calibrate_all() {
  *   no args     - Perform entire calibration sequence (backlash + position on all toolheads)
  */
 void GcodeSuite::G425() {
+  LULZBOT_ENABLE_PROBE_PINS
   TEMPORARY_SOFT_ENDSTOP_STATE(false);
   TEMPORARY_BED_LEVELING_STATE(false);
 

@@ -131,21 +131,12 @@ void GcodeSuite::dwell(millis_t time) {
 
   void GcodeSuite::G29_with_retry() {
     uint8_t retries = G29_MAX_RETRIES;
-    #if defined(LULZBOT_ENABLE_PROBE_PINS)
-      LULZBOT_ENABLE_PROBE_PINS(true);
-    #endif
     while (G29()) { // G29 should return true for failed probes ONLY
       if (retries--) event_probe_recover();
       else {
-        #if defined(LULZBOT_ENABLE_PROBE_PINS)
-          LULZBOT_ENABLE_PROBE_PINS(false);
-        #endif
         event_probe_failure();
         return;
       }
-      #if defined(LULZBOT_ENABLE_PROBE_PINS)
-        LULZBOT_ENABLE_PROBE_PINS(false);
-      #endif
     }
 
     #if ENABLED(HOST_PROMPT_SUPPORT)
@@ -274,11 +265,7 @@ void GcodeSuite::process_parsed_command(
       #endif
 
       #if ENABLED(CALIBRATION_GCODE)
-        case 425:
-          LULZBOT_ENABLE_PROBE_PINS(true);
-          G425();                                                 // G425: Perform calibration with calibration cube
-          LULZBOT_ENABLE_PROBE_PINS(false);
-          break;
+        case 425: G425(); break;                                  // G425: Perform calibration with calibration cube
       #endif
 
       #if ENABLED(DEBUG_GCODE_PARSER)
@@ -435,15 +422,7 @@ void GcodeSuite::process_parsed_command(
       case 115: M115(); break;                                    // M115: Report capabilities
       case 117: M117(); break;                                    // M117: Set LCD message text, if possible
       case 118: M118(); break;                                    // M118: Display a message in the host console
-      case 119: // M119: Report endstop states
-        #if defined(LULZBOT_ENABLE_PROBE_PINS)
-          LULZBOT_ENABLE_PROBE_PINS(true);
-        #endif
-        M119();
-        #if defined(LULZBOT_ENABLE_PROBE_PINS)
-          LULZBOT_ENABLE_PROBE_PINS(false);
-        #endif
-        break;
+      case 119: M119(); break;                                    // M119: Report endstop states
       case 120: M120(); break;                                    // M120: Enable endstops
       case 121: M121(); break;                                    // M121: Disable endstops
 

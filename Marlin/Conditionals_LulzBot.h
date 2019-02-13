@@ -631,7 +631,8 @@
     #define LULZBOT_EXTRUDER_MOTOR_SHUTOFF_ON_PROBE(probing)
 #endif
 
-#define LULZBOT_ENABLE_PROBE_PINS(enable) enable_probe_pins(enable);
+#define LULZBOT_ENABLE_PROBE_PINS EnableProbePins epp;
+#define LULZBOT_SET_PROBE_PINS_STATE(en) EnableProbePins::enable(en);
 
 /* Make it so M42 S<state> controls the state of the
  * probe lines. This is useful for troubleshooting. */

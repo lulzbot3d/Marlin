@@ -181,9 +181,7 @@
  *
  */
 void GcodeSuite::G28(const bool always_home_all) {
-  #if defined(LULZBOT_HOMING_USES_PROBE_PINS)
-    LULZBOT_ENABLE_PROBE_PINS(true);
-  #endif
+  LULZBOT_ENABLE_PROBE_PINS
 
   #if ENABLED(DEBUG_LEVELING_FEATURE)
     if (DEBUGGING(LEVELING)) {
@@ -473,8 +471,5 @@ void GcodeSuite::G28(const bool always_home_all) {
       const uint8_t cv = L6470::chain[j];
       L6470.set_param(cv, L6470_ABS_POS, stepper.position((AxisEnum)L6470.axis_xref[cv]));
     }
-  #endif
-  #if defined(LULZBOT_HOMING_USES_PROBE_PINS)
-    LULZBOT_ENABLE_PROBE_PINS(false);
   #endif
 }

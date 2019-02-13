@@ -3822,15 +3822,15 @@ bool FilesScreen::onTouchEnd(uint8_t tag) {
 #if ENABLED(DEVELOPER_SCREENS)
   void DiagnosticsScreen::onEntry() {
     BaseScreen::onEntry();
-    #if defined(LULZBOT_ENABLE_PROBE_PINS)
-      LULZBOT_ENABLE_PROBE_PINS(true)
+    #if defined(LULZBOT_SET_PROBE_PINS_STATE)
+      LULZBOT_SET_PROBE_PINS_STATE(true)
     #endif
   }
 
   void DiagnosticsScreen::onExit() {
     BaseScreen::onExit();
-    #if defined(LULZBOT_ENABLE_PROBE_PINS)
-      LULZBOT_ENABLE_PROBE_PINS(true)
+    #if defined(LULZBOT_SET_PROBE_PINS_STATE)
+      LULZBOT_SET_PROBE_PINS_STATE(false)
     #endif
   }
 

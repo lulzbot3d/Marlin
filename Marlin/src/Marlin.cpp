@@ -348,17 +348,15 @@ void disable_all_steppers() {
     #endif
 
     #if defined(LULZBOT_RUNOUT_HANDLING_WORKAROUNDS)
-      if(IS_SD_PRINTING()) {
-        runout.host_handling = false;
-      } else {
-        // Let Cura handle the runout
-        runout.host_handling = true;
+      const bool run_runout_script = IS_SD_PRINTING();
+      if(!IS_SD_PRINTING())
         runout.reset();
-      }
+    #else
+      const bool run_runout_script = !runout.host_handling;
     #endif
 
     #if ENABLED(HOST_ACTION_COMMANDS)
-      if (!runout.host_handling
+      if (run_runout_script
         && ( strstr(FILAMENT_RUNOUT_SCRIPT, "M600")
           || strstr(FILAMENT_RUNOUT_SCRIPT, "M125")
           #if ENABLED(ADVANCED_PAUSE_FEATURE)
@@ -384,7 +382,7 @@ void disable_all_steppers() {
       SERIAL_EOL();
     #endif // HOST_ACTION_COMMANDS
 
-    if (!runout.host_handling)
+    if (run_runout_script)
       enqueue_and_echo_commands_P(PSTR(FILAMENT_RUNOUT_SCRIPT));
   }
 
@@ -394,7 +392,7 @@ void disable_all_steppers() {
 
   void event_probe_failure() {
     #ifdef G29_FAILURE_COMMANDS
-      process_subcommands_now_P(PSTR(G29_FAILURE_COMMANDS));
+      GcodeSuite::process_subcommands_now_P(PSTR(G29_FAILURE_COMMANDS));
     #endif
     #ifdef ACTION_ON_G29_FAILURE
       host_action(PSTR(ACTION_ON_G29_FAILURE)); }
@@ -412,7 +410,7 @@ void disable_all_steppers() {
       host_prompt_do(PROMPT_INFO, PSTR("G29 Retrying"));
     #endif
     #ifdef G29_RECOVER_COMMANDS
-      process_subcommands_now_P(PSTR(G29_RECOVER_COMMANDS));
+      GcodeSuite::process_subcommands_now_P(PSTR(G29_RECOVER_COMMANDS));
     #endif
     #ifdef ACTION_ON_G29_RECOVER
       host_action(PSTR(ACTION_ON_G29_RECOVER));

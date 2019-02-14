@@ -75,7 +75,7 @@
  *
  */
 
-#define LULZBOT_FW_VERSION ".87" // Change this with each update
+#define LULZBOT_FW_VERSION ".88" // Change this with each update
 
 #if ( \
     !defined(LULZBOT_Gladiola_Mini) && \

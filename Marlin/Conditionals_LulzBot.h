@@ -84,7 +84,11 @@
     !defined(LULZBOT_Juniper_TAZ5) && \
     !defined(LULZBOT_Oliveoil_TAZ6) && \
     !defined(LULZBOT_Quiver_TAZPro) && \
-    !defined(LULZBOT_Prototype_DemoCLCD) \
+    !defined(LULZBOT_Unsupported_RedGum) && \
+    !defined(LULZBOT_Unsupported_KangarooPaw) && \
+    !defined(LULZBOT_Unsupported_ArchimTAZ6) && \
+    !defined(LULZBOT_Unsupported_EinsyMiniLCD) && \
+    !defined(LULZBOT_Unsupported_EinsyMiniTouchLCD) \
 )
     #error Must specify printer model. Please see "Configuration_LulzBot.h" for directions.
 #endif
@@ -104,7 +108,8 @@
     !defined(TOOLHEAD_Longfin_FlexyDually) && \
     !defined(TOOLHEAD_Yellowfin_DualExtruderV3) && \
     !defined(TOOLHEAD_Angelfish_Aerostruder) && \
-    !defined(TOOLHEAD_Quiver_DualExtruder) \
+    !defined(TOOLHEAD_Quiver_DualExtruder) && \
+    !defined(TOOLHEAD_Unsupported_KangarooPaw) \
 )
     #error Must specify toolhead. Please see "Configuration_LulzBot.h" for directions.
 #endif
@@ -117,12 +122,14 @@
     #define LULZBOT_IS_MINI
     #define LULZBOT_MINI_BED
     #define LULZBOT_USE_AUTOLEVELING
+    #define LULZBOT_BACKLASH_COMPENSATION
+    #define LULZBOT_CALIBRATION_GCODE
     #define LULZBOT_USE_MIN_ENDSTOPS
     #define LULZBOT_USE_MAX_ENDSTOPS
     #define LULZBOT_USE_NORMALLY_OPEN_ENDSTOPS
     #define LULZBOT_ENDSTOPS_ALWAYS_ON_DEFAULT
     #define LULZBOT_USE_Z_SCREW
-    #define LULZBOT_BACKLASH_COMPENSATION
+    #define LULZBOT_USE_LEGACY_XY_STEPS
     #define LULZBOT_BAUDRATE 250000
     #define LULZBOT_MACHINE_UUID "351487b6-ca9a-4c1a-8765-d668b1da6585"
 #endif
@@ -134,12 +141,14 @@
     #define LULZBOT_MINI_BED
     #define LULZBOT_USE_REPRAP_LCD_DISPLAY
     #define LULZBOT_USE_AUTOLEVELING
+    #define LULZBOT_BACKLASH_COMPENSATION
+    #define LULZBOT_CALIBRATION_GCODE
     #define LULZBOT_USE_MIN_ENDSTOPS
     #define LULZBOT_USE_MAX_ENDSTOPS
     #define LULZBOT_USE_NORMALLY_OPEN_ENDSTOPS
     #define LULZBOT_ENDSTOPS_ALWAYS_ON_DEFAULT
     #define LULZBOT_USE_Z_SCREW
-    #define LULZBOT_BACKLASH_COMPENSATION
+    #define LULZBOT_USE_LEGACY_XY_STEPS
     #define LULZBOT_BAUDRATE 250000
     #define LULZBOT_MACHINE_UUID "083f68f1-028e-494c-98e1-f2e0dfaee9a5"
 #endif
@@ -154,6 +163,7 @@
     #define LULZBOT_USE_NORMALLY_OPEN_ENDSTOPS
     #define LULZBOT_USE_Z_SCREW
     #define LULZBOT_BACKLASH_COMPENSATION
+    #define LULZBOT_USE_LEGACY_XY_STEPS
     #define LULZBOT_BAUDRATE 250000
     #define LULZBOT_MACHINE_UUID "c3255c96-4097-4884-8ed0-ded2ff9bae61"
 #endif
@@ -165,13 +175,16 @@
     #define LULZBOT_TAZ_BED
     #define LULZBOT_USE_REPRAP_LCD_DISPLAY
     #define LULZBOT_USE_AUTOLEVELING
+    #define LULZBOT_BACKLASH_COMPENSATION
+    #define LULZBOT_CALIBRATION_GCODE
     #define LULZBOT_USE_MIN_ENDSTOPS
     #define LULZBOT_USE_MAX_ENDSTOPS
     #define LULZBOT_USE_HOME_BUTTON
+    #define LULZBOT_WASHERS_ON_Z_MIN_PROBE
     #define LULZBOT_USE_NORMALLY_CLOSED_ENDSTOPS
     #define LULZBOT_ENDSTOPS_ALWAYS_ON_DEFAULT
     #define LULZBOT_USE_Z_SCREW
-    #define LULZBOT_BACKLASH_COMPENSATION
+    #define LULZBOT_USE_LEGACY_XY_STEPS
     #define LULZBOT_BAUDRATE 250000
     #define LULZBOT_MACHINE_UUID "845f003c-aebd-4e53-a6b9-7d0984fde609"
 #endif
@@ -185,12 +198,13 @@
     #define LULZBOT_USE_REPRAP_LCD_DISPLAY
     #define LULZBOT_TWO_PIECE_BED
     #define LULZBOT_USE_AUTOLEVELING
+    #define LULZBOT_BACKLASH_COMPENSATION
+    #define LULZBOT_CALIBRATION_GCODE
     #define LULZBOT_SENSORLESS_HOMING
     #define LULZBOT_USE_NORMALLY_CLOSED_ENDSTOPS
     #define LULZBOT_STEALTHCHOP_Z
     #define LULZBOT_HYBRID_THRESHOLD
     #define LULZBOT_USE_Z_BELT
-    #define LULZBOT_BACKLASH_COMPENSATION
     #define LULZBOT_BAUDRATE 250000
     #define LULZBOT_PRINTCOUNTER
     #define LULZBOT_MACHINE_UUID "e5502411-d46d-421d-ba3a-a20126d7930f"
@@ -207,10 +221,12 @@
     #define LULZBOT_USE_ARCHIM2
     #define LULZBOT_USE_TOUCH_UI
     #define LULZBOT_USE_AUTOLEVELING
+    #define LULZBOT_BACKLASH_COMPENSATION
+    #define LULZBOT_HAS_CALIBRATION_CUBE
+    #define LULZBOT_CALIBRATION_GCODE
     #define LULZBOT_SENSORLESS_HOMING
     #define LULZBOT_USE_NORMALLY_CLOSED_ENDSTOPS
     #define LULZBOT_USE_Z_BELT
-    #define LULZBOT_BACKLASH_COMPENSATION
     #define LULZBOT_STEALTHCHOP_Z
     #define LULZBOT_HYBRID_THRESHOLD
     #define LULZBOT_BAUDRATE 250000
@@ -219,25 +235,47 @@
     #define LULZBOT_USE_EXPERIMENTAL_FEATURES
     #define LULZBOT_USB_FLASH_DRIVE_SUPPORT
     #define LULZBOT_SDSUPPORT
-    #define LULZBOT_SDSUPPORT_DEBUG
-    #define LULZBOT_HAS_CALIBRATION_CUBE
     #define LULZBOT_FILAMENT_RUNOUT_SENSOR
     #define LULZBOT_BACKUP_EEPROM_INFORMATION
     #define LULZBOT_USB_READ_ERROR_IS_FATAL
     #define LULZBOT_AXIS_LEVELING_USING_DUAL_Z_ENDSTOPS
 #endif
 
-#if defined(LULZBOT_Prototype_DemoCLCD)
-    #define LULZBOT_CUSTOM_MACHINE_NAME "LulzBot TAZ"
-    #define LULZBOT_LCD_MACHINE_NAME "TAZ"
-    #define LULZBOT_IS_MINI
-    #define LULZBOT_USE_EINSY_RETRO
-    #define LULZBOT_MINI_BED
-    #define LULZBOT_USE_TOUCH_UI
-    #define LULZBOT_USE_HIGH_RES
-    //#define LULZBOT_USE_PORTRAIT_UI
+/* Unsupported experimental configurations. Use at your own risk. */
+
+#if defined(LULZBOT_Unsupported_RedGum)
+    #define LULZBOT_CUSTOM_MACHINE_NAME "Redgum"
+    #define LULZBOT_LCD_MACHINE_NAME "Redgum"
+    #define LULZBOT_IS_TAZ
+    #define LULZBOT_TAZ_BED
     #define LULZBOT_TWO_PIECE_BED
+    #define LULZBOT_USE_REPRAP_LCD_DISPLAY
+    #define LULZBOT_LIGHTWEIGHT_UI
+    #define LULZBOT_USE_YMAX_PLUG
+    #define LULZBOT_USE_XMIN_PLUG
     #define LULZBOT_USE_AUTOLEVELING
+    #define LULZBOT_USE_NORMALLY_CLOSED_ENDSTOPS
+    #define LULZBOT_USE_Z_BELT
+    #define LULZBOT_BACKLASH_COMPENSATION
+    #define LULZBOT_HAS_CALIBRATION_CUBE
+    #define LULZBOT_CALIBRATION_GCODE
+    #define LULZBOT_BAUDRATE 250000
+    #define LULZBOT_PRINTCOUNTER
+    #define LULZBOT_MACHINE_UUID "5ee798fb-4062-4d35-8224-5e846ffb45a5"
+    #define LULZBOT_USE_EXPERIMENTAL_FEATURES
+    #define LULZBOT_SDSUPPORT
+    #define LULZBOT_AXIS_LEVELING_USING_DUAL_Z_ENDSTOPS
+    #define LULZBOT_USE_EXPERIMENTAL_FEATURES
+#endif
+
+#if defined(LULZBOT_Unsupported_KangarooPaw)
+    #define LULZBOT_CUSTOM_MACHINE_NAME "KangarooPaw"
+    #define LULZBOT_LCD_MACHINE_NAME "KangarooPaw"
+    #define LULZBOT_NO_HEATERS
+    #define LULZBOT_IS_MINI
+    #define LULZBOT_MINI_BED
+    #define LULZBOT_USE_EINSY_RETRO
+    #define LULZBOT_USE_REPRAP_LCD_DISPLAY
     #define LULZBOT_SENSORLESS_HOMING
     #define LULZBOT_USE_NORMALLY_CLOSED_ENDSTOPS
     #define LULZBOT_STEALTHCHOP_Z
@@ -245,9 +283,85 @@
     #define LULZBOT_USE_Z_BELT
     #define LULZBOT_BAUDRATE 250000
     #define LULZBOT_PRINTCOUNTER
+    #define LULZBOT_MACHINE_UUID "9a1d8eee-7118-40a7-942d-9541f35667dd"
+    #define LULZBOT_LIGHTWEIGHT_UI
+#endif
+
+#if defined(LULZBOT_Unsupported_ArchimTAZ6)
+    // Unsupported TAZ 6 with Archim 2. Washers must be
+    // connected to Z_MIN (in parallel with homing button).
+    #define LULZBOT_CUSTOM_MACHINE_NAME "Archim TAZ 6"
+    #define LULZBOT_LCD_MACHINE_NAME "TAZ 6"
+    #define LULZBOT_IS_TAZ
+    #define LULZBOT_TAZ_BED
+    #define LULZBOT_USE_ARCHIM2
+    #define LULZBOT_USE_REPRAP_LCD_DISPLAY
+    #define LULZBOT_USE_AUTOLEVELING
     #define LULZBOT_BACKLASH_COMPENSATION
-    #define LULZBOT_MACHINE_UUID "e5502411-d46d-421d-ba3a-a20126d7930f"
-    //#define LULZBOT_USE_EXPERIMENTAL_FEATURES
+    #define LULZBOT_CALIBRATION_GCODE
+    #define LULZBOT_USE_NORMALLY_CLOSED_ENDSTOPS
+    #define LULZBOT_USE_MIN_ENDSTOPS
+    #define LULZBOT_USE_MAX_ENDSTOPS
+    #define LULZBOT_USE_HOME_BUTTON
+    #define LULZBOT_ENDSTOPS_ALWAYS_ON_DEFAULT
+    #define LULZBOT_USE_Z_SCREW
+    #define LULZBOT_STEALTHCHOP_Z
+    #define LULZBOT_HYBRID_THRESHOLD
+    #define LULZBOT_BAUDRATE 250000
+    #define LULZBOT_PRINTCOUNTER
+    #define LULZBOT_MACHINE_UUID "a07987e3-7ca7-48e1-b7a4-cc2c45ff2742"
+    #define LULZBOT_SDSUPPORT
+    #define LULZBOT_USE_EXPERIMENTAL_FEATURES
+#endif
+
+#if defined(LULZBOT_Unsupported_EinsyMiniLCD)
+    // Unsupported Mini with Einsy Retro.
+    #define LULZBOT_CUSTOM_MACHINE_NAME "Einsy MiniLCD"
+    #define LULZBOT_LCD_MACHINE_NAME "Mini"
+    #define LULZBOT_IS_MINI
+    #define LULZBOT_MINI_BED
+    #define LULZBOT_USE_EINSY_RETRO
+    #define LULZBOT_USE_Z_SCREW
+    #define LULZBOT_USE_REPRAP_LCD_DISPLAY
+    #define LULZBOT_USE_AUTOLEVELING
+    #define LULZBOT_BACKLASH_COMPENSATION
+    #define LULZBOT_CALIBRATION_GCODE
+    #define LULZBOT_USE_MIN_ENDSTOPS
+    #define LULZBOT_USE_MAX_ENDSTOPS
+    #define LULZBOT_USE_NORMALLY_OPEN_ENDSTOPS
+    #define LULZBOT_STEALTHCHOP_Z
+    #define LULZBOT_HYBRID_THRESHOLD
+    #define LULZBOT_BAUDRATE 250000
+    #define LULZBOT_PRINTCOUNTER
+    #define LULZBOT_MACHINE_UUID "b68ff322-3328-4543-bd93-bb8d8eb0c891"
+    #define LULZBOT_LIGHTWEIGHT_UI
+    #define LULZBOT_USE_EXPERIMENTAL_FEATURES
+#endif
+
+#if defined(LULZBOT_Unsupported_EinsyMiniTouchLCD)
+    // Unsupported Mini with Einsy Retro and Touch LCD
+    #define LULZBOT_CUSTOM_MACHINE_NAME "Einsy MiniCLCD"
+    #define LULZBOT_LCD_MACHINE_NAME "Mini"
+    #define LULZBOT_IS_MINI
+    #define LULZBOT_USE_EINSY_RETRO
+    #define LULZBOT_MINI_BED
+    //#define LULZBOT_NO_HEATERS
+    #define LULZBOT_USE_Z_SCREW
+    #define LULZBOT_USE_TOUCH_UI
+    #define LULZBOT_USE_HIGH_RES
+    //#define LULZBOT_USE_PORTRAIT_UI
+    #define LULZBOT_USE_AUTOLEVELING
+    #define LULZBOT_BACKLASH_COMPENSATION
+    #define LULZBOT_CALIBRATION_GCODE
+    #define LULZBOT_USE_MIN_ENDSTOPS
+    #define LULZBOT_USE_MAX_ENDSTOPS
+    #define LULZBOT_USE_NORMALLY_OPEN_ENDSTOPS
+    #define LULZBOT_STEALTHCHOP_Z
+    #define LULZBOT_HYBRID_THRESHOLD
+    #define LULZBOT_BAUDRATE 250000
+    #define LULZBOT_PRINTCOUNTER
+    #define LULZBOT_MACHINE_UUID "23421dc0-df9f-430b-8f91-0e3bcb55b4e4"
+    #define LULZBOT_USE_EXPERIMENTAL_FEATURES
     #define LULZBOT_SDSUPPORT
 #endif
 
@@ -326,7 +440,6 @@
 /******************** MOTHERBOARD AND PIN CONFIGURATION ***********************/
 
 #if defined(LULZBOT_USE_ARCHIM2)
-    // Experimental TAZ retrofitted with Archim from UltiMachine
     #define LULZBOT_MOTHERBOARD                   BOARD_ARCHIM2
     #define LULZBOT_CONTROLLER_FAN_PIN            FAN1_PIN
     #define LULZBOT_SERIAL_PORT                   -1
@@ -339,7 +452,6 @@
     #define LULZBOT_USB_DEVICE_PRODUCT_ID         0x0001
 
 #elif defined(LULZBOT_USE_EINSY_RETRO)
-    // Experimental Mini retrofitted with EinsyRambo from UltiMachine
     #define LULZBOT_MOTHERBOARD                   BOARD_EINSY_RETRO
     #define LULZBOT_CONTROLLER_FAN_PIN            FAN1_PIN  // Digital pin 6
     #define LULZBOT_SERIAL_PORT                   0
@@ -413,7 +525,7 @@
     #define LULZBOT_HOMING_FEEDRATE_Z               (3*60)  // mm/m
 #endif // LULZBOT_TAZ_BED
 
-#if defined(LULZBOT_USE_HOME_BUTTON)
+#if defined(LULZBOT_WASHERS_ON_Z_MIN_PROBE)
     #define LULZBOT_Z_MIN_PROBE_ENDSTOP
     // On the TAZ 6, the bed washers are on Z_MIN_PROBE while the
     // Z-Home button is on Z_MIN, yet we need both to be disabled
@@ -666,6 +778,8 @@
         "M117 Leveling X Axis\n" /* Set LCD status */ \
         "G28 Z0\n"               /* Home Axis */ \
         "M117 Leveling done.\n"  /* Set LCD status */
+#else
+    #define LULZBOT_MENU_AXIS_LEVELING_COMMANDS ""
 #endif
 
 #if defined(LULZBOT_USE_Z_SCREW)
@@ -682,7 +796,7 @@
 
 /**************************** MINI TOOLHEADS ***********************************/
 
-#if defined(TOOLHEAD_Gladiola_SingleExtruder) || defined(TOOLHEAD_Albatross_Flexystruder) || defined(TOOLHEAD_Finch_Aerostruder) || defined(TOOLHEAD_CecropiaSilk_SingleExtruderAeroV2) || defined(TOOLHEAD_AchemonSphinx_SmallLayer) || defined(TOOLHEAD_BandedTiger_HardenedSteel) || defined(TOOLHEAD_DingyCutworm_HardenedSteelPlus)
+#if defined(TOOLHEAD_Gladiola_SingleExtruder) || defined(TOOLHEAD_Albatross_Flexystruder) || defined(TOOLHEAD_Finch_Aerostruder) || defined(TOOLHEAD_CecropiaSilk_SingleExtruderAeroV2) || defined(TOOLHEAD_AchemonSphinx_SmallLayer) || defined(TOOLHEAD_BandedTiger_HardenedSteel) || defined(TOOLHEAD_DingyCutworm_HardenedSteelPlus) || defined(TOOLHEAD_Unsupported_KangarooPaw)
 
     #define LULZBOT_EXTRUDERS                  1
     #define LULZBOT_TOOLHEAD_X_MAX_ADJ         0
@@ -948,6 +1062,15 @@
     #define LULZBOT_MAY_USE_V2_ADAPTER
 #endif /* TOOLHEAD_DingyCutworm_HardenedSteelPlus */
 
+#if defined(TOOLHEAD_Unsupported_KangarooPaw)
+    #define LULZBOT_LCD_TOOLHEAD_NAME              "Kangaroo Paw"
+//          16 chars max                            ^^^^^^^^^^^^^^^
+    #define LULZBOT_M115_EXTRUDER_TYPE             "Goostruder"
+    #define LULZBOT_X_MAX_ENDSTOP_INVERTING        LULZBOT_NORMALLY_CLOSED_ENDSTOP
+    #define LULZBOT_E3D_Titan_Aero_Volcano
+    #define LULZBOT_E_STEPS                        420
+#endif /* TOOLHEAD_Unsupported_KangarooPaw */
+
 // Using the V2 toolheads on the TAZ and older Minis requires an
 // adapter plate that shifts the coordinate system
 #if defined(LULZBOT_MAY_USE_AERO_V2_ADAPTER) && defined(LULZBOT_USE_Z_SCREW)
@@ -1012,34 +1135,30 @@
     #define LULZBOT_CALIBRATE_ON_BACK_RIGHT_WASHER
 #endif
 
-#if defined(LULZBOT_IS_MINI)
+#if defined(LULZBOT_IS_MINI) && defined(LULZBOT_CALIBRATION_GCODE)
     #if defined(LULZBOT_CALIBRATE_ON_FRONT_LEFT_WASHER)
         #define LULZBOT_CALIBRATION_OBJECT_DIMENSIONS              {22.0,   22.0,  1.5} // mm
         #define LULZBOT_CALIBRATION_OBJECT_CENTER                  {-8.9,   -7.6,  0}   // mm
         #define LULZBOT_CALIBRATION_MEASURE_RIGHT
         #define LULZBOT_CALIBRATION_MEASURE_BACK
-        #define LULZBOT_CALIBRATION_GCODE
 
     #elif defined(LULZBOT_CALIBRATE_ON_FRONT_RIGHT_WASHER)
         #define LULZBOT_CALIBRATION_OBJECT_DIMENSIONS              { 22.0,   22.0, 1.5} // mm
         #define LULZBOT_CALIBRATION_OBJECT_CENTER                  {169.5,   -7.6, 0}   // mm
         #define LULZBOT_CALIBRATION_MEASURE_LEFT
         #define LULZBOT_CALIBRATION_MEASURE_BACK
-        #define LULZBOT_CALIBRATION_GCODE
 
     #elif defined(LULZBOT_CALIBRATE_ON_BACK_LEFT_WASHER)
         #define LULZBOT_CALIBRATION_OBJECT_DIMENSIONS              { 22.0,   22.0, 1.5} // mm
         #define LULZBOT_CALIBRATION_OBJECT_CENTER                  { -8.9,  171.3, 0}   // mm
         #define LULZBOT_CALIBRATION_MEASURE_RIGHT
         #define LULZBOT_CALIBRATION_MEASURE_FRONT
-        #define LULZBOT_CALIBRATION_GCODE
 
     #elif defined(LULZBOT_CALIBRATE_ON_BACK_RIGHT_WASHER)
         #define LULZBOT_CALIBRATION_OBJECT_DIMENSIONS              { 22.0,   22.0, 1.5} // mm
         #define LULZBOT_CALIBRATION_OBJECT_CENTER                  {169.5,  171.3, 0}   // mm
         #define LULZBOT_CALIBRATION_MEASURE_LEFT
         #define LULZBOT_CALIBRATION_MEASURE_FRONT
-        #define LULZBOT_CALIBRATION_GCODE
     #endif
 
 #elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT)
@@ -1054,7 +1173,6 @@
         #endif
         #define LULZBOT_CALIBRATION_MEASURE_LEFT
         #define LULZBOT_CALIBRATION_MEASURE_BACK
-        #define LULZBOT_CALIBRATION_GCODE
     #endif
 #endif
 
@@ -1076,8 +1194,33 @@
 
 /*************************** TEMPERATURE SETTINGS *****************************/
 
-#define LULZBOT_TEMP_SENSOR_0                        5
-#define LULZBOT_TEMP_SENSOR_BED                      7
+#if defined(LULZBOT_NO_HEATERS)
+    #define LULZBOT_TEMP_SENSOR_0                        5
+    #define LULZBOT_TEMP_SENSOR_BED                      0
+    #define LULZBOT_EXTRUDE_MINTEMP                      0
+    #define LULZBOT_MIN_TEMP_WORKAROUND
+#else
+    #define LULZBOT_TEMP_SENSOR_0                        5
+    #define LULZBOT_TEMP_SENSOR_BED                      7
+
+    #define LULZBOT_EXTRUDE_MINTEMP                    120
+
+    // Marlin 1.1.5 no longer issues MIN_TEMP errors and appears to handle
+    // thermal runaway via other means. However, since our users expect a
+    // MIN_TEMP error when disconnecting their print head, this could be
+    // perceived as a safety issue. This is a workaround in "temperature.cpp"
+    // to re-enable that functionality.
+
+    #define LULZBOT_MIN_TEMP_WORKAROUND \
+        static int delayBeforeStartMeasuring = OVERSAMPLENR; \
+            if(delayBeforeStartMeasuring > 0) { \
+                delayBeforeStartMeasuring--; \
+            } else { \
+                if (current_temperature[e] > HEATER_0_MAXTEMP) max_temp_error(0); \
+                if (current_temperature[e] < HEATER_0_MINTEMP) min_temp_error(0); \
+            }
+#endif
+
 #define LULZBOT_TEMP_RESIDENCY_TIME                  1
 #define LULZBOT_TEMP_HYSTERESIS                     10
 #define LULZBOT_TEMP_WINDOW                         10
@@ -1087,7 +1230,6 @@
 #define LULZBOT_TEMP_BED_WINDOW                      5
 
 #define LULZBOT_HEATER_MAXTEMP                     305
-#define LULZBOT_EXTRUDE_MINTEMP                    120
 
 #define LULZBOT_THERMAL_PROTECTION_PERIOD           15     // Seconds
 #define LULZBOT_THERMAL_PROTECTION_HYSTERESIS       30     // Degrees Celsius
@@ -1109,21 +1251,6 @@
     #define LULZBOT_WATCH_TEMP_PERIOD   40  // Seconds
     #define LULZBOT_WATCH_TEMP_INCREASE 10  // Degrees Celsius
 #endif
-
-// Marlin 1.1.5 no longer issues MIN_TEMP errors and appears to handle
-// thermal runaway via other means. However, since our users expect a
-// MIN_TEMP error when disconnecting their print head, this could be
-// perceived as a safety issue. This is a workaround in "temperature.cpp"
-// to re-enable that functionality.
-
-#define LULZBOT_MIN_TEMP_WORKAROUND \
-    static int delayBeforeStartMeasuring = OVERSAMPLENR; \
-        if(delayBeforeStartMeasuring > 0) { \
-            delayBeforeStartMeasuring--; \
-        } else { \
-            if (current_temperature[e] > HEATER_0_MAXTEMP) max_temp_error(0); \
-            if (current_temperature[e] < HEATER_0_MINTEMP) min_temp_error(0); \
-        }
 
 /******************************** HEATING ELEMENTS *****************************/
 
@@ -1198,7 +1325,6 @@
 
 // For the Pelonis C4010L24BPLB1b-7 fan, we need a relative low
 // PWM frequency of about 122Hz in order for the fan to turn.
-
 
 #if defined(LULZBOT_USE_ARCHIM2)
     // On the Archim, it is necessary to use soft PWM to get the
@@ -1333,10 +1459,13 @@
     #define LULZBOT_USE_ZMIN_PLUG
 #endif
 
-// Z-Max Endstops were introduced on the Mini and TAZ 6
 #if defined(LULZBOT_USE_MAX_ENDSTOPS)
     #define LULZBOT_USE_XMAX_PLUG
     #define LULZBOT_USE_YMAX_PLUG
+#endif
+
+// Z-Max Endstops were introduced on the Mini and TAZ 6
+#if defined(LULZBOT_IS_MINI) || (defined(LULZBOT_IS_TAZ) && !defined(LULZBOT_USE_HOME_BUTTON))
     #define LULZBOT_USE_ZMAX_PLUG
 #endif
 
@@ -1898,7 +2027,7 @@
 
 // Values for XYZ vary by printer model, values for E vary by toolhead.
 
-#if defined(LULZBOT_USE_Z_SCREW)
+#if defined(LULZBOT_USE_LEGACY_XY_STEPS)
     // Older printers had a fudge factor for ABS shrinkage.
     #define LULZBOT_XY_STEPS                      100.5
 #else

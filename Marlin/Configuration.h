@@ -557,8 +557,10 @@
  * details can be tuned in Configuration_adv.h
  */
 
+#if !defined(LULZBOT_NO_HEATERS)
 #define THERMAL_PROTECTION_HOTENDS // Enable thermal protection for all extruders
 #define THERMAL_PROTECTION_BED     // Enable thermal protection for the heated bed
+#endif
 
 //===========================================================================
 //============================= Mechanical Settings =========================

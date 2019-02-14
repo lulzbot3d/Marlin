@@ -72,7 +72,7 @@ void lulzbot_startup(void) {
         LULZBOT_EMI_SHUTOFF(pin); \
     }
 
-#if defined(LULZBOT_USE_AUTOLEVELING) && !defined(LULZBOT_USE_HOME_BUTTON)
+#if defined(LULZBOT_USE_AUTOLEVELING) && !defined(LULZBOT_Z_MIN_PROBE_PIN)
 
      void EnableProbePins::enable(const bool enable) {
          endstops.enable_z_probe(enable);
@@ -80,7 +80,7 @@ void lulzbot_startup(void) {
          LULZBOT_EXTRUDER_MOTOR_SHUTOFF_ON_PROBE(enable)
      }
 
-#elif defined(LULZBOT_USE_AUTOLEVELING) && defined(LULZBOT_USE_HOME_BUTTON)
+#elif defined(LULZBOT_USE_AUTOLEVELING) && defined(LULZBOT_Z_MIN_PROBE_PIN)
 
      void EnableProbePins::enable(const bool enable) {
          endstops.enable_z_probe(enable);

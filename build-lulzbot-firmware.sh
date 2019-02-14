@@ -30,12 +30,6 @@ TAZ_PRO_TOOLHEADS="Quiver_DualExtruder $UNIVERSAL_TOOLHEADS"
 MINI2_MODELS="Hibiscus_Mini2"
 MINI2_TOOLHEADS="$UNIVERSAL_TOOLHEADS"
 
-REDGUM_MODELS="Unsupported_RedGum"
-REDGUM_TOOLHEADS="$UNIVERSAL_TOOLHEADS"
-
-KANGAROO_MODELS="Unsupported_KangarooPaw"
-KANGAROO_TOOLHEADS="Unsupported_KangarooPaw"
-
 ####
 # usage
 #
@@ -277,20 +271,6 @@ build_for_taz() {
   for model in $TAZ_PRO_MODELS
   do
     for toolhead in $TAZ_PRO_TOOLHEADS
-    do
-      build_firmware ${model} ${toolhead}
-    done
-  done
-  for model in $REDGUM_MODELS
-  do
-    for toolhead in $REDGUM_TOOLHEADS
-    do
-      build_firmware ${model} ${toolhead}
-    done
-  done
-  for model in $KANGAROO_MODELS
-  do
-    for toolhead in $KANGAROO_TOOLHEADS
     do
       build_firmware ${model} ${toolhead}
     done

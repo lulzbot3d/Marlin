@@ -176,7 +176,6 @@
     #define LULZBOT_USE_REPRAP_LCD_DISPLAY
     #define LULZBOT_USE_AUTOLEVELING
     #define LULZBOT_BACKLASH_COMPENSATION
-    #define LULZBOT_CALIBRATION_GCODE
     #define LULZBOT_USE_MIN_ENDSTOPS
     #define LULZBOT_USE_MAX_ENDSTOPS
     #define LULZBOT_USE_HOME_BUTTON
@@ -750,7 +749,7 @@
  * probe lines. This is useful for troubleshooting. */
 #define LULZBOT_M42_TOGGLES_PROBE_PINS \
     if (!parser.seenval('P')) { \
-      LULZBOT_ENABLE_PROBE_PINS(pin_status); \
+      LULZBOT_SET_PROBE_PINS_STATE(pin_status); \
       return; \
     }
 
@@ -1130,7 +1129,6 @@
 
 #if defined(LULZBOT_HAS_CALIBRATION_CUBE)
     #define LULZBOT_CALIBRATE_ON_CUBE
-
 #elif defined(LULZBOT_IS_MINI)
     #define LULZBOT_CALIBRATE_ON_BACK_RIGHT_WASHER
 #endif

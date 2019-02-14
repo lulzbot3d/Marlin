@@ -331,11 +331,13 @@ void disable_all_steppers() {
       ExtUI::onFilamentRunout(ExtUI::getActiveTool());
     #endif
 
-    const char tool = '0'
-      #if NUM_RUNOUT_SENSORS > 1
-        + active_extruder
-      #endif
-    ;
+    #if ENABLED(HOST_PROMPT_SUPPORT) || ENABLED(HOST_ACTION_COMMANDS)
+      const char tool = '0'
+        #if NUM_RUNOUT_SENSORS > 1
+          + active_extruder
+        #endif
+      ;
+    #endif
 
     //action:out_of_filament
     #if ENABLED(HOST_PROMPT_SUPPORT)
@@ -348,11 +350,11 @@ void disable_all_steppers() {
     #endif
 
     #if defined(LULZBOT_RUNOUT_HANDLING_WORKAROUNDS)
-      const bool run_runout_script = IS_SD_PRINTING();
-      if(!IS_SD_PRINTING())
-        runout.reset();
+    const bool run_runout_script = IS_SD_PRINTING();
+    if(!IS_SD_PRINTING())
+      runout.reset();
     #else
-      const bool run_runout_script = !runout.host_handling;
+    const bool run_runout_script = !runout.host_handling;
     #endif
 
     #if ENABLED(HOST_ACTION_COMMANDS)
@@ -392,7 +394,11 @@ void disable_all_steppers() {
 
   void event_probe_failure() {
     #ifdef G29_FAILURE_COMMANDS
+<<<<<<< HEAD
       GcodeSuite::process_subcommands_now_P(PSTR(G29_FAILURE_COMMANDS));
+=======
+      gcode.process_subcommands_now_P(PSTR(G29_FAILURE_COMMANDS));
+>>>>>>> upstream/bugfix-2.0.x
     #endif
     #ifdef ACTION_ON_G29_FAILURE
       host_action(PSTR(ACTION_ON_G29_FAILURE)); }
@@ -410,7 +416,11 @@ void disable_all_steppers() {
       host_prompt_do(PROMPT_INFO, PSTR("G29 Retrying"));
     #endif
     #ifdef G29_RECOVER_COMMANDS
+<<<<<<< HEAD
       GcodeSuite::process_subcommands_now_P(PSTR(G29_RECOVER_COMMANDS));
+=======
+      gcode.process_subcommands_now_P(PSTR(G29_RECOVER_COMMANDS));
+>>>>>>> upstream/bugfix-2.0.x
     #endif
     #ifdef ACTION_ON_G29_RECOVER
       host_action(PSTR(ACTION_ON_G29_RECOVER));

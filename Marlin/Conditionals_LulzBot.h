@@ -374,6 +374,7 @@
 #define LULZBOT_TX_BUFFER_SIZE 32
 #define LULZBOT_BUFSIZE 5
 #define LULZBOT_PRINTJOB_TIMER_AUTOSTART_DISABLED
+#define LULZBOT_HOST_ACTION_COMMANDS
 
 // Marlin 1.1.4 has changed the behavior of G92 so that
 // it changes software endstops, making it less useful
@@ -1770,7 +1771,7 @@
 }
 
 #define __LULZBOT_WIPE_GCODE(x,y1,y2,z) \
-    "G1 X" #x " Y" #y2 " F5000\n"                 /* Move above second wiper pad */ \
+    "G1 X" #x " Y" #y2 " F5000\n"                 /* Move above wiper pad */ \
     "G1 Z1\n"                                     /* Push nozzle into wiper */ \
     "M109 R170\n"                                 /* Wait for wipe temp */ \
     "G1 X" #x " Y" #y2 " F4000\n"                 /* Slow wipe */ \
@@ -1785,7 +1786,7 @@
     "G1 X" #x " Y" #y1 " F4000\n"                 /* Slow wipe */ \
     "G1 X" #x " Y" #y2 " F4000\n"                 /* Slow wipe */ \
     "G1 X" #x " Y" #y1 " F4000\n"                 /* Slow wipe */ \
-    "G1 Z25\n"                                    /* Raise nozzle */
+    "G1 Z15\n"                                    /* Raise nozzle */
 
 #define _LULZBOT_WIPE_GCODE(x,y1,y2,z) __LULZBOT_WIPE_GCODE(x,y1,y2,z)
 
@@ -1808,7 +1809,7 @@
     //#define LULZBOT_DEBUG_MACROS // Uncomment to debug macro expansions
 
     #define LULZBOT_G29_RETRY_AND_RECOVER
-    #define LULZBOT_G29_MAX_RETRIES      3
+    #define LULZBOT_G29_MAX_RETRIES         2
     #define LULZBOT_G29_HALT_ON_FAILURE
 
     #define LULZBOT_NOZZLE_CLEAN_GOBACK_DISABLED
@@ -1841,10 +1842,10 @@
 
     #if defined(LULZBOT_Quiver_TAZPro) && defined(TOOLHEAD_Quiver_DualExtruder)
         #define LULZBOT_REWIPE_E1 \
-            "G0 Z5\n"                             /* Raise nozzle */ \
             "G0 X150 F5000\n"                     /* Move over to switch extruders */ \
             "T1\n"                                /* Switch to second extruder */ \
             LULZBOT_WIPE_GCODE(RIGHT)             /* Wipe on the rightmost pad */ \
+            "M106 S255 \n"                        /* Turn on fan to blow away fuzzies */ \
             "G0 X150 F5000\n"                     /* Move over to switch extruders */ \
             "T0\n"                                /* Switch to first extruder */
     #else
@@ -1855,17 +1856,19 @@
         "M117 Hot End Heating...\n"               /* Status message */ \
         LULZBOT_WIPE_HEAT_TEMP                    /* Preheat extruders */ \
         "G28 O1\n"                                /* Home if needed */ \
+        "G1 Y25 Z10 F5000\n"                      /* Move to pad while heating */ \
         LULZBOT_WIPE_WAIT_TEMP                    /* Wait for wipe temp */ \
         "M117 Rewiping nozzle\n"                  /* Status message */ \
         LULZBOT_REWIPE_E0                         /* Wipe first extruder */ \
         LULZBOT_REWIPE_E1                         /* Wipe second extruder */ \
         "M106 S255 \n"                            /* Turn on fan to blow away fuzzies */ \
-        "G4 S3\n"                                 /* Wait 3 seconds */ \
+        "G0 X0 Y0\n"                              /* Move to probe corner while blowing */ \
         LULZBOT_WIPE_DONE_TEMP                    /* Drop to probe temp */ \
         "M107\n"                                  /* Turn off fan */
 
     #if defined(LULZBOT_USE_Z_BELT)
         #define LULZBOT_G29_RECOVER_COMMANDS \
+            LULZBOT_WIPE_HEAT_TEMP                /* Preheat extruders */ \
             LULZBOT_MENU_AXIS_LEVELING_COMMANDS   /* Level X axis */ \
             "G12\n"                               /* Perform wipe sequence */ \
             "M109 R160\n"                         /* Setting probing temperature */ \

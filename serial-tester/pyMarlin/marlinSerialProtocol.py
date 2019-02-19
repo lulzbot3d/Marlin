@@ -102,7 +102,7 @@ class MarlinSerialProtocol:
     self.usingAdvancedOk        = False
     self.watchdogTimeout        = time.time()
     self.onResendCallback       = onResendCallback
-    self.onDebugMsgCallback = onDebugMsgCallback
+    self.onDebugMsgCallback     = onDebugMsgCallback
     self.restart()
 
   def _stripCommentsAndWhitespace(self, str):

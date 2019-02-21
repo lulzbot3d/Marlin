@@ -287,8 +287,7 @@
 #endif
 
 #if defined(LULZBOT_Unsupported_ArchimTAZ6)
-    // Unsupported TAZ 6 with Archim 2. Washers must be
-    // connected to Z_MIN (in parallel with homing button).
+    // Unsupported TAZ 6 with Archim 2.
     #define LULZBOT_CUSTOM_MACHINE_NAME "Archim TAZ 6"
     #define LULZBOT_LCD_MACHINE_NAME "TAZ 6"
     #define LULZBOT_IS_TAZ
@@ -310,6 +309,13 @@
     #define LULZBOT_MACHINE_UUID "a07987e3-7ca7-48e1-b7a4-cc2c45ff2742"
     #define LULZBOT_SDSUPPORT
     #define LULZBOT_USE_EXPERIMENTAL_FEATURES
+    /**
+     * Bed washers can either be connected to Z_MIN (in
+     * parallel with homing button); or uncomment the
+     * following lines to use spare pin on Archim:
+     */
+    //#define LULZBOT_WASHERS_ON_Z_MIN_PROBE
+    //#define LULZBOT_Z_MIN_PROBE_PIN -1
 #endif
 
 #if defined(LULZBOT_Unsupported_EinsyMiniLCD)

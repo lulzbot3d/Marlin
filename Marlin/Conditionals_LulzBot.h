@@ -382,21 +382,11 @@
 #define LULZBOT_PRINTJOB_TIMER_AUTOSTART_DISABLED
 #define LULZBOT_HOST_ACTION_COMMANDS
 
-// Marlin 1.1.4 has changed the behavior of G92 so that
-// it changes software endstops, making it less useful
-// for making position adjustments after hitting an
-// endstop. We need the old behavior of G92 for the
-// Yellowfin start GCODE and it is also a useful
-// feature for custom height adjustments (something
-// requested in the forums).
-//
-// Either LULZBOT_G92_BACKWARDS_COMPATIBILITY
-// or LULZBOT_NO_WORKSPACE_OFFSETS will restore the
-// old behavior, but LULZBOT_NO_WORKSPACE_OFFSETS has
-// other problems.
-
-#define LULZBOT_G92_BACKWARDS_COMPATIBILITY
-//#define LULZBOT_NO_WORKSPACE_OFFSETS
+// Marlin 1.1.4 changed G92 to adjust software endstops, making
+// it less useful for adjusting the position after hitting an
+// endstop. It is useful for custom printers and is required for
+// Yellowfin. NO_WORKSPACE_OFFSETS restores the old behavior
+#define LULZBOT_NO_WORKSPACE_OFFSETS
 
 // Q&A wants to be able to use M226 on endstops switches
 #define LULZBOT_NO_PIN_PROTECTION_ON_M226

@@ -541,7 +541,6 @@
     #define LULZBOT_Z_HOMING_HEIGHT               5
 
     #define LULZBOT_AFTER_Z_HOME_Z_RAISE         10
-    #define LULZBOT_AFTER_Z_HOME_Z_ORIGIN         0
 
     #define LULZBOT_HOMING_USES_PROBE_PINS
 #elif defined(LULZBOT_IS_TAZ) && !defined(LULZBOT_USE_HOME_BUTTON)
@@ -569,15 +568,7 @@
         #define LULZBOT_BACKOFF_DIST_Z LULZBOT_AFTER_Z_HOME_Z_RAISE
         #define LULZBOT_BACKOFF_X_POS  LULZBOT_Z_SAFE_HOMING_X_POINT
         #define LULZBOT_BACKOFF_Y_POS  LULZBOT_Z_SAFE_HOMING_Y_POINT
-        /* On yellowfin we need to reset the origin to account for the Z home riser. */
-        #define LULZBOT_BACKOFF_Z_POS_ADJUSTMENT \
-            if((home_all || homeZ)) { \
-                planner.synchronize(); \
-                current_position[Z_AXIS] = LULZBOT_AFTER_Z_HOME_Z_ORIGIN; \
-                sync_plan_position(); \
-            }
     #else
-        #define LULZBOT_BACKOFF_Z_POS_ADJUSTMENT
         #define LULZBOT_BACKOFF_X_POS (LULZBOT_X_HOME_DIR < 0 ? LULZBOT_BACKOFF_DIST_XY : LULZBOT_X_MAX_POS - LULZBOT_BACKOFF_DIST_XY)
         #define LULZBOT_BACKOFF_Y_POS (LULZBOT_Y_HOME_DIR < 0 ? LULZBOT_BACKOFF_DIST_XY : LULZBOT_Y_MAX_POS - LULZBOT_BACKOFF_DIST_XY)
     #endif
@@ -585,7 +576,6 @@
 
     #define LULZBOT_BACKOFF_AFTER_HOME \
         { \
-            LULZBOT_BACKOFF_Z_POS_ADJUSTMENT \
             constexpr int x = LULZBOT_BACKOFF_X_POS; \
             constexpr int y = LULZBOT_BACKOFF_Y_POS; \
             constexpr int z = LULZBOT_BACKOFF_Z_POS; \
@@ -975,8 +965,10 @@
     #define LULZBOT_M115_EXTRUDER_TYPE         "DualExtruder v3"
     #undef  LULZBOT_AFTER_Z_HOME_Z_RAISE
     #define LULZBOT_AFTER_Z_HOME_Z_RAISE           16
-    #undef  LULZBOT_AFTER_Z_HOME_Z_ORIGIN
-    #define LULZBOT_AFTER_Z_HOME_Z_ORIGIN          5.5
+    #if LULZBOT_Z_HOME_DIR < 0
+        /* We need to reset the origin to account for the Z home riser. */
+        #define LULZBOT_MANUAL_Z_HOME_POS         5.5
+    #endif
     #undef  LULZBOT_TOOLHEAD_X_MIN_ADJ
     #undef  LULZBOT_TOOLHEAD_X_MAX_ADJ
     #undef  LULZBOT_TOOLHEAD_Y_MIN_ADJ

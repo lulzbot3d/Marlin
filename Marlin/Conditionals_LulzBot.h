@@ -612,7 +612,7 @@
 
 // Enable NO_MOTION_BEFORE_HOMING on newer printers that have no MAX endstops,
 // but leave TAZ5 as is so we don't introduce a change for those users.
-#if !defined(LULZBOT_USE_MAX_ENDSTOPS) && !defined(LULZBOT_Juniper_TAZ5)
+#if !defined(LULZBOT_USE_MAX_ENDSTOPS) && !defined(LULZBOT_Juniper_TAZ5) && !defined(LULZBOT_Unsupported_KangarooPaw)
     #define LULZBOT_NO_MOTION_BEFORE_HOMING
 #endif
 
@@ -1207,6 +1207,7 @@
     #define LULZBOT_TEMP_SENSOR_0                        5
     #define LULZBOT_TEMP_SENSOR_BED                      7
 
+    #define LULZBOT_PREVENT_COLD_EXTRUSION
     #define LULZBOT_EXTRUDE_MINTEMP                    120
 
     // Marlin 1.1.5 no longer issues MIN_TEMP errors and appears to handle

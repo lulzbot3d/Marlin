@@ -921,6 +921,7 @@
     #define LULZBOT_MOTOR_CURRENT_E0           875 // mA
     #define LULZBOT_MOTOR_CURRENT_E1           875 // mA
     #define LULZBOT_EXTRUDERS                  2
+    #define LULZBOT_TOOLCHANGE_ZRAISE          2
     #define LULZBOT_TOOLHEAD_X_MAX_ADJ        -12
     #define LULZBOT_TOOLHEAD_X_MIN_ADJ        -2
     #define LULZBOT_TOOLHEAD_Y_MAX_ADJ         0
@@ -1096,13 +1097,13 @@
     #define LULZBOT_TOOLHEAD_WIPE_Y1_ADJ            0
     #define LULZBOT_TOOLHEAD_WIPE_Y2_ADJ            0
     #define LULZBOT_EXTRUDERS                       2
+    #define LULZBOT_TOOLCHANGE_ZRAISE               0
     #define LULZBOT_NUM_SERVOS                      2
     #define LULZBOT_SERVO_DELAY                    {1000, 1000}
     #define LULZBOT_SWITCHING_NOZZLE
     #define LULZBOT_SWITCHING_NOZZLE_E1_SERVO_NR   1
     #define LULZBOT_SWITCHING_NOZZLE_SERVO_ANGLES  { 55,   120}
     #define LULZBOT_SWITCHING_NOZZLE_OPPOSING_SERVOS
-    #define LULZBOT_SWITCHING_NOZZLE_NO_Z_LIFT
     #define LULZBOT_HOTEND_OFFSET_X                {0.0, 43}
     #define LULZBOT_HOTEND_OFFSET_Y                {0.0,  0}
     #define LULZBOT_E_STEPS                        420
@@ -2175,9 +2176,6 @@
     #define LULZBOT_CPU_ST7920_DELAY_2 300 // Increase delay from 250 to 300 to avoid display lock ups
     #define MSG_MOVE_E _UxGT("Extruder ") // Add space to extruder string
     #define MSG_MOTION _UxGT("Movement") // Motion -> Movement
-
-    // Indirection to allow TYPE to be a #defined variable
-    #define LULZ_MULTIPLIER_ITEM_EDIT_CALLBACK(TYPE, LABEL, ...) MENU_MULTIPLIER_ITEM_EDIT_CALLBACK(TYPE, LABEL, __VA_ARGS__)
 #else
     #define LULZBOT_PRECISION_XYZ_STEPS float62
     #define LULZBOT_PRECISION_E_STEPS   float62

@@ -759,7 +759,7 @@ void tool_change(const uint8_t tmp_extruder, const float fr_mm_s/*=0.0*/, bool n
       set_destination_from_current();
 
       if (!no_move) {
-        #if DISABLED(SWITCHING_NOZZLE) && DISABLED(LULZBOT_SWITCHING_NOZZLE_NO_Z_LIFT)
+        #if DISABLED(SWITCHING_NOZZLE)
           // Do a small lift to avoid the workpiece in the move back (below)
           #if ENABLED(TOOLCHANGE_PARK)
             current_position[X_AXIS] = toolchange_settings.change_point.x;

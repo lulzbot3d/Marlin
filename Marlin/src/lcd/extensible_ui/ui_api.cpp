@@ -97,8 +97,7 @@ inline float clamp(const float value, const float minimum, const float maximum) 
 
 static struct {
   uint8_t printer_killed  : 1;
-  uint8_t manual_motion   : 1;
-  uint8_t prevent_rentry  : 1;
+  uint8_t manual_motion : 1;
 } flags;
 
 namespace ExtUI {
@@ -763,37 +762,27 @@ void MarlinUI::init() {
 }
 
 void MarlinUI::update() {
-  /**
-  * The flag prevent_rentry is used to prevent re-entry
-  * into the ExtUI callback methods, which could cause
-  * the UI to crash. Re-entry can happen because some
-  * functions (such as planner.synchronize) call idle().
-  */
-  if(!flags.prevent_rentry) {
-    flags.prevent_rentry = true;
-    #if ENABLED(SDSUPPORT)
-      static bool last_sd_status;
-      const bool sd_status = IS_SD_INSERTED();
-      if (sd_status != last_sd_status) {
-        last_sd_status = sd_status;
-        if (sd_status) {
-          card.initsd();
-          if (card.isDetected())
-            ExtUI::onMediaInserted();
-          else
-            ExtUI::onMediaError();
-        }
-        else {
-          const bool ok = card.isDetected();
-          card.release();
-          if (ok) ExtUI::onMediaRemoved();
-        }
+  #if ENABLED(SDSUPPORT)
+    static bool last_sd_status;
+    const bool sd_status = IS_SD_INSERTED();
+    if (sd_status != last_sd_status) {
+      last_sd_status = sd_status;
+      if (sd_status) {
+        card.initsd();
+        if (card.isDetected())
+          ExtUI::onMediaInserted();
+        else
+          ExtUI::onMediaError();
       }
-    #endif // SDSUPPORT
-    ExtUI::_processManualMoveToDestination();
-    ExtUI::onIdle();
-    flags.prevent_rentry = false;
-  }
+      else {
+        const bool ok = card.isDetected();
+        card.release();
+        if (ok) ExtUI::onMediaRemoved();
+      }
+    }
+  #endif // SDSUPPORT
+  ExtUI::_processManualMoveToDestination();
+  ExtUI::onIdle();
 }
 
 void MarlinUI::kill_screen(PGM_P const msg) {

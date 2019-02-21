@@ -2857,7 +2857,7 @@ void InterfaceSettingsScreen::defaultSettings() {
   LockScreen::passcode = 0;
   FTDI::SoundPlayer::set_volume(255);
   CLCD::set_brightness(255);
-  UIData::reset_value();
+  UIData::reset_persistent_data();
   InterfaceSoundsScreen::defaultSettings();
   // TODO: This really should be moved to the EEPROM
   #if ENABLED(BACKLASH_GCODE)
@@ -2885,7 +2885,7 @@ void InterfaceSettingsScreen::saveSettings() {
   data.sound_volume      = FTDI::SoundPlayer::get_volume();
   data.screen_brightness = CLCD::get_brightness();
   data.passcode          = LockScreen::passcode;
-  data.bit_flags         = UIData::get_value();
+  data.bit_flags         = UIData::get_persistent_data();
   data.touch_transform_a = CLCD::mem_read_32(REG_TOUCH_TRANSFORM_A);
   data.touch_transform_b = CLCD::mem_read_32(REG_TOUCH_TRANSFORM_B);
   data.touch_transform_c = CLCD::mem_read_32(REG_TOUCH_TRANSFORM_C);
@@ -2939,7 +2939,7 @@ void InterfaceSettingsScreen::loadSettings() {
     FTDI::SoundPlayer::set_volume(data.sound_volume);
     CLCD::set_brightness(data.screen_brightness);
     LockScreen::passcode = data.passcode;
-    UIData::set_value(data.bit_flags);
+    UIData::set_persistent_data(data.bit_flags);
     CLCD::mem_write_32(REG_TOUCH_TRANSFORM_A, data.touch_transform_a);
     CLCD::mem_write_32(REG_TOUCH_TRANSFORM_B, data.touch_transform_b);
     CLCD::mem_write_32(REG_TOUCH_TRANSFORM_C, data.touch_transform_c);

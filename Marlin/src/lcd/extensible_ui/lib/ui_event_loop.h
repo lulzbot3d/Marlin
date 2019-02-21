@@ -32,12 +32,13 @@ class UIData {
   private:
     typedef union {
       struct {
-        bool touch_start_sound  : 1;
-        bool touch_end_sound    : 1;
-        bool touch_repeat_sound : 1;
-        bool show_animations    : 1;
-        bool touch_debouncing   : 1;
-        bool ignore_unpress     : 1;
+        uint8_t touch_start_sound  : 1;
+        uint8_t touch_end_sound    : 1;
+        uint8_t touch_repeat_sound : 1;
+        uint8_t show_animations    : 1;
+        uint8_t touch_debouncing   : 1;
+        uint8_t ignore_unpress     : 1;
+        uint8_t prevent_reentry    : 1;
       } bits;
       uint8_t value;
     } flags_t;
@@ -45,17 +46,15 @@ class UIData {
   public:
     static flags_t flags;
 
-    static uint8_t get_value();
-    static void set_value(uint8_t);
+    static uint8_t get_persistent_data_mask();
+    static uint8_t get_persistent_data();
+    static void set_persistent_data(uint8_t value);
+    static void reset_persistent_data();
+
     static void enable_touch_sounds(bool enabled);
     static bool touch_sounds_enabled();
     static void enable_animations(bool enabled);
     static bool animations_enabled();
-    static void reset_value() {
-      flags.bits.touch_start_sound  = flags.bits.touch_end_sound = true;
-      flags.bits.touch_repeat_sound = flags.bits.show_animations = true;
-      flags.bits.touch_debouncing   = flags.bits.ignore_unpress = false;
-    }
 };
 
 uint8_t get_pressed_tag();

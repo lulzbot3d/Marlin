@@ -19,8 +19,7 @@
  *   location: <http://www.gnu.org/licenses/>.                              *
  ****************************************************************************/
 
-#ifndef CONDITIONALS_LULZBOT
-#define CONDITIONALS_LULZBOT
+#pragma once
 
 #include "src/Lulzbot_Extras.h"
 
@@ -218,7 +217,6 @@
     #define LULZBOT_TAZ_BED
     #define LULZBOT_TWO_PIECE_BED
     #define LULZBOT_USE_ARCHIM2
-    #define LULZBOT_USE_TOUCH_UI
     #define LULZBOT_USE_AUTOLEVELING
     #define LULZBOT_BACKLASH_COMPENSATION
     #define LULZBOT_HAS_CALIBRATION_CUBE
@@ -238,6 +236,10 @@
     #define LULZBOT_BACKUP_EEPROM_INFORMATION
     #define LULZBOT_USB_READ_ERROR_IS_FATAL
     #define LULZBOT_AXIS_LEVELING_USING_DUAL_Z_ENDSTOPS
+    // Touch LCD configuration
+    #define LULZBOT_USE_TOUCH_UI
+    #define LCD_ALEPHOBJECTS_CLCD_UI
+    #define AO_EXP2_PINOUT_REV_C
 #endif
 
 /* Unsupported experimental configurations. Use at your own risk. */
@@ -351,8 +353,6 @@
     #define LULZBOT_MINI_BED
     //#define LULZBOT_NO_HEATERS
     #define LULZBOT_USE_Z_SCREW
-    #define LULZBOT_USE_TOUCH_UI
-    #define LULZBOT_USE_HIGH_RES
     //#define LULZBOT_USE_PORTRAIT_UI
     #define LULZBOT_USE_AUTOLEVELING
     #define LULZBOT_BACKLASH_COMPENSATION
@@ -366,7 +366,16 @@
     #define LULZBOT_PRINTCOUNTER
     #define LULZBOT_MACHINE_UUID "23421dc0-df9f-430b-8f91-0e3bcb55b4e4"
     #define LULZBOT_USE_EXPERIMENTAL_FEATURES
+    /* Color display seems to only work on EXP1 */
+    #define LULZBOT_USE_TOUCH_UI
+    #define LCD_ALEPHOBJECTS_CLCD_UI
+    #define AO_EXP1_PINOUT_REV_C
+    /* SD or USB will only work on EXP2, but a 5V
+     * pigtail to an endstop connector is needed
+     * since EXP2 does not have 5V on pin 10 */
     #define LULZBOT_SDSUPPORT
+    //#define LULZBOT_USB_FLASH_DRIVE_SUPPORT
+    //#define LULZBOT_USB_READ_ERROR_IS_FATAL
 #endif
 
 /**************************** GENERAL CONFIGURATION *****************************/
@@ -2299,5 +2308,3 @@
     #define LULZBOT_SAVE_ZOFFSET_TO_EEPROM_IMPL
     #define LULZBOT_SAVE_ZOFFSET_TO_EEPROM
 #endif
-
-#endif /* CONDITIONALS_LULZBOT */

@@ -209,6 +209,7 @@ namespace FTDI {
   void EventLoop::setup() {
     CLCD::init();
     DLCache::init();
+    UIData::reset_persistent_data();
     current_screen.start();
   }
 

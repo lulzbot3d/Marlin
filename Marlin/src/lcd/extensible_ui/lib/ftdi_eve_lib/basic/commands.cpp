@@ -1001,6 +1001,10 @@ void CLCD::init (void) {
   for(counter = 0; counter < 250; counter++) {
    uint8_t device_id = mem_read_8(REG_ID);            // Read Device ID, Should Be 0x7C;
    if(device_id == 0x7c) {
+     #if defined(UI_FRAMEWORK_DEBUG)
+       SERIAL_ECHO_START();
+       SERIAL_ECHOLNPGM("FTDI chip initialized ");
+     #endif
      break;
    }
    else {

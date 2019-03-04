@@ -94,7 +94,7 @@
 #define MENU_TIMEOUT 120
 
 // Enable this to debug the event framework
-#define UI_FRAMEWORK_DEBUG
+//#define UI_FRAMEWORK_DEBUG
 
 // Enable the developer's menu and screens
 #define DEVELOPER_SCREENS

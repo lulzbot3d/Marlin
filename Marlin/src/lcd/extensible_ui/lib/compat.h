@@ -30,6 +30,8 @@
   #if __has_include ("../ui_api.h")
     #include "../ui_api.h"
   #endif
+#else
+  #include "../ui_api.h"
 #endif
 
 #if defined(__MARLIN_FIRMWARE__)

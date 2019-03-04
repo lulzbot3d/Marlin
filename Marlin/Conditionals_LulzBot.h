@@ -239,6 +239,7 @@
     // Touch LCD configuration
     #define LULZBOT_USE_TOUCH_UI
     #define LCD_ALEPHOBJECTS_CLCD_UI
+    #define LCD_800x480
     #define AO_EXP2_PINOUT_REV_C
 #endif
 

@@ -202,7 +202,7 @@ void menu_main() {
     #endif // !HAS_ENCODER_WHEEL && SDSUPPORT
 
     #if ENABLED(SDSUPPORT) || ENABLED(HOST_ACTION_COMMANDS)
-      #if DISABLED(HOST_ACTION_COMMANDS)
+      #if DISABLED(HOST_ACTION_COMMANDS) || defined(LULZBOT_HIDE_PAUSE_IN_MAIN_MENU)
         if (card_open && card.isPaused())
       #endif
           MENU_ITEM(function, MSG_RESUME_PRINT, lcd_resume);

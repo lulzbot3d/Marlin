@@ -482,7 +482,11 @@
 
 /*********************** HOMING & AXIS DIRECTIONS ******************************/
 
-#define LULZBOT_INVERT_X_DIR                      false
+#if defined(LULZBOT_Unsupported_RedGum)
+    #define LULZBOT_INVERT_X_DIR                  true
+#else
+    #define LULZBOT_INVERT_X_DIR                  false
+#endif
 #define LULZBOT_INVERT_Y_DIR                      true
 #define LULZBOT_INVERT_Z_DIR                      false
 #define LULZBOT_INVERT_E0_DIR                     true
@@ -498,6 +502,12 @@
     #define LULZBOT_X_HOME_DIR             -1 // Home left
     #define LULZBOT_Y_HOME_DIR             -1 // Home bed rear
     #define LULZBOT_Z_HOME_DIR             -1 // Home towards bed
+    #define LULZBOT_QUICK_HOME
+
+#elif defined(LULZBOT_Unsupported_RedGum)
+    #define LULZBOT_X_HOME_DIR             -1 // Home left
+    #define LULZBOT_Y_HOME_DIR             -1 // Home bed backwards
+    #define LULZBOT_Z_HOME_DIR              1 // Home to top
     #define LULZBOT_QUICK_HOME
 
 #elif defined(LULZBOT_IS_TAZ) && !defined(LULZBOT_USE_HOME_BUTTON)
@@ -2167,6 +2177,7 @@
     #define LULZBOT_HIDE_EXTRA_FAN_CONFIG_IN_LCD
     #define LULZBOT_HIDE_PREHEAT_CHOICES
     #define LULZBOT_HIDE_INITIALIZE_EEPROM
+    #define LULZBOT_HIDE_PAUSE_IN_MAIN_MENU
     #define LULZBOT_ABOUT_FIRMWARE_MENU
     #define LULZBOT_NO_BED_LEVELING_IN_LCD
     #define LULZBOT_PRECISION_ESTEP

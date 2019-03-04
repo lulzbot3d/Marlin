@@ -1394,6 +1394,15 @@
     #define LULZBOT_STANDARD_X_BED_SIZE        288
     #define LULZBOT_STANDARD_Y_BED_SIZE        275
 
+#elif defined(LULZBOT_Unsupported_RedGum)
+    #define LULZBOT_STANDARD_X_MAX_POS         300
+    #define LULZBOT_STANDARD_X_MIN_POS         -32
+    #define LULZBOT_STANDARD_Y_MAX_POS         311
+    #define LULZBOT_STANDARD_Y_MIN_POS         -17
+
+    #define LULZBOT_STANDARD_X_BED_SIZE        280
+    #define LULZBOT_STANDARD_Y_BED_SIZE        280
+
 #elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT)
     #define LULZBOT_STANDARD_X_MAX_POS         321
     #define LULZBOT_STANDARD_X_MIN_POS          -5

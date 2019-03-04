@@ -22,6 +22,23 @@
 
 #include "../config.h"
 
+/**
+ * The MediaPlayerScreen allows an AVI to be played.
+ *
+ * It requires a special AVI file. The following video
+ * and audio codecs must be used:
+ *
+ *    -vcodec mjpeg -pix_fmt yuvj420p
+ *    -acodec adpcm_ima_wav
+ *
+ * To generate a 2 second static screen from a png file:
+ *
+ *   ffmpeg -i startup.png -vcodec mjpeg -pix_fmt yuvj420p -r 1 video.avi
+ *   sox -n -r 44100 -b 8 -c 2 -L silence.wav trim 0.0 2.000
+ *   ffmpeg -i silence.wav -acodec adpcm_ima_wav silence.avi
+ *   ffmpeg -i video.avi -i silence.wav -c copy -map 0:v:0 -map 1:a:0 startup.avi
+ */
+
 #if ENABLED(EXTENSIBLE_UI)
 
 #include "screens.h"

@@ -253,8 +253,7 @@
     #define LULZBOT_TWO_PIECE_BED
     #define LULZBOT_USE_REPRAP_LCD_DISPLAY
     #define LULZBOT_LIGHTWEIGHT_UI
-    #define LULZBOT_USE_YMAX_PLUG
-    #define LULZBOT_USE_XMIN_PLUG
+    #define LULZBOT_USE_MIN_ENDSTOPS
     #define LULZBOT_USE_AUTOLEVELING
     #define LULZBOT_USE_NORMALLY_CLOSED_ENDSTOPS
     #define LULZBOT_USE_Z_BELT
@@ -318,7 +317,6 @@
      * following lines to use spare pin on Archim:
      */
     //#define LULZBOT_WASHERS_ON_Z_MIN_PROBE
-    //#define LULZBOT_Z_MIN_PROBE_PIN -1
 #endif
 
 #if defined(LULZBOT_Unsupported_EinsyMiniLCD)
@@ -471,7 +469,6 @@
 #elif defined(LULZBOT_IS_TAZ)
     #define LULZBOT_MOTHERBOARD                   BOARD_RAMBO
     #define LULZBOT_CONTROLLER_FAN_PIN            FAN2_PIN  // Digital pin 2
-    #define LULZBOT_Z_MIN_PROBE_PIN               SERVO0_PIN // Digital pin 22
     #define LULZBOT_SERIAL_PORT                   0
     #define LULZBOT_SPI_SPEED                     SPI_FULL_SPEED
 #endif
@@ -537,16 +534,16 @@
 
 #elif defined(LULZBOT_TAZ_BED) && defined(LULZBOT_USE_Z_SCREW)
     #define LULZBOT_HOMING_FEEDRATE_XY             (50*60) // mm/m
-    #define LULZBOT_HOMING_FEEDRATE_Z               (3*60)  // mm/m
+    #define LULZBOT_HOMING_FEEDRATE_Z               (3*60) // mm/m
 #endif // LULZBOT_TAZ_BED
 
 #if defined(LULZBOT_WASHERS_ON_Z_MIN_PROBE)
-    #define LULZBOT_Z_MIN_PROBE_ENDSTOP
     // On the TAZ 6, the bed washers are on Z_MIN_PROBE while the
     // Z-Home button is on Z_MIN, yet we need both to be disabled
     // when z_probe_enabled is false. We added this special case
     // to "endstops.cpp"
     #define LULZBOT_Z_MIN_USES_Z_PROBE_ENABLED
+    #define LULZBOT_Z_MIN_PROBE_PIN                SERVO0_PIN
 
 #else
     // The Mini and TAZ Pro lack a home button and probe using the Z_MIN pin.

@@ -84,6 +84,7 @@
     !defined(LULZBOT_Oliveoil_TAZ6) && \
     !defined(LULZBOT_Quiver_TAZPro) && \
     !defined(LULZBOT_Unsupported_RedGum) && \
+    !defined(LULZBOT_Unsupported_ArchimRedGum) && \
     !defined(LULZBOT_Unsupported_KangarooPaw) && \
     !defined(LULZBOT_Unsupported_ArchimTAZ6) && \
     !defined(LULZBOT_Unsupported_EinsyMiniLCD) && \
@@ -263,6 +264,32 @@
     #define LULZBOT_BAUDRATE 250000
     #define LULZBOT_PRINTCOUNTER
     #define LULZBOT_MACHINE_UUID "5ee798fb-4062-4d35-8224-5e846ffb45a5"
+    #define LULZBOT_USE_EXPERIMENTAL_FEATURES
+    #define LULZBOT_SDSUPPORT
+    #define LULZBOT_AXIS_LEVELING_USING_DUAL_Z_ENDSTOPS
+    #define LULZBOT_USE_EXPERIMENTAL_FEATURES
+#endif
+
+#if defined(LULZBOT_Unsupported_ArchimRedGum)
+    #define LULZBOT_CUSTOM_MACHINE_NAME "Archim Redgum"
+    #define LULZBOT_LCD_MACHINE_NAME "Archim Redgum"
+    #define LULZBOT_IS_TAZ
+    #define LULZBOT_TAZ_BED
+    #define LULZBOT_TWO_PIECE_BED
+    #define LULZBOT_USE_ARCHIM2
+    #define LULZBOT_USE_REPRAP_LCD_DISPLAY
+    //The LIGHTWEIGHT_UI is not currently compatible with 32-bit boards.
+    //#define LULZBOT_LIGHTWEIGHT_UI
+    #define LULZBOT_USE_MIN_ENDSTOPS
+    #define LULZBOT_USE_AUTOLEVELING
+    #define LULZBOT_USE_NORMALLY_CLOSED_ENDSTOPS
+    #define LULZBOT_USE_Z_BELT
+    #define LULZBOT_BACKLASH_COMPENSATION
+    #define LULZBOT_HAS_CALIBRATION_CUBE
+    #define LULZBOT_CALIBRATION_GCODE
+    #define LULZBOT_BAUDRATE 250000
+    #define LULZBOT_PRINTCOUNTER
+    #define LULZBOT_MACHINE_UUID "fd546ced-5941-44e4-8d17-5d494bfc2ca3"
     #define LULZBOT_USE_EXPERIMENTAL_FEATURES
     #define LULZBOT_SDSUPPORT
     #define LULZBOT_AXIS_LEVELING_USING_DUAL_Z_ENDSTOPS
@@ -479,7 +506,7 @@
 
 /*********************** HOMING & AXIS DIRECTIONS ******************************/
 
-#if defined(LULZBOT_Unsupported_RedGum)
+#if defined(LULZBOT_Unsupported_RedGum) || defined(LULZBOT_Unsupported_ArchimRedGum)
     #define LULZBOT_INVERT_X_DIR                  true
 #else
     #define LULZBOT_INVERT_X_DIR                  false
@@ -501,7 +528,7 @@
     #define LULZBOT_Z_HOME_DIR             -1 // Home towards bed
     #define LULZBOT_QUICK_HOME
 
-#elif defined(LULZBOT_Unsupported_RedGum)
+#elif defined(LULZBOT_Unsupported_RedGum) || defined(LULZBOT_Unsupported_ArchimRedGum)
     #define LULZBOT_X_HOME_DIR             -1 // Home left
     #define LULZBOT_Y_HOME_DIR             -1 // Home bed backwards
     #define LULZBOT_Z_HOME_DIR              1 // Home to top
@@ -1394,7 +1421,7 @@
     #define LULZBOT_STANDARD_X_BED_SIZE        288
     #define LULZBOT_STANDARD_Y_BED_SIZE        275
 
-#elif defined(LULZBOT_Unsupported_RedGum)
+#elif defined(LULZBOT_Unsupported_RedGum) || defined(LULZBOT_Unsupported_ArchimRedGum)
     #define LULZBOT_STANDARD_X_MAX_POS         300
     #define LULZBOT_STANDARD_X_MIN_POS         -32
     #define LULZBOT_STANDARD_Y_MAX_POS         311

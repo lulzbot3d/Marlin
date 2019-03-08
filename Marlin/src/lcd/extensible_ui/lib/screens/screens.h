@@ -529,6 +529,8 @@ class FilesScreen : public BaseScreen, public CachedScreen<FILES_SCREEN_CACHE, F
     static uint16_t getFileForTag(uint8_t tag);
 
     static const char *getSelectedShortFilename();
+    static const char *getSelectedLongFilename();
+
     static void drawFileButton(const char* filename, uint8_t tag, bool is_dir, bool is_highlighted);
     static void drawFileList();
     static void drawHeader();
@@ -540,6 +542,7 @@ class FilesScreen : public BaseScreen, public CachedScreen<FILES_SCREEN_CACHE, F
     static void onEntry();
     static void onRedraw(draw_mode_t);
     static bool onTouchEnd(uint8_t tag);
+    static void onIdle();
 };
 
 #if ENABLED(DEVELOPER_SCREENS)

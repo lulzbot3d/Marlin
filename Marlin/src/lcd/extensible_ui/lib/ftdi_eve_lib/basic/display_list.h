@@ -130,8 +130,8 @@ namespace FTDI {
                                                                {return DL::VERTEX2II|(((x)&511UL)<<21)|(((y)&511UL)<<12)|(((handle)&31UL)<<7)|(((cell)&127UL)<<0);}
   #if defined(USE_FTDI_FT810)
   inline uint32_t VERTEX_FORMAT(uint8_t frac)                  {return DL::VERTEX_FORMAT|(((frac)&7UL)<<0);}
-  inline uint32_t VERTEX_TRANSLATE_X(uint32_t x)               {return DL::VERTEX_TRANSLATE_X|(((x)&131071UL)<<0);}
-  inline uint32_t VERTEX_TRANSLATE_Y(uint32_t y)               {return DL::VERTEX_TRANSLATE_Y|(((y)&131071UL)<<0);}
+  inline uint32_t VERTEX_TRANSLATE_X(int32_t x)                {return DL::VERTEX_TRANSLATE_X|(((x)&131071UL)<<0);}
+  inline uint32_t VERTEX_TRANSLATE_Y(int32_t y)                {return DL::VERTEX_TRANSLATE_Y|(((y)&131071UL)<<0);}
   #endif
 
    // The following functions *must* be inlined since we are relying on the compiler to do

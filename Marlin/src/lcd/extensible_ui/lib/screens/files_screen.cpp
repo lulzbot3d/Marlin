@@ -45,6 +45,12 @@ const char *FilesScreen::getSelectedShortFilename() {
   return files.shortFilename();
 }
 
+const char *FilesScreen::getSelectedLongFilename() {
+  FileList files;
+  files.seek(getFileForTag(screen_data.FilesScreen.selected_tag), true);
+  return files.longFilename();
+}
+
 void FilesScreen::drawSelectedFile() {
   FileList files;
   files.seek(getFileForTag(screen_data.FilesScreen.selected_tag), true);
@@ -74,13 +80,25 @@ void FilesScreen::drawFileButton(const char* filename, uint8_t tag, bool is_dir,
   const uint8_t line = getLineForTag(tag)+1;
   CommandProcessor cmd;
   cmd.tag(tag);
-  cmd.fgcolor(is_highlighted ? files_selected : background);
+  cmd.cmd(COLOR_RGB(is_highlighted ? files_selected : background));
   cmd.font(font_medium)
-     .button( BTN_POS(1,header_h+line), BTN_SIZE(6,1), F(""),    OPT_FLAT)
-     .text  ( BTN_POS(1,header_h+line), BTN_SIZE(6,1), filename, OPT_CENTERY);
+     .rectangle( 0, BTN_Y(header_h+line), display_width, BTN_H(1));
+  cmd.cmd(COLOR_RGB(default_btn::rgb_enabled));
+  #if ENABLED(SCROLL_LONG_FILENAMES)
+    if(is_highlighted) {
+      cmd.cmd(SAVE_CONTEXT());
+      cmd.cmd(MACRO(0));
+    }
+  #endif
+  cmd.text  ( BTN_POS(1,header_h+line), BTN_SIZE(6,1), filename, OPT_CENTERY);
   if(is_dir) {
     cmd.text( BTN_POS(1,header_h+line), BTN_SIZE(6,1), F("> "),  OPT_CENTERY | OPT_RIGHTX);
   }
+  #if ENABLED(SCROLL_LONG_FILENAMES)
+    if(is_highlighted) {
+      cmd.cmd(RESTORE_CONTEXT());
+    }
+  #endif
 }
 
 void FilesScreen::drawFileList() {
@@ -213,10 +231,29 @@ bool FilesScreen::onTouchEnd(uint8_t tag) {
     default:
       if(tag < 240) {
         screen_data.FilesScreen.selected_tag = tag;
+        #if ENABLED(SCROLL_LONG_FILENAMES)
+          const char *longFilename = getSelectedLongFilename();
+          if(longFilename[0]) {
+            uint16_t text_width = CLCD::get_text_width(font_medium, longFilename);
+            screen_data.FilesScreen.scroll_pos = 0;
+            if(text_width > display_width)
+              screen_data.FilesScreen.scroll_max = text_width - display_width + MARGIN_L + MARGIN_R;
+            else
+              screen_data.FilesScreen.scroll_max = 0;
+          }
+        #endif
       }
       break;
   }
   return true;
+}
+
+void FilesScreen::onIdle() {
+  #if ENABLED(SCROLL_LONG_FILENAMES)
+    CLCD::mem_write_32(REG_MACRO_0,VERTEX_TRANSLATE_X(-screen_data.FilesScreen.scroll_pos));
+    if(screen_data.FilesScreen.scroll_pos < screen_data.FilesScreen.scroll_max * 16)
+      screen_data.FilesScreen.scroll_pos++;
+  #endif
 }
 
 #endif // EXTENSIBLE_UI

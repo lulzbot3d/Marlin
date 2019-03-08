@@ -36,9 +36,13 @@ union screen_data_t {
       uint8_t is_dir  : 1;
       uint8_t is_root : 1;
     } flags;
-    uint8_t  selected_tag;
-    uint8_t  num_page;
-    uint8_t  cur_page;
+    uint8_t   selected_tag;
+    uint8_t   num_page;
+    uint8_t   cur_page;
+    #if ENABLED(SCROLL_LONG_FILENAMES)
+    uint16_t  scroll_pos;
+    uint16_t  scroll_max;
+    #endif
   } FilesScreen;
   struct {
     struct base_numeric_adjustment_t placeholder;

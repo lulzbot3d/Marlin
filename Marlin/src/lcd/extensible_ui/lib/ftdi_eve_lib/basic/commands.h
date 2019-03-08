@@ -130,6 +130,8 @@ class CLCD {
     static void host_cmd (unsigned char host_command, unsigned char byte2);
 
     static void get_font_metrics (uint8_t font, struct FontMetrics &fm);
+    static uint16_t get_text_width(const uint8_t font, const char *str);
+    static uint16_t get_text_width_P(const uint8_t font, const char *str);
 
     static uint8_t get_tag ()     {return mem_read_8(FTDI::REG_TOUCH_TAG);}
     static bool is_touching ()    {return (mem_read_32(FTDI::REG_TOUCH_DIRECT_XY) & 0x80000000) == 0;}

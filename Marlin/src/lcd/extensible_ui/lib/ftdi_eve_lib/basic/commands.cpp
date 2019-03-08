@@ -54,6 +54,32 @@ void CLCD::get_font_metrics(uint8_t font, struct FontMetrics &fm) {
   mem_read_bulk(rom_fontroot + 148 * (font - 16), (uint8_t*) &fm, 148);
 }
 
+uint16_t CLCD::get_text_width(const uint8_t font, const char *str) {
+  uint16_t width = 0;
+  const uint8_t *p = (const uint8_t *) str;
+  FontMetrics fm;
+  get_font_metrics(font, fm);
+  for(;;) {
+    const uint8_t val = *p++;
+    if(!val) break;
+    width += val < 128 ? fm.char_widths[val] : 0;
+  }
+  return width;
+}
+
+uint16_t CLCD::get_text_width_P(const uint8_t font, const char *str) {
+  uint16_t width = 0;
+  const uint8_t *p = (const uint8_t *) str;
+  FontMetrics fm;
+  get_font_metrics(font, fm);
+  for(;;) {
+    const uint8_t val = pgm_read_byte(p++);
+    if(!val) break;
+    width += val < 128 ? fm.char_widths[val] : 0;
+  }
+  return width;
+}
+
 /************************** HOST COMMAND FUNCTION *********************************/
 
 void CLCD::host_cmd (unsigned char host_command, unsigned char byte2) {  // Sends 24-Bit Host Command to LCD

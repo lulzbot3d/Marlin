@@ -431,6 +431,10 @@
 // Marlin to print a new message when the axis are homed
 #define LULZBOT_HOMING_MESSAGE_WORKAROUND
 
+// Fix for crashing into the endstop when changing nozzles
+// near the side of the printer (PR#13334)
+#define LULZBOT_SOFTWARE_ENDSTOP_FOR_DUALS_WORKAROUND
+
 /************************* EXPERIMENTAL FEATURES ******************************/
 
 #if defined(LULZBOT_USE_EXPERIMENTAL_FEATURES)

@@ -1248,8 +1248,8 @@
             if(delayBeforeStartMeasuring > 0) { \
                 delayBeforeStartMeasuring--; \
             } else { \
-                if (current_temperature[e] > HEATER_0_MAXTEMP) max_temp_error(0); \
-                if (current_temperature[e] < HEATER_0_MINTEMP) min_temp_error(0); \
+                if (thermalManager.degHotend(e) > HEATER_0_MAXTEMP) max_temp_error(0); \
+                if (thermalManager.degHotend(e) < HEATER_0_MINTEMP) min_temp_error(0); \
             }
 #endif
 
@@ -1363,11 +1363,10 @@
     // frequency down in the kilohertz
     #define LULZBOT_FAN_SOFT_PWM
 #else
-    // By default, FAST_PWM_FAN appears to PWM at ~31kHz, but if we
-    // set a prescale of 4, it divides this by 256 to get us down to
-    // the frequency we need.
+    // By default, FAST_PWM_FAN_FREQUENCY sets PWM to ~31kHz,
+    // but we want to lower this to 122 Hz.
     #define LULZBOT_FAST_PWM_FAN
-    #define LULZBOT_FAST_PWM_SCALE                4
+    #define LULZBOT_FAST_PWM_FAN_FREQUENCY      122
 #endif
 
 #define LULZBOT_FAN_KICKSTART_TIME              100
@@ -2210,7 +2209,6 @@
     #define LULZBOT_HIDE_EXTRA_FAN_CONFIG_IN_LCD
     #define LULZBOT_HIDE_PREHEAT_CHOICES
     #define LULZBOT_HIDE_INITIALIZE_EEPROM
-    #define LULZBOT_HIDE_PAUSE_IN_MAIN_MENU
     #define LULZBOT_ABOUT_FIRMWARE_MENU
     #define LULZBOT_NO_BED_LEVELING_IN_LCD
     #define LULZBOT_PRECISION_ESTEP
@@ -2251,6 +2249,7 @@
     #define LULZBOT_COOLING_MESSAGES
     #define LULZBOT_EXTRUDER_STR "Hot End"
     #define LULZBOT_NO_CONFIRM_REHEAT_AFTER_PAUSING
+    #define LULZBOT_SCROLL_LONG_FILENAMES
 #endif
 
 #if defined(LULZBOT_SDSUPPORT_DEBUG)

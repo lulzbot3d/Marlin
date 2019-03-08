@@ -266,7 +266,7 @@
  *   USE_OCR2A_AS_TOP sacrifices duty cycle control resolution to achieve this broader range of frequencies.
  */
 #if ENABLED(FAST_PWM_FAN)
-  //#define FAST_PWM_FAN_FREQUENCY 31400
+  #define FAST_PWM_FAN_FREQUENCY LULZBOT_FAST_PWM_FAN_FREQUENCY
   //#define USE_OCR2A_AS_TOP
 #endif
 

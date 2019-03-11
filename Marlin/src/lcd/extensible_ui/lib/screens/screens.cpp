@@ -37,6 +37,7 @@ SCREEN_TABLE {
   DECL_SCREEN(TuneMenu),
   DECL_SCREEN(AdvancedSettingsMenu),
   DECL_SCREEN(AlertDialogBox),
+  DECL_SCREEN(ConfirmUserRequestAlertBox),
   DECL_SCREEN(RestoreFailsafeDialogBox),
   DECL_SCREEN(SaveSettingsDialogBox),
   DECL_SCREEN(ConfirmAbortPrintDialogBox),

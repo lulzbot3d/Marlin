@@ -131,7 +131,7 @@ class KillScreen {
 
 class DialogBoxBaseClass : public BaseScreen {
   protected:
-    static void drawMessage(const progmem_str, const progmem_str = 0, const progmem_str = 0, int16_t font = 0);
+    template<typename T> static void drawMessage(const T, const T = 0, const T = 0, int16_t font = 0);
     static void drawYesNoButtons();
     static void drawOkayButton();
     static void drawSpinner();
@@ -145,8 +145,9 @@ class AlertDialogBox : public DialogBoxBaseClass, public CachedScreen<ALERT_BOX_
   public:
     static void onEntry();
     static void onRedraw(draw_mode_t);
-    static void show(const progmem_str, const progmem_str = 0, const progmem_str = 0);
-    static void showError(const progmem_str, const progmem_str = 0, const progmem_str = 0);
+    template<typename T> static void show(const T, const T = 0, const T = 0);
+    template<typename T> static void showError(const T, const T = 0, const T = 0);
+    static void hide();
 };
 
 class RestoreFailsafeDialogBox : public DialogBoxBaseClass, public UncachedScreen {
@@ -176,6 +177,14 @@ class ConfirmAutoCalibrationDialogBox : public DialogBoxBaseClass, public Uncach
     static bool onTouchEnd(uint8_t tag);
 };
 #endif
+
+class ConfirmUserRequestAlertBox : public AlertDialogBox {
+  public:
+    static void onRedraw(draw_mode_t);
+    static bool onTouchEnd(uint8_t);
+    static void hide();
+    static void show(const char*);
+};
 
 class SpinnerDialogBox : public DialogBoxBaseClass, public CachedScreen<SPINNER_CACHE,SPINNER_DL_SIZE> {
   public:

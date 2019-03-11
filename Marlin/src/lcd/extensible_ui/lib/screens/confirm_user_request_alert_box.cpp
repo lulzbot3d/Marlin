@@ -1,6 +1,6 @@
-/*****************************
- * dialog_box_base_class.cpp *
- *****************************/
+/**************************************
+ * confirm_user_request_alert_box.cpp *
+ **************************************/
 
 /****************************************************************************
  *   Written By Mark Pelletier  2017 - Aleph Objects, Inc.                  *
@@ -25,55 +25,34 @@
 #if ENABLED(EXTENSIBLE_UI)
 
 #include "screens.h"
+#include "screen_data.h"
 
 using namespace FTDI;
-using namespace Theme;
 
-#define GRID_COLS 2
-#define GRID_ROWS 8
-
-template<typename T>
-void DialogBoxBaseClass::drawMessage(const T line1, const T line2, const T line3, int16_t font) {
-  T lines[] = {line1, line2, line3};
-  const uint8_t n_lines = line3 ? 3 : line2 ? 2 : 1;
-  CommandProcessor cmd;
-  cmd.cmd(CMD_DLSTART)
-     .cmd(CLEAR_COLOR_RGB(background))
-     .cmd(CLEAR(true,true,true))
-     .tag(0);
-  cmd.font(font ? font : font_large);
-  for(uint8_t line = 0; line < n_lines; line++) {
-    cmd.text( BTN_POS(1,3-n_lines/2+line), BTN_SIZE(2,1), lines[line]);
-  }
+void ConfirmUserRequestAlertBox::onRedraw(draw_mode_t mode) {
+  AlertDialogBox::onRedraw(mode); // Required for the GOTO_SCREEN function to work
 }
 
-template void DialogBoxBaseClass::drawMessage(const char *, const char *, const char *, int16_t);
-template void DialogBoxBaseClass::drawMessage(const progmem_str, const progmem_str, const progmem_str, int16_t);
-
-void DialogBoxBaseClass::drawYesNoButtons() {
-  CommandProcessor cmd;
-  cmd.font(font_medium)
-     .tag(1).button( BTN_POS(1,8), BTN_SIZE(1,1), F("Yes"))
-     .tag(2).button( BTN_POS(2,8), BTN_SIZE(1,1), F("No"));
-}
-
-void DialogBoxBaseClass::drawOkayButton() {
-  CommandProcessor cmd;
-  cmd.font(font_medium)
-     .tag(1).button( BTN_POS(1,8), BTN_SIZE(2,1), F("Okay"));
-}
-
-void DialogBoxBaseClass::drawSpinner() {
-  CommandProcessor cmd;
-  cmd.spinner(BTN_POS(1,5), BTN_SIZE(2,2)).execute();
-}
-
-bool DialogBoxBaseClass::onTouchEnd(uint8_t tag) {
+bool ConfirmUserRequestAlertBox::onTouchEnd(uint8_t tag) {
   switch(tag) {
-    case 1: GOTO_PREVIOUS(); return true;
+    case 1:
+      ExtUI::setUserConfirmed();
+      GOTO_PREVIOUS();
+      return true;
     case 2: GOTO_PREVIOUS(); return true;
     default:                 return false;
   }
 }
 
+void ConfirmUserRequestAlertBox::show(const char* msg) {
+  drawMessage(msg);
+  storeBackground();
+  screen_data.AlertDialogBox.isError = false;
+  GOTO_SCREEN(ConfirmUserRequestAlertBox);
+}
+
+void ConfirmUserRequestAlertBox::hide() {
+  if(AT_SCREEN(ConfirmUserRequestAlertBox))
+    GOTO_PREVIOUS();
+}
 #endif // EXTENSIBLE_UI

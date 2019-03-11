@@ -38,7 +38,7 @@ namespace ExtUI {
     EventLoop::loop();
   }
 
-  void onPrinterKilled(const char* lcd_msg) {
+  void onPrinterKilled(PGM_P lcd_msg) {
     KillScreen::show(progmem_str(lcd_msg));
   }
 
@@ -102,6 +102,13 @@ namespace ExtUI {
 
   void onPlayTone(const uint16_t frequency, const uint16_t duration) {
     sound.play_tone(frequency, duration);
+  }
+
+  void onUserConfirmRequired(const char * const msg) {
+    if(msg)
+      ConfirmUserRequestAlertBox::show(msg);
+    else
+      ConfirmUserRequestAlertBox::hide();
   }
 }
 

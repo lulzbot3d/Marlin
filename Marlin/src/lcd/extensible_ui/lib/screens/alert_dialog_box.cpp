@@ -41,18 +41,30 @@ void AlertDialogBox::onRedraw(draw_mode_t what) {
   }
 }
 
-void AlertDialogBox::show(const progmem_str line1, const progmem_str line2, const progmem_str line3) {
+template<typename T>
+void AlertDialogBox::show(const T line1, const T line2, const T line3) {
   drawMessage(line1, line2, line3);
   storeBackground();
   screen_data.AlertDialogBox.isError = false;
   GOTO_SCREEN(AlertDialogBox);
 }
 
-void AlertDialogBox::showError(const progmem_str line1, const progmem_str line2, const progmem_str line3) {
+template<typename T>
+void AlertDialogBox::showError(const T line1, const T line2, const T line3) {
   drawMessage(line1, line2, line3);
   storeBackground();
   screen_data.AlertDialogBox.isError = true;
   GOTO_SCREEN(AlertDialogBox);
 }
+
+void AlertDialogBox::hide() {
+  if(AT_SCREEN(AlertDialogBox))
+    GOTO_PREVIOUS();
+}
+
+template void AlertDialogBox::show(const char *, const char *, const char *);
+template void AlertDialogBox::show(const progmem_str, const progmem_str, const progmem_str);
+template void AlertDialogBox::showError(const char *, const char *, const char *);
+template void AlertDialogBox::showError(const progmem_str, const progmem_str, const progmem_str);
 
 #endif // EXTENSIBLE_UI

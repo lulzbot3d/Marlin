@@ -564,8 +564,31 @@ void clean_up_after_endstop_or_probe_move() {
  * For DELTA/SCARA the XY constraint is based on the smallest
  * radius within the set software endstops.
  */
-void clamp_to_software_endstops(float target[XYZ]) {
+  #if HOTENDS > 1 && defined(LULZBOT_SOFTWARE_ENDSTOP_FOR_DUALS_WORKAROUND)
+  void clamp_active_nozzle_to_software_endstops(float target[XYZ]);
 
+  /**
+   * When printer has multiple hotends, clamp to points reachable
+   * by all nozzles (this could avoid a crash on hotend switch).
+   */
+  void clamp_to_software_endstops(float target[XYZ]) {
+    HOTEND_LOOP() {
+      /**
+       * 1. Shift target by hotend offset
+       * 2. Apply clamping to target
+       * 3. Unshift target by hotend offset
+       * 4. Repeat for remaining hotends
+       */
+      LOOP_XYZ(axis) target[axis] += hotend_offset[axis][e] - hotend_offset[axis][active_extruder];
+      clamp_active_nozzle_to_software_endstops(target);
+      LOOP_XYZ(axis) target[axis] -= hotend_offset[axis][e] - hotend_offset[axis][active_extruder];
+    }
+  }
+
+  void clamp_active_nozzle_to_software_endstops(float target[XYZ]) {
+  #else
+  void clamp_to_software_endstops(float target[XYZ]) {
+  #endif
   if (!soft_endstops_enabled) return;
 
   #if IS_KINEMATIC

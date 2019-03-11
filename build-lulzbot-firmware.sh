@@ -87,7 +87,7 @@ compile_dependencies() {
 get_arch_info() {
   printer=$1   ; shift 1
   case $printer in
-    Quiver_TAZPro | ArchimTAZ6_Experimental | ArchimRedGum_Experimental)
+    Quiver_TAZPro | ArchimTAZ6_Experimental | ArchimRedgum_Experimental)
       gcc_path=$ARM_TOOLS_PATH
       format=bin
       HARDWARE_MOTHERBOARD=1592

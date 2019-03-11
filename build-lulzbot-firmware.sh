@@ -21,8 +21,11 @@ UNIVERSAL_TOOLHEADS="AchemonSphinx_SmallLayer CecropiaSilk_SingleExtruderAeroV2 
 MINI_MODELS="Gladiola_Mini Gladiola_MiniLCD"
 MINI_TOOLHEADS="Gladiola_SingleExtruder Albatross_Flexystruder Finch_Aerostruder $UNIVERSAL_TOOLHEADS"
 
-TAZ_MODELS="Juniper_TAZ5 Oliveoil_TAZ6 Redgum_TAZWorkhorse"
+TAZ_MODELS="Juniper_TAZ5 Oliveoil_TAZ6"
 TAZ_TOOLHEADS="Tilapia_SingleExtruder Kanyu_Flexystruder Opah_Moarstruder Javelin_DualExtruderV2 Longfin_FlexyDually Yellowfin_DualExtruderV3 Angelfish_Aerostruder $UNIVERSAL_TOOLHEADS"
+
+TAZ_WORKHORSE_MODELS="Redgum_TAZWorkhorse"
+TAZ_WORKHORSE_TOOLHEADS="$UNIVERSAL_TOOLHEADS"
 
 TAZ_PRO_MODELS="Quiver_TAZPro"
 TAZ_PRO_TOOLHEADS="Quiver_DualExtruder $UNIVERSAL_TOOLHEADS"
@@ -281,6 +284,13 @@ build_for_taz() {
   for model in $TAZ_PRO_MODELS
   do
     for toolhead in $TAZ_PRO_TOOLHEADS
+    do
+      build_firmware ${model} ${toolhead}
+    done
+  done
+  for model in $TAZ_WORKHORSE_MODELS
+  do
+    for toolhead in $TAZ_WORKHORSE_TOOLHEADS
     do
       build_firmware ${model} ${toolhead}
     done

@@ -83,12 +83,12 @@
     !defined(LULZBOT_Juniper_TAZ5) && \
     !defined(LULZBOT_Oliveoil_TAZ6) && \
     !defined(LULZBOT_Quiver_TAZPro) && \
-    !defined(LULZBOT_Unsupported_RedGum) && \
-    !defined(LULZBOT_Unsupported_ArchimRedGum) && \
-    !defined(LULZBOT_Unsupported_KangarooPaw) && \
-    !defined(LULZBOT_Unsupported_ArchimTAZ6) && \
-    !defined(LULZBOT_Unsupported_EinsyMiniLCD) && \
-    !defined(LULZBOT_Unsupported_EinsyMiniTouchLCD) \
+    !defined(LULZBOT_Redgum_TAZWorkhorse) && \
+    !defined(LULZBOT_ArchimRedgum_Experimental) && \
+    !defined(LULZBOT_KangarooPaw_Experimental) && \
+    !defined(LULZBOT_ArchimTAZ6_Experimental) && \
+    !defined(LULZBOT_EinsyMiniLCD_Experimental) && \
+    !defined(LULZBOT_EinsyMiniTouchLCD_Experimental) \
 )
     #error Must specify printer model. Please see "Configuration_LulzBot.h" for directions.
 #endif
@@ -109,7 +109,7 @@
     !defined(TOOLHEAD_Yellowfin_DualExtruderV3) && \
     !defined(TOOLHEAD_Angelfish_Aerostruder) && \
     !defined(TOOLHEAD_Quiver_DualExtruder) && \
-    !defined(TOOLHEAD_Unsupported_KangarooPaw) \
+    !defined(TOOLHEAD_KangarooPaw_Experimental) \
 )
     #error Must specify toolhead. Please see "Configuration_LulzBot.h" for directions.
 #endif
@@ -212,7 +212,7 @@
 #endif
 
 #if defined(LULZBOT_Quiver_TAZPro)
-    #define LULZBOT_CUSTOM_MACHINE_NAME "LulzBot Quiver"
+    #define LULZBOT_CUSTOM_MACHINE_NAME "LulzBot TAZ Pro"
     #define LULZBOT_LCD_MACHINE_NAME "TAZ Pro"
     #define LULZBOT_IS_TAZ
     #define LULZBOT_TAZ_BED
@@ -244,11 +244,11 @@
     #define AO_EXP2_PINOUT_REV_C
 #endif
 
-/* Unsupported experimental configurations. Use at your own risk. */
+/* Unsupported or unreleased experimental configurations. Use at your own risk. */
 
-#if defined(LULZBOT_Unsupported_RedGum)
-    #define LULZBOT_CUSTOM_MACHINE_NAME "Redgum"
-    #define LULZBOT_LCD_MACHINE_NAME "Redgum"
+#if defined(LULZBOT_Redgum_TAZWorkhorse)
+    #define LULZBOT_CUSTOM_MACHINE_NAME "TAZ Workhorse Edition"
+    #define LULZBOT_LCD_MACHINE_NAME "TAZ Workhrse"
     #define LULZBOT_IS_TAZ
     #define LULZBOT_TAZ_BED
     #define LULZBOT_TWO_PIECE_BED
@@ -270,7 +270,7 @@
     #define LULZBOT_USE_EXPERIMENTAL_FEATURES
 #endif
 
-#if defined(LULZBOT_Unsupported_ArchimRedGum)
+#if defined(LULZBOT_ArchimRedgum_Experimental)
     #define LULZBOT_CUSTOM_MACHINE_NAME "Archim Redgum"
     #define LULZBOT_LCD_MACHINE_NAME "Archim Redgum"
     #define LULZBOT_IS_TAZ
@@ -296,7 +296,7 @@
     #define LULZBOT_USE_EXPERIMENTAL_FEATURES
 #endif
 
-#if defined(LULZBOT_Unsupported_KangarooPaw)
+#if defined(LULZBOT_KangarooPaw_Experimental)
     #define LULZBOT_CUSTOM_MACHINE_NAME "KangarooPaw"
     #define LULZBOT_LCD_MACHINE_NAME "KangarooPaw"
     #define LULZBOT_NO_HEATERS
@@ -315,7 +315,7 @@
     #define LULZBOT_LIGHTWEIGHT_UI
 #endif
 
-#if defined(LULZBOT_Unsupported_ArchimTAZ6)
+#if defined(LULZBOT_ArchimTAZ6_Experimental)
     // Unsupported TAZ 6 with Archim 2.
     #define LULZBOT_CUSTOM_MACHINE_NAME "Archim TAZ 6"
     #define LULZBOT_LCD_MACHINE_NAME "TAZ 6"
@@ -346,7 +346,7 @@
     #define LULZBOT_BED_WASHERS_PIN  SERVO0_PIN
 #endif
 
-#if defined(LULZBOT_Unsupported_EinsyMiniLCD)
+#if defined(LULZBOT_EinsyMiniLCD_Experimental)
     // Unsupported Mini with Einsy Retro.
     #define LULZBOT_CUSTOM_MACHINE_NAME "Einsy MiniLCD"
     #define LULZBOT_LCD_MACHINE_NAME "Mini"
@@ -370,7 +370,7 @@
     #define LULZBOT_USE_EXPERIMENTAL_FEATURES
 #endif
 
-#if defined(LULZBOT_Unsupported_EinsyMiniTouchLCD)
+#if defined(LULZBOT_EinsyMiniTouchLCD_Experimental)
     // Unsupported Mini with Einsy Retro and Touch LCD
     #define LULZBOT_CUSTOM_MACHINE_NAME "Einsy MiniCLCD"
     #define LULZBOT_LCD_MACHINE_NAME "Mini"
@@ -510,7 +510,7 @@
 
 /*********************** HOMING & AXIS DIRECTIONS ******************************/
 
-#if defined(LULZBOT_Unsupported_RedGum) || defined(LULZBOT_Unsupported_ArchimRedGum)
+#if defined(LULZBOT_Redgum_TAZWorkhorse) || defined(LULZBOT_ArchimRedgum_Experimental)
     #define LULZBOT_INVERT_X_DIR                  true
 #else
     #define LULZBOT_INVERT_X_DIR                  false
@@ -532,7 +532,7 @@
     #define LULZBOT_Z_HOME_DIR             -1 // Home towards bed
     #define LULZBOT_QUICK_HOME
 
-#elif defined(LULZBOT_Unsupported_RedGum) || defined(LULZBOT_Unsupported_ArchimRedGum)
+#elif defined(LULZBOT_Redgum_TAZWorkhorse) || defined(LULZBOT_ArchimRedgum_Experimental)
     #define LULZBOT_X_HOME_DIR             -1 // Home left
     #define LULZBOT_Y_HOME_DIR             -1 // Home bed backwards
     #define LULZBOT_Z_HOME_DIR              1 // Home to top
@@ -640,7 +640,7 @@
 
 // Enable NO_MOTION_BEFORE_HOMING on newer printers that have no MAX endstops,
 // but leave TAZ5 as is so we don't introduce a change for those users.
-#if !defined(LULZBOT_USE_MAX_ENDSTOPS) && !defined(LULZBOT_Juniper_TAZ5) && !defined(LULZBOT_Unsupported_KangarooPaw)
+#if !defined(LULZBOT_USE_MAX_ENDSTOPS) && !defined(LULZBOT_Juniper_TAZ5) && !defined(LULZBOT_KangarooPaw_Experimental)
     #define LULZBOT_NO_MOTION_BEFORE_HOMING
 #endif
 
@@ -829,7 +829,7 @@
 
 /**************************** MINI TOOLHEADS ***********************************/
 
-#if defined(TOOLHEAD_Gladiola_SingleExtruder) || defined(TOOLHEAD_Albatross_Flexystruder) || defined(TOOLHEAD_Finch_Aerostruder) || defined(TOOLHEAD_CecropiaSilk_SingleExtruderAeroV2) || defined(TOOLHEAD_AchemonSphinx_SmallLayer) || defined(TOOLHEAD_BandedTiger_HardenedSteel) || defined(TOOLHEAD_DingyCutworm_HardenedSteelPlus) || defined(TOOLHEAD_Unsupported_KangarooPaw)
+#if defined(TOOLHEAD_Gladiola_SingleExtruder) || defined(TOOLHEAD_Albatross_Flexystruder) || defined(TOOLHEAD_Finch_Aerostruder) || defined(TOOLHEAD_CecropiaSilk_SingleExtruderAeroV2) || defined(TOOLHEAD_AchemonSphinx_SmallLayer) || defined(TOOLHEAD_BandedTiger_HardenedSteel) || defined(TOOLHEAD_DingyCutworm_HardenedSteelPlus) || defined(TOOLHEAD_KangarooPaw_Experimental)
 
     #define LULZBOT_EXTRUDERS                  1
     #define LULZBOT_TOOLHEAD_X_MAX_ADJ         0
@@ -1098,14 +1098,14 @@
     #define LULZBOT_MAY_USE_V2_ADAPTER
 #endif /* TOOLHEAD_DingyCutworm_HardenedSteelPlus */
 
-#if defined(TOOLHEAD_Unsupported_KangarooPaw)
+#if defined(TOOLHEAD_KangarooPaw_Experimental)
     #define LULZBOT_LCD_TOOLHEAD_NAME              "Kangaroo Paw"
 //          16 chars max                            ^^^^^^^^^^^^^^^
     #define LULZBOT_M115_EXTRUDER_TYPE             "Goostruder"
     #define LULZBOT_X_MAX_ENDSTOP_INVERTING        LULZBOT_NORMALLY_CLOSED_ENDSTOP
     #define LULZBOT_E3D_Titan_Aero_Volcano
     #define LULZBOT_E_STEPS                        420
-#endif /* TOOLHEAD_Unsupported_KangarooPaw */
+#endif /* TOOLHEAD_KangarooPaw_Experimental */
 
 // Using the V2 toolheads on the TAZ and older Minis requires an
 // adapter plate that shifts the coordinate system
@@ -1424,7 +1424,7 @@
     #define LULZBOT_STANDARD_X_BED_SIZE        288
     #define LULZBOT_STANDARD_Y_BED_SIZE        275
 
-#elif defined(LULZBOT_Unsupported_RedGum) || defined(LULZBOT_Unsupported_ArchimRedGum)
+#elif defined(LULZBOT_Redgum_TAZWorkhorse) || defined(LULZBOT_ArchimRedgum_Experimental)
     #define LULZBOT_STANDARD_X_MAX_POS         300
     #define LULZBOT_STANDARD_X_MIN_POS         -32
     #define LULZBOT_STANDARD_Y_MAX_POS         311

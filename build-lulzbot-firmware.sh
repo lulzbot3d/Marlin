@@ -21,7 +21,7 @@ UNIVERSAL_TOOLHEADS="AchemonSphinx_SmallLayer CecropiaSilk_SingleExtruderAeroV2 
 MINI_MODELS="Gladiola_Mini Gladiola_MiniLCD"
 MINI_TOOLHEADS="Gladiola_SingleExtruder Albatross_Flexystruder Finch_Aerostruder $UNIVERSAL_TOOLHEADS"
 
-TAZ_MODELS="Juniper_TAZ5 Oliveoil_TAZ6"
+TAZ_MODELS="Juniper_TAZ5 Oliveoil_TAZ6 Redgum_TAZWorkhorse"
 TAZ_TOOLHEADS="Tilapia_SingleExtruder Kanyu_Flexystruder Opah_Moarstruder Javelin_DualExtruderV2 Longfin_FlexyDually Yellowfin_DualExtruderV3 Angelfish_Aerostruder $UNIVERSAL_TOOLHEADS"
 
 TAZ_PRO_MODELS="Quiver_TAZPro"
@@ -29,6 +29,9 @@ TAZ_PRO_TOOLHEADS="Quiver_DualExtruder $UNIVERSAL_TOOLHEADS"
 
 MINI2_MODELS="Hibiscus_Mini2"
 MINI2_TOOLHEADS="$UNIVERSAL_TOOLHEADS"
+
+KANGAROOPAW_MODELS="KangarooPaw_Experimental"
+KANGAROOPAW_TOOLHEADS="KangarooPaw_Experimental"
 
 ####
 # usage
@@ -81,7 +84,7 @@ compile_dependencies() {
 get_arch_info() {
   printer=$1   ; shift 1
   case $printer in
-    Quiver_TAZPro | Unsupported_ArchimTAZ6 | Unsupported_ArchimRedGum)
+    Quiver_TAZPro | ArchimTAZ6_Experimental | ArchimRedGum_Experimental)
       gcc_path=$ARM_TOOLS_PATH
       format=bin
       HARDWARE_MOTHERBOARD=1592
@@ -249,6 +252,13 @@ build_for_mini() {
   for model in $MINI2_MODELS
   do
     for toolhead in $MINI2_TOOLHEADS
+    do
+      build_firmware ${model} ${toolhead}
+    done
+  done
+  for model in $KANGAROOPAW_MODELS
+  do
+    for toolhead in $KANGAROOPAW_TOOLHEADS
     do
       build_firmware ${model} ${toolhead}
     done

@@ -396,6 +396,7 @@
     #define LULZBOT_USE_TOUCH_UI
     #define LCD_ALEPHOBJECTS_CLCD_UI
     #define AO_EXP1_PINOUT_REV_C
+    #define LCD_480x272
     /* SD or USB will only work on EXP2, but a 5V
      * pigtail to an endstop connector is needed
      * since EXP2 does not have 5V on pin 10 */
@@ -430,10 +431,6 @@
 // never clears that message. The following causes
 // Marlin to print a new message when the axis are homed
 #define LULZBOT_HOMING_MESSAGE_WORKAROUND
-
-// Fix for crashing into the endstop when changing nozzles
-// near the side of the printer (PR#13334)
-#define LULZBOT_SOFTWARE_ENDSTOP_FOR_DUALS_WORKAROUND
 
 /************************* EXPERIMENTAL FEATURES ******************************/
 

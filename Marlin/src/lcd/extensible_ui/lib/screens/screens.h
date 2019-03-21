@@ -46,6 +46,8 @@ enum {
   MOVE_AXIS_SCREEN_CACHE,
   TEMPERATURE_SCREEN_CACHE,
   STEPS_SCREEN_CACHE,
+  STEPPER_CURRENT_SCREEN_CACHE,
+  STEPPER_BUMP_SENSITIVITY_SCREEN_CACHE,
   ZOFFSET_SCREEN_CACHE,
   NOZZLE_OFFSET_SCREEN_CACHE,
   BACKLASH_COMPENSATION_SCREEN_CACHE,
@@ -322,6 +324,20 @@ class StepsScreen : public BaseNumericAdjustmentScreen, public CachedScreen<STEP
     static void onRedraw(draw_mode_t);
     static bool onTouchHeld(uint8_t tag);
 };
+
+#if HAS_TRINAMIC
+  class StepperCurrentScreen : public BaseNumericAdjustmentScreen, public CachedScreen<STEPPER_CURRENT_SCREEN_CACHE> {
+    public:
+      static void onRedraw(draw_mode_t);
+      static bool onTouchHeld(uint8_t tag);
+  };
+
+  class StepperBumpSensitivityScreen : public BaseNumericAdjustmentScreen, public CachedScreen<STEPPER_BUMP_SENSITIVITY_SCREEN_CACHE> {
+    public:
+      static void onRedraw(draw_mode_t);
+      static bool onTouchHeld(uint8_t tag);
+  };
+#endif
 
 #if HAS_BED_PROBE
   class ZOffsetScreen : public BaseNumericAdjustmentScreen, public CachedScreen<ZOFFSET_SCREEN_CACHE> {

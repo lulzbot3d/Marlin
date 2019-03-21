@@ -52,6 +52,10 @@ SCREEN_TABLE {
 #endif
   DECL_SCREEN(MoveAxisScreen),
   DECL_SCREEN(StepsScreen),
+#if HAS_TRINAMIC
+  DECL_SCREEN(StepperCurrentScreen),
+  DECL_SCREEN(StepperBumpSensitivityScreen),
+#endif
 #if HAS_BED_PROBE
   DECL_SCREEN(ZOffsetScreen),
 #endif

@@ -1169,7 +1169,7 @@
 #if defined(TOOLHEAD_Quiver_DualExtruder)
     #define LULZBOT_LCD_TOOLHEAD_NAME              "Quivering Aeros"
 //          16 chars max                            ^^^^^^^^^^^^^^^
-    #define LULZBOT_M115_EXTRUDER_TYPE             "AerostruderDual"
+    #define LULZBOT_M115_EXTRUDER_TYPE             "DualExtruder"
     #define LULZBOT_TOOLHEAD_X_MAX_ADJ             -21
     #define LULZBOT_TOOLHEAD_X_MIN_ADJ             -21
     #define LULZBOT_TOOLHEAD_Y_MAX_ADJ             -21

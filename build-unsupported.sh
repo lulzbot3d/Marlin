@@ -3,3 +3,4 @@
 ./build-lulzbot-firmware.sh ArchimTAZ6_Experimental Tilapia_SingleExtruder
 ./build-lulzbot-firmware.sh EinsyMiniLCD_Experimental Gladiola_SingleExtruder
 ./build-lulzbot-firmware.sh EinsyMiniTouchLCD_Experimental Gladiola_SingleExtruder
+./build-lulzbot-firmware.sh CLCDTestStand_Experimental Gladiola_SingleExtruder

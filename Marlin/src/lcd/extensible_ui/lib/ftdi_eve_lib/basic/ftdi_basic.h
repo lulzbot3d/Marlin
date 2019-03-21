@@ -29,8 +29,8 @@
 #endif
 
 #if defined(FTDI_BASIC)
-  #include "boards.h"
   #include "constants.h"
+  #include "boards.h"
   #include "commands.h"
   #include "spi.h"
   #include "display_list.h"

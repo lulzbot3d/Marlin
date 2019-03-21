@@ -28,16 +28,23 @@
   #if !(HAS_RESOLUTION)
     #define LCD_320x240
   #endif
-  #define USE_FTDI_FT800
+  #ifndef FTDI_API_LEVEL
+    #define FTDI_API_LEVEL                800
+  #endif
   namespace FTDI {
-    const bool Use_Crystal             =  true;  // 0 = use internal oscillator, 1 = module has a crystal populated
-    const bool GPIO_0_Audio_Enable     =  false; /* 1 = does use GPIO00 for amplifier control, 0 = not in use for Audio */
-    const bool GPIO_1_Audio_Shutdown   =  true;  /* 1 = does use GPIO01 for amplifier control, 0 = not in use for Audio */
-    const uint8_t Swizzle              =     2;
-    const uint8_t CSpread              =     1;
+    const uint16_t ftdi_chip            = 800;
+    const bool Use_Crystal              = true;  // 0 = use internal oscillator, 1 = module has a crystal populated
+    const bool GPIO_0_Audio_Enable      = false; /* 1 = does use GPIO00 for amplifier control, 0 = not in use for Audio */
+    const bool GPIO_1_Audio_Shutdown    = true;  /* 1 = does use GPIO01 for amplifier control, 0 = not in use for Audio */
+    const uint8_t Swizzle               = 2;
+    const uint8_t CSpread               = 1;
 
-    const uint16_t touch_threshold     =  1200; /* touch-sensitivity */
+    const uint16_t touch_threshold      = 1200; /* touch-sensitivity */
 
+    using namespace FTDI_FT800;
+    namespace DL {
+      using namespace FTDI_FT800_DL;
+    }
   }
 
 /*
@@ -59,14 +66,22 @@
   #if !(HAS_RESOLUTION)
     #define LCD_480x272
   #endif
-  #define USE_FTDI_FT800
+  #ifndef FTDI_API_LEVEL
+    #define FTDI_API_LEVEL                800
+  #endif
   namespace FTDI {
-    const bool Use_Crystal              =  true; // 0 = use internal oscillator, 1 = module has a crystal populated
+    const uint16_t ftdi_chip            = 800;
+    const bool Use_Crystal              = true; // 0 = use internal oscillator, 1 = module has a crystal populated
     const bool GPIO_0_Audio_Enable      = false;
     const bool GPIO_1_Audio_Shutdown    = false;
-    const uint8_t Swizzle               =     0;
-    const uint8_t CSpread               =     1;
-    const uint16_t touch_threshold      =  2000; /* touch-sensitivity */
+    const uint8_t Swizzle               = 0;
+    const uint8_t CSpread               = 1;
+    const uint16_t touch_threshold      = 2000; /* touch-sensitivity */
+
+    using namespace FTDI_FT800;
+    namespace DL {
+      using namespace FTDI_FT800_DL;
+    }
   }
 
 /*
@@ -84,14 +99,23 @@
   #if !(HAS_RESOLUTION)
     #define LCD_800x480
   #endif
-  #define USE_FTDI_FT810
+  #ifndef FTDI_API_LEVEL
+    #define FTDI_API_LEVEL                810
+  #endif
   namespace FTDI {
-    const bool Use_Crystal              =  true; // 0 = use internal oscillator, 1 = module has a crystal populated
+    const uint16_t ftdi_chip            = 810;
+    const bool Use_Crystal              = true; // 0 = use internal oscillator, 1 = module has a crystal populated
     const bool GPIO_0_Audio_Enable      = false;
     const bool GPIO_1_Audio_Shutdown    = false;
-    const uint8_t Swizzle               =     0;
-    const uint8_t CSpread               =     1;
-    const uint16_t touch_threshold      =  2000; /* touch-sensitivity */
+    const uint8_t Swizzle               = 0;
+    const uint8_t CSpread               = 1;
+    const uint16_t touch_threshold      = 2000; /* touch-sensitivity */
+
+    using namespace FTDI_FT810;
+    namespace DL {
+      using namespace FTDI_FT800_DL;
+      using namespace FTDI_FT810_DL;
+    }
   }
 
 /*
@@ -106,16 +130,25 @@
  */
 
 #elif defined(LCD_4DSYSTEMS_4DLCD_FT843)
-  #define USE_FTDI_FT800
-  #define LCD_480x272
-
+  #if !(HAS_RESOLUTION)
+    #define LCD_480x272
+  #endif
+  #ifndef FTDI_API_LEVEL
+    #define FTDI_API_LEVEL                800
+  #endif
   namespace FTDI {
-    const bool Use_Crystal              =  true; // 0 = use internal oscillator, 1 = module has a crystal populated
+    const uint16_t ftdi_chip            = 800;
+    const bool Use_Crystal              = true; // 0 = use internal oscillator, 1 = module has a crystal populated
     const bool GPIO_0_Audio_Enable      = false;
-    const bool GPIO_1_Audio_Shutdown    =  true;
-    const uint8_t Swizzle               =     0;
-    const uint8_t CSpread               =     1;
-    const uint16_t touch_threshold      =  1200; /* touch-sensitivity */
+    const bool GPIO_1_Audio_Shutdown    = true;
+    const uint8_t Swizzle               = 0;
+    const uint8_t CSpread               = 1;
+    const uint16_t touch_threshold      = 1200; /* touch-sensitivity */
+
+    using namespace FTDI_FT800;
+    namespace DL {
+      using namespace FTDI_FT800_DL;
+    }
   }
 
 /*
@@ -132,14 +165,23 @@
   #if !(HAS_RESOLUTION)
     #define LCD_800x480
   #endif
-  #define USE_FTDI_FT810
+  #ifndef FTDI_API_LEVEL
+    #define FTDI_API_LEVEL                810
+  #endif
   namespace FTDI {
+    const uint16_t ftdi_chip            = 810;
     const bool Use_Crystal              = false; // 0 = use internal oscillator, 1 = module has a crystal populated
     const bool GPIO_0_Audio_Enable      = true;  // The AO CLCD uses GPIO0 to enable audio
     const bool GPIO_1_Audio_Shutdown    = false;
-    const uint8_t Swizzle               =     0;
-    const uint8_t CSpread               =     0;
-    const uint16_t touch_threshold      =  2000; /* touch-sensitivity */
+    const uint8_t Swizzle               = 0;
+    const uint8_t CSpread               = 0;
+    const uint16_t touch_threshold      = 2000; /* touch-sensitivity */
+
+    using namespace FTDI_FT810;
+    namespace DL {
+      using namespace FTDI_FT800_DL;
+      using namespace FTDI_FT810_DL;
+    }
   }
 
 #else

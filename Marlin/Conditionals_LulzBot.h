@@ -88,7 +88,8 @@
     !defined(LULZBOT_KangarooPaw_Experimental) && \
     !defined(LULZBOT_ArchimTAZ6_Experimental) && \
     !defined(LULZBOT_EinsyMiniLCD_Experimental) && \
-    !defined(LULZBOT_EinsyMiniTouchLCD_Experimental) \
+    !defined(LULZBOT_EinsyMiniTouchLCD_Experimental) && \
+    !defined(LULZBOT_CLCDTestStand_Experimental) \
 )
     #error Must specify printer model. Please see "Configuration_LulzBot.h" for directions.
 #endif
@@ -240,6 +241,7 @@
     // Touch LCD configuration
     #define LULZBOT_USE_TOUCH_UI
     #define LCD_ALEPHOBJECTS_CLCD_UI
+    #define USE_PORTRAIT_ORIENTATION
     #define LCD_800x480
     #define AO_EXP2_PINOUT_REV_C
 #endif
@@ -395,7 +397,44 @@
     /* Color display seems to only work on EXP1 */
     #define LULZBOT_USE_TOUCH_UI
     #define LCD_ALEPHOBJECTS_CLCD_UI
+    #define USE_PORTRAIT_ORIENTATION
     #define AO_EXP1_PINOUT_REV_C
+    #define LCD_480x272
+    /* SD or USB will only work on EXP2, but a 5V
+     * pigtail to an endstop connector is needed
+     * since EXP2 does not have 5V on pin 10 */
+    #define LULZBOT_SDSUPPORT
+    //#define LULZBOT_USB_FLASH_DRIVE_SUPPORT
+    //#define LULZBOT_USB_READ_ERROR_IS_FATAL
+#endif
+
+#if defined(LULZBOT_CLCDTestStand_Experimental)
+    // Test stand with Einsy Retro and FT800 Touch LCD
+    #define LULZBOT_CUSTOM_MACHINE_NAME "Einsy MiniCLCD"
+    #define LULZBOT_LCD_MACHINE_NAME "Mini"
+    #define LULZBOT_IS_MINI
+    #define LULZBOT_USE_EINSY_RETRO
+    #define LULZBOT_MINI_BED
+    //#define LULZBOT_NO_HEATERS
+    #define LULZBOT_USE_Z_SCREW
+    //#define LULZBOT_USE_PORTRAIT_UI
+    #define LULZBOT_USE_AUTOLEVELING
+    #define LULZBOT_BACKLASH_COMPENSATION
+    #define LULZBOT_CALIBRATION_GCODE
+    #define LULZBOT_USE_MIN_ENDSTOPS
+    #define LULZBOT_USE_MAX_ENDSTOPS
+    #define LULZBOT_USE_NORMALLY_OPEN_ENDSTOPS
+    #define LULZBOT_STEALTHCHOP_Z
+    #define LULZBOT_HYBRID_THRESHOLD
+    #define LULZBOT_BAUDRATE 250000
+    #define LULZBOT_PRINTCOUNTER
+    #define LULZBOT_MACHINE_UUID "23421dc0-df9f-430b-8f91-0e3bcb55b4e4"
+    #define LULZBOT_USE_EXPERIMENTAL_FEATURES
+    /* Color display seems to only work on EXP1 */
+    #define LULZBOT_USE_TOUCH_UI
+    //#define LCD_ALEPHOBJECTS_CLCD_UI
+    #define LCD_HAOYU_FT800CB
+    #define AO_EXP1_PINOUT_REV_B
     #define LCD_480x272
     /* SD or USB will only work on EXP2, but a 5V
      * pigtail to an endstop connector is needed

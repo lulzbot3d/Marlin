@@ -73,7 +73,7 @@
 // is supported on the FT800. The FT810 or better also support a portrait
 // and mirrored orientation.
 //#define USE_INVERTED_ORIENTATION
-#define USE_PORTRAIT_ORIENTATION
+//#define USE_PORTRAIT_ORIENTATION
 //#define USE_MIRRORED_ORIENTATION
 
 // Use a numeric passcode for "Parental lock".

@@ -216,7 +216,7 @@ void CLCD::mem_write_32 (uint32_t reg_address, uint32_t data) {
 
 /******************* FT800/810 Co-processor Commands *********************************/
 
-#if defined(USE_FTDI_FT800)
+#if FTDI_API_LEVEL == 800
 uint32_t CLCD::CommandFifo::command_write_ptr = 0xFFFFFFFFul;
 #endif
 
@@ -749,7 +749,7 @@ void CLCD::CommandFifo::translate (int32_t tx, int32_t ty) {
   cmd( &cmd_data, sizeof(cmd_data) );
 }
 
-#if defined(USE_FTDI_FT810)
+#if FTDI_API_LEVEL >= 810
 void CLCD::CommandFifo::setbase (uint8_t base) {
   struct {
     int32_t  type = CMD_SETBASE;
@@ -762,7 +762,7 @@ void CLCD::CommandFifo::setbase (uint8_t base) {
 }
 #endif
 
-#if defined(USE_FTDI_FT810)
+#if FTDI_API_LEVEL >= 810
 void CLCD::CommandFifo::setbitmap(uint32_t addr, uint16_t fmt, uint16_t w, uint16_t h) {
   struct {
     uint32_t type = CMD_SETBITMAP;
@@ -783,7 +783,7 @@ void CLCD::CommandFifo::setbitmap(uint32_t addr, uint16_t fmt, uint16_t w, uint1
 }
 #endif
 
-#if defined(USE_FTDI_FT810)
+#if FTDI_API_LEVEL >= 810
 void CLCD::CommandFifo::snapshot2(uint32_t format, uint32_t ptr, int16_t x, int16_t y, uint16_t w, uint16_t h) {
   struct {
     uint32_t type = CMD_SNAPSHOT2;
@@ -806,7 +806,7 @@ void CLCD::CommandFifo::snapshot2(uint32_t format, uint32_t ptr, int16_t x, int1
 }
 #endif
 
-#if defined(USE_FTDI_FT810)
+#if FTDI_API_LEVEL >= 810
 void CLCD::CommandFifo::mediafifo(uint32_t ptr, uint32_t size) {
   struct {
     uint32_t type = CMD_MEDIAFIFO;
@@ -821,13 +821,13 @@ void CLCD::CommandFifo::mediafifo(uint32_t ptr, uint32_t size) {
 }
 #endif
 
-#if defined(USE_FTDI_FT810)
+#if FTDI_API_LEVEL >= 810
 void CLCD::CommandFifo::videostart() {
   cmd( CMD_VIDEOSTART );
 }
 #endif
 
-#if defined(USE_FTDI_FT810)
+#if FTDI_API_LEVEL >= 810
 void CLCD::CommandFifo::videoframe(uint32_t dst, uint32_t ptr) {
   struct {
     uint32_t type = CMD_VIDEOFRAME;
@@ -842,7 +842,7 @@ void CLCD::CommandFifo::videoframe(uint32_t dst, uint32_t ptr) {
 }
 #endif
 
-#if defined(USE_FTDI_FT810)
+#if FTDI_API_LEVEL >= 810
 void CLCD::CommandFifo::playvideo(uint32_t options) {
   struct {
     uint32_t type = CMD_PLAYVIDEO;
@@ -855,7 +855,7 @@ void CLCD::CommandFifo::playvideo(uint32_t options) {
 }
 #endif
 
-#if defined(USE_FTDI_FT810)
+#if FTDI_API_LEVEL >= 810
 void CLCD::CommandFifo::setrotate (uint8_t rotation) {
   struct {
     uint32_t  type = CMD_SETROTATE;
@@ -874,7 +874,7 @@ bool CLCD::CommandFifo::is_processing() {
   return (mem_read_32(REG_CMD_READ) & 0x0FFF) != (mem_read_32(REG_CMD_WRITE) & 0x0FFF);
 }
 
-#if defined(USE_FTDI_FT800)
+#if FTDI_API_LEVEL == 800
 void CLCD::CommandFifo::start() {
   if(command_write_ptr == 0xFFFFFFFFul) {
     command_write_ptr = mem_read_32(REG_CMD_WRITE) & 0x0FFF;
@@ -1111,34 +1111,37 @@ void CLCD::default_touch_transform() {
   mem_write_32(REG_TOUCH_TRANSFORM_E, FTDI::default_transform_e);
   mem_write_32(REG_TOUCH_TRANSFORM_F, FTDI::default_transform_f);
 
-  #if defined(USE_FTDI_FT810)
+  #if FTDI_API_LEVEL >= 810
     // Set the initial display orientation. On the FT810, we use the command
     // processor to do this since it will also update the transform matrices.
-
-    CommandFifo cmd;
-    #if   defined(USE_PORTRAIT_ORIENTATION)  &&  defined(USE_INVERTED_ORIENTATION) &&  defined(USE_MIRRORED_ORIENTATION)
-    cmd.setrotate(7);
-    #elif defined(USE_PORTRAIT_ORIENTATION)  && !defined(USE_INVERTED_ORIENTATION) &&  defined(USE_MIRRORED_ORIENTATION)
-    cmd.setrotate(6);
-    #elif !defined(USE_PORTRAIT_ORIENTATION) &&  defined(USE_INVERTED_ORIENTATION) &&  defined(USE_MIRRORED_ORIENTATION)
-    cmd.setrotate(5);
-    #elif !defined(USE_PORTRAIT_ORIENTATION) && !defined(USE_INVERTED_ORIENTATION) &&  defined(USE_MIRRORED_ORIENTATION)
-    cmd.setrotate(4);
-    #elif  defined(USE_PORTRAIT_ORIENTATION) &&  defined(USE_INVERTED_ORIENTATION) && !defined(USE_MIRRORED_ORIENTATION)
-    cmd.setrotate(3);
-    #elif defined(USE_PORTRAIT_ORIENTATION)  && !defined(USE_INVERTED_ORIENTATION) && !defined(USE_MIRRORED_ORIENTATION)
-    cmd.setrotate(2);
-    #elif !defined(USE_PORTRAIT_ORIENTATION) &&  defined(USE_INVERTED_ORIENTATION) && !defined(USE_MIRRORED_ORIENTATION)
-    cmd.setrotate(1);
-    #else // !defined(USE_PORTRAIT_ORIENTATION) && !defined(USE_INVERTED_ORIENTATION) && !defined(USE_MIRRORED_ORIENTATION)
-    cmd.setrotate(0);
-    #endif
-    cmd.execute();
+    if(FTDI::ftdi_chip >= 810) {
+      CommandFifo cmd;
+      #if   defined(USE_PORTRAIT_ORIENTATION)  &&  defined(USE_INVERTED_ORIENTATION) &&  defined(USE_MIRRORED_ORIENTATION)
+      cmd.setrotate(7);
+      #elif defined(USE_PORTRAIT_ORIENTATION)  && !defined(USE_INVERTED_ORIENTATION) &&  defined(USE_MIRRORED_ORIENTATION)
+      cmd.setrotate(6);
+      #elif !defined(USE_PORTRAIT_ORIENTATION) &&  defined(USE_INVERTED_ORIENTATION) &&  defined(USE_MIRRORED_ORIENTATION)
+      cmd.setrotate(5);
+      #elif !defined(USE_PORTRAIT_ORIENTATION) && !defined(USE_INVERTED_ORIENTATION) &&  defined(USE_MIRRORED_ORIENTATION)
+      cmd.setrotate(4);
+      #elif  defined(USE_PORTRAIT_ORIENTATION) &&  defined(USE_INVERTED_ORIENTATION) && !defined(USE_MIRRORED_ORIENTATION)
+      cmd.setrotate(3);
+      #elif defined(USE_PORTRAIT_ORIENTATION)  && !defined(USE_INVERTED_ORIENTATION) && !defined(USE_MIRRORED_ORIENTATION)
+      cmd.setrotate(2);
+      #elif !defined(USE_PORTRAIT_ORIENTATION) &&  defined(USE_INVERTED_ORIENTATION) && !defined(USE_MIRRORED_ORIENTATION)
+      cmd.setrotate(1);
+      #else // !defined(USE_PORTRAIT_ORIENTATION) && !defined(USE_INVERTED_ORIENTATION) && !defined(USE_MIRRORED_ORIENTATION)
+      cmd.setrotate(0);
+      #endif
+      cmd.execute();
+    } else {
+      #if defined(USE_INVERTED_ORIENTATION)
+        mem_write_32(REG_ROTATE, 1);
+      #endif
+    }
   #elif defined(USE_PORTRAIT_ORIENTATION) || defined(USE_MIRRORED_ORIENTATION)
     #error PORTRAIT or MIRRORED orientation not supported on the FT800
-  #endif
-
-  #if defined(USE_FTDI_FT800) &&  defined(USE_INVERTED_ORIENTATION)
+  #elif defined(USE_INVERTED_ORIENTATION)
     mem_write_32(REG_ROTATE, 1);
   #endif
 }

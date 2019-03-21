@@ -39,7 +39,7 @@ union screen_data_t {
     uint8_t   selected_tag;
     uint8_t   num_page;
     uint8_t   cur_page;
-    #if ENABLED(SCROLL_LONG_FILENAMES) && !defined(USE_FTDI_FT800)
+    #if ENABLED(SCROLL_LONG_FILENAMES) && (FTDI_API_LEVEL >= 810)
     uint16_t  scroll_pos;
     uint16_t  scroll_max;
     #endif

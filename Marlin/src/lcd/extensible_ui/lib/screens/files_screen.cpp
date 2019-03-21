@@ -231,15 +231,17 @@ bool FilesScreen::onTouchEnd(uint8_t tag) {
     default:
       if(tag < 240) {
         screen_data.FilesScreen.selected_tag = tag;
-        #if ENABLED(SCROLL_LONG_FILENAMES) && !defined(USE_FTDI_FT800)
-          const char *longFilename = getSelectedLongFilename();
-          if(longFilename[0]) {
-            uint16_t text_width = CLCD::get_text_width(font_medium, longFilename);
-            screen_data.FilesScreen.scroll_pos = 0;
-            if(text_width > display_width)
-              screen_data.FilesScreen.scroll_max = text_width - display_width + MARGIN_L + MARGIN_R;
-            else
-              screen_data.FilesScreen.scroll_max = 0;
+        #if ENABLED(SCROLL_LONG_FILENAMES) && (FTDI_API_LEVEL >= 810)
+          if(FTDI::ftdi_chip >= 810) {
+            const char *longFilename = getSelectedLongFilename();
+            if(longFilename[0]) {
+              uint16_t text_width = CLCD::get_text_width(font_medium, longFilename);
+              screen_data.FilesScreen.scroll_pos = 0;
+              if(text_width > display_width)
+                screen_data.FilesScreen.scroll_max = text_width - display_width + MARGIN_L + MARGIN_R;
+              else
+                screen_data.FilesScreen.scroll_max = 0;
+            }
           }
         #endif
       }
@@ -249,10 +251,12 @@ bool FilesScreen::onTouchEnd(uint8_t tag) {
 }
 
 void FilesScreen::onIdle() {
-  #if ENABLED(SCROLL_LONG_FILENAMES) && !defined(USE_FTDI_FT800)
-    CLCD::mem_write_32(REG_MACRO_0,VERTEX_TRANSLATE_X(-screen_data.FilesScreen.scroll_pos));
-    if(screen_data.FilesScreen.scroll_pos < screen_data.FilesScreen.scroll_max * 16)
-      screen_data.FilesScreen.scroll_pos++;
+  #if ENABLED(SCROLL_LONG_FILENAMES) && (FTDI_API_LEVEL >= 810)
+    if(FTDI::ftdi_chip >= 810) {
+      CLCD::mem_write_32(REG_MACRO_0,VERTEX_TRANSLATE_X(-screen_data.FilesScreen.scroll_pos));
+      if(screen_data.FilesScreen.scroll_pos < screen_data.FilesScreen.scroll_max * 16)
+        screen_data.FilesScreen.scroll_pos++;
+    }
   #endif
 }
 

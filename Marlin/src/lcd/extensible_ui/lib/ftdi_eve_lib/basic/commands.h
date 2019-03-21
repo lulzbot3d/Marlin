@@ -158,11 +158,11 @@ struct FontMetrics {
 
 class CLCD::CommandFifo {
   protected:
-    #if defined(USE_FTDI_FT800)
+    #if FTDI_API_LEVEL >= 810
+      uint32_t getRegCmdBSpace();
+    #else
       static uint32_t command_write_ptr;
       template <class T> void _write_unaligned(T data, uint16_t len);
-    #else
-      uint32_t getRegCmdBSpace();
     #endif
     void start(void);
 
@@ -211,7 +211,7 @@ class CLCD::CommandFifo {
     void rotate      (int32_t a);
     void translate   (int32_t tx, int32_t ty);
 
-    #if defined(USE_FTDI_FT810)
+    #if FTDI_API_LEVEL >= 810
       void setbase   (uint8_t base);
       void setrotate (uint8_t rotation);
       void setbitmap (uint32_t ptr, uint16_t fmt, uint16_t w, uint16_t h);

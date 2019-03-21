@@ -86,84 +86,86 @@ bool MediaPlayerScreen::playBootMedia() {
 }
 
 void MediaPlayerScreen::playStream(void *obj, media_streamer_func_t *data_stream) {
-  #if defined(USE_FTDI_FT810)
-    // Set up the media FIFO on the end of RAMG, as the top of RAMG
-    // will be used as the framebuffer.
+  #if FTDI_API_LEVEL >= 810
+    if(FTDI::ftdi_chip >= 810) {
+      // Set up the media FIFO on the end of RAMG, as the top of RAMG
+      // will be used as the framebuffer.
 
-    uint8_t        buf[512];
-    const uint32_t block_size = 512;
-    const uint32_t fifo_size  = block_size * 2;
-    const uint32_t fifo_start = RAM_G + RAM_G_SIZE - fifo_size;
+      uint8_t        buf[512];
+      const uint32_t block_size = 512;
+      const uint32_t fifo_size  = block_size * 2;
+      const uint32_t fifo_start = RAM_G + RAM_G_SIZE - fifo_size;
 
-    CommandProcessor cmd;
-    cmd.cmd(CMD_DLSTART)
-       .cmd(CLEAR_COLOR_RGB(0x000000))
-       .cmd(CLEAR(true,true,true))
-       .cmd(DL::DL_DISPLAY)
-       .cmd(CMD_SWAP)
-       .execute()
-       .cmd(CMD_DLSTART)
-       .mediafifo(fifo_start, fifo_size)
-       .playvideo(OPT_FULLSCREEN | OPT_MEDIAFIFO | OPT_NOTEAR | OPT_SOUND)
-       .cmd(DL::DL_DISPLAY)
-       .cmd(CMD_SWAP)
-       .execute();
+      CommandProcessor cmd;
+      cmd.cmd(CMD_DLSTART)
+         .cmd(CLEAR_COLOR_RGB(0x000000))
+         .cmd(CLEAR(true,true,true))
+         .cmd(DL::DL_DISPLAY)
+         .cmd(CMD_SWAP)
+         .execute()
+         .cmd(CMD_DLSTART)
+         .mediafifo(fifo_start, fifo_size)
+         .playvideo(OPT_FULLSCREEN | OPT_MEDIAFIFO | OPT_NOTEAR | OPT_SOUND)
+         .cmd(DL::DL_DISPLAY)
+         .cmd(CMD_SWAP)
+         .execute();
 
-    uint32_t writePtr = 0;
-    int16_t  nBytes;
+      uint32_t writePtr = 0;
+      int16_t  nBytes;
 
-    uint32_t t = millis();
-    uint8_t timeouts;
+      uint32_t t = millis();
+      uint8_t timeouts;
 
-    spiInit(SPI_HALF_SPEED); // Boost SPI speed for video playback
+      spiInit(SPI_HALF_SPEED); // Boost SPI speed for video playback
 
-    do {
-      // Write block n
-      nBytes = (*data_stream)(obj, buf, block_size);
-      if(nBytes == -1) break;
-
-      if(millis() - t > 10) {
-        ExtUI::yield();
-        watchdog_reset();
-        t = millis();
-      }
-
-      CLCD::mem_write_bulk (fifo_start + writePtr, buf, nBytes);
-
-      // Wait for FTDI810 to finish playing block n-1
-      timeouts = 20;
       do {
+        // Write block n
+        nBytes = (*data_stream)(obj, buf, block_size);
+        if(nBytes == -1) break;
+
         if(millis() - t > 10) {
           ExtUI::yield();
           watchdog_reset();
           t = millis();
-          timeouts--;
-          if(timeouts == 0) {
-            SERIAL_ECHO_START();
-            SERIAL_ECHOLNPGM("Timeout playing video");
-            cmd.reset();
-            goto exit;
-          }
         }
-      } while(CLCD::mem_read_32(REG_MEDIAFIFO_READ) != writePtr);
 
-      // Start playing block n
-      writePtr = (writePtr + nBytes) % fifo_size;
-      CLCD::mem_write_32(REG_MEDIAFIFO_WRITE, writePtr);
-    } while(nBytes == block_size);
+        CLCD::mem_write_bulk (fifo_start + writePtr, buf, nBytes);
 
-    SERIAL_ECHO_START();
-    SERIAL_ECHOLNPGM("Done playing video");
+        // Wait for FTDI810 to finish playing block n-1
+        timeouts = 20;
+        do {
+          if(millis() - t > 10) {
+            ExtUI::yield();
+            watchdog_reset();
+            t = millis();
+            timeouts--;
+            if(timeouts == 0) {
+              SERIAL_ECHO_START();
+              SERIAL_ECHOLNPGM("Timeout playing video");
+              cmd.reset();
+              goto exit;
+            }
+          }
+        } while(CLCD::mem_read_32(REG_MEDIAFIFO_READ) != writePtr);
 
-  exit:
-    spiInit(SPI_SPEED); // Restore default speed
+        // Start playing block n
+        writePtr = (writePtr + nBytes) % fifo_size;
+        CLCD::mem_write_32(REG_MEDIAFIFO_WRITE, writePtr);
+      } while(nBytes == block_size);
 
-    // Since playing media overwrites RAMG, we need to reinitialize
-    // everything that is stored in RAMG.
-    cmd.cmd(CMD_DLSTART).execute();
-    DLCache::init();
-    StatusScreen::onStartup();
-  #endif // USE_FTDI_FT810
+      SERIAL_ECHO_START();
+      SERIAL_ECHOLNPGM("Done playing video");
+
+    exit:
+      spiInit(SPI_SPEED); // Restore default speed
+
+      // Since playing media overwrites RAMG, we need to reinitialize
+      // everything that is stored in RAMG.
+      cmd.cmd(CMD_DLSTART).execute();
+      DLCache::init();
+      StatusScreen::onStartup();
+    }
+  #endif // FTDI_API_LEVEL >= 810
 }
 
 #endif // EXTENSIBLE_UI

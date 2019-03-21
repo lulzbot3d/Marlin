@@ -72,7 +72,7 @@ namespace FTDI {
 
   inline uint32_t BITMAP_SIZE(uint8_t filter, uint8_t wrapx, uint8_t wrapy, uint16_t width, uint16_t height)
                                                                {return DL::BITMAP_SIZE|(((filter)&1UL)<<20)|(((wrapx)&1UL)<<19)|(((wrapy)&1UL)<<18)|(((width)&511UL)<<9)|(((height)&511UL)<<0);}
-  #if defined(USE_FTDI_FT810)
+  #if FTDI_API_LEVEL >= 810
   inline uint32_t BITMAP_LAYOUT_H(uint8_t linestride, uint8_t height)
                                                                {return DL::BITMAP_LAYOUT_H|(((linestride)&3UL)<<2)|(((height)&3UL)<<0);}
   inline uint32_t BITMAP_SIZE_H(uint8_t width, uint8_t height)
@@ -108,17 +108,25 @@ namespace FTDI {
   inline uint32_t RESTORE_CONTEXT()                            {return DL::RESTORE_CONTEXT;}
   inline uint32_t RETURN ()                                    {return DL::RETURN;}
   inline uint32_t SAVE_CONTEXT()                               {return DL::SAVE_CONTEXT;}
-  #if defined(USE_FTDI_FT810)
-  inline uint32_t SCISSOR_XY(uint16_t x,uint16_t y)            {return DL::SCISSOR_XY|(((x)&2047UL)<<11)|(((y)&2047UL)<<0);}
-  inline uint32_t SCISSOR_SIZE(uint16_t w,uint16_t h)          {return DL::SCISSOR_SIZE|(((w)&2047UL)<<12)|(((h)&2047UL)<<0);}
+  inline uint32_t SCISSOR_XY(uint16_t x,uint16_t y) {
+    return DL::SCISSOR_XY |
+      (FTDI::ftdi_chip >= 810
+        ? (((x)&2047UL)<<11)|(((y)&2047UL)<<0)
+        : (((x)& 511UL)<<10)|(((y)&511UL)<<0));
+  }
+  inline uint32_t SCISSOR_SIZE(uint16_t w,uint16_t h) {
+    return DL::SCISSOR_SIZE |
+      (FTDI::ftdi_chip >= 810
+        ? (((w)&2047UL)<<12)|(((h)&2047UL)<<0)
+        : (((w)& 511UL)<<10)|(((h)& 511UL)<<0));
+  }
   inline uint32_t SCISSOR_XY()                                 {return DL::SCISSOR_XY;}
-  inline uint32_t SCISSOR_SIZE()                               {return DL::SCISSOR_SIZE|(2048UL<<12)|((2048UL)<<0);}
-  #else
-  inline uint32_t SCISSOR_XY(uint16_t x,uint16_t y)            {return DL::SCISSOR_XY|(((x)&511UL)<<10)|(((y)&511UL)<<0);}
-  inline uint32_t SCISSOR_SIZE(uint16_t w,uint16_t h)          {return DL::SCISSOR_SIZE|(((w)&511UL)<<10)|(((h)&511UL)<<0);}
-  inline uint32_t SCISSOR_XY()                                 {return DL::SCISSOR_XY;}
-  inline uint32_t SCISSOR_SIZE()                               {return DL::SCISSOR_SIZE|(511UL<<10)|((511UL)<<0);}
-  #endif
+  inline uint32_t SCISSOR_SIZE() {
+    return DL::SCISSOR_SIZE |
+      (FTDI::ftdi_chip >= 810
+        ? (2048UL<<12)|((2048UL)<<0)
+        : ( 511UL<<10)|(( 511UL)<<0));
+  }
   inline uint32_t STENCIL_FUNC(uint16_t func, uint8_t ref, uint8_t mask)
                                                                {return DL::STENCIL_FUNC|(((func)&7UL)<<16)|(((ref)&255UL)<<8)|(((mask)&255UL)<<0);}
   inline uint32_t STENCIL_MASK(uint8_t mask)                   {return DL::STENCIL_MASK|(((mask)&255UL)<<0);}
@@ -128,7 +136,8 @@ namespace FTDI {
   inline uint32_t VERTEX2F(uint16_t x, uint16_t y)             {return DL::VERTEX2F|(((x)&32767UL)<<15)|(((y)&32767UL)<<0);}
   inline uint32_t VERTEX2II(uint16_t x,uint16_t y, uint8_t handle = 0, uint8_t cell = 0)
                                                                {return DL::VERTEX2II|(((x)&511UL)<<21)|(((y)&511UL)<<12)|(((handle)&31UL)<<7)|(((cell)&127UL)<<0);}
-  #if defined(USE_FTDI_FT810)
+
+  #if FTDI_API_LEVEL >= 810
   inline uint32_t VERTEX_FORMAT(uint8_t frac)                  {return DL::VERTEX_FORMAT|(((frac)&7UL)<<0);}
   inline uint32_t VERTEX_TRANSLATE_X(int32_t x)                {return DL::VERTEX_TRANSLATE_X|(((x)&131071UL)<<0);}
   inline uint32_t VERTEX_TRANSLATE_Y(int32_t y)                {return DL::VERTEX_TRANSLATE_Y|(((y)&131071UL)<<0);}

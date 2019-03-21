@@ -88,16 +88,18 @@ class CommandProcessor : public CLCD::CommandFifo {
   public:
     inline CommandProcessor& bitmap_size(uint8_t filter, uint8_t wrapx, uint8_t wrapy, uint16_t width, uint16_t height) {
       cmd(FTDI::BITMAP_SIZE(filter, wrapx, wrapy, width, height));
-      #if defined(USE_FTDI_FT810)
-        cmd(FTDI::BITMAP_SIZE_H(width >> 9, height >> 9));
+      #if FTDI_API_LEVEL >= 810
+        if(FTDI::ftdi_chip >= 810)
+          cmd(FTDI::BITMAP_SIZE_H(width >> 9, height >> 9));
       #endif
       return *this;
     }
 
     inline CommandProcessor& bitmap_layout(uint8_t format, uint16_t linestride, uint16_t height) {
       cmd(FTDI::BITMAP_LAYOUT(format, linestride, height));
-      #if defined(USE_FTDI_FT810)
-        cmd(FTDI::BITMAP_LAYOUT_H(linestride >> 10, height >> 9));
+      #if FTDI_API_LEVEL >= 810
+        if(FTDI::ftdi_chip >= 810)
+          cmd(FTDI::BITMAP_LAYOUT_H(linestride >> 10, height >> 9));
       #endif
       return *this;
     }
@@ -131,7 +133,7 @@ class CommandProcessor : public CLCD::CommandFifo {
     inline CommandProcessor& sketch   (int16_t x, int16_t y, uint16_t w, uint16_t h, uint32_t ptr, uint16_t format)
                                                                   {CLCD::CommandFifo::sketch(x, y, w, h, ptr, format); return *this;}
     inline CommandProcessor& screensaver  ()                      {CLCD::CommandFifo::screensaver(); return *this;}
-    #if defined(USE_FTDI_FT810)
+    #if FTDI_API_LEVEL >= 810
     inline CommandProcessor& setbase  (uint8_t base)              {CLCD::CommandFifo::setbase(base); return *this;}
     #endif
     inline CommandProcessor& loadidentity ()                      {CLCD::CommandFifo::loadidentity(); return *this;}
@@ -158,7 +160,7 @@ class CommandProcessor : public CLCD::CommandFifo {
     inline CommandProcessor& getprops (uint32_t ptr, uint32_t width, uint32_t height)
                                                                   {CLCD::CommandFifo::getprops(ptr, width, height); return *this;}
 
-    #if defined(USE_FTDI_FT810)
+    #if FTDI_API_LEVEL >= 810
     inline CommandProcessor& setbitmap (uint32_t ptr, uint16_t fmt, uint16_t w, uint16_t h)
                                                                   {CLCD::CommandFifo::setbitmap(ptr,fmt,w,h); return *this;}
     inline CommandProcessor& snapshot2 (uint32_t fmt, uint32_t ptr, int16_t x, int16_t y, uint16_t w, uint16_t h)

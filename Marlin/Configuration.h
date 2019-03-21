@@ -1023,7 +1023,9 @@
  */
 
 // Min software endstops constrain movement within minimum coordinate bounds
+#ifdef LULZBOT_MIN_SOFTWARE_ENDSTOPS
 #define MIN_SOFTWARE_ENDSTOPS LULZBOT_MIN_SOFTWARE_ENDSTOPS
+#endif
 #if ENABLED(MIN_SOFTWARE_ENDSTOPS)
   #define MIN_SOFTWARE_ENDSTOP_X
   #define MIN_SOFTWARE_ENDSTOP_Y
@@ -1031,7 +1033,9 @@
 #endif
 
 // Max software endstops constrain movement within maximum coordinate bounds
-#define MAX_SOFTWARE_ENDSTOPS
+#ifdef LULZBOT_MAX_SOFTWARE_ENDSTOPS
+#define MAX_SOFTWARE_ENDSTOPS LULZBOT_MAX_SOFTWARE_ENDSTOPS
+#endif
 #if ENABLED(MAX_SOFTWARE_ENDSTOPS)
   #define MAX_SOFTWARE_ENDSTOP_X
   #define MAX_SOFTWARE_ENDSTOP_Y

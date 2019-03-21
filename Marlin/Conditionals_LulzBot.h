@@ -1140,7 +1140,7 @@
     #define LULZBOT_M115_EXTRUDER_TYPE             "Goostruder"
     #define LULZBOT_X_MAX_ENDSTOP_INVERTING        LULZBOT_NORMALLY_CLOSED_ENDSTOP
     #define LULZBOT_E3D_Titan_Aero_Volcano
-    #define LULZBOT_E_STEPS                        420
+    #define LULZBOT_E_STEPS                        13297.9664
 #endif /* TOOLHEAD_KangarooPaw_Experimental */
 
 // Using the V2 toolheads on the TAZ and older Minis requires an
@@ -1551,10 +1551,11 @@
 
 #define LULZBOT_ABORT_ON_ENDSTOP_HIT_FEATURE_ENABLED
 
-// Workaround for bug in Marlin 1.1.5 where motion is stopped a X or Y = 0,
-// On the Hibiscus, enable software endstops
-#if defined(LULZBOT_USE_Z_BELT)
+#if defined(LULZBOT_KangarooPaw_Experimental)
+    // No software endstops
+#else
     #define LULZBOT_MIN_SOFTWARE_ENDSTOPS
+    #define LULZBOT_MAX_SOFTWARE_ENDSTOPS
 #endif
 
 /* Endstop settings are determined by printer model, except for the
@@ -1793,7 +1794,10 @@
     #define LULZBOT_NOZZLE_PARK_POINT { 100, (LULZBOT_Y_MAX_POS -  1), 20 }
 #endif
 
-#if defined(LULZBOT_IS_MINI)
+#if defined(LULZBOT_KangarooPaw_Experimental)
+    #define LULZBOT_AFTER_ABORT_PRINT_ACTION GcodeSuite::process_subcommands_now_P(PSTR("G28 Z\nM117 Print aborted."));
+
+#elif defined(LULZBOT_IS_MINI)
     #define LULZBOT_AFTER_ABORT_PRINT_ACTION GcodeSuite::process_subcommands_now_P(PSTR("G28 Z\nG0 X80 Y190 F3000\nM117 Print aborted."));
 
 #elif defined(LULZBOT_Juniper_TAZ5)

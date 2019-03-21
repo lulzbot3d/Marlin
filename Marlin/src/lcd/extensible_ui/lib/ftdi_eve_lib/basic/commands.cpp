@@ -874,6 +874,11 @@ bool CLCD::CommandFifo::is_processing() {
   return (mem_read_32(REG_CMD_READ) & 0x0FFF) != (mem_read_32(REG_CMD_WRITE) & 0x0FFF);
 }
 
+bool CLCD::CommandFifo::has_fault() {
+  uint16_t Cmd_Read_Reg  = mem_read_32(REG_CMD_READ) & 0x0FFF;
+  return Cmd_Read_Reg == 0x0FFF;
+}
+
 #if FTDI_API_LEVEL == 800
 void CLCD::CommandFifo::start() {
   if(command_write_ptr == 0xFFFFFFFFul) {
@@ -897,7 +902,7 @@ void CLCD::CommandFifo::reset() {
   command_write_ptr = 0xFFFFFFFFul;
 };
 
-template <class T> void CLCD::CommandFifo::_write_unaligned(T data, uint16_t len) {
+template <class T> bool CLCD::CommandFifo::_write_unaligned(T data, uint16_t len) {
   const char *ptr = (const char*)data;
   uint32_t bytes_tail, bytes_head;
   uint32_t command_read_ptr;
@@ -919,6 +924,13 @@ template <class T> void CLCD::CommandFifo::_write_unaligned(T data, uint16_t len
       bytes_tail = command_read_ptr - command_write_ptr;
       bytes_head = 0;
     }
+    // Check for faults which can lock up the command processor
+    if(has_fault()) {
+      #if defined(UI_FRAMEWORK_DEBUG)
+        SERIAL_ECHOLNPGM("Fault waiting for space in the command processor");
+      #endif
+      return false;
+    }
   } while((bytes_tail + bytes_head) < len);
 
   /* Write as many bytes as possible following REG_CMD_WRITE */
@@ -937,18 +949,19 @@ template <class T> void CLCD::CommandFifo::_write_unaligned(T data, uint16_t len
   if(command_write_ptr == 4096U) {
     command_write_ptr = 0;
   }
+  return true;
 }
 
 // Writes len bytes into the FIFO, if len is not
 // divisible by four, zero bytes will be written
 // to align to the boundary.
 
-template <class T> void CLCD::CommandFifo::write(T data, uint16_t len) {
+template <class T> bool CLCD::CommandFifo::write(T data, uint16_t len) {
   const uint8_t padding = MULTIPLE_OF_4(len) - len;
 
   uint8_t pad_bytes[] = {0, 0, 0, 0};
-  _write_unaligned(data,      len);
-  _write_unaligned(pad_bytes, padding);
+  return _write_unaligned(data,      len) &&
+         _write_unaligned(pad_bytes, padding);
 }
 #else
 void CLCD::CommandFifo::start() {
@@ -958,6 +971,9 @@ void CLCD::CommandFifo::execute() {
 }
 
 void CLCD::CommandFifo::reset() {
+  #if defined(UI_FRAMEWORK_DEBUG)
+    SERIAL_ECHOLNPGM("Resetting command processor");
+  #endif
   safe_delay(100);
   mem_write_32(REG_CPURESET,  0x00000001);
   mem_write_32(REG_CMD_WRITE, 0x00000000);
@@ -970,9 +986,15 @@ void CLCD::CommandFifo::reset() {
 // divisible by four, zero bytes will be written
 // to align to the boundary.
 
-template <class T> void CLCD::CommandFifo::write(T data, uint16_t len) {
+template <class T> bool CLCD::CommandFifo::write(T data, uint16_t len) {
   const uint8_t padding = MULTIPLE_OF_4(len) - len;
 
+  if(has_fault()) {
+    #if defined(UI_FRAMEWORK_DEBUG)
+      SERIAL_ECHOLNPGM("Faulted... ignoring write.");
+    #endif
+    return false;
+  }
   // The FT810 provides a special register that can be used
   // for writing data without us having to do our own FIFO
   // management.
@@ -985,17 +1007,24 @@ template <class T> void CLCD::CommandFifo::write(T data, uint16_t len) {
     #endif
     do {
       Command_Space = mem_read_32(REG_CMDB_SPACE) & 0x0FFF;
+      if(has_fault()) {
+        #if defined(UI_FRAMEWORK_DEBUG)
+          SERIAL_ECHOLNPGM("... fault");
+        #endif
+        return false;
+      }
     } while(Command_Space < len + padding);
     #if defined(UI_FRAMEWORK_DEBUG)
       SERIAL_ECHOLNPGM("... done");
     #endif
   }
   mem_write_bulk(REG_CMDB_WRITE, data, len, padding);
+  return true;
 }
 #endif
 
-template void CLCD::CommandFifo::write(void*, uint16_t);
-template void CLCD::CommandFifo::write(progmem_str, uint16_t);
+template bool CLCD::CommandFifo::write(const void*, uint16_t);
+template bool CLCD::CommandFifo::write(progmem_str, uint16_t);
 
 // CO_PROCESSOR COMMANDS
 

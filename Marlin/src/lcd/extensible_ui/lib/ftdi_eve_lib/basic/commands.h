@@ -167,13 +167,14 @@ class CLCD::CommandFifo {
     void start(void);
 
   public:
-    template <class T> void write(T data, uint16_t len);
+    template <class T> bool write(T data, uint16_t len);
 
   public:
     CommandFifo() {start();}
 
     static void reset (void);
     static bool is_processing();
+    static bool has_fault();
 
     void execute(void);
 

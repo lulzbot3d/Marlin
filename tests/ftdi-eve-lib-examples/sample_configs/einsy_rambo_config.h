@@ -37,28 +37,24 @@
 #define LCD_480x272
 //#define LCD_800x480
 
-// Select interfacing pins
+// Select interfacing pins, the following pin specifiers are supported:
+//
+//     ARDUINO_DIGITAL_1  - Arduino pin via digitalWrite/digitalRead
+//     AVR_A1             - Fast AVR port access via PORTA/PINA/DDRA
+//     1                  - Only when compiling Marlin, use Marlin pin IDs.
 
 // The pins for CS and MOD_RESET (PD) must be chosen.
-    #define CLCD_MOD_RESET      D, 0b00001000 // LCD_PINS_ENABLE, Marlin Logical Pin 18, D3
-    #define CLCD_SPI_CS         D, 0b00000100 // LCD_PINS_D4, Marlin Logical Pin 19, D2
+#define CLCD_MOD_RESET          AVR_D3 // LCD_PINS_ENABLE, Marlin Logical Pin 18
+#define CLCD_SPI_CS             AVR_D2 // LCD_PINS_D4, Marlin Logical Pin 19
 
 // If using software SPI, specify pins for SCLK, MOSI, MISO
 #define CLCD_USE_SOFT_SPI
 #if defined(CLCD_USE_SOFT_SPI)
-    #define CLCD_SOFT_SPI_SCLK  H, 0b01000000 // BTN_ENC, Marlin Logical Pin 9, H6
-    #define CLCD_SOFT_SPI_MOSI  G, 0b00010000 // LCD_PINS_D5, Marlin Logical Pin 70, G4
-    #define CLCD_SOFT_SPI_MISO  H, 0b00000100 // BEEPER_PIN, Marlin Logical Pin 84, H2
+    #define CLCD_SOFT_SPI_SCLK  AVR_H6 // BTN_ENC, Marlin Logical Pin 9, H6
+    #define CLCD_SOFT_SPI_MOSI  AVR_G4 // LCD_PINS_D5, Marlin Logical Pin 70, G4
+    #define CLCD_SOFT_SPI_MISO  AVR_H2 // BEEPER_PIN, Marlin Logical Pin 84, H2
 #endif
 
-// If the following is defined, the pin definitions can be
-// given as a pairing of a port and bitmask, as opposed to
-// Arduino pin numbers, for faster sofware based I/O on
-// AVR chips, e.g:
-//
-//   #define CLCD_SPI_CS  G, 0b00001000 // PG3
-//
-#define USE_FAST_AVR_IO
 
 // Defines how to orient the display. An inverted (i.e. upside-down) display
 // is supported on the FT800. The FT810 or better also support a portrait

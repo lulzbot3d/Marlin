@@ -37,28 +37,23 @@
 //#define LCD_480x272
 //#define LCD_800x480
 
-// Select interfacing pins
+// Select interfacing pins, the following pin specifiers are supported:
+//
+//     ARDUINO_DIGITAL_1  - Arduino pin via digitalWrite/digitalRead
+//     AVR_A1             - Fast AVR port access via PORTA/PINA/DDRA
+//     1                  - Only when compiling Marlin, use Marlin pin IDs.
 
 // The pins for CS and MOD_RESET (PD) must be chosen.
-    #define CLCD_MOD_RESET      9
-    #define CLCD_SPI_CS         10
+    #define CLCD_MOD_RESET      ARDUINO_DIGITAL_9
+    #define CLCD_SPI_CS         ARDUINO_DIGITAL_10
 
 // If using software SPI, specify pins for SCLK, MOSI, MISO
 //#define CLCD_USE_SOFT_SPI
 #if defined(CLCD_USE_SOFT_SPI)
-    #define CLCD_SOFT_SPI_SCLK  13
-    #define CLCD_SOFT_SPI_MOSI  11
-    #define CLCD_SOFT_SPI_MISO  12
+    #define CLCD_SOFT_SPI_SCLK  ARDUINO_DIGITAL_13
+    #define CLCD_SOFT_SPI_MOSI  ARDUINO_DIGITAL_11
+    #define CLCD_SOFT_SPI_MISO  ARDUINO_DIGITAL_12
 #endif
-
-// If the following is defined, the pin definitions can be
-// given as a pairing of a port and bitmask, as opposed to
-// Arduino pin numbers, for faster sofware based I/O on
-// AVR chips, e.g:
-//
-//   #define CLCD_SPI_CS  G, 0b00001000 // PG3
-//
-//#define USE_FAST_AVR_IO
 
 // Defines how to orient the display. An inverted (i.e. upside-down) display
 // is supported on the FT800. The FT810 or better also support a portrait

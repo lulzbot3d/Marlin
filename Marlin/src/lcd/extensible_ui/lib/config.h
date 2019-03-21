@@ -50,11 +50,11 @@
 // Otherwise. Define all the pins manually:
 
 #if defined(OTHER_PIN_LAYOUT)
-    // When specifying pins:
-    //   - If compiling Marlin, use Marlin pin numbers.
-    //   - If compiling standalone sketch, use Arduino
-    //     pin numbers or use USE_FAST_AVR_IO instead
-    //    (see below for documentation).
+    // Select interfacing pins, the following pin specifiers are supported:
+    //
+    //     ARDUINO_DIGITAL_1  - Arduino pin via digitalWrite/digitalRead
+    //     AVR_A1             - Fast AVR port access via PORTA/PINA/DDRA
+    //     1                  - When compiling Marlin, use Marlin pin IDs.
 
     // The pins for CS and MOD_RESET (PD) must be chosen.
     #define CLCD_MOD_RESET                      9
@@ -67,15 +67,6 @@
         #define CLCD_SOFT_SPI_MISO             12
         #define CLCD_SOFT_SPI_SCLK             13
     #endif
-
-    // If the following is defined, the pin definitions can be
-    // given as a pairing of a port and bitmask, as opposed to
-    // Arduino pin numbers, for faster sofware based I/O on
-    // AVR chips, e.g:
-    //
-    //   #define CLCD_SPI_CS  G, 0b00001000 // PG3
-    //
-    //#define USE_FAST_AVR_IO
 #endif
 
 // Defines how to orient the display. An inverted (i.e. upside-down) display

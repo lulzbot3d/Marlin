@@ -41,7 +41,7 @@ void AdvancedSettingsMenu::onRedraw(draw_mode_t what) {
     default_button_colors();
     cmd.font(Theme::font_medium)
     #if defined(USE_PORTRAIT_ORIENTATION)
-      #define GRID_ROWS 7
+      #define GRID_ROWS 8
       #define GRID_COLS 2
       #if HAS_BED_PROBE
         .enabled(1)
@@ -63,8 +63,9 @@ void AdvancedSettingsMenu::onRedraw(draw_mode_t what) {
       .enabled(0)
       #endif
       .tag(11).button( BTN_POS(1,3), BTN_SIZE(1,1), F("Filament"))
-      .tag(9) .button( BTN_POS(1,5), BTN_SIZE(2,1), F("Interface Settings"))
-      .tag(10).button( BTN_POS(1,6), BTN_SIZE(2,1), F("Restore Factory Defaults"))
+      .tag(12).button( BTN_POS(1,5), BTN_SIZE(2,1), F("Endstop States"))
+      .tag(9) .button( BTN_POS(1,6), BTN_SIZE(2,1), F("Interface Settings"))
+      .tag(10).button( BTN_POS(1,7), BTN_SIZE(2,1), F("Restore Factory Defaults"))
       .tag(5) .button( BTN_POS(2,1), BTN_SIZE(1,1), F("Velocity "))
       .tag(6) .button( BTN_POS(2,2), BTN_SIZE(1,1), F("Acceleration"))
       #if ENABLED(JUNCTION_DEVIATION)
@@ -79,11 +80,11 @@ void AdvancedSettingsMenu::onRedraw(draw_mode_t what) {
       #endif
       .tag(8).button( BTN_POS(2,4), BTN_SIZE(1,1), F("Axis Backlash"))
       .style(LIGHT_BTN)
-      .tag(1) .button( BTN_POS(1,7), BTN_SIZE(2,1), F("Back"));
+      .tag(1) .button( BTN_POS(1,8), BTN_SIZE(2,1), F("Back"));
       #undef GRID_COLS
       #undef GRID_ROWS
     #else
-      #define GRID_ROWS 6
+      #define GRID_ROWS 7
       #define GRID_COLS 2
       #if HAS_BED_PROBE
         .enabled(1)
@@ -105,6 +106,7 @@ void AdvancedSettingsMenu::onRedraw(draw_mode_t what) {
       .enabled(0)
       #endif
       .tag(4) .button( BTN_POS(1,4),  BTN_SIZE(1,1), F("Nozzle Offsets"))
+      .tag(12).button( BTN_POS(1,5),  BTN_SIZE(1,1), F("Endstop States"))
       .tag(5) .button( BTN_POS(2,1),  BTN_SIZE(1,1), F("Velocity "))
       .tag(6) .button( BTN_POS(2,2),  BTN_SIZE(1,1), F("Acceleration"))
       #if ENABLED(JUNCTION_DEVIATION)
@@ -114,9 +116,9 @@ void AdvancedSettingsMenu::onRedraw(draw_mode_t what) {
       #endif
       .tag(11).button( BTN_POS(2,4), BTN_SIZE(1,1),  F("Filament"))
       .tag(9) .button( BTN_POS(2,5),  BTN_SIZE(1,1), F("Interface Settings"))
-      .tag(10).button( BTN_POS(1,5),  BTN_SIZE(1,1), F("Restore Defaults"))
+      .tag(10).button( BTN_POS(1,6),  BTN_SIZE(2,1), F("Restore Defaults"))
       .style(LIGHT_BTN)
-      .tag(1) .button( BTN_POS(1,6),  BTN_SIZE(2,1), F("Back"));
+      .tag(1) .button( BTN_POS(1,7),  BTN_SIZE(2,1), F("Back"));
     #endif
   }
 }
@@ -143,11 +145,12 @@ bool AdvancedSettingsMenu::onTouchEnd(uint8_t tag) {
     #if ENABLED(BACKLASH_GCODE)
     case 8:  GOTO_SCREEN(BacklashCompensationScreen); break;
     #endif
+    case 9:  GOTO_SCREEN(InterfaceSettingsScreen);  LockScreen::check_passcode(); break;
+    case 10: GOTO_SCREEN(RestoreFailsafeDialogBox); LockScreen::check_passcode(); break;
     #if ENABLED(LIN_ADVANCE) || ENABLED(FILAMENT_RUNOUT_SENSOR)
     case 11: GOTO_SCREEN(FilamentOptionsScreen);      break;
     #endif
-    case 9:  GOTO_SCREEN(InterfaceSettingsScreen);  LockScreen::check_passcode(); break;
-    case 10: GOTO_SCREEN(RestoreFailsafeDialogBox); LockScreen::check_passcode(); break;
+    case 12: GOTO_SCREEN(EndstopStatesScreen);          break;
     default: return false;
   }
   return true;

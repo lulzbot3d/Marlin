@@ -554,6 +554,15 @@ class FilesScreen : public BaseScreen, public CachedScreen<FILES_SCREEN_CACHE, F
     static void onIdle();
 };
 
+class EndstopStatesScreen : public BaseScreen, public UncachedScreen {
+  public:
+    static void onEntry();
+    static void onExit();
+    static void onRedraw(draw_mode_t);
+    static bool onTouchEnd(uint8_t tag);
+    static void onIdle();
+};
+
 #if ENABLED(DEVELOPER_SCREENS)
   class DeveloperMenu : public BaseScreen, public UncachedScreen {
     public:
@@ -572,15 +581,6 @@ class FilesScreen : public BaseScreen, public CachedScreen<FILES_SCREEN_CACHE, F
       static void onEntry();
       static void onRedraw(draw_mode_t);
       static bool onTouchStart(uint8_t tag);
-      static void onIdle();
-  };
-
-  class DiagnosticsScreen : public BaseScreen, public UncachedScreen {
-    public:
-      static void onEntry();
-      static void onExit();
-      static void onRedraw(draw_mode_t);
-      static bool onTouchEnd(uint8_t tag);
       static void onIdle();
   };
 #endif

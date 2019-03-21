@@ -335,6 +335,16 @@ namespace ExtUI {
     return !thermalManager.tooColdToExtrude(extruder - E0);
   }
 
+  #if HAS_SOFTWARE_ENDSTOPS
+    bool getSoftEndstopState() {
+      return soft_endstops_enabled;
+    }
+
+    void setSoftEndstopState(const bool value) {
+      soft_endstops_enabled = value;
+    }
+  #endif
+
   float getAxisSteps_per_mm(const axis_t axis) {
     return planner.settings.axis_steps_per_mm[axis];
   }

@@ -68,6 +68,11 @@ namespace ExtUI {
    */
   PGM_P getFirmwareName_str();
 
+  #if HAS_SOFTWARE_ENDSTOPS
+    bool getSoftEndstopState();
+    void setSoftEndstopState(const bool);
+  #endif
+
   float getActualTemp_celsius(const heater_t);
   float getActualTemp_celsius(const extruder_t);
   float getTargetTemp_celsius(const heater_t);

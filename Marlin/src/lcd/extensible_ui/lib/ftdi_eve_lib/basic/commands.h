@@ -162,7 +162,7 @@ class CLCD::CommandFifo {
       uint32_t getRegCmdBSpace();
     #else
       static uint32_t command_write_ptr;
-      template <class T> void _write_unaligned(T data, uint16_t len);
+      template <class T> bool _write_unaligned(T data, uint16_t len);
     #endif
     void start(void);
 

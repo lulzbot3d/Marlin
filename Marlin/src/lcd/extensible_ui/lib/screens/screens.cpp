@@ -79,12 +79,12 @@ SCREEN_TABLE {
   DECL_SCREEN(InterfaceSoundsScreen),
   DECL_SCREEN(LockScreen),
   DECL_SCREEN(FilesScreen),
+  DECL_SCREEN(EndstopStatesScreen),
 #if ENABLED(DEVELOPER_SCREENS)
   DECL_SCREEN(DeveloperMenu),
   DECL_SCREEN(ConfirmEraseFlashDialogBox),
   DECL_SCREEN(WidgetsScreen),
   DECL_SCREEN(TouchRegistersScreen),
-  DECL_SCREEN(DiagnosticsScreen),
 #endif
   DECL_SCREEN(MediaPlayerScreen),
 };

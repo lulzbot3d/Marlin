@@ -1,5 +1,4 @@
 ./build-lulzbot-firmware.sh ArchimRedgum_Experimental CecropiaSilk_SingleExtruderAeroV2
-./build-lulzbot-firmware.sh KangarooPaw_Experimental KangarooPaw_Experimental
 ./build-lulzbot-firmware.sh ArchimTAZ6_Experimental Tilapia_SingleExtruder
 ./build-lulzbot-firmware.sh EinsyMiniLCD_Experimental Gladiola_SingleExtruder
 ./build-lulzbot-firmware.sh EinsyMiniTouchLCD_Experimental Gladiola_SingleExtruder

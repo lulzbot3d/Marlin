@@ -110,7 +110,7 @@
     !defined(TOOLHEAD_Yellowfin_DualExtruderV3) && \
     !defined(TOOLHEAD_Angelfish_Aerostruder) && \
     !defined(TOOLHEAD_Quiver_DualExtruder) && \
-    !defined(TOOLHEAD_KangarooPaw_Experimental) \
+    !defined(TOOLHEAD_KangarooPaw_SingleExtruder) \
 )
     #error Must specify toolhead. Please see "Configuration_LulzBot.h" for directions.
 #endif
@@ -865,7 +865,7 @@
 
 /**************************** MINI TOOLHEADS ***********************************/
 
-#if defined(TOOLHEAD_Gladiola_SingleExtruder) || defined(TOOLHEAD_Albatross_Flexystruder) || defined(TOOLHEAD_Finch_Aerostruder) || defined(TOOLHEAD_CecropiaSilk_SingleExtruderAeroV2) || defined(TOOLHEAD_AchemonSphinx_SmallLayer) || defined(TOOLHEAD_BandedTiger_HardenedSteel) || defined(TOOLHEAD_DingyCutworm_HardenedSteelPlus) || defined(TOOLHEAD_KangarooPaw_Experimental)
+#if defined(TOOLHEAD_Gladiola_SingleExtruder) || defined(TOOLHEAD_Albatross_Flexystruder) || defined(TOOLHEAD_Finch_Aerostruder) || defined(TOOLHEAD_CecropiaSilk_SingleExtruderAeroV2) || defined(TOOLHEAD_AchemonSphinx_SmallLayer) || defined(TOOLHEAD_BandedTiger_HardenedSteel) || defined(TOOLHEAD_DingyCutworm_HardenedSteelPlus) || defined(TOOLHEAD_KangarooPaw_SingleExtruder)
 
     #define LULZBOT_EXTRUDERS                  1
     #define LULZBOT_TOOLHEAD_X_MAX_ADJ         0
@@ -1134,14 +1134,14 @@
     #define LULZBOT_MAY_USE_V2_ADAPTER
 #endif /* TOOLHEAD_DingyCutworm_HardenedSteelPlus */
 
-#if defined(TOOLHEAD_KangarooPaw_Experimental)
+#if defined(TOOLHEAD_KangarooPaw_SingleExtruder)
     #define LULZBOT_LCD_TOOLHEAD_NAME              "Kangaroo Paw"
 //          16 chars max                            ^^^^^^^^^^^^^^^
     #define LULZBOT_M115_EXTRUDER_TYPE             "Goostruder"
     #define LULZBOT_X_MAX_ENDSTOP_INVERTING        LULZBOT_NORMALLY_CLOSED_ENDSTOP
     #define LULZBOT_E3D_Titan_Aero_Volcano
     #define LULZBOT_E_STEPS                        13297.9664
-#endif /* TOOLHEAD_KangarooPaw_Experimental */
+#endif /* TOOLHEAD_KangarooPaw_SingleExtruder */
 
 // Using the V2 toolheads on the TAZ and older Minis requires an
 // adapter plate that shifts the coordinate system

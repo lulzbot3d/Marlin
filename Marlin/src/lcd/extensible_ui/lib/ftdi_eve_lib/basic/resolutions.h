@@ -24,71 +24,71 @@
 
 #if defined(LCD_320x240)
   namespace FTDI {
-    const uint8_t Pclk                 =    8;
-    const uint8_t Pclkpol              =    0;
-    const uint16_t Hsize               =  320;
-    const uint16_t Vsize               =  240;
-    const uint16_t Vsync0              =    0;
-    const uint16_t Vsync1              =    2;
-    const uint16_t Voffset             =   13;
-    const uint16_t Vcycle              =  263;
-    const uint16_t Hsync0              =    0;
-    const uint16_t Hsync1              =   10;
-    const uint16_t Hoffset             =   70;
-    const uint16_t Hcycle              =  408;
+    constexpr uint8_t Pclk                 =    8;
+    constexpr uint8_t Pclkpol              =    0;
+    constexpr uint16_t Hsize               =  320;
+    constexpr uint16_t Vsize               =  240;
+    constexpr uint16_t Vsync0              =    0;
+    constexpr uint16_t Vsync1              =    2;
+    constexpr uint16_t Voffset             =   13;
+    constexpr uint16_t Vcycle              =  263;
+    constexpr uint16_t Hsync0              =    0;
+    constexpr uint16_t Hsync1              =   10;
+    constexpr uint16_t Hoffset             =   70;
+    constexpr uint16_t Hcycle              =  408;
 
-    const uint32_t default_transform_a =  0x000054ad;
-    const uint32_t default_transform_b =  0xffffff52;
-    const uint32_t default_transform_c =  0xfff7f6e4;
-    const uint32_t default_transform_d =  0x00000065;
-    const uint32_t default_transform_e =  0xffffbe3b;
-    const uint32_t default_transform_f =  0x00f68e75;
+    constexpr uint32_t default_transform_a =  0x000054ad;
+    constexpr uint32_t default_transform_b =  0xffffff52;
+    constexpr uint32_t default_transform_c =  0xfff7f6e4;
+    constexpr uint32_t default_transform_d =  0x00000065;
+    constexpr uint32_t default_transform_e =  0xffffbe3b;
+    constexpr uint32_t default_transform_f =  0x00f68e75;
   }
 
 #elif defined(LCD_480x272)
   namespace FTDI {
-    const uint8_t  Pclk                 =    5;
-    const uint8_t  Pclkpol              =    1;
-    const uint16_t Hsize                =  480;
-    const uint16_t Vsize                =  272;
-    const uint16_t Vsync0               =    0;
-    const uint16_t Vsync1               =   10;
-    const uint16_t Voffset              =   12;
-    const uint16_t Vcycle               =  292;
-    const uint16_t Hsync0               =    0;
-    const uint16_t Hsync1               =   41;
-    const uint16_t Hoffset              =   43;
-    const uint16_t Hcycle               =  548;
+    constexpr uint8_t  Pclk                 =    5;
+    constexpr uint8_t  Pclkpol              =    1;
+    constexpr uint16_t Hsize                =  480;
+    constexpr uint16_t Vsize                =  272;
+    constexpr uint16_t Vsync0               =    0;
+    constexpr uint16_t Vsync1               =   10;
+    constexpr uint16_t Voffset              =   12;
+    constexpr uint16_t Vcycle               =  292;
+    constexpr uint16_t Hsync0               =    0;
+    constexpr uint16_t Hsync1               =   41;
+    constexpr uint16_t Hoffset              =   43;
+    constexpr uint16_t Hcycle               =  548;
 
-    const uint32_t default_transform_a  =  0x00008100;
-    const uint32_t default_transform_b  =  0x00000000;
-    const uint32_t default_transform_c  =  0xFFF18000;
-    const uint32_t default_transform_d  =  0x00000000;
-    const uint32_t default_transform_e  =  0xFFFFB100;
-    const uint32_t default_transform_f  =  0x0120D000;
+    constexpr uint32_t default_transform_a  =  0x00008100;
+    constexpr uint32_t default_transform_b  =  0x00000000;
+    constexpr uint32_t default_transform_c  =  0xFFF18000;
+    constexpr uint32_t default_transform_d  =  0x00000000;
+    constexpr uint32_t default_transform_e  =  0xFFFFB100;
+    constexpr uint32_t default_transform_f  =  0x0120D000;
   }
 
 #elif defined(LCD_800x480)
   namespace FTDI {
-    const uint8_t  Pclk                 =    3;
-    const uint8_t  Pclkpol              =    1;
-    const uint16_t Hsize                =  800;
-    const uint16_t Vsize                =  480;
-    const uint16_t Vsync0               =    0;
-    const uint16_t Vsync1               =    2;
-    const uint16_t Voffset              =   13;
-    const uint16_t Vcycle               =  525;
-    const uint16_t Hsync0               =    0;
-    const uint16_t Hsync1               =   20;
-    const uint16_t Hoffset              =   64;
-    const uint16_t Hcycle               =  952;
+    constexpr uint8_t  Pclk                 =    3;
+    constexpr uint8_t  Pclkpol              =    1;
+    constexpr uint16_t Hsize                =  800;
+    constexpr uint16_t Vsize                =  480;
+    constexpr uint16_t Vsync0               =    0;
+    constexpr uint16_t Vsync1               =    2;
+    constexpr uint16_t Voffset              =   13;
+    constexpr uint16_t Vcycle               =  525;
+    constexpr uint16_t Hsync0               =    0;
+    constexpr uint16_t Hsync1               =   20;
+    constexpr uint16_t Hoffset              =   64;
+    constexpr uint16_t Hcycle               =  952;
 
-    const uint32_t default_transform_a  =  0x0000D8B9;
-    const uint32_t default_transform_b  =  0x00000124;
-    const uint32_t default_transform_c  =  0xFFE23926;
-    const uint32_t default_transform_d  =  0xFFFFFF51;
-    const uint32_t default_transform_e  =  0xFFFF7E4F;
-    const uint32_t default_transform_f  =  0x01F0AF70;
+    constexpr uint32_t default_transform_a  =  0x0000D8B9;
+    constexpr uint32_t default_transform_b  =  0x00000124;
+    constexpr uint32_t default_transform_c  =  0xFFE23926;
+    constexpr uint32_t default_transform_d  =  0xFFFFFF51;
+    constexpr uint32_t default_transform_e  =  0xFFFF7E4F;
+    constexpr uint32_t default_transform_f  =  0x01F0AF70;
   }
 
 #else

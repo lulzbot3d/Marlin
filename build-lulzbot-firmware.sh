@@ -34,7 +34,7 @@ MINI2_MODELS="Hibiscus_Mini2"
 MINI2_TOOLHEADS="$UNIVERSAL_TOOLHEADS"
 
 KANGAROOPAW_MODELS="KangarooPaw_Experimental"
-KANGAROOPAW_TOOLHEADS="KangarooPaw_Experimental"
+KANGAROOPAW_TOOLHEADS="KangarooPaw_SingleExtruder"
 
 ####
 # usage

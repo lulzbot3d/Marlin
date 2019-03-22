@@ -32,14 +32,14 @@
     #define FTDI_API_LEVEL                800
   #endif
   namespace FTDI {
-    const uint16_t ftdi_chip            = 800;
-    const bool Use_Crystal              = true;  // 0 = use internal oscillator, 1 = module has a crystal populated
-    const bool GPIO_0_Audio_Enable      = false; /* 1 = does use GPIO00 for amplifier control, 0 = not in use for Audio */
-    const bool GPIO_1_Audio_Shutdown    = true;  /* 1 = does use GPIO01 for amplifier control, 0 = not in use for Audio */
-    const uint8_t Swizzle               = 2;
-    const uint8_t CSpread               = 1;
+    constexpr uint16_t ftdi_chip            = 800;
+    constexpr bool Use_Crystal              = true;  // 0 = use internal oscillator, 1 = module has a crystal populated
+    constexpr bool GPIO_0_Audio_Enable      = false; /* 1 = does use GPIO00 for amplifier control, 0 = not in use for Audio */
+    constexpr bool GPIO_1_Audio_Shutdown    = true;  /* 1 = does use GPIO01 for amplifier control, 0 = not in use for Audio */
+    constexpr uint8_t Swizzle               = 2;
+    constexpr uint8_t CSpread               = 1;
 
-    const uint16_t touch_threshold      = 1200; /* touch-sensitivity */
+    constexpr uint16_t touch_threshold      = 1200; /* touch-sensitivity */
 
     using namespace FTDI_FT800;
     namespace DL {
@@ -70,13 +70,13 @@
     #define FTDI_API_LEVEL                800
   #endif
   namespace FTDI {
-    const uint16_t ftdi_chip            = 800;
-    const bool Use_Crystal              = true; // 0 = use internal oscillator, 1 = module has a crystal populated
-    const bool GPIO_0_Audio_Enable      = false;
-    const bool GPIO_1_Audio_Shutdown    = false;
-    const uint8_t Swizzle               = 0;
-    const uint8_t CSpread               = 1;
-    const uint16_t touch_threshold      = 2000; /* touch-sensitivity */
+    constexpr uint16_t ftdi_chip            = 800;
+    constexpr bool Use_Crystal              = true; // 0 = use internal oscillator, 1 = module has a crystal populated
+    constexpr bool GPIO_0_Audio_Enable      = false;
+    constexpr bool GPIO_1_Audio_Shutdown    = false;
+    constexpr uint8_t Swizzle               = 0;
+    constexpr uint8_t CSpread               = 1;
+    constexpr uint16_t touch_threshold      = 2000; /* touch-sensitivity */
 
     using namespace FTDI_FT800;
     namespace DL {
@@ -103,13 +103,13 @@
     #define FTDI_API_LEVEL                810
   #endif
   namespace FTDI {
-    const uint16_t ftdi_chip            = 810;
-    const bool Use_Crystal              = true; // 0 = use internal oscillator, 1 = module has a crystal populated
-    const bool GPIO_0_Audio_Enable      = false;
-    const bool GPIO_1_Audio_Shutdown    = false;
-    const uint8_t Swizzle               = 0;
-    const uint8_t CSpread               = 1;
-    const uint16_t touch_threshold      = 2000; /* touch-sensitivity */
+    constexpr uint16_t ftdi_chip            = 810;
+    constexpr bool Use_Crystal              = true; // 0 = use internal oscillator, 1 = module has a crystal populated
+    constexpr bool GPIO_0_Audio_Enable      = false;
+    constexpr bool GPIO_1_Audio_Shutdown    = false;
+    constexpr uint8_t Swizzle               = 0;
+    constexpr uint8_t CSpread               = 1;
+    constexpr uint16_t touch_threshold      = 2000; /* touch-sensitivity */
 
     using namespace FTDI_FT810;
     namespace DL {
@@ -137,13 +137,13 @@
     #define FTDI_API_LEVEL                800
   #endif
   namespace FTDI {
-    const uint16_t ftdi_chip            = 800;
-    const bool Use_Crystal              = true; // 0 = use internal oscillator, 1 = module has a crystal populated
-    const bool GPIO_0_Audio_Enable      = false;
-    const bool GPIO_1_Audio_Shutdown    = true;
-    const uint8_t Swizzle               = 0;
-    const uint8_t CSpread               = 1;
-    const uint16_t touch_threshold      = 1200; /* touch-sensitivity */
+    constexpr uint16_t ftdi_chip            = 800;
+    constexpr bool Use_Crystal              = true; // 0 = use internal oscillator, 1 = module has a crystal populated
+    constexpr bool GPIO_0_Audio_Enable      = false;
+    constexpr bool GPIO_1_Audio_Shutdown    = true;
+    constexpr uint8_t Swizzle               = 0;
+    constexpr uint8_t CSpread               = 1;
+    constexpr uint16_t touch_threshold      = 1200; /* touch-sensitivity */
 
     using namespace FTDI_FT800;
     namespace DL {
@@ -169,13 +169,13 @@
     #define FTDI_API_LEVEL                810
   #endif
   namespace FTDI {
-    const uint16_t ftdi_chip            = 810;
-    const bool Use_Crystal              = false; // 0 = use internal oscillator, 1 = module has a crystal populated
-    const bool GPIO_0_Audio_Enable      = true;  // The AO CLCD uses GPIO0 to enable audio
-    const bool GPIO_1_Audio_Shutdown    = false;
-    const uint8_t Swizzle               = 0;
-    const uint8_t CSpread               = 0;
-    const uint16_t touch_threshold      = 2000; /* touch-sensitivity */
+    constexpr uint16_t ftdi_chip            = 810;
+    constexpr bool Use_Crystal              = false; // 0 = use internal oscillator, 1 = module has a crystal populated
+    constexpr bool GPIO_0_Audio_Enable      = true;  // The AO CLCD uses GPIO0 to enable audio
+    constexpr bool GPIO_1_Audio_Shutdown    = false;
+    constexpr uint8_t Swizzle               = 0;
+    constexpr uint8_t CSpread               = 0;
+    constexpr uint16_t touch_threshold      = 2000; /* touch-sensitivity */
 
     using namespace FTDI_FT810;
     namespace DL {

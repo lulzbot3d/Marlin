@@ -39,8 +39,6 @@ void DeveloperMenu::onRedraw(draw_mode_t what) {
        .font(font_medium)
        .tag(0);
 
-    default_button_colors();
-
     #ifdef SPI_FLASH_SS
       constexpr bool has_flash = true;
     #else
@@ -53,11 +51,13 @@ void DeveloperMenu::onRedraw(draw_mode_t what) {
       constexpr bool has_media = false;
     #endif
 
+    cmd.cmd(COLOR_RGB(text_enabled));
     #if defined(USE_PORTRAIT_ORIENTATION)
       #define GRID_ROWS 9
       #define GRID_COLS 1
-      cmd.font(font_large)         .text  ( BTN_POS(1,1), BTN_SIZE(1,1), F("Developer Menu"))
-         .tag(2).font(font_medium) .button( BTN_POS(1,2), BTN_SIZE(1,1), F("Show All Widgets"))
+      cmd.font(font_large)         .text  ( BTN_POS(1,1), BTN_SIZE(1,1), F("Developer Menu"));
+      default_button_colors();
+      cmd.tag(2).font(font_medium) .button( BTN_POS(1,2), BTN_SIZE(1,1), F("Show All Widgets"))
          .tag(3)                   .button( BTN_POS(1,3), BTN_SIZE(1,1), F("Show Touch Registers"))
          .tag(4)                   .button( BTN_POS(1,4), BTN_SIZE(1,1), F("Play Song"))
          .tag(5).enabled(has_media).button( BTN_POS(1,5), BTN_SIZE(1,1), F("Play Video from Media"))
@@ -69,8 +69,9 @@ void DeveloperMenu::onRedraw(draw_mode_t what) {
     #else
       #define GRID_ROWS 6
       #define GRID_COLS 2
-      cmd.font(font_medium)        .text  ( BTN_POS(1,1), BTN_SIZE(2,1), F("Developer Menu"))
-         .tag(2).font(font_small)  .button( BTN_POS(1,2), BTN_SIZE(1,1), F("Show All Widgets"))
+      cmd.font(font_medium)        .text  ( BTN_POS(1,1), BTN_SIZE(2,1), F("Developer Menu"));
+      default_button_colors();
+      cmd.tag(2).font(font_small)  .button( BTN_POS(1,2), BTN_SIZE(1,1), F("Show All Widgets"))
          .tag(3)                   .button( BTN_POS(1,3), BTN_SIZE(1,1), F("Show Touch Registers"))
          .tag(9)                   .button( BTN_POS(1,4), BTN_SIZE(1,1), F("Show Pin States"))
          .tag(4)                   .button( BTN_POS(1,5), BTN_SIZE(1,1), F("Play Song"))

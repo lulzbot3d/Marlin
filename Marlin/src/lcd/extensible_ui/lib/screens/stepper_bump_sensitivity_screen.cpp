@@ -32,7 +32,7 @@ using namespace Theme;
 
 void StepperBumpSensitivityScreen::onRedraw(draw_mode_t what) {
   widgets_t w(what);
-  w.precision(0);
+  w.precision(0, BaseNumericAdjustmentScreen::DEFAULT_LOWEST);
   w.heading(                     PSTR("TMC Bump Sensitivity"));
   w.color(x_axis)  .adjuster( 2, PSTR("X:"),  getTMCBumpSensitivity(X),
   #if X_SENSORLESS && AXIS_HAS_STALLGUARD(X)

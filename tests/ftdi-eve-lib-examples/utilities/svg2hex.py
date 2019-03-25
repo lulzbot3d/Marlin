@@ -106,6 +106,17 @@ class ComputeBoundingBox:
     print "constexpr float y_min = %f;\n" % self.y_min
     print "constexpr float y_max = %f;\n" % self.y_max
 
+  def from_svg_view_box(self, svg):
+    s = re.search('<svg[^>]+>', svg);
+    if s:
+      m = re.search('viewBox="([0-9-.]+) ([0-9-.]+) ([0-9-.]+) ([0-9-.]+)"', svg)
+      if m:
+        self.x_min    = float(m.group(1))
+        self.y_min    = float(m.group(2))
+        self.x_max    = float(m.group(3))
+        self.y_max    = float(m.group(4))
+        return True
+    return False
 
 class WriteDataStructure:
   def __init__(self, bounding_box):
@@ -255,8 +266,10 @@ if __name__ == "__main__":
   print(header)
 
   b = ComputeBoundingBox()
-  p = Parser(b)
-  p.process_svg_paths(data)
+  if not b.from_svg_view_box(data):
+    # Can't find the view box, so use the bounding box of the elements themselves.
+    p = Parser(b)
+    p.process_svg_paths(data)
   b.write()
 
   w = WriteDataStructure(b)

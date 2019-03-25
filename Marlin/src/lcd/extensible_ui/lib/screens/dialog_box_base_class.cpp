@@ -40,11 +40,13 @@ void DialogBoxBaseClass::drawMessage(const T line1, const T line2, const T line3
   cmd.cmd(CMD_DLSTART)
      .cmd(CLEAR_COLOR_RGB(background))
      .cmd(CLEAR(true,true,true))
+     .cmd(COLOR_RGB(text_enabled))
      .tag(0);
   cmd.font(font ? font : font_large);
   for(uint8_t line = 0; line < n_lines; line++) {
     cmd.text( BTN_POS(1,3-n_lines/2+line), BTN_SIZE(2,1), lines[line]);
   }
+  default_button_colors();
 }
 
 template void DialogBoxBaseClass::drawMessage(const char *, const char *, const char *, int16_t);

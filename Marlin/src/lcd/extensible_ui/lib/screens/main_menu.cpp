@@ -22,7 +22,7 @@
 
 #include "../config.h"
 
-#if ENABLED(EXTENSIBLE_UI)
+#if ENABLED(EXTENSIBLE_UI) && !defined(LULZBOT_USE_BIOPRINTER_UI)
 
 #include "screens.h"
 

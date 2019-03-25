@@ -44,6 +44,7 @@ void WidgetsScreen::onRedraw(draw_mode_t what) {
   CommandProcessor cmd;
   cmd.cmd(CLEAR_COLOR_RGB(background))
      .cmd(CLEAR(true,true,true))
+     .cmd(COLOR_RGB(text_enabled))
      .tag(0);
 
   cmd.bgcolor(theme_dark);
@@ -56,8 +57,11 @@ void WidgetsScreen::onRedraw(draw_mode_t what) {
     #define GRID_COLS 3
     #define GRID_ROWS 8
     cmd.font(font_large)
+       .cmd(COLOR_RGB(text_enabled))
               .text      (BTN_POS(1,1),  BTN_SIZE(3,1), F("Sample Widgets"))
-       .tag(2).dial      (BTN_POS(1,2),  BTN_SIZE(1,2), slider_val)
+       .tag(0).text      (BTN_POS(2,6),  BTN_SIZE(1,1), F("Show grid:"));
+    default_button_colors();
+    cmd.tag(2).dial      (BTN_POS(1,2),  BTN_SIZE(1,2), slider_val)
        .tag(0).clock     (BTN_POS(1,4),  BTN_SIZE(1,2), hrs, m, s, 0)
               .gauge     (BTN_POS(1,6),  BTN_SIZE(1,2), 5, 4, slider_val,  0xFFFFU)
 
@@ -67,9 +71,7 @@ void WidgetsScreen::onRedraw(draw_mode_t what) {
        .tag(6).scrollbar (BTN_POS(2,5),  BTN_SIZE(2,1), slider_val, 1000,  0xFFFFU)
 
        .font(font_small)
-       .tag(0).text      (BTN_POS(2,6),  BTN_SIZE(1,1), F("Show grid:"))
        .tag(7).toggle    (BTN_POS(3,6),  BTN_SIZE(1,1), F("no\xFFyes"), show_grid)
-
        .font(font_medium)
        .tag(1).button    (BTN_POS(1, 8), BTN_SIZE(1,1), F("Back"))
               .button    (BTN_POS(2, 8), BTN_SIZE(1,1), F("1"))
@@ -80,18 +82,17 @@ void WidgetsScreen::onRedraw(draw_mode_t what) {
 
     cmd.font(font_large)
               .text      (BTN_POS(1,1),  BTN_SIZE(4,1), F("Sample Widgets"))
-       .tag(2).dial      (BTN_POS(1,2),  BTN_SIZE(1,3), slider_val)
+       .tag(0).text      (BTN_POS(3,6),  BTN_SIZE(1,1), F("Show grid:"));
+    default_button_colors();
+    cmd.tag(2).dial      (BTN_POS(1,2),  BTN_SIZE(1,3), slider_val)
        .tag(3).dial      (BTN_POS(1,5),  BTN_SIZE(1,3), slider_val)
        .tag(0).clock     (BTN_POS(2,2),  BTN_SIZE(1,3), hrs, m, s, 0)
               .gauge     (BTN_POS(2,5),  BTN_SIZE(1,3), 5, 4, slider_val,  0xFFFFU)
-
        .font(font_medium)
        .tag(4).slider    (BTN_POS(3,3),  BTN_SIZE(2,1), slider_val,        0xFFFFU)
        .tag(5).progress  (BTN_POS(3,4),  BTN_SIZE(2,1), slider_val,        0xFFFFU)
        .tag(6).scrollbar (BTN_POS(3,5),  BTN_SIZE(2,1), slider_val, 1000,  0xFFFFU)
-
        .font(font_small)
-       .tag(0).text      (BTN_POS(3,6),  BTN_SIZE(1,1), F("Show grid:"))
        .tag(7).toggle    (BTN_POS(4,6),  BTN_SIZE(1,1), F("no\xFFyes"), show_grid)
 
        .font(font_medium)
@@ -100,6 +101,7 @@ void WidgetsScreen::onRedraw(draw_mode_t what) {
               .button    (BTN_POS(4, 8), BTN_SIZE(1,1), F("2"));
   #endif
 
+  cmd.cmd(COLOR_RGB(text_enabled));
   if(show_grid) DRAW_LAYOUT_GRID
 }
 

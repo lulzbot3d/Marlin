@@ -63,7 +63,7 @@ void TuneMenu::onRedraw(draw_mode_t what) {
       #if ENABLED(BABYSTEPPING)
        .tag(4).enabled(1)      .button( BTN_POS(1,4), BTN_SIZE(2,1), F("Nudge Nozzle"))
       #else
-        #if ENABLED(HAS_BED_PROBE)
+        #if HAS_BED_PROBE
           .enabled(1)
         #else
           .enabled(0)
@@ -97,7 +97,7 @@ void TuneMenu::onRedraw(draw_mode_t what) {
         #if ENABLED(BABYSTEPPING)
           .tag(4)         .button( BTN_POS(2,1), BTN_SIZE(1,1), F("Nudge Nozzle"))
         #else
-          #if ENABLED(HAS_BED_PROBE)
+          #if HAS_BED_PROBE
             .enabled(1)
           #else
             .enabled(0)
@@ -142,7 +142,7 @@ bool TuneMenu::onTouchEnd(uint8_t tag) {
       #if ENABLED(BABYSTEPPING)
         GOTO_SCREEN(NudgeNozzleScreen);
       #else
-        #if ENABLED(HAS_BED_PROBE)
+        #if HAS_BED_PROBE
           GOTO_SCREEN(ZOffsetScreen);
         #endif
       #endif

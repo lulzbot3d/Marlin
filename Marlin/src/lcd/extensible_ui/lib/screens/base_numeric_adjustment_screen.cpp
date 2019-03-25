@@ -69,7 +69,7 @@ BaseNumericAdjustmentScreen::widgets_t &BaseNumericAdjustmentScreen::widgets_t::
 
 void BaseNumericAdjustmentScreen::widgets_t::heading(const char *label) {
   CommandProcessor cmd;
-  cmd.font(font_medium);
+  cmd.font(font_medium).cmd(COLOR_RGB(text_enabled));
   if(_what & BACKGROUND) {
     #if defined(USE_PORTRAIT_ORIENTATION)
       cmd.tag(0).fgcolor(background).button( BTN_POS(1, _line), BTN_SIZE(12,1), progmem_str(label), OPT_FLAT);
@@ -162,6 +162,7 @@ void BaseNumericAdjustmentScreen::widgets_t::adjuster_sram_val(uint8_t tag, cons
     cmd.enabled(1)
        .font(font_small)
        .fgcolor(_color)            .tag(0).button( BTN_POS(5,_line), BTN_SIZE(5,1), F(""),               OPT_FLAT)
+       .cmd(COLOR_RGB(text_enabled))
        .fgcolor(background) .tag(0).button( BTN_POS(1,_line), BTN_SIZE(4,1), (progmem_str) label, OPT_FLAT);
   }
 

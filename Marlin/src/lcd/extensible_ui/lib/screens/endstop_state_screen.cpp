@@ -63,7 +63,7 @@ void EndstopStatesScreen::onRedraw(draw_mode_t what) {
   cmd.font(font_medium)
   #endif
      .text(BTN_POS(1,1), BTN_SIZE(6,1), F("Endstop States:"))
-     .font(26);
+     .font(font_tiny);
   #if PIN_EXISTS(X_MAX)
     PIN_ENABLED (X_MAX,X_MAX_ENDSTOP_INVERTING,1,2)
   #else
@@ -129,7 +129,9 @@ void EndstopStatesScreen::onRedraw(draw_mode_t what) {
 bool EndstopStatesScreen::onTouchEnd(uint8_t tag) {
   switch(tag) {
     case 1: GOTO_PREVIOUS(); break;
+    #if HAS_SOFTWARE_ENDSTOPS
     case 2: setSoftEndstopState(!getSoftEndstopState());
+    #endif
     default:
       return false;
   }

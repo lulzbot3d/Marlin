@@ -20,8 +20,8 @@
  ****************************************************************************/
 
 #include "src/ftdi_eve_lib/ftdi_eve_lib.h"
+#include "src/ftdi_eve_lib/extras/polygon.h"
 #include "src/bioprinter_ui.h"
-#include "src/polygon.h"
 
 using namespace FTDI;
 
@@ -40,7 +40,7 @@ class LogoScreen : public UIScreen, public UncachedScreen {
 
       #define POLY(A) A, sizeof(A)/sizeof(A[0])
 
-      Polygon p(cmd, x_min, y_min, x_max, y_max);
+      Polygon p(cmd, 0, 0, display_width, display_height);
 
       constexpr uint32_t shadow_rgb  = 0xF3E0E0;
       constexpr uint32_t fill_rgb    = 0x00AA00;
@@ -71,7 +71,7 @@ class LogoScreen : public UIScreen, public UncachedScreen {
       b.fill_style(fill_rgb);
       b.stroke_style(stroke_rgb, 28);
       b.shadow_style(shadow_rgb, 5);
-      
+
       b.button(1, POLY(x_pos));
       b.button(2, POLY(y_pos));
       b.button(3, POLY(z_pos));
@@ -84,7 +84,7 @@ class LogoScreen : public UIScreen, public UncachedScreen {
       uint16_t x, y, h, v;
       cmd.cmd(COLOR_RGB(stroke_rgb));
       cmd.fgcolor(fill_rgb);
-      
+
       p.bounds(POLY(usb_btn), x, y, h, v);
       cmd.font(28).tag(9).button(x, y, h, v, F("USB Drive"));
 

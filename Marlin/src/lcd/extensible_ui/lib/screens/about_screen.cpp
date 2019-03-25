@@ -40,8 +40,9 @@ void AboutScreen::onEntry() {
 
 void AboutScreen::onRedraw(draw_mode_t what) {
   CommandProcessor cmd;
-  cmd.cmd(CLEAR_COLOR_RGB(background));
-  cmd.cmd(CLEAR(true,true,true));
+  cmd.cmd(CLEAR_COLOR_RGB(background))
+     .cmd(CLEAR(true,true,true))
+     .cmd(COLOR_RGB(text_enabled));
 
   #if defined(LULZBOT_LCD_MACHINE_NAME) && defined(LULZBOT_LCD_TOOLHEAD_NAME)
   cmd.tag(0).font(font_medium)
@@ -54,8 +55,10 @@ void AboutScreen::onRedraw(draw_mode_t what) {
             .text(  BTN_POS(1,3), BTN_SIZE(4,1), F("(C) 2018 Aleph Objects, Inc."))
             .text(  BTN_POS(1,4), BTN_SIZE(4,1), F("www.lulzbot.com"))
 
-     .tag(0).text(  BTN_POS(1,6), BTN_SIZE(4,1), progmem_str(getFirmwareName_str()))
-     .tag(1).button(BTN_POS(2,8), BTN_SIZE(2,1), F("Okay"));
+     .tag(0).text(  BTN_POS(1,6), BTN_SIZE(4,1), progmem_str(getFirmwareName_str()));
+
+  default_button_colors();
+  cmd.tag(1).button(BTN_POS(2,8), BTN_SIZE(2,1), F("Okay"));
 }
 
 bool AboutScreen::onTouchEnd(uint8_t tag) {

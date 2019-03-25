@@ -305,7 +305,7 @@
     #define LULZBOT_IS_MINI
     #define LULZBOT_MINI_BED
     #define LULZBOT_USE_EINSY_RETRO
-    #define LULZBOT_USE_REPRAP_LCD_DISPLAY
+
     #define LULZBOT_SENSORLESS_HOMING
     #define LULZBOT_USE_NORMALLY_CLOSED_ENDSTOPS
     #define LULZBOT_STEALTHCHOP_Z
@@ -314,7 +314,20 @@
     #define LULZBOT_BAUDRATE 250000
     #define LULZBOT_PRINTCOUNTER
     #define LULZBOT_MACHINE_UUID "9a1d8eee-7118-40a7-942d-9541f35667dd"
-    #define LULZBOT_LIGHTWEIGHT_UI
+    //#define LULZBOT_USE_BIOPRINTER_UI
+    #ifdef LULZBOT_USE_BIOPRINTER_UI
+        /* Color display seems to only work on EXP1 */
+        #define LULZBOT_USE_TOUCH_UI
+        #define LULZBOT_USE_BIOPRINTER_UI
+        #define LCD_ALEPHOBJECTS_CLCD_UI
+        #define USE_PORTRAIT_ORIENTATION
+        #define AO_EXP1_PINOUT_REV_C
+        #define LCD_480x272
+    #else
+        #define LULZBOT_USE_REPRAP_LCD_DISPLAY
+        #define LULZBOT_LIGHTWEIGHT_UI
+    #endif
+    #define LULZBOT_SDSUPPORT
 #endif
 
 #if defined(LULZBOT_ArchimTAZ6_Experimental)

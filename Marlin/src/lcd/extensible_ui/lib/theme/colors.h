@@ -33,13 +33,30 @@ namespace Theme {
     (uint32_t((((a) & 0x00FF00) >>  8) *    f + (((b) & 0x00FF00) >>  8) * (1-f))  <<  8) | \
     (uint32_t((((a) & 0x0000FF) >>  0) *    f + (((b) & 0x0000FF) >>  0) * (1-f))  <<  0))
 
-  constexpr uint32_t theme_darkest = COLOR_CORRECTION(0x444444);
-  constexpr uint32_t theme_dark    = COLOR_CORRECTION(0x777777);
+  #ifndef LULZBOT_USE_BIOPRINTER_UI
+    constexpr uint32_t theme_darkest = COLOR_CORRECTION(0x444444);
+    constexpr uint32_t theme_dark    = COLOR_CORRECTION(0x777777);
 
-  constexpr uint32_t background    = theme_darkest;
+    constexpr uint32_t background    = theme_darkest;
 
-  constexpr uint32_t text_enabled  = 0xFFFFFF;
-  constexpr uint32_t text_disabled = theme_dark;
+    constexpr uint32_t text_enabled  = 0xFFFFFF;
+    constexpr uint32_t text_disabled = theme_dark;
+  #else
+    constexpr uint32_t theme_darkest = 0x00AA00;
+    constexpr uint32_t theme_dark    = 0x005500;
+
+    constexpr uint32_t background    = 0xFFFFFF;
+
+    constexpr uint32_t text_enabled  = 0x00AA00;
+    constexpr uint32_t text_disabled = 0x333333;
+
+    constexpr uint32_t shadow_rgb    = 0xF3E0E0;
+    constexpr uint32_t fill_rgb      = theme_darkest;
+    constexpr uint32_t stroke_rgb    = 0x005500;
+    constexpr uint32_t syringe_rgb   = 0xE2F2DA;
+  #endif
+
+
 
 
   constexpr uint32_t x_axis        = COLOR_CORRECTION(0xFF0000);
@@ -72,13 +89,24 @@ namespace Theme {
   constexpr uint32_t transformVal  = 0x104010;
 
   // Disabled vs enabled buttons
-  struct default_btn {
-    static constexpr uint32_t rgb_enabled  = 0xFFFFFF;
-    static constexpr uint32_t grad_enabled = 0xFFFFFF;
-    static constexpr uint32_t fg_enabled   = COLOR_BLEND(0x999999,0x666666,0.33);
-    static constexpr uint32_t rgb_disabled = background;
-    static constexpr uint32_t fg_disabled  = background;
-  };
+  #ifndef LULZBOT_USE_BIOPRINTER_UI
+    struct default_btn {
+      static constexpr uint32_t rgb_enabled  = 0xFFFFFF;
+      static constexpr uint32_t grad_enabled = 0xFFFFFF;
+      static constexpr uint32_t fg_enabled   = COLOR_BLEND(0x999999,0x666666,0.33);
+      static constexpr uint32_t rgb_disabled = background;
+      static constexpr uint32_t fg_disabled  = background;
+    };
+  #else
+    struct default_btn {
+      static constexpr uint32_t rgb_enabled  = 0xFFFFFF;
+      static constexpr uint32_t grad_enabled = 0xFFFFFF;
+      static constexpr uint32_t fg_enabled   = fill_rgb;
+      static constexpr uint32_t rgb_disabled = background;
+      static constexpr uint32_t fg_disabled  = background;
+    };
+  #endif
+
 
   struct light_btn {
     static constexpr uint32_t rgb_enabled  = 0xFFFFFF;

@@ -25,11 +25,15 @@
 namespace Theme {
   #if defined(LCD_800x480)
     #if defined(USE_PORTRAIT_ORIENTATION)
+      constexpr int16_t  font_tiny     = 26;
+      constexpr int16_t  font_xsmall   = 28;
       constexpr int16_t  font_small    = 29;
       constexpr int16_t  font_medium   = 30;
       constexpr int16_t  font_large    = 30;
       constexpr int16_t  font_xlarge   = 31;
     #else
+      constexpr int16_t  font_tiny     = 27;
+      constexpr int16_t  font_xsmall   = 29;
       constexpr int16_t  font_small    = 30;
       constexpr int16_t  font_medium   = 30;
       constexpr int16_t  font_large    = 31;
@@ -38,12 +42,16 @@ namespace Theme {
     constexpr float      icon_scale    = 1.0;
   #elif defined(LCD_480x272)
     #if defined(USE_PORTRAIT_ORIENTATION)
+    constexpr int16_t  font_tiny     = 26;
+    constexpr int16_t  font_xsmall   = 26;
     constexpr int16_t  font_small    = 26;
     constexpr int16_t  font_medium   = 27;
     constexpr int16_t  font_large    = 28;
     constexpr int16_t  font_xlarge   = 29;
     constexpr float    icon_scale    = 0.7;
     #else
+    constexpr int16_t  font_tiny     = 26;
+    constexpr int16_t  font_xsmall   = 26;
     constexpr int16_t  font_small    = 27;
     constexpr int16_t  font_medium   = 28;
     constexpr int16_t  font_large    = 30;
@@ -52,12 +60,16 @@ namespace Theme {
     #endif
   #elif defined(LCD_320x240)
     #if defined(USE_PORTRAIT_ORIENTATION)
+    constexpr int16_t  font_tiny     = 26;
+    constexpr int16_t  font_xsmall   = 26;
     constexpr int16_t  font_small    = 26;
     constexpr int16_t  font_medium   = 27;
     constexpr int16_t  font_large    = 27;
     constexpr int16_t  font_xlarge   = 28;
     constexpr float    icon_scale    = 0.6;
     #else
+    constexpr int16_t  font_tiny     = 26;
+    constexpr int16_t  font_xsmall   = 26;
     constexpr int16_t  font_small    = 26;
     constexpr int16_t  font_medium   = 27;
     constexpr int16_t  font_large    = 29;

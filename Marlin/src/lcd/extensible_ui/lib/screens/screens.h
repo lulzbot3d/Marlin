@@ -195,6 +195,7 @@ class SpinnerDialogBox : public DialogBoxBaseClass, public CachedScreen<SPINNER_
     static void hide();
 };
 
+#if !defined(LULZBOT_USE_BIOPRINTER_UI)
 class StatusScreen : public BaseScreen, public CachedScreen<STATUS_SCREEN_CACHE,STATUS_SCREEN_DL_SIZE> {
   private:
     static void draw_axis_position(draw_mode_t);
@@ -212,6 +213,18 @@ class StatusScreen : public BaseScreen, public CachedScreen<STATUS_SCREEN_CACHE,
     static void onIdle();
     static bool onTouchEnd(uint8_t tag);
 };
+#else
+  class StatusScreen : public BaseScreen, public UncachedScreen {
+    public:
+      static void setStatusMessage(const char *) {}
+      static void setStatusMessage(progmem_str) {}
+
+      static void onRedraw(draw_mode_t);
+      static bool onTouchHeld(uint8_t tag);
+      static bool onTouchEnd(uint8_t tag);
+  };
+
+#endif
 
 class MainMenu : public BaseScreen, public CachedScreen<MENU_SCREEN_CACHE> {
   public:

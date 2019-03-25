@@ -401,6 +401,7 @@ namespace ExtUI {
         #if AXIS_IS_TMC(Z)
           case Z: stepperZ.rms_current(clamp(mA, 500, 1500)); break;
         #endif
+        default: break;
       };
     }
 
@@ -439,7 +440,7 @@ namespace ExtUI {
         #if Z_SENSORLESS && AXIS_HAS_STALLGUARD(Z)
           case Z: return stepperZ.sgt();
         #endif
-        default: break;
+        default: return 0;
       }
     }
 

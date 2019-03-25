@@ -38,7 +38,7 @@ using namespace Theme;
 /****************** COLOR SCALE ***********************/
 
 uint32_t getWarmColor(uint16_t temp, uint16_t cool, uint16_t low, uint16_t med, uint16_t high) {
-  FTDI::rgb_t R0, R1, mix;
+  rgb_t R0, R1, mix;
 
   float t;
   if(temp < cool) {
@@ -66,7 +66,7 @@ uint32_t getWarmColor(uint16_t temp, uint16_t cool, uint16_t low, uint16_t med, 
     R1 = high_rgb;
     t = 1;
   }
-  FTDI::rgb_t::lerp(t, R0, R1, mix);
+  rgb_t::lerp(t, R0, R1, mix);
   return mix;
 }
 

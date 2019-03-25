@@ -98,8 +98,8 @@ namespace Theme {
 
   // Temperature color scale
 
-  const FTDI::rgb_t cool_rgb (  0,   0,   0);
-  const FTDI::rgb_t low_rgb  (128,   0,   0);
-  const FTDI::rgb_t med_rgb  (255, 128,   0);
-  const FTDI::rgb_t high_rgb (255, 255, 128);
+  const rgb_t cool_rgb (  0,   0,   0);
+  const rgb_t low_rgb  (128,   0,   0);
+  const rgb_t med_rgb  (255, 128,   0);
+  const rgb_t high_rgb (255, 255, 128);
 };

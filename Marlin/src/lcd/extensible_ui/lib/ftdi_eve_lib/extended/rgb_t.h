@@ -1,10 +1,9 @@
-/*******************
- * ftdi_extended.h *
- *******************/
+/***********
+ * rgb_t.h *
+ ***********/
 
 /****************************************************************************
- *   Written By Mark Pelletier  2019 - Aleph Objects, Inc.                  *
- *   Written By Marcio Teixeira 201( - Aleph Objects, Inc.                  *
+ *   Written By Marcio Teixeira 2018 - Aleph Objects, Inc.                  *
  *                                                                          *
  *   This program is free software: you can redistribute it and/or modify   *
  *   it under the terms of the GNU General Public License as published by   *
@@ -22,21 +21,24 @@
 
 #pragma once
 
-#include "../compat.h"
-#include "../basic/ftdi_basic.h"
+struct rgb_t {
+    union {
+      struct {
+        uint8_t  b,g,r,a;
+      };
+      uint32_t packed;
+    };
 
-#if !defined(__MARLIN_FIRMWARE__)
-  #define FTDI_EXTENDED
-#endif
+    rgb_t()                                : packed(0)              {}
+    rgb_t(uint32_t rgb)                    : packed(rgb)            {}
+    rgb_t(uint8_t r, uint8_t g, uint8_t b) : b(b), g(g), r(r), a(0) {}
+    operator uint32_t() const              {return packed;};
 
-#if defined(FTDI_EXTENDED)
-  #include "rgb_t.h"
-  #include "tiny_timer.h"
-  #include "grid_layout.h"
-  #include "dl_cache.h"
-  #include "screen_types.h"
-  #include "event_loop.h"
-  #include "command_processor.h"
-  #include "sound_player.h"
-  #include "sound_list.h"
-#endif
+    static void lerp(float t, const rgb_t a, const rgb_t b, rgb_t &c) {
+      c.r = a.r + t * (b.r - a.r);
+      c.g = a.g + t * (b.g - a.g);
+      c.b = a.b + t * (b.b - a.b);
+    }
+
+    uint8_t luminance() const {return 0.299*r + 0.587*g + 0.114*b;}
+};

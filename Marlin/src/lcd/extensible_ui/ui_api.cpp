@@ -59,7 +59,7 @@
   #include "../../core/utility.h"
 #endif
 
-#if DO_SWITCH_EXTRUDER || ENABLED(SWITCHING_NOZZLE) || ENABLED(PARKING_EXTRUDER)
+#if DO_SWITCH_EXTRUDER || EITHER(SWITCHING_NOZZLE, PARKING_EXTRUDER)
   #include "../../module/tool_change.h"
 #endif
 
@@ -86,6 +86,10 @@
   #ifdef BACKLASH_SMOOTHING_MM
     extern float backlash_smoothing_mm;
   #endif
+#endif
+
+#if HAS_LEVELING
+  #include "../../feature/bedlevel/bedlevel.h"
 #endif
 
 #if HAS_FILAMENT_SENSOR
@@ -214,26 +218,26 @@ namespace ExtUI {
       if (soft_endstops_enabled) switch (axis) {
         case X_AXIS:
           #if ENABLED(MIN_SOFTWARE_ENDSTOP_X)
-            min = soft_endstop_min[X_AXIS];
+            min = soft_endstop[X_AXIS].min;
           #endif
           #if ENABLED(MAX_SOFTWARE_ENDSTOP_X)
-            max = soft_endstop_max[X_AXIS];
+            max = soft_endstop[X_AXIS].max;
           #endif
           break;
         case Y_AXIS:
           #if ENABLED(MIN_SOFTWARE_ENDSTOP_Y)
-            min = soft_endstop_min[Y_AXIS];
+            min = soft_endstop[Y_AXIS].min;
           #endif
           #if ENABLED(MAX_SOFTWARE_ENDSTOP_Y)
-            max = soft_endstop_max[Y_AXIS];
+            max = soft_endstop[Y_AXIS].max;
           #endif
           break;
         case Z_AXIS:
           #if ENABLED(MIN_SOFTWARE_ENDSTOP_Z)
-            min = soft_endstop_min[Z_AXIS];
+            min = soft_endstop[Z_AXIS].min;
           #endif
           #if ENABLED(MAX_SOFTWARE_ENDSTOP_Z)
-            max = soft_endstop_max[Z_AXIS];
+            max = soft_endstop[Z_AXIS].max;
           #endif
         default: break;
       }
@@ -298,7 +302,7 @@ namespace ExtUI {
   void setActiveTool(const extruder_t extruder, bool no_move) {
     #if EXTRUDERS > 1
       const uint8_t e = extruder - E0;
-      #if DO_SWITCH_EXTRUDER || ENABLED(SWITCHING_NOZZLE) || ENABLED(PARKING_EXTRUDER)
+      #if DO_SWITCH_EXTRUDER || EITHER(SWITCHING_NOZZLE, PARKING_EXTRUDER)
         if (e != active_extruder)
           tool_change(e, 0, no_move);
       #endif
@@ -350,13 +354,13 @@ namespace ExtUI {
     float getAxisCurrent_mA(const axis_t axis) {
       switch (axis) {
         #if AXIS_IS_TMC(X)
-        case X: return stepperX.getMilliamps();
+          case X: return stepperX.getMilliamps();
         #endif
         #if AXIS_IS_TMC(Y)
-        case Y: return stepperY.getMilliamps();
+          case Y: return stepperY.getMilliamps();
         #endif
         #if AXIS_IS_TMC(Z)
-        case Z: return stepperZ.getMilliamps();
+          case Z: return stepperZ.getMilliamps();
         #endif
         default: return NAN;
       };
@@ -365,22 +369,22 @@ namespace ExtUI {
     float getAxisCurrent_mA(const extruder_t extruder) {
       switch (extruder) {
         #if AXIS_IS_TMC(E0)
-        case E0: return stepperE0.getMilliamps();
+          case E0: return stepperE0.getMilliamps();
         #endif
         #if AXIS_IS_TMC(E1)
-        case E1: return stepperE1.getMilliamps();
+          case E1: return stepperE1.getMilliamps();
         #endif
         #if AXIS_IS_TMC(E2)
-        case E2: return stepperE2.getMilliamps();
+          case E2: return stepperE2.getMilliamps();
         #endif
         #if AXIS_IS_TMC(E3)
-        case E3: return stepperE3.getMilliamps();
+          case E3: return stepperE3.getMilliamps();
         #endif
         #if AXIS_IS_TMC(E4)
-        case E4: return stepperE4.getMilliamps();
+          case E4: return stepperE4.getMilliamps();
         #endif
         #if AXIS_IS_TMC(E5)
-        case E5: return stepperE5.getMilliamps();
+          case E5: return stepperE5.getMilliamps();
         #endif
         default: return NAN;
       };
@@ -389,13 +393,13 @@ namespace ExtUI {
     void  setAxisCurrent_mA(const float mA, const axis_t axis) {
       switch (axis) {
         #if AXIS_IS_TMC(X)
-        case X: stepperX.rms_current(clamp(mA, 500, 1500)); break;
+          case X: stepperX.rms_current(clamp(mA, 500, 1500)); break;
         #endif
         #if AXIS_IS_TMC(Y)
-        case Y: stepperY.rms_current(clamp(mA, 500, 1500)); break;
+          case Y: stepperY.rms_current(clamp(mA, 500, 1500)); break;
         #endif
         #if AXIS_IS_TMC(Z)
-        case Z: stepperZ.rms_current(clamp(mA, 500, 1500)); break;
+          case Z: stepperZ.rms_current(clamp(mA, 500, 1500)); break;
         #endif
       };
     }
@@ -403,72 +407,54 @@ namespace ExtUI {
     void  setAxisCurrent_mA(const float mA, const extruder_t extruder) {
       switch (extruder) {
         #if AXIS_IS_TMC(E0)
-        case E0: stepperE0.rms_current(clamp(mA, 500, 1500)); break;
+          case E0: stepperE0.rms_current(clamp(mA, 500, 1500)); break;
         #endif
         #if AXIS_IS_TMC(E1)
-        case E1: stepperE1.rms_current(clamp(mA, 500, 1500)); break;
+          case E1: stepperE1.rms_current(clamp(mA, 500, 1500)); break;
         #endif
         #if AXIS_IS_TMC(E2)
-        case E2: stepperE2.rms_current(clamp(mA, 500, 1500)); break;
+          case E2: stepperE2.rms_current(clamp(mA, 500, 1500)); break;
         #endif
         #if AXIS_IS_TMC(E3)
-        case E3: stepperE3.rms_current(clamp(mA, 500, 1500)); break;
+          case E3: stepperE3.rms_current(clamp(mA, 500, 1500)); break;
         #endif
         #if AXIS_IS_TMC(E4)
-        case E4: stepperE4.rms_current(clamp(mA, 500, 1500)); break;
+          case E4: stepperE4.rms_current(clamp(mA, 500, 1500)); break;
         #endif
         #if AXIS_IS_TMC(E5)
-        case E5: stepperE5.rms_current(clamp(mA, 500, 1500)); break;
+          case E5: stepperE5.rms_current(clamp(mA, 500, 1500)); break;
         #endif
+        default: break;
       };
     }
 
     int getTMCBumpSensitivity(const axis_t axis) {
       switch (axis) {
-        #if X_SENSORLESS
-          #if AXIS_HAS_STALLGUARD(X)
-            case X:
-              return stepperX.sgt();
-          #endif
+        #if X_SENSORLESS && AXIS_HAS_STALLGUARD(X)
+          case X: return stepperX.sgt();
         #endif
-        #if Y_SENSORLESS
-          #if AXIS_HAS_STALLGUARD(Y)
-            case Y:
-              return stepperY.sgt();
-          #endif
+        #if Y_SENSORLESS && AXIS_HAS_STALLGUARD(Y)
+          case Y: return stepperY.sgt();
         #endif
-        #if Z_SENSORLESS
-          #if AXIS_HAS_STALLGUARD(Z)
-            case Z:
-              return stepperZ.sgt();
-          #endif
+        #if Z_SENSORLESS && AXIS_HAS_STALLGUARD(Z)
+          case Z: return stepperZ.sgt();
         #endif
+        default: break;
       }
     }
 
     void setTMCBumpSensitivity(const float value, const axis_t axis) {
       switch (axis) {
-        #if X_SENSORLESS
-          #if AXIS_HAS_STALLGUARD(X)
-            case X:
-              stepperX.sgt(clamp(value, -64, 63));
-              break;
-          #endif
+        #if X_SENSORLESS && AXIS_HAS_STALLGUARD(X)
+          case X: stepperX.sgt(clamp(value, -64, 63)); break;
         #endif
-        #if Y_SENSORLESS
-          #if AXIS_HAS_STALLGUARD(Y)
-            case Y:
-              stepperY.sgt(clamp(value, -64, 63));
-              break;
-          #endif
+        #if Y_SENSORLESS && AXIS_HAS_STALLGUARD(Y)
+          case Y: stepperY.sgt(clamp(value, -64, 63)); break;
         #endif
-        #if Z_SENSORLESS
-          #if AXIS_HAS_STALLGUARD(Z)
-            case Z:
-              stepperZ.sgt(clamp(value, -64, 63));
-              break;
-          #endif
+        #if Z_SENSORLESS && AXIS_HAS_STALLGUARD(Z)
+          case Z: stepperZ.sgt(clamp(value, -64, 63)); break;
         #endif
+        default: break;
       }
     }
   #endif
@@ -555,7 +541,9 @@ namespace ExtUI {
 
     void setJunctionDeviation_mm(const float value) {
       planner.junction_deviation_mm = clamp(value, 0.01, 0.3);
-      planner.recalculate_max_e_jerk();
+      #if ENABLED(LIN_ADVANCE)
+        planner.recalculate_max_e_jerk();
+      #endif
     }
 
   #else
@@ -714,6 +702,27 @@ namespace ExtUI {
     const duration_t elapsed = print_job_timer.duration();
     return elapsed.value;
   }
+
+  #if HAS_LEVELING
+    bool getLevelingActive() { return planner.leveling_active; }
+    void setLevelingActive(const bool state) { set_bed_leveling_enabled(state); }
+    #if HAS_MESH
+      bool getMeshValid() { return leveling_is_valid(); }
+      bed_mesh_t getMeshArray() { return Z_VALUES_ARR; }
+      void setMeshPoint(const uint8_t xpos, const uint8_t ypos, const float zoff) {
+        if (WITHIN(xpos, 0, GRID_MAX_POINTS_X) && WITHIN(ypos, 0, GRID_MAX_POINTS_Y)) {
+          Z_VALUES(xpos, ypos) = zoff;
+          #if ENABLED(ABL_BILINEAR_SUBDIVISION)
+            bed_level_virt_interpolate();
+          #endif
+        }
+      }
+    #endif
+  #endif
+
+  #if ENABLED(HOST_PROMPT_SUPPORT)
+    void setHostResponse(const uint8_t response) { host_response_handler(response); }
+  #endif
 
   #if ENABLED(PRINTCOUNTER)
     char* getTotalPrints_str(char buffer[21])    { strcpy(buffer,i16tostr3left(print_job_timer.getStats().totalPrints));    return buffer; }

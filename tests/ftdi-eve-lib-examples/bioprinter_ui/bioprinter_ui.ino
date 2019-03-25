@@ -1,6 +1,6 @@
-/*****************
- * logo_demo.ino *
- *****************/
+/*********************
+ * bioprinter_ui.ino *
+ *********************/
 
 /****************************************************************************
  *   Written By Marcio Teixeira 2019 - Aleph Objects, Inc.                  *
@@ -40,37 +40,50 @@ class LogoScreen : public UIScreen, public UncachedScreen {
 
       #define POLY(A) A, sizeof(A)/sizeof(A[0])
 
-      Polygon p(x_min, y_min, x_max, y_max); 
+      Polygon p(cmd, x_min, y_min, x_max, y_max);
 
-      // Paint the shadows
-      cmd.cmd(COLOR_RGB(0xF3E0E0));
-      p.shadow(POLY(usb_btn));
-      p.shadow(POLY(menu_btn));
-      p.shadow(POLY(syringe_outline), 3);
+      constexpr uint32_t shadow_rgb  = 0xF3E0E0;
+      constexpr uint32_t fill_rgb    = 0x00AA00;
+      constexpr uint32_t stroke_rgb  = 0x005500;
+      constexpr uint32_t syringe_rgb = 0xE2F2DA;
 
-      cmd.cmd(COLOR_RGB(0xF4F4FF));
+      // Paint the shadows for the syringe and buttons
+      cmd.cmd(COLOR_RGB(shadow_rgb));
+      cmd.cmd(VERTEX_TRANSLATE_X(5 * 16));
+      cmd.cmd(VERTEX_TRANSLATE_Y(5 * 16));
+      p.fill(POLY(usb_btn));
+      p.fill(POLY(menu_btn));
       p.fill(POLY(syringe_outline));
-      cmd.cmd(COLOR_RGB(0x00AA00));
+      cmd.cmd(VERTEX_TRANSLATE_X(0));
+      cmd.cmd(VERTEX_TRANSLATE_Y(0));
+
+      // Paint the syring icon
+      cmd.cmd(COLOR_RGB(syringe_rgb));
+      p.fill(POLY(syringe_outline));
+      cmd.cmd(COLOR_RGB(fill_rgb));
       p.fill(POLY(syringe_fluid));
-      cmd.cmd(COLOR_RGB(0x000000));
+      cmd.cmd(COLOR_RGB(stroke_rgb));
       p.fill(POLY(syringe));
+
+      // Draw the arrow push buttons
+
+      PolyButton b(p);
+      b.fill_style(fill_rgb);
+      b.stroke_style(stroke_rgb, 28);
+      b.shadow_style(shadow_rgb, 5);
       
-      // Stroke the polygons
-      cmd.cmd(LINE_WIDTH(24));
-      cmd.cmd(COLOR_RGB(0x00AA00));
-      p.button(1, POLY(x_pos));
-      p.button(2, POLY(y_pos));
-      p.button(3, POLY(z_pos));
-      p.button(4, POLY(e_pos));
-      p.button(5, POLY(x_neg));
-      p.button(6, POLY(y_neg));
-      p.button(7, POLY(z_neg));
-      p.button(8, POLY(e_neg));
+      b.button(1, POLY(x_pos));
+      b.button(2, POLY(y_pos));
+      b.button(3, POLY(z_pos));
+      b.button(4, POLY(e_pos));
+      b.button(5, POLY(x_neg));
+      b.button(6, POLY(y_neg));
+      b.button(7, POLY(z_neg));
+      b.button(8, POLY(e_neg));
 
       uint16_t x, y, h, v;
-
-      cmd.cmd(COLOR_RGB(0x000000));
-      cmd.fgcolor(0x00AA00);
+      cmd.cmd(COLOR_RGB(stroke_rgb));
+      cmd.fgcolor(fill_rgb);
       
       p.bounds(POLY(usb_btn), x, y, h, v);
       cmd.font(28).tag(9).button(x, y, h, v, F("USB Drive"));
@@ -81,8 +94,7 @@ class LogoScreen : public UIScreen, public UncachedScreen {
 
     static bool LogoScreen::onTouchEnd(uint8_t tag) {
       switch(tag) {
-        case 1: {return true;
-        }
+        case 1: return true;
         default: return false;
       }
     }

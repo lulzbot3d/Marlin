@@ -56,7 +56,7 @@
  *                      ...
  */
 
-#define DL_CACHE_START   RAM_G_SIZE - 0xFFFF
+#define DL_CACHE_START   MAP::RAM_G_SIZE - 0xFFFF
 #define DL_FREE_ADDR     DL_CACHE_START + DL_CACHE_SLOTS * 8
 
 using namespace FTDI;
@@ -108,14 +108,14 @@ bool DLCache::store(uint32_t num_bytes /* = 0*/) {
     return false;
 
   // Figure out how long the display list is
-  uint32_t new_dl_size = CLCD::mem_read_32(REG_CMD_DL) & 0x1FFF;
+  uint32_t new_dl_size = CLCD::mem_read_32(REG::CMD_DL) & 0x1FFF;
   uint32_t free_space  = 0;
   uint32_t dl_alloc    = 0;
 
   if(dl_addr == 0) {
     // If we are allocating new space...
     dl_addr     = CLCD::mem_read_32(DL_FREE_ADDR);
-    free_space  = RAM_G_SIZE - dl_addr;
+    free_space  = MAP::RAM_G_SIZE - dl_addr;
     dl_alloc    = num_bytes ? num_bytes : new_dl_size;
     dl_size     = new_dl_size;
   } else {
@@ -140,7 +140,7 @@ bool DLCache::store(uint32_t num_bytes /* = 0*/) {
       SERIAL_ECHOPAIR("Saving DL to RAMG cache, bytes: ", dl_size);
       SERIAL_ECHOLNPAIR(" Free space: ", free_space);
     #endif
-    cmd.memcpy(dl_addr, RAM_DL, dl_size);
+    cmd.memcpy(dl_addr, MAP::RAM_DL, dl_size);
     cmd.execute();
     save_slot(dl_slot, dl_addr, dl_size);
     if(dl_alloc > 0) {
@@ -169,7 +169,7 @@ void DLCache::append() {
     wait_until_idle();
     SERIAL_ECHO_START();
     SERIAL_ECHOPAIR("Appending to DL from RAMG cache, bytes: ", dl_size);
-    SERIAL_ECHOLNPAIR(" REG_CMD_DL: ", CLCD::mem_read_32(REG_CMD_DL));
+    SERIAL_ECHOLNPAIR(" REG_CMD_DL: ", CLCD::mem_read_32(REG::CMD_DL));
   #endif
 }
 

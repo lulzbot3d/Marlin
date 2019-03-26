@@ -101,6 +101,9 @@ class CLCD {
   friend class UIStorage;
 
   public:
+    typedef FTDI::ftdi_registers  REG;
+    typedef FTDI::ftdi_memory_map MAP;
+
     static void     spi_write_addr (uint32_t reg_address);
     static void     spi_read_addr  (uint32_t reg_address);
 
@@ -133,11 +136,11 @@ class CLCD {
     static uint16_t get_text_width(const uint8_t font, const char *str);
     static uint16_t get_text_width_P(const uint8_t font, const char *str);
 
-    static uint8_t get_tag ()     {return mem_read_8(FTDI::REG_TOUCH_TAG);}
-    static bool is_touching ()    {return (mem_read_32(FTDI::REG_TOUCH_DIRECT_XY) & 0x80000000) == 0;}
+    static uint8_t get_tag ()     {return mem_read_8(REG::TOUCH_TAG);}
+    static bool is_touching ()    {return (mem_read_32(REG::TOUCH_DIRECT_XY) & 0x80000000) == 0;}
 
     static uint8_t get_tracker (uint16_t &value) {
-      uint32_t tracker = mem_read_32(FTDI::REG_TRACKER);
+      uint32_t tracker = mem_read_32(REG::TRACKER);
       value            = tracker >> 16;
       return tracker & 0xFF;
     }

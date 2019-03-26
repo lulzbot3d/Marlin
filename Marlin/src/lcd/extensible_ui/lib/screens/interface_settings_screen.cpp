@@ -193,12 +193,12 @@ void InterfaceSettingsScreen::saveSettings() {
   data.screen_brightness = CLCD::get_brightness();
   data.passcode          = LockScreen::passcode;
   data.bit_flags         = UIData::get_persistent_data();
-  data.touch_transform_a = CLCD::mem_read_32(REG_TOUCH_TRANSFORM_A);
-  data.touch_transform_b = CLCD::mem_read_32(REG_TOUCH_TRANSFORM_B);
-  data.touch_transform_c = CLCD::mem_read_32(REG_TOUCH_TRANSFORM_C);
-  data.touch_transform_d = CLCD::mem_read_32(REG_TOUCH_TRANSFORM_D);
-  data.touch_transform_e = CLCD::mem_read_32(REG_TOUCH_TRANSFORM_E);
-  data.touch_transform_f = CLCD::mem_read_32(REG_TOUCH_TRANSFORM_F);
+  data.touch_transform_a = CLCD::mem_read_32(CLCD::REG::TOUCH_TRANSFORM_A);
+  data.touch_transform_b = CLCD::mem_read_32(CLCD::REG::TOUCH_TRANSFORM_B);
+  data.touch_transform_c = CLCD::mem_read_32(CLCD::REG::TOUCH_TRANSFORM_C);
+  data.touch_transform_d = CLCD::mem_read_32(CLCD::REG::TOUCH_TRANSFORM_D);
+  data.touch_transform_e = CLCD::mem_read_32(CLCD::REG::TOUCH_TRANSFORM_E);
+  data.touch_transform_f = CLCD::mem_read_32(CLCD::REG::TOUCH_TRANSFORM_F);
   #if ENABLED(LULZBOT_BACKUP_EEPROM_INFORMATION)
     #if ENABLED(PRINTCOUNTER)
       // Keep a backup of the print counter information in SPI EEPROM
@@ -245,12 +245,12 @@ void InterfaceSettingsScreen::loadSettings() {
     CLCD::set_brightness(data.screen_brightness);
     LockScreen::passcode = data.passcode;
     UIData::set_persistent_data(data.bit_flags);
-    CLCD::mem_write_32(REG_TOUCH_TRANSFORM_A, data.touch_transform_a);
-    CLCD::mem_write_32(REG_TOUCH_TRANSFORM_B, data.touch_transform_b);
-    CLCD::mem_write_32(REG_TOUCH_TRANSFORM_C, data.touch_transform_c);
-    CLCD::mem_write_32(REG_TOUCH_TRANSFORM_D, data.touch_transform_d);
-    CLCD::mem_write_32(REG_TOUCH_TRANSFORM_E, data.touch_transform_e);
-    CLCD::mem_write_32(REG_TOUCH_TRANSFORM_F, data.touch_transform_f);
+    CLCD::mem_write_32(CLCD::REG::TOUCH_TRANSFORM_A, data.touch_transform_a);
+    CLCD::mem_write_32(CLCD::REG::TOUCH_TRANSFORM_B, data.touch_transform_b);
+    CLCD::mem_write_32(CLCD::REG::TOUCH_TRANSFORM_C, data.touch_transform_c);
+    CLCD::mem_write_32(CLCD::REG::TOUCH_TRANSFORM_D, data.touch_transform_d);
+    CLCD::mem_write_32(CLCD::REG::TOUCH_TRANSFORM_E, data.touch_transform_e);
+    CLCD::mem_write_32(CLCD::REG::TOUCH_TRANSFORM_F, data.touch_transform_f);
     #if ENABLED(LULZBOT_BACKUP_EEPROM_INFORMATION)
       #if ENABLED(PRINTCOUNTER)
         printStatistics* stats = print_job_timer.getStatsPtr();

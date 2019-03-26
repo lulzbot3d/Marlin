@@ -24,6 +24,26 @@
 
 #define HAS_RESOLUTION defined(LCD_320x240) || defined(LCD_480x272) || defined(LCD_800x480)
 
+#define IS_FT800 \
+    constexpr uint16_t ftdi_chip = 800; \
+    using namespace FTDI_FT800; \
+    namespace DL { \
+      using namespace FTDI_FT800_DL; \
+    } \
+    typedef ft800_memory_map ftdi_memory_map; \
+    typedef ft800_registers  ftdi_registers;
+
+#define IS_FT810 \
+    constexpr uint16_t ftdi_chip = 810; \
+    using namespace FTDI_FT810; \
+    namespace DL { \
+      using namespace FTDI_FT800_DL; \
+      using namespace FTDI_FT810_DL; \
+    } \
+    typedef ft810_memory_map ftdi_memory_map; \
+    typedef ft810_registers  ftdi_registers;
+
+
 #if defined(LCD_FTDI_VM800B35A)
   #if !(HAS_RESOLUTION)
     #define LCD_320x240
@@ -32,7 +52,7 @@
     #define FTDI_API_LEVEL                800
   #endif
   namespace FTDI {
-    constexpr uint16_t ftdi_chip            = 800;
+    IS_FT800
     constexpr bool Use_Crystal              = true;  // 0 = use internal oscillator, 1 = module has a crystal populated
     constexpr bool GPIO_0_Audio_Enable      = false; /* 1 = does use GPIO00 for amplifier control, 0 = not in use for Audio */
     constexpr bool GPIO_1_Audio_Shutdown    = true;  /* 1 = does use GPIO01 for amplifier control, 0 = not in use for Audio */
@@ -40,11 +60,6 @@
     constexpr uint8_t CSpread               = 1;
 
     constexpr uint16_t touch_threshold      = 1200; /* touch-sensitivity */
-
-    using namespace FTDI_FT800;
-    namespace DL {
-      using namespace FTDI_FT800_DL;
-    }
   }
 
 /*
@@ -70,18 +85,13 @@
     #define FTDI_API_LEVEL                800
   #endif
   namespace FTDI {
-    constexpr uint16_t ftdi_chip            = 800;
+    IS_FT800
     constexpr bool Use_Crystal              = true; // 0 = use internal oscillator, 1 = module has a crystal populated
     constexpr bool GPIO_0_Audio_Enable      = false;
     constexpr bool GPIO_1_Audio_Shutdown    = false;
     constexpr uint8_t Swizzle               = 0;
     constexpr uint8_t CSpread               = 1;
     constexpr uint16_t touch_threshold      = 2000; /* touch-sensitivity */
-
-    using namespace FTDI_FT800;
-    namespace DL {
-      using namespace FTDI_FT800_DL;
-    }
   }
 
 /*
@@ -103,19 +113,13 @@
     #define FTDI_API_LEVEL                810
   #endif
   namespace FTDI {
-    constexpr uint16_t ftdi_chip            = 810;
+    IS_FT810
     constexpr bool Use_Crystal              = true; // 0 = use internal oscillator, 1 = module has a crystal populated
     constexpr bool GPIO_0_Audio_Enable      = false;
     constexpr bool GPIO_1_Audio_Shutdown    = false;
     constexpr uint8_t Swizzle               = 0;
     constexpr uint8_t CSpread               = 1;
     constexpr uint16_t touch_threshold      = 2000; /* touch-sensitivity */
-
-    using namespace FTDI_FT810;
-    namespace DL {
-      using namespace FTDI_FT800_DL;
-      using namespace FTDI_FT810_DL;
-    }
   }
 
 /*
@@ -137,18 +141,13 @@
     #define FTDI_API_LEVEL                800
   #endif
   namespace FTDI {
-    constexpr uint16_t ftdi_chip            = 800;
+    IS_FT800
     constexpr bool Use_Crystal              = true; // 0 = use internal oscillator, 1 = module has a crystal populated
     constexpr bool GPIO_0_Audio_Enable      = false;
     constexpr bool GPIO_1_Audio_Shutdown    = true;
     constexpr uint8_t Swizzle               = 0;
     constexpr uint8_t CSpread               = 1;
     constexpr uint16_t touch_threshold      = 1200; /* touch-sensitivity */
-
-    using namespace FTDI_FT800;
-    namespace DL {
-      using namespace FTDI_FT800_DL;
-    }
   }
 
 /*
@@ -169,19 +168,13 @@
     #define FTDI_API_LEVEL                810
   #endif
   namespace FTDI {
-    constexpr uint16_t ftdi_chip            = 810;
+    IS_FT810
     constexpr bool Use_Crystal              = false; // 0 = use internal oscillator, 1 = module has a crystal populated
     constexpr bool GPIO_0_Audio_Enable      = true;  // The AO CLCD uses GPIO0 to enable audio
     constexpr bool GPIO_1_Audio_Shutdown    = false;
     constexpr uint8_t Swizzle               = 0;
     constexpr uint8_t CSpread               = 0;
     constexpr uint16_t touch_threshold      = 2000; /* touch-sensitivity */
-
-    using namespace FTDI_FT810;
-    namespace DL {
-      using namespace FTDI_FT800_DL;
-      using namespace FTDI_FT810_DL;
-    }
   }
 
 #else

@@ -30,27 +30,27 @@ using namespace FTDI;
 using namespace FTDI::SPI;
 
 void CLCD::enable (void) {
-  mem_write_8(REG_PCLK, Pclk);
+  mem_write_8(REG::PCLK, Pclk);
 }
 
 void CLCD::disable (void) {
-  mem_write_8(REG_PCLK, 0x00);
+  mem_write_8(REG::PCLK, 0x00);
 }
 
 void CLCD::set_brightness (uint8_t brightness) {
-  mem_write_8(REG_PWM_DUTY, min(128,brightness));
+  mem_write_8(REG::PWM_DUTY, min(128,brightness));
 }
 
 uint8_t CLCD::get_brightness() {
-  return mem_read_8(REG_PWM_DUTY);
+  return mem_read_8(REG::PWM_DUTY);
 }
 
 void CLCD::turn_on_backlight (void) {
-  mem_write_8(REG_PWM_DUTY, 128);
+  mem_write_8(REG::PWM_DUTY, 128);
 }
 
 void CLCD::get_font_metrics(uint8_t font, struct FontMetrics &fm) {
-  uint32_t rom_fontroot = mem_read_32(ROM_FONT_ADDR);
+  uint32_t rom_fontroot = mem_read_32(MAP::ROM_FONT_ADDR);
   mem_read_bulk(rom_fontroot + 148 * (font - 16), (uint8_t*) &fm, 148);
 }
 
@@ -871,33 +871,33 @@ void CLCD::CommandFifo::setrotate (uint8_t rotation) {
 /**************************** FT800/810 Co-Processor Command FIFO ****************************/
 
 bool CLCD::CommandFifo::is_processing() {
-  return (mem_read_32(REG_CMD_READ) & 0x0FFF) != (mem_read_32(REG_CMD_WRITE) & 0x0FFF);
+  return (mem_read_32(REG::CMD_READ) & 0x0FFF) != (mem_read_32(REG::CMD_WRITE) & 0x0FFF);
 }
 
 bool CLCD::CommandFifo::has_fault() {
-  uint16_t Cmd_Read_Reg  = mem_read_32(REG_CMD_READ) & 0x0FFF;
+  uint16_t Cmd_Read_Reg  = mem_read_32(REG::CMD_READ) & 0x0FFF;
   return Cmd_Read_Reg == 0x0FFF;
 }
 
 #if FTDI_API_LEVEL == 800
 void CLCD::CommandFifo::start() {
   if(command_write_ptr == 0xFFFFFFFFul) {
-    command_write_ptr = mem_read_32(REG_CMD_WRITE) & 0x0FFF;
+    command_write_ptr = mem_read_32(REG::CMD_WRITE) & 0x0FFF;
   }
 }
 
 void CLCD::CommandFifo::execute() {
   if(command_write_ptr != 0xFFFFFFFFul) {
-    mem_write_32(REG_CMD_WRITE, command_write_ptr);
+    mem_write_32(REG::CMD_WRITE, command_write_ptr);
   }
 }
 
 void CLCD::CommandFifo::reset() {
   safe_delay(100);
-  mem_write_32(REG_CPURESET,  0x00000001);
-  mem_write_32(REG_CMD_WRITE, 0x00000000);
-  mem_write_32(REG_CMD_READ,  0x00000000);
-  mem_write_32(REG_CPURESET,  0x00000000);
+  mem_write_32(REG::CPURESET,  0x00000001);
+  mem_write_32(REG::CMD_WRITE, 0x00000000);
+  mem_write_32(REG::CMD_READ,  0x00000000);
+  mem_write_32(REG::CPURESET,  0x00000000);
   safe_delay(300);
   command_write_ptr = 0xFFFFFFFFul;
 };
@@ -916,7 +916,7 @@ template <class T> bool CLCD::CommandFifo::_write_unaligned(T data, uint16_t len
 
   /* Wait until there is enough space in the circular buffer for the transfer */
   do {
-    command_read_ptr = mem_read_32(REG_CMD_READ) & 0x0FFF;
+    command_read_ptr = mem_read_32(REG::CMD_READ) & 0x0FFF;
     if (command_read_ptr <= command_write_ptr) {
       bytes_tail = 4096U - command_write_ptr;
       bytes_head = command_read_ptr;
@@ -933,16 +933,16 @@ template <class T> bool CLCD::CommandFifo::_write_unaligned(T data, uint16_t len
     }
   } while((bytes_tail + bytes_head) < len);
 
-  /* Write as many bytes as possible following REG_CMD_WRITE */
+  /* Write as many bytes as possible following REG::CMD_WRITE */
   uint16_t bytes_to_write = min(len, bytes_tail);
-  mem_write_bulk (RAM_CMD + command_write_ptr, T(ptr), bytes_to_write);
+  mem_write_bulk (MAP::RAM_CMD + command_write_ptr, T(ptr), bytes_to_write);
   command_write_ptr += bytes_to_write;
   ptr  += bytes_to_write;
   len  -= bytes_to_write;
 
   if(len > 0) {
     /* Write remaining bytes at start of circular buffer */
-    mem_write_bulk (RAM_CMD, T(ptr), len);
+    mem_write_bulk (MAP::RAM_CMD, T(ptr), len);
     command_write_ptr = len;
   }
 
@@ -975,10 +975,10 @@ void CLCD::CommandFifo::reset() {
     SERIAL_ECHOLNPGM("Resetting command processor");
   #endif
   safe_delay(100);
-  mem_write_32(REG_CPURESET,  0x00000001);
-  mem_write_32(REG_CMD_WRITE, 0x00000000);
-  mem_write_32(REG_CMD_READ,  0x00000000);
-  mem_write_32(REG_CPURESET,  0x00000000);
+  mem_write_32(REG::CPURESET,  0x00000001);
+  mem_write_32(REG::CMD_WRITE, 0x00000000);
+  mem_write_32(REG::CMD_READ,  0x00000000);
+  mem_write_32(REG::CPURESET,  0x00000000);
   safe_delay(300);
 };
 
@@ -998,7 +998,7 @@ template <class T> bool CLCD::CommandFifo::write(T data, uint16_t len) {
   // The FT810 provides a special register that can be used
   // for writing data without us having to do our own FIFO
   // management.
-  uint16_t Command_Space = mem_read_32(REG_CMDB_SPACE) & 0x0FFF;
+  uint16_t Command_Space = mem_read_32(REG::CMDB_SPACE) & 0x0FFF;
   if(Command_Space < (len + padding)) {
     #if defined(UI_FRAMEWORK_DEBUG)
       SERIAL_ECHO_START();
@@ -1006,7 +1006,7 @@ template <class T> bool CLCD::CommandFifo::write(T data, uint16_t len) {
       SERIAL_ECHOPAIR(" bytes in command queue, now free: ", Command_Space);
     #endif
     do {
-      Command_Space = mem_read_32(REG_CMDB_SPACE) & 0x0FFF;
+      Command_Space = mem_read_32(REG::CMDB_SPACE) & 0x0FFF;
       if(has_fault()) {
         #if defined(UI_FRAMEWORK_DEBUG)
           SERIAL_ECHOLNPGM("... fault");
@@ -1018,7 +1018,7 @@ template <class T> bool CLCD::CommandFifo::write(T data, uint16_t len) {
       SERIAL_ECHOLNPGM("... done");
     #endif
   }
-  mem_write_bulk(REG_CMDB_WRITE, data, len, padding);
+  mem_write_bulk(REG::CMDB_WRITE, data, len, padding);
   return true;
 }
 #endif
@@ -1054,7 +1054,7 @@ void CLCD::init (void) {
   /* read the device-id until it returns 0x7c or times out, should take less than 150ms */
   uint8_t counter;
   for(counter = 0; counter < 250; counter++) {
-   uint8_t device_id = mem_read_8(REG_ID);            // Read Device ID, Should Be 0x7C;
+   uint8_t device_id = mem_read_8(REG::ID);            // Read Device ID, Should Be 0x7C;
    if(device_id == 0x7c) {
      #if defined(UI_FRAMEWORK_DEBUG)
        SERIAL_ECHO_START();
@@ -1073,56 +1073,56 @@ void CLCD::init (void) {
    }
   }
 
-  mem_write_8(REG_PWM_DUTY, 0);   // turn off Backlight, Frequency already is set to 250Hz default
+  mem_write_8(REG::PWM_DUTY, 0);   // turn off Backlight, Frequency already is set to 250Hz default
 
   /* Configure the FT8xx Registers */
-  mem_write_16(REG_HCYCLE,  FTDI::Hcycle);
-  mem_write_16(REG_HOFFSET, FTDI::Hoffset);
-  mem_write_16(REG_HSYNC0,  FTDI::Hsync0);
-  mem_write_16(REG_HSYNC1,  FTDI::Hsync1);
-  mem_write_16(REG_VCYCLE,  FTDI::Vcycle);
-  mem_write_16(REG_VOFFSET, FTDI::Voffset);
-  mem_write_16(REG_VSYNC0,  FTDI::Vsync0);
-  mem_write_16(REG_VSYNC1,  FTDI::Vsync1);
-  mem_write_16(REG_HSIZE,   FTDI::Hsize);
-  mem_write_16(REG_VSIZE,   FTDI::Vsize);
-  mem_write_8(REG_SWIZZLE,  FTDI::Swizzle);
-  mem_write_8(REG_PCLK_POL, FTDI::Pclkpol);
-  mem_write_8(REG_CSPREAD,  FTDI::CSpread);
+  mem_write_16(REG::HCYCLE,  FTDI::Hcycle);
+  mem_write_16(REG::HOFFSET, FTDI::Hoffset);
+  mem_write_16(REG::HSYNC0,  FTDI::Hsync0);
+  mem_write_16(REG::HSYNC1,  FTDI::Hsync1);
+  mem_write_16(REG::VCYCLE,  FTDI::Vcycle);
+  mem_write_16(REG::VOFFSET, FTDI::Voffset);
+  mem_write_16(REG::VSYNC0,  FTDI::Vsync0);
+  mem_write_16(REG::VSYNC1,  FTDI::Vsync1);
+  mem_write_16(REG::HSIZE,   FTDI::Hsize);
+  mem_write_16(REG::VSIZE,   FTDI::Vsize);
+  mem_write_8(REG::SWIZZLE,  FTDI::Swizzle);
+  mem_write_8(REG::PCLK_POL, FTDI::Pclkpol);
+  mem_write_8(REG::CSPREAD,  FTDI::CSpread);
 
   /* write a basic display-list to get things started */
-	mem_write_32(RAM_DL,      DL::CLEAR_COLOR_RGB);
-	mem_write_32(RAM_DL + 4, (DL::CLEAR | 0x07)); /* clear color, stencil and tag buffer */
-	mem_write_32(RAM_DL + 8,  DL::DL_DISPLAY);	/* end of display list */
+	mem_write_32(MAP::RAM_DL,      DL::CLEAR_COLOR_RGB);
+	mem_write_32(MAP::RAM_DL + 4, (DL::CLEAR | 0x07)); /* clear color, stencil and tag buffer */
+	mem_write_32(MAP::RAM_DL + 8,  DL::DL_DISPLAY);	/* end of display list */
 
-  mem_write_8(REG_DLSWAP, 0x02); // activate display list, Bad Magic Cookie 2 = switch to new list after current frame is scanned out
+  mem_write_8(REG::DLSWAP, 0x02); // activate display list, Bad Magic Cookie 2 = switch to new list after current frame is scanned out
 
-  //mem_write_8(REG_TOUCH_MODE, 0x03);      // Configure the Touch Screen, Bad Magic Cookie, 3 = CONTINUOUS = Reset Default
-  //mem_write_8(REG_TOUCH_ADC_MODE, 0x01);  // Bad Magic Cookie, 1 = single touch = Reset Default
-  //mem_write_8(REG_TOUCH_OVERSAMPLE, 0x0F); // Reset Default = 7 - why 15?
-  mem_write_16(REG_TOUCH_RZTHRESH, touch_threshold); /* setup touch sensitivity */
-  mem_write_8(REG_VOL_SOUND, 0x00);       // Turn Synthesizer Volume Off
+  //mem_write_8(REG::TOUCH_MODE, 0x03);      // Configure the Touch Screen, Bad Magic Cookie, 3 = CONTINUOUS = Reset Default
+  //mem_write_8(REG::TOUCH_ADC_MODE, 0x01);  // Bad Magic Cookie, 1 = single touch = Reset Default
+  //mem_write_8(REG::TOUCH_OVERSAMPLE, 0x0F); // Reset Default = 7 - why 15?
+  mem_write_16(REG::TOUCH_RZTHRESH, touch_threshold); /* setup touch sensitivity */
+  mem_write_8(REG::VOL_SOUND, 0x00);       // Turn Synthesizer Volume Off
 
   /* turn on the display by setting DISP high */
   /* turn on the Audio Amplifier by setting GPIO_1 high for the select few modules supporting this */
-  /* no need to use GPIOX here since DISP/GPIO_0 and GPIO_1 are on REG_GPIO for FT81x as well */
+  /* no need to use GPIOX here since DISP/GPIO_0 and GPIO_1 are on REG::GPIO for FT81x as well */
   if(GPIO_1_Audio_Shutdown) {
-    mem_write_8(REG_GPIO_DIR,   GPIO_DISP  | GPIO_GP1);
-    mem_write_8(REG_GPIO,       GPIO_DISP  | GPIO_GP1);
+    mem_write_8(REG::GPIO_DIR,   GPIO_DISP  | GPIO_GP1);
+    mem_write_8(REG::GPIO,       GPIO_DISP  | GPIO_GP1);
   } else if(GPIO_0_Audio_Enable) {
-    mem_write_8(REG_GPIO_DIR,   GPIO_DISP  | GPIO_GP0);
-    mem_write_8(REG_GPIO,       GPIO_DISP  | GPIO_GP0);
+    mem_write_8(REG::GPIO_DIR,   GPIO_DISP  | GPIO_GP0);
+    mem_write_8(REG::GPIO,       GPIO_DISP  | GPIO_GP0);
   }
   else {
-    mem_write_8(REG_GPIO, GPIO_DISP); /* REG_GPIO_DIR is set to output for GPIO_DISP by default */
+    mem_write_8(REG::GPIO, GPIO_DISP); /* REG::GPIO_DIR is set to output for GPIO_DISP by default */
   }
 
-  mem_write_8(REG_PCLK, Pclk); // Turns on Clock by setting PCLK Register to the value necessary for the module
+  mem_write_8(REG::PCLK, Pclk); // Turns on Clock by setting PCLK Register to the value necessary for the module
 
-  mem_write_16(REG_PWM_HZ,  0x00FA);
+  mem_write_16(REG::PWM_HZ,  0x00FA);
 
   // Turning off dithering seems to help prevent horizontal line artifacts on certain colors
-  mem_write_8(REG_DITHER,  0);
+  mem_write_8(REG::DITHER,  0);
 
   // Initialize the command FIFO
   CommandFifo::reset();
@@ -1132,13 +1132,13 @@ void CLCD::init (void) {
 
 void CLCD::default_touch_transform() {
   // Set Initial Values for Touch Transform Registers
-  mem_write_32(REG_ROTATE, 0);
-  mem_write_32(REG_TOUCH_TRANSFORM_A, FTDI::default_transform_a);
-  mem_write_32(REG_TOUCH_TRANSFORM_B, FTDI::default_transform_b);
-  mem_write_32(REG_TOUCH_TRANSFORM_C, FTDI::default_transform_c);
-  mem_write_32(REG_TOUCH_TRANSFORM_D, FTDI::default_transform_d);
-  mem_write_32(REG_TOUCH_TRANSFORM_E, FTDI::default_transform_e);
-  mem_write_32(REG_TOUCH_TRANSFORM_F, FTDI::default_transform_f);
+  mem_write_32(REG::ROTATE, 0);
+  mem_write_32(REG::TOUCH_TRANSFORM_A, FTDI::default_transform_a);
+  mem_write_32(REG::TOUCH_TRANSFORM_B, FTDI::default_transform_b);
+  mem_write_32(REG::TOUCH_TRANSFORM_C, FTDI::default_transform_c);
+  mem_write_32(REG::TOUCH_TRANSFORM_D, FTDI::default_transform_d);
+  mem_write_32(REG::TOUCH_TRANSFORM_E, FTDI::default_transform_e);
+  mem_write_32(REG::TOUCH_TRANSFORM_F, FTDI::default_transform_f);
 
   #if FTDI_API_LEVEL >= 810
     // Set the initial display orientation. On the FT810, we use the command
@@ -1165,13 +1165,13 @@ void CLCD::default_touch_transform() {
       cmd.execute();
     } else {
       #if defined(USE_INVERTED_ORIENTATION)
-        mem_write_32(REG_ROTATE, 1);
+        mem_write_32(REG::ROTATE, 1);
       #endif
     }
   #elif defined(USE_PORTRAIT_ORIENTATION) || defined(USE_MIRRORED_ORIENTATION)
     #error PORTRAIT or MIRRORED orientation not supported on the FT800
   #elif defined(USE_INVERTED_ORIENTATION)
-    mem_write_32(REG_ROTATE, 1);
+    mem_write_32(REG::ROTATE, 1);
   #endif
 }
 #endif // FTDI_BASIC

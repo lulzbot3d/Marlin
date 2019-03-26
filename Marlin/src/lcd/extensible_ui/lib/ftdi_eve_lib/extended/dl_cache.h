@@ -41,6 +41,9 @@
  */
 class DLCache {
   private:
+    typedef FTDI::ftdi_registers  REG;
+    typedef FTDI::ftdi_memory_map MAP;
+
     uint8_t  dl_slot;
     uint32_t dl_addr;
     uint16_t dl_size;

@@ -26,14 +26,14 @@ namespace Theme {
   using namespace FTDI;
 
   constexpr PROGMEM bitmap_info_t Extruder_Icon_Info = {
-    .format     = L1,
-    .linestride = 3,
-    .filter     = BILINEAR,
-    .wrapx      = BORDER,
-    .wrapy      = BORDER,
-    .RAMG_addr  = RAM_G + 8000,
-    .width      = 24,
-    .height     = 23,
+    .format       = L1,
+    .linestride   = 3,
+    .filter       = BILINEAR,
+    .wrapx        = BORDER,
+    .wrapy        = BORDER,
+    .RAMG_offset  = 8000,
+    .width        = 24,
+    .height       = 23,
   };
 
   constexpr PROGMEM unsigned char Extruder_Icon[] = {
@@ -63,14 +63,14 @@ namespace Theme {
   };
 
   constexpr PROGMEM bitmap_info_t Bed_Heat_Icon_Info = {
-    .format     = L1,
-    .linestride = 4,
-    .filter     = BILINEAR,
-    .wrapx      = BORDER,
-    .wrapy      = BORDER,
-    .RAMG_addr  = RAM_G + 8100,
-    .width      = 32,
-    .height     = 23,
+    .format       = L1,
+    .linestride   = 4,
+    .filter       = BILINEAR,
+    .wrapx        = BORDER,
+    .wrapy        = BORDER,
+    .RAMG_offset  = 8100,
+    .width        = 32,
+    .height       = 23,
   };
 
   constexpr PROGMEM unsigned char Bed_Heat_Icon[] = {
@@ -100,14 +100,14 @@ namespace Theme {
   };
 
   constexpr PROGMEM bitmap_info_t Fan_Icon_Info = {
-    .format     = L1,
-    .linestride = 4,
-    .filter     = BILINEAR,
-    .wrapx      = BORDER,
-    .wrapy      = BORDER,
-    .RAMG_addr  = RAM_G + 8300,
-    .width      = 32,
-    .height     = 32,
+    .format       = L1,
+    .linestride   = 4,
+    .filter       = BILINEAR,
+    .wrapx        = BORDER,
+    .wrapy        = BORDER,
+    .RAMG_offset  = 8300,
+    .width        = 32,
+    .height       = 32,
   };
 
   constexpr PROGMEM unsigned char Fan_Icon[] = {
@@ -146,14 +146,14 @@ namespace Theme {
   };
 
   constexpr PROGMEM bitmap_info_t TD_Icon_Info = {
-    .format     = L1,
-    .linestride = 7,
-    .filter     = BILINEAR,
-    .wrapx      = BORDER,
-    .wrapy      = BORDER,
-    .RAMG_addr  = RAM_G + 9000,
-    .width      = 50,
-    .height     = 20,
+    .format       = L1,
+    .linestride   = 7,
+    .filter       = BILINEAR,
+    .wrapx        = BORDER,
+    .wrapy        = BORDER,
+    .RAMG_offset  = 9000,
+    .width        = 50,
+    .height       = 20,
   };
 
   constexpr PROGMEM unsigned char TD_Icon[] = {

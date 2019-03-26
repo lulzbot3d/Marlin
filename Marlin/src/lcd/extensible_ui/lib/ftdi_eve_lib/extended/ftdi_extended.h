@@ -31,6 +31,7 @@
 
 #if defined(FTDI_EXTENDED)
   #include "rgb_t.h"
+  #include "bitmap_info.h"
   #include "tiny_timer.h"
   #include "grid_layout.h"
   #include "dl_cache.h"

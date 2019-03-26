@@ -1,9 +1,8 @@
-/****************
- * ftdi_basic.h *
- ****************/
+/*****************
+ * bitmap_info.h *
+ *****************/
 
 /****************************************************************************
- *   Written By Mark Pelletier  2019 - Aleph Objects, Inc.                  *
  *   Written By Marcio Teixeira 2019 - Aleph Objects, Inc.                  *
  *                                                                          *
  *   This program is free software: you can redistribute it and/or modify   *
@@ -22,19 +21,29 @@
 
 #pragma once
 
-#include "../compat.h"
-
-#if !defined(__MARLIN_FIRMWARE__)
-  #define FTDI_BASIC
+#ifndef FORCEDINLINE
+  #define FORCEDINLINE __attribute__((always_inline)) inline
 #endif
 
-#if defined(FTDI_BASIC)
-  #include "registers_ft800.h"
-  #include "registers_ft810.h"
-  #include "constants.h"
-  #include "boards.h"
-  #include "commands.h"
-  #include "spi.h"
-  #include "display_list.h"
-  #include "resolutions.h"
-#endif
+namespace FTDI {
+   // The following functions *must* be inlined since we are relying on the compiler to do
+   // substitution of the constants from the data structure rather than actually storing
+   // it in PROGMEM (which would fail, since we are not using pgm_read to read them).
+   // Plus, by inlining, all the equations are evaluated at compile-time as everything
+   // should be a constant.
+
+   typedef struct {
+     const uint8_t  format;
+     const uint16_t linestride;
+     const uint8_t  filter;
+     const uint8_t  wrapx;
+     const uint8_t  wrapy;
+     const uint32_t RAMG_offset;
+     const uint16_t width;
+     const uint16_t height;
+   } bitmap_info_t;
+
+   FORCEDINLINE uint32_t BITMAP_SOURCE (const bitmap_info_t& info) {return BITMAP_SOURCE (ftdi_memory_map::RAM_G + info.RAMG_offset);};
+   FORCEDINLINE uint32_t BITMAP_LAYOUT (const bitmap_info_t& info) {return BITMAP_LAYOUT (info.format, info.linestride, info.height);};
+   FORCEDINLINE uint32_t BITMAP_SIZE   (const bitmap_info_t& info) {return BITMAP_SIZE   (info.filter, info.wrapx, info.wrapy, info.width, info.height);}
+}

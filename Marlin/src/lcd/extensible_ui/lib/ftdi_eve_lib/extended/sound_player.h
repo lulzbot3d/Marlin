@@ -29,6 +29,9 @@ namespace FTDI {
   } play_mode_t;
 
   class SoundPlayer {
+    typedef FTDI::ftdi_registers  REG;
+    typedef FTDI::ftdi_memory_map MAP;
+
     public:
       struct sound_t {
         effect_t  effect;      // The sound effect number

@@ -33,16 +33,12 @@
 
 #pragma once
 
-#ifndef FORCEDINLINE
-  #define FORCEDINLINE __attribute__((always_inline)) inline
-#endif
-
 namespace FTDI {
   /* FT8xx graphics engine specific macros useful for static display list generation */
   inline uint32_t ALPHA_FUNC(uint8_t func, uint8_t ref)        {return DL::ALPHA_FUNC|((func&7UL)<<8)|(ref&255UL);}
   inline uint32_t BEGIN(begin_t prim)                          {return DL::BEGIN|(prim&15UL);}
 
-  inline uint32_t BITMAP_SOURCE(uint32_t ram_g_addr)           {return DL::BITMAP_SOURCE|(ram_g_addr & (RAM_G_SIZE-1));}
+  inline uint32_t BITMAP_SOURCE(uint32_t ram_g_addr)           {return DL::BITMAP_SOURCE|(ram_g_addr & (FTDI::ftdi_memory_map::RAM_G_SIZE-1));}
   inline uint32_t BITMAP_HANDLE(uint8_t handle)                {return DL::BITMAP_HANDLE|(handle&31UL);}
   inline uint32_t BITMAP_LAYOUT(uint8_t format, uint16_t linestride, uint16_t height)
                                                                {return DL::BITMAP_LAYOUT|((format&31UL)<<19)|((linestride&1023UL)<<9)|(height&511UL);}
@@ -119,25 +115,4 @@ namespace FTDI {
   inline uint32_t VERTEX_TRANSLATE_X(int32_t x)                {return DL::VERTEX_TRANSLATE_X|(x&131071UL);}
   inline uint32_t VERTEX_TRANSLATE_Y(int32_t y)                {return DL::VERTEX_TRANSLATE_Y|(y&131071UL);}
   #endif
-
-   // The following functions *must* be inlined since we are relying on the compiler to do
-   // substitution of the constants from the data structure rather than actually storing
-   // it in PROGMEM (which would fail, since we are not using pgm_read to read them).
-   // Plus, by inlining, all the equations are evaluated at compile-time as everything
-   // should be a constant.
-
-   typedef struct {
-     const uint8_t  format;
-     const uint16_t linestride;
-     const uint8_t  filter;
-     const uint8_t  wrapx;
-     const uint8_t  wrapy;
-     const uint32_t RAMG_addr;
-     const uint16_t width;
-     const uint16_t height;
-   } bitmap_info_t;
-
-   FORCEDINLINE uint32_t BITMAP_SOURCE (const bitmap_info_t& info) {return BITMAP_SOURCE (info.RAMG_addr);};
-   FORCEDINLINE uint32_t BITMAP_LAYOUT (const bitmap_info_t& info) {return BITMAP_LAYOUT (info.format, info.linestride, info.height);};
-   FORCEDINLINE uint32_t BITMAP_SIZE   (const bitmap_info_t& info) {return BITMAP_SIZE   (info.filter, info.wrapx, info.wrapy, info.width, info.height);}
 }

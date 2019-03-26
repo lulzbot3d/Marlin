@@ -253,7 +253,7 @@ bool FilesScreen::onTouchEnd(uint8_t tag) {
 void FilesScreen::onIdle() {
   #if ENABLED(SCROLL_LONG_FILENAMES) && (FTDI_API_LEVEL >= 810)
     if(FTDI::ftdi_chip >= 810) {
-      CLCD::mem_write_32(REG_MACRO_0,VERTEX_TRANSLATE_X(-screen_data.FilesScreen.scroll_pos));
+      CLCD::mem_write_32(CLCD::REG::MACRO_0,VERTEX_TRANSLATE_X(-screen_data.FilesScreen.scroll_pos));
       if(screen_data.FilesScreen.scroll_pos < screen_data.FilesScreen.scroll_max * 16)
         screen_data.FilesScreen.scroll_pos++;
     }

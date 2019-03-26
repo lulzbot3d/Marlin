@@ -94,7 +94,7 @@ void MediaPlayerScreen::playStream(void *obj, media_streamer_func_t *data_stream
       uint8_t        buf[512];
       const uint32_t block_size = 512;
       const uint32_t fifo_size  = block_size * 2;
-      const uint32_t fifo_start = RAM_G + RAM_G_SIZE - fifo_size;
+      const uint32_t fifo_start = CLCD::MAP::RAM_G + CLCD::MAP::RAM_G_SIZE - fifo_size;
 
       CommandProcessor cmd;
       cmd.cmd(CMD_DLSTART)
@@ -146,11 +146,11 @@ void MediaPlayerScreen::playStream(void *obj, media_streamer_func_t *data_stream
               goto exit;
             }
           }
-        } while(CLCD::mem_read_32(REG_MEDIAFIFO_READ) != writePtr);
+        } while(CLCD::mem_read_32(CLCD::REG::MEDIAFIFO_READ) != writePtr);
 
         // Start playing block n
         writePtr = (writePtr + nBytes) % fifo_size;
-        CLCD::mem_write_32(REG_MEDIAFIFO_WRITE, writePtr);
+        CLCD::mem_write_32(CLCD::REG::MEDIAFIFO_WRITE, writePtr);
       } while(nBytes == block_size);
 
       SERIAL_ECHO_START();

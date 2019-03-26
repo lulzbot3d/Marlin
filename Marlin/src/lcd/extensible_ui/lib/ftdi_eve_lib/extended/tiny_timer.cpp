@@ -48,5 +48,4 @@ void tiny_timer_t::start() {
     #endif
   );
 }
-
 #endif // FTDI_EXTENDED

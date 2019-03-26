@@ -27,11 +27,11 @@ namespace FTDI {
   SoundPlayer sound; // Global sound player object
 
   void SoundPlayer::set_volume(uint8_t vol) {
-    CLCD::mem_write_8(REG_VOL_SOUND, vol);
+    CLCD::mem_write_8(REG::VOL_SOUND, vol);
   }
 
   uint8_t SoundPlayer::get_volume() {
-    return CLCD::mem_read_8(REG_VOL_SOUND);
+    return CLCD::mem_read_8(REG::VOL_SOUND);
   }
 
   void SoundPlayer::play(effect_t effect, note_t note) {
@@ -43,8 +43,8 @@ namespace FTDI {
     #endif
 
     // Play the note
-    CLCD::mem_write_16(REG_SOUND, (note == REST) ? 0 : (((note ? note : NOTE_C4) << 8) | effect));
-    CLCD::mem_write_8(REG_PLAY, 1);
+    CLCD::mem_write_16(REG::SOUND, (note == REST) ? 0 : (((note ? note : NOTE_C4) << 8) | effect));
+    CLCD::mem_write_8(REG::PLAY, 1);
   }
 
   note_t SoundPlayer::frequency_to_midi_note(const uint16_t frequency_hz) {
@@ -82,7 +82,7 @@ namespace FTDI {
   }
 
   bool SoundPlayer::is_sound_playing() {
-    return CLCD::mem_read_8( REG_PLAY ) & 0x1;
+    return CLCD::mem_read_8( REG::PLAY ) & 0x1;
   }
 
   void SoundPlayer::onIdle() {

@@ -93,7 +93,6 @@ bool UIData::animations_enabled() {
 }
 
 namespace FTDI {
-
   uint8_t EventLoop::get_pressed_tag() {
     return pressed_tag;
   }

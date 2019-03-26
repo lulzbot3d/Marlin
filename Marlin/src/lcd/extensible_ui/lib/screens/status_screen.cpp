@@ -349,10 +349,11 @@ void StatusScreen::onStartup() {
   // Load the bitmaps for the status screen
 
   using namespace Theme;
-  CLCD::mem_write_pgm(TD_Icon_Info.RAMG_addr,       TD_Icon,       sizeof(TD_Icon));
-  CLCD::mem_write_pgm(Extruder_Icon_Info.RAMG_addr, Extruder_Icon, sizeof(Extruder_Icon));
-  CLCD::mem_write_pgm(Bed_Heat_Icon_Info.RAMG_addr, Bed_Heat_Icon, sizeof(Bed_Heat_Icon));
-  CLCD::mem_write_pgm(Fan_Icon_Info.RAMG_addr,      Fan_Icon,      sizeof(Fan_Icon));
+  constexpr uint32_t base = ftdi_memory_map::RAM_G;
+  CLCD::mem_write_pgm(base + TD_Icon_Info.RAMG_offset,       TD_Icon,       sizeof(TD_Icon));
+  CLCD::mem_write_pgm(base + Extruder_Icon_Info.RAMG_offset, Extruder_Icon, sizeof(Extruder_Icon));
+  CLCD::mem_write_pgm(base + Bed_Heat_Icon_Info.RAMG_offset, Bed_Heat_Icon, sizeof(Bed_Heat_Icon));
+  CLCD::mem_write_pgm(base + Fan_Icon_Info.RAMG_offset,      Fan_Icon,      sizeof(Fan_Icon));
 
   setStatusMessage(F(WELCOME_MSG));
 

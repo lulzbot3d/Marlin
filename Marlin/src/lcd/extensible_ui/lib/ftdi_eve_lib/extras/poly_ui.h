@@ -112,16 +112,15 @@ class PolyReader {
  * data to fit the entire display, a bounding box, or apply
  * some arbitrary affine transform.
  *
- * This class will also remove repeated points from the data
- * in the cases in which these arise.
+ * This class is suitable for reading data from "svg2cpp.py"
  */
 class TransformedPolyReader : public PolyReader {
   private:
     /**
      * Fixed point type for fast transformations, supports
-     * values from 0 to 1024, with 1/64 precision.
+     * values from 0 to 1024, with 1/32 precision.
      */
-    static constexpr uint8_t fract_bits = 6;
+    static constexpr uint8_t fract_bits = 5;
     typedef int16_t fix_t;
     fix_t makefix(float f) {return f * (1 << fract_bits);}
 
@@ -172,12 +171,13 @@ class TransformedPolyReader : public PolyReader {
 
     // Scale the data to fit a specified bounding box
     void scale_to_fit(type_t x_min, type_t y_min, type_t x_max, type_t y_max) {
-      fix_t s  = makefix(max(x_max - x_min, y_max - y_min));
+      fix_t sx = makefix(x_max - x_min);
+      fix_t sy = makefix(y_max - y_min);
       fix_t tx = makefix(x_min);
       fix_t ty = makefix(y_min);
       set_transform(
-        s, 0, tx,
-        0, s, ty
+        sx,  0, tx,
+        0,  sy, ty
       );
     }
 

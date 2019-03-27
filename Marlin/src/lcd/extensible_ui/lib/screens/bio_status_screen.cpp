@@ -53,10 +53,10 @@ void StatusScreen::onRedraw(draw_mode_t what) {
   ui.shadow(POLY(syringe_outline), 5);
 
   // Paint the syring icon
-  ui.color(fill_rgb);
-  ui.fill(POLY(syringe_fluid));
   ui.color(syringe_rgb);
   ui.fill(POLY(syringe_outline));
+  ui.color(fill_rgb);
+  ui.fill(POLY(syringe_fluid));
   ui.color(stroke_rgb);
   ui.fill(POLY(syringe));
 
@@ -83,7 +83,7 @@ void StatusScreen::onRedraw(draw_mode_t what) {
 
   default_button_colors();
 
-  cmd.fgcolor(fill_rgb).font(font_xsmall)
+  cmd.fgcolor(fill_rgb).font(font_medium)
      .enabled(isMediaInserted() && !isPrintingFromMedia())
      .tag(9).button(x, y, h, v,
         isPrintingFromMedia() ?

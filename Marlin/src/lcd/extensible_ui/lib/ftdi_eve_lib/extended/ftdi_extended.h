@@ -40,4 +40,5 @@
   #include "command_processor.h"
   #include "sound_player.h"
   #include "sound_list.h"
+  #include "polygon.h"
 #endif

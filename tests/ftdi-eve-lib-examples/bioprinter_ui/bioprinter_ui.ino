@@ -20,7 +20,7 @@
  ****************************************************************************/
 
 #include "src/ftdi_eve_lib/ftdi_eve_lib.h"
-#include "src/ftdi_eve_lib/extras/polygon.h"
+#include "src/ftdi_eve_lib/extras/poly_ui.h"
 #include "src/bioprinter_ui.h"
 
 using namespace FTDI;
@@ -38,57 +38,50 @@ class LogoScreen : public UIScreen, public UncachedScreen {
       cmd.cmd(CLEAR(true,true,true));
       cmd.tag(0);
 
-      #define POLY(A) A, sizeof(A)/sizeof(A[0])
+      #define POLY(A) PolyUI::poly_reader_t(A, sizeof(A)/sizeof(A[0]))
 
-      Polygon p(cmd, 0, 0, display_width, display_height);
+      PolyUI ui(cmd);
 
       constexpr uint32_t shadow_rgb  = 0xF3E0E0;
       constexpr uint32_t fill_rgb    = 0x00AA00;
       constexpr uint32_t stroke_rgb  = 0x005500;
       constexpr uint32_t syringe_rgb = 0xE2F2DA;
 
-      // Paint the shadows for the syringe and buttons
-      cmd.cmd(COLOR_RGB(shadow_rgb));
-      cmd.cmd(VERTEX_TRANSLATE_X(5 * 16));
-      cmd.cmd(VERTEX_TRANSLATE_Y(5 * 16));
-      p.fill(POLY(usb_btn));
-      p.fill(POLY(menu_btn));
-      p.fill(POLY(syringe_outline));
-      cmd.cmd(VERTEX_TRANSLATE_X(0));
-      cmd.cmd(VERTEX_TRANSLATE_Y(0));
-
+      // Paint the shadow for the syringe
+      ui.color(shadow_rgb);
+      ui.shadow(POLY(syringe_outline), 5);
+    
       // Paint the syring icon
-      cmd.cmd(COLOR_RGB(syringe_rgb));
-      p.fill(POLY(syringe_outline));
-      cmd.cmd(COLOR_RGB(fill_rgb));
-      p.fill(POLY(syringe_fluid));
-      cmd.cmd(COLOR_RGB(stroke_rgb));
-      p.fill(POLY(syringe));
+      ui.color(fill_rgb);
+      ui.fill(POLY(syringe_fluid));
+      ui.color(syringe_rgb);
+      ui.fill(POLY(syringe_outline));
+      ui.color(stroke_rgb);
+      ui.fill(POLY(syringe));
 
       // Draw the arrow push buttons
+    
+      ui.button_fill  (fill_rgb);
+      ui.button_stroke(stroke_rgb, 28);
+      ui.button_shadow(shadow_rgb, 5);
+    
+      ui.button(1, POLY(x_neg));
+      ui.button(2, POLY(x_pos));
+      ui.button(3, POLY(y_neg));
+      ui.button(4, POLY(y_pos));
+      ui.button(5, POLY(z_neg));
+      ui.button(6, POLY(z_pos));
+      ui.button(7, POLY(e_neg));
+      ui.button(8, POLY(e_pos));
 
-      PolyButton b(p);
-      b.fill_style(fill_rgb);
-      b.stroke_style(stroke_rgb, 28);
-      b.shadow_style(shadow_rgb, 5);
-
-      b.button(1, POLY(x_pos));
-      b.button(2, POLY(y_pos));
-      b.button(3, POLY(z_pos));
-      b.button(4, POLY(e_pos));
-      b.button(5, POLY(x_neg));
-      b.button(6, POLY(y_neg));
-      b.button(7, POLY(z_neg));
-      b.button(8, POLY(e_neg));
-
-      uint16_t x, y, h, v;
-      cmd.cmd(COLOR_RGB(stroke_rgb));
+      int16_t x, y, h, v;
+      ui.color(stroke_rgb);
       cmd.fgcolor(fill_rgb);
 
-      p.bounds(POLY(usb_btn), x, y, h, v);
+      ui.bounds(POLY(usb_btn), x, y, h, v);
       cmd.font(28).tag(9).button(x, y, h, v, F("USB Drive"));
 
-      p.bounds(POLY(menu_btn), x, y, h, v);
+      ui.bounds(POLY(menu_btn), x, y, h, v);
       cmd.font(28).tag(10).button(x, y, h, v, F("Menu"));
     }
 

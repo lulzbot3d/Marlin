@@ -483,6 +483,10 @@ void menu_motion() {
     MENU_ITEM(function, MSG_LEVEL_CORNERS, _lcd_level_bed_corners);
   #endif
 
+  #if ENABLED(LULZBOT_CALIBRATION_GCODE) && defined(LULZBOT_CALIBRATION_SCRIPT)
+    MENU_ITEM(gcode, _UxGT("Auto-calibrate"), LULZBOT_CALIBRATION_SCRIPT);
+  #endif
+
   //
   // Disable Steppers
   //

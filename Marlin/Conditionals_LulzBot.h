@@ -1847,8 +1847,8 @@
 
     #if defined(LULZBOT_Quiver_TAZPro)
         // The Quiver has an wipe pad on the right side of the bed.
-        #define LULZBOT_RIGHT_WIPE_X1                   298
-        #define LULZBOT_RIGHT_WIPE_X2                   298
+        #define LULZBOT_RIGHT_WIPE_X1                   293
+        #define LULZBOT_RIGHT_WIPE_X2                   293
         #define LULZBOT_RIGHT_WIPE_Y1                    95
         #define LULZBOT_RIGHT_WIPE_Y2                    25
         #define LULZBOT_RIGHT_WIPE_Z                      1

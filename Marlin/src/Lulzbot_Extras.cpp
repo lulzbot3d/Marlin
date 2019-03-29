@@ -22,6 +22,7 @@
 #include "Marlin.h"
 #include "module/endstops.h"
 #include "module/stepper_indirection.h"
+#include "gcode/gcode.h"
 #include "Lulzbot_Extras.h"
 
 /******************************** EMI MITIGATION *******************************/
@@ -49,6 +50,10 @@ void lulzbot_startup(void) {
 
     #if defined(LULZBOT_USE_Z_BELT)
         enable_Z();
+
+        #if defined(LULZBOT_IS_TAZ)
+            GcodeSuite::process_subcommands_now_P("G28 Z");
+        #endif
     #endif
 }
 

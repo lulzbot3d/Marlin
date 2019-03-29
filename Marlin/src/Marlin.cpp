@@ -1048,10 +1048,6 @@ void setup() {
     fanmux_init();
   #endif
 
-  #if defined(LULZBOT_STARTUP)
-    LULZBOT_STARTUP
-  #endif
-
   ui.init();
   ui.reset_status();
 
@@ -1076,6 +1072,10 @@ void setup() {
     i2c.onRequest(i2c_on_request);
   #endif
 
+  #if defined(LULZBOT_STARTUP)
+    LULZBOT_STARTUP
+  #endif
+
   #if DO_SWITCH_EXTRUDER
     move_extruder_servo(0);   // Initialize extruder servo
   #endif
@@ -1083,7 +1083,6 @@ void setup() {
   #if ENABLED(SWITCHING_NOZZLE)
     // Initialize nozzle servo(s)
     #if SWITCHING_NOZZLE_TWO_SERVOS
-      GcodeSuite::process_subcommands_now_P("G28 Z");
       lower_nozzle(0);
       raise_nozzle(1);
     #else

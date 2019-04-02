@@ -125,7 +125,6 @@ void MediaPlayerScreen::playStream(void *obj, media_streamer_func_t *data_stream
 
         if(millis() - t > 10) {
           ExtUI::yield();
-          watchdog_reset();
           t = millis();
         }
 
@@ -136,7 +135,6 @@ void MediaPlayerScreen::playStream(void *obj, media_streamer_func_t *data_stream
         do {
           if(millis() - t > 10) {
             ExtUI::yield();
-            watchdog_reset();
             t = millis();
             timeouts--;
             if(timeouts == 0) {

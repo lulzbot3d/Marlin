@@ -635,8 +635,6 @@
     #define LULZBOT_Z_SAFE_HOMING_Y_POINT         (258)
     #define LULZBOT_Z_HOMING_HEIGHT               5
 
-    #define LULZBOT_AFTER_Z_HOME_Z_RAISE         10
-
     #define LULZBOT_HOMING_USES_PROBE_PINS
 #elif defined(LULZBOT_IS_TAZ) && !defined(LULZBOT_USE_HOME_BUTTON)
     // TAZ 5 safe homing position so fan duct does not hit.
@@ -650,39 +648,36 @@
 #endif  // LULZBOT_USE_HOME_BUTTON
 
 #if defined(LULZBOT_USE_HOME_BUTTON) || defined(LULZBOT_SENSORLESS_HOMING) || defined(LULZBOT_ENDSTOPS_ALWAYS_ON_DEFAULT)
-    /* Leaving the toolhead resting on the endstops with sensorless homing
-     * will likely cause chatter if the machine is immediately re-homed, so
-     * don't leave the head sitting on the endstops after homing. */
-    #define LULZBOT_BACKOFF_FEEDRATE 5
-    #define LULZBOT_BACKOFF_DIST_XY  5
-    #define LULZBOT_BACKOFF_DIST_Z   2
+    #define LULZBOT_ENDSTOP_BACKOFF_FEEDRATE 5
 
     #if defined(LULZBOT_USE_HOME_BUTTON)
         /* On a TAZ, we need to raise the print head after homing to clear the button */
-        #undef  LULZBOT_BACKOFF_DIST_Z
-        #define LULZBOT_BACKOFF_DIST_Z LULZBOT_AFTER_Z_HOME_Z_RAISE
-        #define LULZBOT_BACKOFF_X_POS  LULZBOT_Z_SAFE_HOMING_X_POINT
-        #define LULZBOT_BACKOFF_Y_POS  LULZBOT_Z_SAFE_HOMING_Y_POINT
+        #define LULZBOT_ENDSTOP_BACKOFF_X   0
+        #define LULZBOT_ENDSTOP_BACKOFF_Y   0
+        #define LULZBOT_ENDSTOP_BACKOFF_Z   16
     #else
-        #define LULZBOT_BACKOFF_X_POS (LULZBOT_X_HOME_DIR < 0 ? LULZBOT_BACKOFF_DIST_XY : LULZBOT_X_MAX_POS - LULZBOT_BACKOFF_DIST_XY)
-        #define LULZBOT_BACKOFF_Y_POS (LULZBOT_Y_HOME_DIR < 0 ? LULZBOT_BACKOFF_DIST_XY : LULZBOT_Y_MAX_POS - LULZBOT_BACKOFF_DIST_XY)
+        /* Leaving the toolhead resting on the endstops with sensorless homing
+         * will likely cause chatter if the machine is immediately re-homed, so
+         * don't leave the head sitting on the endstops after homing. */
+        #define LULZBOT_ENDSTOP_BACKOFF_X   5
+        #define LULZBOT_ENDSTOP_BACKOFF_Y   5
+        #define LULZBOT_ENDSTOP_BACKOFF_Z   2
     #endif
-    #define     LULZBOT_BACKOFF_Z_POS (LULZBOT_Z_HOME_DIR < 0 ? LULZBOT_BACKOFF_DIST_Z  : LULZBOT_Z_MAX_POS - LULZBOT_BACKOFF_DIST_Z)
 
-    #define LULZBOT_BACKOFF_AFTER_HOME \
+    #define LULZBOT_ENDSTOP_BACKOFF \
         { \
-            constexpr int x = LULZBOT_BACKOFF_X_POS; \
-            constexpr int y = LULZBOT_BACKOFF_Y_POS; \
-            constexpr int z = LULZBOT_BACKOFF_Z_POS; \
+            const int backoff_x = (home_all || homeX) ? LULZBOT_ENDSTOP_BACKOFF_X : 0; \
+            const int backoff_y = (home_all || homeY) ? LULZBOT_ENDSTOP_BACKOFF_Y : 0; \
+            const int backoff_z = (home_all || homeZ) ? LULZBOT_ENDSTOP_BACKOFF_Z : 0; \
             const bool saved_endstop_state = Endstops::global_enabled(); \
             Endstops::enable_globally(false); \
-            do_blocking_move_to_z  ((home_all || homeZ) ? z : current_position[Z_AXIS], LULZBOT_BACKOFF_FEEDRATE); \
-            do_blocking_move_to_xy ((home_all || homeX) ? x : current_position[X_AXIS], \
-                                    (home_all || homeY) ? y : current_position[Y_AXIS], LULZBOT_BACKOFF_FEEDRATE); \
+            do_blocking_move_to_z  (current_position[Z_AXIS] - backoff_z * LULZBOT_Z_HOME_DIR, LULZBOT_ENDSTOP_BACKOFF_FEEDRATE); \
+            do_blocking_move_to_xy (current_position[X_AXIS] - backoff_x * LULZBOT_X_HOME_DIR, \
+                                    current_position[Y_AXIS] - backoff_y * LULZBOT_Y_HOME_DIR, LULZBOT_ENDSTOP_BACKOFF_FEEDRATE); \
             Endstops::enable_globally(saved_endstop_state); \
         }
 #else
-    #define LULZBOT_BACKOFF_AFTER_HOME
+    #define LULZBOT_ENDSTOP_BACKOFF
 #endif
 
 // Enable NO_MOTION_BEFORE_HOMING on newer printers that have no MAX endstops,
@@ -1059,8 +1054,6 @@
     #define LULZBOT_LCD_TOOLHEAD_NAME              "Dual Extruder 3"
 //          16 chars max                            ^^^^^^^^^^^^^^^
     #define LULZBOT_M115_EXTRUDER_TYPE         "DualExtruder v3"
-    #undef  LULZBOT_AFTER_Z_HOME_Z_RAISE
-    #define LULZBOT_AFTER_Z_HOME_Z_RAISE           16
     #if LULZBOT_Z_HOME_DIR < 0
         /* We need to reset the origin to account for the Z home riser. */
         #define LULZBOT_MANUAL_Z_HOME_POS         5.5

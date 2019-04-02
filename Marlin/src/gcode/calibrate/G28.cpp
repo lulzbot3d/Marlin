@@ -407,8 +407,8 @@ void GcodeSuite::G28(const bool always_home_all) {
     ui.reset_status();
   #endif
 
-  #if defined(LULZBOT_BACKOFF_AFTER_HOME)
-    LULZBOT_BACKOFF_AFTER_HOME // This must happen before endstops.not_homing()
+  #if defined(LULZBOT_ENDSTOP_BACKOFF)
+    LULZBOT_ENDSTOP_BACKOFF // This must happen before endstops.not_homing()
   #endif
   endstops.not_homing();
 

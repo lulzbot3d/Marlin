@@ -457,7 +457,8 @@
 #define Y_HOME_BUMP_MM LULZBOT_Y_HOME_BUMP_MM
 #define Z_HOME_BUMP_MM LULZBOT_Z_HOME_BUMP_MM
 #define HOMING_BUMP_DIVISOR { 2, 2, 4 }  // Re-Bump Speed Divisor (Divides the Homing Feedrate)
-#define QUICK_HOME LULZBOT_QUICK_HOME   // If homing includes X and Y, do a diagonal move initially
+#define QUICK_HOME LULZBOT_QUICK_HOME // If homing includes X and Y, do a diagonal move initially
+//#define HOMING_BACKOFF_MM { 2, 2, 2 }  // (mm) Move away from the endstops after homing
 
 // When G28 is called, this option will make Y home before X
 #define HOME_Y_BEFORE_X LULZBOT_HOME_Y_BEFORE_X
@@ -780,8 +781,9 @@
   // Since the FAT gets out of order with usage, SDCARD_SORT_ALPHA is recommended.
   #define SDCARD_RATHERRECENTFIRST
 
-  // Add an option in the menu to run all auto#.g files
-  //#define MENU_ADDAUTOSTART
+  //#define MENU_ADDAUTOSTART               // Add a menu option to run auto#.g files
+
+  #define EVENT_GCODE_SD_STOP LULZBOT_EVENT_GCODE_SD_STOP // G-code to run on Stop Print (e.g., "G28XY" or "G27")
 
   /**
    * Continue after Power-Loss (Creality3D)

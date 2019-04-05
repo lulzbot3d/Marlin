@@ -1799,16 +1799,16 @@
 #endif
 
 #if defined(LULZBOT_KangarooPaw_Experimental)
-    #define LULZBOT_AFTER_ABORT_PRINT_ACTION GcodeSuite::process_subcommands_now_P(PSTR("G28 Z\nM117 Print aborted."));
+    #define LULZBOT_EVENT_GCODE_SD_STOP "G28 Z\nM117 Print aborted."
 
 #elif defined(LULZBOT_IS_MINI)
-    #define LULZBOT_AFTER_ABORT_PRINT_ACTION GcodeSuite::process_subcommands_now_P(PSTR("G28 Z\nG0 X80 Y190 F3000\nM117 Print aborted."));
+    #define LULZBOT_EVENT_GCODE_SD_STOP "G28 Z\nG0 X80 Y190 F3000\nM117 Print aborted."
 
 #elif defined(LULZBOT_Juniper_TAZ5)
-    #define LULZBOT_AFTER_ABORT_PRINT_ACTION GcodeSuite::process_subcommands_now_P(PSTR("G0 X170 Y290 F3000\nM117 Print aborted."));
+    #define LULZBOT_EVENT_GCODE_SD_STOP "G0 X170 Y290 F3000\nM117 Print aborted."
 
 #elif defined(LULZBOT_IS_TAZ)
-    #define LULZBOT_AFTER_ABORT_PRINT_ACTION GcodeSuite::process_subcommands_now_P(PSTR("G91\nG0 Z15 F600\nG90\nG0 X170 Y290 F3000\nM117 Print aborted."));
+    #define LULZBOT_EVENT_GCODE_SD_STOP "G91\nG0 Z15 F600\nG90\nG0 X170 Y290 F3000\nM117 Print aborted."
 #endif
 
 /*********************************** WIPER PAD **********************************/

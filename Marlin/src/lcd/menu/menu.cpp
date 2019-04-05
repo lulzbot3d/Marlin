@@ -54,10 +54,12 @@
 ////////////////////////////////////////////
 
 // Menu Navigation
-int8_t encoderTopLine;
+int8_t encoderTopLine, encoderLine, screen_items;
+
 typedef struct {
   screenFunc_t menu_function;
   uint32_t encoder_position;
+  uint8_t top_line, items;
 } menuPosition;
 menuPosition screen_history[6];
 uint8_t screen_history_depth = 0;
@@ -80,22 +82,20 @@ bool no_reentry = false;
 void MarlinUI::return_to_status() { goto_screen(status_screen); }
 
 void MarlinUI::save_previous_screen() {
-  if (screen_history_depth < COUNT(screen_history)) {
-    screen_history[screen_history_depth].menu_function = currentScreen;
-    screen_history[screen_history_depth].encoder_position = encoderPosition;
-    ++screen_history_depth;
-  }
+  if (screen_history_depth < COUNT(screen_history))
+    screen_history[screen_history_depth++] = { currentScreen, encoderPosition, encoderTopLine, screen_items };
 }
 
 void MarlinUI::goto_previous_screen() {
   if (screen_history_depth > 0) {
-    --screen_history_depth;
-    goto_screen(
-      screen_history[screen_history_depth].menu_function
-      #if !defined(LULZBOT_RESET_SELECTION_TO_FIRST_ON_MENU_BACK)
-      ,screen_history[screen_history_depth].encoder_position
-      #endif
-    );
+    menuPosition &sh = screen_history[--screen_history_depth];
+    goto_screen(sh.menu_function,
+    #if !defined(LULZBOT_RESET_SELECTION_TO_FIRST_ON_MENU_BACK)
+    sh.encoder_position,
+    #else
+    0ul,
+    #endif
+    sh.top_line, sh.items);
   }
   else
     return_to_status();
@@ -199,7 +199,7 @@ bool printer_busy() {
 /**
  * General function to go directly to a screen
  */
-void MarlinUI::goto_screen(screenFunc_t screen, const uint32_t encoder/*=0*/) {
+void MarlinUI::goto_screen(screenFunc_t screen, const uint32_t encoder/*=0*/, const uint8_t top/*=0*/, const uint8_t items/*=0*/) {
   if (currentScreen != screen) {
 
     #if ENABLED(ENABLE_LEVELING_FADE_HEIGHT)
@@ -248,6 +248,8 @@ void MarlinUI::goto_screen(screenFunc_t screen, const uint32_t encoder/*=0*/) {
 
     currentScreen = screen;
     encoderPosition = encoder;
+    encoderTopLine = top;
+    screen_items = items;
     if (screen == status_screen) {
       defer_status_screen(false);
       #if ENABLED(AUTO_BED_LEVELING_UBL)
@@ -316,7 +318,6 @@ void MarlinUI::synchronize(PGM_P const msg/*=NULL*/) {
  *   _thisItemNr is the index of each MENU_ITEM or STATIC_ITEM
  *   screen_items is the total number of items in the menu (after one call)
  */
-int8_t encoderLine, screen_items;
 void scroll_screen(const uint8_t limit, const bool is_menu) {
   ui.encoder_direction_menus();
   ENCODER_RATE_MULTIPLY(false);

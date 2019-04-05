@@ -971,9 +971,11 @@
   //#define STATUS_HEAT_PERCENT       // Show heating in a progress bar
 
   // Frivolous Game Options
-  #define MARLIN_BRICKOUT
-  #define MARLIN_INVADERS
-  #define MARLIN_SNAKE
+  #if defined(LULZBOT_GAMES_EASTER_EGG)
+    #define MARLIN_BRICKOUT
+    #define MARLIN_INVADERS
+    #define MARLIN_SNAKE
+  #endif
 
 #endif // HAS_GRAPHICAL_LCD
 

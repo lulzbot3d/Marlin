@@ -49,6 +49,8 @@
 #define MACHINE_CAN_STOP (EITHER(SDSUPPORT, HOST_PROMPT_SUPPORT) || defined(ACTION_ON_CANCEL))
 #define MACHINE_CAN_PAUSE (ANY(SDSUPPORT, HOST_PROMPT_SUPPORT, PARK_HEAD_ON_PAUSE) || defined(ACTION_ON_PAUSE))
 
+void menu_game();
+
 #if MACHINE_CAN_PAUSE
 
   void lcd_pause_job() {
@@ -149,6 +151,23 @@ void menu_led();
     #if ENABLED(PRINTCOUNTER)
       MENU_ITEM(submenu, MSG_INFO_STATS_MENU, menu_info_stats);          // Printer Statistics >
     #endif
+
+    #if ANY(MARLIN_BRICKOUT, MARLIN_INVADERS, MARLIN_SNAKE) && defined(LULZBOT_GAMES_EASTER_EGG)
+      MENU_ITEM_DUMMY();
+      MENU_ITEM_DUMMY();
+      MENU_ITEM(submenu, "Games", (
+      #if HAS_GAME_MENU
+        menu_game
+      #elif ENABLED(MARLIN_BRICKOUT)
+        lcd_goto_brickout
+      #elif ENABLED(MARLIN_INVADERS)
+        lcd_goto_invaders
+      #elif ENABLED(MARLIN_SNAKE)
+        lcd_goto_snake
+      #endif
+    ));
+    #endif
+
     END_MENU();
   }
 #endif
@@ -325,7 +344,7 @@ void menu_main() {
     #endif
   #endif
 
-  #if ANY(MARLIN_BRICKOUT, MARLIN_INVADERS, MARLIN_SNAKE)
+  #if ANY(MARLIN_BRICKOUT, MARLIN_INVADERS, MARLIN_SNAKE) && !defined(LULZBOT_GAMES_EASTER_EGG)
     MENU_ITEM(submenu, "Game", (
       #if HAS_GAME_MENU
         menu_game

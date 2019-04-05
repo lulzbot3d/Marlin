@@ -458,7 +458,9 @@
 #define Z_HOME_BUMP_MM LULZBOT_Z_HOME_BUMP_MM
 #define HOMING_BUMP_DIVISOR { 2, 2, 4 }  // Re-Bump Speed Divisor (Divides the Homing Feedrate)
 #define QUICK_HOME LULZBOT_QUICK_HOME // If homing includes X and Y, do a diagonal move initially
-//#define HOMING_BACKOFF_MM { 2, 2, 2 }  // (mm) Move away from the endstops after homing
+#ifdef LULZBOT_HOMING_BACKOFF_MM
+#define HOMING_BACKOFF_MM LULZBOT_HOMING_BACKOFF_MM // (mm) Move away from the endstops after homing
+#endif
 
 // When G28 is called, this option will make Y home before X
 #define HOME_Y_BEFORE_X LULZBOT_HOME_Y_BEFORE_X

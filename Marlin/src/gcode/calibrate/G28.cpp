@@ -411,7 +411,7 @@ void GcodeSuite::G28(const bool always_home_all) {
 
   #ifdef HOMING_BACKOFF_MM
     endstops.enable(false);
-    constexpr float backoff[XYZ] = HOMING_BACKOFF_MM;
+    constexpr float endstop_backoff[XYZ] = HOMING_BACKOFF_MM;
     const float backoff_x = doX ? ABS(endstop_backoff[X_AXIS]) * (X_HOME_DIR) : 0,
                 backoff_y = doY ? ABS(endstop_backoff[Y_AXIS]) * (Y_HOME_DIR) : 0,
                 backoff_z = doZ ? ABS(endstop_backoff[Z_AXIS]) * (Z_HOME_DIR) : 0;

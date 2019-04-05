@@ -648,36 +648,15 @@
 #endif  // LULZBOT_USE_HOME_BUTTON
 
 #if defined(LULZBOT_USE_HOME_BUTTON) || defined(LULZBOT_SENSORLESS_HOMING) || defined(LULZBOT_ENDSTOPS_ALWAYS_ON_DEFAULT)
-    #define LULZBOT_ENDSTOP_BACKOFF_FEEDRATE 5
-
     #if defined(LULZBOT_USE_HOME_BUTTON)
         /* On a TAZ, we need to raise the print head after homing to clear the button */
-        #define LULZBOT_ENDSTOP_BACKOFF_X   0
-        #define LULZBOT_ENDSTOP_BACKOFF_Y   0
-        #define LULZBOT_ENDSTOP_BACKOFF_Z   16
+        #define LULZBOT_HOMING_BACKOFF_MM   {0, 0, 16}
     #else
         /* Leaving the toolhead resting on the endstops with sensorless homing
          * will likely cause chatter if the machine is immediately re-homed, so
          * don't leave the head sitting on the endstops after homing. */
-        #define LULZBOT_ENDSTOP_BACKOFF_X   5
-        #define LULZBOT_ENDSTOP_BACKOFF_Y   5
-        #define LULZBOT_ENDSTOP_BACKOFF_Z   2
+        #define LULZBOT_HOMING_BACKOFF_MM   {5, 5, 2}
     #endif
-
-    #define LULZBOT_ENDSTOP_BACKOFF \
-        { \
-            const int backoff_x = (home_all || homeX) ? LULZBOT_ENDSTOP_BACKOFF_X : 0; \
-            const int backoff_y = (home_all || homeY) ? LULZBOT_ENDSTOP_BACKOFF_Y : 0; \
-            const int backoff_z = (home_all || homeZ) ? LULZBOT_ENDSTOP_BACKOFF_Z : 0; \
-            const bool saved_endstop_state = Endstops::global_enabled(); \
-            Endstops::enable_globally(false); \
-            do_blocking_move_to_z  (current_position[Z_AXIS] - backoff_z * LULZBOT_Z_HOME_DIR, LULZBOT_ENDSTOP_BACKOFF_FEEDRATE); \
-            do_blocking_move_to_xy (current_position[X_AXIS] - backoff_x * LULZBOT_X_HOME_DIR, \
-                                    current_position[Y_AXIS] - backoff_y * LULZBOT_Y_HOME_DIR, LULZBOT_ENDSTOP_BACKOFF_FEEDRATE); \
-            Endstops::enable_globally(saved_endstop_state); \
-        }
-#else
-    #define LULZBOT_ENDSTOP_BACKOFF
 #endif
 
 // Enable NO_MOTION_BEFORE_HOMING on newer printers that have no MAX endstops,

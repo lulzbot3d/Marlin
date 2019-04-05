@@ -1045,7 +1045,7 @@ void setup() {
   ui.init();
   ui.reset_status();
 
-  #if ENABLED(SHOW_BOOTSCREEN)
+  #if HAS_SPI_LCD && ENABLED(SHOW_BOOTSCREEN)
     ui.show_bootscreen();
   #endif
 
@@ -1142,6 +1142,9 @@ void loop() {
         wait_for_heatup = false;
         #if ENABLED(POWER_LOSS_RECOVERY)
           card.removeJobRecoveryFile();
+        #endif
+        #ifdef EVENT_GCODE_SD_STOP
+          enqueue_and_echo_commands_P(PSTR(EVENT_GCODE_SD_STOP));
         #endif
       }
     #endif // SDSUPPORT

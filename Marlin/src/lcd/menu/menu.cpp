@@ -37,7 +37,7 @@
   #include "../../module/configuration_store.h"
 #endif
 
-#if WATCH_HOTENDS || WATCH_BED || ENABLED(BABYSTEP_ZPROBE_OFFSET)
+#if WATCH_HOTENDS || WATCH_BED
   #include "../../module/temperature.h"
 #endif
 
@@ -59,7 +59,7 @@ int8_t encoderTopLine, encoderLine, screen_items;
 typedef struct {
   screenFunc_t menu_function;
   uint32_t encoder_position;
-  uint8_t top_line, items;
+  int8_t top_line, items;
 } menuPosition;
 menuPosition screen_history[6];
 uint8_t screen_history_depth = 0;
@@ -358,6 +358,8 @@ void MarlinUI::completion_feedback(const bool good/*=true*/) {
 
 #if ENABLED(BABYSTEP_ZPROBE_OFFSET)
 
+  #include "../../feature/babystep.h"
+
   void lcd_babystep_zoffset() {
     if (ui.use_click()) {LULZBOT_SAVE_ZOFFSET_TO_EEPROM; return ui.goto_previous_screen_no_defer();}
     ui.defer_status_screen();
@@ -382,7 +384,7 @@ void MarlinUI::completion_feedback(const bool good/*=true*/) {
                   ;
       if (WITHIN(new_offs, Z_PROBE_OFFSET_RANGE_MIN, Z_PROBE_OFFSET_RANGE_MAX)) {
 
-        thermalManager.babystep_axis(Z_AXIS, babystep_increment);
+        babystep.add_steps(Z_AXIS, babystep_increment);
 
         if (do_probe) zprobe_zoffset = new_offs;
         #if ENABLED(BABYSTEP_HOTEND_Z_OFFSET)

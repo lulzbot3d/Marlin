@@ -504,7 +504,7 @@ class InterfaceSettingsScreen : public BaseScreen, public CachedScreen<INTERFACE
       // TODO: The following should really be stored in the EEPROM
       #if ENABLED(BACKLASH_GCODE)
         float backlash_distance_mm[XYZ];
-        float backlash_correction;
+        uint8_t backlash_correction;
         #ifdef BACKLASH_SMOOTHING_MM
           float backlash_smoothing_mm;
         #endif

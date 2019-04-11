@@ -1252,28 +1252,12 @@
     #define LULZBOT_TEMP_SENSOR_0                        5
     #define LULZBOT_TEMP_SENSOR_BED                      0
     #define LULZBOT_EXTRUDE_MINTEMP                      0
-    #define LULZBOT_MIN_TEMP_WORKAROUND
 #else
     #define LULZBOT_TEMP_SENSOR_0                        5
     #define LULZBOT_TEMP_SENSOR_BED                      7
 
     #define LULZBOT_PREVENT_COLD_EXTRUSION
     #define LULZBOT_EXTRUDE_MINTEMP                    120
-
-    // Marlin 1.1.5 no longer issues MIN_TEMP errors and appears to handle
-    // thermal runaway via other means. However, since our users expect a
-    // MIN_TEMP error when disconnecting their print head, this could be
-    // perceived as a safety issue. This is a workaround in "temperature.cpp"
-    // to re-enable that functionality.
-
-    #define LULZBOT_MIN_TEMP_WORKAROUND \
-        static int delayBeforeStartMeasuring = OVERSAMPLENR; \
-            if(delayBeforeStartMeasuring > 0) { \
-                delayBeforeStartMeasuring--; \
-            } else { \
-                if (thermalManager.degHotend(e) > HEATER_0_MAXTEMP) max_temp_error(0); \
-                if (thermalManager.degHotend(e) < HEATER_0_MINTEMP) min_temp_error(0); \
-            }
 #endif
 
 #define LULZBOT_TEMP_RESIDENCY_TIME                  1

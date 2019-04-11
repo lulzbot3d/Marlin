@@ -936,11 +936,6 @@ void Temperature::manage_heater() {
   #endif
 
   HOTEND_LOOP() {
-
-    #if defined(LULZBOT_MIN_TEMP_WORKAROUND)
-      LULZBOT_MIN_TEMP_WORKAROUND
-    #endif
-
     #if HEATER_IDLE_HANDLER
       hotend_idle[e].update(ms);
     #endif

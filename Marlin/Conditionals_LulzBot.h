@@ -2253,6 +2253,7 @@
     #define LULZBOT_DISABLE_KILL_BUTTON
     #define LULZBOT_EXTRUDER_STR "Extruder"
     #define LULZBOT_RESET_SELECTION_TO_FIRST_ON_MENU_BACK
+    #define LULZBOT_LCD_Z_HOTEND_OFFSET_MIN -2
     #define LULZBOT_CPU_ST7920_DELAY_2 300 // Increase delay from 250 to 300 to avoid display lock ups
     #define MSG_MOVE_E _UxGT("Extruder ") // Add space to extruder string
     #define MSG_MOTION _UxGT("Movement") // Motion -> Movement

@@ -139,7 +139,7 @@ static void lcd_factory_settings() {
       MENU_MULTIPLIER_ITEM_EDIT_CALLBACK(float52, MSG_X_OFFSET, &hotend_offset[X_AXIS][1], -10.0, 10.0, _recalc_offsets);
     #endif
     MENU_MULTIPLIER_ITEM_EDIT_CALLBACK(float52, MSG_Y_OFFSET, &hotend_offset[Y_AXIS][1], -10.0, 10.0, _recalc_offsets);
-    MENU_MULTIPLIER_ITEM_EDIT_CALLBACK(float52, MSG_Z_OFFSET, &hotend_offset[Z_AXIS][1], Z_PROBE_LOW_POINT, 10.0, _recalc_offsets);
+    MENU_MULTIPLIER_ITEM_EDIT_CALLBACK(float52, MSG_Z_OFFSET, &hotend_offset[Z_AXIS][1], LULZBOT_LCD_Z_HOTEND_OFFSET_MIN, 10.0, _recalc_offsets);
     #if ENABLED(EEPROM_SETTINGS)
       MENU_ITEM(function, MSG_STORE_EEPROM, lcd_store_settings);
     #endif

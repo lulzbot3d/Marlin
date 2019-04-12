@@ -287,8 +287,12 @@
     #define LULZBOT_USE_NORMALLY_CLOSED_ENDSTOPS
     #define LULZBOT_USE_Z_BELT
     #define LULZBOT_BACKLASH_COMPENSATION
-    #define LULZBOT_HAS_CALIBRATION_CUBE
-    #define LULZBOT_CALIBRATION_GCODE
+    #ifndef TOOLHEAD_Yellowfin_DualExtruderV3
+        // The nozzles on the yellowfin are too close together
+        // to run the calibration routine on the cube
+        #define LULZBOT_HAS_CALIBRATION_CUBE
+        #define LULZBOT_CALIBRATION_GCODE
+    #endif
     #define LULZBOT_BAUDRATE 250000
     #define LULZBOT_PRINTCOUNTER
     #define LULZBOT_MACHINE_UUID "fd546ced-5941-44e4-8d17-5d494bfc2ca3"

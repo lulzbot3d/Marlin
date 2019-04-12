@@ -55,43 +55,43 @@ namespace FTDI {
       #endif
     };
 
-    inline void        spi_write_8    (uint8_t val)          {spi_send(val);};
-    inline uint8_t     spi_read_8     ()                     {return spi_recv();};
+    inline void       spi_write_8    (uint8_t val)    {spi_send(val);};
+    inline uint8_t    spi_read_8     ()               {return spi_recv();};
 
     namespace least_significant_byte_first {
-      inline void     spi_write_16   (uint16_t val)          {spi_send(val >> 0);
-                                                              spi_send(val >> 8);};
-      inline void     spi_write_32   (uint32_t val)          {spi_send(val >> 0);
-                                                              spi_send(val >> 8);
-                                                              spi_send(val >> 16);
-                                                              spi_send(val >> 24);};
+      inline void     spi_write_16   (uint16_t val)   {spi_send(val >> 0);
+                                                       spi_send(val >> 8);};
+      inline void     spi_write_32   (uint32_t val)   {spi_send(val >> 0);
+                                                       spi_send(val >> 8);
+                                                       spi_send(val >> 16);
+                                                       spi_send(val >> 24);};
 
-      inline uint8_t  spi_read_8     ()                      {return spi_recv();};
-      inline uint16_t spi_read_16    ()                      {return (((uint16_t) spi_recv()) <<  0) |
-                                                                     (((uint16_t) spi_recv()) <<  8);};
-      inline uint32_t spi_read_32    ()                      {return (((uint32_t) spi_recv()) <<  0) |
-                                                                     (((uint32_t) spi_recv()) <<  8) |
-                                                                     (((uint32_t) spi_recv()) << 16) |
-                                                                     (((uint32_t) spi_recv()) << 24);};
+      inline uint8_t  spi_read_8     ()               {return spi_recv();};
+      inline uint16_t spi_read_16    ()               {return (((uint16_t) spi_recv()) <<  0) |
+                                                              (((uint16_t) spi_recv()) <<  8);};
+      inline uint32_t spi_read_32    ()               {return (((uint32_t) spi_recv()) <<  0) |
+                                                              (((uint32_t) spi_recv()) <<  8) |
+                                                              (((uint32_t) spi_recv()) << 16) |
+                                                              (((uint32_t) spi_recv()) << 24);};
     }
 
     namespace most_significant_byte_first {
-      inline void     spi_write_16   (uint16_t val)          {spi_send(val >> 8);
-                                                              spi_send(val >> 0);};
-      inline void     spi_write_24   (uint32_t val)          {spi_send(val >> 16);
-                                                              spi_send(val >> 8);
-                                                              spi_send(val >> 0);};
-      inline void     spi_write_32   (uint32_t val)          {spi_send(val >> 24);
-                                                              spi_send(val >> 16);
-                                                              spi_send(val >> 8);
-                                                              spi_send(val >> 0);};
+      inline void     spi_write_16   (uint16_t val)   {spi_send(val >> 8);
+                                                       spi_send(val >> 0);};
+      inline void     spi_write_24   (uint32_t val)   {spi_send(val >> 16);
+                                                       spi_send(val >> 8);
+                                                       spi_send(val >> 0);};
+      inline void     spi_write_32   (uint32_t val)   {spi_send(val >> 24);
+                                                       spi_send(val >> 16);
+                                                       spi_send(val >> 8);
+                                                       spi_send(val >> 0);};
 
-      inline uint16_t spi_read_16    ()                      {return (((uint16_t) spi_recv()) <<  8) |
-                                                                     (((uint16_t) spi_recv()) <<  0);};
-      inline uint32_t spi_read_32    ()                      {return (((uint32_t) spi_recv()) << 24) |
-                                                                     (((uint32_t) spi_recv()) << 16) |
-                                                                     (((uint32_t) spi_recv()) <<  8) |
-                                                                     (((uint32_t) spi_recv()) <<  0);};
+      inline uint16_t spi_read_16    ()               {return (((uint16_t) spi_recv()) <<  8) |
+                                                              (((uint16_t) spi_recv()) <<  0);};
+      inline uint32_t spi_read_32    ()               {return (((uint32_t) spi_recv()) << 24) |
+                                                              (((uint32_t) spi_recv()) << 16) |
+                                                              (((uint32_t) spi_recv()) <<  8) |
+                                                              (((uint32_t) spi_recv()) <<  0);};
     }
 
     inline uint8_t ram_write(const uint8_t *p) {return *p;}
@@ -103,22 +103,22 @@ namespace FTDI {
     // The template parameter op is an inlineable function which is applied to each byte.
 
     template<bulk_write_op byte_op>
-    void     spi_write_bulk (const void *data, uint16_t len, uint8_t padding) {
+    void spi_write_bulk(const void *data, uint16_t len, uint8_t padding) {
       const uint8_t* p = (const uint8_t *)data;
-      while(len--)      spi_send(byte_op(p++));
-      while(padding--)  spi_send(0);
+      while(len--)     spi_send(byte_op(p++));
+      while(padding--) spi_send(0);
     }
 
     template<bulk_write_op byte_op>
-    void     spi_write_bulk (const void *data, uint16_t len) {
+    void spi_write_bulk(const void *data, uint16_t len) {
       const uint8_t* p = (const uint8_t *)data;
-      while(len--)      spi_send(byte_op(p++));
+      while(len--) spi_send(byte_op(p++));
     }
 
-    void     spi_read_bulk   (      void *data, uint16_t len);
-    bool     spi_verify_bulk (const void *data, uint16_t len);
+    void spi_read_bulk(      void *data, uint16_t len);
+    bool spi_verify_bulk(const void *data, uint16_t len);
 
-    void     ftdi_reset (void);
-    void     test_pulse(void);
+    void ftdi_reset(void);
+    void test_pulse(void);
   }
 }

@@ -1428,9 +1428,9 @@
     #define LULZBOT_STANDARD_Y_BED_SIZE        275
 
 #elif defined(LULZBOT_Redgum_TAZWorkhorse) || defined(LULZBOT_ArchimRedgum_Experimental)
-    #define LULZBOT_STANDARD_X_MAX_POS         300
-    #define LULZBOT_STANDARD_X_MIN_POS         -32
-    #define LULZBOT_STANDARD_Y_MAX_POS         311
+    #define LULZBOT_STANDARD_X_MAX_POS         295
+    #define LULZBOT_STANDARD_X_MIN_POS         -50
+    #define LULZBOT_STANDARD_Y_MAX_POS         308
     #define LULZBOT_STANDARD_Y_MIN_POS         -17
 
     #define LULZBOT_STANDARD_X_BED_SIZE        280
@@ -2196,6 +2196,7 @@
     #define LULZBOT_XYZ_HOLLOW_FRAME_DISABLE
     #define LULZBOT_MENU_HOLLOW_FRAME_DISABLE
     #define LULZBOT_USE_SMALL_INFOFONT
+    #define LULZBOT_BOOT_MARLIN_LOGO_SMALL
     #if defined(LULZBOT_USE_AUTOLEVELING)
         #define LULZBOT_MENU_BED_LEVELING_GCODE "G28 XY\nM109 S175\nG28 Z\nM109 R145\nG12\nG29\nM104 S0"
     #endif

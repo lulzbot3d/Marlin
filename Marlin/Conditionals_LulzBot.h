@@ -2228,13 +2228,6 @@
     #define LULZBOT_HIDE_INITIALIZE_EEPROM
     #define LULZBOT_ABOUT_FIRMWARE_MENU
     #define LULZBOT_NO_BED_LEVELING_IN_LCD
-    #define LULZBOT_PRECISION_ESTEP
-    #if defined(LULZBOT_USE_Z_SCREW)
-        #define LULZBOT_PRECISION_XYZ_STEPS float62
-    #else
-        #define LULZBOT_PRECISION_XYZ_STEPS float3
-    #endif
-    #define LULZBOT_PRECISION_E_STEPS float3
     #define LULZBOT_PRECISION_ZOFFSET ftostr52
     #define LULZBOT_LCD_SET_PROGRESS_MANUALLY
     #define LULZBOT_SCROLL_LONG_FILENAMES
@@ -2246,9 +2239,6 @@
     #define LULZBOT_CPU_ST7920_DELAY_2 300 // Increase delay from 250 to 300 to avoid display lock ups
     #define MSG_MOVE_E _UxGT("Extruder ") // Add space to extruder string
     #define MSG_MOTION _UxGT("Movement") // Motion -> Movement
-#else
-    #define LULZBOT_PRECISION_XYZ_STEPS float62
-    #define LULZBOT_PRECISION_E_STEPS   float62
 #endif
 
 #if defined(LULZBOT_LIGHTWEIGHT_UI)

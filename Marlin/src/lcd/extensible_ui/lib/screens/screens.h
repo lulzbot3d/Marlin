@@ -137,6 +137,7 @@ class DialogBoxBaseClass : public BaseScreen {
     static void drawYesNoButtons();
     static void drawOkayButton();
     static void drawSpinner();
+    static void drawButton(const progmem_str);
 
     static void onRedraw(draw_mode_t) {};
   public:
@@ -221,6 +222,18 @@ class StatusScreen : public BaseScreen, public CachedScreen<STATUS_SCREEN_CACHE,
 
       static void onRedraw(draw_mode_t);
       static bool onTouchHeld(uint8_t tag);
+      static bool onTouchEnd(uint8_t tag);
+      static void onIdle();
+
+  };
+
+  class BioPrintingDialogBox : public SpinnerDialogBox {
+    public:
+      static void onRedraw(draw_mode_t);
+
+      static void show();
+
+      static void onIdle();
       static bool onTouchEnd(uint8_t tag);
   };
 #endif

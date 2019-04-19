@@ -84,6 +84,9 @@ SCREEN_TABLE {
   DECL_SCREEN(LockScreen),
   DECL_SCREEN(FilesScreen),
   DECL_SCREEN(EndstopStatesScreen),
+#if ENABLED(EXTENSIBLE_UI) && defined(LULZBOT_USE_BIOPRINTER_UI)
+  DECL_SCREEN(BioPrintingDialogBox),
+#endif
 #if ENABLED(DEVELOPER_SCREENS)
   DECL_SCREEN(DeveloperMenu),
   DECL_SCREEN(ConfirmEraseFlashDialogBox),

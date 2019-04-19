@@ -65,9 +65,16 @@ void DialogBoxBaseClass::drawOkayButton() {
      .tag(1).button( BTN_POS(1,8), BTN_SIZE(2,1), F("Okay"));
 }
 
+void DialogBoxBaseClass::drawButton(const progmem_str label) {
+  CommandProcessor cmd;
+  cmd.font(font_medium)
+     .tag(1).button( BTN_POS(1,8), BTN_SIZE(2,1), label);
+}
+
 void DialogBoxBaseClass::drawSpinner() {
   CommandProcessor cmd;
-  cmd.spinner(BTN_POS(1,5), BTN_SIZE(2,2)).execute();
+  cmd.cmd(COLOR_RGB(text_enabled))
+     .spinner(BTN_POS(1,4), BTN_SIZE(2,3)).execute();
 }
 
 bool DialogBoxBaseClass::onTouchEnd(uint8_t tag) {

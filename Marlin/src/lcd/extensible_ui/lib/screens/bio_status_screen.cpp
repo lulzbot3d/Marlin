@@ -143,4 +143,9 @@ void StatusScreen::setStatusMessage(const char * const message) {
   }
 }
 
+void StatusScreen::onIdle() {
+  if(isPrintingFromMedia())
+    BioPrintingDialogBox::show();
+}
+
 #endif // EXTENSIBLE_UI

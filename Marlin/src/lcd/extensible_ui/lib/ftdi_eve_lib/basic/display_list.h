@@ -90,15 +90,15 @@ namespace FTDI {
   inline uint32_t SCISSOR_SIZE(uint16_t w,uint16_t h) {
     return DL::SCISSOR_SIZE |
       (FTDI::ftdi_chip >= 810
-        ? ((w&2047UL)<<12)|(h&2047UL)
-        : ((w& 511UL)<<10)|(h& 511UL));
+        ? ((w&4095UL)<<12)|(h&4095UL)
+        : ((w&1023UL)<<10)|(h&1023UL));
   }
   inline uint32_t SCISSOR_XY()                                 {return DL::SCISSOR_XY;}
   inline uint32_t SCISSOR_SIZE() {
     return DL::SCISSOR_SIZE |
       (FTDI::ftdi_chip >= 810
         ? (2048UL<<12)|(2048UL)
-        : ( 511UL<<10)|( 511UL));
+        : ( 512UL<<10)|( 512UL));
   }
   inline uint32_t STENCIL_FUNC(uint16_t func, uint8_t ref, uint8_t mask)
                                                                {return DL::STENCIL_FUNC|((func&7UL)<<16)|((ref&255UL)<<8)|(mask&255UL);}

@@ -209,6 +209,7 @@ namespace FTDI_FT800_DL {
 }
 
 namespace FTDI_FT810_DL {
+  constexpr uint32_t NOP                                = 0x25000000;
   constexpr uint32_t BITMAP_LAYOUT_H                    = 0x28000000;
   constexpr uint32_t BITMAP_SIZE_H                      = 0x29000000;
   constexpr uint32_t VERTEX_FORMAT                      = 0x27000000;

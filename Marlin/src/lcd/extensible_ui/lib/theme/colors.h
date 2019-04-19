@@ -34,30 +34,31 @@ namespace Theme {
     (uint32_t((((a) & 0x0000FF) >>  0) *    f + (((b) & 0x0000FF) >>  0) * (1-f))  <<  0))
 
   #ifndef LULZBOT_USE_BIOPRINTER_UI
-    constexpr uint32_t theme_darkest = COLOR_CORRECTION(0x444444);
-    constexpr uint32_t theme_dark    = COLOR_CORRECTION(0x777777);
+    constexpr uint32_t theme_darkest   = COLOR_CORRECTION(0x444444);
+    constexpr uint32_t theme_dark      = COLOR_CORRECTION(0x777777);
 
-    constexpr uint32_t background    = theme_darkest;
+    constexpr uint32_t background      = theme_darkest;
 
-    constexpr uint32_t text_enabled  = 0xFFFFFF;
-    constexpr uint32_t text_disabled = theme_dark;
+    constexpr uint32_t text_enabled    = 0xFFFFFF;
+    constexpr uint32_t text_disabled   = theme_dark;
+
+    constexpr uint32_t highlight_color = COLOR_BLEND(0xC1DB2F,0x788814,0.33);
   #else
-    constexpr uint32_t theme_darkest = 0x00AA00;
-    constexpr uint32_t theme_dark    = 0x005500;
+    constexpr uint32_t theme_darkest   = 0x005500;
+    constexpr uint32_t theme_dark      = 0x00AA00;
 
-    constexpr uint32_t background    = 0xFFFFFF;
+    constexpr uint32_t background      = 0xFFFFFF;
 
-    constexpr uint32_t text_enabled  = 0x00AA00;
-    constexpr uint32_t text_disabled = 0x333333;
+    constexpr uint32_t text_enabled    = theme_darkest;
+    constexpr uint32_t text_disabled   = 0x333333;
 
-    constexpr uint32_t shadow_rgb    = 0xF3E0E0;
-    constexpr uint32_t fill_rgb      = theme_darkest;
-    constexpr uint32_t stroke_rgb    = 0x005500;
-    constexpr uint32_t syringe_rgb   = 0xE2F2DA;
+    constexpr uint32_t shadow_rgb      = 0xF3E0E0;
+    constexpr uint32_t fill_rgb        = theme_dark;
+    constexpr uint32_t stroke_rgb      = theme_darkest;
+    constexpr uint32_t syringe_rgb     = 0xE2F2DA;
+
+    constexpr uint32_t highlight_color = theme_dark;
   #endif
-
-
-
 
   constexpr uint32_t x_axis        = COLOR_CORRECTION(0xFF0000);
   constexpr uint32_t y_axis        = COLOR_CORRECTION(0x00BB00);
@@ -65,10 +66,6 @@ namespace Theme {
   constexpr uint32_t e_axis        = theme_dark;
   constexpr uint32_t feedrate      = theme_dark;
   constexpr uint32_t other         = theme_dark;
-
-  // Files screens
-
-  constexpr uint32_t files_selected = COLOR_BLEND(0xC1DB2F,0x788814,0.33);
 
   // Status screen
   constexpr uint32_t progress      = theme_dark;
@@ -101,17 +98,16 @@ namespace Theme {
     struct default_btn {
       static constexpr uint32_t rgb_enabled  = 0xFFFFFF;
       static constexpr uint32_t grad_enabled = 0xFFFFFF;
-      static constexpr uint32_t fg_enabled   = fill_rgb;
+      static constexpr uint32_t fg_enabled   = theme_darkest;
       static constexpr uint32_t rgb_disabled = background;
       static constexpr uint32_t fg_disabled  = background;
     };
   #endif
 
-
   struct light_btn {
     static constexpr uint32_t rgb_enabled  = 0xFFFFFF;
     static constexpr uint32_t grad_enabled = 0xFFFFFF;
-    static constexpr uint32_t fg_enabled   = COLOR_BLEND(0xC1DB2F,0x788814,0.33);
+    static constexpr uint32_t fg_enabled   = highlight_color;
     static constexpr uint32_t rgb_disabled = background;
     static constexpr uint32_t fg_disabled  = background;
   };

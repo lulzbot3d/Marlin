@@ -330,6 +330,8 @@
         #define LULZBOT_LIGHTWEIGHT_UI
     #endif
     #define LULZBOT_SDSUPPORT
+    #define LULZBOT_USB_FLASH_DRIVE_SUPPORT
+    #define LULZBOT_USB_READ_ERROR_IS_FATAL
 #endif
 
 #if defined(LULZBOT_ArchimTAZ6_Experimental)

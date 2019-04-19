@@ -34,8 +34,10 @@ using namespace Theme;
 void FilesScreen::onEntry() {
   screen_data.FilesScreen.cur_page        = 0;
   screen_data.FilesScreen.selected_tag    = 0xFF;
+  #if ENABLED(SCROLL_LONG_FILENAMES) && (FTDI_API_LEVEL >= 810)
+    CLCD::mem_write_32(CLCD::REG::MACRO_0,DL::NOP);
+  #endif
   gotoPage(0);
-
   BaseScreen::onEntry();
 }
 
@@ -80,19 +82,19 @@ void FilesScreen::drawFileButton(const char* filename, uint8_t tag, bool is_dir,
   const uint8_t line = getLineForTag(tag)+1;
   CommandProcessor cmd;
   cmd.tag(tag);
-  cmd.cmd(COLOR_RGB(is_highlighted ? files_selected : background));
+  cmd.cmd(COLOR_RGB(is_highlighted ? highlight_color : background));
   cmd.font(font_medium)
      .rectangle( 0, BTN_Y(header_h+line), display_width, BTN_H(1));
-  cmd.cmd(COLOR_RGB(default_btn::rgb_enabled));
+  cmd.cmd(COLOR_RGB(is_highlighted ? default_btn::rgb_enabled : text_enabled));
   #if ENABLED(SCROLL_LONG_FILENAMES)
     if(is_highlighted) {
       cmd.cmd(SAVE_CONTEXT());
       cmd.cmd(MACRO(0));
     }
   #endif
-  cmd.text  ( BTN_POS(1,header_h+line), BTN_SIZE(6,1), filename, OPT_CENTERY);
+  cmd.text  (BTN_POS(1,header_h+line), BTN_SIZE(6,1), filename, OPT_CENTERY);
   if(is_dir) {
-    cmd.text( BTN_POS(1,header_h+line), BTN_SIZE(6,1), F("> "),  OPT_CENTERY | OPT_RIGHTX);
+    cmd.text(BTN_POS(1,header_h+line), BTN_SIZE(6,1), F("> "),  OPT_CENTERY | OPT_RIGHTX);
   }
   #if ENABLED(SCROLL_LONG_FILENAMES)
     if(is_highlighted) {
@@ -253,7 +255,8 @@ bool FilesScreen::onTouchEnd(uint8_t tag) {
 void FilesScreen::onIdle() {
   #if ENABLED(SCROLL_LONG_FILENAMES) && (FTDI_API_LEVEL >= 810)
     if(FTDI::ftdi_chip >= 810) {
-      CLCD::mem_write_32(CLCD::REG::MACRO_0,VERTEX_TRANSLATE_X(-screen_data.FilesScreen.scroll_pos));
+      CLCD::mem_write_32(CLCD::REG::MACRO_0,
+        VERTEX_TRANSLATE_X(-int32_t(screen_data.FilesScreen.scroll_pos)));
       if(screen_data.FilesScreen.scroll_pos < screen_data.FilesScreen.scroll_max * 16)
         screen_data.FilesScreen.scroll_pos++;
     }

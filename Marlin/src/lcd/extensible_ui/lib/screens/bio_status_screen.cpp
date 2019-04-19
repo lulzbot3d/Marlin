@@ -131,4 +131,16 @@ bool StatusScreen::onTouchHeld(uint8_t tag) {
   return false;
 }
 
+void StatusScreen::setStatusMessage(progmem_str message) {
+  char buff[strlen_P((const char * const)message)+1];
+  strcpy_P(buff, (const char * const) message);
+  setStatusMessage(buff);
+}
+
+void StatusScreen::setStatusMessage(const char * const message) {
+  if(AT_SCREEN(StatusScreen)) {
+    current_screen.onRefresh();
+  }
+}
+
 #endif // EXTENSIBLE_UI

@@ -216,14 +216,13 @@ class StatusScreen : public BaseScreen, public CachedScreen<STATUS_SCREEN_CACHE,
 #else
   class StatusScreen : public BaseScreen, public UncachedScreen {
     public:
-      static void setStatusMessage(const char *) {}
-      static void setStatusMessage(progmem_str) {}
+      static void setStatusMessage(const char *);
+      static void setStatusMessage(progmem_str);
 
       static void onRedraw(draw_mode_t);
       static bool onTouchHeld(uint8_t tag);
       static bool onTouchEnd(uint8_t tag);
   };
-
 #endif
 
 class MainMenu : public BaseScreen, public CachedScreen<MENU_SCREEN_CACHE> {

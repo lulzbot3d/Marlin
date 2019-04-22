@@ -483,11 +483,6 @@
 // Q&A wants to be able to use M226 on endstops switches
 #define LULZBOT_NO_PIN_PROTECTION_ON_M226
 
-// Often Marlin shows the "Home XYZ first" message, but
-// never clears that message. The following causes
-// Marlin to print a new message when the axis are homed
-#define LULZBOT_HOMING_MESSAGE_WORKAROUND
-
 /************************* EXPERIMENTAL FEATURES ******************************/
 
 #if defined(LULZBOT_USE_EXPERIMENTAL_FEATURES)
@@ -2235,10 +2230,8 @@
     #define LULZBOT_SCROLL_LONG_FILENAMES
     #define LULZBOT_BABYSTEP_ZPROBE_GFX_OVERLAY
     #define LULZBOT_DISABLE_KILL_BUTTON
-    #define LULZBOT_EXTRUDER_STR "Extruder"
     #define LULZBOT_RESET_SELECTION_TO_FIRST_ON_MENU_BACK
     #define LULZBOT_LCD_Z_HOTEND_OFFSET_MIN -2
-    #define LULZBOT_CPU_ST7920_DELAY_2 300 // Increase delay from 250 to 300 to avoid display lock ups
     #define MSG_MOVE_E _UxGT("Extruder ") // Add space to extruder string
     #define MSG_MOTION _UxGT("Movement") // Motion -> Movement
 #endif
@@ -2257,7 +2250,6 @@
     #define LULZBOT_DISABLE_DUE_SD_MMC
     #define LULZBOT_LCD_SET_PROGRESS_MANUALLY
     #define LULZBOT_COOLING_MESSAGES
-    #define LULZBOT_EXTRUDER_STR "Hot End"
     #define LULZBOT_NO_CONFIRM_REHEAT_AFTER_PAUSING
     #define LULZBOT_SCROLL_LONG_FILENAMES
 #endif
@@ -2291,6 +2283,8 @@
         #define LULZBOT_BABYSTEP_HOTEND_Z_OFFSET
     #endif
 #endif
+
+#define LULZBOT_EXTRUDER_STR "Hot End"
 
 /***************************** CUSTOM SPLASH SCREEN *****************************/
 

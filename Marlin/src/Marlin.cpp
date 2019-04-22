@@ -353,8 +353,6 @@ void disable_all_steppers() {
 
     #if defined(LULZBOT_RUNOUT_HANDLING_WORKAROUNDS)
     const bool run_runout_script = IS_SD_PRINTING();
-    if(!IS_SD_PRINTING())
-      runout.reset();
     #else
     const bool run_runout_script = !runout.host_handling;
     #endif

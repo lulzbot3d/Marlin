@@ -63,9 +63,9 @@ namespace Theme {
   constexpr uint32_t x_axis        = COLOR_CORRECTION(0xFF0000);
   constexpr uint32_t y_axis        = COLOR_CORRECTION(0x00BB00);
   constexpr uint32_t z_axis        = COLOR_CORRECTION(0x0000FF);
-  constexpr uint32_t e_axis        = theme_dark;
-  constexpr uint32_t feedrate      = theme_dark;
-  constexpr uint32_t other         = theme_dark;
+  constexpr uint32_t e_axis        = COLOR_CORRECTION(0x777777);
+  constexpr uint32_t feedrate      = COLOR_CORRECTION(0x777777);
+  constexpr uint32_t other         = COLOR_CORRECTION(0x777777);
 
   // Status screen
   constexpr uint32_t progress      = theme_dark;

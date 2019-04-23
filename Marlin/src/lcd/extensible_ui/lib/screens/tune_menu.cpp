@@ -32,7 +32,7 @@ using namespace Theme;
 void TuneMenu::onRedraw(draw_mode_t what) {
   if(what & BACKGROUND) {
     CommandProcessor cmd;
-    cmd.cmd(CLEAR_COLOR_RGB(background))
+    cmd.cmd(CLEAR_COLOR_RGB(bg_color))
        .cmd(CLEAR(true,true,true))
        .font(font_medium);
   }
@@ -84,7 +84,7 @@ void TuneMenu::onRedraw(draw_mode_t what) {
         .enabled(0)
       #endif
       .tag(8)             .button( BTN_POS(1,7), BTN_SIZE(2,1), F("Cancel Print"))
-      .tag(1).style(LIGHT_BTN)
+      .tag(1).style(ACTION_BTN)
                           .button( BTN_POS(1,8), BTN_SIZE(2,1), F("Back"));
     #else // USE_PORTRAIT_ORIENTATION
        .tag(2).enabled(1) .button( BTN_POS(1,1), BTN_SIZE(1,1), F("Temperature"))
@@ -124,7 +124,7 @@ void TuneMenu::onRedraw(draw_mode_t what) {
           .enabled(0)
         #endif
        .tag(9).button( BTN_POS(1,4), BTN_SIZE(1,1), F("Filament Options"))
-       .tag(1).style(LIGHT_BTN) .button( BTN_POS(2,4), BTN_SIZE(1,1), F("Back"));
+       .tag(1).style(ACTION_BTN) .button( BTN_POS(2,4), BTN_SIZE(1,1), F("Back"));
     #endif
   }
   #undef GRID_COLS

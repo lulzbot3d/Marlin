@@ -59,7 +59,7 @@ void InterfaceSettingsScreen::onRedraw(draw_mode_t what) {
       #define GRID_ROWS 6
     #endif
 
-    cmd.cmd(CLEAR_COLOR_RGB(background))
+    cmd.cmd(CLEAR_COLOR_RGB(bg_color))
        .cmd(CLEAR(true,true,true))
        .tag(0)
        .font(font_medium)
@@ -96,11 +96,11 @@ void InterfaceSettingsScreen::onRedraw(draw_mode_t what) {
     #define EDGE_R 0
     #if defined(USE_PORTRAIT_ORIENTATION)
       .tag(6).button (BTN_POS(1,6), BTN_SIZE(4,1), F("Customize Sounds"))
-      .style(LIGHT_BTN)
+      .style(ACTION_BTN)
       .tag(1).button (BTN_POS(1,7), BTN_SIZE(4,1), F("Back"));
     #else
       .tag(6).button (BTN_POS(1,6), BTN_SIZE(2,1), F("Customize Sounds"))
-      .style(LIGHT_BTN)
+      .style(ACTION_BTN)
       .tag(1).button (BTN_POS(3,6), BTN_SIZE(2,1), F("Back"));
     #endif
   }

@@ -101,7 +101,7 @@ void ChangeFilamentScreen::onRedraw(draw_mode_t what) {
   #endif
 
   if(what & BACKGROUND) {
-    cmd.cmd(CLEAR_COLOR_RGB(background))
+    cmd.cmd(CLEAR_COLOR_RGB(bg_color))
        .cmd(CLEAR(true,true,true))
        .tag(0)
     #if defined(USE_PORTRAIT_ORIENTATION)
@@ -159,12 +159,12 @@ void ChangeFilamentScreen::onRedraw(draw_mode_t what) {
       cmd.text(BTN_POS(1,6), BTN_SIZE(1,1), F("Hot!"));
     }
 
-    const uint32_t tog2  = screen_data.ChangeFilamentScreen.t_tag == 2  ? LIGHT_BTN : 0;
-    const uint32_t tog3  = screen_data.ChangeFilamentScreen.t_tag == 3  ? LIGHT_BTN : 0;
-    const uint32_t tog4  = screen_data.ChangeFilamentScreen.t_tag == 4  ? LIGHT_BTN : 0;
-    const uint32_t tog10 = screen_data.ChangeFilamentScreen.e_tag == 10 ? LIGHT_BTN : 0;
+    const uint32_t tog2  = screen_data.ChangeFilamentScreen.t_tag == 2  ? ACTION_BTN : 0;
+    const uint32_t tog3  = screen_data.ChangeFilamentScreen.t_tag == 3  ? ACTION_BTN : 0;
+    const uint32_t tog4  = screen_data.ChangeFilamentScreen.t_tag == 4  ? ACTION_BTN : 0;
+    const uint32_t tog10 = screen_data.ChangeFilamentScreen.e_tag == 10 ? ACTION_BTN : 0;
     #if HOTENDS > 1
-    const uint32_t tog11 = screen_data.ChangeFilamentScreen.e_tag == 11 ? LIGHT_BTN : 0;
+    const uint32_t tog11 = screen_data.ChangeFilamentScreen.e_tag == 11 ? ACTION_BTN : 0;
     #endif
 
     #if defined(USE_PORTRAIT_ORIENTATION)
@@ -183,8 +183,8 @@ void ChangeFilamentScreen::onRedraw(draw_mode_t what) {
 
     if(!t_ok) reset_menu_timeout();
 
-    const uint16_t tag7_style = screen_data.ChangeFilamentScreen.repeat_tag == 7 ? LIGHT_BTN : 0;
-    const uint16_t tag8_style = screen_data.ChangeFilamentScreen.repeat_tag == 8 ? LIGHT_BTN : 0;
+    const uint16_t tag7_style = screen_data.ChangeFilamentScreen.repeat_tag == 7 ? ACTION_BTN : 0;
+    const uint16_t tag8_style = screen_data.ChangeFilamentScreen.repeat_tag == 8 ? ACTION_BTN : 0;
 
     #if defined(USE_PORTRAIT_ORIENTATION)
       cmd.font(font_large)
@@ -203,7 +203,7 @@ void ChangeFilamentScreen::onRedraw(draw_mode_t what) {
     .tag(4) .rectangle(BTN_POS(1,4), BTN_SIZE(1,1))
     .cmd(COLOR_MASK(1,1,1,1))
 
-    .cmd(COLOR_RGB(t_ok ? text_enabled : text_disabled))
+    .cmd(COLOR_RGB(t_ok ? bg_text_enabled : bg_text_disabled))
     #if defined(USE_PORTRAIT_ORIENTATION)
        .font(font_large)
        .tag(0)                                .text   (BTN_POS(1,8),  BTN_SIZE(1,1), F("Unload"))
@@ -212,7 +212,7 @@ void ChangeFilamentScreen::onRedraw(draw_mode_t what) {
        .tag(6)                  .enabled(t_ok).button (BTN_POS(2,9),  BTN_SIZE(1,1), F("Momentary"))
        .tag(7).style(tag7_style).enabled(t_ok).button (BTN_POS(1,10), BTN_SIZE(1,1), F("Continuous"))
        .tag(8).style(tag8_style).enabled(t_ok).button (BTN_POS(2,10), BTN_SIZE(1,1), F("Continuous"))
-       .tag(1).style(LIGHT_BTN)         .button (BTN_POS(1,11), BTN_SIZE(2,1), F("Back"));
+       .tag(1).style(ACTION_BTN)         .button (BTN_POS(1,11), BTN_SIZE(2,1), F("Back"));
     #else
        .font(font_small)
        .tag(0)                                .text   (BTN_POS(3,3), BTN_SIZE(1,1), F("Unload"))
@@ -222,7 +222,7 @@ void ChangeFilamentScreen::onRedraw(draw_mode_t what) {
        .tag(7).style(tag7_style).enabled(t_ok).button (BTN_POS(3,5), BTN_SIZE(1,1), F("Continuous"))
        .tag(8).style(tag8_style).enabled(t_ok).button (BTN_POS(4,5), BTN_SIZE(1,1), F("Continuous"))
        .font(font_medium)
-       .tag(1).style(LIGHT_BTN)         .button (BTN_POS(3,6), BTN_SIZE(2,1), F("Back"));
+       .tag(1).style(ACTION_BTN)         .button (BTN_POS(3,6), BTN_SIZE(2,1), F("Back"));
     #endif
   }
   #undef GRID_COLS

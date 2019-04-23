@@ -62,7 +62,7 @@ void InterfaceSoundsScreen::onRedraw(draw_mode_t what) {
   CommandProcessor cmd;
 
   if(what & BACKGROUND) {
-    cmd.cmd(CLEAR_COLOR_RGB(background))
+    cmd.cmd(CLEAR_COLOR_RGB(bg_color))
        .cmd(CLEAR(true,true,true))
        .tag(0)
 
@@ -98,7 +98,7 @@ void InterfaceSoundsScreen::onRedraw(draw_mode_t what) {
        .tag(4).button    (BTN_POS(3,5), BTN_SIZE(2,1), getSoundSelection(PRINTING_STARTED))
        .tag(5).button    (BTN_POS(3,6), BTN_SIZE(2,1), getSoundSelection(PRINTING_FINISHED))
        .tag(6).button    (BTN_POS(3,7), BTN_SIZE(2,1), getSoundSelection(PRINTING_FAILED))
-       .style(LIGHT_BTN)
+       .style(ACTION_BTN)
        .tag(1).button    (BTN_POS(1,9), BTN_SIZE(4,1), F("Back"));
   }
 }

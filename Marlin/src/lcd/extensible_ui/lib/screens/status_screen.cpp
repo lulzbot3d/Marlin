@@ -275,9 +275,12 @@ void StatusScreen::draw_interaction_buttons(draw_mode_t what) {
 
   if(what & FOREGROUND) {
     using namespace ExtUI;
+
+    const bool has_media = isMediaInserted() && !isPrintingFromMedia();
+
     CommandProcessor cmd;
     cmd.font(Theme::font_medium)
-       .enabled(isMediaInserted() && !isPrintingFromMedia())
+       .enabled(has_media).style(has_media ? ACTION_BTN : 0)
       #if defined(USE_PORTRAIT_ORIENTATION)
          .tag(3).button( BTN_POS(1,8), BTN_SIZE(2,1),
       #else
@@ -289,7 +292,7 @@ void StatusScreen::draw_interaction_buttons(draw_mode_t what) {
       #else
         F("SD Card"))
       #endif
-      .style(LIGHT_BTN)
+      .style(!has_media ? ACTION_BTN : 0)
       #if defined(USE_PORTRAIT_ORIENTATION)
        .tag(4).button( BTN_POS(3,8), BTN_SIZE(2,1), F("MENU"));
       #else
@@ -325,7 +328,7 @@ void StatusScreen::setStatusMessage(progmem_str message) {
 void StatusScreen::setStatusMessage(const char * const message) {
   CommandProcessor cmd;
   cmd.cmd(CMD_DLSTART)
-     .cmd(CLEAR_COLOR_RGB(Theme::background))
+     .cmd(CLEAR_COLOR_RGB(Theme::bg_color))
      .cmd(CLEAR(true,true,true));
 
   draw_temperature(BACKGROUND);

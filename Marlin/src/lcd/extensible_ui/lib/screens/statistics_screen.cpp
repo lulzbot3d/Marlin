@@ -38,7 +38,7 @@ void StatisticsScreen::onRedraw(draw_mode_t what) {
   if(what & BACKGROUND) {
     char buffer[21];
 
-    cmd.cmd(CLEAR_COLOR_RGB(Theme::background))
+    cmd.cmd(CLEAR_COLOR_RGB(Theme::bg_color))
        .cmd(CLEAR(true,true,true))
        .tag(0)
 
@@ -61,7 +61,7 @@ void StatisticsScreen::onRedraw(draw_mode_t what) {
 
   if(what & FOREGROUND) {
     cmd.font(Theme::font_medium)
-       .style(LIGHT_BTN)
+       .style(ACTION_BTN)
        .tag(1).button(BTN_POS(1,7), BTN_SIZE(4,1), F("Back"));
   }
 }

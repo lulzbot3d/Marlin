@@ -39,7 +39,7 @@ void TouchRegistersScreen::onRedraw(draw_mode_t what) {
    char b[20];
 
    CommandProcessor cmd;
-   cmd.cmd(CLEAR_COLOR_RGB(background))
+   cmd.cmd(CLEAR_COLOR_RGB(bg_color))
       .cmd(CLEAR(true,true,true))
       .tag(0);
 
@@ -68,7 +68,7 @@ void TouchRegistersScreen::onRedraw(draw_mode_t what) {
    sprintf_P(b, PSTR("0x%08lX"), T_Transform_E); cmd.text( BTN_POS(2,5), BTN_SIZE(1,1), b);
    sprintf_P(b, PSTR("0x%08lX"), T_Transform_F); cmd.text( BTN_POS(2,6), BTN_SIZE(1,1), b);
 
-   cmd.style(LIGHT_BTN).tag(1).font(font_medium).button( BTN_POS(2,7), BTN_SIZE(1,1), F("Back"));
+   cmd.style(ACTION_BTN).tag(1).font(font_medium).button( BTN_POS(2,7), BTN_SIZE(1,1), F("Back"));
    #undef GRID_COLS
    #undef GRID_ROWS
  }

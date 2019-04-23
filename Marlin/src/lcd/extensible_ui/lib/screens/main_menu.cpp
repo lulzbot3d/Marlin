@@ -31,7 +31,7 @@ using namespace FTDI;
 void MainMenu::onRedraw(draw_mode_t what) {
   if(what & BACKGROUND) {
     CommandProcessor cmd;
-    cmd.cmd(CLEAR_COLOR_RGB(Theme::background))
+    cmd.cmd(CLEAR_COLOR_RGB(Theme::bg_color))
        .cmd(CLEAR(true,true,true));
   }
 
@@ -61,7 +61,7 @@ void MainMenu::onRedraw(draw_mode_t what) {
         #endif
         .tag(9).button( BTN_POS(1,7), BTN_SIZE(2,1), F("Printer Statistics"))
         .tag(10).button( BTN_POS(1,6), BTN_SIZE(2,1), F("About Printer"))
-        .style(LIGHT_BTN)
+        .style(ACTION_BTN)
         .tag(1).button( BTN_POS(1,8), BTN_SIZE(2,1), F("Back"));
       #undef GRID_COLS
       #undef GRID_ROWS
@@ -87,7 +87,7 @@ void MainMenu::onRedraw(draw_mode_t what) {
         #endif
         .tag(9).button( BTN_POS(2,4), BTN_SIZE(1,1), F("Printer Statistics"))
         .tag(10).button( BTN_POS(1,5), BTN_SIZE(1,1), F("About Printer"))
-        .style(LIGHT_BTN)
+        .style(ACTION_BTN)
         .tag(1).button( BTN_POS(2,5), BTN_SIZE(1,1), F("Back"));
       #undef GRID_COLS
       #undef GRID_ROWS

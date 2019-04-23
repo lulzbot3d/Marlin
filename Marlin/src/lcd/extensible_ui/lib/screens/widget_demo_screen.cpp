@@ -42,12 +42,10 @@ void WidgetsScreen::onEntry() {
 void WidgetsScreen::onRedraw(draw_mode_t what) {
   using namespace ExtUI;
   CommandProcessor cmd;
-  cmd.cmd(CLEAR_COLOR_RGB(background))
+  cmd.cmd(CLEAR_COLOR_RGB(bg_color))
      .cmd(CLEAR(true,true,true))
-     .cmd(COLOR_RGB(text_enabled))
+     .cmd(COLOR_RGB(bg_text_enabled))
      .tag(0);
-
-  cmd.bgcolor(theme_dark);
 
   const uint16_t hrs = (slider_val*12/0xFFFFU);
   const uint16_t m   = (slider_val*12*60/0xFFFFU)%60;
@@ -57,7 +55,7 @@ void WidgetsScreen::onRedraw(draw_mode_t what) {
     #define GRID_COLS 3
     #define GRID_ROWS 8
     cmd.font(font_large)
-       .cmd(COLOR_RGB(text_enabled))
+       .cmd(COLOR_RGB(bg_text_enabled))
               .text      (BTN_POS(1,1),  BTN_SIZE(3,1), F("Sample Widgets"))
        .tag(0).text      (BTN_POS(2,6),  BTN_SIZE(1,1), F("Show grid:"));
     default_button_colors();
@@ -101,7 +99,7 @@ void WidgetsScreen::onRedraw(draw_mode_t what) {
               .button    (BTN_POS(4, 8), BTN_SIZE(1,1), F("2"));
   #endif
 
-  cmd.cmd(COLOR_RGB(text_enabled));
+  cmd.cmd(COLOR_RGB(bg_text_enabled));
   if(show_grid) DRAW_LAYOUT_GRID
 }
 

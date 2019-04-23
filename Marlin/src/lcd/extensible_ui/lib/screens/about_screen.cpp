@@ -40,9 +40,9 @@ void AboutScreen::onEntry() {
 
 void AboutScreen::onRedraw(draw_mode_t what) {
   CommandProcessor cmd;
-  cmd.cmd(CLEAR_COLOR_RGB(background))
+  cmd.cmd(CLEAR_COLOR_RGB(bg_color))
      .cmd(CLEAR(true,true,true))
-     .cmd(COLOR_RGB(text_enabled));
+     .cmd(COLOR_RGB(bg_text_enabled));
 
   #if defined(LULZBOT_LCD_MACHINE_NAME) && defined(LULZBOT_LCD_TOOLHEAD_NAME)
   cmd.tag(0).font(font_medium)
@@ -58,7 +58,7 @@ void AboutScreen::onRedraw(draw_mode_t what) {
      .tag(0).text(  BTN_POS(1,6), BTN_SIZE(4,1), progmem_str(getFirmwareName_str()));
 
   default_button_colors();
-  cmd.tag(1).button(BTN_POS(2,8), BTN_SIZE(2,1), F("Okay"));
+  cmd.style(ACTION_BTN).tag(1).button(BTN_POS(2,8), BTN_SIZE(2,1), F("Okay"));
 }
 
 bool AboutScreen::onTouchEnd(uint8_t tag) {

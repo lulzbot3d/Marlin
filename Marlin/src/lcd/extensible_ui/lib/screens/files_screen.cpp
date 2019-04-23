@@ -82,10 +82,10 @@ void FilesScreen::drawFileButton(const char* filename, uint8_t tag, bool is_dir,
   const uint8_t line = getLineForTag(tag)+1;
   CommandProcessor cmd;
   cmd.tag(tag);
-  cmd.cmd(COLOR_RGB(is_highlighted ? highlight_color : background));
+  cmd.cmd(COLOR_RGB(is_highlighted ? fg_action : bg_color));
   cmd.font(font_medium)
      .rectangle( 0, BTN_Y(header_h+line), display_width, BTN_H(1));
-  cmd.cmd(COLOR_RGB(is_highlighted ? default_btn::rgb_enabled : text_enabled));
+  cmd.cmd(COLOR_RGB(is_highlighted ? normal_btn.rgb : bg_text_enabled));
   #if ENABLED(SCROLL_LONG_FILENAMES)
     if(is_highlighted) {
       cmd.cmd(SAVE_CONTEXT());
@@ -141,7 +141,7 @@ void FilesScreen::drawHeader() {
      .tag(0).button( BTN_POS(2,1), BTN_SIZE(4,header_h), str, OPT_CENTER | OPT_FLAT);
 
   cmd.font(font_medium)
-     .style(LIGHT_BTN)
+     .style(ACTION_BTN)
      .tag(241).enabled(prev_enabled).button( BTN_POS(1,1), BTN_SIZE(1,header_h), F("<"))
      .tag(242).enabled(next_enabled).button( BTN_POS(6,1), BTN_SIZE(1,header_h), F(">"));
 }
@@ -163,11 +163,11 @@ void FilesScreen::drawFooter() {
 
   CommandProcessor cmd;
   cmd.font(font_medium);
-  cmd.style(has_selection ? NORMAL : LIGHT_BTN)
+  cmd.style(has_selection ? NORMAL : ACTION_BTN)
      .tag(back_tag).button( BTN_POS(4,y), BTN_SIZE(3,h), F("Back"));
 
   cmd.enabled(has_selection)
-     .style(has_selection ? LIGHT_BTN : NORMAL);
+     .style(has_selection ? ACTION_BTN : NORMAL);
   if(screen_data.FilesScreen.flags.is_dir) {
     cmd.tag(244).button( BTN_POS(1, y), BTN_SIZE(3,h), F("Open"));
   } else {
@@ -191,7 +191,7 @@ void FilesScreen::gotoPage(uint8_t page) {
   screen_data.FilesScreen.cur_page     = page;
   CommandProcessor cmd;
   cmd.cmd(CMD_DLSTART)
-     .cmd(CLEAR_COLOR_RGB(background))
+     .cmd(CLEAR_COLOR_RGB(bg_color))
      .cmd(CLEAR(true,true,true));
   default_button_colors();
   drawFileList();

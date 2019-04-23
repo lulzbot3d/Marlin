@@ -38,9 +38,9 @@ void DialogBoxBaseClass::drawMessage(const T line1, const T line2, const T line3
   const uint8_t n_lines = line3 ? 3 : line2 ? 2 : 1;
   CommandProcessor cmd;
   cmd.cmd(CMD_DLSTART)
-     .cmd(CLEAR_COLOR_RGB(background))
+     .cmd(CLEAR_COLOR_RGB(bg_color))
      .cmd(CLEAR(true,true,true))
-     .cmd(COLOR_RGB(text_enabled))
+     .cmd(COLOR_RGB(bg_text_enabled))
      .tag(0);
   cmd.font(font ? font : font_large);
   for(uint8_t line = 0; line < n_lines; line++) {
@@ -73,7 +73,7 @@ void DialogBoxBaseClass::drawButton(const progmem_str label) {
 
 void DialogBoxBaseClass::drawSpinner() {
   CommandProcessor cmd;
-  cmd.cmd(COLOR_RGB(text_enabled))
+  cmd.cmd(COLOR_RGB(bg_text_enabled))
      .spinner(BTN_POS(1,4), BTN_SIZE(2,3)).execute();
 }
 

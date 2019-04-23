@@ -40,7 +40,7 @@ static uint8_t increment;
 
 void StatusScreen::onRedraw(draw_mode_t what) {
   CommandProcessor cmd;
-  cmd.cmd(CLEAR_COLOR_RGB(background));
+  cmd.cmd(CLEAR_COLOR_RGB(bg_color));
   cmd.cmd(CLEAR(true,true,true));
   cmd.tag(0);
 
@@ -83,8 +83,10 @@ void StatusScreen::onRedraw(draw_mode_t what) {
 
   default_button_colors();
 
-  cmd.fgcolor(fill_rgb).font(font_medium)
-     .enabled(isMediaInserted() && !isPrintingFromMedia())
+  const bool has_media = isMediaInserted() && !isPrintingFromMedia();
+
+  cmd.font(font_medium)
+     .enabled(has_media).style(has_media ? ACTION_BTN : 0)
      .tag(9).button(x, y, h, v,
         isPrintingFromMedia() ?
           F("Printing") :
@@ -96,7 +98,7 @@ void StatusScreen::onRedraw(draw_mode_t what) {
       );
 
   ui.bounds(POLY(menu_btn), x, y, h, v);
-  cmd.tag(10).button(x, y, h, v, F("Menu"));
+  cmd.style(!has_media ? ACTION_BTN : 0).tag(10).button(x, y, h, v, F("Menu"));
 }
 
 bool StatusScreen::onTouchEnd(uint8_t tag) {

@@ -113,8 +113,8 @@ class CommandProcessor : public CLCD::CommandFifo {
 
     inline CommandProcessor& font     (int16_t  font)             {_font = font; return *this;}
 
-    inline CommandProcessor& enabled  (bool enabled)              {if(!enabled) _style |= DISABLED; else _style &= ~DISABLED; return *this;}
-    inline CommandProcessor& style    (uint8_t style)             {_style = style; return *this;}
+    inline CommandProcessor& enabled  (bool enabled)              {if(!enabled) _style = DISABLED; return *this;}
+    inline CommandProcessor& style    (uint8_t style)             {if(_style != DISABLED) _style = style; return *this;}
 
     // Wrap all the CommandFifo routines to allow method chaining
 

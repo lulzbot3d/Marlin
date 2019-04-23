@@ -41,7 +41,7 @@ using namespace Theme;
 BaseNumericAdjustmentScreen::widgets_t::widgets_t(draw_mode_t what) : _what(what) {
   if(what & BACKGROUND) {
     CommandProcessor cmd;
-    cmd.cmd(CLEAR_COLOR_RGB(background))
+    cmd.cmd(CLEAR_COLOR_RGB(bg_color))
        .cmd(CLEAR(true,true,true));
   }
 
@@ -49,9 +49,9 @@ BaseNumericAdjustmentScreen::widgets_t::widgets_t(draw_mode_t what) : _what(what
     CommandProcessor cmd;
     cmd.font(font_medium)
     #if defined(USE_PORTRAIT_ORIENTATION)
-       .style(LIGHT_BTN).tag(1).button( BTN_POS(1,10), BTN_SIZE(13,1), F("Back"));
+       .style(ACTION_BTN).tag(1).button( BTN_POS(1,10), BTN_SIZE(13,1), F("Back"));
     #else
-       .style(LIGHT_BTN).tag(1).button( BTN_POS(15,7), BTN_SIZE(4,1),  F("Back"));
+       .style(ACTION_BTN).tag(1).button( BTN_POS(15,7), BTN_SIZE(4,1),  F("Back"));
     #endif
   }
 
@@ -69,12 +69,12 @@ BaseNumericAdjustmentScreen::widgets_t &BaseNumericAdjustmentScreen::widgets_t::
 
 void BaseNumericAdjustmentScreen::widgets_t::heading(const char *label) {
   CommandProcessor cmd;
-  cmd.font(font_medium).cmd(COLOR_RGB(text_enabled));
+  cmd.font(font_medium).cmd(COLOR_RGB(bg_text_enabled));
   if(_what & BACKGROUND) {
     #if defined(USE_PORTRAIT_ORIENTATION)
-      cmd.tag(0).fgcolor(background).button( BTN_POS(1, _line), BTN_SIZE(12,1), progmem_str(label), OPT_FLAT);
+      cmd.tag(0).fgcolor(bg_color).button( BTN_POS(1, _line), BTN_SIZE(12,1), progmem_str(label), OPT_FLAT);
     #else
-      cmd.tag(0).fgcolor(background).button( BTN_POS(5, _line), BTN_SIZE(8,1),  progmem_str(label), OPT_FLAT);
+      cmd.tag(0).fgcolor(bg_color).button( BTN_POS(5, _line), BTN_SIZE(8,1),  progmem_str(label), OPT_FLAT);
     #endif
   }
 
@@ -101,7 +101,7 @@ void BaseNumericAdjustmentScreen::widgets_t::_draw_increment_btn(uint8_t line, c
   }
 
   if(screen_data.BaseNumericAdjustmentScreen.increment == tag) {
-    cmd.style(LIGHT_BTN);
+    cmd.style(ACTION_BTN);
   }
 
   switch(tag) {
@@ -135,7 +135,7 @@ void BaseNumericAdjustmentScreen::widgets_t::_draw_increment_btn(uint8_t line, c
 void BaseNumericAdjustmentScreen::widgets_t::increments() {
   if(_what & BACKGROUND) {
     CommandProcessor cmd;
-    cmd.fgcolor(background)
+    cmd.fgcolor(bg_color)
        .tag(0)
     #if defined(USE_PORTRAIT_ORIENTATION)
        .font(font_small).button( BTN_POS(1, _line),  BTN_SIZE(4,1), F("Increment:"), OPT_FLAT);
@@ -162,8 +162,8 @@ void BaseNumericAdjustmentScreen::widgets_t::adjuster_sram_val(uint8_t tag, cons
     cmd.enabled(1)
        .font(font_small)
        .fgcolor(_color)            .tag(0).button( BTN_POS(5,_line), BTN_SIZE(5,1), F(""),               OPT_FLAT)
-       .cmd(COLOR_RGB(text_enabled))
-       .fgcolor(background) .tag(0).button( BTN_POS(1,_line), BTN_SIZE(4,1), (progmem_str) label, OPT_FLAT);
+       .cmd(COLOR_RGB(bg_text_enabled))
+       .fgcolor(bg_color) .tag(0).button( BTN_POS(1,_line), BTN_SIZE(4,1), (progmem_str) label, OPT_FLAT);
   }
 
   if(_what & FOREGROUND) {
@@ -226,7 +226,7 @@ void BaseNumericAdjustmentScreen::widgets_t::text_field(uint8_t tag, const char 
     cmd.enabled(1)
        .font(font_small)
        .fgcolor(_color)            .tag(0).button( BTN_POS(5,_line), BTN_SIZE(9,1), F(""),               OPT_FLAT)
-       .fgcolor(background) .tag(0).button( BTN_POS(1,_line), BTN_SIZE(4,1), (progmem_str) label, OPT_FLAT);
+       .fgcolor(bg_color) .tag(0).button( BTN_POS(1,_line), BTN_SIZE(4,1), (progmem_str) label, OPT_FLAT);
   }
 
   if(_what & FOREGROUND) {
@@ -256,7 +256,7 @@ void BaseNumericAdjustmentScreen::widgets_t::two_buttons(uint8_t tag1, const cha
 void BaseNumericAdjustmentScreen::widgets_t::toggle(uint8_t tag, const char *label, const char *text, bool value, bool is_enabled) {
   if(_what & BACKGROUND) {
     CommandProcessor cmd;
-    cmd.fgcolor(background)
+    cmd.fgcolor(bg_color)
        .tag(0)
        .font(font_small)
     #if defined(USE_PORTRAIT_ORIENTATION)
@@ -284,7 +284,7 @@ void BaseNumericAdjustmentScreen::widgets_t::toggle(uint8_t tag, const char *lab
 void BaseNumericAdjustmentScreen::widgets_t::home_buttons(uint8_t tag) {
   if(_what & BACKGROUND) {
     CommandProcessor cmd;
-    cmd.fgcolor(background)
+    cmd.fgcolor(bg_color)
        .tag(0)
        .font(font_small)
        .button( BTN_POS(1, _line),  BTN_SIZE(4,1), F("Home:"), OPT_FLAT);

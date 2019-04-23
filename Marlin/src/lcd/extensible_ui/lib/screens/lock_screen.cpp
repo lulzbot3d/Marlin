@@ -43,7 +43,7 @@ void LockScreen::onRedraw(draw_mode_t what) {
   CommandProcessor cmd;
 
   if(what & BACKGROUND) {
-    cmd.cmd(CLEAR_COLOR_RGB(background))
+    cmd.cmd(CLEAR_COLOR_RGB(bg_color))
        .cmd(CLEAR(true,true,true))
        .tag(0);
   }

@@ -36,66 +36,43 @@ void BaseScreen::onEntry() {
 }
 
 bool BaseScreen::buttonStyleCallback(uint8_t tag, uint8_t &style, uint16_t &options, bool post) {
-  CommandProcessor cmd;
-
   if(post) {
-    default_button_colors();
+    set_button_colors(normal_btn);
     return false;
   }
 
   #if defined(MENU_TIMEOUT)
-  if(EventLoop::get_pressed_tag() != 0) {
-    reset_menu_timeout();
-  }
+    if(EventLoop::get_pressed_tag() != 0) {
+      reset_menu_timeout();
+    }
   #endif
 
   if(tag != 0 && EventLoop::get_pressed_tag() == tag) {
     options = OPT_FLAT;
   }
 
-  if(style & RED_BTN) {
-    if(style & DISABLED) {
-      cmd.cmd(COLOR_RGB(red_btn::rgb_disabled))
-         .fgcolor(red_btn::fg_disabled)
-         .tag(0);
-      style &= ~DISABLED; // Clear the disabled flag
-    } else {
-      cmd.cmd(COLOR_RGB(red_btn::rgb_enabled))
-         .fgcolor(red_btn::fg_enabled);
-    }
-    return true;              // Call me again to reset the colors
-  }
+  CommandProcessor cmd;
 
-  if(style & LIGHT_BTN) {
-    if(style & DISABLED) {
-      cmd.cmd(COLOR_RGB(light_btn::rgb_disabled))
-         .fgcolor(light_btn::fg_disabled)
-         .gradcolor(0xFFFFFF)
-         .tag(0);
-      style &= ~DISABLED; // Clear the disabled flag
-    } else {
-      cmd.cmd(COLOR_RGB(light_btn::rgb_enabled))
-         .gradcolor(light_btn::grad_enabled)
-         .fgcolor(light_btn::fg_enabled);
-    }
-    return true;              // Call me again to reset the colors
+  switch(style) {
+    case DISABLED:
+      cmd.tag(0);
+      style &= ~DISABLED;
+      set_button_colors(disabled_btn);
+      break;
+    case RED_BTN:
+      set_button_colors(red_btn);
+      break;
+    case ACTION_BTN:
+      set_button_colors(action_btn);
+      break;
+    default:
+      return false;
   }
-
-  if(style & DISABLED) {
-    cmd.cmd(COLOR_RGB(default_btn::rgb_disabled))
-       .fgcolor(default_btn::fg_disabled)
-       .tag(0);
-    style &= ~DISABLED; // Clear the disabled flag
-    return true;              // Call me again to reset the colors
-  }
-  return false;
+  return true; // Call me again to reset the colors
 }
 
 void BaseScreen::default_button_colors() {
-  CommandProcessor cmd;
-  cmd.cmd(COLOR_RGB(default_btn::rgb_enabled))
-     .gradcolor(default_btn::grad_enabled)
-     .fgcolor(default_btn::fg_enabled);
+  set_button_colors(normal_btn);
 }
 
 void BaseScreen::onIdle() {

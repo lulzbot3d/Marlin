@@ -86,12 +86,20 @@ class BaseScreen : public UIScreen {
       NORMAL    = 0x00,
       DISABLED  = 0x01,
       RED_BTN   = 0x02,
-      LIGHT_BTN = 0x04
+      ACTION_BTN = 0x04
     };
 
     #if defined(MENU_TIMEOUT)
       static uint32_t last_interaction;
     #endif
+
+    static inline void set_button_colors(const Theme::btn_colors &colors) {
+      CommandProcessor cmd;
+      cmd.cmd(FTDI::COLOR_RGB(colors.rgb))
+        .gradcolor(colors.grad)
+        .fgcolor(colors.fg)
+        .bgcolor(colors.bg);
+    }
 
     static void default_button_colors();
   public:

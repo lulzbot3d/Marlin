@@ -52,6 +52,7 @@ namespace Theme {
 
     constexpr uint32_t fg_normal        = COLOR_BLEND(0x999999,0x666666,0.33);
     constexpr uint32_t fg_action        = COLOR_BLEND(0xC1DB2F,0x788814,0.33);
+    constexpr uint32_t fg_disabled      = bg_color;
   #else
     constexpr uint32_t theme_darkest    = 0x005500;
     constexpr uint32_t theme_dark       = 0x00AA00;
@@ -62,8 +63,9 @@ namespace Theme {
 
     constexpr uint32_t fg_normal        = theme_darkest;
     constexpr uint32_t fg_action        = theme_dark;
+    constexpr uint32_t fg_disabled      = 0xE0E0E0;
 
-    constexpr uint32_t shadow_rgb       = 0xF3E0E0;
+    constexpr uint32_t shadow_rgb       = 0xE0E0E0;
     constexpr uint32_t fill_rgb         = theme_dark;
     constexpr uint32_t stroke_rgb       = theme_darkest;
     constexpr uint32_t syringe_rgb      = 0xE2F2DA;
@@ -94,10 +96,10 @@ namespace Theme {
   constexpr uint32_t transformF    = 0x8010D0;
   constexpr uint32_t transformVal  = 0x104010;
 
-  constexpr btn_colors disabled_btn = {.bg = bg_color,      .grad = 0xFFFFFF, .fg = bg_color,  .rgb = bg_color };
-  constexpr btn_colors normal_btn   = {.bg = theme_darkest, .grad = 0xFFFFFF, .fg = fg_normal, .rgb = 0xFFFFFF };
-  constexpr btn_colors action_btn   = {.bg = theme_darkest, .grad = 0xFFFFFF, .fg = fg_action, .rgb = 0xFFFFFF };
-  constexpr btn_colors red_btn      = {.bg = theme_darkest, .grad = 0xFFFFFF, .fg = 0xFF0000,  .rgb = 0xFFFFFF };
+  constexpr btn_colors disabled_btn = {.bg = bg_color,      .grad = 0xFFFFFF, .fg = fg_disabled,  .rgb = fg_disabled };
+  constexpr btn_colors normal_btn   = {.bg = theme_darkest, .grad = 0xFFFFFF, .fg = fg_normal,    .rgb = 0xFFFFFF };
+  constexpr btn_colors action_btn   = {.bg = theme_darkest, .grad = 0xFFFFFF, .fg = fg_action,    .rgb = 0xFFFFFF };
+  constexpr btn_colors red_btn      = {.bg = theme_darkest, .grad = 0xFFFFFF, .fg = 0xFF0000,     .rgb = 0xFFFFFF };
 
   // Temperature color scale
 

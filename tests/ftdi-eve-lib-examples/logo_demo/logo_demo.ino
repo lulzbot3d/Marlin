@@ -20,6 +20,7 @@
  ****************************************************************************/
 
 #include "src/ftdi_eve_lib/ftdi_eve_lib.h"
+#include "src/ftdi_eve_lib/extras/poly_ui.h"
 #include "src/LulzBot_Logo.h"
 
 using namespace FTDI;
@@ -31,58 +32,6 @@ class LogoScreen : public UIScreen, public UncachedScreen {
     static uint32_t color;
 
   public:
-    static void polygon_vertices(const uint16_t data[], size_t n, uint16_t origin_x, uint16_t origin_y, uint16_t scale, begin_t primitive) {
-      uint16_t poly_start_x = 0xFFFF, poly_start_y;
-      uint32_t last_x = -1, last_y = -1;
-      CommandProcessor cmd;
-      cmd.cmd(BEGIN(primitive));
-      for(size_t i = 0; i < n; i += 2) {
-        const uint16_t x = pgm_read_word_far(&data[i+0]);
-        if(x == 0xFFFF) {
-          if(poly_start_x != 0xFFFF) {
-            cmd.cmd(VERTEX2F(poly_start_x, poly_start_y));
-            poly_start_x = 0xFFFF;
-          }
-          cmd.cmd(BEGIN(primitive));
-          i += 1;
-          continue;
-          poly_start_x = 0xFFFF;
-        }
-        const uint16_t y = pgm_read_word_far(&data[i+1]);
-        const uint32_t scaled_x = uint32_t(x) * scale / 0xFFFE + origin_x;
-        const uint32_t scaled_y = uint32_t(y) * scale / 0xFFFE + origin_y;
-        if(last_x != scaled_x || last_y != scaled_y)
-          cmd.cmd(VERTEX2F(scaled_x, scaled_y));
-        last_x = scaled_x;
-        last_y = scaled_y;
-        if(poly_start_x == 0xFFFF) {
-          poly_start_x = scaled_x;
-          poly_start_y = scaled_y;
-        }
-      }
-      cmd.cmd(VERTEX2F(poly_start_x, poly_start_y));
-    }
-
-    static void polygon_fill(const uint16_t data[], size_t n, uint16_t origin_x, uint16_t origin_y, uint16_t scale) {
-      CommandProcessor cmd;
-      cmd.cmd(SAVE_CONTEXT());
-      cmd.cmd(COLOR_MASK(0,0,0,0));
-      cmd.cmd(STENCIL_OP(STENCIL_OP_KEEP, STENCIL_OP_INVERT));
-      cmd.cmd(STENCIL_FUNC(STENCIL_FUNC_ALWAYS, 255, 255));
-      polygon_vertices(data, n, origin_x, origin_y, scale, EDGE_STRIP_B);
-      cmd.cmd(RESTORE_CONTEXT());
-
-      cmd.cmd(SAVE_CONTEXT());
-      cmd.cmd(STENCIL_FUNC(STENCIL_FUNC_NOTEQUAL, 0, 255));
-      cmd.cmd(BEGIN(RECTS));
-      cmd.cmd(VERTEX2F( 0  * 16,  0  * 16));
-      cmd.cmd(VERTEX2F(display_width * 16, display_height * 16));
-      cmd.cmd(RESTORE_CONTEXT());
-    }
-
-    static void polygon_outline(const uint16_t data[], size_t n, uint16_t origin_x, uint16_t origin_y, uint16_t scale) {
-      polygon_vertices(data, n, origin_x, origin_y, scale, LINE_STRIP);
-    }
 
     static void onRedraw(draw_mode_t what) {
       constexpr uint32_t background_rgb = 0xDEEA5C;
@@ -92,13 +41,25 @@ class LogoScreen : public UIScreen, public UncachedScreen {
       cmd.cmd(CLEAR_COLOR_RGB(background_rgb));
       cmd.cmd(CLEAR(true,true,true));
 
+      #define POLY(A) PolyUI::poly_reader_t(A, sizeof(A)/sizeof(A[0]))
+
+      PolyUI ui(cmd);
+      cmd.cmd(COLOR_RGB(0xC1D82F));
+      ui.fill(POLY(logo_green));
+      cmd.cmd(COLOR_RGB(0x000000));
+      ui.fill(POLY(logo_black));
       cmd.cmd(COLOR_RGB(color));
-      polygon_fill(logo, sizeof(logo)/sizeof(logo[0]), 15 * 16, 30 * 16, 250 * 16);
+      ui.fill(POLY(logo_white));
+      
+      cmd.cmd(COLOR_RGB(0x000000));
+      ui.fill(POLY(logo_type));
+      cmd.cmd(COLOR_RGB(0x000000));
+      ui.fill(POLY(logo_mark));
 
       #define GRID_COLS 4
-      #define GRID_ROWS 7
+      #define GRID_ROWS 9
       cmd.fgcolor(foreground_rgb);
-      cmd.font(30).tag(1).button(BTN_POS(2,6), BTN_SIZE(2,1), F("Okay"));
+      cmd.font(30).tag(1).button(BTN_POS(2,8), BTN_SIZE(2,1), F("Okay"));
     }
 
     static bool onTouchEnd(uint8_t tag) {

@@ -84,13 +84,18 @@ class PolyReader {
 
     // Reads the next point in the polygon data structure
     void next() {
+      if(!p) return;
+
       if(p == end) {
-        close_loop();
+        if(start_x != eol)
+          close_loop();
+        else
+          p = NULL;
       } else {
         x = pgm_read_word_far(p++);
-        if(x == eol) {
+        if(x == eol)
           close_loop();
-        } else {
+        else {
           y = pgm_read_word_far(p++);
           if(start_x == eol) {
             start_x = x;
@@ -100,7 +105,7 @@ class PolyReader {
       }
     }
 
-    bool has_more()       {return p != end || start_x != 0xFFFF;}
+    bool has_more()       {return p != NULL;}
     bool end_of_loop()    {return start_x == eol;}
 };
 
@@ -136,8 +141,9 @@ class TransformedPolyReader : public PolyReader {
        */
       const int32_t px = PolyReader::x;
       const int32_t py = PolyReader::y;
-      x = ((((a * px) + (b * py)) >> 16) + c) >> fract_bits;
-      y = ((((d * px) + (e * py)) >> 16) + f) >> fract_bits;
+      const int32_t round = 1 << (fract_bits-1);
+      x = (((((a * px) + (b * py)) >> 16) + c) + round) >> fract_bits;
+      y = (((((d * px) + (e * py)) >> 16) + f) + round) >> fract_bits;
     }
 
     void set_transform(
@@ -203,6 +209,8 @@ class DeduplicatedPolyReader : public POLY_READER {
   private:
     typename POLY_READER::type_t last_x, last_y;
 
+    static constexpr typename POLY_READER::type_t eol = 0xFFFF;
+
   public:
     DeduplicatedPolyReader(const uint16_t data[], const size_t n) : POLY_READER(data, n) {
       last_x = POLY_READER::x;
@@ -211,11 +219,15 @@ class DeduplicatedPolyReader : public POLY_READER {
 
     void next() {
       do {
+        if(!POLY_READER::has_more()) return;
         POLY_READER::next();
-      } while(POLY_READER::x == last_x && POLY_READER::y == last_y &&
-              POLY_READER::has_more() && !POLY_READER::end_of_loop());
-      last_x = POLY_READER::x;
-      last_y = POLY_READER::y;
+      } while(POLY_READER::x == last_x && POLY_READER::y == last_y && !POLY_READER::end_of_loop());
+      if(POLY_READER::end_of_loop()) {
+        last_x = last_y = eol;
+      } else {
+        last_x = POLY_READER::x;
+        last_y = POLY_READER::y;
+      }
     }
 };
 

@@ -52,7 +52,7 @@ void AboutScreen::onRedraw(draw_mode_t what) {
             .text(  BTN_POS(1,2), BTN_SIZE(4,1), F("Color Touch Panel"))
   #endif
      .tag(2).font(font_medium)
-            .text(  BTN_POS(1,3), BTN_SIZE(4,1), F("(C) 2018 Aleph Objects, Inc."))
+            .text(  BTN_POS(1,3), BTN_SIZE(4,1), F("(C) 2019 Aleph Objects, Inc."))
             .text(  BTN_POS(1,4), BTN_SIZE(4,1), F("www.lulzbot.com"))
 
      .tag(0).text(  BTN_POS(1,6), BTN_SIZE(4,1), progmem_str(getFirmwareName_str()));

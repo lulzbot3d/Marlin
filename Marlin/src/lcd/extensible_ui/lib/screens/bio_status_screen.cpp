@@ -104,10 +104,14 @@ void StatusScreen::onRedraw(draw_mode_t what) {
 bool StatusScreen::onTouchEnd(uint8_t tag) {
   increment = 3;
   switch(tag) {
-    case  9: GOTO_SCREEN(FilesScreen); return true;
-    case 10: GOTO_SCREEN(MainMenu);    return true;
-    default:                           return false;
+    case  9: GOTO_SCREEN(FilesScreen); break;
+    case 10: GOTO_SCREEN(MainMenu);    break;
+    default: return false;
   }
+  // If a passcode is enabled, the LockScreen will prevent the
+  // user from proceeding.
+  LockScreen::check_passcode();
+  return true;
 }
 
 bool StatusScreen::onTouchHeld(uint8_t tag) {

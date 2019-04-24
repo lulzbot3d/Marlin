@@ -50,8 +50,8 @@ class CommandProcessor : public CLCD::CommandFifo {
     uint8_t _style = 0;
 
   protected:
-    enum {
-      DISABLED = 0x01
+    enum : uint8_t {
+      DISABLED = 0x80
     };
 
     // Returns the cannonical thickness of a widget (i.e. the height of a toggle element)
@@ -113,8 +113,8 @@ class CommandProcessor : public CLCD::CommandFifo {
 
     inline CommandProcessor& font     (int16_t  font)             {_font = font; return *this;}
 
-    inline CommandProcessor& enabled  (bool enabled)              {if(!enabled) _style = DISABLED; return *this;}
-    inline CommandProcessor& style    (uint8_t style)             {if(_style != DISABLED) _style = style; return *this;}
+    inline CommandProcessor& enabled  (bool enabled)              {if(enabled) _style &= ~DISABLED; else _style |= DISABLED; return *this;}
+    inline CommandProcessor& style    (uint8_t style)             {_style = (_style & DISABLED) | style; return *this;}
 
     // Wrap all the CommandFifo routines to allow method chaining
 

@@ -82,11 +82,11 @@ enum {
 
 class BaseScreen : public UIScreen {
   protected:
-    enum {
-      NORMAL    = 0x00,
-      DISABLED  = 0x01,
-      RED_BTN   = 0x02,
-      ACTION_BTN = 0x04
+    enum : uint8_t {
+      NORMAL_BTN,
+      ACTION_BTN,
+      RED_BTN,
+      DISABLED_BTN = 0x80
     };
 
     #if defined(MENU_TIMEOUT)
@@ -112,6 +112,8 @@ class BaseScreen : public UIScreen {
 };
 
 class BootScreen : public BaseScreen, public UncachedScreen {
+  private:
+    static void showSplashScreen();
   public:
     static void onRedraw(draw_mode_t);
     static void onIdle();

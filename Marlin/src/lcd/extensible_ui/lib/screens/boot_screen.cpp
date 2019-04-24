@@ -26,6 +26,9 @@
 
 #include "screens.h"
 
+#include "../ftdi_eve_lib/extras/poly_ui.h"
+#include "../theme/bootscreen_logo.h"
+
 using namespace FTDI;
 
 void BootScreen::onRedraw(draw_mode_t what) {
@@ -46,10 +49,41 @@ void BootScreen::onIdle() {
     GOTO_SCREEN(TouchCalibrationScreen);
   } else {
     if(UIData::animations_enabled()) {
-      MediaPlayerScreen::playBootMedia();
+      // If there is a startup video in the flash SPI, play
+      // that, otherwise show a static splash screen.
+      if(!MediaPlayerScreen::playBootMedia())
+        showSplashScreen();
     }
     GOTO_SCREEN(StatusScreen);
   }
+}
+
+void BootScreen::showSplashScreen() {
+  CommandProcessor cmd;
+  cmd.cmd(CMD_DLSTART);
+  cmd.cmd(CLEAR_COLOR_RGB(0xDEEA5C));
+  cmd.cmd(CLEAR(true,true,true));
+
+  #define POLY(A) PolyUI::poly_reader_t(A, sizeof(A)/sizeof(A[0]))
+
+  PolyUI ui(cmd);
+  cmd.cmd(COLOR_RGB(0xC1D82F));
+  ui.fill(POLY(logo_green));
+  cmd.cmd(COLOR_RGB(0x000000));
+  ui.fill(POLY(logo_black));
+  cmd.cmd(COLOR_RGB(0xFFFFFF));
+  ui.fill(POLY(logo_white));
+
+  cmd.cmd(COLOR_RGB(0x000000));
+  ui.fill(POLY(logo_type));
+  cmd.cmd(COLOR_RGB(0x000000));
+  ui.fill(POLY(logo_mark));
+
+  cmd.cmd(DL::DL_DISPLAY);
+  cmd.cmd(CMD_SWAP);
+  cmd.execute();
+
+  ExtUI::delay_ms(2500);
 }
 
 #endif // EXTENSIBLE_UI

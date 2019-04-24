@@ -53,20 +53,21 @@ bool BaseScreen::buttonStyleCallback(uint8_t tag, uint8_t &style, uint16_t &opti
 
   CommandProcessor cmd;
 
-  switch(style) {
-    case DISABLED:
+  if(style & DISABLED_BTN) {
       cmd.tag(0);
-      style &= ~DISABLED;
+      style &= ~DISABLED_BTN;
       set_button_colors(disabled_btn);
-      break;
-    case RED_BTN:
-      set_button_colors(red_btn);
-      break;
-    case ACTION_BTN:
-      set_button_colors(action_btn);
-      break;
-    default:
-      return false;
+  } else {
+    switch(style) {
+      case ACTION_BTN:
+        set_button_colors(action_btn);
+        break;
+      case RED_BTN:
+        set_button_colors(red_btn);
+        break;
+      default:
+        return false;
+    }
   }
   return true; // Call me again to reset the colors
 }

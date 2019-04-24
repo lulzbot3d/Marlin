@@ -1118,15 +1118,6 @@
     #define LULZBOT_MAY_USE_V2_ADAPTER
 #endif /* TOOLHEAD_DingyCutworm_HardenedSteelPlus */
 
-#if defined(TOOLHEAD_KangarooPaw_SingleExtruder)
-    #define LULZBOT_LCD_TOOLHEAD_NAME              "Kangaroo Paw"
-//          16 chars max                            ^^^^^^^^^^^^^^^
-    #define LULZBOT_M115_EXTRUDER_TYPE             "Goostruder"
-    #define LULZBOT_X_MAX_ENDSTOP_INVERTING        LULZBOT_NORMALLY_CLOSED_ENDSTOP
-    #define LULZBOT_E3D_Titan_Aero_Volcano
-    #define LULZBOT_E_STEPS                        13297.9664
-#endif /* TOOLHEAD_KangarooPaw_SingleExtruder */
-
 // Using the V2 toolheads on the TAZ and older Minis requires an
 // adapter plate that shifts the coordinate system
 #if defined(LULZBOT_MAY_USE_AERO_V2_ADAPTER) && defined(LULZBOT_USE_Z_SCREW)
@@ -1181,6 +1172,17 @@
     #define LULZBOT_MOTOR_CURRENT_E0               960 // mA
     #define LULZBOT_MOTOR_CURRENT_E1               960 // mA
 #endif /* TOOLHEAD_Quiver_DualExtruder */
+
+/********************************* OTHER TOOLHEADS ***************************/
+
+#if defined(TOOLHEAD_KangarooPaw_SingleExtruder)
+    #define LULZBOT_LCD_TOOLHEAD_NAME              "Goostruder"
+//          16 chars max                            ^^^^^^^^^^^^^^^
+    #define LULZBOT_M115_EXTRUDER_TYPE             "SingleExtruder"
+    #define LULZBOT_X_MAX_ENDSTOP_INVERTING        LULZBOT_NORMALLY_CLOSED_ENDSTOP
+    #define LULZBOT_E3D_Titan_Aero_Volcano
+    #define LULZBOT_E_STEPS                        13297.9664
+#endif /* TOOLHEAD_KangarooPaw_SingleExtruder */
 
 /************** AUTO-CALIBRATION (BACKLASH AND NOZZLE OFFSET) ****************/
 

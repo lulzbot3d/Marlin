@@ -61,19 +61,18 @@ void InterfaceSettingsScreen::onRedraw(draw_mode_t what) {
 
     cmd.cmd(CLEAR_COLOR_RGB(bg_color))
        .cmd(CLEAR(true,true,true))
+       .cmd(COLOR_RGB(bg_text_enabled))
        .tag(0)
        .font(font_medium)
-       .text      (BTN_POS(1,1), BTN_SIZE(4,1), F("Interface Settings"))
+       .text(BTN_POS(1,1), BTN_SIZE(4,1), F("Interface Settings"))
     #undef EDGE_R
     #define EDGE_R 30
        .font(font_small)
        .tag(0)
-       .text(BTN_POS(1,2), BTN_SIZE(2,1), F("Screen brightness:"), OPT_RIGHTX | OPT_CENTERY)
-       .text(BTN_POS(1,3), BTN_SIZE(2,1), F("Sound volume:"),      OPT_RIGHTX | OPT_CENTERY)
-       .text(BTN_POS(1,4), BTN_SIZE(2,1), F("Screen lock:"),       OPT_RIGHTX | OPT_CENTERY);
-      #ifdef SPI_FLASH_SS
-    cmd.text(BTN_POS(1,5), BTN_SIZE(2,1), F("Boot animation:"),    OPT_RIGHTX | OPT_CENTERY);
-      #endif
+       .text(BTN_POS(1,2), BTN_SIZE(2,1), F("LCD brightness:"), OPT_RIGHTX | OPT_CENTERY)
+       .text(BTN_POS(1,3), BTN_SIZE(2,1), F("Sound volume:"),   OPT_RIGHTX | OPT_CENTERY)
+       .text(BTN_POS(1,4), BTN_SIZE(2,1), F("Screen lock:"),    OPT_RIGHTX | OPT_CENTERY);
+    cmd.text(BTN_POS(1,5), BTN_SIZE(2,1), F("Boot screen:"),    OPT_RIGHTX | OPT_CENTERY);
     #undef EDGE_R
   }
 
@@ -84,24 +83,24 @@ void InterfaceSettingsScreen::onRedraw(draw_mode_t what) {
       constexpr uint8_t w = 1;
     #endif
 
+    set_button_colors(ui_widget);
     cmd.font(font_medium)
     #define EDGE_R 30
        .tag(2).slider(BTN_POS(3,2), BTN_SIZE(2,1), screen_data.InterfaceSettingsScreen.brightness, 128)
        .tag(3).slider(BTN_POS(3,3), BTN_SIZE(2,1), screen_data.InterfaceSettingsScreen.volume,     0xFF)
        .tag(4).toggle(BTN_POS(3,4), BTN_SIZE(w,1), F("off\xFFon"), LockScreen::is_enabled())
-       #ifdef SPI_FLASH_SS
-       .tag(5).toggle(BTN_POS(3,5), BTN_SIZE(w,1), F("off\xFFon"), UIData::animations_enabled())
-       #endif
+       .tag(5).toggle(BTN_POS(3,5), BTN_SIZE(w,1), F("off\xFFon"), UIData::animations_enabled());
     #undef EDGE_R
     #define EDGE_R 0
+    default_button_colors();
     #if defined(USE_PORTRAIT_ORIENTATION)
-      .tag(6).button (BTN_POS(1,6), BTN_SIZE(4,1), F("Customize Sounds"))
-      .style(ACTION_BTN)
-      .tag(1).button (BTN_POS(1,7), BTN_SIZE(4,1), F("Back"));
+    cmd.tag(6).button (BTN_POS(1,6), BTN_SIZE(4,1), F("Customize Sounds"))
+       .style(ACTION_BTN)
+       .tag(1).button (BTN_POS(1,7), BTN_SIZE(4,1), F("Back"));
     #else
-      .tag(6).button (BTN_POS(1,6), BTN_SIZE(2,1), F("Customize Sounds"))
-      .style(ACTION_BTN)
-      .tag(1).button (BTN_POS(3,6), BTN_SIZE(2,1), F("Back"));
+    cmd.tag(6).button (BTN_POS(1,6), BTN_SIZE(2,1), F("Customize Sounds"))
+       .style(ACTION_BTN)
+       .tag(1).button (BTN_POS(3,6), BTN_SIZE(2,1), F("Back"));
     #endif
   }
 }

@@ -163,11 +163,11 @@ void FilesScreen::drawFooter() {
 
   CommandProcessor cmd;
   cmd.font(font_medium);
-  cmd.style(has_selection ? NORMAL : ACTION_BTN)
+  cmd.style(has_selection ? NORMAL_BTN : ACTION_BTN)
      .tag(back_tag).button( BTN_POS(4,y), BTN_SIZE(3,h), F("Back"));
 
   cmd.enabled(has_selection)
-     .style(has_selection ? ACTION_BTN : NORMAL);
+     .style(has_selection ? ACTION_BTN : NORMAL_BTN);
   if(screen_data.FilesScreen.flags.is_dir) {
     cmd.tag(244).button( BTN_POS(1, y), BTN_SIZE(3,h), F("Open"));
   } else {

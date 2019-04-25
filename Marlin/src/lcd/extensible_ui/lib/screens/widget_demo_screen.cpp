@@ -83,7 +83,7 @@ void WidgetsScreen::onRedraw(draw_mode_t what) {
 
     cmd.font(font_large)
               .text      (BTN_POS(1,1),  BTN_SIZE(4,1), F("Sample Widgets"))
-       .tag(0).text      (BTN_POS(3,6),  BTN_SIZE(1,1), F("Show grid:"));
+       .tag(0).text      (BTN_POS(3,6),  BTN_SIZE(1,1), F("Show grid:"))
        .colors(ui_toggle)
        .tag(2).dial      (BTN_POS(1,2),  BTN_SIZE(1,3), slider_val)
        .tag(3).dial      (BTN_POS(1,5),  BTN_SIZE(1,3), slider_val)

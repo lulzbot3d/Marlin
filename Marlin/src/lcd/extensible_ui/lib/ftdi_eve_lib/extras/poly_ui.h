@@ -271,12 +271,14 @@ class GenericPolyUI {
     }
 
     void shadow(poly_reader_t r, uint8_t offset) {
-      using namespace FTDI;
-      cmd.cmd(VERTEX_TRANSLATE_X(offset * 16));
-      cmd.cmd(VERTEX_TRANSLATE_Y(offset * 16));
-      fill(r);
-      cmd.cmd(VERTEX_TRANSLATE_X(0));
-      cmd.cmd(VERTEX_TRANSLATE_Y(0));
+      #if FTDI_API_LEVEL >= 810
+        using namespace FTDI;
+        cmd.cmd(VERTEX_TRANSLATE_X(offset * 16));
+        cmd.cmd(VERTEX_TRANSLATE_Y(offset * 16));
+        fill(r);
+        cmd.cmd(VERTEX_TRANSLATE_X(0));
+        cmd.cmd(VERTEX_TRANSLATE_Y(0));
+      #endif
     }
 
     // Strokes a polygon with the current COLOR_RGB
@@ -339,14 +341,16 @@ class GenericPolyUI {
       cmd.cmd(SAVE_CONTEXT());
       cmd.cmd(TAG(tag));
       // Draw the shadow
-      cmd.cmd(VERTEX_TRANSLATE_X(btn_shadow_depth * 16));
-      cmd.cmd(VERTEX_TRANSLATE_Y(btn_shadow_depth * 16));
-      if(EventLoop::get_pressed_tag() != tag) {
-        cmd.cmd(COLOR_RGB(btn_shadow_color));
-        fill(r);
-        cmd.cmd(VERTEX_TRANSLATE_X(0));
-        cmd.cmd(VERTEX_TRANSLATE_Y(0));
-      }
+      #if FTDI_API_LEVEL >= 810
+        cmd.cmd(VERTEX_TRANSLATE_X(btn_shadow_depth * 16));
+        cmd.cmd(VERTEX_TRANSLATE_Y(btn_shadow_depth * 16));
+        if(EventLoop::get_pressed_tag() != tag) {
+          cmd.cmd(COLOR_RGB(btn_shadow_color));
+          fill(r);
+          cmd.cmd(VERTEX_TRANSLATE_X(0));
+          cmd.cmd(VERTEX_TRANSLATE_Y(0));
+        }
+      #endif
       // Draw the fill and stroke
       cmd.cmd(COLOR_RGB(btn_fill_color));
       fill(r);

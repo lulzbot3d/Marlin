@@ -831,6 +831,7 @@
 #elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT)
     #define LULZBOT_MENU_AXIS_LEVELING_COMMANDS \
         "M117 Leveling X Axis\n" /* Set LCD status */ \
+        "G0 X150\n"              /* Center axis */ \
         "G28 Z0\n"               /* Home Axis */ \
         "M117 Leveling done.\n"  /* Set LCD status */
 #else
@@ -1828,8 +1829,8 @@
 
 #define __LULZBOT_WIPE_GCODE(x,y1,y2,z) \
     "G1 X" #x " Y" #y2 " F5000\n"                 /* Move above wiper pad */ \
+    LULZBOT_WIPE_WAIT_TEMP \
     "G1 Z1\n"                                     /* Push nozzle into wiper */ \
-    "M109 R170\n"                                 /* Wait for wipe temp */ \
     "G1 X" #x " Y" #y2 " F4000\n"                 /* Slow wipe */ \
     "G1 X" #x " Y" #y1 " F4000\n"                 /* Slow wipe */ \
     "G1 X" #x " Y" #y2 " F4000\n"                 /* Slow wipe */ \
@@ -1913,7 +1914,6 @@
         LULZBOT_WIPE_HEAT_TEMP                    /* Preheat extruders */ \
         "G28 O1\n"                                /* Home if needed */ \
         "G1 Y25 Z10 F5000\n"                      /* Move to pad while heating */ \
-        LULZBOT_WIPE_WAIT_TEMP                    /* Wait for wipe temp */ \
         "M117 Rewiping nozzle\n"                  /* Status message */ \
         LULZBOT_REWIPE_E0                         /* Wipe first extruder */ \
         LULZBOT_REWIPE_E1                         /* Wipe second extruder */ \

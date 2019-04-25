@@ -50,9 +50,8 @@ void lulzbot_startup(void) {
 
     #if defined(LULZBOT_USE_Z_BELT)
         enable_Z();
-
         #if defined(LULZBOT_IS_TAZ)
-            GcodeSuite::process_subcommands_now_P("G28 Z");
+            GcodeSuite::process_subcommands_now_P(PSTR("G28 Z"));
         #endif
     #endif
 }

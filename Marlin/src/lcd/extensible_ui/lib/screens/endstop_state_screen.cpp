@@ -54,7 +54,7 @@ void EndstopStatesScreen::onRedraw(draw_mode_t what) {
   #define GRID_COLS 6
 
   #define PIN_BTN(X,Y,PIN)          button(BTN_POS(X,Y), BTN_SIZE(2,1), F(#PIN))
-  #define PIN_ENABLED(PIN,INV,X,Y)  cmd.enabled(1).style(READ(PIN##_PIN) != INV ? ACTION_BTN : 0).PIN_BTN(X,Y,PIN);
+  #define PIN_ENABLED(PIN,INV,X,Y)  cmd.enabled(1).colors(READ(PIN##_PIN) != INV ? action_btn : normal_btn).PIN_BTN(X,Y,PIN);
   #define PIN_DISABLED(PIN,INV,X,Y) cmd.enabled(0).PIN_BTN(X,Y,PIN);
 
   #if defined(USE_PORTRAIT_ORIENTATION)
@@ -120,7 +120,7 @@ void EndstopStatesScreen::onRedraw(draw_mode_t what) {
       #define EDGE_R 0
   #endif
 
-  cmd.style(ACTION_BTN).tag(1).font(font_medium)
+  cmd.colors(action_btn).tag(1).font(font_medium)
      .button( BTN_POS(1,7), BTN_SIZE(6,1), F("Back"));
   #undef GRID_COLS
   #undef GRID_ROWS

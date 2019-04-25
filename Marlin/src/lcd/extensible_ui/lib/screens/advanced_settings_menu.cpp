@@ -28,6 +28,7 @@
 
 using namespace FTDI;
 using namespace ExtUI;
+using namespace Theme;
 
 void AdvancedSettingsMenu::onRedraw(draw_mode_t what) {
   if(what & BACKGROUND) {
@@ -38,8 +39,8 @@ void AdvancedSettingsMenu::onRedraw(draw_mode_t what) {
 
   if(what & FOREGROUND) {
     CommandProcessor cmd;
-    default_button_colors();
-    cmd.font(Theme::font_medium)
+    cmd.colors(normal_btn)
+       .font(Theme::font_medium)
     #if defined(USE_PORTRAIT_ORIENTATION)
       #define GRID_ROWS 9
       #define GRID_COLS 2
@@ -91,7 +92,7 @@ void AdvancedSettingsMenu::onRedraw(draw_mode_t what) {
       .enabled(0)
       #endif
       .tag(8).button( BTN_POS(2,5), BTN_SIZE(1,1), F("Backlash"))
-      .style(ACTION_BTN)
+      .colors(action_btn)
       .tag(1) .button( BTN_POS(1,9), BTN_SIZE(2,1), F("Back"));
       #undef GRID_COLS
       #undef GRID_ROWS
@@ -129,7 +130,7 @@ void AdvancedSettingsMenu::onRedraw(draw_mode_t what) {
       .tag(11).button( BTN_POS(2,4), BTN_SIZE(1,1),  F("Filament"))
       .tag(9) .button( BTN_POS(2,5),  BTN_SIZE(1,1), F("Interface Settings"))
       .tag(10).button( BTN_POS(1,6),  BTN_SIZE(2,1), F("Restore Defaults"))
-      .style(ACTION_BTN)
+      .colors(action_btn)
       .tag(1) .button( BTN_POS(1,7),  BTN_SIZE(2,1), F("Back"));
     #endif
   }

@@ -93,23 +93,20 @@ void LockScreen::onRedraw(draw_mode_t what) {
        .text(BTN_POS(1,2), BTN_SIZE(1,1), message)
        .font(font_xlarge)
        .text(BTN_POS(1,4), BTN_SIZE(1,1), screen_data.LockScreen.passcode)
-       .font(font_large);
        #else
        .text(BTN_POS(1,1), BTN_SIZE(1,1), message)
        .font(font_xlarge)
        .text(BTN_POS(1,2), BTN_SIZE(1,1), screen_data.LockScreen.passcode)
-       .font(font_large);
        #endif
-
-    default_button_colors();
-
+       .font(font_large)
+       .colors(normal_btn)
        #if defined(USE_NUMERIC_PASSCODE)
-    cmd.keys(BTN_POS(1,l+1), BTN_SIZE(1,1), F("123"),        pressed)
+       .keys(BTN_POS(1,l+1), BTN_SIZE(1,1), F("123"),        pressed)
        .keys(BTN_POS(1,l+2), BTN_SIZE(1,1), F("456"),        pressed)
        .keys(BTN_POS(1,l+3), BTN_SIZE(1,1), F("789"),        pressed)
        .keys(BTN_POS(1,l+4), BTN_SIZE(1,1), F("0.<"),        pressed);
        #else
-    cmd.keys(BTN_POS(1,l+1), BTN_SIZE(1,1), F("1234567890"), pressed)
+       .keys(BTN_POS(1,l+1), BTN_SIZE(1,1), F("1234567890"), pressed)
        .keys(BTN_POS(1,l+2), BTN_SIZE(1,1), F("qwertyuiop"), pressed)
        .keys(BTN_POS(1,l+3), BTN_SIZE(1,1), F("asdfghjkl "), pressed)
        .keys(BTN_POS(1,l+4), BTN_SIZE(1,1), F("zxcvbnm!?<"), pressed);

@@ -83,23 +83,24 @@ void InterfaceSettingsScreen::onRedraw(draw_mode_t what) {
       constexpr uint8_t w = 1;
     #endif
 
-    set_button_colors(ui_widget);
     cmd.font(font_medium)
     #define EDGE_R 30
+       .colors(ui_slider)
        .tag(2).slider(BTN_POS(3,2), BTN_SIZE(2,1), screen_data.InterfaceSettingsScreen.brightness, 128)
        .tag(3).slider(BTN_POS(3,3), BTN_SIZE(2,1), screen_data.InterfaceSettingsScreen.volume,     0xFF)
+       .colors(ui_toggle)
        .tag(4).toggle(BTN_POS(3,4), BTN_SIZE(w,1), F("off\xFFon"), LockScreen::is_enabled())
-       .tag(5).toggle(BTN_POS(3,5), BTN_SIZE(w,1), F("off\xFFon"), UIData::animations_enabled());
+       .tag(5).toggle(BTN_POS(3,5), BTN_SIZE(w,1), F("off\xFFon"), UIData::animations_enabled())
     #undef EDGE_R
     #define EDGE_R 0
-    default_button_colors();
     #if defined(USE_PORTRAIT_ORIENTATION)
-    cmd.tag(6).button (BTN_POS(1,6), BTN_SIZE(4,1), F("Customize Sounds"))
-       .style(ACTION_BTN)
+       .colors(normal_btn)
+       .tag(6).button (BTN_POS(1,6), BTN_SIZE(4,1), F("Customize Sounds"))
+       .colors(action_btn)
        .tag(1).button (BTN_POS(1,7), BTN_SIZE(4,1), F("Back"));
     #else
-    cmd.tag(6).button (BTN_POS(1,6), BTN_SIZE(2,1), F("Customize Sounds"))
-       .style(ACTION_BTN)
+       .tag(6).button (BTN_POS(1,6), BTN_SIZE(2,1), F("Customize Sounds"))
+       .colors(action_btn)
        .tag(1).button (BTN_POS(3,6), BTN_SIZE(2,1), F("Back"));
     #endif
   }

@@ -90,18 +90,19 @@ void InterfaceSoundsScreen::onRedraw(draw_mode_t what) {
       constexpr uint8_t w = 1;
     #endif
 
-    set_button_colors(ui_widget);
     cmd.font(font_medium)
+       .colors(ui_slider)
     #define EDGE_R 30
        .tag(2).slider    (BTN_POS(3,2), BTN_SIZE(2,1), screen_data.InterfaceSettingsScreen.volume, 0xFF)
-       .tag(3).toggle    (BTN_POS(3,3), BTN_SIZE(w,1), F("off\xFFon"), UIData::touch_sounds_enabled());
+       .colors(ui_toggle)
+       .tag(3).toggle    (BTN_POS(3,3), BTN_SIZE(w,1), F("off\xFFon"), UIData::touch_sounds_enabled())
     #undef EDGE_R
-    default_button_colors();
+       .colors(normal_btn)
     #define EDGE_R 0
-    cmd.tag(4).button    (BTN_POS(3,5), BTN_SIZE(2,1), getSoundSelection(PRINTING_STARTED))
+       .tag(4).button    (BTN_POS(3,5), BTN_SIZE(2,1), getSoundSelection(PRINTING_STARTED))
        .tag(5).button    (BTN_POS(3,6), BTN_SIZE(2,1), getSoundSelection(PRINTING_FINISHED))
        .tag(6).button    (BTN_POS(3,7), BTN_SIZE(2,1), getSoundSelection(PRINTING_FAILED))
-       .style(ACTION_BTN)
+       .colors(action_btn)
        .tag(1).button    (BTN_POS(1,9), BTN_SIZE(4,1), F("Back"));
   }
 }

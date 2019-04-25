@@ -35,9 +35,9 @@ void BaseScreen::onEntry() {
   UIScreen::onEntry();
 }
 
-bool BaseScreen::buttonStyleCallback(uint8_t tag, uint8_t &style, uint16_t &options, bool post) {
+bool BaseScreen::buttonStyleCallback(CommandProcessor &cmd, uint8_t tag, uint8_t &style, uint16_t &options, bool post) {
   if(post) {
-    set_button_colors(normal_btn);
+    cmd.colors(normal_btn);
     return false;
   }
 
@@ -51,29 +51,13 @@ bool BaseScreen::buttonStyleCallback(uint8_t tag, uint8_t &style, uint16_t &opti
     options = OPT_FLAT;
   }
 
-  CommandProcessor cmd;
-
-  if(style & DISABLED_BTN) {
-      cmd.tag(0);
-      style &= ~DISABLED_BTN;
-      set_button_colors(disabled_btn);
-  } else {
-    switch(style) {
-      case ACTION_BTN:
-        set_button_colors(action_btn);
-        break;
-      case RED_BTN:
-        set_button_colors(red_btn);
-        break;
-      default:
-        return false;
-    }
+  if(style & cmd.STYLE_DISABLED) {
+    cmd.tag(0);
+    style &= ~cmd.STYLE_DISABLED;
+    cmd.colors(disabled_btn);
+    return true; // Call me again to reset the colors
   }
-  return true; // Call me again to reset the colors
-}
-
-void BaseScreen::default_button_colors() {
-  set_button_colors(normal_btn);
+  return false;
 }
 
 void BaseScreen::onIdle() {

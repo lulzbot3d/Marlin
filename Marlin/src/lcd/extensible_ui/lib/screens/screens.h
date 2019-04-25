@@ -82,28 +82,12 @@ enum {
 
 class BaseScreen : public UIScreen {
   protected:
-    enum : uint8_t {
-      NORMAL_BTN,
-      ACTION_BTN,
-      RED_BTN,
-      DISABLED_BTN = 0x80
-    };
-
     #if defined(MENU_TIMEOUT)
       static uint32_t last_interaction;
     #endif
 
-    static inline void set_button_colors(const Theme::btn_colors &colors) {
-      CommandProcessor cmd;
-      cmd.cmd(FTDI::COLOR_RGB(colors.rgb))
-        .gradcolor(colors.grad)
-        .fgcolor(colors.fg)
-        .bgcolor(colors.bg);
-    }
-
-    static void default_button_colors();
   public:
-    static bool buttonStyleCallback(uint8_t tag, uint8_t &style, uint16_t &options, bool post);
+    static bool buttonStyleCallback(CommandProcessor &, uint8_t, uint8_t &, uint16_t &, bool);
 
     static void reset_menu_timeout();
 

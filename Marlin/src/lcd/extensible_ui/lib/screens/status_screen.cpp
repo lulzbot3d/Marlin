@@ -268,19 +268,16 @@ void StatusScreen::draw_progress(draw_mode_t what) {
 
 
 void StatusScreen::draw_interaction_buttons(draw_mode_t what) {
-  CommandProcessor cmd;
-  default_button_colors();
-
   #define GRID_COLS 4
-
   if(what & FOREGROUND) {
     using namespace ExtUI;
 
     const bool has_media = isMediaInserted() && !isPrintingFromMedia();
 
     CommandProcessor cmd;
-    cmd.font(Theme::font_medium)
-       .enabled(has_media).style(has_media ? ACTION_BTN : 0)
+    cmd.colors(normal_btn)
+       .font(Theme::font_medium)
+       .enabled(has_media).colors(has_media ? action_btn : normal_btn)
       #if defined(USE_PORTRAIT_ORIENTATION)
          .tag(3).button( BTN_POS(1,8), BTN_SIZE(2,1),
       #else
@@ -292,14 +289,13 @@ void StatusScreen::draw_interaction_buttons(draw_mode_t what) {
       #else
         F("SD Card"))
       #endif
-      .style(!has_media ? ACTION_BTN : 0)
+      .colors(!has_media ? action_btn : normal_btn)
       #if defined(USE_PORTRAIT_ORIENTATION)
        .tag(4).button( BTN_POS(3,8), BTN_SIZE(2,1), F("MENU"));
       #else
        .tag(4).button( BTN_POS(3,7), BTN_SIZE(2,2), F("MENU"));
     #endif
   }
-
   #undef  GRID_COLS
 }
 

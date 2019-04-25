@@ -63,7 +63,6 @@ void FilesScreen::drawSelectedFile() {
     screen_data.FilesScreen.flags.is_dir,
     true
   );
-  default_button_colors();
 }
 
 uint16_t FilesScreen::getFileForTag(uint8_t tag) {
@@ -136,12 +135,13 @@ void FilesScreen::drawHeader() {
   sprintf_P(str, PSTR("Page %d of %d"),
     screen_data.FilesScreen.cur_page + 1, screen_data.FilesScreen.num_page);
 
-  CommandProcessor cmd;
-  cmd.font(font_small)
-     .tag(0).button( BTN_POS(2,1), BTN_SIZE(4,header_h), str, OPT_CENTER | OPT_FLAT);
 
-  cmd.font(font_medium)
-     .style(ACTION_BTN)
+  CommandProcessor cmd;
+  cmd.colors(normal_btn)
+     .font(font_small)
+     .tag(0).button( BTN_POS(2,1), BTN_SIZE(4,header_h), str, OPT_CENTER | OPT_FLAT)
+     .font(font_medium)
+     .colors(action_btn)
      .tag(241).enabled(prev_enabled).button( BTN_POS(1,1), BTN_SIZE(1,header_h), F("<"))
      .tag(242).enabled(next_enabled).button( BTN_POS(6,1), BTN_SIZE(1,header_h), F(">"));
 }
@@ -162,12 +162,12 @@ void FilesScreen::drawFooter() {
   const uint8_t h             = footer_h;
 
   CommandProcessor cmd;
-  cmd.font(font_medium);
-  cmd.style(has_selection ? NORMAL_BTN : ACTION_BTN)
-     .tag(back_tag).button( BTN_POS(4,y), BTN_SIZE(3,h), F("Back"));
-
-  cmd.enabled(has_selection)
-     .style(has_selection ? ACTION_BTN : NORMAL_BTN);
+  cmd.colors(normal_btn)
+     .font(font_medium)
+     .colors(has_selection ? normal_btn : action_btn)
+     .tag(back_tag).button( BTN_POS(4,y), BTN_SIZE(3,h), F("Back"))
+     .enabled(has_selection)
+     .colors(has_selection ? action_btn : normal_btn);
   if(screen_data.FilesScreen.flags.is_dir) {
     cmd.tag(244).button( BTN_POS(1, y), BTN_SIZE(3,h), F("Open"));
   } else {
@@ -176,10 +176,7 @@ void FilesScreen::drawFooter() {
 }
 
 void FilesScreen::onRedraw(draw_mode_t what) {
-  CommandProcessor cmd;
-
   if(what & FOREGROUND) {
-    default_button_colors();
     drawHeader();
     drawSelectedFile();
     drawFooter();
@@ -192,8 +189,8 @@ void FilesScreen::gotoPage(uint8_t page) {
   CommandProcessor cmd;
   cmd.cmd(CMD_DLSTART)
      .cmd(CLEAR_COLOR_RGB(bg_color))
-     .cmd(CLEAR(true,true,true));
-  default_button_colors();
+     .cmd(CLEAR(true,true,true))
+     .colors(normal_btn);
   drawFileList();
   storeBackground();
 }

@@ -48,10 +48,11 @@ BaseNumericAdjustmentScreen::widgets_t::widgets_t(draw_mode_t what) : _what(what
   if(what & FOREGROUND) {
     CommandProcessor cmd;
     cmd.font(font_medium)
+       .colors(action_btn)
     #if defined(USE_PORTRAIT_ORIENTATION)
-       .style(ACTION_BTN).tag(1).button( BTN_POS(1,10), BTN_SIZE(13,1), F("Back"));
+       .tag(1).button( BTN_POS(1,10), BTN_SIZE(13,1), F("Back"));
     #else
-       .style(ACTION_BTN).tag(1).button( BTN_POS(15,7), BTN_SIZE(4,1),  F("Back"));
+       .tag(1).button( BTN_POS(15,7), BTN_SIZE(4,1),  F("Back"));
     #endif
   }
 
@@ -101,7 +102,7 @@ void BaseNumericAdjustmentScreen::widgets_t::_draw_increment_btn(uint8_t line, c
   }
 
   if(screen_data.BaseNumericAdjustmentScreen.increment == tag) {
-    cmd.style(ACTION_BTN);
+    cmd.colors(action_btn);
   }
 
   switch(tag) {
@@ -167,11 +168,11 @@ void BaseNumericAdjustmentScreen::widgets_t::adjuster_sram_val(uint8_t tag, cons
   }
 
   if(_what & FOREGROUND) {
-    default_button_colors();
-    cmd.font(font_medium)
+    cmd.colors(normal_btn)
+       .font(font_medium)
        .tag(is_enabled ? tag   : 0).enabled(is_enabled).button( BTN_POS(10,_line), BTN_SIZE(2,1),  F("-"))
-       .tag(is_enabled ? tag+1 : 0).enabled(is_enabled).button( BTN_POS(12,_line), BTN_SIZE(2,1),  F("+"));
-    cmd.tag(0).font(font_small).text ( BTN_POS(5,_line), BTN_SIZE(5,1), is_enabled ? value : "-");
+       .tag(is_enabled ? tag+1 : 0).enabled(is_enabled).button( BTN_POS(12,_line), BTN_SIZE(2,1),  F("+"))
+       .tag(0).font(font_small)                        .text  ( BTN_POS(5,_line),  BTN_SIZE(5,1),  is_enabled ? value : "-");
   }
 
   _line++;

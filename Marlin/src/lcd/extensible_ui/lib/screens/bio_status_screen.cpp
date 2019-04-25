@@ -81,12 +81,11 @@ void StatusScreen::onRedraw(draw_mode_t what) {
   int16_t x, y, h, v;
   ui.bounds(POLY(usb_btn), x, y, h, v);
 
-  default_button_colors();
-
   const bool has_media = isMediaInserted() && !isPrintingFromMedia();
 
   cmd.font(font_medium)
-     .enabled(has_media).style(has_media ? ACTION_BTN : 0)
+     .colors(normal_btn)
+     .enabled(has_media).colors(has_media ? action_btn : normal_btn)
      .tag(9).button(x, y, h, v,
         isPrintingFromMedia() ?
           F("Printing") :
@@ -98,7 +97,7 @@ void StatusScreen::onRedraw(draw_mode_t what) {
       );
 
   ui.bounds(POLY(menu_btn), x, y, h, v);
-  cmd.style(!has_media ? ACTION_BTN : 0).tag(10).button(x, y, h, v, F("Menu"));
+  cmd.colors(!has_media ? action_btn : normal_btn).tag(10).button(x, y, h, v, F("Menu"));
 }
 
 bool StatusScreen::onTouchEnd(uint8_t tag) {

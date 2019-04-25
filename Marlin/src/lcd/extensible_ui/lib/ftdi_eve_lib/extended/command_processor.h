@@ -21,6 +21,15 @@
 
 #pragma once
 
+typedef struct {
+  uint32_t bg;
+  uint32_t grad;
+  uint32_t fg;
+  uint32_t rgb;
+} btn_colors;
+
+
+
 /**************************** Enhanced Command Processor **************************/
 
 /* The CommandProcessor class wraps the CommandFifo with several features to make
@@ -34,15 +43,18 @@
  */
 
 class CommandProcessor : public CLCD::CommandFifo {
+  public:
+    static constexpr uint8_t STYLE_DISABLED = 0x80;
+
   private:
-    static bool default_button_style_func(uint8_t tag, uint8_t &style, uint16_t &options, bool post) {
+    static bool default_button_style_func(CommandProcessor &cmd, uint8_t tag, uint8_t &style, uint16_t &options, bool post) {
       if(tag != 0 && FTDI::EventLoop::get_pressed_tag() == tag) {
         options = FTDI::OPT_FLAT;
       }
       return false;
     }
 
-    typedef bool btn_style_func_t(uint8_t tag, uint8_t &style, uint16_t &options, bool post);
+    typedef bool btn_style_func_t(CommandProcessor &cmd, uint8_t tag, uint8_t &style, uint16_t &options, bool post);
 
     static btn_style_func_t  *_btn_style_callback;
     static bool is_tracking;
@@ -50,10 +62,6 @@ class CommandProcessor : public CLCD::CommandFifo {
     uint8_t _style = 0;
 
   protected:
-    enum : uint8_t {
-      DISABLED = 0x80
-    };
-
     // Returns the cannonical thickness of a widget (i.e. the height of a toggle element)
     uint16_t widget_thickness() {
       FontMetrics fm;
@@ -86,6 +94,15 @@ class CommandProcessor : public CLCD::CommandFifo {
     }
 
   public:
+    // Helper method for setting all colors at once
+    inline CommandProcessor& colors(const btn_colors &colors) {
+      cmd(FTDI::COLOR_RGB(colors.rgb))
+        .gradcolor(colors.grad)
+        .fgcolor(colors.fg)
+        .bgcolor(colors.bg);
+      return *this;
+    }
+
     inline CommandProcessor& bitmap_size(uint8_t filter, uint8_t wrapx, uint8_t wrapy, uint16_t width, uint16_t height) {
       cmd(FTDI::BITMAP_SIZE(filter, wrapx, wrapy, width, height));
       #if FTDI_API_LEVEL >= 810
@@ -113,8 +130,18 @@ class CommandProcessor : public CLCD::CommandFifo {
 
     inline CommandProcessor& font     (int16_t  font)             {_font = font; return *this;}
 
-    inline CommandProcessor& enabled  (bool enabled)              {if(enabled) _style &= ~DISABLED; else _style |= DISABLED; return *this;}
-    inline CommandProcessor& style    (uint8_t style)             {_style = (_style & DISABLED) | style; return *this;}
+    inline CommandProcessor& enabled  (bool enabled) {
+      if(enabled)
+        _style &= ~STYLE_DISABLED;
+      else
+        _style |= STYLE_DISABLED;
+      return *this;
+    }
+
+    inline CommandProcessor& style    (uint8_t style) {
+      _style = (_style & STYLE_DISABLED) | style;
+      return *this;
+    }
 
     // Wrap all the CommandFifo routines to allow method chaining
 
@@ -305,10 +332,10 @@ class CommandProcessor : public CLCD::CommandFifo {
     CommandProcessor& button(int16_t x, int16_t y, int16_t w, int16_t h, T text, uint16_t options = FTDI::OPT_3D) {
       using namespace FTDI;
       bool styleModified = false;
-      if(_btn_style_callback) styleModified = _btn_style_callback(_tag, _style, options, false);
+      if(_btn_style_callback) styleModified = _btn_style_callback(*this, _tag, _style, options, false);
       CLCD::CommandFifo::button(x, y, w, h, _font, options);
       CLCD::CommandFifo::str(text);
-      if(_btn_style_callback && styleModified) _btn_style_callback(_tag, _style, options, true);
+      if(_btn_style_callback && styleModified) _btn_style_callback(*this, _tag, _style, options, true);
       return *this;
     }
 

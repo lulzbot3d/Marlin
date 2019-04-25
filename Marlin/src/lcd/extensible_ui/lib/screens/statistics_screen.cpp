@@ -28,6 +28,7 @@
 
 using namespace FTDI;
 using namespace ExtUI;
+using namespace Theme;
 
 #define GRID_COLS 4
 #define GRID_ROWS 7
@@ -61,7 +62,7 @@ void StatisticsScreen::onRedraw(draw_mode_t what) {
 
   if(what & FOREGROUND) {
     cmd.font(Theme::font_medium)
-       .style(ACTION_BTN)
+       .colors(action_btn)
        .tag(1).button(BTN_POS(1,7), BTN_SIZE(4,1), F("Back"));
   }
 }

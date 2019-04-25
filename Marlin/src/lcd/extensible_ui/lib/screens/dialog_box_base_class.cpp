@@ -46,7 +46,7 @@ void DialogBoxBaseClass::drawMessage(const T line1, const T line2, const T line3
   for(uint8_t line = 0; line < n_lines; line++) {
     cmd.text( BTN_POS(1,3-n_lines/2+line), BTN_SIZE(2,1), lines[line]);
   }
-  default_button_colors();
+  cmd.colors(normal_btn);
 }
 
 template void DialogBoxBaseClass::drawMessage(const char *, const char *, const char *, int16_t);

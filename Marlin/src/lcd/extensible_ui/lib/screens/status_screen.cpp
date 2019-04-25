@@ -30,6 +30,7 @@
 #include "../io/flash_storage.h"
 
 using namespace FTDI;
+using namespace Theme;
 
 #if defined(USE_PORTRAIT_ORIENTATION)
   #define GRID_ROWS 8

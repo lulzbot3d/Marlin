@@ -27,6 +27,7 @@
 #include "screens.h"
 
 using namespace FTDI;
+using namespace Theme;
 
 void MainMenu::onRedraw(draw_mode_t what) {
   if(what & BACKGROUND) {

@@ -50,10 +50,11 @@ BaseNumericAdjustmentScreen::widgets_t::widgets_t(draw_mode_t what) : _what(what
     cmd.font(font_medium)
        .colors(action_btn)
     #if defined(USE_PORTRAIT_ORIENTATION)
-       .tag(1).button( BTN_POS(1,10), BTN_SIZE(13,1), F("Back"));
+       .tag(1).button( BTN_POS(1,10), BTN_SIZE(13,1), F("Back"))
     #else
-       .tag(1).button( BTN_POS(15,7), BTN_SIZE(4,1),  F("Back"));
+       .tag(1).button( BTN_POS(15,7), BTN_SIZE(4,1),  F("Back"))
     #endif
+       .colors(normal_btn);
   }
 
   _line = 1;
@@ -96,13 +97,10 @@ void BaseNumericAdjustmentScreen::widgets_t::_draw_increment_btn(uint8_t line, c
   CommandProcessor  cmd;
   const char        *label = PSTR("?");
   uint8_t            pos;
+  uint8_t &          increment = screen_data.BaseNumericAdjustmentScreen.increment;
 
-  if(screen_data.BaseNumericAdjustmentScreen.increment == 0) {
-    screen_data.BaseNumericAdjustmentScreen.increment = tag; // Set the default value to be the first.
-  }
-
-  if(screen_data.BaseNumericAdjustmentScreen.increment == tag) {
-    cmd.colors(action_btn);
+  if(increment == 0) {
+    increment = tag; // Set the default value to be the first.
   }
 
   switch(tag) {
@@ -115,10 +113,11 @@ void BaseNumericAdjustmentScreen::widgets_t::_draw_increment_btn(uint8_t line, c
   }
 
   cmd.tag(tag)
+     .colors(increment == tag ? action_btn : normal_btn)
   #if defined(USE_PORTRAIT_ORIENTATION)
-    .font(font_small);
+     .font(font_small);
   #else
-    .font(font_medium);
+     .font(font_medium);
   #endif
   switch(pos) {
     #if defined(USE_PORTRAIT_ORIENTATION)

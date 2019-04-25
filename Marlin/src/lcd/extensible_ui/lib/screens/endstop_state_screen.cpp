@@ -115,13 +115,15 @@ void EndstopStatesScreen::onRedraw(draw_mode_t what) {
     #define EDGE_R 30
     cmd.font(font_small)
        .text         (BTN_POS(1,5), BTN_SIZE(3,1), F("Soft Limits:"), OPT_RIGHTX | OPT_CENTERY)
+       .colors(ui_toggle)
        .tag(2).toggle(BTN_POS(4,5), BTN_SIZE(3,1), F("off\xFFon"), getSoftEndstopState());
       #undef EDGE_R
       #define EDGE_R 0
   #endif
 
-  cmd.colors(action_btn).tag(1).font(font_medium)
-     .button( BTN_POS(1,7), BTN_SIZE(6,1), F("Back"));
+  cmd.font(font_medium)
+     .colors(action_btn)
+     .tag(1).button( BTN_POS(1,7), BTN_SIZE(6,1), F("Back"));
   #undef GRID_COLS
   #undef GRID_ROWS
 }

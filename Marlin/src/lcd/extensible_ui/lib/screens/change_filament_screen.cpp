@@ -249,6 +249,16 @@ ExtUI::extruder_t ChangeFilamentScreen::getExtruder() {
   }
 }
 
+bool ChangeFilamentScreen::onTouchStart(uint8_t tag) {
+  // Make the Momentary and Continuous buttons slightly more responsive
+  switch(tag) {
+    case 5: case 6: case 7: case 8:
+      return ChangeFilamentScreen::onTouchHeld(tag);
+    default:
+      return false;
+  }
+}
+
 bool ChangeFilamentScreen::onTouchEnd(uint8_t tag) {
   using namespace ExtUI;
   switch(tag) {
@@ -291,7 +301,7 @@ bool ChangeFilamentScreen::onTouchHeld(uint8_t tag) {
   }
   #undef UI_DECREMENT_AXIS
   #undef UI_INCREMENT_AXIS
-  return true;
+  return false;
 }
 
 void ChangeFilamentScreen::onIdle() {

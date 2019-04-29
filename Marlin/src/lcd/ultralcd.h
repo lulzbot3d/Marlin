@@ -311,6 +311,11 @@ public:
       static inline void refresh(const LCDViewAction type) { lcdDrawUpdate = type; }
       static inline void refresh() { refresh(LCDVIEW_CLEAR_CALL_REDRAW); }
 
+      #if ENABLED(SHOW_CUSTOM_BOOTSCREEN)
+        static void draw_custom_bootscreen();
+      #endif
+      static void draw_marlin_bootscreen();
+
       #if ENABLED(SHOW_BOOTSCREEN)
         static void show_bootscreen();
       #endif

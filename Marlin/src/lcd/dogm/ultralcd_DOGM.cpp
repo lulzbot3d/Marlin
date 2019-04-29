@@ -108,7 +108,7 @@ void MarlinUI::set_font(const MarlinFont font_nr) {
     #ifdef LULZBOT_CUSTOM_BOOTSCREEN
       LULZBOT_CUSTOM_BOOTSCREEN
     #else
-    FORCE_INLINE void draw_custom_bootscreen(const u8g_pgm_uint8_t * const bmp, const bool erase=true) {
+    FORCE_INLINE void draw_custom_bootscreen_frame(const u8g_pgm_uint8_t * const bmp, const bool erase=true) {
       constexpr u8g_uint_t left = (LCD_PIXEL_WIDTH  - (CUSTOM_BOOTSCREEN_BMPWIDTH)) / 2,
                            top = (LCD_PIXEL_HEIGHT - (CUSTOM_BOOTSCREEN_BMPHEIGHT)) / 2;
       #if ENABLED(CUSTOM_BOOTSCREEN_INVERTED)
@@ -134,30 +134,22 @@ void MarlinUI::set_font(const MarlinFont font_nr) {
         #endif
       } while (u8g.nextPage());
     }
-    #endif
 
-    void lcd_custom_bootscreen() {
+    void MarlinUI::draw_custom_bootscreen() {
       #if ENABLED(ANIMATED_BOOTSCREEN)
         LOOP_L_N(f, COUNT(custom_bootscreen_animation)) {
           if (f) safe_delay(CUSTOM_BOOTSCREEN_FRAME_TIME);
-          draw_custom_bootscreen((u8g_pgm_uint8_t*)pgm_read_ptr(&custom_bootscreen_animation[f]), f == 0);
+          draw_custom_bootscreen_frame((u8g_pgm_uint8_t*)pgm_read_ptr(&custom_bootscreen_animation[f]), f == 0);
         }
       #else
-        draw_custom_bootscreen(custom_start_bmp);
+        draw_custom_bootscreen_frame(custom_start_bmp);
       #endif
-      #ifndef CUSTOM_BOOTSCREEN_TIMEOUT
-        #define CUSTOM_BOOTSCREEN_TIMEOUT 2500
-      #endif
-      safe_delay(CUSTOM_BOOTSCREEN_TIMEOUT);
     }
+    #endif // LULZBOT_CUSTOM_BOOTSCREEN
 
   #endif // SHOW_CUSTOM_BOOTSCREEN
 
-  void MarlinUI::show_bootscreen() {
-    #if ENABLED(SHOW_CUSTOM_BOOTSCREEN)
-      lcd_custom_bootscreen();
-    #endif
-
+  void MarlinUI::draw_marlin_bootscreen() {
     // Screen dimensions.
     //const uint8_t width = u8g.getWidth(), height = u8g.getHeight();
     constexpr uint8_t width = LCD_PIXEL_WIDTH, height = LCD_PIXEL_HEIGHT;
@@ -207,9 +199,21 @@ void MarlinUI::set_font(const MarlinFont font_nr) {
         u8g.drawStr(txt_offx_2, txt_base, STRING_SPLASH_LINE2);
       #endif
     } while (u8g.nextPage());
+
+  }
+
+  void MarlinUI::show_bootscreen() {
     #ifndef BOOTSCREEN_TIMEOUT
       #define BOOTSCREEN_TIMEOUT 2500
     #endif
+    #if ENABLED(SHOW_CUSTOM_BOOTSCREEN)
+      #ifndef CUSTOM_BOOTSCREEN_TIMEOUT
+        #define CUSTOM_BOOTSCREEN_TIMEOUT 2500
+      #endif
+      draw_custom_bootscreen();
+      safe_delay(CUSTOM_BOOTSCREEN_TIMEOUT);
+    #endif
+    draw_marlin_bootscreen();
     safe_delay(BOOTSCREEN_TIMEOUT);
   }
 

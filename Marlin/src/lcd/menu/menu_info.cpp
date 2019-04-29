@@ -26,7 +26,7 @@
 
 #include "../../inc/MarlinConfigPre.h"
 
-#if HAS_LCD_MENU && ENABLED(LCD_INFO_MENU) || ENABLED(LULZBOT_ABOUT_FIRMWARE_MENU)
+#if HAS_LCD_MENU && ENABLED(LCD_INFO_MENU)
 
 #include "menu.h"
 // #include "../../module/motion.h"
@@ -208,18 +208,66 @@ void menu_info_printer() {
   END_SCREEN();
 }
 
+#if ENABLED(LCD_INFO_PRINTER_SHOWS_BOOTSCREEN)
+  //
+  // About Printer > Show Bootscreen
+  //
+
+  void menu_show_marlin_bootscreen() {
+    if (ui.lcd_clicked) { ui.goto_previous_screen_no_defer(); }
+    ui.draw_marlin_bootscreen();
+  }
+
+  #if ENABLED(SHOW_CUSTOM_BOOTSCREEN)
+    void menu_show_custom_bootscreen() {
+      if (ui.lcd_clicked) { ui.goto_screen(menu_show_marlin_bootscreen); }
+      ui.draw_custom_bootscreen();
+    }
+  #endif
+#endif // LCD_INFO_PRINTER_SHOW_BOOTSCREEN
+
+void menu_game();
+
 //
 // "About Printer" submenu
 //
 void menu_info() {
   START_MENU();
   MENU_BACK(MSG_MAIN);
-  MENU_ITEM(submenu, MSG_INFO_PRINTER_MENU, menu_info_printer);        // Printer Info >
-  MENU_ITEM(submenu, MSG_INFO_BOARD_MENU, menu_info_board);            // Board Info >
-  MENU_ITEM(submenu, MSG_INFO_THERMISTOR_MENU, menu_info_thermistors); // Thermistors >
+  #if ENABLED(LCD_INFO_PRINTER_SHOWS_BOOTSCREEN)
+    MENU_ITEM(submenu, MSG_INFO_PRINTER_MENU,
+      #if ENABLED(SHOW_CUSTOM_BOOTSCREEN)
+        menu_show_custom_bootscreen);
+      #else
+        menu_show_marlin_bootscreen);
+      #endif
+  #else
+    MENU_ITEM(submenu, MSG_INFO_PRINTER_MENU, menu_info_printer);        // Printer Info >
+    MENU_ITEM(submenu, MSG_INFO_BOARD_MENU, menu_info_board);            // Board Info >
+    MENU_ITEM(submenu, MSG_INFO_THERMISTOR_MENU, menu_info_thermistors); // Thermistors >
+  #endif
   #if ENABLED(PRINTCOUNTER)
     MENU_ITEM(submenu, MSG_INFO_STATS_MENU, menu_info_stats);          // Printer Stats >
   #endif
+
+  #if ANY(MARLIN_BRICKOUT, MARLIN_INVADERS, MARLIN_SNAKE) && defined(LULZBOT_GAMES_EASTER_EGG)
+    MENU_ITEM_DUMMY();
+    MENU_ITEM_DUMMY();
+    MENU_ITEM(submenu, "Games", (
+      #if HAS_GAME_MENU
+        menu_game
+      #elif ENABLED(MARLIN_BRICKOUT)
+        brickout.enter_game
+      #elif ENABLED(MARLIN_INVADERS)
+        invaders.enter_game
+      #elif ENABLED(MARLIN_SNAKE)
+        snake.enter_game
+      #elif ENABLED(MARLIN_MAZE)
+        maze.enter_game
+      #endif
+    ));
+  #endif
+
   END_MENU();
 }
 

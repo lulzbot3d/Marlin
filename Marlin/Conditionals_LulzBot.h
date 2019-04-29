@@ -2204,6 +2204,8 @@
         #define LULZBOT_MENU_BED_LEVELING_GCODE "G28 XY\nM109 S175\nG28 Z\nM109 R145\nG12\nG29\nM104 S0"
     #endif
     #define LULZBOT_SHOW_CUSTOM_BOOTSCREEN
+    #define LULZBOT_LCD_INFO_MENU
+    #define LULZBOT_SHORT_INFO_MENU
     #define LULZBOT_GAMES_EASTER_EGG
     #define LULZBOT_ENCODER_PULSES_PER_STEP 2
     #define LULZBOT_ENCODER_STEPS_PER_MENU_ITEM 1
@@ -2225,7 +2227,6 @@
     #define LULZBOT_HIDE_EXTRA_FAN_CONFIG_IN_LCD
     #define LULZBOT_HIDE_PREHEAT_CHOICES
     #define LULZBOT_HIDE_INITIALIZE_EEPROM
-    #define LULZBOT_ABOUT_FIRMWARE_MENU
     #define LULZBOT_NO_BED_LEVELING_IN_LCD
     #define LULZBOT_PRECISION_ZOFFSET ftostr52
     #define LULZBOT_LCD_SET_PROGRESS_MANUALLY
@@ -2291,7 +2292,7 @@
 /***************************** CUSTOM SPLASH SCREEN *****************************/
 
 #define LULZBOT_CUSTOM_BOOTSCREEN \
-    void draw_custom_bootscreen(const u8g_pgm_uint8_t * const bmp, const bool erase=true) { \
+    void MarlinUI::draw_custom_bootscreen() { \
         u8g.firstPage(); \
         do { \
             u8g.drawBitmapP(0,0,CEILING(CUSTOM_BOOTSCREEN_BMPWIDTH, 8),CUSTOM_BOOTSCREEN_BMPHEIGHT,custom_start_bmp); \
@@ -2305,7 +2306,6 @@
             u8g.drawStr(61,62,"v"); \
             u8g.drawStr(66,62,SHORT_BUILD_VERSION); \
         } while( u8g.nextPage() ); \
-        safe_delay(CUSTOM_BOOTSCREEN_TIMEOUT); \
         u8g.setFont(MENU_FONT_NAME); \
     }
 

@@ -120,56 +120,6 @@ void menu_change_filament();
 void menu_info();
 void menu_led();
 
-#if ENABLED(LULZBOT_ABOUT_FIRMWARE_MENU)
-  void menu_info_stats();
-  void lcd_custom_bootscreen();
-
-  /**
-   *
-   * Extra menu item to show LulzBot firmware version
-   *
-   */
-  void menu_show_bootscreen() {
-    if (ui.lcd_clicked) { ui.goto_previous_screen_no_defer(); }
-    lcd_custom_bootscreen();
-  }
-
-  /**
-   *
-   * Extra menu item to show printer and firmware version
-   *
-   */
-  void menu_about_printer() {
-    START_MENU();
-    MENU_BACK(MSG_MAIN);
-    MENU_ITEM(submenu, _UxGT("Firmware Version"), menu_show_bootscreen);
-
-    #if ENABLED(PRINTCOUNTER)
-      MENU_ITEM(submenu, MSG_INFO_STATS_MENU, menu_info_stats);          // Printer Statistics >
-    #endif
-
-    #if ANY(MARLIN_BRICKOUT, MARLIN_INVADERS, MARLIN_SNAKE) && defined(LULZBOT_GAMES_EASTER_EGG)
-      MENU_ITEM_DUMMY();
-      MENU_ITEM_DUMMY();
-      MENU_ITEM(submenu, "Games", (
-        #if HAS_GAME_MENU
-          menu_game
-        #elif ENABLED(MARLIN_BRICKOUT)
-          brickout.enter_game
-        #elif ENABLED(MARLIN_INVADERS)
-          invaders.enter_game
-        #elif ENABLED(MARLIN_SNAKE)
-          snake.enter_game
-        #elif ENABLED(MARLIN_MAZE)
-          maze.enter_game
-        #endif
-      ));
-    #endif
-
-    END_MENU();
-  }
-#endif
-
 #if ENABLED(MIXING_EXTRUDER)
   void menu_mixer();
 #endif
@@ -268,14 +218,6 @@ void menu_main() {
     #else
       MENU_ITEM(submenu, MSG_FILAMENTCHANGE, menu_change_filament);
     #endif
-  #endif
-
-  #if ENABLED(LULZBOT_ABOUT_FIRMWARE_MENU)
-      #if ENABLED(PRINTCOUNTER)
-      MENU_ITEM(submenu, MSG_INFO_MENU, menu_about_printer);
-      #else
-      MENU_ITEM(submenu, MSG_INFO_MENU, menu_show_bootscreen);
-      #endif
   #endif
 
   #if ENABLED(LCD_INFO_MENU)

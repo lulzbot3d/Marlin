@@ -117,6 +117,7 @@ bool InterfaceSoundsScreen::onTouchEnd(uint8_t tag) {
     default:
       return false;
   }
+  SaveSettingsDialogBox::settingsChanged();
   return true;
 }
 
@@ -141,6 +142,7 @@ void InterfaceSoundsScreen::onIdle() {
       case 2:
         screen_data.InterfaceSettingsScreen.volume = value >> 8;
         SoundPlayer::set_volume(screen_data.InterfaceSettingsScreen.volume);
+        SaveSettingsDialogBox::settingsChanged();
         break;
       default:
         return;

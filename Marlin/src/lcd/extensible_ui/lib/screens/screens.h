@@ -154,11 +154,15 @@ class RestoreFailsafeDialogBox : public DialogBoxBaseClass, public UncachedScree
 };
 
 class SaveSettingsDialogBox : public DialogBoxBaseClass, public UncachedScreen {
+  private:
+    static bool needs_save;
+
   public:
     static void onRedraw(draw_mode_t);
     static bool onTouchEnd(uint8_t tag);
 
     static void promptToSaveSettings();
+    static void settingsChanged() {needs_save = true;}
 };
 
 class ConfirmAbortPrintDialogBox : public DialogBoxBaseClass, public UncachedScreen {

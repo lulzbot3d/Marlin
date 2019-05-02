@@ -174,8 +174,8 @@ void PrintCounter::saveStats() {
   persistentStore.write_data(address + sizeof(uint8_t), (uint8_t*)&data, sizeof(printStatistics));
   persistentStore.access_finish();
 
-  #if ENABLED(EXTENSIBLE_UI) && ENABLED(LULZBOT_PRINTCOUNTER)
-    ExtUI::onStoreSettings();
+  #if ENABLED(EXTENSIBLE_UI)
+    ExtUI::onConfigurationStoreWritten(true);
   #endif
 }
 

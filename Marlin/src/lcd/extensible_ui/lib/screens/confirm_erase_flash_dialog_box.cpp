@@ -42,7 +42,7 @@ bool ConfirmEraseFlashDialogBox::onTouchEnd(uint8_t tag) {
   switch(tag) {
     case 1:
       SpinnerDialogBox::show(F("Erasing..."));
-      UIFlashStorage::erase_chip();
+      UIFlashStorage::format_flash();
       SpinnerDialogBox::hide();
       AlertDialogBox::show(F("SPI flash erased"));
       // Remove ConfirmEraseFlashDialogBox from the stack

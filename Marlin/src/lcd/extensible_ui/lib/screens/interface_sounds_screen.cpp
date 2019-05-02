@@ -107,9 +107,14 @@ void InterfaceSoundsScreen::onRedraw(draw_mode_t what) {
   }
 }
 
+void InterfaceSoundsScreen::onEntry() {
+  screen_data.InterfaceSettingsScreen.volume = SoundPlayer::get_volume();
+  BaseScreen::onEntry();
+}
+
 bool InterfaceSoundsScreen::onTouchEnd(uint8_t tag) {
   switch(tag) {
-    case 1: GOTO_PREVIOUS();                                              break;
+    case 1: GOTO_PREVIOUS();                                              return true;
     case 3: UIData::enable_touch_sounds(!UIData::touch_sounds_enabled()); break;
     case 4: toggleSoundSelection(PRINTING_STARTED);                       break;
     case 5: toggleSoundSelection(PRINTING_FINISHED);                      break;

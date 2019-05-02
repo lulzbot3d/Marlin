@@ -457,9 +457,10 @@ class InterfaceSoundsScreen : public BaseScreen, public CachedScreen<INTERFACE_S
     enum event_t {
       PRINTING_STARTED  = 0,
       PRINTING_FINISHED = 1,
-      PRINTING_FAILED   = 2
+      PRINTING_FAILED   = 2,
+
+      NUM_EVENTS
     };
-    static constexpr uint8_t NUM_EVENTS = 3;
 
   private:
     friend class InterfaceSettingsScreen;
@@ -475,6 +476,7 @@ class InterfaceSoundsScreen : public BaseScreen, public CachedScreen<INTERFACE_S
 
     static void defaultSettings();
 
+    static void onEntry();
     static void onRedraw(draw_mode_t);
     static bool onTouchStart(uint8_t tag);
     static bool onTouchEnd(uint8_t tag);
@@ -484,53 +486,26 @@ class InterfaceSoundsScreen : public BaseScreen, public CachedScreen<INTERFACE_S
 class InterfaceSettingsScreen : public BaseScreen, public CachedScreen<INTERFACE_SETTINGS_SCREEN_CACHE> {
   private:
     struct persistent_data_t {
-      static constexpr uint32_t MAGIC_WORD = 0x4C756C7A; // 'Lulz'
-      uint32_t magic_word;
-      uint16_t version;
-      uint8_t  sound_volume;
-      uint8_t  screen_brightness;
-      uint8_t  bit_flags;
-      uint16_t passcode;
       uint32_t touch_transform_a;
       uint32_t touch_transform_b;
       uint32_t touch_transform_c;
       uint32_t touch_transform_d;
       uint32_t touch_transform_e;
       uint32_t touch_transform_f;
-      uint8_t event_sounds[InterfaceSoundsScreen::NUM_EVENTS];
-      #if ENABLED(LULZBOT_BACKUP_EEPROM_INFORMATION)
-        #if ENABLED(PRINTCOUNTER)
-          // Keep a backup of the print counter information in SPI EEPROM
-          // since the emulated EEPROM on the Due HAL does not survive
-          // a reflash.
-          uint16_t total_prints;
-          uint16_t finished_prints;
-          uint32_t total_print_time;
-          uint32_t longest_print;
-          float    total_filament_used;
-        #endif
-        float nozzle_offsets_mm[XYZ];
-        float nozzle_z_offset;
-      #endif
-      // TODO: The following should really be stored in the EEPROM
-      #if ENABLED(BACKLASH_GCODE)
-        float backlash_distance_mm[XYZ];
-        uint8_t backlash_correction;
-        #ifdef BACKLASH_SMOOTHING_MM
-          float backlash_smoothing_mm;
-        #endif
-      #endif
-      #if ENABLED(FILAMENT_RUNOUT_SENSOR)
-        bool runout_sensor_enabled;
-        #if defined(FILAMENT_RUNOUT_DISTANCE_MM)
-          float runout_sensor_mm;
-        #endif
-      #endif
+      uint16_t passcode;
+      uint8_t  sound_volume;
+      uint8_t  screen_brightness;
+      uint8_t  bit_flags;
+      uint8_t  event_sounds[InterfaceSoundsScreen::NUM_EVENTS];
     };
 
   public:
-    static void saveSettings();
-    static void loadSettings();
+    #ifdef LULZBOT_EEPROM_BACKUP_SIZE
+      static bool backupEEPROM();
+    #endif
+
+    static void saveSettings(char *);
+    static void loadSettings(const char *);
     static void defaultSettings();
 
     static void onStartup();

@@ -392,6 +392,16 @@ void MarlinSettings::postprocess() {
     report_current_position();
 }
 
+#if ENABLED(PRINTCOUNTER)
+  #if ENABLED(EEPROM_SETTINGS)
+    static_assert(
+      !WITHIN(STATS_EEPROM_ADDRESS, EEPROM_OFFSET, EEPROM_OFFSET + sizeof(SettingsData)) &&
+      !WITHIN(STATS_EEPROM_ADDRESS + sizeof(printStatistics), EEPROM_OFFSET, EEPROM_OFFSET + sizeof(SettingsData)),
+      "STATS_EEPROM_ADDRESS collides with EEPROM settings storage."
+    );
+  #endif
+#endif
+
 #if ENABLED(SD_FIRMWARE_UPDATE)
 
   #if ENABLED(EEPROM_SETTINGS)
@@ -417,6 +427,13 @@ void MarlinSettings::postprocess() {
   }
 
 #endif // SD_FIRMWARE_UPDATE
+
+#ifdef LULZBOT_EEPROM_BACKUP_SIZE
+  static_assert(
+      EEPROM_OFFSET + sizeof(SettingsData) < LULZBOT_EEPROM_BACKUP_SIZE,
+      "LULZBOT_EEPROM_BACKUP_SIZE is insufficient to capture all EEPROM data."
+    );
+#endif
 
 #define DEBUG_OUT ENABLED(EEPROM_CHITCHAT)
 #include "../core/debug_out.h"
@@ -1178,8 +1195,8 @@ void MarlinSettings::postprocess() {
     //
     #if ENABLED(EXTENSIBLE_UI)
       {
-        uint8_t extui_data[ExtUI::eeprom_data_size] = { 0 };
-        memcpy(extui_data, ExtUI::eeprom_data, ExtUI::eeprom_data_size);
+        char extui_data[ExtUI::eeprom_data_size] = { 0 };
+        ExtUI::onStoreSettings(extui_data);
         _FIELD_TEST(extui_data);
         EEPROM_WRITE(extui_data);
       }
@@ -1215,7 +1232,7 @@ void MarlinSettings::postprocess() {
     #endif
 
     #if ENABLED(EXTENSIBLE_UI)
-      if (!eeprom_error) ExtUI::onStoreSettings();
+      ExtUI::onConfigurationStoreWritten(!eeprom_error);
     #endif
 
     return !eeprom_error;
@@ -1956,10 +1973,11 @@ void MarlinSettings::postprocess() {
       #if ENABLED(EXTENSIBLE_UI)
         // This is a significant hardware change; don't reserve EEPROM space when not present
         {
-          const uint8_t extui_data[ExtUI::eeprom_data_size] = { 0 };
+          const char extui_data[ExtUI::eeprom_data_size] = { 0 };
           _FIELD_TEST(extui_data);
           EEPROM_READ(extui_data);
-          memcpy(ExtUI::eeprom_data, extui_data, ExtUI::eeprom_data_size);
+          if(!validating)
+            ExtUI::onLoadSettings(extui_data);
         }
       #endif
 
@@ -2022,9 +2040,21 @@ void MarlinSettings::postprocess() {
     return !eeprom_error;
   }
 
+  #ifdef LULZBOT_EEPROM_BACKUP_SIZE
+    extern bool restoreEEPROM();
+  #endif
+
   bool MarlinSettings::validate() {
     validating = true;
+    #ifdef LULZBOT_EEPROM_BACKUP_SIZE
+      bool success = _load();
+      if(!success && restoreEEPROM()) {
+        SERIAL_ECHOLNPGM("Recovered backup EEPROM settings from SPI Flash");
+        success = _load();
+      }
+    #else
     const bool success = _load();
+    #endif
     validating = false;
     return success;
   }
@@ -2033,7 +2063,7 @@ void MarlinSettings::postprocess() {
     if (validate()) {
       const bool success = _load();
       #if ENABLED(EXTENSIBLE_UI)
-        if (success) ExtUI::onLoadSettings();
+        ExtUI::onConfigurationStoreRead(success);
       #endif
       return success;
     }

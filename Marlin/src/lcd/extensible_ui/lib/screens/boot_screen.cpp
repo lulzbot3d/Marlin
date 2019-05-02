@@ -28,6 +28,7 @@
 
 #include "../ftdi_eve_lib/extras/poly_ui.h"
 #include "../theme/bootscreen_logo.h"
+#include "../io/flash_storage.h"
 
 using namespace FTDI;
 
@@ -46,8 +47,20 @@ void BootScreen::onIdle() {
     // assume the user wants to re-calibrate the screen.
     // This gives the user the ability to recover a
     // miscalibration that has been stored to EEPROM.
+
+    // Also set the brightness to 100%, as a way to recover
+    // from having set the screen to 0%
+
+    CLCD::set_brightness(255);
+
     GOTO_SCREEN(TouchCalibrationScreen);
   } else {
+    if(!UIFlashStorage::is_valid()) {
+      SpinnerDialogBox::show(F("Please wait..."));
+      UIFlashStorage::format_flash();
+      SpinnerDialogBox::hide();
+    }
+
     if(UIData::animations_enabled()) {
       // If there is a startup video in the flash SPI, play
       // that, otherwise show a static splash screen.

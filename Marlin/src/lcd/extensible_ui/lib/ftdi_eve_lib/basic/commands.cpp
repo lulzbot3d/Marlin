@@ -1128,6 +1128,7 @@ void CLCD::init (void) {
   CommandFifo::reset();
 
   default_touch_transform();
+  default_display_orientation();
 }
 
 void CLCD::default_touch_transform() {
@@ -1139,7 +1140,9 @@ void CLCD::default_touch_transform() {
   mem_write_32(REG::TOUCH_TRANSFORM_D, FTDI::default_transform_d);
   mem_write_32(REG::TOUCH_TRANSFORM_E, FTDI::default_transform_e);
   mem_write_32(REG::TOUCH_TRANSFORM_F, FTDI::default_transform_f);
+}
 
+void CLCD::default_display_orientation() {
   #if FTDI_API_LEVEL >= 810
     // Set the initial display orientation. On the FT810, we use the command
     // processor to do this since it will also update the transform matrices.

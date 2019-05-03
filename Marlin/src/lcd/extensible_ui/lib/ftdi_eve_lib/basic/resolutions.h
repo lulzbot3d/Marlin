@@ -76,11 +76,11 @@
     constexpr uint16_t Vsize                =  480;
     constexpr uint16_t Vsync0               =    0;
     constexpr uint16_t Vsync1               =    2;
-    constexpr uint16_t Voffset              =   13;
+    constexpr uint16_t Voffset              =   24;
     constexpr uint16_t Vcycle               =  525;
     constexpr uint16_t Hsync0               =    0;
     constexpr uint16_t Hsync1               =   20;
-    constexpr uint16_t Hoffset              =   64;
+    constexpr uint16_t Hoffset              =   46;
     constexpr uint16_t Hcycle               =  952;
 
     constexpr uint32_t default_transform_a  =  0x0000D8B9;

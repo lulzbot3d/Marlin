@@ -67,7 +67,8 @@ enum {
   INTERFACE_SETTINGS_SCREEN_CACHE,
   INTERFACE_SOUNDS_SCREEN_CACHE,
   LOCK_SCREEN_CACHE,
-  FILES_SCREEN_CACHE
+  FILES_SCREEN_CACHE,
+  DISPLAY_TIMINGS_SCREEN_CACHE
 };
 
 // To save MCU RAM, the status message is "baked" in to the status screen
@@ -493,8 +494,10 @@ class InterfaceSettingsScreen : public BaseScreen, public CachedScreen<INTERFACE
       uint32_t touch_transform_e;
       uint32_t touch_transform_f;
       uint16_t passcode;
+      uint8_t  display_brightness;
+      int8_t   display_h_offset;
+      int8_t   display_v_offset;
       uint8_t  sound_volume;
-      uint8_t  screen_brightness;
       uint8_t  bit_flags;
       uint8_t  event_sounds[InterfaceSoundsScreen::NUM_EVENTS];
     };
@@ -507,6 +510,7 @@ class InterfaceSettingsScreen : public BaseScreen, public CachedScreen<INTERFACE
     static void saveSettings(char *);
     static void loadSettings(const char *);
     static void defaultSettings();
+    static void failSafeSettings();
 
     static void onStartup();
     static void onEntry();
@@ -576,6 +580,12 @@ class EndstopStatesScreen : public BaseScreen, public UncachedScreen {
     static void onRedraw(draw_mode_t);
     static bool onTouchEnd(uint8_t tag);
     static void onIdle();
+};
+
+class DisplayTuningScreen : public BaseNumericAdjustmentScreen, public CachedScreen<DISPLAY_TIMINGS_SCREEN_CACHE> {
+  public:
+    static void onRedraw(draw_mode_t);
+    static bool onTouchHeld(uint8_t tag);
 };
 
 #if ENABLED(DEVELOPER_SCREENS)

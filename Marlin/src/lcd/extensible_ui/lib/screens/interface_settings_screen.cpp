@@ -170,12 +170,26 @@ void InterfaceSettingsScreen::onIdle() {
   BaseScreen::onIdle();
 }
 
+void InterfaceSettingsScreen::failSafeSettings() {
+  // Reset settings that may make the printer interface
+  // unusable.
+  CLCD::mem_write_32(CLCD::REG::ROTATE, 0);
+  CLCD::default_touch_transform();
+  CLCD::default_display_orientation();
+  CLCD::set_brightness(255);
+  UIData::reset_persistent_data();
+  CLCD::mem_write_16(CLCD::REG::HOFFSET, FTDI::Hoffset);
+  CLCD::mem_write_16(CLCD::REG::VOFFSET, FTDI::Voffset);
+}
+
 void InterfaceSettingsScreen::defaultSettings() {
   LockScreen::passcode = 0;
   SoundPlayer::set_volume(255);
   CLCD::set_brightness(255);
   UIData::reset_persistent_data();
   InterfaceSoundsScreen::defaultSettings();
+  CLCD::mem_write_16(CLCD::REG::HOFFSET, FTDI::Hoffset);
+  CLCD::mem_write_16(CLCD::REG::VOFFSET, FTDI::Voffset);
 }
 
 void InterfaceSettingsScreen::saveSettings(char *buff) {
@@ -189,7 +203,7 @@ void InterfaceSettingsScreen::saveSettings(char *buff) {
   persistent_data_t eeprom;
 
   eeprom.sound_volume      = SoundPlayer::get_volume();
-  eeprom.screen_brightness = CLCD::get_brightness();
+  eeprom.display_brightness = CLCD::get_brightness();
   eeprom.bit_flags         = UIData::get_persistent_data();
   eeprom.touch_transform_a = CLCD::mem_read_32(CLCD::REG::TOUCH_TRANSFORM_A);
   eeprom.touch_transform_b = CLCD::mem_read_32(CLCD::REG::TOUCH_TRANSFORM_B);
@@ -197,6 +211,8 @@ void InterfaceSettingsScreen::saveSettings(char *buff) {
   eeprom.touch_transform_d = CLCD::mem_read_32(CLCD::REG::TOUCH_TRANSFORM_D);
   eeprom.touch_transform_e = CLCD::mem_read_32(CLCD::REG::TOUCH_TRANSFORM_E);
   eeprom.touch_transform_f = CLCD::mem_read_32(CLCD::REG::TOUCH_TRANSFORM_F);
+  eeprom.display_h_offset          = CLCD::mem_read_16(CLCD::REG::HOFFSET);
+  eeprom.display_v_offset          = CLCD::mem_read_16(CLCD::REG::VOFFSET);
   for(uint8_t i = 0; i < InterfaceSoundsScreen::NUM_EVENTS; i++)
     eeprom.event_sounds[i] = InterfaceSoundsScreen::event_sounds[i];
 
@@ -216,14 +232,16 @@ void InterfaceSettingsScreen::loadSettings(const char *buff) {
 
   LockScreen::passcode = eeprom.passcode;
   SoundPlayer::set_volume(eeprom.sound_volume);
-  CLCD::set_brightness(eeprom.screen_brightness);
   UIData::set_persistent_data(eeprom.bit_flags);
+  CLCD::set_brightness(eeprom.display_brightness);
   CLCD::mem_write_32(CLCD::REG::TOUCH_TRANSFORM_A, eeprom.touch_transform_a);
   CLCD::mem_write_32(CLCD::REG::TOUCH_TRANSFORM_B, eeprom.touch_transform_b);
   CLCD::mem_write_32(CLCD::REG::TOUCH_TRANSFORM_C, eeprom.touch_transform_c);
   CLCD::mem_write_32(CLCD::REG::TOUCH_TRANSFORM_D, eeprom.touch_transform_d);
   CLCD::mem_write_32(CLCD::REG::TOUCH_TRANSFORM_E, eeprom.touch_transform_e);
   CLCD::mem_write_32(CLCD::REG::TOUCH_TRANSFORM_F, eeprom.touch_transform_f);
+  CLCD::mem_write_16(CLCD::REG::HOFFSET,           eeprom.display_h_offset);
+  CLCD::mem_write_16(CLCD::REG::VOFFSET,           eeprom.display_v_offset);
   for(uint8_t i = 0; i < InterfaceSoundsScreen::NUM_EVENTS; i++)
     InterfaceSoundsScreen::event_sounds[i] = eeprom.event_sounds[i];
 }

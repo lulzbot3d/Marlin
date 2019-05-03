@@ -93,7 +93,8 @@ SCREEN_TABLE {
   DECL_SCREEN(WidgetsScreen),
   DECL_SCREEN(TouchRegistersScreen),
 #endif
-  DECL_SCREEN(MediaPlayerScreen)
+  DECL_SCREEN(MediaPlayerScreen),
+  DECL_SCREEN(DisplayTuningScreen)
 };
 
 SCREEN_TABLE_POST

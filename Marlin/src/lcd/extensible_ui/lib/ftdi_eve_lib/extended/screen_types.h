@@ -116,10 +116,11 @@ class ScreenStack : public ScreenRef {
 
   public:
     void start();
+    void push(onRedraw_func_t);
     void push();
     void pop();
     void forget();
-    void goTo(onRedraw_func_t s);
+    void goTo(onRedraw_func_t);
     void goBack();
 
     uint8_t peek()      {return stack[0];}
@@ -143,6 +144,7 @@ class UIScreen {
     static bool onTouchEnd(uint8_t)    {return true;}
 };
 
+#define PUSH_SCREEN(screen)   current_screen.push(screen::onRedraw);
 #define GOTO_SCREEN(screen)   current_screen.goTo(screen::onRedraw);
 #define GOTO_PREVIOUS()       current_screen.goBack();
 #define AT_SCREEN(screen)     (current_screen.getType() == current_screen.lookupScreen(screen::onRedraw))

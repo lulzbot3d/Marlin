@@ -1,6 +1,6 @@
-/********************************
- * touch_calibration_screen.cpp *
- ********************************/
+/*****************************
+ * display_tuning_screen.cpp *
+ *****************************/
 
 /****************************************************************************
  *   Written By Mark Pelletier  2017 - Aleph Objects, Inc.                  *
@@ -29,57 +29,33 @@
 using namespace FTDI;
 using namespace Theme;
 
-void TouchCalibrationScreen::onEntry() {
-  // Clear the display
-  CommandProcessor cmd;
-  cmd.cmd(CMD_DLSTART)
-     .cmd(CLEAR_COLOR_RGB(bg_color))
-     .cmd(CLEAR(true,true,true))
-     .cmd(DL::DL_DISPLAY)
-     .cmd(CMD_SWAP)
-     .execute();
-
-  // Wait for the touch to release before starting,
-  // as otherwise the first calibration point could
-  // be misinterpreted.
-  while(CLCD::is_touching()) {
-    #if defined(UI_FRAMEWORK_DEBUG)
-      SERIAL_ECHO_START();
-      SERIAL_ECHOLNPGM("Waiting for touch release");
-    #endif
-  }
-  BaseScreen::onEntry();
+void DisplayTuningScreen::onRedraw(draw_mode_t what) {
+  widgets_t w(what);
+  w.precision(0, BaseNumericAdjustmentScreen::DEFAULT_LOWEST);
+  w.units(PSTR(""));
+  w.heading(     PSTR("Display Tuning"));
+  w.color(other);
+  w.adjuster( 2, PSTR("H Offset:"), CLCD::mem_read_16(CLCD::REG::HOFFSET) );
+  w.adjuster( 4, PSTR("V Offset:"), CLCD::mem_read_16(CLCD::REG::VOFFSET) );
+  w.increments();
+  w.heading(     PSTR("Touch Screen"));
+  w.button(6, PSTR("Calibrate"));
 }
 
-void TouchCalibrationScreen::onRedraw(draw_mode_t what) {
-  CommandProcessor cmd;
-  cmd.cmd(CLEAR_COLOR_RGB(bg_color))
-     .cmd(CLEAR(true,true,true))
-  #define GRID_COLS 4
-  #define GRID_ROWS 16
-  #if defined(USE_PORTRAIT_ORIENTATION)
-    .font(font_large)
-    .text  ( BTN_POS(1,8), BTN_SIZE(4,1), F("Touch the dots"))
-    .text  ( BTN_POS(1,9), BTN_SIZE(4,1), F("to calibrate"))
-  #else
-    .font(
-      #if defined(LCD_800x480)
-        font_large
-      #else
-        font_medium
-      #endif
-    )
-    .text  ( BTN_POS(1,1), BTN_SIZE(4,16), F("Touch the dots to calibrate"))
-  #endif
-  #undef GRID_COLS
-  #undef GRID_ROWS
-    .cmd(CMD_CALIBRATE);
-}
-
-void TouchCalibrationScreen::onIdle() {
-  if(!CommandProcessor::is_processing()) {
-    GOTO_PREVIOUS();
+bool DisplayTuningScreen::onTouchHeld(uint8_t tag) {
+  #define REG_INCREMENT(a,i) CLCD::mem_write_16(CLCD::REG::a, CLCD::mem_read_16(CLCD::REG::a) + i)
+  const float increment = getIncrement();
+  switch(tag) {
+    case  2: REG_INCREMENT(HOFFSET, -increment);  break;
+    case  3: REG_INCREMENT(HOFFSET,  increment);  break;
+    case  4: REG_INCREMENT(VOFFSET, -increment);  break;
+    case  5: REG_INCREMENT(VOFFSET,  increment);  break;
+    case  6: GOTO_SCREEN(TouchCalibrationScreen); break;
+    default:
+      return false;
   }
+  SaveSettingsDialogBox::settingsChanged();
+  return true;
 }
 
 #endif // EXTENSIBLE_UI

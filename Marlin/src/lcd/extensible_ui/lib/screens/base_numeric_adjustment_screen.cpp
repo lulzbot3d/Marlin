@@ -130,7 +130,9 @@ void BaseNumericAdjustmentScreen::widgets_t::_draw_increment_btn(uint8_t line, c
       case 2: cmd.button( BTN_POS(15,4),    BTN_SIZE(4,1), progmem_str(label)); break;
     #endif
   }
+  cmd.colors(normal_btn);
 }
+
 
 void BaseNumericAdjustmentScreen::widgets_t::increments() {
   if(_what & BACKGROUND) {

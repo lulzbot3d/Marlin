@@ -76,7 +76,8 @@ void AdvancedSettingsMenu::onRedraw(draw_mode_t what) {
       .enabled(0)
       #endif
       .tag(11).button( BTN_POS(1,3), BTN_SIZE(1,1), F("Filament"))
-      .tag(12).button( BTN_POS(1,6), BTN_SIZE(2,1), F("Endstop States"))
+      .tag(12).button( BTN_POS(1,6), BTN_SIZE(1,1), F("Endstops"))
+      .tag(15).button( BTN_POS(2,6), BTN_SIZE(1,1), F("Display"))
       .tag(9) .button( BTN_POS(1,7), BTN_SIZE(2,1), F("Interface Settings"))
       .tag(10).button( BTN_POS(1,8), BTN_SIZE(2,1), F("Restore Factory Defaults"))
       .tag(5) .button( BTN_POS(2,2), BTN_SIZE(1,1), F("Velocity "))
@@ -167,6 +168,7 @@ bool AdvancedSettingsMenu::onTouchEnd(uint8_t tag) {
     #if HAS_TRINAMIC
     case 13: GOTO_SCREEN(StepperCurrentScreen); break;
     case 14: GOTO_SCREEN(StepperBumpSensitivityScreen); break;
+    case 15: GOTO_SCREEN(DisplayTuningScreen); break;
     #endif
     default: return false;
   }

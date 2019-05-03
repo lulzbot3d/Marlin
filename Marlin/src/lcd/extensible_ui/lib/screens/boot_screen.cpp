@@ -48,12 +48,13 @@ void BootScreen::onIdle() {
     // This gives the user the ability to recover a
     // miscalibration that has been stored to EEPROM.
 
-    // Also set the brightness to 100%, as a way to recover
-    // from having set the screen to 0%
-
-    CLCD::set_brightness(255);
+    // Also reset display parameters to defaults, just
+    // in case the display is borked.
+    InterfaceSettingsScreen::failSafeSettings();
 
     GOTO_SCREEN(TouchCalibrationScreen);
+    current_screen.forget();
+    PUSH_SCREEN(StatusScreen);
   } else {
     if(!UIFlashStorage::is_valid()) {
       SpinnerDialogBox::show(F("Please wait..."));

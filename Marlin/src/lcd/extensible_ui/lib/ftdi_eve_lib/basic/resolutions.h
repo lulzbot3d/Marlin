@@ -22,6 +22,30 @@
 
 #pragma once
 
+/***
+ * The FT8xx has odd registers that don't correspond to timing values in
+ * display datasheets. This macro computes the register values using the
+ * formulas given in the document:
+ *
+ *     Bridgetek Application Note
+ *     AN_336 FT8xx
+ *     Selecting an LCD Display
+ *     Version 2.1
+ *     Issue Date: 2017-11-14
+ *
+ */
+#define COMPUTE_REGS_FROM_DATASHEET \
+    constexpr uint16_t Hoffset              = thfp + thb - 1; \
+    constexpr uint16_t Hcycle               = th; \
+    constexpr uint16_t Hsync0               = thfp - 1 ; \
+    constexpr uint16_t Hsync1               = thfp + thpw - 1; \
+    constexpr uint16_t Voffset              = tvfp + tvb - 1; \
+    constexpr uint16_t Vcycle               = tv; \
+    constexpr uint16_t Vsync0               = tvfp - 1; \
+    constexpr uint16_t Vsync1               = tvfp + tvpw - 1; \
+    static_assert(thfp + thb + Hsize == th, "Mismatch in display th"); \
+    static_assert(tvfp + tvb + Vsize == tv, "Mismatch in display tv");
+
 #if defined(LCD_320x240)
   namespace FTDI {
     constexpr uint8_t Pclk                 =    8;
@@ -70,18 +94,22 @@
 
 #elif defined(LCD_800x480)
   namespace FTDI {
-    constexpr uint8_t  Pclk                 =    4;
+    constexpr uint8_t  Pclk                 =    3;
     constexpr uint8_t  Pclkpol              =    1;
     constexpr uint16_t Hsize                =  800;
     constexpr uint16_t Vsize                =  480;
-    constexpr uint16_t Vsync0               =    0;
-    constexpr uint16_t Vsync1               =    2;
-    constexpr uint16_t Voffset              =   24;
-    constexpr uint16_t Vcycle               =  525;
-    constexpr uint16_t Hsync0               =    0;
-    constexpr uint16_t Hsync1               =   20;
-    constexpr uint16_t Hoffset              =   46;
-    constexpr uint16_t Hcycle               =  952;
+
+    constexpr uint16_t th                   = 1056; // One horizontal line
+    constexpr uint16_t thfp                 =  210; // HS Front porch
+    constexpr uint16_t thb                  =   46; // HS Back porch (blanking)
+    constexpr uint16_t thpw                 =   23; // HS pulse width
+
+    constexpr uint16_t tv                   =  525; // Vertical period time
+    constexpr uint16_t tvfp                 =   22; // VS Front porch
+    constexpr uint16_t tvb                  =   23; // VS Back porch (blanking)
+    constexpr uint16_t tvpw                 =   10; // VS pulse width
+
+    COMPUTE_REGS_FROM_DATASHEET
 
     constexpr uint32_t default_transform_a  =  0x0000D8B9;
     constexpr uint32_t default_transform_b  =  0x00000124;

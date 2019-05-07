@@ -37,7 +37,7 @@
  */
 
 // Change EEPROM version if the structure changes
-#define EEPROM_VERSION "V65"
+#define EEPROM_VERSION "V66"
 #define EEPROM_OFFSET 100
 
 // Check the integrity of data offsets.
@@ -242,6 +242,13 @@ typedef struct SettingsDataStruct {
   // PIDTEMPBED
   //
   PID_t bedPID;                                         // M304 PID / M303 E-1 U
+
+  //
+  // User-defined Thermistors
+  //
+  #if HAS_USER_THERMISTORS
+    user_thermistor_t user_thermistor[USER_THERMISTORS]; // M305 P0 R4700 T100000 B3950
+  #endif
 
   //
   // HAS_LCD_CONTRAST
@@ -574,9 +581,9 @@ void MarlinSettings::postprocess() {
         const bool runout_sensor_enabled = false;
       #endif
       #if HAS_FILAMENT_SENSOR && defined(FILAMENT_RUNOUT_DISTANCE_MM)
-        const float &runout_distance_mm = RunoutResponseDelayed::runout_distance_mm;
+        const float &runout_distance_mm = runout.runout_distance();
       #else
-        const float runout_distance_mm = 25;
+        const float runout_distance_mm = 0;
       #endif
       _FIELD_TEST(runout_sensor_enabled);
       EEPROM_WRITE(runout_sensor_enabled);
@@ -810,6 +817,16 @@ void MarlinSettings::postprocess() {
         EEPROM_WRITE(thermalManager.temp_bed.pid);
       #endif
     }
+
+    //
+    // User-defined Thermistors
+    //
+    #if HAS_USER_THERMISTORS
+    {
+      _FIELD_TEST(user_thermistor);
+      EEPROM_WRITE(thermalManager.user_thermistor);
+    }
+    #endif
 
     //
     // LCD Contrast
@@ -1355,14 +1372,14 @@ void MarlinSettings::postprocess() {
         #else
           bool runout_sensor_enabled;
         #endif
-        #if HAS_FILAMENT_SENSOR && defined(FILAMENT_RUNOUT_DISTANCE_MM)
-          float &runout_distance_mm = RunoutResponseDelayed::runout_distance_mm;
-        #else
-          float runout_distance_mm;
-        #endif
         _FIELD_TEST(runout_sensor_enabled);
         EEPROM_READ(runout_sensor_enabled);
+
+        float runout_distance_mm;
         EEPROM_READ(runout_distance_mm);
+        #if HAS_FILAMENT_SENSOR && defined(FILAMENT_RUNOUT_DISTANCE_MM)
+          runout.set_runout_distance(runout_distance_mm);
+        #endif
       }
 
       //
@@ -1591,6 +1608,16 @@ void MarlinSettings::postprocess() {
             memcpy(&thermalManager.temp_bed.pid, &pid, sizeof(pid));
         #endif
       }
+
+      //
+      // User-defined Thermistors
+      //
+      #if HAS_USER_THERMISTORS
+      {
+        _FIELD_TEST(user_thermistor);
+        EEPROM_READ(thermalManager.user_thermistor);
+      }
+      #endif
 
       //
       // LCD Contrast
@@ -2235,7 +2262,7 @@ void MarlinSettings::reset() {
     runout.enabled = true;
     runout.reset();
     #ifdef FILAMENT_RUNOUT_DISTANCE_MM
-      RunoutResponseDelayed::runout_distance_mm = FILAMENT_RUNOUT_DISTANCE_MM;
+      runout.set_runout_distance(FILAMENT_RUNOUT_DISTANCE_MM);
     #endif
   #endif
 
@@ -2409,6 +2436,14 @@ void MarlinSettings::reset() {
     thermalManager.temp_bed.pid.Kp = DEFAULT_bedKp;
     thermalManager.temp_bed.pid.Ki = scalePID_i(DEFAULT_bedKi);
     thermalManager.temp_bed.pid.Kd = scalePID_d(DEFAULT_bedKd);
+  #endif
+
+  //
+  // User-Defined Thermistors
+  //
+
+  #if HAS_USER_THERMISTORS
+    thermalManager.reset_user_thermistors();
   #endif
 
   //
@@ -2976,6 +3011,12 @@ void MarlinSettings::reset() {
 
     #endif // PIDTEMP || PIDTEMPBED
 
+    #if HAS_USER_THERMISTORS
+      CONFIG_ECHO_HEADING("User thermistors:");
+      for (uint8_t i = 0; i < USER_THERMISTORS; i++)
+        thermalManager.log_user_thermistor(i, true);
+    #endif
+
     #if HAS_LCD_CONTRAST
       CONFIG_ECHO_HEADING("LCD Contrast:");
       CONFIG_ECHO_START();
@@ -3374,7 +3415,7 @@ void MarlinSettings::reset() {
         " Y", LINEAR_UNIT(backlash.distance_mm[Y_AXIS]),
         " Z", LINEAR_UNIT(backlash.distance_mm[Z_AXIS])
         #ifdef BACKLASH_SMOOTHING_MM
-          ," S", LINEAR_UNIT(backlash.smoothing_mm)
+          , " S", LINEAR_UNIT(backlash.smoothing_mm)
         #endif
       );
     #endif
@@ -3385,7 +3426,7 @@ void MarlinSettings::reset() {
       SERIAL_ECHOLNPAIR(
         "  M412 S", int(runout.enabled)
         #ifdef FILAMENT_RUNOUT_DISTANCE_MM
-          ," D", LINEAR_UNIT(RunoutResponseDelayed::runout_distance_mm)
+          , " D", LINEAR_UNIT(runout.runout_distance())
         #endif
       );
     #endif

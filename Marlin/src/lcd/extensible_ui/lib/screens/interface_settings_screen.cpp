@@ -202,6 +202,7 @@ void InterfaceSettingsScreen::saveSettings(char *buff) {
 
   persistent_data_t eeprom;
 
+  eeprom.passcode             = LockScreen::passcode;
   eeprom.sound_volume         = SoundPlayer::get_volume();
   eeprom.display_brightness   = CLCD::get_brightness();
   eeprom.bit_flags            = UIData::get_persistent_data();

@@ -27,8 +27,13 @@
 #include "screens.h"
 
 #include "../ftdi_eve_lib/extras/poly_ui.h"
-#include "../theme/bootscreen_logo.h"
 #include "../io/flash_storage.h"
+
+#ifdef USE_PORTRAIT_ORIENTATION
+  #include "../theme/bootscreen_logo_portrait.h"
+#else
+  #include "../theme/bootscreen_logo_landscape.h"
+#endif
 
 using namespace FTDI;
 

@@ -64,7 +64,13 @@ namespace FTDI {
         cmd.cmd(COLOR_MASK(0,0,0,0));
         cmd.cmd(STENCIL_OP(STENCIL_OP_KEEP, STENCIL_OP_INVERT));
         cmd.cmd(STENCIL_FUNC(STENCIL_FUNC_ALWAYS, 255, 255));
-        path_initiator = EDGE_STRIP_B;
+        // Drawing the edge strip along scan lines
+        // seems to yield the best performance
+        #ifdef USE_PORTRAIT_ORIENTATION
+          path_initiator = EDGE_STRIP_B;
+        #else
+          path_initiator = EDGE_STRIP_R;
+        #endif
       }
 
       // Specify a clipping rectangle to paint fewer pixels and reduce rendering time, otherwise all pixels will be painted.

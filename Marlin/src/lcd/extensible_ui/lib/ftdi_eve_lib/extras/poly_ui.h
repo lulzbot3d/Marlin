@@ -256,6 +256,18 @@ class GenericPolyUI {
     // Fills a polygon with the current COLOR_RGB
     void fill(poly_reader_t r, bool clip = true) {
       using namespace FTDI;
+      int16_t x, y, w, h;
+
+      if(clip) {
+        // Clipping reduces the number of pixels that are
+        // filled, allowing more complex shapes to be drawn
+        // in the alloted time.
+        bounds(r, x, y, w, h);
+        cmd.cmd(SAVE_CONTEXT());
+        cmd.cmd(SCISSOR_XY(x, y));
+        cmd.cmd(SCISSOR_SIZE(w, h));
+      }
+
       Polygon p(cmd);
       p.begin_fill();
       p.begin_loop();
@@ -267,16 +279,9 @@ class GenericPolyUI {
         }
       }
       p.end_loop();
-      if(clip) {
-        // Clipping reduces the number of pixels that are
-        // filled, allowing more complex shapes to be drawn
-        // in the alloted time.
-        int16_t x, y, w, h;
-        bounds(r, x, y, w, h);
-        p.end_fill(x * 16, y * 16, (x + w) * 16, (y + h) * 16);
-      } else {
-        p.end_fill();
-      }
+      p.end_fill();
+      if(clip)
+        cmd.cmd(RESTORE_CONTEXT());
     }
 
     void shadow(poly_reader_t r, uint8_t offset) {

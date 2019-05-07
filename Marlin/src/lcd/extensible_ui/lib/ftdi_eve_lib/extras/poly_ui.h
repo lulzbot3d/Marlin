@@ -254,7 +254,7 @@ class GenericPolyUI {
     GenericPolyUI(CommandProcessor &c) : cmd(c) {}
 
     // Fills a polygon with the current COLOR_RGB
-    void fill(poly_reader_t r) {
+    void fill(poly_reader_t r, bool clip = true) {
       using namespace FTDI;
       Polygon p(cmd);
       p.begin_fill();
@@ -267,7 +267,16 @@ class GenericPolyUI {
         }
       }
       p.end_loop();
-      p.end_fill();
+      if(clip) {
+        // Clipping reduces the number of pixels that are
+        // filled, allowing more complex shapes to be drawn
+        // in the alloted time.
+        int16_t x, y, w, h;
+        bounds(r, x, y, w, h);
+        p.end_fill(x * 16, y * 16, (x + w) * 16, (y + h) * 16);
+      } else {
+        p.end_fill();
+      }
     }
 
     void shadow(poly_reader_t r, uint8_t offset) {

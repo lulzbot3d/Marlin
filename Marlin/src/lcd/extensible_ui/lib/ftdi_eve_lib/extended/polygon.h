@@ -67,15 +67,16 @@ namespace FTDI {
         path_initiator = EDGE_STRIP_B;
       }
 
-      void end_fill() {
+      // Specify a clipping rectangle to paint fewer pixels and reduce rendering time, otherwise all pixels will be painted.
+      void end_fill(const int16_t x1 = 0, const int16_t y1 = 0, const int16_t x2 = display_width * 16, const int16_t y2 = display_height * 16) {
         using namespace FTDI;
         cmd.cmd(RESTORE_CONTEXT());
 
         cmd.cmd(SAVE_CONTEXT());
         cmd.cmd(STENCIL_FUNC(STENCIL_FUNC_NOTEQUAL, 0, 255));
         cmd.cmd(BEGIN(RECTS));
-        cmd.cmd(VERTEX2F(0, 0));
-        cmd.cmd(VERTEX2F(display_width * 16, display_height * 16));
+        cmd.cmd(VERTEX2F(x1, y1));
+        cmd.cmd(VERTEX2F(x2, y2));
         cmd.cmd(RESTORE_CONTEXT());
       }
 

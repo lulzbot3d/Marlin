@@ -81,17 +81,15 @@ void BootScreen::showSplashScreen() {
   #define POLY(A) PolyUI::poly_reader_t(A, sizeof(A)/sizeof(A[0]))
 
   PolyUI ui(cmd);
+
   cmd.cmd(COLOR_RGB(0xC1D82F));
   ui.fill(POLY(logo_green));
   cmd.cmd(COLOR_RGB(0x000000));
   ui.fill(POLY(logo_black));
+  ui.fill(POLY(logo_type));
+  ui.fill(POLY(logo_mark));
   cmd.cmd(COLOR_RGB(0xFFFFFF));
   ui.fill(POLY(logo_white));
-
-  cmd.cmd(COLOR_RGB(0x000000));
-  ui.fill(POLY(logo_type));
-  cmd.cmd(COLOR_RGB(0x000000));
-  ui.fill(POLY(logo_mark));
 
   cmd.cmd(DL::DL_DISPLAY);
   cmd.cmd(CMD_SWAP);

@@ -202,17 +202,17 @@ void InterfaceSettingsScreen::saveSettings(char *buff) {
 
   persistent_data_t eeprom;
 
-  eeprom.sound_volume      = SoundPlayer::get_volume();
-  eeprom.display_brightness = CLCD::get_brightness();
-  eeprom.bit_flags         = UIData::get_persistent_data();
-  eeprom.touch_transform_a = CLCD::mem_read_32(CLCD::REG::TOUCH_TRANSFORM_A);
-  eeprom.touch_transform_b = CLCD::mem_read_32(CLCD::REG::TOUCH_TRANSFORM_B);
-  eeprom.touch_transform_c = CLCD::mem_read_32(CLCD::REG::TOUCH_TRANSFORM_C);
-  eeprom.touch_transform_d = CLCD::mem_read_32(CLCD::REG::TOUCH_TRANSFORM_D);
-  eeprom.touch_transform_e = CLCD::mem_read_32(CLCD::REG::TOUCH_TRANSFORM_E);
-  eeprom.touch_transform_f = CLCD::mem_read_32(CLCD::REG::TOUCH_TRANSFORM_F);
-  eeprom.display_h_offset          = CLCD::mem_read_16(CLCD::REG::HOFFSET);
-  eeprom.display_v_offset          = CLCD::mem_read_16(CLCD::REG::VOFFSET);
+  eeprom.sound_volume         = SoundPlayer::get_volume();
+  eeprom.display_brightness   = CLCD::get_brightness();
+  eeprom.bit_flags            = UIData::get_persistent_data();
+  eeprom.touch_transform_a    = CLCD::mem_read_32(CLCD::REG::TOUCH_TRANSFORM_A);
+  eeprom.touch_transform_b    = CLCD::mem_read_32(CLCD::REG::TOUCH_TRANSFORM_B);
+  eeprom.touch_transform_c    = CLCD::mem_read_32(CLCD::REG::TOUCH_TRANSFORM_C);
+  eeprom.touch_transform_d    = CLCD::mem_read_32(CLCD::REG::TOUCH_TRANSFORM_D);
+  eeprom.touch_transform_e    = CLCD::mem_read_32(CLCD::REG::TOUCH_TRANSFORM_E);
+  eeprom.touch_transform_f    = CLCD::mem_read_32(CLCD::REG::TOUCH_TRANSFORM_F);
+  eeprom.display_h_offset_adj = CLCD::mem_read_16(CLCD::REG::HOFFSET) - FTDI::Hoffset;
+  eeprom.display_v_offset_adj = CLCD::mem_read_16(CLCD::REG::VOFFSET) - FTDI::Voffset;
   for(uint8_t i = 0; i < InterfaceSoundsScreen::NUM_EVENTS; i++)
     eeprom.event_sounds[i] = InterfaceSoundsScreen::event_sounds[i];
 
@@ -240,8 +240,8 @@ void InterfaceSettingsScreen::loadSettings(const char *buff) {
   CLCD::mem_write_32(CLCD::REG::TOUCH_TRANSFORM_D, eeprom.touch_transform_d);
   CLCD::mem_write_32(CLCD::REG::TOUCH_TRANSFORM_E, eeprom.touch_transform_e);
   CLCD::mem_write_32(CLCD::REG::TOUCH_TRANSFORM_F, eeprom.touch_transform_f);
-  CLCD::mem_write_16(CLCD::REG::HOFFSET,           eeprom.display_h_offset);
-  CLCD::mem_write_16(CLCD::REG::VOFFSET,           eeprom.display_v_offset);
+  CLCD::mem_write_16(CLCD::REG::HOFFSET,           eeprom.display_h_offset_adj + FTDI::Hoffset);
+  CLCD::mem_write_16(CLCD::REG::VOFFSET,           eeprom.display_v_offset_adj + FTDI::Voffset);
   for(uint8_t i = 0; i < InterfaceSoundsScreen::NUM_EVENTS; i++)
     InterfaceSoundsScreen::event_sounds[i] = eeprom.event_sounds[i];
 }

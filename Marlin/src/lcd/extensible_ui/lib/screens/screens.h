@@ -495,8 +495,8 @@ class InterfaceSettingsScreen : public BaseScreen, public CachedScreen<INTERFACE
       uint32_t touch_transform_f;
       uint16_t passcode;
       uint8_t  display_brightness;
-      int8_t   display_h_offset;
-      int8_t   display_v_offset;
+      int8_t   display_h_offset_adj;
+      int8_t   display_v_offset_adj;
       uint8_t  sound_volume;
       uint8_t  bit_flags;
       uint8_t  event_sounds[InterfaceSoundsScreen::NUM_EVENTS];

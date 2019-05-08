@@ -543,17 +543,15 @@ void wait_for_confirmation(const bool is_reload/*=false*/, const int8_t max_beep
       #if ENABLED(HOST_PROMPT_SUPPORT)
         host_prompt_do(PROMPT_USER_CONTINUE, PSTR("Reheating"));
       #endif
+      #if defined(LULZBOT_REHEAT_AFTER_PAUSING_WORKAROUND)
+        ExtUI::onStatusChanged(PSTR("Reheating..."));
+      #endif
 
       // Re-enable the heaters if they timed out
       HOTEND_LOOP() thermalManager.reset_heater_idle_timer(e);
 
       // Wait for the heaters to reach the target temperatures
       ensure_safe_temperature();
-
-      #if !defined(LULZBOT_NO_CONFIRM_REHEAT_AFTER_PAUSING)
-        nozzle_timed_out = false;
-        break;
-      #endif
 
       // Show the prompt to continue
       show_continue_prompt(is_reload);
@@ -564,6 +562,9 @@ void wait_for_confirmation(const bool is_reload/*=false*/, const int8_t max_beep
       HOTEND_LOOP() thermalManager.hotend_idle[e].start(nozzle_timeout);
       #if ENABLED(HOST_PROMPT_SUPPORT)
         host_prompt_do(PROMPT_USER_CONTINUE, PSTR("Reheat Done"), PSTR("Continue"));
+      #endif
+      #if defined(LULZBOT_REHEAT_AFTER_PAUSING_WORKAROUND)
+        ExtUI::onUserConfirmRequired("Reheat finished. ");
       #endif
       wait_for_user = true;
       nozzle_timed_out = false;

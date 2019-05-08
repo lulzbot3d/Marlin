@@ -790,6 +790,11 @@
 
 // Include a page of printer information in the LCD Main Menu
 #define LCD_INFO_MENU LULZBOT_LCD_INFO_MENU
+#if ENABLED(LCD_INFO_MENU)
+  // Add menu item to re-display Marlin bootscreen and custom bootscreen
+  // instead of submenu with details for printer, board and thermistors.
+  #define LCD_INFO_PRINTER_SHOWS_BOOTSCREEN LULZBOT_LCD_INFO_PRINTER_SHOWS_BOOTSCREEN
+#endif
 
 // Scroll a longer status message into view
 //#define STATUS_MESSAGE_SCROLLING
@@ -1057,11 +1062,9 @@
   #define BOOT_MARLIN_LOGO_SMALL LULZBOT_BOOT_MARLIN_LOGO_SMALL // Show a smaller Marlin logo on the Boot Screen (saving 399 bytes of flash)
 
   // Frivolous Game Options
-  #if defined(LULZBOT_GAMES_EASTER_EGG)
-    #define MARLIN_BRICKOUT
-    #define MARLIN_INVADERS
-    #define MARLIN_SNAKE
-  #endif
+  #define MARLIN_BRICKOUT LULZBOT_MARLIN_BRICKOUT
+  #define MARLIN_INVADERS LULZBOT_MARLIN_INVADERS
+  #define MARLIN_SNAKE    LULZBOT_MARLIN_SNAKE
 
 #endif // HAS_GRAPHICAL_LCD
 

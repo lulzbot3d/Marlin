@@ -2205,8 +2205,8 @@
     #endif
     #define LULZBOT_SHOW_CUSTOM_BOOTSCREEN
     #define LULZBOT_LCD_INFO_MENU
+    #define LULZBOT_LCD_INFO_PRINTER_SHOWS_BOOTSCREEN
     #define LULZBOT_SHORT_INFO_MENU
-    #define LULZBOT_GAMES_EASTER_EGG
     #define LULZBOT_ENCODER_PULSES_PER_STEP 2
     #define LULZBOT_ENCODER_STEPS_PER_MENU_ITEM 1
     #define LULZBOT_COOLING_MESSAGES
@@ -2235,8 +2235,14 @@
     #define LULZBOT_DISABLE_KILL_BUTTON
     #define LULZBOT_RESET_SELECTION_TO_FIRST_ON_MENU_BACK
     #define LULZBOT_LCD_Z_HOTEND_OFFSET_MIN -2
+    // Enable the games as easter eggs :)
+    #define LULZBOT_MARLIN_BRICKOUT
+    #define LULZBOT_MARLIN_INVADERS
+    #define LULZBOT_MARLIN_SNAKE
+    // Change wording on a couple menu items
     #define MSG_MOVE_E _UxGT("Extruder ") // Add space to extruder string
     #define MSG_MOTION _UxGT("Movement") // Motion -> Movement
+    #define MSG_INFO_PRINTER_MENU _UxGT("Firmware Version") // About Printer -> Firmware Version
 #endif
 
 #if defined(LULZBOT_LIGHTWEIGHT_UI)
@@ -2292,20 +2298,17 @@
 /***************************** CUSTOM SPLASH SCREEN *****************************/
 
 #define LULZBOT_CUSTOM_BOOTSCREEN \
-    void MarlinUI::draw_custom_bootscreen() { \
-        u8g.firstPage(); \
-        do { \
-            u8g.drawBitmapP(0,0,CEILING(CUSTOM_BOOTSCREEN_BMPWIDTH, 8),CUSTOM_BOOTSCREEN_BMPHEIGHT,custom_start_bmp); \
-            u8g.setFont(u8g_font_6x13); \
-            u8g.drawStr(57,17,LULZBOT_LCD_MACHINE_NAME); \
-            u8g.setFont(u8g_font_04b_03); \
-            u8g.drawStr(58,28,LULZBOT_LCD_TOOLHEAD_NAME); \
-            u8g.setFont(u8g_font_5x8); \
-            u8g.drawStr(59,41,"LulzBot.com"); \
-            u8g.setFont(u8g_font_5x8); \
-            u8g.drawStr(61,62,"v"); \
-            u8g.drawStr(66,62,SHORT_BUILD_VERSION); \
-        } while( u8g.nextPage() ); \
+    void MarlinUI::draw_custom_bootscreen(const uint8_t, const bool) { \
+        u8g.drawBitmapP(0,0,CEILING(CUSTOM_BOOTSCREEN_BMPWIDTH, 8),CUSTOM_BOOTSCREEN_BMPHEIGHT,custom_start_bmp); \
+        u8g.setFont(u8g_font_6x13); \
+        u8g.drawStr(57,17,LULZBOT_LCD_MACHINE_NAME); \
+        u8g.setFont(u8g_font_04b_03); \
+        u8g.drawStr(58,28,LULZBOT_LCD_TOOLHEAD_NAME); \
+        u8g.setFont(u8g_font_5x8); \
+        u8g.drawStr(59,41,"LulzBot.com"); \
+        u8g.setFont(u8g_font_5x8); \
+        u8g.drawStr(61,62,"v"); \
+        u8g.drawStr(66,62,SHORT_BUILD_VERSION); \
         u8g.setFont(MENU_FONT_NAME); \
     }
 

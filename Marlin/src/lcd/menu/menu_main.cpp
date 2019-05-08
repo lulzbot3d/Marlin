@@ -43,7 +43,7 @@
   #include "../../feature/host_actions.h"
 #endif
 
-#if HAS_GAMES
+#if HAS_GAMES && DISABLED(LCD_INFO_MENU)
   #include "game/game.h"
 #endif
 
@@ -136,14 +136,16 @@ void menu_led();
   #endif
 #endif
 
-#if HAS_GAME_MENU
-  void menu_game();
-#elif ENABLED(MARLIN_BRICKOUT)
-  void lcd_goto_brickout();
-#elif ENABLED(MARLIN_INVADERS)
-  void lcd_goto_invaders();
-#elif ENABLED(MARLIN_SNAKE)
-  void lcd_goto_snake();
+#if DISABLED(LCD_INFO_MENU)
+  #if HAS_GAME_MENU
+    void menu_game();
+  #elif ENABLED(MARLIN_BRICKOUT)
+    void lcd_goto_brickout();
+  #elif ENABLED(MARLIN_INVADERS)
+    void lcd_goto_invaders();
+  #elif ENABLED(MARLIN_SNAKE)
+    void lcd_goto_snake();
+  #endif
 #endif
 
 void menu_main() {
@@ -264,7 +266,6 @@ void menu_main() {
 
     if (card_detected) {
       if (!card_open) {
-        MENU_ITEM(submenu, MSG_CARD_MENU, menu_sdcard);
         MENU_ITEM(gcode,
           #if PIN_EXISTS(SD_DETECT)
             MSG_CHANGE_SDCARD, PSTR("M21")
@@ -272,6 +273,7 @@ void menu_main() {
             MSG_RELEASE_SDCARD, PSTR("M22")
           #endif
         );
+        MENU_ITEM(submenu, MSG_CARD_MENU, menu_sdcard);
       }
     }
     else {
@@ -296,8 +298,8 @@ void menu_main() {
     #endif
   #endif
 
-  #if ANY(MARLIN_BRICKOUT, MARLIN_INVADERS, MARLIN_SNAKE, MARLIN_MAZE) && !defined(LULZBOT_GAMES_EASTER_EGG)
-    MENU_ITEM(submenu, "Game", (
+  #if DISABLED(LCD_INFO_MENU) && ANY(MARLIN_BRICKOUT, MARLIN_INVADERS, MARLIN_SNAKE, MARLIN_MAZE)
+    MENU_ITEM(submenu, MSG_GAMES, (
       #if HAS_GAME_MENU
         menu_game
       #elif ENABLED(MARLIN_BRICKOUT)

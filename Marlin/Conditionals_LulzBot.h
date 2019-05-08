@@ -74,7 +74,7 @@
  *
  */
 
-#define LULZBOT_FW_VERSION ".116" // Change this with each update
+#define LULZBOT_FW_VERSION ".117" // Change this with each update
 
 #if ( \
     !defined(LULZBOT_Gladiola_Mini) && \
@@ -235,7 +235,7 @@
     #define LULZBOT_USB_FLASH_DRIVE_SUPPORT
     #define LULZBOT_SDSUPPORT
     #define LULZBOT_FILAMENT_RUNOUT_SENSOR
-    #define LULZBOT_BACKUP_EEPROM_INFORMATION
+    #define LULZBOT_EEPROM_BACKUP_SIZE 1000
     #define LULZBOT_USB_READ_ERROR_IS_FATAL
     #define LULZBOT_AXIS_LEVELING_USING_DUAL_Z_ENDSTOPS
     // Touch LCD configuration
@@ -287,8 +287,12 @@
     #define LULZBOT_USE_NORMALLY_CLOSED_ENDSTOPS
     #define LULZBOT_USE_Z_BELT
     #define LULZBOT_BACKLASH_COMPENSATION
-    #define LULZBOT_HAS_CALIBRATION_CUBE
-    #define LULZBOT_CALIBRATION_GCODE
+    #ifndef TOOLHEAD_Yellowfin_DualExtruderV3
+        // The nozzles on the yellowfin are too close together
+        // to run the calibration routine on the cube
+        #define LULZBOT_HAS_CALIBRATION_CUBE
+        #define LULZBOT_CALIBRATION_GCODE
+    #endif
     #define LULZBOT_BAUDRATE 250000
     #define LULZBOT_PRINTCOUNTER
     #define LULZBOT_MACHINE_UUID "fd546ced-5941-44e4-8d17-5d494bfc2ca3"
@@ -326,6 +330,8 @@
         #define LULZBOT_LIGHTWEIGHT_UI
     #endif
     #define LULZBOT_SDSUPPORT
+    #define LULZBOT_USB_FLASH_DRIVE_SUPPORT
+    #define LULZBOT_USB_READ_ERROR_IS_FATAL
 #endif
 
 #if defined(LULZBOT_ArchimTAZ6_Experimental)
@@ -459,6 +465,7 @@
 
 #define LULZBOT_STRING_CONFIG_H_AUTHOR "(Aleph Objects Inc., LulzBot Git Repository)"
 #define LULZBOT_EEPROM_SETTINGS
+#define LULZBOT_EEPROM_AUTO_INIT
 #define LULZBOT_EMERGENCY_PARSER
 #define LULZBOT_NOZZLE_PARK_FEATURE
 #define LULZBOT_PAUSE_PARK_NOZZLE_TIMEOUT 300
@@ -476,11 +483,6 @@
 
 // Q&A wants to be able to use M226 on endstops switches
 #define LULZBOT_NO_PIN_PROTECTION_ON_M226
-
-// Often Marlin shows the "Home XYZ first" message, but
-// never clears that message. The following causes
-// Marlin to print a new message when the axis are homed
-#define LULZBOT_HOMING_MESSAGE_WORKAROUND
 
 /************************* EXPERIMENTAL FEATURES ******************************/
 
@@ -830,6 +832,7 @@
 #elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT)
     #define LULZBOT_MENU_AXIS_LEVELING_COMMANDS \
         "M117 Leveling X Axis\n" /* Set LCD status */ \
+        "G0 X150\n"              /* Center axis */ \
         "G28 Z0\n"               /* Home Axis */ \
         "M117 Leveling done.\n"  /* Set LCD status */
 #else
@@ -1117,15 +1120,6 @@
     #define LULZBOT_MAY_USE_V2_ADAPTER
 #endif /* TOOLHEAD_DingyCutworm_HardenedSteelPlus */
 
-#if defined(TOOLHEAD_KangarooPaw_SingleExtruder)
-    #define LULZBOT_LCD_TOOLHEAD_NAME              "Kangaroo Paw"
-//          16 chars max                            ^^^^^^^^^^^^^^^
-    #define LULZBOT_M115_EXTRUDER_TYPE             "Goostruder"
-    #define LULZBOT_X_MAX_ENDSTOP_INVERTING        LULZBOT_NORMALLY_CLOSED_ENDSTOP
-    #define LULZBOT_E3D_Titan_Aero_Volcano
-    #define LULZBOT_E_STEPS                        13297.9664
-#endif /* TOOLHEAD_KangarooPaw_SingleExtruder */
-
 // Using the V2 toolheads on the TAZ and older Minis requires an
 // adapter plate that shifts the coordinate system
 #if defined(LULZBOT_MAY_USE_AERO_V2_ADAPTER) && defined(LULZBOT_USE_Z_SCREW)
@@ -1180,6 +1174,17 @@
     #define LULZBOT_MOTOR_CURRENT_E0               960 // mA
     #define LULZBOT_MOTOR_CURRENT_E1               960 // mA
 #endif /* TOOLHEAD_Quiver_DualExtruder */
+
+/********************************* OTHER TOOLHEADS ***************************/
+
+#if defined(TOOLHEAD_KangarooPaw_SingleExtruder)
+    #define LULZBOT_LCD_TOOLHEAD_NAME              "Goostruder"
+//          16 chars max                            ^^^^^^^^^^^^^^^
+    #define LULZBOT_M115_EXTRUDER_TYPE             "SingleExtruder"
+    #define LULZBOT_X_MAX_ENDSTOP_INVERTING        LULZBOT_NORMALLY_CLOSED_ENDSTOP
+    #define LULZBOT_E3D_Titan_Aero_Volcano
+    #define LULZBOT_E_STEPS                        13297.9664
+#endif /* TOOLHEAD_KangarooPaw_SingleExtruder */
 
 /************** AUTO-CALIBRATION (BACKLASH AND NOZZLE OFFSET) ****************/
 
@@ -1428,9 +1433,9 @@
     #define LULZBOT_STANDARD_Y_BED_SIZE        275
 
 #elif defined(LULZBOT_Redgum_TAZWorkhorse) || defined(LULZBOT_ArchimRedgum_Experimental)
-    #define LULZBOT_STANDARD_X_MAX_POS         300
-    #define LULZBOT_STANDARD_X_MIN_POS         -32
-    #define LULZBOT_STANDARD_Y_MAX_POS         311
+    #define LULZBOT_STANDARD_X_MAX_POS         295
+    #define LULZBOT_STANDARD_X_MIN_POS         -50
+    #define LULZBOT_STANDARD_Y_MAX_POS         308
     #define LULZBOT_STANDARD_Y_MIN_POS         -17
 
     #define LULZBOT_STANDARD_X_BED_SIZE        280
@@ -1825,8 +1830,8 @@
 
 #define __LULZBOT_WIPE_GCODE(x,y1,y2,z) \
     "G1 X" #x " Y" #y2 " F5000\n"                 /* Move above wiper pad */ \
+    LULZBOT_WIPE_WAIT_TEMP \
     "G1 Z1\n"                                     /* Push nozzle into wiper */ \
-    "M109 R170\n"                                 /* Wait for wipe temp */ \
     "G1 X" #x " Y" #y2 " F4000\n"                 /* Slow wipe */ \
     "G1 X" #x " Y" #y1 " F4000\n"                 /* Slow wipe */ \
     "G1 X" #x " Y" #y2 " F4000\n"                 /* Slow wipe */ \
@@ -1910,7 +1915,6 @@
         LULZBOT_WIPE_HEAT_TEMP                    /* Preheat extruders */ \
         "G28 O1\n"                                /* Home if needed */ \
         "G1 Y25 Z10 F5000\n"                      /* Move to pad while heating */ \
-        LULZBOT_WIPE_WAIT_TEMP                    /* Wait for wipe temp */ \
         "M117 Rewiping nozzle\n"                  /* Status message */ \
         LULZBOT_REWIPE_E0                         /* Wipe first extruder */ \
         LULZBOT_REWIPE_E1                         /* Wipe second extruder */ \
@@ -2196,11 +2200,14 @@
     #define LULZBOT_XYZ_HOLLOW_FRAME_DISABLE
     #define LULZBOT_MENU_HOLLOW_FRAME_DISABLE
     #define LULZBOT_USE_SMALL_INFOFONT
+    #define LULZBOT_BOOT_MARLIN_LOGO_SMALL
     #if defined(LULZBOT_USE_AUTOLEVELING)
         #define LULZBOT_MENU_BED_LEVELING_GCODE "G28 XY\nM109 S175\nG28 Z\nM109 R145\nG12\nG29\nM104 S0"
     #endif
     #define LULZBOT_SHOW_CUSTOM_BOOTSCREEN
-    #define LULZBOT_GAMES_EASTER_EGG
+    #define LULZBOT_LCD_INFO_MENU
+    #define LULZBOT_LCD_INFO_PRINTER_SHOWS_BOOTSCREEN
+    #define LULZBOT_SHORT_INFO_MENU
     #define LULZBOT_ENCODER_PULSES_PER_STEP 2
     #define LULZBOT_ENCODER_STEPS_PER_MENU_ITEM 1
     #define LULZBOT_COOLING_MESSAGES
@@ -2221,29 +2228,22 @@
     #define LULZBOT_HIDE_EXTRA_FAN_CONFIG_IN_LCD
     #define LULZBOT_HIDE_PREHEAT_CHOICES
     #define LULZBOT_HIDE_INITIALIZE_EEPROM
-    #define LULZBOT_ABOUT_FIRMWARE_MENU
     #define LULZBOT_NO_BED_LEVELING_IN_LCD
-    #define LULZBOT_PRECISION_ESTEP
-    #if defined(LULZBOT_USE_Z_SCREW)
-        #define LULZBOT_PRECISION_XYZ_STEPS float62
-    #else
-        #define LULZBOT_PRECISION_XYZ_STEPS float3
-    #endif
-    #define LULZBOT_PRECISION_E_STEPS float3
     #define LULZBOT_PRECISION_ZOFFSET ftostr52
     #define LULZBOT_LCD_SET_PROGRESS_MANUALLY
     #define LULZBOT_SCROLL_LONG_FILENAMES
     #define LULZBOT_BABYSTEP_ZPROBE_GFX_OVERLAY
     #define LULZBOT_DISABLE_KILL_BUTTON
-    #define LULZBOT_EXTRUDER_STR "Extruder"
     #define LULZBOT_RESET_SELECTION_TO_FIRST_ON_MENU_BACK
     #define LULZBOT_LCD_Z_HOTEND_OFFSET_MIN -2
-    #define LULZBOT_CPU_ST7920_DELAY_2 300 // Increase delay from 250 to 300 to avoid display lock ups
+    // Enable the games as easter eggs :)
+    #define LULZBOT_MARLIN_BRICKOUT
+    #define LULZBOT_MARLIN_INVADERS
+    #define LULZBOT_MARLIN_SNAKE
+    // Change wording on a couple menu items
     #define MSG_MOVE_E _UxGT("Extruder ") // Add space to extruder string
     #define MSG_MOTION _UxGT("Movement") // Motion -> Movement
-#else
-    #define LULZBOT_PRECISION_XYZ_STEPS float62
-    #define LULZBOT_PRECISION_E_STEPS   float62
+    #define MSG_INFO_PRINTER_MENU _UxGT("Firmware Version") // About Printer -> Firmware Version
 #endif
 
 #if defined(LULZBOT_LIGHTWEIGHT_UI)
@@ -2260,8 +2260,7 @@
     #define LULZBOT_DISABLE_DUE_SD_MMC
     #define LULZBOT_LCD_SET_PROGRESS_MANUALLY
     #define LULZBOT_COOLING_MESSAGES
-    #define LULZBOT_EXTRUDER_STR "Hot End"
-    #define LULZBOT_NO_CONFIRM_REHEAT_AFTER_PAUSING
+    #define LULZBOT_REHEAT_AFTER_PAUSING_WORKAROUND
     #define LULZBOT_SCROLL_LONG_FILENAMES
 #endif
 
@@ -2295,24 +2294,22 @@
     #endif
 #endif
 
+#define LULZBOT_EXTRUDER_STR "Hot End"
+
 /***************************** CUSTOM SPLASH SCREEN *****************************/
 
 #define LULZBOT_CUSTOM_BOOTSCREEN \
-    void draw_custom_bootscreen(const u8g_pgm_uint8_t * const bmp, const bool erase=true) { \
-        u8g.firstPage(); \
-        do { \
-            u8g.drawBitmapP(0,0,CEILING(CUSTOM_BOOTSCREEN_BMPWIDTH, 8),CUSTOM_BOOTSCREEN_BMPHEIGHT,custom_start_bmp); \
-            u8g.setFont(u8g_font_6x13); \
-            u8g.drawStr(57,17,LULZBOT_LCD_MACHINE_NAME); \
-            u8g.setFont(u8g_font_04b_03); \
-            u8g.drawStr(58,28,LULZBOT_LCD_TOOLHEAD_NAME); \
-            u8g.setFont(u8g_font_5x8); \
-            u8g.drawStr(59,41,"LulzBot.com"); \
-            u8g.setFont(u8g_font_5x8); \
-            u8g.drawStr(61,62,"v"); \
-            u8g.drawStr(66,62,SHORT_BUILD_VERSION); \
-        } while( u8g.nextPage() ); \
-        safe_delay(CUSTOM_BOOTSCREEN_TIMEOUT); \
+    void MarlinUI::draw_custom_bootscreen(const uint8_t, const bool) { \
+        u8g.drawBitmapP(0,0,CEILING(CUSTOM_BOOTSCREEN_BMPWIDTH, 8),CUSTOM_BOOTSCREEN_BMPHEIGHT,custom_start_bmp); \
+        u8g.setFont(u8g_font_6x13); \
+        u8g.drawStr(57,17,LULZBOT_LCD_MACHINE_NAME); \
+        u8g.setFont(u8g_font_04b_03); \
+        u8g.drawStr(58,28,LULZBOT_LCD_TOOLHEAD_NAME); \
+        u8g.setFont(u8g_font_5x8); \
+        u8g.drawStr(59,41,"LulzBot.com"); \
+        u8g.setFont(u8g_font_5x8); \
+        u8g.drawStr(61,62,"v"); \
+        u8g.drawStr(66,62,SHORT_BUILD_VERSION); \
         u8g.setFont(MENU_FONT_NAME); \
     }
 

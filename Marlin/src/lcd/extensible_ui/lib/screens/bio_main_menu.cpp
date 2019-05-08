@@ -27,47 +27,48 @@
 #include "screens.h"
 
 using namespace FTDI;
+using namespace Theme;
 
 void MainMenu::onRedraw(draw_mode_t what) {
   if(what & BACKGROUND) {
     CommandProcessor cmd;
-    cmd.cmd(CLEAR_COLOR_RGB(Theme::background))
+    cmd.cmd(CLEAR_COLOR_RGB(Theme::bg_color))
        .cmd(CLEAR(true,true,true));
   }
 
   if(what & FOREGROUND) {
     CommandProcessor cmd;
-    default_button_colors();
-    cmd.font(Theme::font_medium)
-    #define GRID_ROWS 7
+    cmd.colors(normal_btn)
+       .font(Theme::font_medium)
+    #define GRID_ROWS 8
     #define GRID_COLS 2
-      .tag(2).button( BTN_POS(1,1), BTN_SIZE(1,1), F("Auto Home"))
-      .tag(3).button( BTN_POS(1,2), BTN_SIZE(1,1), F("Motors Off"))
+       .tag(2).button( BTN_POS(1,1), BTN_SIZE(1,1), F("Auto Home"))
+       .tag(3).button( BTN_POS(1,2), BTN_SIZE(1,1), F("Motors Off"))
       #if HAS_TRINAMIC
-        .enabled(1)
+       .enabled(1)
       #else
-        .enabled(0)
+       .enabled(0)
       #endif
-      .tag(4).button( BTN_POS(1,3), BTN_SIZE(1,1), F("Motor mA"))
+       .tag(4).button( BTN_POS(1,3), BTN_SIZE(1,1), F("Motor mA"))
       #if HAS_TRINAMIC
-        .enabled(1)
+       .enabled(1)
       #else
-        .enabled(0)
+       .enabled(0)
       #endif
-      .tag(5).button( BTN_POS(1,4), BTN_SIZE(1,1), F("Bump Sense"))
-      .tag(6).button( BTN_POS(2,1), BTN_SIZE(1,1), F("Steps/mm"))
-      .tag(7).button( BTN_POS(2,2), BTN_SIZE(1,1), F("Velocity "))
-      .tag(8).button( BTN_POS(2,3), BTN_SIZE(1,1), F("Acceleration"))
+       .tag(5).button( BTN_POS(1,4), BTN_SIZE(1,1), F("Bump Sense"))
+       .tag(6).button( BTN_POS(2,1), BTN_SIZE(1,1), F("Steps/mm"))
+       .tag(7).button( BTN_POS(2,2), BTN_SIZE(1,1), F("Velocity "))
+       .tag(8).button( BTN_POS(2,3), BTN_SIZE(1,1), F("Acceleration"))
     #if ENABLED(JUNCTION_DEVIATION)
-      .tag(9).button( BTN_POS(2,4), BTN_SIZE(1,1), F("Junc Dev"))
+       .tag(9).button( BTN_POS(2,4), BTN_SIZE(1,1), F("Junc Dev"))
     #else
-      .tag(9).button( BTN_POS(2,4), BTN_SIZE(1,1), F("Jerk"))
+       .tag(9).button( BTN_POS(2,4), BTN_SIZE(1,1), F("Jerk"))
     #endif
-      //.tag(10).button( BTN_POS(1,5), BTN_SIZE(2,1), F("Interface Settings"))
-      .tag(11).button( BTN_POS(1,5), BTN_SIZE(2,1), F("Restore Factory Defaults"))
-      .tag(12).button( BTN_POS(1,6), BTN_SIZE(2,1), F("About Printer"))
-      .style(LIGHT_BTN)
-      .tag(1).button( BTN_POS(1,7), BTN_SIZE(2,1), F("Back"));
+       .tag(10).button( BTN_POS(1,5), BTN_SIZE(2,1), F("Interface Settings"))
+       .tag(11).button( BTN_POS(1,6), BTN_SIZE(2,1), F("Restore Factory Defaults"))
+       .tag(12).button( BTN_POS(1,7), BTN_SIZE(2,1), F("About Printer"))
+       .colors(action_btn)
+       .tag(1).button( BTN_POS(1,8), BTN_SIZE(2,1), F("Back"));
     #undef GRID_COLS
     #undef GRID_ROWS
   }
@@ -77,14 +78,14 @@ bool MainMenu::onTouchEnd(uint8_t tag) {
   using namespace ExtUI;
 
   switch(tag) {
-    case 1:  GOTO_PREVIOUS();                                         break;
-    case 2:  enqueueCommands_P(PSTR("G28"));                          break;
-    case 3:  enqueueCommands_P(PSTR("M84"));                          break;
-    case 4:  GOTO_SCREEN(StepperCurrentScreen);                       break;
-    case 5:  GOTO_SCREEN(StepperBumpSensitivityScreen);               break;
-    case 6:  GOTO_SCREEN(StepsScreen);                                break;
-    case 7:  GOTO_SCREEN(MaxVelocityScreen);                          break;
-    case 8:  GOTO_SCREEN(DefaultAccelerationScreen);                  break;
+    case 1: SaveSettingsDialogBox::promptToSaveSettings(); break;
+    case 2:  enqueueCommands_P(PSTR("G28"));               break;
+    case 3:  enqueueCommands_P(PSTR("M84"));               break;
+    case 4:  GOTO_SCREEN(StepperCurrentScreen);            break;
+    case 5:  GOTO_SCREEN(StepperBumpSensitivityScreen);    break;
+    case 6:  GOTO_SCREEN(StepsScreen);                     break;
+    case 7:  GOTO_SCREEN(MaxVelocityScreen);               break;
+    case 8:  GOTO_SCREEN(DefaultAccelerationScreen);       break;
     case 9:
       #if ENABLED(JUNCTION_DEVIATION)
         GOTO_SCREEN(JunctionDeviationScreen);
@@ -92,9 +93,9 @@ bool MainMenu::onTouchEnd(uint8_t tag) {
         GOTO_SCREEN(JerkScreen);
       #endif
       break;
-    //case 10: GOTO_SCREEN(InterfaceSettingsScreen);                    break;
-    case 11: GOTO_SCREEN(RestoreFailsafeDialogBox);                   break;
-    case 12: GOTO_SCREEN(AboutScreen);                                break;
+    case 10: GOTO_SCREEN(InterfaceSettingsScreen);         break;
+    case 11: GOTO_SCREEN(RestoreFailsafeDialogBox);        break;
+    case 12: GOTO_SCREEN(AboutScreen);                     break;
     default:
       return false;
   }

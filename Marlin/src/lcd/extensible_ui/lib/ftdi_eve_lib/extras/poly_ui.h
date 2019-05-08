@@ -84,13 +84,18 @@ class PolyReader {
 
     // Reads the next point in the polygon data structure
     void next() {
+      if(!p) return;
+
       if(p == end) {
-        close_loop();
+        if(start_x != eol)
+          close_loop();
+        else
+          p = NULL;
       } else {
         x = pgm_read_word_far(p++);
-        if(x == eol) {
+        if(x == eol)
           close_loop();
-        } else {
+        else {
           y = pgm_read_word_far(p++);
           if(start_x == eol) {
             start_x = x;
@@ -100,7 +105,7 @@ class PolyReader {
       }
     }
 
-    bool has_more()       {return p != end || start_x != 0xFFFF;}
+    bool has_more()       {return p != NULL;}
     bool end_of_loop()    {return start_x == eol;}
 };
 
@@ -136,8 +141,9 @@ class TransformedPolyReader : public PolyReader {
        */
       const int32_t px = PolyReader::x;
       const int32_t py = PolyReader::y;
-      x = ((((a * px) + (b * py)) >> 16) + c) >> fract_bits;
-      y = ((((d * px) + (e * py)) >> 16) + f) >> fract_bits;
+      const int32_t round = 1 << (fract_bits-1);
+      x = (((((a * px) + (b * py)) >> 16) + c) + round) >> fract_bits;
+      y = (((((d * px) + (e * py)) >> 16) + f) + round) >> fract_bits;
     }
 
     void set_transform(
@@ -203,6 +209,8 @@ class DeduplicatedPolyReader : public POLY_READER {
   private:
     typename POLY_READER::type_t last_x, last_y;
 
+    static constexpr typename POLY_READER::type_t eol = 0xFFFF;
+
   public:
     DeduplicatedPolyReader(const uint16_t data[], const size_t n) : POLY_READER(data, n) {
       last_x = POLY_READER::x;
@@ -211,11 +219,15 @@ class DeduplicatedPolyReader : public POLY_READER {
 
     void next() {
       do {
+        if(!POLY_READER::has_more()) return;
         POLY_READER::next();
-      } while(POLY_READER::x == last_x && POLY_READER::y == last_y &&
-              POLY_READER::has_more() && !POLY_READER::end_of_loop());
-      last_x = POLY_READER::x;
-      last_y = POLY_READER::y;
+      } while(POLY_READER::x == last_x && POLY_READER::y == last_y && !POLY_READER::end_of_loop());
+      if(POLY_READER::end_of_loop()) {
+        last_x = last_y = eol;
+      } else {
+        last_x = POLY_READER::x;
+        last_y = POLY_READER::y;
+      }
     }
 };
 
@@ -242,8 +254,20 @@ class GenericPolyUI {
     GenericPolyUI(CommandProcessor &c) : cmd(c) {}
 
     // Fills a polygon with the current COLOR_RGB
-    void fill(poly_reader_t r) {
+    void fill(poly_reader_t r, bool clip = true) {
       using namespace FTDI;
+      int16_t x, y, w, h;
+
+      if(clip) {
+        // Clipping reduces the number of pixels that are
+        // filled, allowing more complex shapes to be drawn
+        // in the alloted time.
+        bounds(r, x, y, w, h);
+        cmd.cmd(SAVE_CONTEXT());
+        cmd.cmd(SCISSOR_XY(x, y));
+        cmd.cmd(SCISSOR_SIZE(w, h));
+      }
+
       Polygon p(cmd);
       p.begin_fill();
       p.begin_loop();
@@ -256,15 +280,19 @@ class GenericPolyUI {
       }
       p.end_loop();
       p.end_fill();
+      if(clip)
+        cmd.cmd(RESTORE_CONTEXT());
     }
 
     void shadow(poly_reader_t r, uint8_t offset) {
-      using namespace FTDI;
-      cmd.cmd(VERTEX_TRANSLATE_X(offset * 16));
-      cmd.cmd(VERTEX_TRANSLATE_Y(offset * 16));
-      fill(r);
-      cmd.cmd(VERTEX_TRANSLATE_X(0));
-      cmd.cmd(VERTEX_TRANSLATE_Y(0));
+      #if FTDI_API_LEVEL >= 810
+        using namespace FTDI;
+        cmd.cmd(VERTEX_TRANSLATE_X(offset * 16));
+        cmd.cmd(VERTEX_TRANSLATE_Y(offset * 16));
+        fill(r);
+        cmd.cmd(VERTEX_TRANSLATE_X(0));
+        cmd.cmd(VERTEX_TRANSLATE_Y(0));
+      #endif
     }
 
     // Strokes a polygon with the current COLOR_RGB
@@ -327,14 +355,16 @@ class GenericPolyUI {
       cmd.cmd(SAVE_CONTEXT());
       cmd.cmd(TAG(tag));
       // Draw the shadow
-      cmd.cmd(VERTEX_TRANSLATE_X(btn_shadow_depth * 16));
-      cmd.cmd(VERTEX_TRANSLATE_Y(btn_shadow_depth * 16));
-      if(EventLoop::get_pressed_tag() != tag) {
-        cmd.cmd(COLOR_RGB(btn_shadow_color));
-        fill(r);
-        cmd.cmd(VERTEX_TRANSLATE_X(0));
-        cmd.cmd(VERTEX_TRANSLATE_Y(0));
-      }
+      #if FTDI_API_LEVEL >= 810
+        cmd.cmd(VERTEX_TRANSLATE_X(btn_shadow_depth * 16));
+        cmd.cmd(VERTEX_TRANSLATE_Y(btn_shadow_depth * 16));
+        if(EventLoop::get_pressed_tag() != tag) {
+          cmd.cmd(COLOR_RGB(btn_shadow_color));
+          fill(r);
+          cmd.cmd(VERTEX_TRANSLATE_X(0));
+          cmd.cmd(VERTEX_TRANSLATE_Y(0));
+        }
+      #endif
       // Draw the fill and stroke
       cmd.cmd(COLOR_RGB(btn_fill_color));
       fill(r);

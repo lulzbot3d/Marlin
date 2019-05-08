@@ -353,8 +353,6 @@ void disable_all_steppers() {
 
     #if defined(LULZBOT_RUNOUT_HANDLING_WORKAROUNDS)
     const bool run_runout_script = IS_SD_PRINTING();
-    if(!IS_SD_PRINTING())
-      runout.reset();
     #else
     const bool run_runout_script = !runout.host_handling;
     #endif
@@ -739,7 +737,7 @@ void kill(PGM_P const lcd_msg/*=NULL*/) {
 
   SERIAL_ERROR_MSG(MSG_ERR_KILLED);
 
-  #if HAS_SPI_LCD || ENABLED(EXTENSIBLE_UI)
+  #if HAS_DISPLAY
     ui.kill_screen(lcd_msg ? lcd_msg : PSTR(MSG_KILLED));
   #else
     UNUSED(lcd_msg);
@@ -945,9 +943,31 @@ void setup() {
 
   queue_setup();
 
+  // UI must be initialized before EEPROM
+  // (because EEPROM code calls the UI).
+  ui.init();
+  ui.reset_status();
+
+  #if HAS_SPI_LCD && ENABLED(SHOW_BOOTSCREEN)
+    ui.show_bootscreen();
+  #endif
+
+  #if ENABLED(SDIO_SUPPORT) && SD_DETECT_PIN == -1
+    // Auto-mount the SD for EEPROM.dat emulation
+    if (!card.isDetected()) card.initsd();
+  #endif
+
   // Load data from EEPROM if available (or use defaults)
   // This also updates variables in the planner, elsewhere
-  (void)settings.load();
+  #if ENABLED(EEPROM_AUTO_INIT)
+    if (!settings.load()) {
+      (void)settings.reset();
+      (void)settings.save();
+      SERIAL_ECHO_MSG("EEPROM Initialized");
+    }
+  #else
+    (void)settings.load();
+  #endif
 
   #if HAS_M206_COMMAND
     // Initialize current position based on home_offset
@@ -1043,13 +1063,6 @@ void setup() {
 
   #if HAS_FANMUX
     fanmux_init();
-  #endif
-
-  ui.init();
-  ui.reset_status();
-
-  #if HAS_SPI_LCD && ENABLED(SHOW_BOOTSCREEN)
-    ui.show_bootscreen();
   #endif
 
   #if ENABLED(MIXING_EXTRUDER)

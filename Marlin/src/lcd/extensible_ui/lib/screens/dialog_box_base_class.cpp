@@ -38,15 +38,15 @@ void DialogBoxBaseClass::drawMessage(const T line1, const T line2, const T line3
   const uint8_t n_lines = line3 ? 3 : line2 ? 2 : 1;
   CommandProcessor cmd;
   cmd.cmd(CMD_DLSTART)
-     .cmd(CLEAR_COLOR_RGB(background))
+     .cmd(CLEAR_COLOR_RGB(bg_color))
      .cmd(CLEAR(true,true,true))
-     .cmd(COLOR_RGB(text_enabled))
+     .cmd(COLOR_RGB(bg_text_enabled))
      .tag(0);
   cmd.font(font ? font : font_large);
   for(uint8_t line = 0; line < n_lines; line++) {
     cmd.text( BTN_POS(1,3-n_lines/2+line), BTN_SIZE(2,1), lines[line]);
   }
-  default_button_colors();
+  cmd.colors(normal_btn);
 }
 
 template void DialogBoxBaseClass::drawMessage(const char *, const char *, const char *, int16_t);
@@ -65,9 +65,16 @@ void DialogBoxBaseClass::drawOkayButton() {
      .tag(1).button( BTN_POS(1,8), BTN_SIZE(2,1), F("Okay"));
 }
 
+void DialogBoxBaseClass::drawButton(const progmem_str label) {
+  CommandProcessor cmd;
+  cmd.font(font_medium)
+     .tag(1).button( BTN_POS(1,8), BTN_SIZE(2,1), label);
+}
+
 void DialogBoxBaseClass::drawSpinner() {
   CommandProcessor cmd;
-  cmd.spinner(BTN_POS(1,5), BTN_SIZE(2,2)).execute();
+  cmd.cmd(COLOR_RGB(bg_text_enabled))
+     .spinner(BTN_POS(1,4), BTN_SIZE(2,3)).execute();
 }
 
 bool DialogBoxBaseClass::onTouchEnd(uint8_t tag) {

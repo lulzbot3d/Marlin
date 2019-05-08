@@ -405,10 +405,6 @@ void GcodeSuite::G28(const bool always_home_all) {
 
   #endif // DUAL_X_CARRIAGE
 
-  #if ENABLED(ULTRA_LCD) && defined(LULZBOT_HOMING_MESSAGE_WORKAROUND)
-    ui.reset_status();
-  #endif
-
   #ifdef HOMING_BACKOFF_MM
     endstops.enable(false);
     constexpr float endstop_backoff[XYZ] = HOMING_BACKOFF_MM;

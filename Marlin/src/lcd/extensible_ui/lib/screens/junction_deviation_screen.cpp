@@ -47,7 +47,7 @@ bool JunctionDeviationScreen::onTouchHeld(uint8_t tag) {
     default:
       return false;
   }
-  onRefresh();
+  SaveSettingsDialogBox::settingsChanged();
   return true;
 }
 

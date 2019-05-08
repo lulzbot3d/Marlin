@@ -26,7 +26,7 @@
 
 #include "../../inc/MarlinConfigPre.h"
 
-#if HAS_LCD_MENU && ENABLED(LCD_INFO_MENU) || ENABLED(LULZBOT_ABOUT_FIRMWARE_MENU)
+#if HAS_LCD_MENU && ENABLED(LCD_INFO_MENU)
 
 #include "menu.h"
 // #include "../../module/motion.h"
@@ -37,6 +37,19 @@
 // #if HAS_LEVELING
 //   #include "../../feature/bedlevel/bedlevel.h"
 // #endif
+
+#if HAS_GAMES
+  #include "game/game.h"
+  #if HAS_GAME_MENU
+    void menu_game();
+  #elif ENABLED(MARLIN_BRICKOUT)
+    void lcd_goto_brickout();
+  #elif ENABLED(MARLIN_INVADERS)
+    void lcd_goto_invaders();
+  #elif ENABLED(MARLIN_SNAKE)
+    void lcd_goto_snake();
+  #endif
+#endif
 
 #if ENABLED(PRINTCOUNTER)
 
@@ -185,28 +198,44 @@ void menu_info_board() {
 //
 // About Printer > Printer Info
 //
-void menu_info_printer() {
-  if (ui.use_click()) return ui.goto_previous_screen();
-  START_SCREEN();
-  STATIC_ITEM(MSG_MARLIN, true, true);                             // Marlin
-  STATIC_ITEM(SHORT_BUILD_VERSION, true);                          // x.x.x-Branch
-  STATIC_ITEM(STRING_DISTRIBUTION_DATE, true);                     // YYYY-MM-DD HH:MM
-  STATIC_ITEM(MACHINE_NAME, true);                                 // My3DPrinter
-  STATIC_ITEM(WEBSITE_URL, true);                                  // www.my3dprinter.com
-  STATIC_ITEM(MSG_INFO_EXTRUDERS ": " STRINGIFY(EXTRUDERS), true); // Extruders: 2
-  #if ENABLED(AUTO_BED_LEVELING_3POINT)
-    STATIC_ITEM(MSG_3POINT_LEVELING, true);                        // 3-Point Leveling
-  #elif ENABLED(AUTO_BED_LEVELING_LINEAR)
-    STATIC_ITEM(MSG_LINEAR_LEVELING, true);                        // Linear Leveling
-  #elif ENABLED(AUTO_BED_LEVELING_BILINEAR)
-    STATIC_ITEM(MSG_BILINEAR_LEVELING, true);                      // Bi-linear Leveling
-  #elif ENABLED(AUTO_BED_LEVELING_UBL)
-    STATIC_ITEM(MSG_UBL_LEVELING, true);                           // Unified Bed Leveling
-  #elif ENABLED(MESH_BED_LEVELING)
-    STATIC_ITEM(MSG_MESH_LEVELING, true);                          // Mesh Leveling
+#if DISABLED(LCD_INFO_PRINTER_SHOWS_BOOTSCREEN)
+  void menu_info_printer() {
+    if (ui.use_click()) return ui.goto_previous_screen();
+    START_SCREEN();
+    STATIC_ITEM(MSG_MARLIN, true, true);                             // Marlin
+    STATIC_ITEM(SHORT_BUILD_VERSION, true);                          // x.x.x-Branch
+    STATIC_ITEM(STRING_DISTRIBUTION_DATE, true);                     // YYYY-MM-DD HH:MM
+    STATIC_ITEM(MACHINE_NAME, true);                                 // My3DPrinter
+    STATIC_ITEM(WEBSITE_URL, true);                                  // www.my3dprinter.com
+    STATIC_ITEM(MSG_INFO_EXTRUDERS ": " STRINGIFY(EXTRUDERS), true); // Extruders: 2
+    #if ENABLED(AUTO_BED_LEVELING_3POINT)
+      STATIC_ITEM(MSG_3POINT_LEVELING, true);                        // 3-Point Leveling
+    #elif ENABLED(AUTO_BED_LEVELING_LINEAR)
+      STATIC_ITEM(MSG_LINEAR_LEVELING, true);                        // Linear Leveling
+    #elif ENABLED(AUTO_BED_LEVELING_BILINEAR)
+      STATIC_ITEM(MSG_BILINEAR_LEVELING, true);                      // Bi-linear Leveling
+    #elif ENABLED(AUTO_BED_LEVELING_UBL)
+      STATIC_ITEM(MSG_UBL_LEVELING, true);                           // Unified Bed Leveling
+    #elif ENABLED(MESH_BED_LEVELING)
+      STATIC_ITEM(MSG_MESH_LEVELING, true);                          // Mesh Leveling
+    #endif
+    END_SCREEN();
+  }
+#else
+  void menu_show_marlin_bootscreen() {
+    if (ui.use_click()) { ui.goto_previous_screen_no_defer(); }
+    ui.draw_marlin_bootscreen();
+  }
+
+  #if ENABLED(SHOW_CUSTOM_BOOTSCREEN)
+    void menu_show_custom_bootscreen() {
+      if (ui.use_click()) { ui.goto_screen(menu_show_marlin_bootscreen); }
+      ui.draw_custom_bootscreen();
+    }
   #endif
-  END_SCREEN();
-}
+#endif // LCD_INFO_PRINTER_SHOWS_BOOTSCREEN
+
+void menu_game();
 
 //
 // "About Printer" submenu
@@ -214,12 +243,42 @@ void menu_info_printer() {
 void menu_info() {
   START_MENU();
   MENU_BACK(MSG_MAIN);
-  MENU_ITEM(submenu, MSG_INFO_PRINTER_MENU, menu_info_printer);        // Printer Info >
-  MENU_ITEM(submenu, MSG_INFO_BOARD_MENU, menu_info_board);            // Board Info >
-  MENU_ITEM(submenu, MSG_INFO_THERMISTOR_MENU, menu_info_thermistors); // Thermistors >
+  #if ENABLED(LCD_INFO_PRINTER_SHOWS_BOOTSCREEN)
+    MENU_ITEM(submenu, MSG_INFO_PRINTER_MENU, (
+      #if ENABLED(SHOW_CUSTOM_BOOTSCREEN)
+        menu_show_custom_bootscreen
+      #else
+        menu_show_marlin_bootscreen
+      #endif
+    ));
+  #else
+    MENU_ITEM(submenu, MSG_INFO_PRINTER_MENU, menu_info_printer);        // Printer Info >
+    MENU_ITEM(submenu, MSG_INFO_BOARD_MENU, menu_info_board);            // Board Info >
+    MENU_ITEM(submenu, MSG_INFO_THERMISTOR_MENU, menu_info_thermistors); // Thermistors >
+  #endif
+
   #if ENABLED(PRINTCOUNTER)
     MENU_ITEM(submenu, MSG_INFO_STATS_MENU, menu_info_stats);          // Printer Stats >
   #endif
+
+  #if ANY(MARLIN_BRICKOUT, MARLIN_INVADERS, MARLIN_SNAKE)
+    MENU_ITEM_DUMMY();
+    MENU_ITEM_DUMMY();
+    MENU_ITEM(submenu, MSG_GAMES, (
+      #if HAS_GAME_MENU
+        menu_game
+      #elif ENABLED(MARLIN_BRICKOUT)
+        brickout.enter_game
+      #elif ENABLED(MARLIN_INVADERS)
+        invaders.enter_game
+      #elif ENABLED(MARLIN_SNAKE)
+        snake.enter_game
+      #elif ENABLED(MARLIN_MAZE)
+        maze.enter_game
+      #endif
+    ));
+  #endif
+
   END_MENU();
 }
 

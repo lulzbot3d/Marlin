@@ -104,7 +104,7 @@ bool FilamentOptionsScreen::onTouchHeld(uint8_t tag) {
     setFilamentRunoutEnabled(getFilamentRunoutDistance_mm() >= FILAMENT_RUNOUT_DISTANCE_MM);
   #endif
 
-  onRefresh();
+  SaveSettingsDialogBox::settingsChanged();
   return true;
 }
 

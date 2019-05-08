@@ -28,18 +28,19 @@
 
 using namespace FTDI;
 using namespace ExtUI;
+using namespace Theme;
 
 void AdvancedSettingsMenu::onRedraw(draw_mode_t what) {
   if(what & BACKGROUND) {
     CommandProcessor cmd;
-    cmd.cmd(CLEAR_COLOR_RGB(Theme::background))
+    cmd.cmd(CLEAR_COLOR_RGB(Theme::bg_color))
        .cmd(CLEAR(true,true,true));
   }
 
   if(what & FOREGROUND) {
     CommandProcessor cmd;
-    default_button_colors();
-    cmd.font(Theme::font_medium)
+    cmd.colors(normal_btn)
+       .font(Theme::font_medium)
     #if defined(USE_PORTRAIT_ORIENTATION)
       #define GRID_ROWS 9
       #define GRID_COLS 2
@@ -75,7 +76,8 @@ void AdvancedSettingsMenu::onRedraw(draw_mode_t what) {
       .enabled(0)
       #endif
       .tag(11).button( BTN_POS(1,3), BTN_SIZE(1,1), F("Filament"))
-      .tag(12).button( BTN_POS(1,6), BTN_SIZE(2,1), F("Endstop States"))
+      .tag(12).button( BTN_POS(1,6), BTN_SIZE(1,1), F("Endstops"))
+      .tag(15).button( BTN_POS(2,6), BTN_SIZE(1,1), F("Display"))
       .tag(9) .button( BTN_POS(1,7), BTN_SIZE(2,1), F("Interface Settings"))
       .tag(10).button( BTN_POS(1,8), BTN_SIZE(2,1), F("Restore Factory Defaults"))
       .tag(5) .button( BTN_POS(2,2), BTN_SIZE(1,1), F("Velocity "))
@@ -91,46 +93,59 @@ void AdvancedSettingsMenu::onRedraw(draw_mode_t what) {
       .enabled(0)
       #endif
       .tag(8).button( BTN_POS(2,5), BTN_SIZE(1,1), F("Backlash"))
-      .style(LIGHT_BTN)
+      .colors(action_btn)
       .tag(1) .button( BTN_POS(1,9), BTN_SIZE(2,1), F("Back"));
       #undef GRID_COLS
       #undef GRID_ROWS
     #else
-      #define GRID_ROWS 7
-      #define GRID_COLS 2
+      #define GRID_ROWS 6
+      #define GRID_COLS 3
       #if HAS_BED_PROBE
         .enabled(1)
       #else
         .enabled(0)
       #endif
-      .tag(2) .button( BTN_POS(1,1),  BTN_SIZE(1,1), F("Z Offset "))
+      .tag(2) .button( BTN_POS(1,1),  BTN_SIZE(1,2), F("Z Offset "))
       .enabled(1)
-      .tag(3) .button( BTN_POS(1,2),  BTN_SIZE(1,1), F("Steps/mm"))
+      .tag(3) .button( BTN_POS(2,1),  BTN_SIZE(1,1), F("Steps/mm"))
+      #if HAS_TRINAMIC
+        .enabled(1)
+      #else
+        .enabled(0)
+      #endif
+      .tag(13).button( BTN_POS(3,1), BTN_SIZE(1,1), F("Motor mA"))
+      #if HAS_TRINAMIC
+        .enabled(1)
+      #else
+        .enabled(0)
+      #endif
+      .tag(14).button( BTN_POS(3,2), BTN_SIZE(1,1), F("Bump Sense"))
       #if ENABLED(BACKLASH_GCODE)
       .enabled(1)
       #else
       .enabled(0)
       #endif
-      .tag(8).button( BTN_POS(1,3),  BTN_SIZE(1,1), F("Axis Backlash"))
+      .tag(8).button( BTN_POS(3,3),  BTN_SIZE(1,1), F("Backlash"))
       #if HOTENDS > 1
       .enabled(1)
       #else
       .enabled(0)
       #endif
-      .tag(4) .button( BTN_POS(1,4),  BTN_SIZE(1,1), F("Nozzle Offsets"))
-      .tag(12).button( BTN_POS(1,5),  BTN_SIZE(1,1), F("Endstop States"))
-      .tag(5) .button( BTN_POS(2,1),  BTN_SIZE(1,1), F("Velocity "))
-      .tag(6) .button( BTN_POS(2,2),  BTN_SIZE(1,1), F("Acceleration"))
+      .tag(4) .button( BTN_POS(1,3),  BTN_SIZE(1,1), F("Nozzle Offsets"))
+      .tag(12).button( BTN_POS(3,4),  BTN_SIZE(1,1), F("Endstops"))
+      .tag(5) .button( BTN_POS(2,2),  BTN_SIZE(1,1), F("Velocity "))
+      .tag(6) .button( BTN_POS(2,3),  BTN_SIZE(1,1), F("Acceleration"))
       #if ENABLED(JUNCTION_DEVIATION)
-      .tag(7) .button( BTN_POS(2,3),  BTN_SIZE(1,1), F("Junc Dev"))
+      .tag(7) .button( BTN_POS(2,4),  BTN_SIZE(1,1), F("Junc Dev"))
       #else
-      .tag(7) .button( BTN_POS(2,3),  BTN_SIZE(1,1), F("Jerk"))
+      .tag(7) .button( BTN_POS(2,4),  BTN_SIZE(1,1), F("Jerk"))
       #endif
-      .tag(11).button( BTN_POS(2,4), BTN_SIZE(1,1),  F("Filament"))
-      .tag(9) .button( BTN_POS(2,5),  BTN_SIZE(1,1), F("Interface Settings"))
+      .tag(11).button( BTN_POS(1,4),  BTN_SIZE(1,1), F("Filament"))
+      .tag(15).button( BTN_POS(3,5),  BTN_SIZE(1,1), F("Display"))
+      .tag(9) .button( BTN_POS(1,5),  BTN_SIZE(2,1), F("Interface Settings"))
       .tag(10).button( BTN_POS(1,6),  BTN_SIZE(2,1), F("Restore Defaults"))
-      .style(LIGHT_BTN)
-      .tag(1) .button( BTN_POS(1,7),  BTN_SIZE(2,1), F("Back"));
+      .colors(action_btn)
+      .tag(1) .button( BTN_POS(3,6),  BTN_SIZE(1,1), F("Back"));
     #endif
   }
 }
@@ -166,6 +181,7 @@ bool AdvancedSettingsMenu::onTouchEnd(uint8_t tag) {
     #if HAS_TRINAMIC
     case 13: GOTO_SCREEN(StepperCurrentScreen); break;
     case 14: GOTO_SCREEN(StepperBumpSensitivityScreen); break;
+    case 15: GOTO_SCREEN(DisplayTuningScreen); break;
     #endif
     default: return false;
   }

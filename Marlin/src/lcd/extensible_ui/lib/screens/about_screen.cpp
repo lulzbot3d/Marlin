@@ -40,25 +40,24 @@ void AboutScreen::onEntry() {
 
 void AboutScreen::onRedraw(draw_mode_t what) {
   CommandProcessor cmd;
-  cmd.cmd(CLEAR_COLOR_RGB(background))
+  cmd.cmd(CLEAR_COLOR_RGB(bg_color))
      .cmd(CLEAR(true,true,true))
-     .cmd(COLOR_RGB(text_enabled));
+     .cmd(COLOR_RGB(bg_text_enabled))
 
   #if defined(LULZBOT_LCD_MACHINE_NAME) && defined(LULZBOT_LCD_TOOLHEAD_NAME)
-  cmd.tag(0).font(font_medium)
+     .tag(0).font(font_medium)
             .text(  BTN_POS(1,2), BTN_SIZE(4,1), F(LULZBOT_LCD_MACHINE_NAME "  (" LULZBOT_LCD_TOOLHEAD_NAME ")"))
   #else
-  cmd.tag(0).font(font_large)
+     .tag(0).font(font_large)
             .text(  BTN_POS(1,2), BTN_SIZE(4,1), F("Color Touch Panel"))
   #endif
      .tag(2).font(font_medium)
-            .text(  BTN_POS(1,3), BTN_SIZE(4,1), F("(C) 2018 Aleph Objects, Inc."))
+            .text(  BTN_POS(1,3), BTN_SIZE(4,1), F("(C) 2019 Aleph Objects, Inc."))
             .text(  BTN_POS(1,4), BTN_SIZE(4,1), F("www.lulzbot.com"))
 
-     .tag(0).text(  BTN_POS(1,6), BTN_SIZE(4,1), progmem_str(getFirmwareName_str()));
-
-  default_button_colors();
-  cmd.tag(1).button(BTN_POS(2,8), BTN_SIZE(2,1), F("Okay"));
+     .tag(0).text(  BTN_POS(1,6), BTN_SIZE(4,1), progmem_str(getFirmwareName_str()))
+     .colors(action_btn)
+     .tag(1).button(BTN_POS(2,8), BTN_SIZE(2,1), F("Okay"));
 }
 
 bool AboutScreen::onTouchEnd(uint8_t tag) {

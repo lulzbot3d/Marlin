@@ -46,7 +46,7 @@ void EndstopStatesScreen::onExit() {
 
 void EndstopStatesScreen::onRedraw(draw_mode_t what) {
   CommandProcessor cmd;
-  cmd.cmd(CLEAR_COLOR_RGB(background))
+  cmd.cmd(CLEAR_COLOR_RGB(bg_color))
      .cmd(CLEAR(true,true,true))
      .tag(0);
 
@@ -54,7 +54,7 @@ void EndstopStatesScreen::onRedraw(draw_mode_t what) {
   #define GRID_COLS 6
 
   #define PIN_BTN(X,Y,PIN)          button(BTN_POS(X,Y), BTN_SIZE(2,1), F(#PIN))
-  #define PIN_ENABLED(PIN,INV,X,Y)  cmd.enabled(1).style(READ(PIN##_PIN) != INV ? LIGHT_BTN : 0).PIN_BTN(X,Y,PIN);
+  #define PIN_ENABLED(PIN,INV,X,Y)  cmd.enabled(1).colors(READ(PIN##_PIN) != INV ? action_btn : normal_btn).PIN_BTN(X,Y,PIN);
   #define PIN_DISABLED(PIN,INV,X,Y) cmd.enabled(0).PIN_BTN(X,Y,PIN);
 
   #if defined(USE_PORTRAIT_ORIENTATION)
@@ -115,13 +115,15 @@ void EndstopStatesScreen::onRedraw(draw_mode_t what) {
     #define EDGE_R 30
     cmd.font(font_small)
        .text         (BTN_POS(1,5), BTN_SIZE(3,1), F("Soft Limits:"), OPT_RIGHTX | OPT_CENTERY)
+       .colors(ui_toggle)
        .tag(2).toggle(BTN_POS(4,5), BTN_SIZE(3,1), F("off\xFFon"), getSoftEndstopState());
       #undef EDGE_R
       #define EDGE_R 0
   #endif
 
-  cmd.style(LIGHT_BTN).tag(1).font(font_medium)
-     .button( BTN_POS(1,7), BTN_SIZE(6,1), F("Back"));
+  cmd.font(font_medium)
+     .colors(action_btn)
+     .tag(1).button( BTN_POS(1,7), BTN_SIZE(6,1), F("Back"));
   #undef GRID_COLS
   #undef GRID_ROWS
 }

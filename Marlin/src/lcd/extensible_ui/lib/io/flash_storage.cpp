@@ -29,6 +29,24 @@
 #include "media_file_reader.h"
 #include "flash_storage.h"
 
+// The following must be changed whenever the layout of the flash
+// data is changed in a manner that would render the data invalid.
+
+constexpr uint32_t flash_eeprom_version = 1;
+
+/* SPI Flash Memory Map:
+ *
+ * The following offsets and sizes are specified in 4k erase units:
+ *
+ * Page    Size     Description
+ * 0       16       DATA STORAGE AREA
+ * 16      1        VERSIONING DATA
+ * 17      inf      MEDIA STORAGE AREA
+ *
+ */
+
+#define DATA_STORAGE_SIZE_64K
+
 using namespace FTDI::SPI;
 using namespace FTDI::SPI::most_significant_byte_first;
 
@@ -147,7 +165,7 @@ bool UIFlashStorage::is_present = false;
     return addr + size;
   }
 
-  /******************************* UI STORAGE ROUTINES ******************************/
+  /********************************** UTILITY ROUTINES *********************************/
 
   bool UIFlashStorage::check_known_device() {
     uint8_t manufacturer_id, device_type, capacity;
@@ -182,12 +200,10 @@ bool UIFlashStorage::is_present = false;
   /**************************** DATA STORAGE AREA (first 4K or 64k) ********************/
 
   #if defined(DATA_STORAGE_SIZE_64K)
-    constexpr uint32_t data_storage_area_size = 64 * 1024;
+    constexpr uint32_t data_storage_area_size = 64 * 1024; // Large erase unit
   #else
-    constexpr uint32_t data_storage_area_size = 4 * 1024;
+    constexpr uint32_t data_storage_area_size =  4 * 1024; // Small erase unit
   #endif
-
-  constexpr uint32_t data_addr = 0;
 
   /* In order to provide some degree of wear leveling, each data write to the
    * SPI Flash chip is appended to data that was already written before, until
@@ -320,22 +336,60 @@ bool UIFlashStorage::is_present = false;
     SERIAL_ECHOLNPGM("DONE");
   }
 
+  /************************** VERSIONING INFO AREA ************************/
+
+  /* The version info area follows the data storage area. If the version
+   * is incorrect, the data on the chip is invalid and format_flash should
+   * be called.
+   */
+
+  typedef struct {
+    uint32_t magic;
+    uint32_t version;
+  } flash_version_info;
+
+  constexpr uint32_t version_info_addr = data_storage_area_size;
+  constexpr uint32_t version_info_size = 4 * 1024; // Small erase unit
+
+  bool UIFlashStorage::is_valid() {
+    flash_version_info info;
+
+    spi_read_begin(version_info_addr);
+    spi_read_bulk (&info, sizeof(flash_version_info));
+    spi_read_end();
+
+    return info.magic == delimiter && info.version == flash_eeprom_version;
+  }
+
+  void UIFlashStorage::write_version_info() {
+    flash_version_info info;
+
+    info.magic   = delimiter;
+    info.version = flash_eeprom_version;
+
+    spi_write_begin(version_info_addr);
+    spi_write_bulk<ram_write>(&info, sizeof(flash_version_info));
+    spi_write_end();
+  }
+
   /**************************** MEDIA STORAGE AREA *****************************/
 
-  /* The media storage area follows the data storage area. It consists
+  /* The media storage area follows the versioning info area. It consists
    * of a file index followed by the data for one or more media files.
    *
    * The file index consists of an array of 32-bit file sizes. If a file
    * is not present, the file's size will be set to 0xFFFFFFFF
    */
 
-  constexpr uint32_t media_storage_addr    = data_storage_area_size;
+  constexpr uint32_t media_storage_addr    = version_info_addr + version_info_size;
   constexpr uint8_t  media_storage_slots   = 4;
 
-  void UIFlashStorage::erase_chip() {
+  void UIFlashStorage::format_flash() {
     SERIAL_ECHO_START(); SERIAL_ECHOPGM("Erasing SPI Flash...");
     SPIFlash::erase_chip();
     SERIAL_ECHOLNPGM("DONE");
+
+    write_version_info();
   }
 
   uint32_t UIFlashStorage::get_media_file_start(uint8_t slot) {
@@ -457,10 +511,12 @@ bool UIFlashStorage::is_present = false;
   }
 
   bool UIFlashStorage::BootMediaReader::isAvailable(uint32_t slot) {
-    bytes_remaining = get_media_file_size(0);
+    if(!is_present) return false;
+
+    bytes_remaining = get_media_file_size(slot);
     if(bytes_remaining != 0xFFFFFFFFUL) {
       SERIAL_ECHO_START(); SERIAL_ECHOLNPAIR("Boot media file size:", bytes_remaining);
-      addr = get_media_file_start(0);
+      addr = get_media_file_start(slot);
       return true;
     } else {
       return false;
@@ -490,11 +546,12 @@ bool UIFlashStorage::is_present = false;
 
 #else
   void UIFlashStorage::initialize()                                           {}
+  bool UIFlashStorage::is_valid()                                             {return true;}
   void UIFlashStorage::write_config_data(const void *data, size_t size)       {}
   bool UIFlashStorage::verify_config_data(const void *, size_t)               {return false;}
   bool UIFlashStorage::read_config_data(void *data, size_t size)              {return false;}
   UIFlashStorage::error_t UIFlashStorage::write_media_file(progmem_str filename, uint8_t slot) {return FILE_NOT_FOUND;}
-  void UIFlashStorage::erase_chip()                                           {}
+  void UIFlashStorage::format_flash()                                         {}
 
   bool UIFlashStorage::BootMediaReader::isAvailable(uint32_t slot)            {return false;}
   int16_t UIFlashStorage::BootMediaReader::read(void *, const size_t)         {return -1;}

@@ -43,7 +43,7 @@ void LockScreen::onRedraw(draw_mode_t what) {
   CommandProcessor cmd;
 
   if(what & BACKGROUND) {
-    cmd.cmd(CLEAR_COLOR_RGB(background))
+    cmd.cmd(CLEAR_COLOR_RGB(bg_color))
        .cmd(CLEAR(true,true,true))
        .tag(0);
   }
@@ -61,8 +61,6 @@ void LockScreen::onRedraw(draw_mode_t what) {
     #undef MARGIN_B
     #define MARGIN_T 3
     #define MARGIN_B 3
-
-    default_button_colors();
 
     progmem_str message;
     switch(message_style()) {
@@ -90,6 +88,7 @@ void LockScreen::onRedraw(draw_mode_t what) {
     const uint8_t pressed = EventLoop::get_pressed_tag();
 
     cmd.font(font_large)
+       .cmd(COLOR_RGB(bg_text_enabled))
        #if defined(USE_PORTRAIT_ORIENTATION)
        .text(BTN_POS(1,2), BTN_SIZE(1,1), message)
        .font(font_xlarge)
@@ -98,8 +97,9 @@ void LockScreen::onRedraw(draw_mode_t what) {
        .text(BTN_POS(1,1), BTN_SIZE(1,1), message)
        .font(font_xlarge)
        .text(BTN_POS(1,2), BTN_SIZE(1,1), screen_data.LockScreen.passcode)
-       .font(font_large)
        #endif
+       .font(font_large)
+       .colors(normal_btn)
        #if defined(USE_NUMERIC_PASSCODE)
        .keys(BTN_POS(1,l+1), BTN_SIZE(1,1), F("123"),        pressed)
        .keys(BTN_POS(1,l+2), BTN_SIZE(1,1), F("456"),        pressed)
@@ -108,7 +108,7 @@ void LockScreen::onRedraw(draw_mode_t what) {
        #else
        .keys(BTN_POS(1,l+1), BTN_SIZE(1,1), F("1234567890"), pressed)
        .keys(BTN_POS(1,l+2), BTN_SIZE(1,1), F("qwertyuiop"), pressed)
-       .keys(BTN_POS(1,l+3), BTN_SIZE(1,1), F("asdfghijkl"), pressed)
+       .keys(BTN_POS(1,l+3), BTN_SIZE(1,1), F("asdfghjkl "), pressed)
        .keys(BTN_POS(1,l+4), BTN_SIZE(1,1), F("zxcvbnm!?<"), pressed);
        #endif
 

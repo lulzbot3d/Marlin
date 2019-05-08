@@ -30,14 +30,7 @@
 
 #include <stdint.h>
 
-#undef DISABLED
-#undef M_PI
-
-#include <Arduino.h>
-
-#undef DISABLED
-#define DISABLED(V...) DO(DIS,&&,V)
-
+#include "../shared/Marduino.h"
 #include "../shared/math_32bit.h"
 #include "../shared/HAL_SPI.h"
 
@@ -97,7 +90,7 @@ extern uint16_t HAL_adc_result;
 void HAL_clear_reset_source (void);
 
 // reset reason
-uint8_t HAL_get_reset_source (void);
+uint8_t HAL_get_reset_source(void);
 
 void _delay_ms(int delay);
 
@@ -120,7 +113,7 @@ void HAL_adc_init(void);
 #define HAL_READ_ADC()      HAL_adc_result
 #define HAL_ADC_READY()     true
 
-void HAL_adc_start_conversion (uint8_t adc_pin);
+void HAL_adc_start_conversion(uint8_t adc_pin);
 
 #define GET_PIN_MAP_PIN(index) index
 #define GET_PIN_MAP_INDEX(pin) pin

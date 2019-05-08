@@ -29,16 +29,21 @@
 
 #include "../io/flash_storage.h"
 
+#include "../../../../module/configuration_store.h"
+
 #if ENABLED(LULZBOT_PRINTCOUNTER)
   #include "../../../../module/printcounter.h"
 #endif
+
+bool restoreEEPROM();
 
 using namespace FTDI;
 using namespace ExtUI;
 using namespace Theme;
 
+constexpr bool PERSISTENT_STORE_SUCCESS = false; // persistentStore uses true for error
+
 void InterfaceSettingsScreen::onStartup() {
-  loadSettings();
 }
 
 void InterfaceSettingsScreen::onEntry() {
@@ -59,21 +64,20 @@ void InterfaceSettingsScreen::onRedraw(draw_mode_t what) {
       #define GRID_ROWS 6
     #endif
 
-    cmd.cmd(CLEAR_COLOR_RGB(background))
+    cmd.cmd(CLEAR_COLOR_RGB(bg_color))
        .cmd(CLEAR(true,true,true))
+       .cmd(COLOR_RGB(bg_text_enabled))
        .tag(0)
        .font(font_medium)
-       .text      (BTN_POS(1,1), BTN_SIZE(4,1), F("Interface Settings"))
+       .text(BTN_POS(1,1), BTN_SIZE(4,1), F("Interface Settings"))
     #undef EDGE_R
     #define EDGE_R 30
        .font(font_small)
        .tag(0)
-       .text(BTN_POS(1,2), BTN_SIZE(2,1), F("Screen brightness:"), OPT_RIGHTX | OPT_CENTERY)
-       .text(BTN_POS(1,3), BTN_SIZE(2,1), F("Sound volume:"),      OPT_RIGHTX | OPT_CENTERY)
-       .text(BTN_POS(1,4), BTN_SIZE(2,1), F("Screen lock:"),       OPT_RIGHTX | OPT_CENTERY);
-      #ifdef SPI_FLASH_SS
-    cmd.text(BTN_POS(1,5), BTN_SIZE(2,1), F("Boot animation:"),    OPT_RIGHTX | OPT_CENTERY);
-      #endif
+       .text(BTN_POS(1,2), BTN_SIZE(2,1), F("LCD brightness:"), OPT_RIGHTX | OPT_CENTERY)
+       .text(BTN_POS(1,3), BTN_SIZE(2,1), F("Sound volume:"),   OPT_RIGHTX | OPT_CENTERY)
+       .text(BTN_POS(1,4), BTN_SIZE(2,1), F("Screen lock:"),    OPT_RIGHTX | OPT_CENTERY);
+    cmd.text(BTN_POS(1,5), BTN_SIZE(2,1), F("Boot screen:"),    OPT_RIGHTX | OPT_CENTERY);
     #undef EDGE_R
   }
 
@@ -86,29 +90,30 @@ void InterfaceSettingsScreen::onRedraw(draw_mode_t what) {
 
     cmd.font(font_medium)
     #define EDGE_R 30
+       .colors(ui_slider)
        .tag(2).slider(BTN_POS(3,2), BTN_SIZE(2,1), screen_data.InterfaceSettingsScreen.brightness, 128)
        .tag(3).slider(BTN_POS(3,3), BTN_SIZE(2,1), screen_data.InterfaceSettingsScreen.volume,     0xFF)
+       .colors(ui_toggle)
        .tag(4).toggle(BTN_POS(3,4), BTN_SIZE(w,1), F("off\xFFon"), LockScreen::is_enabled())
-       #ifdef SPI_FLASH_SS
        .tag(5).toggle(BTN_POS(3,5), BTN_SIZE(w,1), F("off\xFFon"), UIData::animations_enabled())
-       #endif
     #undef EDGE_R
     #define EDGE_R 0
     #if defined(USE_PORTRAIT_ORIENTATION)
-      .tag(6).button (BTN_POS(1,6), BTN_SIZE(4,1), F("Customize Sounds"))
-      .style(LIGHT_BTN)
-      .tag(1).button (BTN_POS(1,7), BTN_SIZE(4,1), F("Back"));
+       .colors(normal_btn)
+       .tag(6).button (BTN_POS(1,6), BTN_SIZE(4,1), F("Customize Sounds"))
+       .colors(action_btn)
+       .tag(1).button (BTN_POS(1,7), BTN_SIZE(4,1), F("Back"));
     #else
-      .tag(6).button (BTN_POS(1,6), BTN_SIZE(2,1), F("Customize Sounds"))
-      .style(LIGHT_BTN)
-      .tag(1).button (BTN_POS(3,6), BTN_SIZE(2,1), F("Back"));
+       .tag(6).button (BTN_POS(1,6), BTN_SIZE(2,1), F("Customize Sounds"))
+       .colors(action_btn)
+       .tag(1).button (BTN_POS(3,6), BTN_SIZE(2,1), F("Back"));
     #endif
   }
 }
 
 bool InterfaceSettingsScreen::onTouchEnd(uint8_t tag) {
   switch(tag) {
-    case 1: GOTO_PREVIOUS(); break;
+    case 1: GOTO_PREVIOUS(); return true;
     case 4:
       if(!LockScreen::is_enabled())
         LockScreen::enable();
@@ -116,10 +121,11 @@ bool InterfaceSettingsScreen::onTouchEnd(uint8_t tag) {
         LockScreen::disable();
       break;
     case 5: UIData::enable_animations(!UIData::animations_enabled());; break;
-    case 6: GOTO_SCREEN(InterfaceSoundsScreen); break;
+    case 6: GOTO_SCREEN(InterfaceSoundsScreen); return true;
     default:
       return false;
   }
+  SaveSettingsDialogBox::settingsChanged();
   return true;
 }
 
@@ -149,10 +155,12 @@ void InterfaceSettingsScreen::onIdle() {
       case 2:
         screen_data.InterfaceSettingsScreen.brightness = float(value) * 128 / 0xFFFF;
         CLCD::set_brightness(screen_data.InterfaceSettingsScreen.brightness);
+        SaveSettingsDialogBox::settingsChanged();
         break;
       case 3:
         screen_data.InterfaceSettingsScreen.volume = value >> 8;
         SoundPlayer::set_volume(screen_data.InterfaceSettingsScreen.volume);
+        SaveSettingsDialogBox::settingsChanged();
         break;
       default:
         return;
@@ -162,128 +170,112 @@ void InterfaceSettingsScreen::onIdle() {
   BaseScreen::onIdle();
 }
 
+void InterfaceSettingsScreen::failSafeSettings() {
+  // Reset settings that may make the printer interface
+  // unusable.
+  CLCD::mem_write_32(CLCD::REG::ROTATE, 0);
+  CLCD::default_touch_transform();
+  CLCD::default_display_orientation();
+  CLCD::set_brightness(255);
+  UIData::reset_persistent_data();
+  CLCD::mem_write_16(CLCD::REG::HOFFSET, FTDI::Hoffset);
+  CLCD::mem_write_16(CLCD::REG::VOFFSET, FTDI::Voffset);
+}
+
 void InterfaceSettingsScreen::defaultSettings() {
   LockScreen::passcode = 0;
   SoundPlayer::set_volume(255);
   CLCD::set_brightness(255);
   UIData::reset_persistent_data();
   InterfaceSoundsScreen::defaultSettings();
-  // TODO: This really should be moved to the EEPROM
-  #if ENABLED(BACKLASH_GCODE)
-    constexpr float backlash[XYZ] = BACKLASH_DISTANCE_MM;
-    setAxisBacklash_mm(backlash[X_AXIS], X);
-    setAxisBacklash_mm(backlash[Y_AXIS], Y);
-    setAxisBacklash_mm(backlash[Z_AXIS], Z);
-    setBacklashCorrection_percent(BACKLASH_CORRECTION);
-    #ifdef BACKLASH_SMOOTHING_MM
-      setBacklashSmoothing_mm(BACKLASH_SMOOTHING_MM);
-    #endif
-  #endif
-  #if ENABLED(FILAMENT_RUNOUT_SENSOR) && defined(FILAMENT_RUNOUT_DISTANCE_MM)
-    setFilamentRunoutDistance_mm(FILAMENT_RUNOUT_DISTANCE_MM);
-    setFilamentRunoutEnabled(true);
-  #endif
+  CLCD::mem_write_16(CLCD::REG::HOFFSET, FTDI::Hoffset);
+  CLCD::mem_write_16(CLCD::REG::VOFFSET, FTDI::Voffset);
 }
 
-void InterfaceSettingsScreen::saveSettings() {
-  persistent_data_t      data;
-  data.magic_word        = data.MAGIC_WORD;
-  data.version           = 0;
-  data.sound_volume      = SoundPlayer::get_volume();
-  data.screen_brightness = CLCD::get_brightness();
-  data.passcode          = LockScreen::passcode;
-  data.bit_flags         = UIData::get_persistent_data();
-  data.touch_transform_a = CLCD::mem_read_32(CLCD::REG::TOUCH_TRANSFORM_A);
-  data.touch_transform_b = CLCD::mem_read_32(CLCD::REG::TOUCH_TRANSFORM_B);
-  data.touch_transform_c = CLCD::mem_read_32(CLCD::REG::TOUCH_TRANSFORM_C);
-  data.touch_transform_d = CLCD::mem_read_32(CLCD::REG::TOUCH_TRANSFORM_D);
-  data.touch_transform_e = CLCD::mem_read_32(CLCD::REG::TOUCH_TRANSFORM_E);
-  data.touch_transform_f = CLCD::mem_read_32(CLCD::REG::TOUCH_TRANSFORM_F);
-  #if ENABLED(LULZBOT_BACKUP_EEPROM_INFORMATION)
-    #if ENABLED(PRINTCOUNTER)
-      // Keep a backup of the print counter information in SPI EEPROM
-      // since the emulated EEPROM on the Due HAL does not survive
-      // a reflash.
-      printStatistics* stats   = print_job_timer.getStatsPtr();
-      data.total_prints        = stats->totalPrints;
-      data.finished_prints     = stats->finishedPrints;
-      data.total_print_time    = stats->printTime;
-      data.longest_print       = stats->longestPrint;
-      data.total_filament_used = stats->filamentUsed;
-    #endif
-    #if EXTRUDERS > 1
-      data.nozzle_offsets_mm[X_AXIS] = getNozzleOffset_mm(X, E1);
-      data.nozzle_offsets_mm[Y_AXIS] = getNozzleOffset_mm(Y, E1);
-      data.nozzle_offsets_mm[Z_AXIS] = getNozzleOffset_mm(Z, E1);
-    #endif
-    data.nozzle_z_offset           = getZOffset_mm();
-  #endif
-  // TODO: This really should be moved to the EEPROM
-  #if ENABLED(BACKLASH_GCODE)
-    data.backlash_distance_mm[X_AXIS] = getAxisBacklash_mm(X);
-    data.backlash_distance_mm[Y_AXIS] = getAxisBacklash_mm(Y);
-    data.backlash_distance_mm[Z_AXIS] = getAxisBacklash_mm(Z);
-    data.backlash_correction          = getBacklashCorrection_percent();
-    #ifdef BACKLASH_SMOOTHING_MM
-      data.backlash_smoothing_mm      = getBacklashSmoothing_mm();
-    #endif
-  #endif
-  #if ENABLED(FILAMENT_RUNOUT_SENSOR) && defined(FILAMENT_RUNOUT_DISTANCE_MM)
-    data.runout_sensor_mm             = getFilamentRunoutDistance_mm();
-    data.runout_sensor_enabled        = getFilamentRunoutEnabled();
-  #endif
+void InterfaceSettingsScreen::saveSettings(char *buff) {
+  static_assert(
+    ExtUI::eeprom_data_size >= sizeof(persistent_data_t),
+    "Insufficient space in EEPROM for UI parameters"
+  );
+
+  SERIAL_ECHOLNPGM("Writing setting to EEPROM");
+
+  persistent_data_t eeprom;
+
+  eeprom.passcode             = LockScreen::passcode;
+  eeprom.sound_volume         = SoundPlayer::get_volume();
+  eeprom.display_brightness   = CLCD::get_brightness();
+  eeprom.bit_flags            = UIData::get_persistent_data();
+  eeprom.touch_transform_a    = CLCD::mem_read_32(CLCD::REG::TOUCH_TRANSFORM_A);
+  eeprom.touch_transform_b    = CLCD::mem_read_32(CLCD::REG::TOUCH_TRANSFORM_B);
+  eeprom.touch_transform_c    = CLCD::mem_read_32(CLCD::REG::TOUCH_TRANSFORM_C);
+  eeprom.touch_transform_d    = CLCD::mem_read_32(CLCD::REG::TOUCH_TRANSFORM_D);
+  eeprom.touch_transform_e    = CLCD::mem_read_32(CLCD::REG::TOUCH_TRANSFORM_E);
+  eeprom.touch_transform_f    = CLCD::mem_read_32(CLCD::REG::TOUCH_TRANSFORM_F);
+  eeprom.display_h_offset_adj = CLCD::mem_read_16(CLCD::REG::HOFFSET) - FTDI::Hoffset;
+  eeprom.display_v_offset_adj = CLCD::mem_read_16(CLCD::REG::VOFFSET) - FTDI::Voffset;
   for(uint8_t i = 0; i < InterfaceSoundsScreen::NUM_EVENTS; i++)
-    data.event_sounds[i] = InterfaceSoundsScreen::event_sounds[i];
-  UIFlashStorage::write_config_data(&data, sizeof(data));
+    eeprom.event_sounds[i] = InterfaceSoundsScreen::event_sounds[i];
+
+  memcpy(buff, &eeprom, sizeof(eeprom));
 }
 
-void InterfaceSettingsScreen::loadSettings() {
-  persistent_data_t data;
-  UIFlashStorage::read_config_data(&data, sizeof(data));
-  if(data.magic_word == data.MAGIC_WORD && data.version == 0) {
-    SoundPlayer::set_volume(data.sound_volume);
-    CLCD::set_brightness(data.screen_brightness);
-    LockScreen::passcode = data.passcode;
-    UIData::set_persistent_data(data.bit_flags);
-    CLCD::mem_write_32(CLCD::REG::TOUCH_TRANSFORM_A, data.touch_transform_a);
-    CLCD::mem_write_32(CLCD::REG::TOUCH_TRANSFORM_B, data.touch_transform_b);
-    CLCD::mem_write_32(CLCD::REG::TOUCH_TRANSFORM_C, data.touch_transform_c);
-    CLCD::mem_write_32(CLCD::REG::TOUCH_TRANSFORM_D, data.touch_transform_d);
-    CLCD::mem_write_32(CLCD::REG::TOUCH_TRANSFORM_E, data.touch_transform_e);
-    CLCD::mem_write_32(CLCD::REG::TOUCH_TRANSFORM_F, data.touch_transform_f);
-    #if ENABLED(LULZBOT_BACKUP_EEPROM_INFORMATION)
-      #if ENABLED(PRINTCOUNTER)
-        printStatistics* stats = print_job_timer.getStatsPtr();
-        stats->totalPrints     = max(stats->totalPrints,    data.total_prints);
-        stats->finishedPrints  = max(stats->finishedPrints, data.finished_prints);
-        stats->printTime       = max(stats->printTime,      data.total_print_time);
-        stats->longestPrint    = max(stats->longestPrint,   data.longest_print);
-        stats->filamentUsed    = max(stats->filamentUsed,   data.total_filament_used);
-      #endif
-      #if EXTRUDERS > 1
-        setNozzleOffset_mm(data.nozzle_offsets_mm[X_AXIS], X, E1);
-        setNozzleOffset_mm(data.nozzle_offsets_mm[Y_AXIS], Y, E1);
-        setNozzleOffset_mm(data.nozzle_offsets_mm[Z_AXIS], Z, E1);
-      #endif
-      setZOffset_mm(data.nozzle_z_offset);
-    #endif
-    // TODO: This really should be moved to the EEPROM
-    #if ENABLED(BACKLASH_GCODE)
-      setAxisBacklash_mm(data.backlash_distance_mm[X_AXIS], X);
-      setAxisBacklash_mm(data.backlash_distance_mm[Y_AXIS], Y);
-      setAxisBacklash_mm(data.backlash_distance_mm[Z_AXIS], Z);
-      setBacklashCorrection_percent(data.backlash_correction);
-      #ifdef BACKLASH_SMOOTHING_MM
-        setBacklashSmoothing_mm(data.backlash_smoothing_mm);
-      #endif
-    #endif
-    #if ENABLED(FILAMENT_RUNOUT_SENSOR) && defined(FILAMENT_RUNOUT_DISTANCE_MM)
-      setFilamentRunoutDistance_mm(data.runout_sensor_mm);
-      setFilamentRunoutEnabled(data.runout_sensor_enabled);
-    #endif
-    for(uint8_t i = 0; i < InterfaceSoundsScreen::NUM_EVENTS; i++)
-      InterfaceSoundsScreen::event_sounds[i] = data.event_sounds[i];
-  }
+void InterfaceSettingsScreen::loadSettings(const char *buff) {
+  static_assert(
+    ExtUI::eeprom_data_size >= sizeof(persistent_data_t),
+    "Insufficient space in EEPROM for UI parameters"
+  );
+
+  persistent_data_t eeprom;
+  memcpy(&eeprom, buff, sizeof(eeprom));
+
+  SERIAL_ECHOLNPGM("Loading setting from EEPROM");
+
+  LockScreen::passcode = eeprom.passcode;
+  SoundPlayer::set_volume(eeprom.sound_volume);
+  UIData::set_persistent_data(eeprom.bit_flags);
+  CLCD::set_brightness(eeprom.display_brightness);
+  CLCD::mem_write_32(CLCD::REG::TOUCH_TRANSFORM_A, eeprom.touch_transform_a);
+  CLCD::mem_write_32(CLCD::REG::TOUCH_TRANSFORM_B, eeprom.touch_transform_b);
+  CLCD::mem_write_32(CLCD::REG::TOUCH_TRANSFORM_C, eeprom.touch_transform_c);
+  CLCD::mem_write_32(CLCD::REG::TOUCH_TRANSFORM_D, eeprom.touch_transform_d);
+  CLCD::mem_write_32(CLCD::REG::TOUCH_TRANSFORM_E, eeprom.touch_transform_e);
+  CLCD::mem_write_32(CLCD::REG::TOUCH_TRANSFORM_F, eeprom.touch_transform_f);
+  CLCD::mem_write_16(CLCD::REG::HOFFSET,           eeprom.display_h_offset_adj + FTDI::Hoffset);
+  CLCD::mem_write_16(CLCD::REG::VOFFSET,           eeprom.display_v_offset_adj + FTDI::Voffset);
+  for(uint8_t i = 0; i < InterfaceSoundsScreen::NUM_EVENTS; i++)
+    InterfaceSoundsScreen::event_sounds[i] = eeprom.event_sounds[i];
 }
+
+#ifdef LULZBOT_EEPROM_BACKUP_SIZE
+  #include "../../../../HAL/shared/persistent_store_api.h"
+
+  bool restoreEEPROM() {
+    uint8_t data[LULZBOT_EEPROM_BACKUP_SIZE];
+
+    bool success = UIFlashStorage::read_config_data(data, LULZBOT_EEPROM_BACKUP_SIZE);
+
+    if(success)
+      success = persistentStore.write_data(0, data, LULZBOT_EEPROM_BACKUP_SIZE) == PERSISTENT_STORE_SUCCESS;
+
+    if(success)
+      StatusScreen::setStatusMessage(F("Settings restored from backup"));
+    else
+      StatusScreen::setStatusMessage(F("Settings restored to default"));
+
+    return success;
+  }
+
+  bool InterfaceSettingsScreen::backupEEPROM() {
+    uint8_t data[LULZBOT_EEPROM_BACKUP_SIZE];
+
+    if(persistentStore.read_data(0, data, LULZBOT_EEPROM_BACKUP_SIZE) != PERSISTENT_STORE_SUCCESS)
+      return false;
+
+    UIFlashStorage::write_config_data(data, LULZBOT_EEPROM_BACKUP_SIZE);
+
+    return true;
+  }
+#endif
 
 #endif // EXTENSIBLE_UI

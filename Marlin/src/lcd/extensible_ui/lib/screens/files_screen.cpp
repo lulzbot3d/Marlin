@@ -34,8 +34,10 @@ using namespace Theme;
 void FilesScreen::onEntry() {
   screen_data.FilesScreen.cur_page        = 0;
   screen_data.FilesScreen.selected_tag    = 0xFF;
+  #if ENABLED(SCROLL_LONG_FILENAMES) && (FTDI_API_LEVEL >= 810)
+    CLCD::mem_write_32(CLCD::REG::MACRO_0,DL::NOP);
+  #endif
   gotoPage(0);
-
   BaseScreen::onEntry();
 }
 
@@ -61,7 +63,6 @@ void FilesScreen::drawSelectedFile() {
     screen_data.FilesScreen.flags.is_dir,
     true
   );
-  default_button_colors();
 }
 
 uint16_t FilesScreen::getFileForTag(uint8_t tag) {
@@ -80,19 +81,19 @@ void FilesScreen::drawFileButton(const char* filename, uint8_t tag, bool is_dir,
   const uint8_t line = getLineForTag(tag)+1;
   CommandProcessor cmd;
   cmd.tag(tag);
-  cmd.cmd(COLOR_RGB(is_highlighted ? files_selected : background));
+  cmd.cmd(COLOR_RGB(is_highlighted ? fg_action : bg_color));
   cmd.font(font_medium)
      .rectangle( 0, BTN_Y(header_h+line), display_width, BTN_H(1));
-  cmd.cmd(COLOR_RGB(default_btn::rgb_enabled));
+  cmd.cmd(COLOR_RGB(is_highlighted ? normal_btn.rgb : bg_text_enabled));
   #if ENABLED(SCROLL_LONG_FILENAMES)
     if(is_highlighted) {
       cmd.cmd(SAVE_CONTEXT());
       cmd.cmd(MACRO(0));
     }
   #endif
-  cmd.text  ( BTN_POS(1,header_h+line), BTN_SIZE(6,1), filename, OPT_CENTERY);
+  cmd.text  (BTN_POS(1,header_h+line), BTN_SIZE(6,1), filename, OPT_CENTERY);
   if(is_dir) {
-    cmd.text( BTN_POS(1,header_h+line), BTN_SIZE(6,1), F("> "),  OPT_CENTERY | OPT_RIGHTX);
+    cmd.text(BTN_POS(1,header_h+line), BTN_SIZE(6,1), F("> "),  OPT_CENTERY | OPT_RIGHTX);
   }
   #if ENABLED(SCROLL_LONG_FILENAMES)
     if(is_highlighted) {
@@ -134,12 +135,13 @@ void FilesScreen::drawHeader() {
   sprintf_P(str, PSTR("Page %d of %d"),
     screen_data.FilesScreen.cur_page + 1, screen_data.FilesScreen.num_page);
 
-  CommandProcessor cmd;
-  cmd.font(font_small)
-     .tag(0).button( BTN_POS(2,1), BTN_SIZE(4,header_h), str, OPT_CENTER | OPT_FLAT);
 
-  cmd.font(font_medium)
-     .style(LIGHT_BTN)
+  CommandProcessor cmd;
+  cmd.colors(normal_btn)
+     .font(font_small)
+     .tag(0).button( BTN_POS(2,1), BTN_SIZE(4,header_h), str, OPT_CENTER | OPT_FLAT)
+     .font(font_medium)
+     .colors(action_btn)
      .tag(241).enabled(prev_enabled).button( BTN_POS(1,1), BTN_SIZE(1,header_h), F("<"))
      .tag(242).enabled(next_enabled).button( BTN_POS(6,1), BTN_SIZE(1,header_h), F(">"));
 }
@@ -160,12 +162,12 @@ void FilesScreen::drawFooter() {
   const uint8_t h             = footer_h;
 
   CommandProcessor cmd;
-  cmd.font(font_medium);
-  cmd.style(has_selection ? NORMAL : LIGHT_BTN)
-     .tag(back_tag).button( BTN_POS(4,y), BTN_SIZE(3,h), F("Back"));
-
-  cmd.enabled(has_selection)
-     .style(has_selection ? LIGHT_BTN : NORMAL);
+  cmd.colors(normal_btn)
+     .font(font_medium)
+     .colors(has_selection ? normal_btn : action_btn)
+     .tag(back_tag).button( BTN_POS(4,y), BTN_SIZE(3,h), F("Back"))
+     .enabled(has_selection)
+     .colors(has_selection ? action_btn : normal_btn);
   if(screen_data.FilesScreen.flags.is_dir) {
     cmd.tag(244).button( BTN_POS(1, y), BTN_SIZE(3,h), F("Open"));
   } else {
@@ -174,10 +176,7 @@ void FilesScreen::drawFooter() {
 }
 
 void FilesScreen::onRedraw(draw_mode_t what) {
-  CommandProcessor cmd;
-
   if(what & FOREGROUND) {
-    default_button_colors();
     drawHeader();
     drawSelectedFile();
     drawFooter();
@@ -189,9 +188,9 @@ void FilesScreen::gotoPage(uint8_t page) {
   screen_data.FilesScreen.cur_page     = page;
   CommandProcessor cmd;
   cmd.cmd(CMD_DLSTART)
-     .cmd(CLEAR_COLOR_RGB(background))
-     .cmd(CLEAR(true,true,true));
-  default_button_colors();
+     .cmd(CLEAR_COLOR_RGB(bg_color))
+     .cmd(CLEAR(true,true,true))
+     .colors(normal_btn);
   drawFileList();
   storeBackground();
 }
@@ -253,7 +252,8 @@ bool FilesScreen::onTouchEnd(uint8_t tag) {
 void FilesScreen::onIdle() {
   #if ENABLED(SCROLL_LONG_FILENAMES) && (FTDI_API_LEVEL >= 810)
     if(FTDI::ftdi_chip >= 810) {
-      CLCD::mem_write_32(CLCD::REG::MACRO_0,VERTEX_TRANSLATE_X(-screen_data.FilesScreen.scroll_pos));
+      CLCD::mem_write_32(CLCD::REG::MACRO_0,
+        VERTEX_TRANSLATE_X(-int32_t(screen_data.FilesScreen.scroll_pos)));
       if(screen_data.FilesScreen.scroll_pos < screen_data.FilesScreen.scroll_max * 16)
         screen_data.FilesScreen.scroll_pos++;
     }

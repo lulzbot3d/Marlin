@@ -35,67 +35,29 @@ void BaseScreen::onEntry() {
   UIScreen::onEntry();
 }
 
-bool BaseScreen::buttonStyleCallback(uint8_t tag, uint8_t &style, uint16_t &options, bool post) {
-  CommandProcessor cmd;
-
+bool BaseScreen::buttonStyleCallback(CommandProcessor &cmd, uint8_t tag, uint8_t &style, uint16_t &options, bool post) {
   if(post) {
-    default_button_colors();
+    cmd.colors(normal_btn);
     return false;
   }
 
   #if defined(MENU_TIMEOUT)
-  if(EventLoop::get_pressed_tag() != 0) {
-    reset_menu_timeout();
-  }
+    if(EventLoop::get_pressed_tag() != 0) {
+      reset_menu_timeout();
+    }
   #endif
 
   if(tag != 0 && EventLoop::get_pressed_tag() == tag) {
     options = OPT_FLAT;
   }
 
-  if(style & RED_BTN) {
-    if(style & DISABLED) {
-      cmd.cmd(COLOR_RGB(red_btn::rgb_disabled))
-         .fgcolor(red_btn::fg_disabled)
-         .tag(0);
-      style &= ~DISABLED; // Clear the disabled flag
-    } else {
-      cmd.cmd(COLOR_RGB(red_btn::rgb_enabled))
-         .fgcolor(red_btn::fg_enabled);
-    }
-    return true;              // Call me again to reset the colors
-  }
-
-  if(style & LIGHT_BTN) {
-    if(style & DISABLED) {
-      cmd.cmd(COLOR_RGB(light_btn::rgb_disabled))
-         .fgcolor(light_btn::fg_disabled)
-         .gradcolor(0xFFFFFF)
-         .tag(0);
-      style &= ~DISABLED; // Clear the disabled flag
-    } else {
-      cmd.cmd(COLOR_RGB(light_btn::rgb_enabled))
-         .gradcolor(light_btn::grad_enabled)
-         .fgcolor(light_btn::fg_enabled);
-    }
-    return true;              // Call me again to reset the colors
-  }
-
-  if(style & DISABLED) {
-    cmd.cmd(COLOR_RGB(default_btn::rgb_disabled))
-       .fgcolor(default_btn::fg_disabled)
-       .tag(0);
-    style &= ~DISABLED; // Clear the disabled flag
-    return true;              // Call me again to reset the colors
+  if(style & cmd.STYLE_DISABLED) {
+    cmd.tag(0);
+    style &= ~cmd.STYLE_DISABLED;
+    cmd.colors(disabled_btn);
+    return true; // Call me again to reset the colors
   }
   return false;
-}
-
-void BaseScreen::default_button_colors() {
-  CommandProcessor cmd;
-  cmd.cmd(COLOR_RGB(default_btn::rgb_enabled))
-     .gradcolor(default_btn::grad_enabled)
-     .fgcolor(default_btn::fg_enabled);
 }
 
 void BaseScreen::onIdle() {

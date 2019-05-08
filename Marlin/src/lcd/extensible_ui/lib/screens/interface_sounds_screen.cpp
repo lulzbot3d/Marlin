@@ -62,8 +62,9 @@ void InterfaceSoundsScreen::onRedraw(draw_mode_t what) {
   CommandProcessor cmd;
 
   if(what & BACKGROUND) {
-    cmd.cmd(CLEAR_COLOR_RGB(background))
+    cmd.cmd(CLEAR_COLOR_RGB(bg_color))
        .cmd(CLEAR(true,true,true))
+       .cmd(COLOR_RGB(bg_text_enabled))
        .tag(0)
 
     #define GRID_COLS 4
@@ -90,22 +91,30 @@ void InterfaceSoundsScreen::onRedraw(draw_mode_t what) {
     #endif
 
     cmd.font(font_medium)
+       .colors(ui_slider)
     #define EDGE_R 30
        .tag(2).slider    (BTN_POS(3,2), BTN_SIZE(2,1), screen_data.InterfaceSettingsScreen.volume, 0xFF)
+       .colors(ui_toggle)
        .tag(3).toggle    (BTN_POS(3,3), BTN_SIZE(w,1), F("off\xFFon"), UIData::touch_sounds_enabled())
     #undef EDGE_R
+       .colors(normal_btn)
     #define EDGE_R 0
        .tag(4).button    (BTN_POS(3,5), BTN_SIZE(2,1), getSoundSelection(PRINTING_STARTED))
        .tag(5).button    (BTN_POS(3,6), BTN_SIZE(2,1), getSoundSelection(PRINTING_FINISHED))
        .tag(6).button    (BTN_POS(3,7), BTN_SIZE(2,1), getSoundSelection(PRINTING_FAILED))
-       .style(LIGHT_BTN)
+       .colors(action_btn)
        .tag(1).button    (BTN_POS(1,9), BTN_SIZE(4,1), F("Back"));
   }
 }
 
+void InterfaceSoundsScreen::onEntry() {
+  screen_data.InterfaceSettingsScreen.volume = SoundPlayer::get_volume();
+  BaseScreen::onEntry();
+}
+
 bool InterfaceSoundsScreen::onTouchEnd(uint8_t tag) {
   switch(tag) {
-    case 1: GOTO_PREVIOUS();                                              break;
+    case 1: GOTO_PREVIOUS();                                              return true;
     case 3: UIData::enable_touch_sounds(!UIData::touch_sounds_enabled()); break;
     case 4: toggleSoundSelection(PRINTING_STARTED);                       break;
     case 5: toggleSoundSelection(PRINTING_FINISHED);                      break;
@@ -113,6 +122,7 @@ bool InterfaceSoundsScreen::onTouchEnd(uint8_t tag) {
     default:
       return false;
   }
+  SaveSettingsDialogBox::settingsChanged();
   return true;
 }
 
@@ -137,6 +147,7 @@ void InterfaceSoundsScreen::onIdle() {
       case 2:
         screen_data.InterfaceSettingsScreen.volume = value >> 8;
         SoundPlayer::set_volume(screen_data.InterfaceSettingsScreen.volume);
+        SaveSettingsDialogBox::settingsChanged();
         break;
       default:
         return;

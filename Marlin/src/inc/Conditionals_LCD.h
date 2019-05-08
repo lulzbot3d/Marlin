@@ -138,20 +138,37 @@
 #elif ENABLED(MKS_MINI_12864)
 
   #define MINIPANEL
+  #define DEFAULT_LCD_CONTRAST 150
+  #define LCD_CONTRAST_MAX 255
 
-#elif ENABLED(FYSETC_MINI_12864)
+#elif ANY(FYSETC_MINI_12864_1_2, FYSETC_MINI_12864_2_0, FYSETC_MINI_12864_2_1)
 
+  #define FYSETC_MINI_12864
   #define DOGLCD
   #define ULTIPANEL
+  #define LCD_CONTRAST_MIN 0
+  #define LCD_CONTRAST_MAX 255
   #define DEFAULT_LCD_CONTRAST 255
   #define LED_COLORS_REDUCE_GREEN
+
+  // Require LED backlighting enabled
+  #if EITHER(FYSETC_MINI_12864_1_2, FYSETC_MINI_12864_2_0)
+    #define RGB_LED
+  #elif ENABLED(FYSETC_MINI_12864_2_1)
+    #define NEOPIXEL_LED
+    #define NEOPIXEL_TYPE       NEO_GRB
+    #define NEOPIXEL_PIXELS     3
+    #define NEOPIXEL_BRIGHTNESS 127
+  #endif
 
 #endif
 
 #if EITHER(MAKRPANEL, MINIPANEL)
   #define DOGLCD
   #define ULTIPANEL
-  #define DEFAULT_LCD_CONTRAST 17
+  #ifndef DEFAULT_LCD_CONTRAST
+    #define DEFAULT_LCD_CONTRAST 17
+  #endif
 #endif
 
 #if ENABLED(ULTI_CONTROLLER)
@@ -312,8 +329,14 @@
   #define ULTRA_LCD
 #endif
 
+// Extensible UI serial touch screens. (See src/lcd/extensible_ui)
+#if ENABLED(MALYAN_LCD)
+  #define EXTENSIBLE_UI
+#endif
+
 // Aliases for LCD features
 #define HAS_SPI_LCD          ENABLED(ULTRA_LCD)
+#define HAS_DISPLAY         (HAS_SPI_LCD || ENABLED(EXTENSIBLE_UI))
 #define HAS_GRAPHICAL_LCD    ENABLED(DOGLCD)
 #define HAS_CHARACTER_LCD   (HAS_SPI_LCD && !HAS_GRAPHICAL_LCD)
 #define HAS_LCD_MENU        (ENABLED(ULTIPANEL) && DISABLED(NO_LCD_MENUS))
@@ -323,7 +346,7 @@
 /**
  * Default LCD contrast for Graphical LCD displays
  */
-#define HAS_LCD_CONTRAST HAS_GRAPHICAL_LCD && defined(DEFAULT_LCD_CONTRAST)
+#define HAS_LCD_CONTRAST (HAS_GRAPHICAL_LCD && defined(DEFAULT_LCD_CONTRAST))
 #if HAS_LCD_CONTRAST
   #ifndef LCD_CONTRAST_MIN
     #define LCD_CONTRAST_MIN 0
@@ -425,7 +448,7 @@
  */
 #if ENABLED(DISTINCT_E_FACTORS) && E_STEPPERS > 1
   #define XYZE_N (XYZ + E_STEPPERS)
-  #define E_AXIS_N(E) (E_AXIS + E)
+  #define E_AXIS_N(E) AxisEnum(E_AXIS + E)
 #else
   #undef DISTINCT_E_FACTORS
   #define XYZE_N XYZE
@@ -447,9 +470,6 @@
   #if NUM_SERVOS == 1
     #undef SERVO_DELAY
     #define SERVO_DELAY { 50 }
-  #endif
-  #ifndef BLTOUCH_DELAY
-    #define BLTOUCH_DELAY 375
   #endif
 
   // Always disable probe pin inverting for BLTouch
@@ -560,3 +580,5 @@
 #if ENABLED(SLIM_LCD_MENUS)
   #define BOOT_MARLIN_LOGO_SMALL
 #endif
+
+#define IS_RE_ARM_BOARD (MB(RAMPS_14_RE_ARM_EFB) || MB(RAMPS_14_RE_ARM_EEB) || MB(RAMPS_14_RE_ARM_EFF) || MB(RAMPS_14_RE_ARM_EEF) || MB(RAMPS_14_RE_ARM_SF))

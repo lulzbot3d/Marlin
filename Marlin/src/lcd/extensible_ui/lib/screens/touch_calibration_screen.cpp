@@ -33,7 +33,7 @@ void TouchCalibrationScreen::onEntry() {
   // Clear the display
   CommandProcessor cmd;
   cmd.cmd(CMD_DLSTART)
-     .cmd(CLEAR_COLOR_RGB(background))
+     .cmd(CLEAR_COLOR_RGB(bg_color))
      .cmd(CLEAR(true,true,true))
      .cmd(DL::DL_DISPLAY)
      .cmd(CMD_SWAP)
@@ -53,7 +53,7 @@ void TouchCalibrationScreen::onEntry() {
 
 void TouchCalibrationScreen::onRedraw(draw_mode_t what) {
   CommandProcessor cmd;
-  cmd.cmd(CLEAR_COLOR_RGB(background))
+  cmd.cmd(CLEAR_COLOR_RGB(bg_color))
      .cmd(CLEAR(true,true,true))
   #define GRID_COLS 4
   #define GRID_ROWS 16
@@ -78,7 +78,7 @@ void TouchCalibrationScreen::onRedraw(draw_mode_t what) {
 
 void TouchCalibrationScreen::onIdle() {
   if(!CommandProcessor::is_processing()) {
-    GOTO_SCREEN(StatusScreen);
+    GOTO_PREVIOUS();
   }
 }
 

@@ -125,6 +125,7 @@ class CLCD {
 
     static void init (void);
     static void default_touch_transform (void);
+    static void default_display_orientation (void);
     static void turn_on_backlight (void);
     static void enable (void);
     static void disable (void);

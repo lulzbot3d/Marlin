@@ -44,6 +44,7 @@ bool RestoreFailsafeDialogBox::onTouchEnd(uint8_t tag) {
       // Remove RestoreFailsafeDialogBox from the stack
       // so the alert box doesn't return to it.
       current_screen.forget();
+      SaveSettingsDialogBox::settingsChanged();
       return true;
     default:
       return DialogBoxBaseClass::onTouchEnd(tag);

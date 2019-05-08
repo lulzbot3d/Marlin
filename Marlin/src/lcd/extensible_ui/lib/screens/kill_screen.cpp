@@ -36,7 +36,7 @@ void KillScreen::show(progmem_str message) {
   CommandProcessor cmd;
 
   cmd.cmd(CMD_DLSTART)
-     .cmd(CLEAR_COLOR_RGB(Theme::background))
+     .cmd(CLEAR_COLOR_RGB(Theme::bg_color))
      .cmd(CLEAR(true,true,true))
      .tag(0);
 
@@ -44,6 +44,7 @@ void KillScreen::show(progmem_str message) {
   #define GRID_ROWS 8
 
   cmd.font(Theme::font_large)
+     .cmd(COLOR_RGB(Theme::bg_text_enabled))
      .text(BTN_POS(1,2), BTN_SIZE(4,1), message)
      .text(BTN_POS(1,3), BTN_SIZE(4,1), F("PRINTER HALTED"))
      .text(BTN_POS(1,6), BTN_SIZE(4,1), F("Please reset"));

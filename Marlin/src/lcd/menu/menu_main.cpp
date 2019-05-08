@@ -43,7 +43,7 @@
   #include "../../feature/host_actions.h"
 #endif
 
-#if HAS_GAMES
+#if HAS_GAMES && DISABLED(LCD_INFO_MENU)
   #include "game/game.h"
 #endif
 
@@ -101,10 +101,7 @@
   }
 
   void menu_abort_confirm() {
-    START_MENU();
-    MENU_BACK(MSG_MAIN);
-    MENU_ITEM(function, MSG_STOP_PRINT, lcd_abort_job);
-    END_MENU();
+    do_select_screen(PSTR(MSG_BUTTON_STOP), PSTR(MSG_BACK), lcd_abort_job, ui.goto_previous_screen, PSTR(MSG_STOP_PRINT), NULL, PSTR("?"));
   }
 
 #endif // MACHINE_CAN_STOP
@@ -123,56 +120,6 @@ void menu_change_filament();
 void menu_info();
 void menu_led();
 
-#if ENABLED(LULZBOT_ABOUT_FIRMWARE_MENU)
-  void menu_info_stats();
-  void lcd_custom_bootscreen();
-
-  /**
-   *
-   * Extra menu item to show LulzBot firmware version
-   *
-   */
-  void menu_show_bootscreen() {
-    if (ui.lcd_clicked) { ui.goto_previous_screen_no_defer(); }
-    lcd_custom_bootscreen();
-  }
-
-  /**
-   *
-   * Extra menu item to show printer and firmware version
-   *
-   */
-  void menu_about_printer() {
-    START_MENU();
-    MENU_BACK(MSG_MAIN);
-    MENU_ITEM(submenu, _UxGT("Firmware Version"), menu_show_bootscreen);
-
-    #if ENABLED(PRINTCOUNTER)
-      MENU_ITEM(submenu, MSG_INFO_STATS_MENU, menu_info_stats);          // Printer Statistics >
-    #endif
-
-    #if ANY(MARLIN_BRICKOUT, MARLIN_INVADERS, MARLIN_SNAKE) && defined(LULZBOT_GAMES_EASTER_EGG)
-      MENU_ITEM_DUMMY();
-      MENU_ITEM_DUMMY();
-      MENU_ITEM(submenu, "Games", (
-        #if HAS_GAME_MENU
-          menu_game
-        #elif ENABLED(MARLIN_BRICKOUT)
-          brickout.enter_game
-        #elif ENABLED(MARLIN_INVADERS)
-          invaders.enter_game
-        #elif ENABLED(MARLIN_SNAKE)
-          snake.enter_game
-        #elif ENABLED(MARLIN_MAZE)
-          maze.enter_game
-        #endif
-      ));
-    #endif
-
-    END_MENU();
-  }
-#endif
-
 #if ENABLED(MIXING_EXTRUDER)
   void menu_mixer();
 #endif
@@ -186,6 +133,18 @@ void menu_led();
   #endif
   #if SERVICE_INTERVAL_3 > 0
     void menu_service3();
+  #endif
+#endif
+
+#if DISABLED(LCD_INFO_MENU)
+  #if HAS_GAME_MENU
+    void menu_game();
+  #elif ENABLED(MARLIN_BRICKOUT)
+    void lcd_goto_brickout();
+  #elif ENABLED(MARLIN_INVADERS)
+    void lcd_goto_invaders();
+  #elif ENABLED(MARLIN_SNAKE)
+    void lcd_goto_snake();
   #endif
 #endif
 
@@ -221,16 +180,22 @@ void menu_main() {
       if (card_detected) {
         if (!card_open) {
           MENU_ITEM(submenu, MSG_CARD_MENU, menu_sdcard);
-          #if !PIN_EXISTS(SD_DETECT)
-            MENU_ITEM(gcode, MSG_CHANGE_SDCARD, PSTR("M21"));  // SD-card changed by user
-          #endif
+          MENU_ITEM(gcode,
+            #if PIN_EXISTS(SD_DETECT)
+              MSG_CHANGE_SDCARD, PSTR("M21")
+            #else
+              MSG_RELEASE_SDCARD, PSTR("M22")
+            #endif
+          );
         }
       }
       else {
-        #if !PIN_EXISTS(SD_DETECT)
-          MENU_ITEM(gcode, MSG_INIT_SDCARD, PSTR("M21")); // Manually init SD-card
+        #if PIN_EXISTS(SD_DETECT)
+          MENU_ITEM(function, MSG_NO_CARD, NULL);
+        #else
+          MENU_ITEM(gcode, MSG_INIT_SDCARD, PSTR("M21"));
+          MENU_ITEM(function, MSG_SD_RELEASED, NULL);
         #endif
-        MENU_ITEM(function, MSG_NO_CARD, NULL);
       }
     #endif // !HAS_ENCODER_WHEEL && SDSUPPORT
 
@@ -273,14 +238,6 @@ void menu_main() {
     #endif
   #endif
 
-  #if ENABLED(LULZBOT_ABOUT_FIRMWARE_MENU)
-      #if ENABLED(PRINTCOUNTER)
-      MENU_ITEM(submenu, MSG_INFO_MENU, menu_about_printer);
-      #else
-      MENU_ITEM(submenu, MSG_INFO_MENU, menu_show_bootscreen);
-      #endif
-  #endif
-
   #if ENABLED(LCD_INFO_MENU)
     MENU_ITEM(submenu, MSG_INFO_MENU, menu_info);
   #endif
@@ -309,17 +266,23 @@ void menu_main() {
 
     if (card_detected) {
       if (!card_open) {
+        MENU_ITEM(gcode,
+          #if PIN_EXISTS(SD_DETECT)
+            MSG_CHANGE_SDCARD, PSTR("M21")
+          #else
+            MSG_RELEASE_SDCARD, PSTR("M22")
+          #endif
+        );
         MENU_ITEM(submenu, MSG_CARD_MENU, menu_sdcard);
-        #if !PIN_EXISTS(SD_DETECT)
-          MENU_ITEM(gcode, MSG_CHANGE_SDCARD, PSTR("M21"));  // SD-card changed by user
-        #endif
       }
     }
     else {
-      #if !PIN_EXISTS(SD_DETECT)
-        MENU_ITEM(gcode, MSG_INIT_SDCARD, PSTR("M21")); // Manually init SD-card
+      #if PIN_EXISTS(SD_DETECT)
+        MENU_ITEM(function, MSG_NO_CARD, NULL);
+      #else
+        MENU_ITEM(gcode, MSG_INIT_SDCARD, PSTR("M21"));
+        MENU_ITEM(function, MSG_SD_RELEASED, NULL);
       #endif
-      MENU_ITEM(function, MSG_NO_CARD, NULL);
     }
   #endif // HAS_ENCODER_WHEEL && SDSUPPORT
 
@@ -335,8 +298,8 @@ void menu_main() {
     #endif
   #endif
 
-  #if ANY(MARLIN_BRICKOUT, MARLIN_INVADERS, MARLIN_SNAKE, MARLIN_MAZE) && !defined(LULZBOT_GAMES_EASTER_EGG)
-    MENU_ITEM(submenu, "Game", (
+  #if DISABLED(LCD_INFO_MENU) && ANY(MARLIN_BRICKOUT, MARLIN_INVADERS, MARLIN_SNAKE, MARLIN_MAZE)
+    MENU_ITEM(submenu, MSG_GAMES, (
       #if HAS_GAME_MENU
         menu_game
       #elif ENABLED(MARLIN_BRICKOUT)

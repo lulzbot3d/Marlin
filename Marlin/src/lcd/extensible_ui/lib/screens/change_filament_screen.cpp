@@ -27,6 +27,7 @@
 #include "screens.h"
 #include "screen_data.h"
 
+using namespace ExtUI;
 using namespace FTDI;
 using namespace Theme;
 
@@ -86,10 +87,14 @@ void ChangeFilamentScreen::onEntry() {
   screen_data.ChangeFilamentScreen.e_tag = ExtUI::getActiveTool() + 10;
   screen_data.ChangeFilamentScreen.t_tag = 0;
   screen_data.ChangeFilamentScreen.repeat_tag = 0;
+  screen_data.ChangeFilamentScreen.saved_extruder = getActiveTool();
+}
+
+void ChangeFilamentScreen::onExit() {
+  setActiveTool(screen_data.ChangeFilamentScreen.saved_extruder, true);
 }
 
 void ChangeFilamentScreen::onRedraw(draw_mode_t what) {
-  using namespace ExtUI;
   CommandProcessor cmd;
 
   #if defined(USE_PORTRAIT_ORIENTATION)
@@ -101,7 +106,7 @@ void ChangeFilamentScreen::onRedraw(draw_mode_t what) {
   #endif
 
   if(what & BACKGROUND) {
-    cmd.cmd(CLEAR_COLOR_RGB(background))
+    cmd.cmd(CLEAR_COLOR_RGB(bg_color))
        .cmd(CLEAR(true,true,true))
        .tag(0)
     #if defined(USE_PORTRAIT_ORIENTATION)
@@ -141,12 +146,11 @@ void ChangeFilamentScreen::onRedraw(draw_mode_t what) {
        .cmd(COLOR_RGB(tcol.luminance() > 128 ? 0x000000 : 0xFFFFFF))
        .font(font_medium)
     #if defined(USE_PORTRAIT_ORIENTATION)
-       .text(BTN_POS(2,7), BTN_SIZE(1,1), e_str);
+       .text(BTN_POS(2,7), BTN_SIZE(1,1), e_str)
     #else
-       .text(BTN_POS(3,2), BTN_SIZE(2,1), e_str);
+       .text(BTN_POS(3,2), BTN_SIZE(2,1), e_str)
     #endif
-
-    default_button_colors();
+       .colors(normal_btn);
 
     const bool t_ok = getActualTemp_celsius(getExtruder()) > getSoftenTemp() - 10;
 
@@ -154,17 +158,19 @@ void ChangeFilamentScreen::onRedraw(draw_mode_t what) {
       cmd.text(BTN_POS(1,6), BTN_SIZE(1,1), F("Heating..."));
     } else if(getActualTemp_celsius(getExtruder()) > 100) {
       cmd.cmd(COLOR_RGB(0xFF0000))
-         .text(BTN_POS(1,4), BTN_SIZE(1,1), F("Caution:"));
-      default_button_colors();
-      cmd.text(BTN_POS(1,6), BTN_SIZE(1,1), F("Hot!"));
+         .text(BTN_POS(1,4), BTN_SIZE(1,1), F("Caution:"))
+         .colors(normal_btn)
+         .text(BTN_POS(1,6), BTN_SIZE(1,1), F("Hot!"));
     }
 
-    const uint32_t tog2  = screen_data.ChangeFilamentScreen.t_tag == 2  ? LIGHT_BTN : 0;
-    const uint32_t tog3  = screen_data.ChangeFilamentScreen.t_tag == 3  ? LIGHT_BTN : 0;
-    const uint32_t tog4  = screen_data.ChangeFilamentScreen.t_tag == 4  ? LIGHT_BTN : 0;
-    const uint32_t tog10 = screen_data.ChangeFilamentScreen.e_tag == 10 ? LIGHT_BTN : 0;
+    #define TOG_STYLE(A) colors(A ? action_btn : normal_btn)
+
+    const bool tog2  = screen_data.ChangeFilamentScreen.t_tag == 2;
+    const bool tog3  = screen_data.ChangeFilamentScreen.t_tag == 3;
+    const bool tog4  = screen_data.ChangeFilamentScreen.t_tag == 4;
+    const bool tog10 = screen_data.ChangeFilamentScreen.e_tag == 10;
     #if HOTENDS > 1
-    const uint32_t tog11 = screen_data.ChangeFilamentScreen.e_tag == 11 ? LIGHT_BTN : 0;
+    const bool tog11 = screen_data.ChangeFilamentScreen.e_tag == 11;
     #endif
 
     #if defined(USE_PORTRAIT_ORIENTATION)
@@ -172,29 +178,29 @@ void ChangeFilamentScreen::onRedraw(draw_mode_t what) {
     #else
       cmd.font(font_medium)
     #endif
-       .tag(10).style(tog10).button (BTN_POS(1,2), BTN_SIZE(1,1), F("1"))
+       .TOG_STYLE(tog10)
+       .tag(10)          .button (BTN_POS(1,2), BTN_SIZE(1,1), F("1"))
     #if HOTENDS < 2
        .enabled(false)
     #else
-       .style(tog11)
+       .TOG_STYLE(tog11)
     #endif
-       .tag(11)             .button (BTN_POS(2,2), BTN_SIZE(1,1), F("2"))
-       .style(0);
+       .tag(11)          .button (BTN_POS(2,2), BTN_SIZE(1,1), F("2"));
 
     if(!t_ok) reset_menu_timeout();
 
-    const uint16_t tag7_style = screen_data.ChangeFilamentScreen.repeat_tag == 7 ? LIGHT_BTN : 0;
-    const uint16_t tag8_style = screen_data.ChangeFilamentScreen.repeat_tag == 8 ? LIGHT_BTN : 0;
+    const bool tog7 = screen_data.ChangeFilamentScreen.repeat_tag == 7;
+    const bool tog8 = screen_data.ChangeFilamentScreen.repeat_tag == 8;
 
     #if defined(USE_PORTRAIT_ORIENTATION)
       cmd.font(font_large)
     #else
       cmd.font(font_small)
     #endif
-       .tag(2) .style(tog2) .button (BTN_POS(2,6), BTN_SIZE(1,1), F( STRINGIFY(LOW_TEMP)  "C (PLA)"))
-       .tag(3) .style(tog3) .button (BTN_POS(2,5), BTN_SIZE(1,1), F( STRINGIFY(MED_TEMP)  "C (ABS)"))
-       .tag(4) .style(tog4) .button (BTN_POS(2,4), BTN_SIZE(1,1), F( STRINGIFY(HIGH_TEMP) "C (High)"))
-       .style(0)
+       .tag(2) .TOG_STYLE(tog2) .button (BTN_POS(2,6), BTN_SIZE(1,1), F( STRINGIFY(LOW_TEMP)  "C (PLA)"))
+       .tag(3) .TOG_STYLE(tog3) .button (BTN_POS(2,5), BTN_SIZE(1,1), F( STRINGIFY(MED_TEMP)  "C (ABS)"))
+       .tag(4) .TOG_STYLE(tog4) .button (BTN_POS(2,4), BTN_SIZE(1,1), F( STRINGIFY(HIGH_TEMP) "C (High)"))
+       .colors(normal_btn)
 
     // Add tags to color gradient
     .cmd(COLOR_MASK(0,0,0,0))
@@ -203,26 +209,26 @@ void ChangeFilamentScreen::onRedraw(draw_mode_t what) {
     .tag(4) .rectangle(BTN_POS(1,4), BTN_SIZE(1,1))
     .cmd(COLOR_MASK(1,1,1,1))
 
-    .cmd(COLOR_RGB(t_ok ? text_enabled : text_disabled))
+    .cmd(COLOR_RGB(t_ok ? bg_text_enabled : bg_text_disabled))
     #if defined(USE_PORTRAIT_ORIENTATION)
        .font(font_large)
-       .tag(0)                                .text   (BTN_POS(1,8),  BTN_SIZE(1,1), F("Unload"))
-                                              .text   (BTN_POS(2,8),  BTN_SIZE(1,1), F("Load/Extrude"))
-       .tag(5)                  .enabled(t_ok).button (BTN_POS(1,9),  BTN_SIZE(1,1), F("Momentary"))
-       .tag(6)                  .enabled(t_ok).button (BTN_POS(2,9),  BTN_SIZE(1,1), F("Momentary"))
-       .tag(7).style(tag7_style).enabled(t_ok).button (BTN_POS(1,10), BTN_SIZE(1,1), F("Continuous"))
-       .tag(8).style(tag8_style).enabled(t_ok).button (BTN_POS(2,10), BTN_SIZE(1,1), F("Continuous"))
-       .tag(1).style(LIGHT_BTN)         .button (BTN_POS(1,11), BTN_SIZE(2,1), F("Back"));
+       .tag(0)                              .text   (BTN_POS(1,8),  BTN_SIZE(1,1), F("Unload"))
+                                            .text   (BTN_POS(2,8),  BTN_SIZE(1,1), F("Load/Extrude"))
+       .tag(5)                .enabled(t_ok).button (BTN_POS(1,9),  BTN_SIZE(1,1), F("Momentary"))
+       .tag(6)                .enabled(t_ok).button (BTN_POS(2,9),  BTN_SIZE(1,1), F("Momentary"))
+       .tag(7).TOG_STYLE(tog7).enabled(t_ok).button (BTN_POS(1,10), BTN_SIZE(1,1), F("Continuous"))
+       .tag(8).TOG_STYLE(tog8).enabled(t_ok).button (BTN_POS(2,10), BTN_SIZE(1,1), F("Continuous"))
+       .tag(1).colors(action_btn)           .button (BTN_POS(1,11), BTN_SIZE(2,1), F("Back"));
     #else
        .font(font_small)
-       .tag(0)                                .text   (BTN_POS(3,3), BTN_SIZE(1,1), F("Unload"))
-                                              .text   (BTN_POS(4,3), BTN_SIZE(1,1), F("Load/Extrude"))
-       .tag(5)                  .enabled(t_ok).button (BTN_POS(3,4), BTN_SIZE(1,1), F("Momentary"))
-       .tag(6)                  .enabled(t_ok).button (BTN_POS(4,4), BTN_SIZE(1,1), F("Momentary"))
-       .tag(7).style(tag7_style).enabled(t_ok).button (BTN_POS(3,5), BTN_SIZE(1,1), F("Continuous"))
-       .tag(8).style(tag8_style).enabled(t_ok).button (BTN_POS(4,5), BTN_SIZE(1,1), F("Continuous"))
+       .tag(0)                              .text   (BTN_POS(3,3),  BTN_SIZE(1,1), F("Unload"))
+                                            .text   (BTN_POS(4,3),  BTN_SIZE(1,1), F("Load/Extrude"))
+       .tag(5)                .enabled(t_ok).button (BTN_POS(3,4),  BTN_SIZE(1,1), F("Momentary"))
+       .tag(6)                .enabled(t_ok).button (BTN_POS(4,4),  BTN_SIZE(1,1), F("Momentary"))
+       .tag(7).TOG_STYLE(tog7).enabled(t_ok).button (BTN_POS(3,5),  BTN_SIZE(1,1), F("Continuous"))
+       .tag(8).TOG_STYLE(tog8).enabled(t_ok).button (BTN_POS(4,5),  BTN_SIZE(1,1), F("Continuous"))
        .font(font_medium)
-       .tag(1).style(LIGHT_BTN)         .button (BTN_POS(3,6), BTN_SIZE(2,1), F("Back"));
+       .tag(1).colors(action_btn)           .button (BTN_POS(3,6),  BTN_SIZE(2,1), F("Back"));
     #endif
   }
   #undef GRID_COLS
@@ -244,6 +250,16 @@ ExtUI::extruder_t ChangeFilamentScreen::getExtruder() {
     case 12: return ExtUI::E2;
     case 11: return ExtUI::E1;
     default: return ExtUI::E0;
+  }
+}
+
+bool ChangeFilamentScreen::onTouchStart(uint8_t tag) {
+  // Make the Momentary and Continuous buttons slightly more responsive
+  switch(tag) {
+    case 5: case 6: case 7: case 8:
+      return ChangeFilamentScreen::onTouchHeld(tag);
+    default:
+      return false;
   }
 }
 
@@ -289,7 +305,7 @@ bool ChangeFilamentScreen::onTouchHeld(uint8_t tag) {
   }
   #undef UI_DECREMENT_AXIS
   #undef UI_INCREMENT_AXIS
-  return true;
+  return false;
 }
 
 void ChangeFilamentScreen::onIdle() {

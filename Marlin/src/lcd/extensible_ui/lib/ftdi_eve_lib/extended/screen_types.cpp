@@ -62,6 +62,13 @@ void ScreenStack::start() {
   onEntry();
 }
 
+void ScreenStack::push(onRedraw_func_t onRedraw_ptr) {
+  stack[3] = stack[2];
+  stack[2] = stack[1];
+  stack[1] = stack[0];
+  stack[0] = lookupScreen(onRedraw_ptr);
+}
+
 void ScreenStack::push() {
   stack[3] = stack[2];
   stack[2] = stack[1];

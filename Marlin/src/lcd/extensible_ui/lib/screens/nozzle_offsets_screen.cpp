@@ -66,6 +66,7 @@ bool NozzleOffsetScreen::onTouchHeld(uint8_t tag) {
     default:
       return false;
   }
+  SaveSettingsDialogBox::settingsChanged();
   return true;
 }
 

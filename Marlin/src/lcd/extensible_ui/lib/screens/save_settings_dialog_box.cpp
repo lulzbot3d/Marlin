@@ -28,15 +28,18 @@
 
 using namespace ExtUI;
 
+bool SaveSettingsDialogBox::needs_save = false;
+
 void SaveSettingsDialogBox::onRedraw(draw_mode_t what) {
   drawMessage(
     F("Do you wish to save these"),
-    F("settings as power on defaults?")
+    F("settings as defaults?")
   );
   drawYesNoButtons();
 }
 
 bool SaveSettingsDialogBox::onTouchEnd(uint8_t tag) {
+  needs_save = false;
   switch(tag) {
     case 1:
       enqueueCommands_P(PSTR("M500"));
@@ -51,10 +54,15 @@ bool SaveSettingsDialogBox::onTouchEnd(uint8_t tag) {
 }
 
 void SaveSettingsDialogBox::promptToSaveSettings() {
-   // Remove current screen from the stack
-   // so SaveSettingsDialogBox doesn't return here.
-   GOTO_SCREEN(SaveSettingsDialogBox);
-   current_screen.forget();
+   if(needs_save) {
+     // Remove current screen from the stack
+     // so SaveSettingsDialogBox doesn't return here.
+     GOTO_SCREEN(SaveSettingsDialogBox);
+     current_screen.forget();
+   } else {
+     // No save needed.
+     GOTO_PREVIOUS();
+   }
 }
 
 #endif // EXTENSIBLE_UI

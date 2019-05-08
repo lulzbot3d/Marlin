@@ -80,8 +80,11 @@ class UIFlashStorage : private SPIFlash {
     };
 
     static void    initialize  ();
-    static void    erase_chip  ();
+    static void    format_flash ();
     static bool    check_known_device();
+
+    static bool    is_valid ();
+    static void    write_version_info();
 
     static void    write_config_data  (const void *data, size_t size);
     static bool    verify_config_data (const void *data, size_t size);

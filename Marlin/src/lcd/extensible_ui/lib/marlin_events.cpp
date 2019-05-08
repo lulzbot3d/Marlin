@@ -92,12 +92,23 @@ namespace ExtUI {
     InterfaceSettingsScreen::defaultSettings();
   }
 
-  void onStoreSettings() {
-    InterfaceSettingsScreen::saveSettings();
+  void onStoreSettings(char *buff) {
+    InterfaceSettingsScreen::saveSettings(buff);
   }
 
-  void onLoadSettings() {
-    InterfaceSettingsScreen::loadSettings();
+  void onLoadSettings(const char *buff) {
+    InterfaceSettingsScreen::loadSettings(buff);
+  }
+
+  void onConfigurationStoreWritten(bool success) {
+    #ifdef LULZBOT_EEPROM_BACKUP_SIZE
+      if(success && InterfaceSettingsScreen::backupEEPROM()) {
+        SERIAL_ECHOLNPGM("Made backup of EEPROM to SPI Flash");
+      }
+    #endif
+  }
+
+  void onConfigurationStoreRead(bool success) {
   }
 
   void onPlayTone(const uint16_t frequency, const uint16_t duration) {

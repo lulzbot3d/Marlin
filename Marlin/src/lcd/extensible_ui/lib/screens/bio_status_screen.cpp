@@ -40,7 +40,7 @@ static uint8_t increment;
 
 void StatusScreen::onRedraw(draw_mode_t what) {
   CommandProcessor cmd;
-  cmd.cmd(CLEAR_COLOR_RGB(background));
+  cmd.cmd(CLEAR_COLOR_RGB(bg_color));
   cmd.cmd(CLEAR(true,true,true));
   cmd.tag(0);
 
@@ -81,10 +81,11 @@ void StatusScreen::onRedraw(draw_mode_t what) {
   int16_t x, y, h, v;
   ui.bounds(POLY(usb_btn), x, y, h, v);
 
-  default_button_colors();
+  const bool has_media = isMediaInserted() && !isPrintingFromMedia();
 
-  cmd.fgcolor(fill_rgb).font(font_medium)
-     .enabled(isMediaInserted() && !isPrintingFromMedia())
+  cmd.font(font_medium)
+     .colors(normal_btn)
+     .enabled(has_media).colors(has_media ? action_btn : normal_btn)
      .tag(9).button(x, y, h, v,
         isPrintingFromMedia() ?
           F("Printing") :
@@ -96,16 +97,20 @@ void StatusScreen::onRedraw(draw_mode_t what) {
       );
 
   ui.bounds(POLY(menu_btn), x, y, h, v);
-  cmd.tag(10).button(x, y, h, v, F("Menu"));
+  cmd.colors(!has_media ? action_btn : normal_btn).tag(10).button(x, y, h, v, F("Menu"));
 }
 
 bool StatusScreen::onTouchEnd(uint8_t tag) {
   increment = 3;
   switch(tag) {
-    case  9: GOTO_SCREEN(FilesScreen); return true;
-    case 10: GOTO_SCREEN(MainMenu);    return true;
-    default:                           return false;
+    case  9: GOTO_SCREEN(FilesScreen); break;
+    case 10: GOTO_SCREEN(MainMenu);    break;
+    default: return false;
   }
+  // If a passcode is enabled, the LockScreen will prevent the
+  // user from proceeding.
+  LockScreen::check_passcode();
+  return true;
 }
 
 bool StatusScreen::onTouchHeld(uint8_t tag) {
@@ -129,6 +134,23 @@ bool StatusScreen::onTouchHeld(uint8_t tag) {
   if(increment < 10)
     increment++;
   return false;
+}
+
+void StatusScreen::setStatusMessage(progmem_str message) {
+  char buff[strlen_P((const char * const)message)+1];
+  strcpy_P(buff, (const char * const) message);
+  setStatusMessage(buff);
+}
+
+void StatusScreen::setStatusMessage(const char * const message) {
+  if(AT_SCREEN(StatusScreen)) {
+    current_screen.onRefresh();
+  }
+}
+
+void StatusScreen::onIdle() {
+  if(isPrintingFromMedia())
+    BioPrintingDialogBox::show();
 }
 
 #endif // EXTENSIBLE_UI

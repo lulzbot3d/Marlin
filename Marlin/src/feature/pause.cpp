@@ -302,16 +302,22 @@ bool load_filament(const float &slow_load_length/*=0*/, const float &fast_load_l
  */
 bool unload_filament(const float &unload_length, const bool show_lcd/*=false*/,
                      const PauseMode mode/*=PAUSE_MODE_PAUSE_PRINT*/
+                     #if BOTH(FILAMENT_UNLOAD_ALL_EXTRUDERS, MIXING_EXTRUDER)
+                       , const float &mix_multiplier/*=1.0*/
+                     #endif
 ) {
   #if !HAS_LCD_MENU
     UNUSED(show_lcd);
+  #endif
+
+  #if !BOTH(FILAMENT_UNLOAD_ALL_EXTRUDERS, MIXING_EXTRUDER)
+    constexpr float mix_multiplier = 1.0;
   #endif
 
   if (!ensure_safe_temperature(mode)) {
     #if HAS_LCD_MENU
       if (show_lcd) lcd_pause_show_message(PAUSE_MESSAGE_STATUS);
     #endif
-
     return false;
   }
 
@@ -324,13 +330,14 @@ bool unload_filament(const float &unload_length, const bool show_lcd/*=false*/,
     do_pause_e_move(LULZBOT_AEROSTRUDER_UNLOAD_PURGE_LENGTH, LULZBOT_AEROSTRUDER_UNLOAD_PURGE_FEEDRATE);
   #else
   // Retract filament
-  do_pause_e_move(-FILAMENT_UNLOAD_RETRACT_LENGTH, PAUSE_PARK_RETRACT_FEEDRATE);
+  do_pause_e_move(-(FILAMENT_UNLOAD_RETRACT_LENGTH) * mix_multiplier, (PAUSE_PARK_RETRACT_FEEDRATE) * mix_multiplier);
 
   // Wait for filament to cool
   safe_delay(FILAMENT_UNLOAD_DELAY);
 
   // Quickly purge
-  do_pause_e_move(FILAMENT_UNLOAD_RETRACT_LENGTH + FILAMENT_UNLOAD_PURGE_LENGTH, planner.settings.max_feedrate_mm_s[E_AXIS]);
+  do_pause_e_move((FILAMENT_UNLOAD_RETRACT_LENGTH + FILAMENT_UNLOAD_PURGE_LENGTH) * mix_multiplier,
+                  planner.settings.max_feedrate_mm_s[E_AXIS] * mix_multiplier);
   #endif
 
   // Unload filament
@@ -339,7 +346,7 @@ bool unload_filament(const float &unload_length, const bool show_lcd/*=false*/,
     planner.settings.retract_acceleration = FILAMENT_CHANGE_UNLOAD_ACCEL;
   #endif
 
-  do_pause_e_move(unload_length, FILAMENT_CHANGE_UNLOAD_FEEDRATE);
+  do_pause_e_move(unload_length * mix_multiplier, (FILAMENT_CHANGE_UNLOAD_FEEDRATE) * mix_multiplier);
 
   #if FILAMENT_CHANGE_FAST_LOAD_ACCEL > 0
     planner.settings.retract_acceleration = saved_acceleration;
@@ -421,6 +428,10 @@ bool pause_print(const float &retract, const point_t &park_point, const float &u
 
   // Wait for buffered blocks to complete
   planner.synchronize();
+
+  #if ENABLED(ADVANCED_PAUSE_FANS_PAUSE) && FAN_COUNT > 0
+    thermalManager.set_fans_paused(true);
+  #endif
 
   // Initial retract before move to filament change position
   if (retract && thermalManager.hotEnoughToExtrude(active_extruder))
@@ -532,17 +543,15 @@ void wait_for_confirmation(const bool is_reload/*=false*/, const int8_t max_beep
       #if ENABLED(HOST_PROMPT_SUPPORT)
         host_prompt_do(PROMPT_USER_CONTINUE, PSTR("Reheating"));
       #endif
+      #if defined(LULZBOT_REHEAT_AFTER_PAUSING_WORKAROUND)
+        ExtUI::onStatusChanged(PSTR("Reheating..."));
+      #endif
 
       // Re-enable the heaters if they timed out
       HOTEND_LOOP() thermalManager.reset_heater_idle_timer(e);
 
       // Wait for the heaters to reach the target temperatures
       ensure_safe_temperature();
-
-      #if !defined(LULZBOT_NO_CONFIRM_REHEAT_AFTER_PAUSING)
-        nozzle_timed_out = false;
-        break;
-      #endif
 
       // Show the prompt to continue
       show_continue_prompt(is_reload);
@@ -553,6 +562,9 @@ void wait_for_confirmation(const bool is_reload/*=false*/, const int8_t max_beep
       HOTEND_LOOP() thermalManager.hotend_idle[e].start(nozzle_timeout);
       #if ENABLED(HOST_PROMPT_SUPPORT)
         host_prompt_do(PROMPT_USER_CONTINUE, PSTR("Reheat Done"), PSTR("Continue"));
+      #endif
+      #if defined(LULZBOT_REHEAT_AFTER_PAUSING_WORKAROUND)
+        ExtUI::onUserConfirmRequired("Reheat finished. ");
       #endif
       wait_for_user = true;
       nozzle_timed_out = false;
@@ -666,10 +678,16 @@ void resume_print(const float &slow_load_length/*=0*/, const float &fast_load_le
     }
   #endif
 
+  #if ENABLED(ADVANCED_PAUSE_FANS_PAUSE) && FAN_COUNT > 0
+    thermalManager.set_fans_paused(false);
+  #endif
+
   // Resume the print job timer if it was running
   if (print_job_timer.isPaused()) print_job_timer.start();
 
-  ui.reset_status();
+  #if HAS_LCD_MENU
+    ui.return_to_status();
+  #endif
 }
 
 #endif // ADVANCED_PAUSE_FEATURE

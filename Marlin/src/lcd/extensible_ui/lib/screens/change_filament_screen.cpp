@@ -27,6 +27,7 @@
 #include "screens.h"
 #include "screen_data.h"
 
+using namespace ExtUI;
 using namespace FTDI;
 using namespace Theme;
 
@@ -86,10 +87,14 @@ void ChangeFilamentScreen::onEntry() {
   screen_data.ChangeFilamentScreen.e_tag = ExtUI::getActiveTool() + 10;
   screen_data.ChangeFilamentScreen.t_tag = 0;
   screen_data.ChangeFilamentScreen.repeat_tag = 0;
+  screen_data.ChangeFilamentScreen.saved_extruder = getActiveTool();
+}
+
+void ChangeFilamentScreen::onExit() {
+  setActiveTool(screen_data.ChangeFilamentScreen.saved_extruder, true);
 }
 
 void ChangeFilamentScreen::onRedraw(draw_mode_t what) {
-  using namespace ExtUI;
   CommandProcessor cmd;
 
   #if defined(USE_PORTRAIT_ORIENTATION)
@@ -173,7 +178,6 @@ void ChangeFilamentScreen::onRedraw(draw_mode_t what) {
     #else
       cmd.font(font_medium)
     #endif
-
        .TOG_STYLE(tog10)
        .tag(10)          .button (BTN_POS(1,2), BTN_SIZE(1,1), F("1"))
     #if HOTENDS < 2

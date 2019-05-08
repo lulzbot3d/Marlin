@@ -30,7 +30,10 @@ union screen_data_t {
   struct {uint8_t volume; uint8_t brightness;} InterfaceSettingsScreen;
   struct {char passcode[5];}                   LockScreen;
   struct {bool isError;}                       AlertDialogBox;
-  struct {uint8_t e_tag, t_tag, repeat_tag;}   ChangeFilamentScreen;
+  struct {
+    uint8_t e_tag, t_tag, repeat_tag;
+    ExtUI::extruder_t saved_extruder;
+  } ChangeFilamentScreen;
   struct {
     struct {
       uint8_t is_dir  : 1;

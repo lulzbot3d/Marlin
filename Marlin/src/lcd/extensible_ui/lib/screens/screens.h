@@ -276,6 +276,7 @@ class ChangeFilamentScreen : public BaseScreen, public CachedScreen<CHANGE_FILAM
     static uint32_t getTempColor(uint32_t temp);
   public:
     static void onEntry();
+    static void onExit();
     static void onRedraw(draw_mode_t);
     static bool onTouchStart(uint8_t tag);
     static bool onTouchEnd(uint8_t tag);

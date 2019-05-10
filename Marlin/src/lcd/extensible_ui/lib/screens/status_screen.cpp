@@ -189,8 +189,8 @@ void StatusScreen::draw_temperature(draw_mode_t what) {
       int8_t(getActualFan_percent(FAN0))
     );
 
-    constexpr const char *idle = PSTR("%-3d C / idle");
-    constexpr const char *not_idle = PSTR("%-3d / %-3d C");
+    const char *idle = PSTR("%-3d C / idle");
+    const char *not_idle = PSTR("%-3d / %-3d C");
 
     sprintf_P(
       bed_str,

@@ -128,8 +128,8 @@ void ChangeFilamentScreen::onRedraw(draw_mode_t what) {
   if(what & FOREGROUND) {
     char e_str[15];
 
-    constexpr const char *idle = PSTR("%-3d C / idle");
-    constexpr const char *not_idle = PSTR("%-3d / %-3d C");
+    const char *idle = PSTR("%-3d C / idle");
+    const char *not_idle = PSTR("%-3d / %-3d C");
 
     sprintf_P(
       e_str,

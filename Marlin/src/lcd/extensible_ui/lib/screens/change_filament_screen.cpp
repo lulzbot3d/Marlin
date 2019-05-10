@@ -128,9 +128,12 @@ void ChangeFilamentScreen::onRedraw(draw_mode_t what) {
   if(what & FOREGROUND) {
     char e_str[15];
 
+    constexpr const char *idle = PSTR("%-3d C / idle");
+    constexpr const char *not_idle = PSTR("%-3d / %-3d C");
+
     sprintf_P(
       e_str,
-      PSTR("%-3d / %-3d C"),
+      isHeaterIdle(getExtruder()) ? idle : not_idle,
       ROUND(getActualTemp_celsius(getExtruder())),
       ROUND(getTargetTemp_celsius(getExtruder()))
     );

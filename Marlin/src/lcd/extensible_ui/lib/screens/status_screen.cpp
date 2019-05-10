@@ -189,16 +189,19 @@ void StatusScreen::draw_temperature(draw_mode_t what) {
       int8_t(getActualFan_percent(FAN0))
     );
 
+    constexpr const char *idle = PSTR("%-3d C / idle");
+    constexpr const char *not_idle = PSTR("%-3d / %-3d C");
+
     sprintf_P(
       bed_str,
-      PSTR("%-3d / %-3d C" ),
+      isHeaterIdle(BED) ? idle : not_idle,
       ROUND(getActualTemp_celsius(BED)),
       ROUND(getTargetTemp_celsius(BED))
     );
 
     sprintf_P(
       e0_str,
-      PSTR("%-3d / %-3d C"),
+      isHeaterIdle(H0) ? idle : not_idle,
       ROUND(getActualTemp_celsius(H0)),
       ROUND(getTargetTemp_celsius(H0))
     );
@@ -206,7 +209,7 @@ void StatusScreen::draw_temperature(draw_mode_t what) {
     #if EXTRUDERS == 2
       sprintf_P(
         e1_str,
-        PSTR("%-3d / %-3d C"),
+        isHeaterIdle(H1) ? idle : not_idle,
         ROUND(getActualTemp_celsius(H1)),
         ROUND(getTargetTemp_celsius(H1))
       );
@@ -217,12 +220,12 @@ void StatusScreen::draw_temperature(draw_mode_t what) {
       );
     #endif
 
-      cmd.tag(5)
-         .font(font_medium)
-         .text(BTN_POS(2,1), BTN_SIZE(3,1), e0_str)
-         .text(BTN_POS(6,1), BTN_SIZE(3,1), e1_str)
-         .text(BTN_POS(2,2), BTN_SIZE(3,1), bed_str)
-         .text(BTN_POS(6,2), BTN_SIZE(3,1), fan_str);
+    cmd.tag(5)
+       .font(font_medium)
+       .text(BTN_POS(2,1), BTN_SIZE(3,1), e0_str)
+       .text(BTN_POS(6,1), BTN_SIZE(3,1), e1_str)
+       .text(BTN_POS(2,2), BTN_SIZE(3,1), bed_str)
+       .text(BTN_POS(6,2), BTN_SIZE(3,1), fan_str);
   }
 }
 

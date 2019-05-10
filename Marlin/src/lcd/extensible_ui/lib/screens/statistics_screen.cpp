@@ -22,7 +22,7 @@
 
 #include "../config.h"
 
-#if ENABLED(EXTENSIBLE_UI)
+#if ENABLED(EXTENSIBLE_UI) && ENABLED(PRINTCOUNTER)
 
 #include "screens.h"
 
@@ -74,4 +74,4 @@ bool StatisticsScreen::onTouchEnd(uint8_t tag) {
   }
 }
 
-#endif // EXTENSIBLE_UI
+#endif // EXTENSIBLE_UI && PRINTCOUNTER

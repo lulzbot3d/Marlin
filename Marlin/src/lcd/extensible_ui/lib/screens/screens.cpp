@@ -46,7 +46,9 @@ SCREEN_TABLE {
 #endif
   DECL_SCREEN(SpinnerDialogBox),
   DECL_SCREEN(AboutScreen),
+#if ENABLED(PRINTCOUNTER)
   DECL_SCREEN(StatisticsScreen),
+#endif
 #if ENABLED(BABYSTEPPING)
   DECL_SCREEN(NudgeNozzleScreen),
 #endif

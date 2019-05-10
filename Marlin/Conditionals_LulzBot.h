@@ -3,7 +3,7 @@
  **************************/
 
 /****************************************************************************
- *   Written By Marcio Teixeira 2018 - Aleph Objects, Inc.                  *
+ *   Written By Marcio Teixeira 2019 - Aleph Objects, Inc.                  *
  *                                                                          *
  *   This program is free software: you can redistribute it and/or modify   *
  *   it under the terms of the GNU General Public License as published by   *
@@ -84,11 +84,12 @@
     !defined(LULZBOT_Oliveoil_TAZ6) && \
     !defined(LULZBOT_Quiver_TAZPro) && \
     !defined(LULZBOT_Redgum_TAZWorkhorse) && \
-    !defined(LULZBOT_ArchimRedgum_Experimental) && \
+    !defined(LULZBOT_RedgumArchim_Experimental) && \
     !defined(LULZBOT_KangarooPaw_Experimental) && \
-    !defined(LULZBOT_ArchimTAZ6_Experimental) && \
-    !defined(LULZBOT_EinsyMiniLCD_Experimental) && \
-    !defined(LULZBOT_EinsyMiniTouchLCD_Experimental) && \
+    !defined(LULZBOT_GladiolaTouchLCD_Experimental) && \
+    !defined(LULZBOT_GladiolaEinsyLCD_Experimental) && \
+    !defined(LULZBOT_GladiolaEinsyTouchLCD_Experimental) && \
+    !defined(LULZBOT_OliveoilArchim_Experimental) && \
     !defined(LULZBOT_CLCDTestStand_Experimental) \
 )
     #error Must specify printer model. Please see "Configuration_LulzBot.h" for directions.
@@ -272,7 +273,7 @@
     #define LULZBOT_USE_EXPERIMENTAL_FEATURES
 #endif
 
-#if defined(LULZBOT_ArchimRedgum_Experimental)
+#if defined(LULZBOT_RedgumArchim_Experimental)
     #define LULZBOT_CUSTOM_MACHINE_NAME "Archim Redgum"
     #define LULZBOT_LCD_MACHINE_NAME "Archim Redgum"
     #define LULZBOT_IS_TAZ
@@ -317,24 +318,109 @@
     #define LULZBOT_BAUDRATE 250000
     #define LULZBOT_PRINTCOUNTER
     #define LULZBOT_MACHINE_UUID "9a1d8eee-7118-40a7-942d-9541f35667dd"
+    // Kangaroo Paw uses a 480x272 display and USB flashdrive
+    #define LULZBOT_USE_TOUCH_UI
     #define LULZBOT_USE_BIOPRINTER_UI
-    #ifdef LULZBOT_USE_BIOPRINTER_UI
-        #define LULZBOT_USE_TOUCH_UI
-        #define LULZBOT_USE_BIOPRINTER_UI
-        #define LCD_ALEPHOBJECTS_CLCD_UI
-        #define USE_PORTRAIT_ORIENTATION
-        #define AO_EXP1_PINOUT_REV_C
-        #define LCD_480x272
-    #else
-        #define LULZBOT_USE_REPRAP_LCD_DISPLAY
-        #define LULZBOT_LIGHTWEIGHT_UI
-    #endif
+    #define LCD_ALEPHOBJECTS_CLCD_UI
+    #define USE_PORTRAIT_ORIENTATION
+    #define AO_EXP1_PINOUT_REV_C
+    #define LCD_480x272
     #define LULZBOT_SDSUPPORT
     #define LULZBOT_USB_FLASH_DRIVE_SUPPORT
     #define LULZBOT_USB_READ_ERROR_IS_FATAL
 #endif
 
-#if defined(LULZBOT_ArchimTAZ6_Experimental)
+#if defined(LULZBOT_GladiolaTouchLCD_Experimental)
+    // Unsupported Mini with 480x272 Touch LCD and USB
+    #define LULZBOT_CUSTOM_MACHINE_NAME "Mini CLCD"
+    #define LULZBOT_LCD_MACHINE_NAME "Mini"
+    #define LULZBOT_IS_MINI
+    #define LULZBOT_MINI_BED
+    #define LULZBOT_USE_AUTOLEVELING
+    #define LULZBOT_BACKLASH_COMPENSATION
+    #define LULZBOT_CALIBRATION_GCODE
+    #define LULZBOT_USE_MIN_ENDSTOPS
+    #define LULZBOT_USE_MAX_ENDSTOPS
+    #define LULZBOT_USE_NORMALLY_OPEN_ENDSTOPS
+    #define LULZBOT_ENDSTOPS_ALWAYS_ON_DEFAULT
+    #define LULZBOT_USE_Z_SCREW
+    #define LULZBOT_USE_LEGACY_XY_STEPS
+    #define LULZBOT_BAUDRATE 250000
+    #define LULZBOT_MACHINE_UUID "083f68f1-028e-494c-98e1-f2e0dfaee9a5"
+    // Enable the touchscreen and USB on EXP2
+    #define LULZBOT_USE_TOUCH_UI
+    #define LCD_ALEPHOBJECTS_CLCD_UI
+    #define USE_PORTRAIT_ORIENTATION
+    #define AO_EXP2_PINOUT_REV_C
+    #define LCD_480x272
+    #define LULZBOT_SDSUPPORT
+    #define LULZBOT_USB_FLASH_DRIVE_SUPPORT
+    #define LULZBOT_USB_READ_ERROR_IS_FATAL
+#endif
+
+#if defined(LULZBOT_GladiolaEinsyLCD_Experimental)
+    // Unsupported Mini with Einsy Retro.
+    #define LULZBOT_CUSTOM_MACHINE_NAME "Einsy MiniLCD"
+    #define LULZBOT_LCD_MACHINE_NAME "Mini"
+    #define LULZBOT_IS_MINI
+    #define LULZBOT_MINI_BED
+    #define LULZBOT_USE_EINSY_RETRO
+    #define LULZBOT_USE_Z_SCREW
+    #define LULZBOT_USE_REPRAP_LCD_DISPLAY
+    #define LULZBOT_USE_AUTOLEVELING
+    #define LULZBOT_BACKLASH_COMPENSATION
+    #define LULZBOT_CALIBRATION_GCODE
+    #define LULZBOT_USE_MIN_ENDSTOPS
+    #define LULZBOT_USE_MAX_ENDSTOPS
+    #define LULZBOT_USE_NORMALLY_OPEN_ENDSTOPS
+    #define LULZBOT_STEALTHCHOP_Z
+    #define LULZBOT_HYBRID_THRESHOLD
+    #define LULZBOT_BAUDRATE 250000
+    #define LULZBOT_PRINTCOUNTER
+    #define LULZBOT_MACHINE_UUID "b68ff322-3328-4543-bd93-bb8d8eb0c891"
+    #define LULZBOT_LIGHTWEIGHT_UI
+    #define LULZBOT_USE_EXPERIMENTAL_FEATURES
+#endif
+
+#if defined(LULZBOT_GladiolaEinsyTouchLCD_Experimental)
+    // Unsupported Mini with Einsy Retro and 480x272 Touch LCD and USB
+    #define LULZBOT_CUSTOM_MACHINE_NAME "Einsy MiniCLCD"
+    #define LULZBOT_LCD_MACHINE_NAME "Mini"
+    #define LULZBOT_IS_MINI
+    #define LULZBOT_USE_EINSY_RETRO
+    #define LULZBOT_MINI_BED
+    //#define LULZBOT_NO_HEATERS
+    #define LULZBOT_USE_Z_SCREW
+    //#define LULZBOT_USE_PORTRAIT_UI
+    #define LULZBOT_USE_AUTOLEVELING
+    #define LULZBOT_BACKLASH_COMPENSATION
+    #define LULZBOT_CALIBRATION_GCODE
+    #define LULZBOT_USE_MIN_ENDSTOPS
+    #define LULZBOT_USE_MAX_ENDSTOPS
+    #define LULZBOT_USE_NORMALLY_OPEN_ENDSTOPS
+    #define LULZBOT_STEALTHCHOP_Z
+    #define LULZBOT_HYBRID_THRESHOLD
+    #define LULZBOT_BAUDRATE 250000
+    #define LULZBOT_PRINTCOUNTER
+    #define LULZBOT_MACHINE_UUID "23421dc0-df9f-430b-8f91-0e3bcb55b4e4"
+    #define LULZBOT_USE_EXPERIMENTAL_FEATURES
+    /* On EinsyRetro 1.1a, the touch LCD cannot use hardware
+     * SPI because there is a level shifter on MISO controlled
+     * by SD_SS. Use software SPI on EXP1 instead. */
+    #define AO_EXP1_PINOUT_REV_C
+    #define LULZBOT_USE_TOUCH_UI
+    #define LCD_ALEPHOBJECTS_CLCD_UI
+    #define USE_PORTRAIT_ORIENTATION
+    #define LCD_480x272
+    /* SD or USB will only work on EXP2, but a 5V
+     * pigtail to an endstop connector is needed
+     * since EXP2 does not have 5V on pin 10 */
+    #define LULZBOT_SDSUPPORT
+    #define LULZBOT_USB_FLASH_DRIVE_SUPPORT
+    #define LULZBOT_USB_READ_ERROR_IS_FATAL
+#endif
+
+#if defined(LULZBOT_OliveoilArchim_Experimental)
     // Unsupported TAZ 6 with Archim 2.
     #define LULZBOT_CUSTOM_MACHINE_NAME "Archim TAZ 6"
     #define LULZBOT_LCD_MACHINE_NAME "TAZ 6"
@@ -365,66 +451,6 @@
     #define LULZBOT_BED_WASHERS_PIN  SERVO0_PIN
 #endif
 
-#if defined(LULZBOT_EinsyMiniLCD_Experimental)
-    // Unsupported Mini with Einsy Retro.
-    #define LULZBOT_CUSTOM_MACHINE_NAME "Einsy MiniLCD"
-    #define LULZBOT_LCD_MACHINE_NAME "Mini"
-    #define LULZBOT_IS_MINI
-    #define LULZBOT_MINI_BED
-    #define LULZBOT_USE_EINSY_RETRO
-    #define LULZBOT_USE_Z_SCREW
-    #define LULZBOT_USE_REPRAP_LCD_DISPLAY
-    #define LULZBOT_USE_AUTOLEVELING
-    #define LULZBOT_BACKLASH_COMPENSATION
-    #define LULZBOT_CALIBRATION_GCODE
-    #define LULZBOT_USE_MIN_ENDSTOPS
-    #define LULZBOT_USE_MAX_ENDSTOPS
-    #define LULZBOT_USE_NORMALLY_OPEN_ENDSTOPS
-    #define LULZBOT_STEALTHCHOP_Z
-    #define LULZBOT_HYBRID_THRESHOLD
-    #define LULZBOT_BAUDRATE 250000
-    #define LULZBOT_PRINTCOUNTER
-    #define LULZBOT_MACHINE_UUID "b68ff322-3328-4543-bd93-bb8d8eb0c891"
-    #define LULZBOT_LIGHTWEIGHT_UI
-    #define LULZBOT_USE_EXPERIMENTAL_FEATURES
-#endif
-
-#if defined(LULZBOT_EinsyMiniTouchLCD_Experimental)
-    // Unsupported Mini with Einsy Retro and Touch LCD
-    #define LULZBOT_CUSTOM_MACHINE_NAME "Einsy MiniCLCD"
-    #define LULZBOT_LCD_MACHINE_NAME "Mini"
-    #define LULZBOT_IS_MINI
-    #define LULZBOT_USE_EINSY_RETRO
-    #define LULZBOT_MINI_BED
-    //#define LULZBOT_NO_HEATERS
-    #define LULZBOT_USE_Z_SCREW
-    //#define LULZBOT_USE_PORTRAIT_UI
-    #define LULZBOT_USE_AUTOLEVELING
-    #define LULZBOT_BACKLASH_COMPENSATION
-    #define LULZBOT_CALIBRATION_GCODE
-    #define LULZBOT_USE_MIN_ENDSTOPS
-    #define LULZBOT_USE_MAX_ENDSTOPS
-    #define LULZBOT_USE_NORMALLY_OPEN_ENDSTOPS
-    #define LULZBOT_STEALTHCHOP_Z
-    #define LULZBOT_HYBRID_THRESHOLD
-    #define LULZBOT_BAUDRATE 250000
-    #define LULZBOT_PRINTCOUNTER
-    #define LULZBOT_MACHINE_UUID "23421dc0-df9f-430b-8f91-0e3bcb55b4e4"
-    #define LULZBOT_USE_EXPERIMENTAL_FEATURES
-    /* Color display seems to only work on EXP1 */
-    #define LULZBOT_USE_TOUCH_UI
-    #define LCD_ALEPHOBJECTS_CLCD_UI
-    #define USE_PORTRAIT_ORIENTATION
-    #define AO_EXP1_PINOUT_REV_C
-    #define LCD_480x272
-    /* SD or USB will only work on EXP2, but a 5V
-     * pigtail to an endstop connector is needed
-     * since EXP2 does not have 5V on pin 10 */
-    #define LULZBOT_SDSUPPORT
-    //#define LULZBOT_USB_FLASH_DRIVE_SUPPORT
-    //#define LULZBOT_USB_READ_ERROR_IS_FATAL
-#endif
-
 #if defined(LULZBOT_CLCDTestStand_Experimental)
     // Test stand with Einsy Retro and FT800 Touch LCD
     #define LULZBOT_CUSTOM_MACHINE_NAME "Einsy MiniCLCD"
@@ -447,7 +473,7 @@
     #define LULZBOT_PRINTCOUNTER
     #define LULZBOT_MACHINE_UUID "23421dc0-df9f-430b-8f91-0e3bcb55b4e4"
     #define LULZBOT_USE_EXPERIMENTAL_FEATURES
-    /* Color display seems to only work on EXP1 */
+    /* Since we are using EinsyRetro 1.1a, use EXP1 for touch panel */
     #define LULZBOT_USE_TOUCH_UI
     //#define LCD_ALEPHOBJECTS_CLCD_UI
     #define LCD_HAOYU_FT800CB
@@ -559,7 +585,7 @@
 
 /*********************** HOMING & AXIS DIRECTIONS ******************************/
 
-#if defined(LULZBOT_Redgum_TAZWorkhorse) || defined(LULZBOT_ArchimRedgum_Experimental)
+#if defined(LULZBOT_Redgum_TAZWorkhorse) || defined(LULZBOT_RedgumArchim_Experimental)
     #define LULZBOT_INVERT_X_DIR                  true
 #else
     #define LULZBOT_INVERT_X_DIR                  false
@@ -581,7 +607,7 @@
     #define LULZBOT_Z_HOME_DIR             -1 // Home towards bed
     #define LULZBOT_QUICK_HOME
 
-#elif defined(LULZBOT_Redgum_TAZWorkhorse) || defined(LULZBOT_ArchimRedgum_Experimental)
+#elif defined(LULZBOT_Redgum_TAZWorkhorse) || defined(LULZBOT_RedgumArchim_Experimental)
     #define LULZBOT_X_HOME_DIR             -1 // Home left
     #define LULZBOT_Y_HOME_DIR             -1 // Home bed backwards
     #define LULZBOT_Z_HOME_DIR              1 // Home to top
@@ -1432,7 +1458,7 @@
     #define LULZBOT_STANDARD_X_BED_SIZE        288
     #define LULZBOT_STANDARD_Y_BED_SIZE        275
 
-#elif defined(LULZBOT_Redgum_TAZWorkhorse) || defined(LULZBOT_ArchimRedgum_Experimental)
+#elif defined(LULZBOT_Redgum_TAZWorkhorse) || defined(LULZBOT_RedgumArchim_Experimental)
     #define LULZBOT_STANDARD_X_MAX_POS         295
     #define LULZBOT_STANDARD_X_MIN_POS         -50
     #define LULZBOT_STANDARD_Y_MAX_POS         308

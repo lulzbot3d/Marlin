@@ -71,7 +71,7 @@
  * The AlephObjects mapping for re-purposing the UltraLCD
  * connector EXP1 for software SPI for display (rev C):
  *
- *     EXP2:      FTDI:   SD -or- USB [2]:     ULTRA_LCD:
+ *     EXP2:      FTDI:   SD -or- USB [1]:     ULTRA_LCD:
  *      1         MISO    MISO    MISO    -->  BEEPER
  *      2         SCLK    SCLK    SCLK    -->  BTN_ENC
  *      3         PD_N      -      -      -->  LCDE
@@ -81,12 +81,9 @@
  *      7          -      SD_DET  INT     -->  LCD6
  *      8         RESET     -     RESET   -->  LCD4
  *      9         GND     GND     GND     -->  GND
- *     10         5V      5V      5V      -->  KILL [1]
+ *     10         5V      5V      5V      -->  5V
  *
- *     [1] Since most boards do not supply 5V on pin 10,
- *         reroute this wire from the ribbon cable to 5V.
- *
- *     [2] At the moment, Marlin does not support SD or USB
+ *     [1] At the moment, Marlin does not support SD or USB
  *         functionality over software SPI.
  */
 
@@ -121,7 +118,18 @@
  *      7          -      SD_DET  INT     -->  SD_DET
  *      8         RESET     -     RESET   -->  RESET
  *      9         GND     GND     GND     -->  GND
- *     10         5V      5V      5V      -->  5V
+ *     10         5V      5V      5V      -->  KILL [3]
+ *
+ * [1] This configuration is not compatible with the
+ *     EinsyRetro 1.1a because there is a level shifter
+ *     on MISO enabled by SD/USB chip select.
+ *
+ * [2] This configuration allows daisy-chaining of the
+ *     display and SD/USB on EXP2.
+ *
+ * [3] Archim Rambo provides 5V on this pin. On any other
+ *     board, divert this wire from the ribbon cable and
+ *     connect it to 5V at an endstop.
  */
 
 #if defined(AO_EXP2_PINOUT_REV_C)

@@ -289,7 +289,7 @@ class GenericPolyUI {
         using namespace FTDI;
         cmd.cmd(VERTEX_TRANSLATE_X(offset * 16));
         cmd.cmd(VERTEX_TRANSLATE_Y(offset * 16));
-        fill(r);
+        fill(r, false);
         cmd.cmd(VERTEX_TRANSLATE_X(0));
         cmd.cmd(VERTEX_TRANSLATE_Y(0));
       #endif
@@ -360,7 +360,7 @@ class GenericPolyUI {
         cmd.cmd(VERTEX_TRANSLATE_Y(btn_shadow_depth * 16));
         if(EventLoop::get_pressed_tag() != tag) {
           cmd.cmd(COLOR_RGB(btn_shadow_color));
-          fill(r);
+          fill(r, false);
           cmd.cmd(VERTEX_TRANSLATE_X(0));
           cmd.cmd(VERTEX_TRANSLATE_Y(0));
         }

@@ -957,6 +957,7 @@
     #define LULZBOT_X_MAX_ENDSTOP_INVERTING    LULZBOT_NORMALLY_CLOSED_ENDSTOP
     #define LULZBOT_AO_Hexagon
     #define LULZBOT_E_STEPS                    830
+    #define LULZBOT_LEGACY_TAZ_MOUNT
 #endif /* TOOLHEAD_Tilapia_SingleExtruder */
 
 #if defined(TOOLHEAD_Angelfish_Aerostruder)
@@ -968,6 +969,7 @@
     #define LULZBOT_X_MAX_ENDSTOP_INVERTING    LULZBOT_NORMALLY_CLOSED_ENDSTOP
     #define LULZBOT_E3D_Titan_Aero_V6
     #define LULZBOT_E_STEPS                    420
+    #define LULZBOT_LEGACY_TAZ_MOUNT
 #endif /* TOOLHEAD_Angelfish_Aerostruder */
 
 #if defined(TOOLHEAD_Kanyu_Flexystruder)
@@ -989,6 +991,7 @@
     #define LULZBOT_TOOLHEAD_WIPE_Y2_ADJ       0
     #define LULZBOT_AO_Hexagon
     #define LULZBOT_E_STEPS                    830
+    #define LULZBOT_LEGACY_TAZ_MOUNT
 #endif /* TOOLHEAD_Kanyu_Flexystruder */
 
 #if defined(TOOLHEAD_Opah_Moarstruder)
@@ -1012,6 +1015,7 @@
     #define LULZBOT_TOOLHEAD_WIPE_Y2_ADJ       0
     #define LULZBOT_Moarstruder
     #define LULZBOT_E_STEPS                    830
+    #define LULZBOT_LEGACY_TAZ_MOUNT
 #endif /* TOOLHEAD_Opah_Moarstruder */
 
 #if defined(TOOLHEAD_Javelin_DualExtruderV2) || defined(TOOLHEAD_Longfin_FlexyDually) || defined(TOOLHEAD_Yellowfin_DualExtruderV3)
@@ -1044,6 +1048,7 @@
     #define LULZBOT_X_MAX_ENDSTOP_INVERTING    LULZBOT_NORMALLY_OPEN_ENDSTOP
     #define LULZBOT_E_STEPS                    830
     #define LULZBOT_AO_Hexagon
+    #define LULZBOT_LEGACY_TAZ_MOUNT
 #endif /* TOOLHEAD_Javelin_DualExtruderV2 */
 
 #if defined(TOOLHEAD_Longfin_FlexyDually)
@@ -1055,6 +1060,7 @@
     #define LULZBOT_X_MAX_ENDSTOP_INVERTING    LULZBOT_NORMALLY_OPEN_ENDSTOP
     #define LULZBOT_E_STEPS                    830
     #define LULZBOT_AO_Hexagon
+    #define LULZBOT_LEGACY_TAZ_MOUNT
 #endif /* TOOLHEAD_Longfin_FlexyDually */
 
 #if defined(TOOLHEAD_Yellowfin_DualExtruderV3)
@@ -1099,6 +1105,7 @@
     #define LULZBOT_INVERT_E1_DIR                 false
     #define LULZBOT_E_STEPS                        760
     #define LULZBOT_E3D_SOMEstruder_x2
+    #define LULZBOT_LEGACY_TAZ_MOUNT
 #endif /* TOOLHEAD_Yellowfin_DualExtruderV3 */
 
 /******************************** UNIVERSAL TOOLHEADS *************************/
@@ -1110,7 +1117,7 @@
     #define LULZBOT_X_MAX_ENDSTOP_INVERTING        LULZBOT_NORMALLY_CLOSED_ENDSTOP
     #define LULZBOT_E3D_Titan_Aero_V6
     #define LULZBOT_E_STEPS                        420
-    #define LULZBOT_MAY_USE_V2_ADAPTER
+    #define LULZBOT_UNIVERSAL_MOUNT
 #endif /* TOOLHEAD_CecropiaSilk_SingleExtruderAeroV2 */
 
 #if defined(TOOLHEAD_AchemonSphinx_SmallLayer)
@@ -1123,7 +1130,7 @@
     #define LULZBOT_Z_PROBE_OFFSET_FROM_EXTRUDER   -1.24
     #undef  LULZBOT_MANUAL_FEEDRATE_E
     #define LULZBOT_MANUAL_FEEDRATE_E               0.7 // mm/sec
-    #define LULZBOT_MAY_USE_V2_ADAPTER
+    #define LULZBOT_UNIVERSAL_MOUNT
 #endif /* TOOLHEAD_AchemonSphinx_SmallLayer */
 
 #if defined(TOOLHEAD_BandedTiger_HardenedSteel)
@@ -1133,7 +1140,7 @@
     #define LULZBOT_X_MAX_ENDSTOP_INVERTING        LULZBOT_NORMALLY_CLOSED_ENDSTOP
     #define LULZBOT_E3D_Titan_Aero_Volcano
     #define LULZBOT_E_STEPS                        420
-    #define LULZBOT_MAY_USE_V2_ADAPTER
+    #define LULZBOT_UNIVERSAL_MOUNT
 #endif /* TOOLHEAD_BandedTiger_HardenedSteel */
 
 #if defined(TOOLHEAD_DingyCutworm_HardenedSteelPlus)
@@ -1143,12 +1150,12 @@
     #define LULZBOT_X_MAX_ENDSTOP_INVERTING        LULZBOT_NORMALLY_CLOSED_ENDSTOP
     #define LULZBOT_E3D_Titan_Aero_Volcano
     #define LULZBOT_E_STEPS                        420
-    #define LULZBOT_MAY_USE_V2_ADAPTER
+    #define LULZBOT_UNIVERSAL_MOUNT
 #endif /* TOOLHEAD_DingyCutworm_HardenedSteelPlus */
 
 // Using the V2 toolheads on the TAZ and older Minis requires an
 // adapter plate that shifts the coordinate system
-#if defined(LULZBOT_MAY_USE_AERO_V2_ADAPTER) && defined(LULZBOT_USE_Z_SCREW)
+#if defined(LULZBOT_UNIVERSAL_MOUNT) && defined(LULZBOT_USE_Z_SCREW)
     #undef  LULZBOT_X_MAX_ENDSTOP_INVERTING
     #define LULZBOT_X_MAX_ENDSTOP_INVERTING LULZBOT_NO_ENDSTOP
     #define LULZBOT_NO_MOTION_BEFORE_HOMING
@@ -1165,6 +1172,15 @@
         #undef  LULZBOT_TOOLHEAD_Y_MIN_ADJ
         #define LULZBOT_TOOLHEAD_Y_MIN_ADJ LULZBOT_TOOLHEAD_Y_OFFSET
     #endif
+#endif
+
+// Using the Dual V3 toolhead on the TAZ Workhorse requires an
+// adapter plate.
+
+#if defined(LULZBOT_Redgum_TAZWorkhorse) && defined(LULZBOT_LEGACY_TAZ_MOUNT)
+    #undef  LULZBOT_X_MAX_ENDSTOP_INVERTING
+    #define LULZBOT_X_MAX_ENDSTOP_INVERTING LULZBOT_NO_ENDSTOP
+    #define LULZBOT_NO_MOTION_BEFORE_HOMING
 #endif
 
 /*********************************** TAZ PRO TOOLHEADS ************************/

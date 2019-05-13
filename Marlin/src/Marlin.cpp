@@ -732,7 +732,7 @@ void idle(
  * Kill all activity and lock the machine.
  * After this the machine will need to be reset.
  */
-void kill(PGM_P const lcd_msg/*=NULL*/) {
+void kill(PGM_P const lcd_msg/*=nullptr*/) {
   thermalManager.disable_all_heaters();
 
   SERIAL_ERROR_MSG(MSG_ERR_KILLED);
@@ -959,15 +959,7 @@ void setup() {
 
   // Load data from EEPROM if available (or use defaults)
   // This also updates variables in the planner, elsewhere
-  #if ENABLED(EEPROM_AUTO_INIT)
-    if (!settings.load()) {
-      (void)settings.reset();
-      (void)settings.save();
-      SERIAL_ECHO_MSG("EEPROM Initialized");
-    }
-  #else
-    (void)settings.load();
-  #endif
+  (void)settings.load();
 
   #if HAS_M206_COMMAND
     // Initialize current position based on home_offset

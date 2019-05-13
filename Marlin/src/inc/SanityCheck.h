@@ -560,7 +560,7 @@ static_assert(Y_MAX_LENGTH >= Y_BED_SIZE, "Movement bounds (Y_MIN_POS, Y_MAX_POS
 #endif
 
 #if defined(EVENT_GCODE_SD_STOP) && DISABLED(NOZZLE_PARK_FEATURE)
-  static_assert(NULL == strstr(EVENT_GCODE_SD_STOP, "G27"), "NOZZLE_PARK_FEATURE is required to use G27 in EVENT_GCODE_SD_STOP.");
+  static_assert(nullptr == strstr(EVENT_GCODE_SD_STOP, "G27"), "NOZZLE_PARK_FEATURE is required to use G27 in EVENT_GCODE_SD_STOP.");
 #endif
 
 /**
@@ -620,7 +620,7 @@ static_assert(Y_MAX_LENGTH >= Y_BED_SIZE, "Movement bounds (Y_MIN_POS, Y_MAX_POS
   #elif FILAMENT_RUNOUT_DISTANCE_MM < 0
     #error "FILAMENT_RUNOUT_DISTANCE_MM must be greater than or equal to zero."
   #elif DISABLED(ADVANCED_PAUSE_FEATURE)
-    static_assert(NULL == strstr(FILAMENT_RUNOUT_SCRIPT, "M600"), "ADVANCED_PAUSE_FEATURE is required to use M600 with FILAMENT_RUNOUT_SENSOR.");
+    static_assert(nullptr == strstr(FILAMENT_RUNOUT_SCRIPT, "M600"), "ADVANCED_PAUSE_FEATURE is required to use M600 with FILAMENT_RUNOUT_SENSOR.");
   #endif
 #endif
 
@@ -1830,26 +1830,6 @@ static_assert(Y_MAX_LENGTH >= Y_BED_SIZE, "Movement bounds (Y_MIN_POS, Y_MAX_POS
   #error "RGB_LED is required for FYSETC_MINI_12864 1.2 and 2.0."
 #elif EITHER(FYSETC_MINI_12864_2_0, FYSETC_MINI_12864_2_1) && DISABLED(LED_USER_PRESET_STARTUP)
   #error "LED_USER_PRESET_STARTUP is required for FYSETC_MINI_12864 2.x displays."
-#elif ENABLED(FYSETC_MINI_12864_2_1)
-  #if DISABLED(NEOPIXEL_LED)
-    #error "NEOPIXEL_LED is required for FYSETC_MINI_12864 Rev. 2.1."
-  #elif NEOPIXEL_PIXELS != 3
-    #error "NEOPIXEL_PIXELS should be 3 for FYSETC_MINI_12864 Rev. 2.1."
-  #elif NEOPIXEL_BRIGHTNESS != 127
-    #error "NEOPIXEL_BRIGHTNESS should be 127 for FYSETC_MINI_12864 Rev. 2.1."
-  #else
-    #ifndef NEO_GRB
-      #define NEO_GRB 0xFAD
-      #define _UNDO_NEO_GRB
-    #endif
-    #if NEOPIXEL_TYPE != NEO_GRB
-      #error "NEOPIXEL_TYPE should be NEO_GRB for FYSETC_MINI_12864 Rev. 2.1."
-    #endif
-    #ifdef _UNDO_NEO_GRB
-      #undef NEO_GRB
-      #undef _UNDO_NEO_GRB
-    #endif
-  #endif
 #endif
 
 /**
@@ -2176,7 +2156,7 @@ static_assert(   _ARR_TEST(3,0) && _ARR_TEST(3,1) && _ARR_TEST(3,2)
   #elif EXTRUDERS != 5
     #error "PRUSA_MMU2 requires EXTRUDERS = 5."
   #elif DISABLED(ADVANCED_PAUSE_FEATURE)
-    static_assert(NULL == strstr(MMU2_FILAMENT_RUNOUT_SCRIPT, "M600"), "ADVANCED_PAUSE_FEATURE is required to use M600 with PRUSA_MMU2.");
+    static_assert(nullptr == strstr(MMU2_FILAMENT_RUNOUT_SCRIPT, "M600"), "ADVANCED_PAUSE_FEATURE is required to use M600 with PRUSA_MMU2.");
   #endif
 #endif
 

@@ -311,6 +311,7 @@
     #define LULZBOT_MINI_BED
     #define LULZBOT_USE_EINSY_RETRO
     #define LULZBOT_SENSORLESS_HOMING
+    #define LULZBOT_BIOPRINTER_GCODE
     #define LULZBOT_USE_NORMALLY_CLOSED_ENDSTOPS
     #define LULZBOT_STEALTHCHOP_Z
     #define LULZBOT_HYBRID_THRESHOLD
@@ -1556,6 +1557,10 @@
 #if defined(LULZBOT_USE_MAX_ENDSTOPS)
     #define LULZBOT_USE_XMAX_PLUG
     #define LULZBOT_USE_YMAX_PLUG
+#endif
+
+#if defined(LULZBOT_KangarooPaw_Experimental)
+    #define LULZBOT_USE_XMAX_PLUG
 #endif
 
 // Z-Max Endstops were introduced on the Mini and TAZ 6

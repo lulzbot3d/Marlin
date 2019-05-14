@@ -40,7 +40,7 @@ void MainMenu::onRedraw(draw_mode_t what) {
     CommandProcessor cmd;
     cmd.colors(normal_btn)
        .font(Theme::font_medium)
-    #define GRID_ROWS 8
+    #define GRID_ROWS 9
     #define GRID_COLS 2
        .tag(2).button( BTN_POS(1,1), BTN_SIZE(1,1), F("Auto Home"))
        .tag(3).button( BTN_POS(1,2), BTN_SIZE(1,1), F("Motors Off"))
@@ -64,11 +64,12 @@ void MainMenu::onRedraw(draw_mode_t what) {
     #else
        .tag(9).button( BTN_POS(2,4), BTN_SIZE(1,1), F("Jerk"))
     #endif
-       .tag(10).button( BTN_POS(1,5), BTN_SIZE(2,1), F("Interface Settings"))
-       .tag(11).button( BTN_POS(1,6), BTN_SIZE(2,1), F("Restore Factory Defaults"))
-       .tag(12).button( BTN_POS(1,7), BTN_SIZE(2,1), F("About Printer"))
+       .tag(13).button( BTN_POS(1,5), BTN_SIZE(2,1), F("Release Syringe"))
+       .tag(10).button( BTN_POS(1,6), BTN_SIZE(2,1), F("Interface Settings"))
+       .tag(11).button( BTN_POS(1,7), BTN_SIZE(2,1), F("Restore Factory Defaults"))
+       .tag(12).button( BTN_POS(1,8), BTN_SIZE(2,1), F("About Printer"))
        .colors(action_btn)
-       .tag(1).button( BTN_POS(1,8), BTN_SIZE(2,1), F("Back"));
+       .tag(1).button( BTN_POS(1,9), BTN_SIZE(2,1), F("Back"));
     #undef GRID_COLS
     #undef GRID_ROWS
   }
@@ -96,6 +97,7 @@ bool MainMenu::onTouchEnd(uint8_t tag) {
     case 10: GOTO_SCREEN(InterfaceSettingsScreen);         break;
     case 11: GOTO_SCREEN(RestoreFailsafeDialogBox);        break;
     case 12: GOTO_SCREEN(AboutScreen);                     break;
+    case 13: enqueueCommands_P(PSTR("G112"));              break;
     default:
       return false;
   }

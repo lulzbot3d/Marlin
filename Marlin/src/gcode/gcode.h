@@ -440,6 +440,10 @@ private:
 
   static void G92();
 
+  #if ENABLED(LULZBOT_BIOPRINTER_GCODE)
+    static void G112();
+  #endif
+
   #if ENABLED(CALIBRATION_GCODE)
     static void G425();
   #endif

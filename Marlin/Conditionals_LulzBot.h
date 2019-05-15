@@ -1201,7 +1201,7 @@
     #define LULZBOT_M115_EXTRUDER_TYPE             "SingleExtruder"
     #define LULZBOT_X_MAX_ENDSTOP_INVERTING        LULZBOT_NORMALLY_CLOSED_ENDSTOP
     #define LULZBOT_E3D_Titan_Aero_Volcano
-    #define LULZBOT_E_STEPS                        13297.9664
+    #define LULZBOT_E_STEPS                        9448.8
 #endif /* TOOLHEAD_KangarooPaw_SingleExtruder */
 
 /************** AUTO-CALIBRATION (BACKLASH AND NOZZLE OFFSET) ****************/

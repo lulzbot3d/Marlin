@@ -665,7 +665,7 @@
     #define LULZBOT_Z_HOMING_HEIGHT               5
 
     #define LULZBOT_HOMING_USES_PROBE_PINS
-#elif defined(LULZBOT_IS_TAZ) && !defined(LULZBOT_USE_HOME_BUTTON)
+#elif defined(LULZBOT_Juniper_TAZ5)
     // TAZ 5 safe homing position so fan duct does not hit.
     #define LULZBOT_Z_SAFE_HOMING
     #define LULZBOT_Z_SAFE_HOMING_X_POINT         10
@@ -745,9 +745,9 @@
     #define LULZBOT_USE_PRE_GLADIOLA_G29_WORKAROUND
 
 #elif defined(LULZBOT_USE_AUTOLEVELING) && defined(LULZBOT_TAZ_BED)
-    #define LULZBOT_STANDARD_LEFT_PROBE_BED_POSITION       -9
+    #define LULZBOT_STANDARD_LEFT_PROBE_BED_POSITION      -10
     #define LULZBOT_STANDARD_RIGHT_PROBE_BED_POSITION     288
-    #define LULZBOT_STANDARD_BACK_PROBE_BED_POSITION      289
+    #define LULZBOT_STANDARD_BACK_PROBE_BED_POSITION      291
     #define LULZBOT_STANDARD_FRONT_PROBE_BED_POSITION      -9
 #endif
 
@@ -775,8 +775,8 @@
 
 /* Make sure Marlin allows probe points outside of the bed area */
 #if defined(LULZBOT_USE_AUTOLEVELING)
-  #if LULZBOT_Z_SAFE_HOMING_X_POINT < LULZBOT_LEFT_PROBE_BED_POSITION
-    #define MIN_PROBE_X LULZBOT_Z_SAFE_HOMING_X_POINT
+  #if defined(LULZBOT_Z_SAFE_HOMING_X_POINT)
+    #define MIN_PROBE_X min(LULZBOT_Z_SAFE_HOMING_X_POINT, LULZBOT_LEFT_PROBE_BED_POSITION)
   #else
     #define MIN_PROBE_X LULZBOT_LEFT_PROBE_BED_POSITION
   #endif
@@ -889,10 +889,6 @@
     #define LULZBOT_TOOLHEAD_Y_MIN_ADJ         0
     #define LULZBOT_TOOLHEAD_Z_MAX_ADJ         0
     #define LULZBOT_TOOLHEAD_Z_MIN_ADJ         0
-    #define LULZBOT_TOOLHEAD_WIPE_X1_ADJ       0
-    #define LULZBOT_TOOLHEAD_WIPE_X2_ADJ       0
-    #define LULZBOT_TOOLHEAD_WIPE_Y1_ADJ       0
-    #define LULZBOT_TOOLHEAD_WIPE_Y2_ADJ       0
 
     #if defined(LULZBOT_USE_EINSY_RETRO) || \
         defined(LULZBOT_USE_ARCHIM2) || \
@@ -944,10 +940,6 @@
     #define LULZBOT_TOOLHEAD_Y_MIN_ADJ         0
     #define LULZBOT_TOOLHEAD_Z_MAX_ADJ         0
     #define LULZBOT_TOOLHEAD_Z_MIN_ADJ         0
-    #define LULZBOT_TOOLHEAD_WIPE_X1_ADJ       0
-    #define LULZBOT_TOOLHEAD_WIPE_X2_ADJ       0
-    #define LULZBOT_TOOLHEAD_WIPE_Y1_ADJ       0
-    #define LULZBOT_TOOLHEAD_WIPE_Y2_ADJ       0
 #endif /* TOOLHEAD_Tilapia_SingleExtruder || TOOLHEAD_Angelfish_Aerostruder */
 
 #if defined(TOOLHEAD_Tilapia_SingleExtruder)
@@ -986,10 +978,6 @@
     #define LULZBOT_TOOLHEAD_Y_MIN_ADJ         0
     #define LULZBOT_TOOLHEAD_Z_MAX_ADJ         0
     #define LULZBOT_TOOLHEAD_Z_MIN_ADJ         0
-    #define LULZBOT_TOOLHEAD_WIPE_X1_ADJ       0
-    #define LULZBOT_TOOLHEAD_WIPE_X2_ADJ       0
-    #define LULZBOT_TOOLHEAD_WIPE_Y1_ADJ       0
-    #define LULZBOT_TOOLHEAD_WIPE_Y2_ADJ       0
     #define LULZBOT_AO_Hexagon
     #define LULZBOT_E_STEPS                    830
     #define LULZBOT_LEGACY_TAZ_MOUNT
@@ -1010,10 +998,6 @@
     #define LULZBOT_TOOLHEAD_Y_MIN_ADJ         0
     #define LULZBOT_TOOLHEAD_Z_MAX_ADJ         0
     #define LULZBOT_TOOLHEAD_Z_MIN_ADJ         0
-    #define LULZBOT_TOOLHEAD_WIPE_X1_ADJ       0
-    #define LULZBOT_TOOLHEAD_WIPE_X2_ADJ       0
-    #define LULZBOT_TOOLHEAD_WIPE_Y1_ADJ       0
-    #define LULZBOT_TOOLHEAD_WIPE_Y2_ADJ       0
     #define LULZBOT_Moarstruder
     #define LULZBOT_E_STEPS                    830
     #define LULZBOT_LEGACY_TAZ_MOUNT
@@ -1031,10 +1015,6 @@
     #define LULZBOT_TOOLHEAD_Y_MIN_ADJ         0
     #define LULZBOT_TOOLHEAD_Z_MAX_ADJ         0
     #define LULZBOT_TOOLHEAD_Z_MIN_ADJ         0
-    #define LULZBOT_TOOLHEAD_WIPE_X1_ADJ       0
-    #define LULZBOT_TOOLHEAD_WIPE_X2_ADJ       0
-    #define LULZBOT_TOOLHEAD_WIPE_Y1_ADJ       0
-    #define LULZBOT_TOOLHEAD_WIPE_Y2_ADJ       0
     #define LULZBOT_TEMP_SENSOR_1              5
     #define LULZBOT_NO_MOVE_ON_TOOLHEAD_CHANGE
     #define LULZBOT_DISTINCT_E_FACTORS
@@ -1069,39 +1049,36 @@
     #define LULZBOT_LCD_TOOLHEAD_NAME              "Dual Extruder 3"
 //          16 chars max                            ^^^^^^^^^^^^^^^
     #define LULZBOT_M115_EXTRUDER_TYPE         "DualExtruder v3"
-    #if LULZBOT_Z_HOME_DIR < 0
-        /* We need to reset the origin to account for the Z home riser. */
-        #define LULZBOT_MANUAL_Z_HOME_POS         5.5
-    #endif
     #undef  LULZBOT_TOOLHEAD_X_MIN_ADJ
     #undef  LULZBOT_TOOLHEAD_X_MAX_ADJ
     #undef  LULZBOT_TOOLHEAD_Y_MIN_ADJ
     #undef  LULZBOT_TOOLHEAD_Y_MAX_ADJ
-    #define LULZBOT_TOOLHEAD_X_MIN_ADJ             1
-    #define LULZBOT_TOOLHEAD_X_MAX_ADJ            -7
+    #define LULZBOT_TOOLHEAD_X_MIN_ADJ            -6
+    #define LULZBOT_TOOLHEAD_X_MAX_ADJ            -21
     #define LULZBOT_TOOLHEAD_Y_MIN_ADJ            -7
     #define LULZBOT_TOOLHEAD_Y_MAX_ADJ            -7
-    #undef  LULZBOT_TOOLHEAD_WIPE_X1_ADJ
-    #undef  LULZBOT_TOOLHEAD_WIPE_X2_ADJ
-    #define LULZBOT_TOOLHEAD_WIPE_X1_ADJ          -2
-    #define LULZBOT_TOOLHEAD_WIPE_X2_ADJ          -2
-    #undef  LULZBOT_Z_HOMING_HEIGHT
-    #define LULZBOT_Z_HOMING_HEIGHT                10
-    #undef  LULZBOT_Z_CLEARANCE_DEPLOY_PROBE
-    #define LULZBOT_Z_CLEARANCE_DEPLOY_PROBE       10
-    #undef  LULZBOT_Z_CLEARANCE_BETWEEN_PROBES
-    #define LULZBOT_Z_CLEARANCE_BETWEEN_PROBES     10
-    // Move the rear homing position back to avoid the Z homing adaptor
-    #undef  LULZBOT_STANDARD_BACK_PROBE_BED_POSITION
-    #define LULZBOT_STANDARD_BACK_PROBE_BED_POSITION       291
+    #define LULZBOT_HOTEND_OFFSET_X                {0.0, 13}
+    #define LULZBOT_HOTEND_OFFSET_Y                {0.0,  0}
+    #define LULZBOT_X_MAX_ENDSTOP_INVERTING LULZBOT_NORMALLY_CLOSED_ENDSTOP
+    #if defined(LULZBOT_USE_HOME_BUTTON)
+        // Legacy configuration for TAZ 6 with homing button riser
+        #define LULZBOT_MANUAL_Z_HOME_POS             5.5
+        #undef  LULZBOT_Z_SAFE_HOMING_X_POINT
+        #undef  LULZBOT_Z_SAFE_HOMING_Y_POINT
+        #define LULZBOT_Z_SAFE_HOMING_X_POINT         (-26)
+        #define LULZBOT_Z_SAFE_HOMING_Y_POINT         (258)
+        #undef  LULZBOT_Z_HOMING_HEIGHT
+        #define LULZBOT_Z_HOMING_HEIGHT                10
+        #undef  LULZBOT_Z_CLEARANCE_DEPLOY_PROBE
+        #define LULZBOT_Z_CLEARANCE_DEPLOY_PROBE       10
+        #undef  LULZBOT_Z_CLEARANCE_BETWEEN_PROBES
+        #define LULZBOT_Z_CLEARANCE_BETWEEN_PROBES     10
+        #define LULZBOT_SWAP_EXTRUDERS
+    #endif
     // Adjust so left nozzle probes on the left washers;
     // right nozzles on the right nozzle.
-    #undef  LULZBOT_STANDARD_LEFT_PROBE_BED_POSITION
-    #define LULZBOT_STANDARD_LEFT_PROBE_BED_POSITION        -3
     #undef  LULZBOT_STANDARD_RIGHT_PROBE_BED_POSITION
-    #define LULZBOT_STANDARD_RIGHT_PROBE_BED_POSITION      282
-    #define LULZBOT_X_MAX_ENDSTOP_INVERTING       LULZBOT_NORMALLY_CLOSED_ENDSTOP
-    #define LULZBOT_SWAP_EXTRUDERS
+    #define LULZBOT_STANDARD_RIGHT_PROBE_BED_POSITION          275
     #undef  LULZBOT_INVERT_E1_DIR
     #define LULZBOT_INVERT_E1_DIR                 false
     #define LULZBOT_E_STEPS                        760
@@ -1162,16 +1139,9 @@
     #define LULZBOT_NO_MOTION_BEFORE_HOMING
 
     #if defined(LULZBOT_IS_TAZ)
-        #define LULZBOT_TOOLHEAD_Y_OFFSET -2.0
+        #define LULZBOT_ADAPTER_Y_OFFSET -2.0
     #else
-        #define LULZBOT_TOOLHEAD_Y_OFFSET -7.2
-    #endif
-    #if LULZBOT_Y_HOME_DIR > 0
-        #undef  LULZBOT_TOOLHEAD_Y_MAX_ADJ
-        #define LULZBOT_TOOLHEAD_Y_MAX_ADJ LULZBOT_TOOLHEAD_Y_OFFSET
-    #else
-        #undef  LULZBOT_TOOLHEAD_Y_MIN_ADJ
-        #define LULZBOT_TOOLHEAD_Y_MIN_ADJ LULZBOT_TOOLHEAD_Y_OFFSET
+        #define LULZBOT_ADAPTER_Y_OFFSET -7.2
     #endif
 #endif
 
@@ -1182,6 +1152,8 @@
     #undef  LULZBOT_X_MAX_ENDSTOP_INVERTING
     #define LULZBOT_X_MAX_ENDSTOP_INVERTING LULZBOT_NO_ENDSTOP
     #define LULZBOT_NO_MOTION_BEFORE_HOMING
+    #define LULZBOT_ADAPTER_X_OFFSET 22
+    #define LULZBOT_ADAPTER_Y_OFFSET -8
 #endif
 
 /*********************************** TAZ PRO TOOLHEADS ************************/
@@ -1196,10 +1168,6 @@
     #define LULZBOT_TOOLHEAD_Y_MIN_ADJ             -21
     #define LULZBOT_TOOLHEAD_Z_MAX_ADJ             -7
     #define LULZBOT_TOOLHEAD_Z_MIN_ADJ             -7
-    #define LULZBOT_TOOLHEAD_WIPE_X1_ADJ            0
-    #define LULZBOT_TOOLHEAD_WIPE_X2_ADJ            0
-    #define LULZBOT_TOOLHEAD_WIPE_Y1_ADJ            0
-    #define LULZBOT_TOOLHEAD_WIPE_Y2_ADJ            0
     #define LULZBOT_EXTRUDERS                       2
     #define LULZBOT_TOOLCHANGE_ZRAISE               0
     #define LULZBOT_NUM_SERVOS                      2
@@ -1524,10 +1492,18 @@
     #define LULZBOT_STANDARD_Z_MAX_POS         299
 #endif
 
-#define LULZBOT_X_MAX_POS (LULZBOT_STANDARD_X_MAX_POS + LULZBOT_TOOLHEAD_X_MAX_ADJ)
-#define LULZBOT_X_MIN_POS (LULZBOT_STANDARD_X_MIN_POS + LULZBOT_TOOLHEAD_X_MIN_ADJ)
-#define LULZBOT_Y_MAX_POS (LULZBOT_STANDARD_Y_MAX_POS + LULZBOT_TOOLHEAD_Y_MAX_ADJ)
-#define LULZBOT_Y_MIN_POS (LULZBOT_STANDARD_Y_MIN_POS + LULZBOT_TOOLHEAD_Y_MIN_ADJ)
+#ifndef LULZBOT_ADAPTER_X_OFFSET
+    #define LULZBOT_ADAPTER_X_OFFSET 0
+#endif
+
+#ifndef LULZBOT_ADAPTER_Y_OFFSET
+    #define LULZBOT_ADAPTER_Y_OFFSET 0
+#endif
+
+#define LULZBOT_X_MAX_POS (LULZBOT_STANDARD_X_MAX_POS + LULZBOT_TOOLHEAD_X_MAX_ADJ + LULZBOT_ADAPTER_X_OFFSET)
+#define LULZBOT_X_MIN_POS (LULZBOT_STANDARD_X_MIN_POS + LULZBOT_TOOLHEAD_X_MIN_ADJ + LULZBOT_ADAPTER_X_OFFSET)
+#define LULZBOT_Y_MAX_POS (LULZBOT_STANDARD_Y_MAX_POS + LULZBOT_TOOLHEAD_Y_MAX_ADJ + LULZBOT_ADAPTER_Y_OFFSET)
+#define LULZBOT_Y_MIN_POS (LULZBOT_STANDARD_Y_MIN_POS + LULZBOT_TOOLHEAD_Y_MIN_ADJ + LULZBOT_ADAPTER_Y_OFFSET)
 #define LULZBOT_Z_MAX_POS (LULZBOT_STANDARD_Z_MAX_POS + LULZBOT_TOOLHEAD_Z_MAX_ADJ)
 #define LULZBOT_Z_MIN_POS (LULZBOT_STANDARD_Z_MIN_POS + LULZBOT_TOOLHEAD_Z_MIN_ADJ)
 
@@ -1538,6 +1514,20 @@
 #define LULZBOT_RIGHT_PROBE_BED_POSITION   min(LULZBOT_STANDARD_RIGHT_PROBE_BED_POSITION, LULZBOT_X_MAX_POS)
 #define LULZBOT_BACK_PROBE_BED_POSITION    min(LULZBOT_STANDARD_BACK_PROBE_BED_POSITION,  LULZBOT_Y_MAX_POS)
 #define LULZBOT_FRONT_PROBE_BED_POSITION   max(LULZBOT_STANDARD_FRONT_PROBE_BED_POSITION, LULZBOT_Y_MIN_POS)
+
+/* definition to expand macro then apply to pragma message */
+#define LULZBOT_VALUE_TO_STRING(x) #x
+#define LULZBOT_VALUE(x) LULZBOT_VALUE_TO_STRING(x)
+#define LULZBOT_PRINT_VARIABLE(var) #var "=" LULZBOT_VALUE(var)
+
+//#define LULZBOT_DEBUG_PROBE_POINTS
+
+#if defined(LULZBOT_DEBUG_PROBE_POINTS)
+    #pragma message(LULZBOT_PRINT_VARIABLE(LULZBOT_LEFT_PROBE_BED_POSITION))
+    #pragma message(LULZBOT_PRINT_VARIABLE(LULZBOT_RIGHT_PROBE_BED_POSITION))
+    #pragma message(LULZBOT_PRINT_VARIABLE(LULZBOT_BACK_PROBE_BED_POSITION))
+    #pragma message(LULZBOT_PRINT_VARIABLE(LULZBOT_FRONT_PROBE_BED_POSITION))
+#endif
 
 /**************************** ENDSTOP CONFIGURATION ****************************/
 
@@ -1845,12 +1835,25 @@
     #define LULZBOT_LEFT_WIPE_Y2                       172
     #define LULZBOT_LEFT_WIPE_Z                       -0.5
 
+#elif defined(LULZBOT_USE_AUTOLEVELING) && defined(LULZBOT_TAZ_BED) && defined(TOOLHEAD_Yellowfin_DualExtruderV3)
+    // When using a Yellowfin toolhead, a wider wiping pad will be installed
+    #define LULZBOT_LEFT_WIPE_X1                      -26
+    #define LULZBOT_LEFT_WIPE_X2                      -26
+    #define LULZBOT_LEFT_WIPE_Y1                       95
+    #define LULZBOT_LEFT_WIPE_Y2                       25
+    #define LULZBOT_LEFT_WIPE_Z                        1
+
 #elif defined(LULZBOT_USE_AUTOLEVELING) && defined(LULZBOT_TAZ_BED)
     // TAZ has a vertical wiping pad on the left side of the bed
     #define LULZBOT_LEFT_WIPE_X1                      -16
     #define LULZBOT_LEFT_WIPE_X2                      -16
     #define LULZBOT_LEFT_WIPE_Y1                       95
-    #define LULZBOT_LEFT_WIPE_Y2                       25
+    #if defined(TOOLHEAD_Javelin_DualExtruderV2) || defined(TOOLHEAD_Longfin_FlexyDually)
+        // These dual toolheads have nozzles front and back, so the wiping location is shortened in Y
+        #define LULZBOT_LEFT_WIPE_Y2                   73
+    #else
+        #define LULZBOT_LEFT_WIPE_Y2                   25
+    #endif
     #define LULZBOT_LEFT_WIPE_Z                        1
 
     #if defined(LULZBOT_Quiver_TAZPro)
@@ -1864,14 +1867,14 @@
 #endif
 
 #define _LULZBOT_NOZZLE_CLEAN_START_POINT(side) { \
-    LULZBOT_ ## side ## _WIPE_X1 + LULZBOT_TOOLHEAD_WIPE_X1_ADJ, \
-    LULZBOT_ ## side ## _WIPE_Y1 + LULZBOT_TOOLHEAD_WIPE_Y1_ADJ, \
+    LULZBOT_ ## side ## _WIPE_X1, \
+    LULZBOT_ ## side ## _WIPE_Y1, \
     LULZBOT_ ## side ## _WIPE_Z \
 }
 
 #define _LULZBOT_NOZZLE_CLEAN_END_POINT(side)   { \
-    LULZBOT_ ## side ## _WIPE_X2 + LULZBOT_TOOLHEAD_WIPE_X2_ADJ, \
-    LULZBOT_ ## side ## _WIPE_Y2 + LULZBOT_TOOLHEAD_WIPE_Y2_ADJ, \
+    LULZBOT_ ## side ## _WIPE_X2, \
+    LULZBOT_ ## side ## _WIPE_Y2, \
     LULZBOT_ ## side ## _WIPE_Z \
 }
 
@@ -2340,7 +2343,7 @@
     #endif
 #endif
 
-#define LULZBOT_EXTRUDER_STR "Hot End"
+#define LULZBOT_EXTRUDER_STR "Hotend"
 
 /***************************** CUSTOM SPLASH SCREEN *****************************/
 

@@ -47,7 +47,7 @@ void BioPrintingDialogBox::onRedraw(draw_mode_t what) {
      .font(font_large)
      .text(BTN_POS(1,2), BTN_SIZE(2,1), F("Printing..."));
 
-  cmd.tag(2);
+  cmd.tag(1);
   draw_circular_progress(cmd, BTN_POS(1,3), BTN_SIZE(2,4), getProgress_percent(), theme_dark, theme_darkest);
 
   char time_str[10];
@@ -57,13 +57,28 @@ void BioPrintingDialogBox::onRedraw(draw_mode_t what) {
 
   cmd.colors(normal_btn)
      .font(font_medium)
-     .tag(1).button( BTN_POS(1,9), BTN_SIZE(2,1), F("Abort Print"));
+      #if ENABLED(SDSUPPORT)
+        .enabled(isPrintingFromMedia())
+      #else
+        .enabled(0)
+      #endif
+     .tag(2).button( BTN_POS(1,9), BTN_SIZE(1,1), F("Cancel"))
+     .tag(isPrintingFromMediaPaused() ? 4 : 3)
+     .colors(action_btn)
+      #if ENABLED(SDSUPPORT)
+        .enabled(isPrintingFromMedia())
+      #else
+        .enabled(0)
+      #endif
+        .button( BTN_POS(2,9), BTN_SIZE(1,1), isPrintingFromMediaPaused() ? F("Resume") : F("Pause"));
 }
 
 bool BioPrintingDialogBox::onTouchEnd(uint8_t tag) {
   switch(tag) {
-    case 1: GOTO_SCREEN(ConfirmAbortPrintDialogBox); break;
-    case 2: GOTO_SCREEN(FeedratePercentScreen);      break;
+    case 1: GOTO_SCREEN(FeedratePercentScreen);      break;
+    case 2: GOTO_SCREEN(ConfirmAbortPrintDialogBox); break;
+    case 3:  sound.play(twinkle, PLAY_ASYNCHRONOUS); ExtUI::pausePrint();  break;
+    case 4:  sound.play(twinkle, PLAY_ASYNCHRONOUS); ExtUI::resumePrint(); break;
     default: return false;
   }
   return true;

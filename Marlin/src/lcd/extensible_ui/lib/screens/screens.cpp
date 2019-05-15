@@ -67,7 +67,7 @@ SCREEN_TABLE {
 #if ENABLED(BACKLASH_GCODE)
   DECL_SCREEN(BacklashCompensationScreen),
 #endif
-  DECL_SCREEN(MaxFeedrateScreen),
+  DECL_SCREEN(FeedratePercentScreen),
   DECL_SCREEN(MaxVelocityScreen),
   DECL_SCREEN(MaxAccelerationScreen),
   DECL_SCREEN(DefaultAccelerationScreen),

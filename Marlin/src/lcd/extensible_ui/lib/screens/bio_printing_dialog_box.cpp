@@ -26,15 +26,44 @@
 
 #include "screens.h"
 
+#include "../ftdi_eve_lib/extras/circular_progress.h"
+
 using namespace FTDI;
 using namespace ExtUI;
+using namespace Theme;
+
+#define GRID_COLS 2
+#define GRID_ROWS 9
 
 void BioPrintingDialogBox::onRedraw(draw_mode_t what) {
+  const uint32_t elapsed = getProgress_seconds_elapsed();
+  const uint8_t hrs = elapsed/3600;
+  const uint8_t min = (elapsed/60)%60;
+
+  CommandProcessor cmd;
+  cmd.cmd(CLEAR_COLOR_RGB(bg_color))
+     .cmd(CLEAR(true,true,true))
+     .cmd(COLOR_RGB(bg_text_enabled))
+     .font(font_large)
+     .text(BTN_POS(1,2), BTN_SIZE(2,1), F("Printing..."));
+
+  cmd.tag(2);
+  draw_circular_progress(cmd, BTN_POS(1,3), BTN_SIZE(2,4), getProgress_percent(), theme_dark, theme_darkest);
+
+  char time_str[10];
+  sprintf_P(time_str, PSTR("%02dh %02dm"), hrs, min);
+
+  cmd.text(BTN_POS(1,7), BTN_SIZE(2,1), time_str);
+
+  cmd.colors(normal_btn)
+     .font(font_medium)
+     .tag(1).button( BTN_POS(1,9), BTN_SIZE(2,1), F("Abort Print"));
 }
 
 bool BioPrintingDialogBox::onTouchEnd(uint8_t tag) {
   switch(tag) {
     case 1: GOTO_SCREEN(ConfirmAbortPrintDialogBox); break;
+    case 2: GOTO_SCREEN(FeedratePercentScreen);      break;
     default: return false;
   }
   return true;
@@ -43,13 +72,15 @@ bool BioPrintingDialogBox::onTouchEnd(uint8_t tag) {
 void BioPrintingDialogBox::onIdle() {
   if(!isPrintingFromMedia())
     GOTO_SCREEN(StatusScreen);
+
+  if(refresh_timer.elapsed(STATUS_UPDATE_INTERVAL)) {
+    onRefresh();
+    refresh_timer.start();
+  }
+  BaseScreen::onIdle();
 }
 
 void BioPrintingDialogBox::show() {
-  drawMessage(F("Printing..."),F(""));
-  drawButton(F("Cancel Print"));
-  drawSpinner();
-  storeBackground();
   GOTO_SCREEN(BioPrintingDialogBox);
 }
 

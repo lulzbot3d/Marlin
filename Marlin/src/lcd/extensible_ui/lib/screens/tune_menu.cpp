@@ -147,7 +147,7 @@ bool TuneMenu::onTouchEnd(uint8_t tag) {
         #endif
       #endif
       break;
-    case 5:  GOTO_SCREEN(MaxFeedrateScreen);     break;
+    case 5:  GOTO_SCREEN(FeedratePercentScreen);     break;
     case 6:  sound.play(twinkle, PLAY_ASYNCHRONOUS); ExtUI::pausePrint();  GOTO_SCREEN(StatusScreen); break;
     case 7:  sound.play(twinkle, PLAY_ASYNCHRONOUS); ExtUI::resumePrint(); GOTO_SCREEN(StatusScreen); break;
     case 8:  GOTO_SCREEN(ConfirmAbortPrintDialogBox);     break;

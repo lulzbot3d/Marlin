@@ -1,6 +1,6 @@
-/***************************
- * max_feedrate_screen.cpp *
- ***************************/
+/*******************************
+ * feedrate_percent_screen.cpp *
+ *******************************/
 
 /****************************************************************************
  *   Written By Mark Pelletier  2017 - Aleph Objects, Inc.                  *
@@ -29,7 +29,7 @@
 using namespace FTDI;
 using namespace ExtUI;
 
-void MaxFeedrateScreen::onRedraw(draw_mode_t what) {
+void FeedratePercentScreen::onRedraw(draw_mode_t what) {
   widgets_t w(what);
   w.precision(0).units(PSTR("%"));
 
@@ -38,7 +38,7 @@ void MaxFeedrateScreen::onRedraw(draw_mode_t what) {
   w.increments();
 }
 
-bool MaxFeedrateScreen::onTouchHeld(uint8_t tag) {
+bool FeedratePercentScreen::onTouchHeld(uint8_t tag) {
   const float increment = getIncrement();
   switch(tag) {
     case 4: UI_DECREMENT(Feedrate_percent); break;

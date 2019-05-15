@@ -393,8 +393,11 @@ void GcodeSuite::process_parsed_command(
         case 100: M100(); break;                                  // M100: Free Memory Report
       #endif
 
+      #if !defined(LULZBOT_NO_HEATERS)
       case 104: M104(); break;                                    // M104: Set hot end temperature
       case 109: M109(); break;                                    // M109: Wait for hotend temperature to reach target
+      #endif
+
       case 110: M110(); break;                                    // M110: Set Current Line Number
       case 111: M111(); break;                                    // M111: Set debug level
 
@@ -417,7 +420,7 @@ void GcodeSuite::process_parsed_command(
         case 113: M113(); break;                                  // M113: Set Host Keepalive interval
       #endif
 
-      #if HAS_HEATED_BED
+      #if HAS_HEATED_BED && !defined(LULZBOT_NO_HEATERS)
         case 140: M140(); break;                                  // M140: Set bed temperature
         case 190: M190(); break;                                  // M190: Wait for bed temperature to reach target
       #endif

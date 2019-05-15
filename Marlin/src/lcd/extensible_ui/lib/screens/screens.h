@@ -226,7 +226,7 @@ class StatusScreen : public BaseScreen, public CachedScreen<STATUS_SCREEN_CACHE,
 
   };
 
-  class BioPrintingDialogBox : public SpinnerDialogBox {
+  class BioPrintingDialogBox : public BaseScreen, public UncachedScreen {
     public:
       static void onRedraw(draw_mode_t);
 
@@ -401,7 +401,7 @@ class StepsScreen : public BaseNumericAdjustmentScreen, public CachedScreen<STEP
   };
 #endif
 
-class MaxFeedrateScreen : public BaseNumericAdjustmentScreen, public CachedScreen<MAX_FEEDRATE_SCREEN_CACHE> {
+class FeedratePercentScreen : public BaseNumericAdjustmentScreen, public CachedScreen<MAX_FEEDRATE_SCREEN_CACHE> {
   public:
     static void onRedraw(draw_mode_t);
     static bool onTouchHeld(uint8_t tag);

@@ -22,7 +22,7 @@
 
 #include "../config.h"
 
-#if ENABLED(EXTENSIBLE_UI)
+#if ENABLED(EXTENSIBLE_UI) && !defined(LULZBOT_USE_BIOPRINTER_UI)
 
 #include "screens.h"
 
@@ -181,8 +181,8 @@ bool AdvancedSettingsMenu::onTouchEnd(uint8_t tag) {
     #if HAS_TRINAMIC
     case 13: GOTO_SCREEN(StepperCurrentScreen); break;
     case 14: GOTO_SCREEN(StepperBumpSensitivityScreen); break;
-    case 15: GOTO_SCREEN(DisplayTuningScreen); break;
     #endif
+    case 15: GOTO_SCREEN(DisplayTuningScreen); break;
     default: return false;
   }
   return true;

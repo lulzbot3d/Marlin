@@ -311,6 +311,7 @@
     #define LULZBOT_MINI_BED
     #define LULZBOT_USE_EINSY_RETRO
     #define LULZBOT_SENSORLESS_HOMING
+    #define LULZBOT_BACKLASH_COMPENSATION
     #define LULZBOT_BIOPRINTER_GCODE
     #define LULZBOT_USE_NORMALLY_CLOSED_ENDSTOPS
     #define LULZBOT_STEALTHCHOP_Z
@@ -837,11 +838,17 @@
       return; \
     }
 
+#if defined(LULZBOT_KangarooPaw_Experimental)
+    #define LULZBOT_XLEVEL_POS "G0 X97 Y-6 F9999\n"
+#else
+    #define LULZBOT_XLEVEL_POS "G0 X150 F9999\n"
+#endif
+
 #if defined(LULZBOT_IS_MINI) && defined(LULZBOT_USE_Z_BELT)
     #define LULZBOT_MENU_AXIS_LEVELING_COMMANDS \
         "M117 Leveling X Axis\n" /* Set LCD status */ \
         "G28\n"                  /* Home Axis */ \
-        "G0 X160 F9999\n"        /* Move toolhead to the right */ \
+        LULZBOT_XLEVEL_POS       /* Move toolhead to the right */ \
         "G0 Z5 F6000\n"          /* Move to bottom of printer */ \
         "G91\n"                  /* Set relative motion mode */ \
         "M211 S0\n"              /* Turn off soft endstops */ \
@@ -859,7 +866,7 @@
 #elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT)
     #define LULZBOT_MENU_AXIS_LEVELING_COMMANDS \
         "M117 Leveling X Axis\n" /* Set LCD status */ \
-        "G0 X150\n"              /* Center axis */ \
+        LULZBOT_XLEVEL_POS       /* Center axis */ \
         "G28 Z0\n"               /* Home Axis */ \
         "M117 Leveling done.\n"  /* Set LCD status */
 #else

@@ -208,7 +208,8 @@ void BaseNumericAdjustmentScreen::widgets_t::adjuster(uint8_t tag, const char *l
 void BaseNumericAdjustmentScreen::widgets_t::button(uint8_t tag, const char *label, bool is_enabled) {
   if(_what & FOREGROUND) {
     CommandProcessor cmd;
-    cmd.tag(is_enabled ? tag   : 0)
+    cmd.colors(normal_btn)
+       .tag(is_enabled ? tag   : 0)
        .enabled(is_enabled)
     #if defined(USE_PORTRAIT_ORIENTATION)
        .font(font_small)

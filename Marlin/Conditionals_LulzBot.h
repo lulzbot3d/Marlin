@@ -1878,27 +1878,28 @@
     LULZBOT_ ## side ## _WIPE_Z \
 }
 
-#define __LULZBOT_WIPE_GCODE(x,y1,y2,z) \
-    "G1 X" #x " Y" #y2 " F5000\n"                 /* Move above wiper pad */ \
+#define __LULZBOT_WIPE_GCODE(x1,x2,y1,y2,z) \
+    "G1 X" #x2 " Y" #y2 " F5000\n"                /* Move above wiper pad */ \
     LULZBOT_WIPE_WAIT_TEMP \
     "G1 Z1\n"                                     /* Push nozzle into wiper */ \
-    "G1 X" #x " Y" #y2 " F4000\n"                 /* Slow wipe */ \
-    "G1 X" #x " Y" #y1 " F4000\n"                 /* Slow wipe */ \
-    "G1 X" #x " Y" #y2 " F4000\n"                 /* Slow wipe */ \
-    "G1 X" #x " Y" #y1 " F4000\n"                 /* Slow wipe */ \
-    "G1 X" #x " Y" #y2 " F4000\n"                 /* Slow wipe */ \
-    "G1 X" #x " Y" #y1 " F4000\n"                 /* Slow wipe */ \
-    "G1 X" #x " Y" #y2 " F4000\n"                 /* Slow wipe */ \
-    "G1 X" #x " Y" #y1 " F4000\n"                 /* Slow wipe */ \
-    "G1 X" #x " Y" #y2 " F4000\n"                 /* Slow wipe */ \
-    "G1 X" #x " Y" #y1 " F4000\n"                 /* Slow wipe */ \
-    "G1 X" #x " Y" #y2 " F4000\n"                 /* Slow wipe */ \
-    "G1 X" #x " Y" #y1 " F4000\n"                 /* Slow wipe */ \
+    "G1 X" #x2 " Y" #y2 " F4000\n"                /* Slow wipe */ \
+    "G1 X" #x1 " Y" #y1 " F4000\n"                /* Slow wipe */ \
+    "G1 X" #x2 " Y" #y2 " F4000\n"                /* Slow wipe */ \
+    "G1 X" #x1 " Y" #y1 " F4000\n"                /* Slow wipe */ \
+    "G1 X" #x2 " Y" #y2 " F4000\n"                /* Slow wipe */ \
+    "G1 X" #x1 " Y" #y1 " F4000\n"                /* Slow wipe */ \
+    "G1 X" #x2 " Y" #y2 " F4000\n"                /* Slow wipe */ \
+    "G1 X" #x1 " Y" #y1 " F4000\n"                /* Slow wipe */ \
+    "G1 X" #x2 " Y" #y2 " F4000\n"                /* Slow wipe */ \
+    "G1 X" #x1 " Y" #y1 " F4000\n"                /* Slow wipe */ \
+    "G1 X" #x2 " Y" #y2 " F4000\n"                /* Slow wipe */ \
+    "G1 X" #x1 " Y" #y1 " F4000\n"                /* Slow wipe */ \
     "G1 Z15\n"                                    /* Raise nozzle */
 
-#define _LULZBOT_WIPE_GCODE(x,y1,y2,z) __LULZBOT_WIPE_GCODE(x,y1,y2,z)
+#define _LULZBOT_WIPE_GCODE(x1,x2,y1,y2,z) __LULZBOT_WIPE_GCODE(x1,x2,y1,y2,z)
 
 #define LULZBOT_WIPE_GCODE(side) _LULZBOT_WIPE_GCODE(LULZBOT_ ## side ## _WIPE_X1, \
+                                                     LULZBOT_ ## side ## _WIPE_X2, \
                                                      LULZBOT_ ## side ## _WIPE_Y1, \
                                                      LULZBOT_ ## side ## _WIPE_Y2, \
                                                      LULZBOT_ ## side ## _WIPE_Z )

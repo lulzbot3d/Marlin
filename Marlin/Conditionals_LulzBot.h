@@ -887,7 +887,7 @@
 
 /**************************** MINI TOOLHEADS ***********************************/
 
-#if defined(TOOLHEAD_Gladiola_SingleExtruder) || defined(TOOLHEAD_Albatross_Flexystruder) || defined(TOOLHEAD_Finch_Aerostruder) || defined(TOOLHEAD_CecropiaSilk_SingleExtruderAeroV2) || defined(TOOLHEAD_AchemonSphinx_SmallLayer) || defined(TOOLHEAD_BandedTiger_HardenedSteel) || defined(TOOLHEAD_DingyCutworm_HardenedSteelPlus) || defined(TOOLHEAD_KangarooPaw_SingleExtruder)
+#if defined(TOOLHEAD_Gladiola_SingleExtruder) || defined(TOOLHEAD_Albatross_Flexystruder) || defined(TOOLHEAD_Finch_Aerostruder) || defined(TOOLHEAD_CecropiaSilk_SingleExtruderAeroV2) || defined(TOOLHEAD_AchemonSphinx_SmallLayer) || defined(TOOLHEAD_BandedTiger_HardenedSteel) || defined(TOOLHEAD_DingyCutworm_HardenedSteelPlus)
 
     #define LULZBOT_EXTRUDERS                  1
     #define LULZBOT_TOOLHEAD_X_MAX_ADJ         0
@@ -1159,7 +1159,7 @@
     #undef  LULZBOT_X_MAX_ENDSTOP_INVERTING
     #define LULZBOT_X_MAX_ENDSTOP_INVERTING LULZBOT_NO_ENDSTOP
     #define LULZBOT_NO_MOTION_BEFORE_HOMING
-    #define LULZBOT_ADAPTER_X_OFFSET 22
+    #define LULZBOT_ADAPTER_X_OFFSET 29
     #define LULZBOT_ADAPTER_Y_OFFSET -8
 #endif
 
@@ -1199,6 +1199,16 @@
     #define LULZBOT_LCD_TOOLHEAD_NAME              "Goostruder"
 //          16 chars max                            ^^^^^^^^^^^^^^^
     #define LULZBOT_M115_EXTRUDER_TYPE             "SingleExtruder"
+    #define LULZBOT_EXTRUDERS                  1
+    #define LULZBOT_TOOLHEAD_X_MAX_ADJ         0
+    #define LULZBOT_TOOLHEAD_X_MIN_ADJ         0
+    #define LULZBOT_TOOLHEAD_Y_MAX_ADJ         0
+    #define LULZBOT_TOOLHEAD_Y_MIN_ADJ         0
+    #define LULZBOT_TOOLHEAD_Z_MAX_ADJ         0
+    #define LULZBOT_TOOLHEAD_Z_MIN_ADJ         0
+    #define LULZBOT_MOTOR_CURRENT_E          350 // mA
+    #undef  LULZBOT_MANUAL_FEEDRATE_E
+    #define LULZBOT_MANUAL_FEEDRATE_E       0.25 // mm/sec
     #define LULZBOT_X_MAX_ENDSTOP_INVERTING        LULZBOT_NORMALLY_CLOSED_ENDSTOP
     #define LULZBOT_E3D_Titan_Aero_Volcano
     #define LULZBOT_E_STEPS                        9448.8

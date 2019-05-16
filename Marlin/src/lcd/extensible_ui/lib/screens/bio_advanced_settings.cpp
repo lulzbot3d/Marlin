@@ -40,7 +40,7 @@ void AdvancedSettingsMenu::onRedraw(draw_mode_t what) {
     CommandProcessor cmd;
     cmd.colors(normal_btn)
        .font(Theme::font_medium)
-    #define GRID_ROWS 8
+    #define GRID_ROWS 9
     #define GRID_COLS 2
 
       .tag(2) .button( BTN_POS(1,1), BTN_SIZE(1,1), F("Display"))
@@ -79,11 +79,16 @@ void AdvancedSettingsMenu::onRedraw(draw_mode_t what) {
       .enabled(0)
       #endif
       .tag(11) .button( BTN_POS(2,5), BTN_SIZE(1,1), F("Backlash"))
-
-      .tag(12).button( BTN_POS(1,6), BTN_SIZE(2,1), F("Interface Settings"))
-      .tag(13).button( BTN_POS(1,7), BTN_SIZE(2,1), F("Restore Factory Defaults"))
+      #if ENABLED(LIN_ADVANCE)
+      .enabled(1)
+      #else
+      .enabled(0)
+      #endif
+      .tag(12) .button( BTN_POS(1,6), BTN_SIZE(2,1), F("Linear Advance"))
+      .tag(13) .button( BTN_POS(1,7), BTN_SIZE(2,1), F("Interface Settings"))
+      .tag(14) .button( BTN_POS(1,8), BTN_SIZE(2,1), F("Restore Factory Defaults"))
       .colors(action_btn)
-      .tag(1).button( BTN_POS(1,8), BTN_SIZE(2,1), F("Back"));
+      .tag(1). button( BTN_POS(1,9), BTN_SIZE(2,1), F("Back"));
     #undef GRID_COLS
     #undef GRID_ROWS
   }
@@ -117,9 +122,12 @@ bool AdvancedSettingsMenu::onTouchEnd(uint8_t tag) {
     #if ENABLED(BACKLASH_GCODE)
     case 11: GOTO_SCREEN(BacklashCompensationScreen);      break;
     #endif
+    #if ENABLED(LIN_ADVANCE)
+    case 12: GOTO_SCREEN(LinearAdvanceScreen);             break;
+    #endif
+    case 13: GOTO_SCREEN(InterfaceSettingsScreen);         break;
+    case 14: GOTO_SCREEN(RestoreFailsafeDialogBox);        break;
 
-    case 12: GOTO_SCREEN(InterfaceSettingsScreen);         break;
-    case 13: GOTO_SCREEN(RestoreFailsafeDialogBox);        break;
     default:
       return false;
   }

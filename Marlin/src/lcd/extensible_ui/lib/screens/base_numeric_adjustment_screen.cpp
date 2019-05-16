@@ -274,6 +274,7 @@ void BaseNumericAdjustmentScreen::widgets_t::toggle(uint8_t tag, const char *lab
     cmd.tag(is_enabled ? tag   : 0)
        .enabled(is_enabled)
        .font(font_small)
+       .colors(ui_toggle)
     #if defined(USE_PORTRAIT_ORIENTATION)
       .toggle(BTN_POS( 9,_line), BTN_SIZE(5,1), progmem_str(text), value);
     #else

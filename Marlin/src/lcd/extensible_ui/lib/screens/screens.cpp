@@ -77,7 +77,13 @@ SCREEN_TABLE {
   DECL_SCREEN(JerkScreen),
 #endif
 #if ENABLED(LIN_ADVANCE) || ENABLED(FILAMENT_RUNOUT_SENSOR)
-  DECL_SCREEN(FilamentOptionsScreen),
+  DECL_SCREEN(FilamentMenu),
+#endif
+#if ENABLED(FILAMENT_RUNOUT_SENSOR)
+  DECL_SCREEN(FilamentRunoutScreen),
+#endif
+#if ENABLED(LIN_ADVANCE)
+  DECL_SCREEN(LinearAdvanceScreen),
 #endif
   DECL_SCREEN(TemperatureScreen),
   DECL_SCREEN(ChangeFilamentScreen),

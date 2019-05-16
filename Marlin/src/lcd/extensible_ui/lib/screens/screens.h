@@ -61,7 +61,13 @@ enum {
   JERK_SCREEN_CACHE,
 #endif
 #if ENABLED(LIN_ADVANCE) || ENABLED(FILAMENT_RUNOUT_SENSOR)
-  FILAMENT_OPTIONS_CACHE,
+  FILAMENT_MENU_CACHE,
+#endif
+#if ENABLED(LIN_ADVANCE)
+  LINEAR_ADVANCE_SCREEN_CACHE,
+#endif
+#if ENABLED(FILAMENT_RUNOUT_SENSOR)
+  FILAMENT_RUNOUT_SCREEN_CACHE,
 #endif
   CHANGE_FILAMENT_SCREEN_CACHE,
   INTERFACE_SETTINGS_SCREEN_CACHE,
@@ -440,11 +446,26 @@ class DefaultAccelerationScreen : public BaseNumericAdjustmentScreen, public Cac
 #endif
 
 #if ENABLED(LIN_ADVANCE) || ENABLED(FILAMENT_RUNOUT_SENSOR)
-  class FilamentOptionsScreen : public BaseNumericAdjustmentScreen, public CachedScreen<FILAMENT_OPTIONS_CACHE> {
+  class FilamentMenu : public BaseNumericAdjustmentScreen, public CachedScreen<FILAMENT_MENU_CACHE> {
+    public:
+      static void onRedraw(draw_mode_t);
+      static bool onTouchEnd(uint8_t tag);
+  };
+#endif
+
+#if ENABLED(FILAMENT_RUNOUT_SENSOR)
+  class FilamentRunoutScreen : public BaseNumericAdjustmentScreen, public CachedScreen<FILAMENT_RUNOUT_SCREEN_CACHE> {
     public:
       static void onRedraw(draw_mode_t);
       static bool onTouchHeld(uint8_t tag);
-      static bool onTouchEnd(uint8_t tag);
+  };
+#endif
+
+#if ENABLED(LIN_ADVANCE)
+  class LinearAdvanceScreen : public BaseNumericAdjustmentScreen, public CachedScreen<LINEAR_ADVANCE_SCREEN_CACHE> {
+    public:
+      static void onRedraw(draw_mode_t);
+      static bool onTouchHeld(uint8_t tag);
   };
 #endif
 

@@ -152,7 +152,7 @@ bool TuneMenu::onTouchEnd(uint8_t tag) {
     case 7:  sound.play(twinkle, PLAY_ASYNCHRONOUS); ExtUI::resumePrint(); GOTO_SCREEN(StatusScreen); break;
     case 8:  GOTO_SCREEN(ConfirmAbortPrintDialogBox);     break;
     #if ENABLED(LIN_ADVANCE) || ENABLED(FILAMENT_RUNOUT_SENSOR)
-    case 9:  GOTO_SCREEN(FilamentOptionsScreen); break;
+    case 9:  GOTO_SCREEN(FilamentMenu); break;
     #endif
     default:
       return false;

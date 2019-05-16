@@ -367,7 +367,7 @@ class GenericPolyUI {
       #endif
       // Draw the fill and stroke
       cmd.cmd(COLOR_RGB(btn_fill_color));
-      fill(r);
+      fill(r, false);
       cmd.cmd(COLOR_RGB(btn_stroke_color));
       cmd.cmd(LINE_WIDTH(btn_stroke_width));
       stroke(r);

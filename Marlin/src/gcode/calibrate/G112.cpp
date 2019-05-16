@@ -41,10 +41,12 @@ static inline bool read_pin() {
 }
 
 static void home_e() {
+  feedrate_mm_s = 2; // mm/s
+
   // Back off the extruder until the pin is triggered
   set_destination_from_current();
   while(!read_pin()) {
-    destination[E_AXIS] -= 0.1;
+    destination[E_AXIS] -= 0.5;
     prepare_move_to_destination();
     planner.synchronize();
   };

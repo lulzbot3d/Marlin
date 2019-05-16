@@ -42,8 +42,8 @@ void MainMenu::onRedraw(draw_mode_t what) {
        .font(Theme::font_medium)
     #define GRID_ROWS 8
     #define GRID_COLS 2
-       .tag(2).button( BTN_POS(1,1), BTN_SIZE(2,1), F("Release Syringe"))
-       .tag(3).button( BTN_POS(1,2), BTN_SIZE(2,1), F("Auto Home"))
+       .tag(2).button( BTN_POS(1,1), BTN_SIZE(2,1), F("Home Extruder"))
+       .tag(3).button( BTN_POS(1,2), BTN_SIZE(2,1), F("Home XYZ"))
        .tag(4).button( BTN_POS(1,3), BTN_SIZE(2,1), F("Level X Axis"))
        .tag(5).button( BTN_POS(1,4), BTN_SIZE(2,1), F("All Motors Off"))
        .tag(6).button( BTN_POS(1,5), BTN_SIZE(2,1), F("Interface Settings"))

@@ -46,7 +46,6 @@ void LinearAdvanceScreen::onRedraw(draw_mode_t what) {
       #endif
     #endif
   #endif
-  w.heading(PSTR(""));
   w.increments();
 }
 

@@ -36,7 +36,7 @@ using namespace FTDI;
 using namespace Theme;
 using namespace ExtUI;
 
-static uint8_t increment;
+static float increment;
 
 void StatusScreen::onRedraw(draw_mode_t what) {
   CommandProcessor cmd;
@@ -101,7 +101,7 @@ void StatusScreen::onRedraw(draw_mode_t what) {
 }
 
 bool StatusScreen::onTouchEnd(uint8_t tag) {
-  increment = 3;
+  increment = 0.5;
   switch(tag) {
     case  9: GOTO_SCREEN(FilesScreen); break;
     case 10: GOTO_SCREEN(MainMenu);    break;
@@ -115,16 +115,15 @@ bool StatusScreen::onTouchEnd(uint8_t tag) {
 
 bool StatusScreen::onTouchHeld(uint8_t tag) {
   if(ExtUI::isMoving()) return false; // Don't allow moves to accumulate
-  //constexpr float increment = 1;
   #define UI_INCREMENT_AXIS(axis) MoveAxisScreen::setManualFeedrate(axis, increment); UI_INCREMENT(AxisPosition_mm, axis);
   #define UI_DECREMENT_AXIS(axis) MoveAxisScreen::setManualFeedrate(axis, increment); UI_DECREMENT(AxisPosition_mm, axis);
   switch(tag) {
-    case 1: UI_DECREMENT_AXIS(X); break;
-    case 2: UI_INCREMENT_AXIS(X); break;
-    case 3: UI_DECREMENT_AXIS(Y); break;
-    case 4: UI_INCREMENT_AXIS(Y); break;
-    case 5: UI_DECREMENT_AXIS(Z); break;
-    case 6: UI_INCREMENT_AXIS(Z); break;
+    case 1: UI_DECREMENT_AXIS(X);  break;
+    case 2: UI_INCREMENT_AXIS(X);  break;
+    case 4: UI_DECREMENT_AXIS(Y);  break; // NOTE: Y directions inverted because bed rather than needle moves
+    case 3: UI_INCREMENT_AXIS(Y);  break;
+    case 5: UI_DECREMENT_AXIS(Z);  break;
+    case 6: UI_INCREMENT_AXIS(Z);  break;
     case 7: UI_DECREMENT_AXIS(E0); break;
     case 8: UI_INCREMENT_AXIS(E0); break;
     default: return false;
@@ -132,7 +131,7 @@ bool StatusScreen::onTouchHeld(uint8_t tag) {
   #undef UI_DECREMENT_AXIS
   #undef UI_INCREMENT_AXIS
   if(increment < 10)
-    increment++;
+    increment += 0.5;
   return false;
 }
 

@@ -567,10 +567,12 @@ void wait_for_confirmation(const bool is_reload/*=false*/, const int8_t max_beep
       #if ENABLED(HOST_PROMPT_SUPPORT)
         host_prompt_do(PROMPT_USER_CONTINUE, PSTR("Reheat Done"), PSTR("Continue"));
       #endif
+      #if !defined(LULZBOT_NO_PAUSE_AFTER_REHEAT_WORKAROUND)
       #if ENABLED(EXTENSIBLE_UI)
         ExtUI::onUserConfirmRequired("Reheat finished.");
       #endif
       wait_for_user = true;
+      #endif // LULZBOT_NO_PAUSE_AFTER_REHEAT_WORKAROUND
       nozzle_timed_out = false;
 
       #if HAS_BUZZER

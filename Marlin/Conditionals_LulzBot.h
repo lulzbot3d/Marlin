@@ -1010,7 +1010,7 @@
     #define LULZBOT_LEGACY_TAZ_MOUNT
 #endif /* TOOLHEAD_Opah_Moarstruder */
 
-#if defined(TOOLHEAD_Javelin_DualExtruderV2) || defined(TOOLHEAD_Longfin_FlexyDually) || defined(TOOLHEAD_Yellowfin_DualExtruderV3)
+#if defined(TOOLHEAD_Javelin_DualExtruderV2) || defined(TOOLHEAD_Longfin_FlexyDually)
     #define LULZBOT_EXTRUDER_FAN_ON_PIN_6      // For backwards compatibility with TAZ 4
     #define LULZBOT_MOTOR_CURRENT_E0           875 // mA
     #define LULZBOT_MOTOR_CURRENT_E1           875 // mA
@@ -1025,7 +1025,7 @@
     #define LULZBOT_TEMP_SENSOR_1              5
     #define LULZBOT_NO_MOVE_ON_TOOLHEAD_CHANGE
     #define LULZBOT_DISTINCT_E_FACTORS
-#endif /* TOOLHEAD_Javelin_DualExtruderV2 || TOOLHEAD_Longfin_FlexyDually || TOOLHEAD_Yellowfin_DualExtruderV3 */
+#endif /* TOOLHEAD_Javelin_DualExtruderV2 || TOOLHEAD_Longfin_FlexyDually */
 
 #if defined(TOOLHEAD_Javelin_DualExtruderV2)
     #define LULZBOT_LCD_TOOLHEAD_NAME              "Dual Extruder 2"
@@ -1056,17 +1056,20 @@
     #define LULZBOT_LCD_TOOLHEAD_NAME              "Dual Extruder 3"
 //          16 chars max                            ^^^^^^^^^^^^^^^
     #define LULZBOT_M115_EXTRUDER_TYPE         "DualExtruder v3"
-    #undef  LULZBOT_TOOLHEAD_X_MIN_ADJ
-    #undef  LULZBOT_TOOLHEAD_X_MAX_ADJ
-    #undef  LULZBOT_TOOLHEAD_Y_MIN_ADJ
-    #undef  LULZBOT_TOOLHEAD_Y_MAX_ADJ
-    #define LULZBOT_TOOLHEAD_X_MIN_ADJ            -6
-    #define LULZBOT_TOOLHEAD_X_MAX_ADJ            -21
-    #define LULZBOT_TOOLHEAD_Y_MIN_ADJ            -7
-    #define LULZBOT_TOOLHEAD_Y_MAX_ADJ            -7
-    #define LULZBOT_HOTEND_OFFSET_X                {0.0, 13}
-    #define LULZBOT_HOTEND_OFFSET_Y                {0.0,  0}
-    #define LULZBOT_X_MAX_ENDSTOP_INVERTING LULZBOT_NORMALLY_CLOSED_ENDSTOP
+    #define LULZBOT_MOTOR_CURRENT_E0           875 // mA
+    #define LULZBOT_MOTOR_CURRENT_E1           875 // mA
+    #define LULZBOT_EXTRUDERS                  2
+    #define LULZBOT_TEMP_SENSOR_1              5
+    #define LULZBOT_DISTINCT_E_FACTORS
+    #define LULZBOT_TOOLHEAD_X_MIN_ADJ        -6
+    #define LULZBOT_TOOLHEAD_X_MAX_ADJ        -21
+    #define LULZBOT_TOOLHEAD_Y_MIN_ADJ        -7
+    #define LULZBOT_TOOLHEAD_Y_MAX_ADJ        -7
+    #define LULZBOT_TOOLHEAD_Z_MAX_ADJ         0
+    #define LULZBOT_TOOLHEAD_Z_MIN_ADJ         0
+    #define LULZBOT_TOOLCHANGE_ZRAISE          2
+    #define LULZBOT_HOTEND_OFFSET_X           {0.0, 13}
+    #define LULZBOT_HOTEND_OFFSET_Y           {0.0,  0}
     #if defined(LULZBOT_USE_HOME_BUTTON)
         // Legacy configuration for TAZ 6 with homing button riser
         #define LULZBOT_MANUAL_Z_HOME_POS             5.5
@@ -1081,6 +1084,9 @@
         #undef  LULZBOT_Z_CLEARANCE_BETWEEN_PROBES
         #define LULZBOT_Z_CLEARANCE_BETWEEN_PROBES     10
         #define LULZBOT_SWAP_EXTRUDERS
+        #define LULZBOT_NO_MOVE_ON_TOOLHEAD_CHANGE
+        #define LULZBOT_EXTRUDER_FAN_ON_PIN_6 // For backwards compatibility with TAZ 4
+        #define LULZBOT_X_MAX_ENDSTOP_INVERTING LULZBOT_NORMALLY_CLOSED_ENDSTOP
     #endif
     // Adjust so left nozzle probes on the left washers;
     // right nozzles on the right nozzle.

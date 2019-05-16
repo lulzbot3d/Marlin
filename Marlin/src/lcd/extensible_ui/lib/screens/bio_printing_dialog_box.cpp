@@ -47,13 +47,16 @@ void BioPrintingDialogBox::onRedraw(draw_mode_t what) {
      .font(font_large)
      .text(BTN_POS(1,2), BTN_SIZE(2,1), F("Printing..."));
 
-  cmd.tag(1);
+  cmd.tag(1)
+     .font(font_xlarge);
+
   draw_circular_progress(cmd, BTN_POS(1,3), BTN_SIZE(2,4), getProgress_percent(), theme_dark, theme_darkest);
 
   char time_str[10];
   sprintf_P(time_str, PSTR("%02dh %02dm"), hrs, min);
 
-  cmd.text(BTN_POS(1,7), BTN_SIZE(2,1), time_str);
+  cmd.font(font_large)
+     .text(BTN_POS(1,7), BTN_SIZE(2,1), time_str);
 
   cmd.colors(normal_btn)
      .font(font_medium)

@@ -136,9 +136,9 @@ static void lcd_factory_settings() {
     #if ENABLED(DUAL_X_CARRIAGE)
       MENU_MULTIPLIER_ITEM_EDIT_CALLBACK(float52, MSG_X_OFFSET, &hotend_offset[X_AXIS][1], MIN(X2_HOME_POS, X2_MAX_POS) - 25.0, MAX(X2_HOME_POS, X2_MAX_POS) + 25.0, _recalc_offsets);
     #else
-      MENU_MULTIPLIER_ITEM_EDIT_CALLBACK(float52, MSG_X_OFFSET, &hotend_offset[X_AXIS][1], -10.0, 10.0, _recalc_offsets);
+      MENU_MULTIPLIER_ITEM_EDIT_CALLBACK(float52, MSG_X_OFFSET, &hotend_offset[X_AXIS][1], LULZBOT_LCD_HOTEND_OFFSET_MIN, LULZBOT_LCD_HOTEND_OFFSET_MAX, _recalc_offsets);
     #endif
-    MENU_MULTIPLIER_ITEM_EDIT_CALLBACK(float52, MSG_Y_OFFSET, &hotend_offset[Y_AXIS][1], -10.0, 10.0, _recalc_offsets);
+    MENU_MULTIPLIER_ITEM_EDIT_CALLBACK(float52, MSG_Y_OFFSET, &hotend_offset[Y_AXIS][1], LULZBOT_LCD_HOTEND_OFFSET_MIN, LULZBOT_LCD_HOTEND_OFFSET_MAX, _recalc_offsets);
     MENU_MULTIPLIER_ITEM_EDIT_CALLBACK(float52, MSG_Z_OFFSET, &hotend_offset[Z_AXIS][1], LULZBOT_LCD_Z_HOTEND_OFFSET_MIN, 10.0, _recalc_offsets);
     #if ENABLED(EEPROM_SETTINGS)
       MENU_ITEM(function, MSG_STORE_EEPROM, lcd_store_settings);

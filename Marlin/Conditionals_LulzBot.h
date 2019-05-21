@@ -309,6 +309,7 @@
     #define LULZBOT_NO_HEATERS
     #define LULZBOT_IS_MINI
     #define LULZBOT_MINI_BED
+    #define LULZBOT_USE_AUTOLEVELING
     #define LULZBOT_USE_EINSY_RETRO
     #define LULZBOT_SENSORLESS_HOMING
     #define LULZBOT_BACKLASH_COMPENSATION
@@ -723,7 +724,14 @@
 
 /*********************** AUTOLEVELING / BED PROBE *******************************/
 
-#if defined(LULZBOT_USE_AUTOLEVELING) && defined(LULZBOT_MINI_BED) && defined(LULZBOT_USE_Z_BELT)
+#if defined(LULZBOT_KangarooPaw_Experimental)
+    // KangarooPaw only has a single force sensitive resistor for probing.
+    #define LULZBOT_STANDARD_LEFT_PROBE_BED_POSITION       37
+    #define LULZBOT_STANDARD_RIGHT_PROBE_BED_POSITION      38
+    #define LULZBOT_STANDARD_BACK_PROBE_BED_POSITION       181
+    #define LULZBOT_STANDARD_FRONT_PROBE_BED_POSITION      180
+
+#elif defined(LULZBOT_USE_AUTOLEVELING) && defined(LULZBOT_MINI_BED) && defined(LULZBOT_USE_Z_BELT)
     #define LULZBOT_STANDARD_LEFT_PROBE_BED_POSITION        -3
     #define LULZBOT_STANDARD_RIGHT_PROBE_BED_POSITION      163
     #define LULZBOT_STANDARD_BACK_PROBE_BED_POSITION       168

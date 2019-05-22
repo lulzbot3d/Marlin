@@ -71,18 +71,22 @@
 
 #elif defined(LCD_480x272)
   namespace FTDI {
-    constexpr uint8_t  Pclk                 =    5;
+    constexpr uint8_t  Pclk                 =    6;
     constexpr uint8_t  Pclkpol              =    1;
     constexpr uint16_t Hsize                =  480;
     constexpr uint16_t Vsize                =  272;
-    constexpr uint16_t Vsync0               =    0;
-    constexpr uint16_t Vsync1               =   10;
-    constexpr uint16_t Voffset              =   12;
-    constexpr uint16_t Vcycle               =  292;
-    constexpr uint16_t Hsync0               =    0;
-    constexpr uint16_t Hsync1               =   41;
-    constexpr uint16_t Hoffset              =   43;
-    constexpr uint16_t Hcycle               =  548;
+
+    constexpr uint16_t th                   =  525; // One horizontal line
+    constexpr uint16_t thfp                 =   43; // HS Front porch
+    constexpr uint16_t thb                  =    2; // HS Back porch (blanking)
+    constexpr uint16_t thpw                 =   41; // HS pulse width
+
+    constexpr uint16_t tv                   =  286; // Vertical period time
+    constexpr uint16_t tvfp                 =   12; // VS Front porch
+    constexpr uint16_t tvb                  =    2; // VS Back porch (blanking)
+    constexpr uint16_t tvpw                 =   10; // VS pulse width
+
+    COMPUTE_REGS_FROM_DATASHEET
 
     constexpr uint32_t default_transform_a  =  0x00008100;
     constexpr uint32_t default_transform_b  =  0x00000000;

@@ -85,6 +85,7 @@
     !defined(LULZBOT_Quiver_TAZPro) && \
     !defined(LULZBOT_Redgum_TAZWorkhorse) && \
     !defined(LULZBOT_RedgumArchim_Experimental) && \
+    !defined(LULZBOT_HibiscusTouchLCD_Experimental) && \
     !defined(LULZBOT_KangarooPaw_Experimental) && \
     !defined(LULZBOT_GladiolaTouchLCD_Experimental) && \
     !defined(LULZBOT_GladiolaEinsyLCD_Experimental) && \
@@ -301,6 +302,36 @@
     #define LULZBOT_SDSUPPORT
     #define LULZBOT_AXIS_LEVELING_USING_DUAL_Z_ENDSTOPS
     #define LULZBOT_USE_EXPERIMENTAL_FEATURES
+#endif
+
+#if defined(LULZBOT_HibiscusTouchLCD_Experimental)
+    #define LULZBOT_CUSTOM_MACHINE_NAME "LulzBot Mini 2"
+    #define LULZBOT_LCD_MACHINE_NAME "Mini 2"
+    #define LULZBOT_IS_MINI
+    #define LULZBOT_MINI_BED
+    #define LULZBOT_USE_EINSY_RETRO
+    #define LULZBOT_TWO_PIECE_BED
+    #define LULZBOT_USE_AUTOLEVELING
+    #define LULZBOT_BACKLASH_COMPENSATION
+    #define LULZBOT_CALIBRATION_GCODE
+    #define LULZBOT_SENSORLESS_HOMING
+    #define LULZBOT_USE_NORMALLY_CLOSED_ENDSTOPS
+    #define LULZBOT_STEALTHCHOP_Z
+    #define LULZBOT_HYBRID_THRESHOLD
+    #define LULZBOT_USE_Z_BELT
+    #define LULZBOT_BAUDRATE 250000
+    #define LULZBOT_PRINTCOUNTER
+    #define LULZBOT_MACHINE_UUID "e5502411-d46d-421d-ba3a-a20126d7930f"
+    #define LULZBOT_USE_EXPERIMENTAL_FEATURES
+    // Use a 480x272 display and USB flashdrive
+    #define LULZBOT_USE_TOUCH_UI
+    #define LCD_ALEPHOBJECTS_CLCD_UI
+    #define USE_PORTRAIT_ORIENTATION
+    #define AO_EXP1_PINOUT_REV_C
+    #define LCD_480x272
+    #define LULZBOT_SDSUPPORT
+    #define LULZBOT_USB_FLASH_DRIVE_SUPPORT
+    #define LULZBOT_USB_READ_ERROR_IS_FATAL
 #endif
 
 #if defined(LULZBOT_KangarooPaw_Experimental)

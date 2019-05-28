@@ -484,7 +484,7 @@ void menu_motion() {
   #endif
 
   #if ENABLED(LULZBOT_CALIBRATION_GCODE) && defined(LULZBOT_CALIBRATION_SCRIPT)
-    MENU_ITEM(gcode, _UxGT("Auto-calibrate"), LULZBOT_CALIBRATION_SCRIPT);
+    MENU_ITEM(gcode, _UxGT("Auto-calibrate"), PSTR(LULZBOT_CALIBRATION_SCRIPT));
   #endif
 
   //

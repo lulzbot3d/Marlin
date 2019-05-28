@@ -694,7 +694,7 @@ static_assert(Y_MAX_LENGTH >= Y_BED_SIZE, "Movement bounds (Y_MIN_POS, Y_MAX_POS
   #endif
 
   #ifndef TOOLCHANGE_ZRAISE
-    #error "TOOLCHANGE_ZRAISE required for EXTRUDERS > 1. Please update your Configuration."
+    #error "TOOLCHANGE_ZRAISE required for EXTRUDERS > 1. Please update your Configuration_adv.h."
   #endif
 
 #elif ENABLED(MK2_MULTIPLEXER)
@@ -1028,8 +1028,8 @@ static_assert(Y_MAX_LENGTH >= Y_BED_SIZE, "Movement bounds (Y_MIN_POS, Y_MAX_POS
   #if ENABLED(BLTOUCH)
     #if BLTOUCH_DELAY < 200
       #error "BLTOUCH_DELAY less than 200 is unsafe and is not supported."
-    #elif DISABLED(BLTOUCH_FORCE_5V_MODE) && NONE(ENDSTOPPULLUPS, ENDSTOPPULLUP_ZMIN, ENDSTOPPULLUP_ZMIN_PROBE)
-      #error "BLTOUCH without BLTOUCH_FORCE_5V_MODE requires ENDSTOPPULLUPS, ENDSTOPPULLUP_ZMIN or ENDSTOPPULLUP_ZMIN_PROBE."
+    #elif DISABLED(BLTOUCH_SET_5V_MODE) && NONE(ENDSTOPPULLUPS, ENDSTOPPULLUP_ZMIN, ENDSTOPPULLUP_ZMIN_PROBE)
+      #error "BLTOUCH without BLTOUCH_SET_5V_MODE requires ENDSTOPPULLUPS, ENDSTOPPULLUP_ZMIN or ENDSTOPPULLUP_ZMIN_PROBE."
     #endif
   #endif
 

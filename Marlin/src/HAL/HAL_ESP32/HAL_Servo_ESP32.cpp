@@ -19,39 +19,51 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifdef __MK20DX256__
+#ifdef ARDUINO_ARCH_ESP32
 
 #include "../../inc/MarlinConfig.h"
 
 #if HAS_SERVOS
 
-#include "HAL_Servo_Teensy.h"
+#include "HAL_Servo_ESP32.h"
 
-uint8_t servoPin[MAX_SERVOS] = { 0 };
+int Servo::channel_next_free = 0;
 
-int8_t libServo::attach(const int pin) {
-  if (this->servoIndex >= MAX_SERVOS) return -1;
-  if (pin > 0) servoPin[this->servoIndex] = pin;
-  return Servo::attach(servoPin[this->servoIndex]);
+Servo::Servo() {
+  this->channel = channel_next_free++;
 }
 
-int8_t libServo::attach(const int pin, const int min, const int max) {
-  if (pin > 0) servoPin[this->servoIndex] = pin;
-  return Servo::attach(servoPin[this->servoIndex], min, max);
+int8_t Servo::attach(const int pin) {
+  if (this->channel >= CHANNEL_MAX_NUM) return -1;
+  if (pin > 0) this->pin = pin;
+
+  ledcSetup(this->channel, 50, 16); // channel X, 50 Hz, 16-bit depth
+  ledcAttachPin(this->pin, this->channel);
+  return true;
 }
 
-void libServo::move(const int value) {
+void Servo::detach() { ledcDetachPin(this->pin) }
+
+int Servo::read() { return this->degrees; }
+
+void Servo::write(int degrees) {
+  this->degrees = constrain(degrees, MIN_ANGLE, MAX_ANGLE);
+  int us = map(this->degrees, MIN_ANGLE, MAX_ANGLE, MIN_PULSE_WIDTH, MAX_PULSE_WIDTH);
+  int duty = map(us, 0, TAU_USEC, 0, MAX_COMPARE);
+  ledcWrite(channel, duty);
+}
+
+void Servo::move(const int value) {
   constexpr uint16_t servo_delay[] = SERVO_DELAY;
   static_assert(COUNT(servo_delay) == NUM_SERVOS, "SERVO_DELAY must be an array NUM_SERVOS long.");
   if (this->attach(0) >= 0) {
     this->write(value);
-    safe_delay(servo_delay[this->servoIndex]);
+    safe_delay(servo_delay[this->channel]);
     #if ENABLED(DEACTIVATE_SERVOS_AFTER_MOVE)
       this->detach();
     #endif
   }
 }
-
 #endif // HAS_SERVOS
 
-#endif // __MK20DX256__
+#endif // ARDUINO_ARCH_ESP32

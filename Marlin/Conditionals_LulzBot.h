@@ -2085,6 +2085,8 @@
         #pragma message("\n\nLULZBOT_G29_FAILURE_COMMANDS:\n\n"   LULZBOT_G29_FAILURE_COMMANDS "\n\n")
         #error Dump complete
     #endif
+#else
+    #define LULZBOT_Z_PROBE_LOW_POINT    0
 #endif
 
 /******************************** PROBE QUALITY CHECK *************************/

@@ -30,18 +30,34 @@
    LULZBOT_ENABLE_PROBE_PINS
    delayMicroseconds(10);
    bool val;
+   #define TEST_PIN(PIN) case PIN##_PIN: val = READ(PIN##_PIN) != PIN##_ENDSTOP_INVERTING; break
    switch(pin_number) {
+    #if HAS_X_MIN
+     TEST_PIN(X_MIN)
+    #endif
+    #if HAS_X_MAX
+     TEST_PIN(X_MAX)
+    #endif
+    #if HAS_Y_MIN
+     TEST_PIN(Y_MIN)
+    #endif
+    #if HAS_Y_MAX
+     TEST_PIN(Y_MAX)
+    #endif
     #if HAS_Z_MIN
-     case Z_MIN_PIN: val = READ(Z_MIN_PIN) != Z_MIN_ENDSTOP_INVERTING; break;
+     TEST_PIN(Z_MIN)
     #endif
-    #if HAS_Z_MIN_PROBE_PIN
-     case Z_MIN_PROBE_PIN: val = READ(Z_MIN_PROBE_PIN) != Z_MIN_PROBE_ENDSTOP_INVERTING;  break;
+    #if HAS_Z_PROBE
+     TEST_PIN(Z_PROBE)
     #endif
-    default: val = digitalRead(pin_number); break;
+    #if HAS_Z_MAX
+     TEST_PIN(Z_MAX)
+    #endif
+    default: val = extDigitalRead(pin_number); break;
    }
    return val;
  }
- #define digitalRead _digitalRead
+ #define extDigitalRead _digitalRead
 #endif
 
 /**

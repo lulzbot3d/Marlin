@@ -1267,7 +1267,7 @@
     #define LULZBOT_Z_CLEARANCE_BETWEEN_PROBES     30
     #define LULZBOT_MOTOR_CURRENT_E          350 // mA
     #undef  LULZBOT_MANUAL_FEEDRATE_E
-    #define LULZBOT_MANUAL_FEEDRATE_E       0.25 // mm/sec
+    #define LULZBOT_MANUAL_FEEDRATE_E        1.7 // mm/sec
     #define LULZBOT_X_MAX_ENDSTOP_INVERTING        LULZBOT_NORMALLY_CLOSED_ENDSTOP
     #define LULZBOT_E3D_Titan_Aero_Volcano
     #define LULZBOT_E_STEPS                        9448.8

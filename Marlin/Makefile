@@ -62,7 +62,7 @@ HARDWARE_MOTHERBOARD ?= 301
 # Arduino source install directory, and version number
 # On most linuxes this will be /usr/share/arduino
 ARDUINO_INSTALL_DIR  ?= ../ArduinoAddons/arduino-1.8.5
-ARDUINO_VERSION      ?= 183
+ARDUINO_VERSION      ?= 10805
 
 # The installed Libraries are in the User folder
 ARDUINO_USER_DIR ?= ${HOME}/Arduino

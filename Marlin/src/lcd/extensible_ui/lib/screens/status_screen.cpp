@@ -29,6 +29,10 @@
 
 #include "../io/flash_storage.h"
 
+#if ENABLED(SDSUPPORT) && defined(LULZBOT_MANUAL_USB_STARTUP)
+  #include "../../../../sd/cardreader.h"
+#endif
+
 using namespace FTDI;
 using namespace Theme;
 
@@ -281,7 +285,12 @@ void StatusScreen::draw_interaction_buttons(draw_mode_t what) {
     CommandProcessor cmd;
     cmd.colors(normal_btn)
        .font(Theme::font_medium)
-       .enabled(has_media).colors(has_media ? action_btn : normal_btn)
+    #if ENABLED(USB_FLASH_DRIVE_SUPPORT) && defined(LULZBOT_MANUAL_USB_STARTUP)
+      .enabled(!Sd2Card::ready() || has_media)
+    #else
+      .enabled(has_media)
+    #endif
+       .colors(has_media ? action_btn : normal_btn)
       #if defined(USE_PORTRAIT_ORIENTATION)
          .tag(3).button( BTN_POS(1,8), BTN_SIZE(2,1),
       #else
@@ -289,7 +298,12 @@ void StatusScreen::draw_interaction_buttons(draw_mode_t what) {
       #endif
       isPrintingFromMedia() ? F("Printing") :
       #if ENABLED(USB_FLASH_DRIVE_SUPPORT)
-        F("USB Drive"))
+        #if defined(LULZBOT_MANUAL_USB_STARTUP)
+        (Sd2Card::ready() ? F("USB Drive") : F("Enable USB"))
+        #else
+        F("USB Drive")
+        #endif
+        )
       #else
         F("SD Card"))
       #endif
@@ -388,7 +402,18 @@ bool StatusScreen::onTouchEnd(uint8_t tag) {
   using namespace ExtUI;
 
   switch(tag) {
-    case 3: GOTO_SCREEN(FilesScreen); break;
+    case 3:
+      #if ENABLED(USB_FLASH_DRIVE_SUPPORT) && defined(LULZBOT_MANUAL_USB_STARTUP)
+      if(!Sd2Card::ready()) {
+        StatusScreen::setStatusMessage(F("Insert USB drive..."));
+        Sd2Card::usbStartup();
+      } else {
+        GOTO_SCREEN(FilesScreen);
+      }
+      #else
+        GOTO_SCREEN(FilesScreen);
+      #endif
+      break;
     case 4:
       if(isPrinting()) {
         GOTO_SCREEN(TuneMenu);

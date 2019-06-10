@@ -22,6 +22,9 @@
 
 #include "../../inc/MarlinConfigPre.h"
 
+#define USB_STARTUP_DELAY 0
+#define USB_DEBUG         0
+
 #if ENABLED(USB_FLASH_DRIVE_SUPPORT)
 
 #include "../../Marlin.h"
@@ -36,10 +39,34 @@
   #include "../../lcd/ultralcd.h"
 #endif
 
+static_assert(USB_CS_PIN   != -1, "USB_CS_PIN must be defined");
+static_assert(USB_INTR_PIN != -1, "USB_INTR_PIN must be defined");
+
 USB usb;
 BulkOnly bulk(&usb);
 
-Sd2Card::state_t Sd2Card::state;
+bool Sd2Card::initialized = false;
+
+bool Sd2Card::usbStartup() {
+  SERIAL_ECHOPGM("Starting USB host...");
+    if (!usb.start()) {
+      SERIAL_ECHOLNPGM(" failed.");
+      #if EITHER(ULTRA_LCD, EXTENSIBLE_UI)
+        LCD_MESSAGEPGM("USB start failed");
+      #endif
+      return false;
+    }
+
+    // SPI quick test - check revision register
+    switch(usb.regRd(rREVISION)) {
+      case 0x01: SERIAL_ECHOPGM("rev.01 started"); break;
+      case 0x12: SERIAL_ECHOPGM("rev.02 started"); break;
+      case 0x13: SERIAL_ECHOPGM("rev.03 started"); break;
+      default:   SERIAL_ECHOPGM("started. rev unknown.");   break;
+    }
+    initialized = true;
+    return true;
+}
 
 // The USB library needs to be called periodically to detect USB thumbdrive
 // insertion and removals. Call this idle() function periodically to allow
@@ -47,33 +74,20 @@ Sd2Card::state_t Sd2Card::state;
 // of initializing the USB library for the first time.
 
 void Sd2Card::idle() {
-  static uint32_t next_retry;
+  #ifndef LULZBOT_MANUAL_USB_STARTUP
+    #if USB_STARTUP_DELAY > 0
+      static uint32_t next_retry = millis() + USB_STARTUP_DELAY;
+      if(!initialized && ELAPSED(millis(), next_retry) && !usbStartup()) {
+        next_retry = millis() + USB_STARTUP_DELAY;
+      }
+    #else
+      if(!initialized)
+        usbStartup();
+    #endif
+  #endif
 
-  switch (state) {
-    case USB_HOST_DELAY_INIT:
-      next_retry = millis() + 2000;
-      state = USB_HOST_WAITING;
-      break;
-    case USB_HOST_WAITING:
-      if (ELAPSED(millis(), next_retry)) {
-        next_retry = millis() + 2000;
-        state = USB_HOST_UNINITIALIZED;
-      }
-      break;
-    case USB_HOST_UNINITIALIZED:
-      SERIAL_ECHOPGM("Starting USB host...");
-      if (!usb.start()) {
-        SERIAL_ECHOPGM(" Failed. Retrying in 2s.");
-        #if EITHER(ULTRA_LCD, EXTENSIBLE_UI)
-          LCD_MESSAGEPGM("USB start failed");
-        #endif
-        state = USB_HOST_DELAY_INIT;
-      }
-      else
-        state = USB_HOST_INITIALIZED;
-      SERIAL_EOL();
-      break;
-    case USB_HOST_INITIALIZED:
+  #ifdef USB_DEBUG
+    if(initialized) {
       const uint8_t lastUsbTaskState = usb.getUsbTaskState();
       usb.Task();
       const uint8_t newUsbTaskState  = usb.getUsbTaskState();
@@ -90,8 +104,8 @@ void Sd2Card::idle() {
           SERIAL_ECHOLNPGM("USB drive inserted");
         #endif
       }
-      break;
-  }
+    }
+  #endif
 }
 
 // Marlin calls this function to check whether an USB drive is inserted.

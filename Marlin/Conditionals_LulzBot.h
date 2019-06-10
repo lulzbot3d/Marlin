@@ -332,6 +332,7 @@
     #define LULZBOT_SDSUPPORT
     #define LULZBOT_USB_FLASH_DRIVE_SUPPORT
     #define LULZBOT_USB_READ_ERROR_IS_FATAL
+    #define LULZBOT_MANUAL_USB_STARTUP
 #endif
 
 #if defined(LULZBOT_KangarooPaw_Experimental)
@@ -362,6 +363,7 @@
     #define LULZBOT_SDSUPPORT
     #define LULZBOT_USB_FLASH_DRIVE_SUPPORT
     #define LULZBOT_USB_READ_ERROR_IS_FATAL
+    //#define LULZBOT_MANUAL_USB_STARTUP
 #endif
 
 #if defined(LULZBOT_GladiolaTouchLCD_Experimental)
@@ -589,6 +591,8 @@
     #define LULZBOT_SPI_SPEED                     SPI_SIXTEENTH_SPEED
     #define LULZBOT_M226_PINS_WORKAROUND
 
+    #define LULZBOT_USB_INTR_PIN                  SD_DETECT_PIN
+
     // Force Archim to use same USB ID as Mini-Rambo and Rambo when flashed
     // NOTE: While in "erase" (bootloader) mode, the ID will be 03eb:6124
     #define LULZBOT_USB_DEVICE_VENDOR_ID          0x27b1
@@ -598,13 +602,19 @@
     #define LULZBOT_MOTHERBOARD                   BOARD_EINSY_RETRO
     #define LULZBOT_CONTROLLER_FAN_PIN            FAN1_PIN  // Digital pin 6
     #define LULZBOT_SERIAL_PORT                   0
-    #define LULZBOT_SPI_SPEED                     SPI_FULL_SPEED
+    #ifdef LULZBOT_USE_TOUCH_UI
+        #define LULZBOT_SPI_SPEED                 SPI_SIXTEENTH_SPEED
+    #else
+        #define LULZBOT_SPI_SPEED                 SPI_FULL_SPEED
+    #endif
+    #define LULZBOT_USB_INTR_PIN                  21
 
 #elif defined(LULZBOT_IS_MINI)
     #define LULZBOT_MOTHERBOARD                   BOARD_MINIRAMBO
     #define LULZBOT_CONTROLLER_FAN_PIN            FAN1_PIN  // Digital pin 6
     #define LULZBOT_SERIAL_PORT                   0
     #define LULZBOT_SPI_SPEED                     SPI_FULL_SPEED
+    #define LULZBOT_USB_INTR_PIN                  SD_DETECT_PIN
 
 #elif defined(LULZBOT_IS_TAZ)
     #define LULZBOT_MOTHERBOARD                   BOARD_RAMBO

@@ -59,24 +59,19 @@
 
 class Sd2Card {
   private:
-
-    typedef enum : uint8_t {
-      USB_HOST_UNINITIALIZED,
-      USB_HOST_INITIALIZED,
-      USB_HOST_DELAY_INIT,
-      USB_HOST_WAITING
-    } state_t;
-
-    static state_t state;
-
     uint32_t pos;
     #ifdef USB_DEBUG
       uint32_t lun0_capacity;
     #endif
 
-    static inline bool ready() { return state == USB_HOST_INITIALIZED; }
+    static bool initialized;
+
+    static void usbStateDebug();
 
   public:
+    static bool usbStartup();
+    static inline bool ready() { return initialized; }
+
     bool init(const uint8_t sckRateID=0, const pin_t chipSelectPin=SD_CHIP_SELECT_PIN);
 
     static void idle();

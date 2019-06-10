@@ -2426,6 +2426,7 @@
 #endif
 
 #define LULZBOT_EXTRUDER_STR "Hotend"
+#define MSG_ERR_PROBING_FAILED              _UxGT("Autolevel failed")
 
 /***************************** CUSTOM SPLASH SCREEN *****************************/
 

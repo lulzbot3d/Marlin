@@ -45,10 +45,17 @@ static_assert(USB_INTR_PIN != -1, "USB_INTR_PIN must be defined");
 USB usb;
 BulkOnly bulk(&usb);
 
-bool Sd2Card::initialized = false;
+static enum {
+  UNINITIALIZED,
+  DO_STARTUP,
+  WAIT_FOR_INSERTION,
+  MEDIA_READY,
+  MEDIA_ERROR
+} state;
 
 bool Sd2Card::usbStartup() {
-  SERIAL_ECHOPGM("Starting USB host...");
+  if(state <= DO_STARTUP) {
+    SERIAL_ECHOPGM("Starting USB host...");
     if (!usb.start()) {
       SERIAL_ECHOLNPGM(" failed.");
       #if EITHER(ULTRA_LCD, EXTENSIBLE_UI)
@@ -59,13 +66,14 @@ bool Sd2Card::usbStartup() {
 
     // SPI quick test - check revision register
     switch(usb.regRd(rREVISION)) {
-      case 0x01: SERIAL_ECHOPGM("rev.01 started"); break;
-      case 0x12: SERIAL_ECHOPGM("rev.02 started"); break;
-      case 0x13: SERIAL_ECHOPGM("rev.03 started"); break;
-      default:   SERIAL_ECHOPGM("started. rev unknown.");   break;
+      case 0x01: SERIAL_ECHOLNPGM("rev.01 started"); break;
+      case 0x12: SERIAL_ECHOLNPGM("rev.02 started"); break;
+      case 0x13: SERIAL_ECHOLNPGM("rev.03 started"); break;
+      default:   SERIAL_ECHOLNPGM("started. rev unknown."); break;
     }
-    initialized = true;
-    return true;
+    state = WAIT_FOR_INSERTION;
+  }
+  return true;
 }
 
 // The USB library needs to be called periodically to detect USB thumbdrive
@@ -74,52 +82,75 @@ bool Sd2Card::usbStartup() {
 // of initializing the USB library for the first time.
 
 void Sd2Card::idle() {
-  #ifndef LULZBOT_MANUAL_USB_STARTUP
-    #if USB_STARTUP_DELAY > 0
-      static uint32_t next_retry = millis() + USB_STARTUP_DELAY;
-      if(!initialized && ELAPSED(millis(), next_retry) && !usbStartup()) {
-        next_retry = millis() + USB_STARTUP_DELAY;
-      }
-    #else
-      if(!initialized)
-        usbStartup();
-    #endif
-  #endif
+  usb.Task();
+
+  const uint8_t task_state = usb.getUsbTaskState();
 
   #ifdef USB_DEBUG
-    if(initialized) {
-      const uint8_t lastUsbTaskState = usb.getUsbTaskState();
-      usb.Task();
-      const uint8_t newUsbTaskState  = usb.getUsbTaskState();
-
-      if (lastUsbTaskState == USB_STATE_RUNNING && newUsbTaskState != USB_STATE_RUNNING) {
-        // the user pulled the flash drive. Make sure the bulk storage driver releases the address
-        #ifdef USB_DEBUG
-          SERIAL_ECHOLNPGM("USB drive removed");
-        #endif
-        //bulk.Release();
-      }
-      if (lastUsbTaskState != USB_STATE_RUNNING && newUsbTaskState == USB_STATE_RUNNING) {
-        #ifdef USB_DEBUG
-          SERIAL_ECHOLNPGM("USB drive inserted");
-        #endif
-      }
+    static uint8_t last_task_state = 0xFF;
+    if(last_task_state != task_state) {
+      last_task_state = task_state;
+      SERIAL_ECHOLNPAIR("USB Task State:", task_state);
     }
   #endif
+
+  static millis_t next_state_ms = millis();
+
+  #define GOTO_STATE_AFTER_DELAY(STATE, DELAY) do {state = STATE; next_state_ms  = millis() + DELAY; } while(0)
+
+  if(ELAPSED(millis(), next_state_ms)) {
+    next_state_ms = 250;
+    switch(state) {
+      case UNINITIALIZED:
+        #ifndef LULZBOT_MANUAL_USB_STARTUP
+          GOTO_STATE_AFTER_DELAY( DO_STARTUP, USB_STARTUP_DELAY );
+        #endif
+        break;
+      case DO_STARTUP:
+        usbStartup();
+        break;
+      case WAIT_FOR_INSERTION:
+        if(task_state == USB_STATE_RUNNING) {
+          #ifdef USB_DEBUG
+            SERIAL_ECHOLNPGM("USB drive inserted");
+          #endif
+          GOTO_STATE_AFTER_DELAY( MEDIA_READY, 250 );
+        }
+        break;
+      case MEDIA_READY:
+        break;
+      case MEDIA_ERROR:
+        break;
+    }
+
+    // Handle drive removal events
+    if(state > WAIT_FOR_INSERTION && task_state != USB_STATE_RUNNING) {
+      #ifdef USB_DEBUG
+        SERIAL_ECHOLNPGM("USB drive removed");
+      #endif
+      GOTO_STATE_AFTER_DELAY( WAIT_FOR_INSERTION, 0 );
+    }
+  }
 }
 
 // Marlin calls this function to check whether an USB drive is inserted.
 // This is equivalent to polling the SD_DETECT when using SD cards.
 bool Sd2Card::isInserted() {
-  return usb.getUsbTaskState() == USB_STATE_RUNNING;
+  return state == MEDIA_READY;
+}
+
+bool Sd2Card::ready() {
+  return state > DO_STARTUP;
 }
 
 // Marlin calls this to initialize an SD card once it is inserted.
 bool Sd2Card::init(const uint8_t sckRateID/*=0*/, const pin_t chipSelectPin/*=SD_CHIP_SELECT_PIN*/) {
-  if (!ready()) return false;
+  if (!isInserted()) return false;
 
-  if (!bulk.LUNIsGood(0)) {
-    SERIAL_ECHOLNPGM("LUN zero is not good");
+  if(!bulk.LUNIsGood(0)) {
+    #ifdef USB_DEBUG
+      SERIAL_ECHOLNPGM("LUN is not good");
+    #endif
     return false;
   }
 
@@ -138,7 +169,7 @@ bool Sd2Card::init(const uint8_t sckRateID/*=0*/, const pin_t chipSelectPin/*=SD
 
 // Returns the capacity of the card in blocks.
 uint32_t Sd2Card::cardSize() {
-  if (!ready()) return 0;
+  if (!isInserted()) return false;
   #ifndef USB_DEBUG
     const uint32_t
   #endif
@@ -147,7 +178,7 @@ uint32_t Sd2Card::cardSize() {
 }
 
 bool Sd2Card::readBlock(uint32_t block, uint8_t* dst) {
-  if (!ready()) return false;
+  if (!isInserted()) return false;
   #ifdef USB_DEBUG
     if (block >= lun0_capacity) {
       SERIAL_ECHOLNPAIR("Attempt to read past end of LUN: ", block);
@@ -165,7 +196,7 @@ bool Sd2Card::readBlock(uint32_t block, uint8_t* dst) {
 }
 
 bool Sd2Card::writeBlock(uint32_t block, const uint8_t* src) {
-  if (!ready()) return false;
+  if (!isInserted()) return false;
   #ifdef USB_DEBUG
     if (block >= lun0_capacity) {
       SERIAL_ECHOLNPAIR("Attempt to write past end of LUN: ", block);

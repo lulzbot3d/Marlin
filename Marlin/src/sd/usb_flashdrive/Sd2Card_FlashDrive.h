@@ -64,13 +64,10 @@ class Sd2Card {
       uint32_t lun0_capacity;
     #endif
 
-    static bool initialized;
-
     static void usbStateDebug();
 
   public:
     static bool usbStartup();
-    static inline bool ready() { return initialized; }
 
     bool init(const uint8_t sckRateID=0, const pin_t chipSelectPin=SD_CHIP_SELECT_PIN);
 
@@ -89,4 +86,5 @@ class Sd2Card {
 
     uint32_t cardSize();
     static bool isInserted();
+    static bool ready();
 };

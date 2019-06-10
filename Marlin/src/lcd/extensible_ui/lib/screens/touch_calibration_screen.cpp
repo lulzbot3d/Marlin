@@ -29,55 +29,86 @@
 using namespace FTDI;
 using namespace Theme;
 
-void TouchCalibrationScreen::onEntry() {
-  // Clear the display
-  CommandProcessor cmd;
-  cmd.cmd(CMD_DLSTART)
-     .cmd(CLEAR_COLOR_RGB(bg_color))
-     .cmd(CLEAR(true,true,true))
-     .cmd(DL::DL_DISPLAY)
-     .cmd(CMD_SWAP)
-     .execute();
+#define GRID_COLS 4
+#define GRID_ROWS 16
 
-  // Wait for the touch to release before starting,
-  // as otherwise the first calibration point could
-  // be misinterpreted.
-  while(CLCD::is_touching()) {
-    #if defined(UI_FRAMEWORK_DEBUG)
-      SERIAL_ECHO_START();
-      SERIAL_ECHOLNPGM("Waiting for touch release");
-    #endif
-  }
+void TouchCalibrationScreen::onEntry() {
+  CommandProcessor cmd;
+
   BaseScreen::onEntry();
+
+  if(CLCD::is_touching()) {
+    // Ask the user to release the touch before starting,
+    // as otherwise the first calibration point could
+    // be misinterpreted.
+    cmd.cmd(CMD_DLSTART)
+       .cmd(CLEAR_COLOR_RGB(bg_color))
+       .cmd(CLEAR(true,true,true))
+       .cmd(COLOR_RGB(bg_text_enabled))
+    #if defined(USE_PORTRAIT_ORIENTATION)
+       .font(font_large)
+       .text  ( BTN_POS(1,8), BTN_SIZE(4,1), F("Release to begin"))
+       .text  ( BTN_POS(1,9), BTN_SIZE(4,1), F("screen calibration"))
+    #else
+       .font(
+        #if defined(LCD_800x480)
+          font_large
+        #else
+          font_medium
+        #endif
+        )
+       .text  ( BTN_POS(1,1), BTN_SIZE(4,16), F("Release to calibrate"))
+    #endif
+       .cmd(DL::DL_DISPLAY)
+       .cmd(CMD_SWAP)
+       .execute();
+
+    while(CLCD::is_touching()) {
+      #if defined(UI_FRAMEWORK_DEBUG)
+        SERIAL_ECHO_START();
+        SERIAL_ECHOLNPGM("Waiting for touch release");
+      #endif
+    }
+  }
+
+  // Force a refresh
+  cmd.cmd(CMD_DLSTART);
+  onRedraw(FOREGROUND);
+  cmd.cmd(DL::DL_DISPLAY);
+  cmd.execute();
 }
 
-void TouchCalibrationScreen::onRedraw(draw_mode_t what) {
+void TouchCalibrationScreen::onRefresh() {
+  // Don't do the regular refresh, as this would
+  // cause the calibration be restarted on every
+  // touch.
+}
+
+void TouchCalibrationScreen::onRedraw(draw_mode_t) {
   CommandProcessor cmd;
   cmd.cmd(CLEAR_COLOR_RGB(bg_color))
      .cmd(CLEAR(true,true,true))
-  #define GRID_COLS 4
-  #define GRID_ROWS 16
+     .cmd(COLOR_RGB(bg_text_enabled))
+
   #if defined(USE_PORTRAIT_ORIENTATION)
-    .font(font_large)
-    .text  ( BTN_POS(1,8), BTN_SIZE(4,1), F("Touch the dots"))
-    .text  ( BTN_POS(1,9), BTN_SIZE(4,1), F("to calibrate"))
+     .font(font_large)
+     .text  ( BTN_POS(1,8), BTN_SIZE(4,1), F("Touch the dots"))
+     .text  ( BTN_POS(1,9), BTN_SIZE(4,1), F("to calibrate"))
   #else
-    .font(
-      #if defined(LCD_800x480)
-        font_large
-      #else
-        font_medium
-      #endif
-    )
-    .text  ( BTN_POS(1,1), BTN_SIZE(4,16), F("Touch the dots to calibrate"))
+     .font(
+       #if defined(LCD_800x480)
+         font_large
+       #else
+         font_medium
+       #endif
+     )
+     .text  ( BTN_POS(1,1), BTN_SIZE(4,16), F("Touch the dots to calibrate"))
   #endif
-  #undef GRID_COLS
-  #undef GRID_ROWS
-    .cmd(CMD_CALIBRATE);
+     .cmd(CMD_CALIBRATE);
 }
 
 void TouchCalibrationScreen::onIdle() {
-  if(!CommandProcessor::is_processing()) {
+  if(!CLCD::is_touching() && !CommandProcessor::is_processing()) {
     GOTO_PREVIOUS();
   }
 }

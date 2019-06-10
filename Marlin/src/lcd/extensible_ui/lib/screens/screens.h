@@ -257,6 +257,7 @@ class TuneMenu : public BaseScreen, public CachedScreen<TUNE_SCREEN_CACHE> {
 
 class TouchCalibrationScreen : public BaseScreen, public UncachedScreen {
   public:
+    static void onRefresh();
     static void onEntry();
     static void onRedraw(draw_mode_t);
     static void onIdle();

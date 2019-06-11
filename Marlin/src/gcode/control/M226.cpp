@@ -33,25 +33,25 @@
    #define TEST_PIN(PIN) case PIN##_PIN: val = READ(PIN##_PIN) != PIN##_ENDSTOP_INVERTING; break
    switch(pin_number) {
     #if HAS_X_MIN
-     TEST_PIN(X_MIN)
+     TEST_PIN(X_MIN);
     #endif
     #if HAS_X_MAX
-     TEST_PIN(X_MAX)
+     TEST_PIN(X_MAX);
     #endif
     #if HAS_Y_MIN
-     TEST_PIN(Y_MIN)
+     TEST_PIN(Y_MIN);
     #endif
     #if HAS_Y_MAX
-     TEST_PIN(Y_MAX)
+     TEST_PIN(Y_MAX);
     #endif
     #if HAS_Z_MIN
-     TEST_PIN(Z_MIN)
+     TEST_PIN(Z_MIN);
     #endif
     #if HAS_Z_PROBE
-     TEST_PIN(Z_PROBE)
+     TEST_PIN(Z_PROBE);
     #endif
     #if HAS_Z_MAX
-     TEST_PIN(Z_MAX)
+     TEST_PIN(Z_MAX);
     #endif
     default: val = extDigitalRead(pin_number); break;
    }

@@ -544,7 +544,8 @@
 #define LULZBOT_NO_WORKSPACE_OFFSETS
 
 // Q&A wants to be able to use M226 on endstops switches
-#define LULZBOT_NO_PIN_PROTECTION_ON_M226
+#define LULZBOT_M226_PIN_PROTECTION_WORKAROUND
+#define LULZBOT_M226_NON_ARDUINO_PINS_WORKAROUND
 
 /************************* EXPERIMENTAL FEATURES ******************************/
 
@@ -589,7 +590,6 @@
     #define LULZBOT_CONTROLLER_FAN_PIN            FAN1_PIN
     #define LULZBOT_SERIAL_PORT                   -1
     #define LULZBOT_SPI_SPEED                     SPI_SIXTEENTH_SPEED
-    #define LULZBOT_M226_PINS_WORKAROUND
 
     #define LULZBOT_USB_INTR_PIN                  SD_DETECT_PIN
 

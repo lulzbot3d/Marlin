@@ -22,8 +22,16 @@
 
 #include "../../inc/MarlinConfigPre.h"
 
+/**
+ * Adjust USB_DEBUG to select debugging verbosity.
+ *    0 - no debug messages
+ *    1 - basic insertion/removal messages
+ *    2 - show USB state transitions
+ *    3 - perform block range checking
+ *    4 - print each block access
+ */
+#define USB_DEBUG         1
 #define USB_STARTUP_DELAY 0
-#define USB_DEBUG         0
 
 #if ENABLED(USB_FLASH_DRIVE_SUPPORT)
 
@@ -48,10 +56,15 @@ BulkOnly bulk(&usb);
 static enum {
   UNINITIALIZED,
   DO_STARTUP,
-  WAIT_FOR_INSERTION,
+  WAIT_FOR_DEVICE,
+  WAIT_FOR_LUN,
   MEDIA_READY,
   MEDIA_ERROR
 } state;
+
+#if USB_DEBUG >= 3
+  uint32_t lun0_capacity;
+#endif
 
 bool Sd2Card::usbStartup() {
   if(state <= DO_STARTUP) {
@@ -71,7 +84,7 @@ bool Sd2Card::usbStartup() {
       case 0x13: SERIAL_ECHOLNPGM("rev.03 started"); break;
       default:   SERIAL_ECHOLNPGM("started. rev unknown."); break;
     }
-    state = WAIT_FOR_INSERTION;
+    state = WAIT_FOR_DEVICE;
   }
   return true;
 }
@@ -86,7 +99,7 @@ void Sd2Card::idle() {
 
   const uint8_t task_state = usb.getUsbTaskState();
 
-  #ifdef USB_DEBUG
+  #if USB_DEBUG >= 2
     static uint8_t last_task_state = 0xFF;
     if(last_task_state != task_state) {
       last_task_state = task_state;
@@ -99,36 +112,63 @@ void Sd2Card::idle() {
   #define GOTO_STATE_AFTER_DELAY(STATE, DELAY) do {state = STATE; next_state_ms  = millis() + DELAY; } while(0)
 
   if(ELAPSED(millis(), next_state_ms)) {
-    next_state_ms = 250;
+    GOTO_STATE_AFTER_DELAY(state, 250); // Default delay
+
     switch(state) {
+
       case UNINITIALIZED:
         #ifndef LULZBOT_MANUAL_USB_STARTUP
           GOTO_STATE_AFTER_DELAY( DO_STARTUP, USB_STARTUP_DELAY );
         #endif
         break;
+
       case DO_STARTUP:
         usbStartup();
         break;
-      case WAIT_FOR_INSERTION:
+
+      case WAIT_FOR_DEVICE:
         if(task_state == USB_STATE_RUNNING) {
-          #ifdef USB_DEBUG
-            SERIAL_ECHOLNPGM("USB drive inserted");
+          #if USB_DEBUG >= 1
+            SERIAL_ECHOLNPGM("USB device inserted");
           #endif
-          GOTO_STATE_AFTER_DELAY( MEDIA_READY, 250 );
+          GOTO_STATE_AFTER_DELAY( WAIT_FOR_LUN, 250 );
         }
         break;
+
+      case WAIT_FOR_LUN:
+        /* USB device is inserted, but if it is an SD card,
+         * adapter it may not have an SD card in it yet. */
+        if(bulk.LUNIsGood(0)) {
+          GOTO_STATE_AFTER_DELAY( MEDIA_READY, 100 );
+        } else {
+          #ifdef USB_DEBUG >= 1
+            SERIAL_ECHOLNPGM("Waiting for media");
+          #endif
+          GOTO_STATE_AFTER_DELAY(state, 2000);
+        }
+        break;
+
       case MEDIA_READY:
         break;
+
       case MEDIA_ERROR:
         break;
     }
 
-    // Handle drive removal events
-    if(state > WAIT_FOR_INSERTION && task_state != USB_STATE_RUNNING) {
-      #ifdef USB_DEBUG
-        SERIAL_ECHOLNPGM("USB drive removed");
+    // Handle device removal events
+    if(state > WAIT_FOR_DEVICE && task_state != USB_STATE_RUNNING) {
+      #ifdef USB_DEBUG >= 1
+        SERIAL_ECHOLNPGM("USB device removed");
       #endif
-      GOTO_STATE_AFTER_DELAY( WAIT_FOR_INSERTION, 0 );
+      GOTO_STATE_AFTER_DELAY( WAIT_FOR_DEVICE, 0 );
+    }
+
+    // Handle media removal events
+    if(state > WAIT_FOR_LUN && !bulk.LUNIsGood(0)) {
+      #ifdef USB_DEBUG >= 1
+        SERIAL_ECHOLNPGM("USB media removed");
+      #endif
+      GOTO_STATE_AFTER_DELAY( WAIT_FOR_DEVICE, 0 );
     }
   }
 }
@@ -147,20 +187,15 @@ bool Sd2Card::ready() {
 bool Sd2Card::init(const uint8_t sckRateID/*=0*/, const pin_t chipSelectPin/*=SD_CHIP_SELECT_PIN*/) {
   if (!isInserted()) return false;
 
-  if(!bulk.LUNIsGood(0)) {
-    #ifdef USB_DEBUG
-      SERIAL_ECHOLNPGM("LUN is not good");
-    #endif
-    return false;
-  }
-
+  #if USB_DEBUG >= 1
   const uint32_t sectorSize = bulk.GetSectorSize(0);
   if (sectorSize != 512) {
     SERIAL_ECHOLNPAIR("Expecting sector size of 512. Got: ", sectorSize);
     return false;
   }
+  #endif
 
-  #ifdef USB_DEBUG
+  #if USB_DEBUG >= 3
     lun0_capacity = bulk.GetCapacity(0);
     SERIAL_ECHOLNPAIR("LUN Capacity (in blocks): ", lun0_capacity);
   #endif
@@ -170,7 +205,7 @@ bool Sd2Card::init(const uint8_t sckRateID/*=0*/, const pin_t chipSelectPin/*=SD
 // Returns the capacity of the card in blocks.
 uint32_t Sd2Card::cardSize() {
   if (!isInserted()) return false;
-  #ifndef USB_DEBUG
+  #if USB_DEBUG < 3
     const uint32_t
   #endif
       lun0_capacity = bulk.GetCapacity(0);
@@ -179,30 +214,26 @@ uint32_t Sd2Card::cardSize() {
 
 bool Sd2Card::readBlock(uint32_t block, uint8_t* dst) {
   if (!isInserted()) return false;
-  #ifdef USB_DEBUG
+  #if USB_DEBUG >= 3
     if (block >= lun0_capacity) {
       SERIAL_ECHOLNPAIR("Attempt to read past end of LUN: ", block);
       return false;
     }
-    #if USB_DEBUG > 1
+    #if USB_DEBUG >= 4
       SERIAL_ECHOLNPAIR("Read block ", block);
     #endif
   #endif
-  const bool ok = (bulk.Read(0, block, 512, 1, dst) == 0);
-  #if defined(LULZBOT_USB_READ_ERROR_IS_FATAL)
-  if(!ok) kill(PSTR("USB Read Error"));
-  #endif
-  return ok;
+  return bulk.Read(0, block, 512, 1, dst) == 0;
 }
 
 bool Sd2Card::writeBlock(uint32_t block, const uint8_t* src) {
   if (!isInserted()) return false;
-  #ifdef USB_DEBUG
+  #if USB_DEBUG >= 3
     if (block >= lun0_capacity) {
       SERIAL_ECHOLNPAIR("Attempt to write past end of LUN: ", block);
       return false;
     }
-    #if USB_DEBUG > 1
+    #if USB_DEBUG >= 4
       SERIAL_ECHOLNPAIR("Write block ", block);
     #endif
   #endif

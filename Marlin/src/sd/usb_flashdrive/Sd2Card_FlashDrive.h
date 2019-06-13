@@ -26,12 +26,6 @@
  * \brief Sd2Card class for V2 SD/SDHC cards
  */
 
-/* Uncomment USB_DEBUG to enable debugging.
- *    1 - basic debugging and bounds checking
- *    2 - print each block access
- */
-//#define USB_DEBUG 1
-
 #include "../SdFatConfig.h"
 #include "../SdInfo.h"
 
@@ -60,9 +54,6 @@
 class Sd2Card {
   private:
     uint32_t pos;
-    #ifdef USB_DEBUG
-      uint32_t lun0_capacity;
-    #endif
 
     static void usbStateDebug();
 

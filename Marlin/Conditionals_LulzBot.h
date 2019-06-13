@@ -238,7 +238,6 @@
     #define LULZBOT_SDSUPPORT
     #define LULZBOT_FILAMENT_RUNOUT_SENSOR
     #define LULZBOT_EEPROM_BACKUP_SIZE 1000
-    #define LULZBOT_USB_READ_ERROR_IS_FATAL
     #define LULZBOT_AXIS_LEVELING_USING_DUAL_Z_ENDSTOPS
     // Touch LCD configuration
     #define LULZBOT_USE_TOUCH_UI
@@ -331,7 +330,6 @@
     #define LCD_480x272
     #define LULZBOT_SDSUPPORT
     #define LULZBOT_USB_FLASH_DRIVE_SUPPORT
-    #define LULZBOT_USB_READ_ERROR_IS_FATAL
     #define LULZBOT_MANUAL_USB_STARTUP
 #endif
 
@@ -362,7 +360,6 @@
     #define LCD_480x272
     #define LULZBOT_SDSUPPORT
     #define LULZBOT_USB_FLASH_DRIVE_SUPPORT
-    #define LULZBOT_USB_READ_ERROR_IS_FATAL
     //#define LULZBOT_MANUAL_USB_STARTUP
 #endif
 
@@ -391,7 +388,6 @@
     #define LCD_480x272
     #define LULZBOT_SDSUPPORT
     #define LULZBOT_USB_FLASH_DRIVE_SUPPORT
-    #define LULZBOT_USB_READ_ERROR_IS_FATAL
 #endif
 
 #if defined(LULZBOT_GladiolaEinsyLCD_Experimental)
@@ -453,7 +449,6 @@
      * since EXP2 does not have 5V on pin 10 */
     #define LULZBOT_SDSUPPORT
     #define LULZBOT_USB_FLASH_DRIVE_SUPPORT
-    #define LULZBOT_USB_READ_ERROR_IS_FATAL
 #endif
 
 #if defined(LULZBOT_OliveoilArchim_Experimental)
@@ -520,7 +515,6 @@
      * since EXP2 does not have 5V on pin 10 */
     #define LULZBOT_SDSUPPORT
     //#define LULZBOT_USB_FLASH_DRIVE_SUPPORT
-    //#define LULZBOT_USB_READ_ERROR_IS_FATAL
 #endif
 
 /**************************** GENERAL CONFIGURATION *****************************/

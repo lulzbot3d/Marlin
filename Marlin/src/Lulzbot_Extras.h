@@ -30,6 +30,7 @@
       EnableProbePins() {enable(true);}
       ~EnableProbePins() {enable(false);}
   };
-#endif
 
-void lulzbot_startup(void);
+  extern "C" void LULZBOT_ON_REFLASH();
+  extern "C" void LULZBOT_ON_STARTUP();
+#endif

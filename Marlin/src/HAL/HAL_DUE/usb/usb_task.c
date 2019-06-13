@@ -109,6 +109,8 @@ void usb_task_cdc_set_dtr(const uint8_t port, const bool b_enable) {
     // We check DTR state to determine if host port is open (bit 0 of lineState).
     if (!b_enable) {
 
+      LULZBOT_ON_REFLASH();
+
       // Set RST pin to go low for 65535 clock cycles on reset
       //  This helps restarting when firmware flash ends
       RSTC->RSTC_MR = 0xA5000F01;

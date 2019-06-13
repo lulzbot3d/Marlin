@@ -1074,9 +1074,7 @@ void setup() {
     i2c.onRequest(i2c_on_request);
   #endif
 
-  #if defined(LULZBOT_STARTUP)
-    LULZBOT_STARTUP
-  #endif
+  LULZBOT_ON_STARTUP();
 
   #if DO_SWITCH_EXTRUDER
     move_extruder_servo(0);   // Initialize extruder servo

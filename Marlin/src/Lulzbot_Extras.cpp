@@ -23,13 +23,16 @@
 #include "module/endstops.h"
 #include "module/stepper_indirection.h"
 #include "gcode/gcode.h"
+#if ENABLED(LULZBOT_USE_TOUCH_UI)
+    #include "lcd/extensible_ui/lib/ftdi_eve_lib/basic/ftdi_basic.h"
+#endif
 #include "Lulzbot_Extras.h"
 
 /******************************** EMI MITIGATION *******************************/
 
 #define LULZBOT_EMI_SHUTOFF(pin)             SET_OUTPUT(pin); WRITE(pin, LOW);
 
-void lulzbot_startup(void) {
+void LULZBOT_ON_STARTUP(void) {
     EnableProbePins::enable(false);
 
     #if defined(LULZBOT_USE_ARCHIM2)
@@ -53,6 +56,12 @@ void lulzbot_startup(void) {
         #if defined(LULZBOT_IS_TAZ)
             GcodeSuite::process_subcommands_now_P(PSTR("G28 Z"));
         #endif
+    #endif
+}
+
+void LULZBOT_ON_REFLASH() {
+    #if ENABLED(LULZBOT_USE_TOUCH_UI)
+        CLCD::set_brightness(0);
     #endif
 }
 

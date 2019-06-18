@@ -141,7 +141,7 @@ void Sd2Card::idle() {
         if(bulk.LUNIsGood(0)) {
           GOTO_STATE_AFTER_DELAY( MEDIA_READY, 100 );
         } else {
-          #ifdef USB_DEBUG >= 1
+          #if USB_DEBUG >= 1
             SERIAL_ECHOLNPGM("Waiting for media");
           #endif
           GOTO_STATE_AFTER_DELAY(state, 2000);
@@ -157,7 +157,7 @@ void Sd2Card::idle() {
 
     // Handle device removal events
     if(state > WAIT_FOR_DEVICE && task_state != USB_STATE_RUNNING) {
-      #ifdef USB_DEBUG >= 1
+      #if USB_DEBUG >= 1
         SERIAL_ECHOLNPGM("USB device removed");
       #endif
       GOTO_STATE_AFTER_DELAY( WAIT_FOR_DEVICE, 0 );
@@ -165,7 +165,7 @@ void Sd2Card::idle() {
 
     // Handle media removal events
     if(state > WAIT_FOR_LUN && !bulk.LUNIsGood(0)) {
-      #ifdef USB_DEBUG >= 1
+      #if USB_DEBUG >= 1
         SERIAL_ECHOLNPGM("USB media removed");
       #endif
       GOTO_STATE_AFTER_DELAY( WAIT_FOR_DEVICE, 0 );

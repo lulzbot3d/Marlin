@@ -33,4 +33,7 @@
 
   extern "C" void LULZBOT_ON_REFLASH();
   extern "C" void LULZBOT_ON_STARTUP();
+#else
+  void LULZBOT_ON_REFLASH(void);
+  void LULZBOT_ON_STARTUP(void);
 #endif

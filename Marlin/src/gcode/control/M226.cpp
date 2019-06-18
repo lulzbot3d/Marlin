@@ -57,6 +57,7 @@
    }
    return val;
  }
+ #undef  extDigitalRead
  #define extDigitalRead _digitalRead
 #endif
 

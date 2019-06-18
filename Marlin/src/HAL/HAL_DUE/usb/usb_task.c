@@ -50,6 +50,8 @@
 #include <Arduino.h>
 #include <Reset.h>
 
+#include "../../../Lulzbot_Extras.h"
+
 #if ENABLED(SDSUPPORT)
   static volatile bool main_b_msc_enable = false;
 #endif

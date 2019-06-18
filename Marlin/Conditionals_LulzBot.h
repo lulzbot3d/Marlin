@@ -1227,7 +1227,7 @@
     #define LULZBOT_SWITCHING_NOZZLE_E1_SERVO_NR   1
     #define LULZBOT_SWITCHING_NOZZLE_SERVO_ANGLES  { 55,   120}
     #define LULZBOT_SWITCHING_NOZZLE_OPPOSING_SERVOS
-    #define LULZBOT_HOTEND_OFFSET_X                {0.0, 43}
+    #define LULZBOT_HOTEND_OFFSET_X                {0.0, 45}
     #define LULZBOT_HOTEND_OFFSET_Y                {0.0,  0}
     #define LULZBOT_E_STEPS                        420
     #define LULZBOT_X_MAX_ENDSTOP_INVERTING        LULZBOT_NO_ENDSTOP
@@ -1299,7 +1299,7 @@
 #elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT)
     #ifdef LULZBOT_CALIBRATE_ON_CUBE
         #define LULZBOT_CALIBRATION_OBJECT_DIMENSIONS              {  10.0,  10.0,  10.0} // mm
-        #define LULZBOT_CALIBRATION_OBJECT_CENTER                  { 264.0, -22.0,  -2.0} // mm
+        #define LULZBOT_CALIBRATION_OBJECT_CENTER                  { 261.0, -22.0,  -2.0} // mm
 
         #define LULZBOT_CALIBRATION_OBJECT_TOP_CENTER_MEASUREMENT
         #define LULZBOT_CALIBRATION_MEASURE_RIGHT
@@ -1518,10 +1518,10 @@
     #define LULZBOT_STANDARD_Y_BED_SIZE        280
 
 #elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT)
-    #define LULZBOT_STANDARD_X_MAX_POS         319
-    #define LULZBOT_STANDARD_X_MIN_POS          -7
-    #define LULZBOT_STANDARD_Y_MAX_POS         312
-    #define LULZBOT_STANDARD_Y_MIN_POS         -16
+    #define LULZBOT_STANDARD_X_MAX_POS         320
+    #define LULZBOT_STANDARD_X_MIN_POS          -6
+    #define LULZBOT_STANDARD_Y_MAX_POS         313
+    #define LULZBOT_STANDARD_Y_MIN_POS         -15
 
     #define LULZBOT_STANDARD_X_BED_SIZE        280
     #define LULZBOT_STANDARD_Y_BED_SIZE        280

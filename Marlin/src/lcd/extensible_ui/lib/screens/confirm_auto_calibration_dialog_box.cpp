@@ -31,9 +31,9 @@ using namespace Theme;
 
 void ConfirmAutoCalibrationDialogBox::onRedraw(draw_mode_t what) {
   drawMessage(
-    F("This process will adjust the"),
-    F("backlash and nozzle offsets."),
-    F("Continue with auto-calibration?"),
+    F("For best results, unload filament"),
+    F("and clean hotend prior to"),
+    F("starting calibration. Continue?"),
     font_small
   );
   drawYesNoButtons();

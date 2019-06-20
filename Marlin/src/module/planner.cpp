@@ -139,7 +139,7 @@ float Planner::steps_to_mm[XYZE_N];           // (mm) Millimeters per step
   #endif
 #endif
 
-#if ENABLED(ABORT_ON_ENDSTOP_HIT_FEATURE_ENABLED)
+#if ENABLED(SD_ABORT_ON_ENDSTOP_HIT)
   bool Planner::abort_on_endstop_hit = false;
 #endif
 
@@ -1303,7 +1303,8 @@ void Planner::check_axes_activity() {
         analogWrite(FAN2_PIN, CALC_FAN_SPEED(2));
       #endif
     #endif
-
+  #else
+    UNUSED(tail_fan_speed);
   #endif // FAN_COUNT > 0
 
   #if ENABLED(AUTOTEMP)

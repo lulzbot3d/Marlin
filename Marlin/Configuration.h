@@ -301,7 +301,7 @@
 #define HOTEND_OFFSET_X LULZBOT_HOTEND_OFFSET_X // (mm) relative X-offset for each nozzle
 #define HOTEND_OFFSET_Y LULZBOT_HOTEND_OFFSET_Y // (mm) relative Y-offset for each nozzle
 #endif
-//#define HOTEND_OFFSET_Z {0.0, 0.00}  // (mm) relative Z-offset for each nozzle
+//#define HOTEND_OFFSET_Z { 0.0, 0.00 }  // (mm) relative Z-offset for each nozzle
 
 // @section machine
 
@@ -656,11 +656,11 @@
  * A4988 is assumed for unspecified drivers.
  *
  * Options: A4988, A5984, DRV8825, LV8729, L6470, TB6560, TB6600, TMC2100,
- *          TMC2130, TMC2130_STANDALONE, TMC2208, TMC2208_STANDALONE,
+ *          TMC2130, TMC2130_STANDALONE, TMC2160, TMC2160_STANDALONE,
+ *          TMC2208, TMC2208_STANDALONE, TMC2209, TMC2209_STANDALONE,
  *          TMC26X,  TMC26X_STANDALONE,  TMC2660, TMC2660_STANDALONE,
- *          TMC2160, TMC2160_STANDALONE, TMC5130, TMC5130_STANDALONE,
- *          TMC5160, TMC5160_STANDALONE
- * :['A4988', 'A5984', 'DRV8825', 'LV8729', 'L6470', 'TB6560', 'TB6600', 'TMC2100', 'TMC2130', 'TMC2130_STANDALONE', 'TMC2160', 'TMC2160_STANDALONE', 'TMC2208', 'TMC2208_STANDALONE', 'TMC26X', 'TMC26X_STANDALONE', 'TMC2660', 'TMC2660_STANDALONE', 'TMC5130', 'TMC5130_STANDALONE', 'TMC5160', 'TMC5160_STANDALONE']
+ *          TMC5130, TMC5130_STANDALONE, TMC5160, TMC5160_STANDALONE
+ * :['A4988', 'A5984', 'DRV8825', 'LV8729', 'L6470', 'TB6560', 'TB6600', 'TMC2100', 'TMC2130', 'TMC2130_STANDALONE', 'TMC2160', 'TMC2160_STANDALONE', 'TMC2208', 'TMC2208_STANDALONE', 'TMC2209', 'TMC2209_STANDALONE', 'TMC26X', 'TMC26X_STANDALONE', 'TMC2660', 'TMC2660_STANDALONE', 'TMC5130', 'TMC5130_STANDALONE', 'TMC5160', 'TMC5160_STANDALONE']
  */
 #define X_DRIVER_TYPE  LULZBOT_X_DRIVER_TYPE
 #define Y_DRIVER_TYPE  LULZBOT_Y_DRIVER_TYPE
@@ -844,8 +844,8 @@
 /**
  * Z Servo Probe, such as an endstop switch on a rotating arm.
  */
-//#define Z_PROBE_SERVO_NR 0   // Defaults to SERVO 0 connector.
-//#define Z_SERVO_ANGLES {70,0}  // Z Servo Deploy and Stow angles
+//#define Z_PROBE_SERVO_NR 0       // Defaults to SERVO 0 connector.
+//#define Z_SERVO_ANGLES { 70, 0 } // Z Servo Deploy and Stow angles
 
 /**
  * The BLTouch probe uses a Hall effect sensor and emulates a servo.
@@ -921,10 +921,17 @@
 // Feedrate (mm/m) for the "accurate" probe of each point
 #define Z_PROBE_SPEED_SLOW LULZBOT_Z_PROBE_SPEED_SLOW
 
-// The number of probes to perform at each point.
-//   Set to 2 for a fast/slow probe, using the second probe result.
-//   Set to 3 or more for slow probes, averaging the results.
+/**
+ * Multiple Probing
+ *
+ * You may get improved results by probing 2 or more times.
+ * With EXTRA_PROBING the more atypical reading(s) will be disregarded.
+ *
+ * A total of 2 does fast/slow probes with a weighted average.
+ * A total of 3 or more adds more slow probes, taking the average.
+ */
 #define MULTIPLE_PROBING LULZBOT_MULTIPLE_PROBING
+//#define EXTRA_PROBING    1
 
 /**
  * Z probes require clearance when deploying, stowing, and moving between
@@ -1995,12 +2002,23 @@
 //
 //#define SILVER_GATE_GLCD_CONTROLLER
 
+//=============================================================================
+//========================== Extensible UI Displays ===========================
+//=============================================================================
+
 //
-// Extensible UI
+// DGUS Touch Display with DWIN OS
 //
-// Enable third-party or vendor customized user interfaces that aren't
-// packaged with Marlin. Source code for the user interface will need to
-// be placed in "src/lcd/extensible_ui/lib"
+//#define DGUS_LCD
+
+//
+// Touch-screen LCD for Malyan M200 printers
+//
+//#define MALYAN_LCD
+
+//
+// Third-party or vendor-customized controller interfaces.
+// Sources should be installed in 'src/lcd/extensible_ui'.
 //
 #define EXTENSIBLE_UI LULZBOT_EXTENSIBLE_UI
 
@@ -2016,15 +2034,6 @@
 //=============================================================================
 //============================  Other Controllers  ============================
 //=============================================================================
-
-//
-// CONTROLLER TYPE: Standalone / Serial
-//
-
-//
-// LCD for Malyan M200 printers.
-//
-//#define MALYAN_LCD
 
 //
 // CONTROLLER TYPE: Keypad / Add-on

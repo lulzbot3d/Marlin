@@ -43,10 +43,6 @@
   #include "../../module/probe.h"
 #endif
 
-#if ENABLED(BLTOUCH)
-  #include "../../feature/bltouch.h"
-#endif
-
 #include "../../lcd/ultralcd.h"
 
 #if HAS_DRIVER(L6470)                         // set L6470 absolute position registers to counts
@@ -243,7 +239,7 @@ void GcodeSuite::G28(const bool always_home_all) {
     #if DISABLED(DELTA) || ENABLED(DELTA_HOME_TO_SAFE_ZONE)
       const uint8_t old_tool_index = active_extruder;
     #endif
-    tool_change(0, 0, true);
+    tool_change(0, true);
   #endif
 
   #if HAS_DUPLICATION_MODE
@@ -266,6 +262,10 @@ void GcodeSuite::G28(const bool always_home_all) {
                doX = home_all || homeX, doY = home_all || homeY, doZ = home_all || homeZ;
 
     set_destination_from_current();
+
+    #if HAS_BED_PROBE
+      STOW_PROBE();
+    #endif
 
     #if Z_HOME_DIR > 0  // If homing away from BED do Z first
 
@@ -346,9 +346,6 @@ void GcodeSuite::G28(const bool always_home_all) {
     // Home Z last if homing towards the bed
     #if Z_HOME_DIR < 0
       if (doZ) {
-        #if ENABLED(BLTOUCH)
-          bltouch.init();
-        #endif
         #if ENABLED(Z_SAFE_HOMING)
           home_z_safely();
         #else
@@ -429,7 +426,7 @@ void GcodeSuite::G28(const bool always_home_all) {
     #else
       #define NO_FETCH true
     #endif
-    tool_change(old_tool_index, 0, NO_FETCH);
+    tool_change(old_tool_index, NO_FETCH);
   #endif
 
   ui.refresh();

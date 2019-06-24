@@ -22,8 +22,16 @@
 
 #pragma once
 
+#if !defined(CLCD_USE_SOFT_SPI)
+  #include <SPI.h>
+#endif
+
 namespace FTDI {
   namespace SPI {
+    #if !defined(CLCD_USE_SOFT_SPI)
+      extern SPISettings spi_settings;
+    #endif
+
     uint8_t  _soft_spi_xfer (uint8_t val);
     void     _soft_spi_send (uint8_t val);
 
@@ -38,8 +46,6 @@ namespace FTDI {
     inline uint8_t spi_recv() {
       #if defined(CLCD_USE_SOFT_SPI)
         return _soft_spi_xfer(0x00);
-      #elif defined(__MARLIN_FIRMWARE__)
-        return spiRec();
       #else
         return ::SPI.transfer(0x00);
       #endif
@@ -48,8 +54,6 @@ namespace FTDI {
     inline void spi_send (uint8_t val) {
       #if defined(CLCD_USE_SOFT_SPI)
         _soft_spi_send(val);
-      #elif defined(__MARLIN_FIRMWARE__)
-        spiSend(val);
       #else
         ::SPI.transfer(val);
       #endif

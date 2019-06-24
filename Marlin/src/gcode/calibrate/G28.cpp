@@ -39,7 +39,7 @@
   #include "../../feature/tmc_util.h"
 #endif
 
-#if HOMING_Z_WITH_PROBE || ENABLED(BLTOUCH)
+#if HAS_BED_PROBE
   #include "../../module/probe.h"
 #endif
 
@@ -263,7 +263,7 @@ void GcodeSuite::G28(const bool always_home_all) {
 
     set_destination_from_current();
 
-    #if HOMING_Z_WITH_PROBE || ENABLED(BLTOUCH)
+    #if HAS_BED_PROBE
       STOW_PROBE();
     #endif
 

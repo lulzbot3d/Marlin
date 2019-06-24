@@ -23,12 +23,12 @@
  * lib/usbhost.c". This has been rewritten to use SPI routines from the
  * Marlin HAL */
 
-#include "../../inc/MarlinConfigPre.h"
+#include "../../../inc/MarlinConfigPre.h"
 
-#if ENABLED(USB_FLASH_DRIVE_SUPPORT)
+#if ENABLED(USB_FLASH_DRIVE_SUPPORT) && !defined(LULZBOT_USB_USE_UHS3)
 
-#include "lib/Usb.h"
-#include "usb_host.h"
+#include "Usb.h"
+#include "usbhost.h"
 
 uint8_t MAX3421e::vbusState = 0;
 

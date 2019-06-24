@@ -263,7 +263,7 @@ void GcodeSuite::G28(const bool always_home_all) {
 
     set_destination_from_current();
 
-    #if HAS_BED_PROBE
+    #if HOMING_Z_WITH_PROBE || ENABLED(BLTOUCH)
       STOW_PROBE();
     #endif
 

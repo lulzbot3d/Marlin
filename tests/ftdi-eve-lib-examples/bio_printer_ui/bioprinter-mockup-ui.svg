@@ -11,7 +11,7 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   sodipodi:docname="button-outlines.svg"
+   sodipodi:docname="bioprinter-mockup-ui.svg"
    inkscape:version="0.92.1 r15371"
    id="svg8"
    version="1.1"
@@ -123,7 +123,7 @@
      inkscape:snap-global="false"
      inkscape:window-maximized="1"
      inkscape:window-y="31"
-     inkscape:window-x="0"
+     inkscape:window-x="1920"
      inkscape:window-height="971"
      inkscape:window-width="1920"
      units="px"
@@ -131,7 +131,7 @@
      inkscape:current-layer="layer1"
      inkscape:document-units="mm"
      inkscape:cy="237.84121"
-     inkscape:cx="132.37818"
+     inkscape:cx="15.420522"
      inkscape:zoom="1.5219183"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
@@ -153,7 +153,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -365,6 +365,25 @@
          id="path3684-9-4-1-8-8"
          d="m 91.383017,244.38862 h 5.29166 v 10.58333 h 2.645839 l -5.291669,5.29167 -5.29167,-5.29167 h 2.64584 z"
          style="display:inline;fill:url(#linearGradient4768);stroke:#000000;stroke-width:0.83418405;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    </g>
+    <g
+       transform="matrix(0.26458333,0,0,0.26458333,-5.618461,162.4856)"
+       id="g854"
+       style="display:inline">
+      <path
+         style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:8.48528099;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none"
+         d="m -104.03344,318.38925 c 0,0 0,-36.07537 0,-36.07537 -0.0864,-5.51044 -4.57677,-9.93296 -10.08789,-9.93555 0,0 -2e-5,0 -2e-5,0 -5.51036,0.004 -9.99951,4.42587 -10.08594,9.93555 0,0 0,4.13093 0,4.13093"
+         id="path39"
+         inkscape:connector-curvature="0" />
+      <rect
+         style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.14142136;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none"
+         id="rect850"
+         width="34.722221"
+         height="29.166666"
+         x="-131.48148"
+         y="297.59259"
+         ry="4"
+         rx="4" />
     </g>
   </g>
   <g

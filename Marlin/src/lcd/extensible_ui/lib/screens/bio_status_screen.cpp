@@ -29,6 +29,8 @@
 #include "../ftdi_eve_lib/extras/poly_ui.h"
 #include "bio_printer_ui.h"
 
+#define E_TRAVEL_LIMIT 60
+
 #define GRID_COLS 4
 #define GRID_ROWS 9
 
@@ -40,9 +42,32 @@ using namespace FTDI;
 using namespace Theme;
 using namespace ExtUI;
 
-static float increment;
+float StatusScreen::increment;
+bool  StatusScreen::jog_xy;
+
+void StatusScreen::unlockMotors() {
+  enqueueCommands_P(PSTR("M84 XY"));
+  jog_xy = false;
+}
+
+static void buttonsEnabled(PolyUI &ui, bool enabled, uint8_t shadow = 5) {
+  if(!enabled) {
+    ui.button_fill  (shadow_rgb);
+    ui.button_stroke(shadow_rgb, 28);
+    ui.button_shadow(shadow_rgb, 0);
+  } else {
+    ui.button_fill  (fill_rgb);
+    ui.button_stroke(stroke_rgb, 28);
+    ui.button_shadow(shadow_rgb, shadow);
+  }
+}
 
 void StatusScreen::onRedraw(draw_mode_t what) {
+  int16_t x, y, h, v;
+  const float fill_level = 1.0 - min(1.0, max(0.0, getAxisPosition_mm(E0) / E_TRAVEL_LIMIT));
+  const bool  e_homed = isAxisPositionKnown(E0);
+  const bool  z_homed = isAxisPositionKnown(Z);
+
   CommandProcessor cmd;
   cmd.cmd(CLEAR_COLOR_RGB(bg_color));
   cmd.cmd(CLEAR(true,true,true));
@@ -54,35 +79,55 @@ void StatusScreen::onRedraw(draw_mode_t what) {
 
   // Paint the shadow for the syringe
   ui.color(shadow_rgb);
-  ui.shadow(POLY(syringe_outline), 5);
+  ui.shadow(POLY(syringe_outline), e_homed ? 5 : 0);
 
   // Paint the syring icon
-  ui.color(syringe_rgb);
+  ui.color(e_homed ? syringe_rgb : shadow_rgb);
   ui.fill(POLY(syringe_outline));
-  ui.color(fill_rgb);
-  ui.fill(POLY(syringe_fluid));
-  ui.color(stroke_rgb);
+
+  ui.color(e_homed ? fill_rgb : shadow_rgb);
+  ui.bounds(POLY(syringe_fluid), x, y, h, v);
+  cmd.cmd(SAVE_CONTEXT());
+  cmd.cmd(SCISSOR_XY(x,y + v * (1.0 - fill_level)));
+  cmd.cmd(SCISSOR_SIZE(h,  v *        fill_level));
+  ui.fill(POLY(syringe_fluid), false);
+  cmd.cmd(RESTORE_CONTEXT());
+
+  ui.color(e_homed ? stroke_rgb : shadow_rgb);
   ui.fill(POLY(syringe));
 
   // Draw the arrow push buttons
 
-  ui.button_fill  (fill_rgb);
-  ui.button_stroke(stroke_rgb, 28);
-  ui.button_shadow(shadow_rgb, 5);
-
+  buttonsEnabled(ui, jog_xy);
   ui.button(1, POLY(x_neg));
   ui.button(2, POLY(x_pos));
   ui.button(3, POLY(y_neg));
   ui.button(4, POLY(y_pos));
+
+  buttonsEnabled(ui, z_homed);
   ui.button(5, POLY(z_neg));
   ui.button(6, POLY(z_pos));
+
+  buttonsEnabled(ui, e_homed);
   ui.button(7, POLY(e_neg));
   ui.button(8, POLY(e_pos));
+
+  buttonsEnabled(ui, true, 0);
+  if(!jog_xy) {
+    ui.button(12, POLY(padlock));
+  }
+
+  if(!e_homed) {
+    ui.button(13, POLY(home_e));
+  }
+
+  if(!z_homed) {
+    ui.button(14, POLY(home_z));
+  }
 
   // Overlay FTDI buttons over the polygons
   // for the buttons
 
-  int16_t x, y, h, v;
   ui.bounds(POLY(usb_btn), x, y, h, v);
 
   const bool has_media = isMediaInserted() && !isPrintingFromMedia();
@@ -116,6 +161,16 @@ void StatusScreen::onRedraw(draw_mode_t what) {
 bool StatusScreen::onTouchEnd(uint8_t tag) {
   increment = 0.5;
   switch(tag) {
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 12:
+      if(!jog_xy) {
+        jog_xy = true;
+        enqueueCommands_P(PSTR("M17"));
+      }
+      break;
     case 9:
       #if ENABLED(USB_FLASH_DRIVE_SUPPORT) && defined(LULZBOT_MANUAL_USB_STARTUP)
       if(!Sd2Card::ready()) {
@@ -128,7 +183,9 @@ bool StatusScreen::onTouchEnd(uint8_t tag) {
         GOTO_SCREEN(FilesScreen);
       #endif
       break;
-    case 10: GOTO_SCREEN(MainMenu);    break;
+    case 10: GOTO_SCREEN(MainMenu); break;
+    case 13: enqueueCommands_P(PSTR("G112"));  break;
+    case 14: enqueueCommands_P(PSTR("G28 Z")); break;
     default: return false;
   }
   // If a passcode is enabled, the LockScreen will prevent the
@@ -138,6 +195,7 @@ bool StatusScreen::onTouchEnd(uint8_t tag) {
 }
 
 bool StatusScreen::onTouchHeld(uint8_t tag) {
+  if(tag >= 1 && tag <= 4 && !jog_xy) return false;
   if(ExtUI::isMoving()) return false; // Don't allow moves to accumulate
   #define UI_INCREMENT_AXIS(axis) MoveAxisScreen::setManualFeedrate(axis, increment); UI_INCREMENT(AxisPosition_mm, axis);
   #define UI_DECREMENT_AXIS(axis) MoveAxisScreen::setManualFeedrate(axis, increment); UI_DECREMENT(AxisPosition_mm, axis);
@@ -156,6 +214,7 @@ bool StatusScreen::onTouchHeld(uint8_t tag) {
   #undef UI_INCREMENT_AXIS
   if(increment < 10)
     increment += 0.5;
+  current_screen.onRefresh();
   return false;
 }
 
@@ -174,6 +233,11 @@ void StatusScreen::setStatusMessage(const char * const message) {
 void StatusScreen::onIdle() {
   if(isPrintingFromMedia())
     BioPrintingDialogBox::show();
+
+  if(refresh_timer.elapsed(STATUS_UPDATE_INTERVAL)) {
+    onRefresh();
+    refresh_timer.start();
+  }
 }
 
 #endif // EXTENSIBLE_UI

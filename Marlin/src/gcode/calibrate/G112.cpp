@@ -54,6 +54,9 @@ static void home_e() {
   // Set E position to zero
   current_position[E_AXIS] = 0;
   sync_plan_position();
+
+  SBI(axis_known_position, E_AXIS);
+  SBI(axis_homed, E_AXIS);
 }
 
 /**

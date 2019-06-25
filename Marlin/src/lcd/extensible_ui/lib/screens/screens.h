@@ -221,7 +221,13 @@ class StatusScreen : public BaseScreen, public CachedScreen<STATUS_SCREEN_CACHE,
 };
 #else
   class StatusScreen : public BaseScreen, public UncachedScreen {
+    private:
+      static float increment;
+      static bool  jog_xy;
+
     public:
+      static void unlockMotors();
+
       static void setStatusMessage(const char *);
       static void setStatusMessage(progmem_str);
 

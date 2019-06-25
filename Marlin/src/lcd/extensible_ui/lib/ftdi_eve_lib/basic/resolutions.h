@@ -71,7 +71,7 @@
 
 #elif defined(LCD_480x272)
   namespace FTDI {
-    constexpr uint8_t  Pclk                 =    6;
+    constexpr uint8_t  Pclk                 =    7;
     constexpr uint8_t  Pclkpol              =    1;
     constexpr uint16_t Hsize                =  480;
     constexpr uint16_t Vsize                =  272;

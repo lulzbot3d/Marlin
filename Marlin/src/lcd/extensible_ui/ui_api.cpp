@@ -104,7 +104,7 @@ inline float clamp(const float value, const float minimum, const float maximum) 
 static struct {
   uint8_t printer_killed  : 1;
   uint8_t manual_motion : 1;
-} flags;
+} flags = {0,0};
 
 namespace ExtUI {
   #ifdef __SAM3X8E__
@@ -766,6 +766,10 @@ namespace ExtUI {
 
   bool isAxisPositionKnown(const axis_t axis) {
     return TEST(axis_known_position, axis);
+  }
+
+  bool isAxisPositionKnown(const extruder_t) {
+    return TEST(axis_known_position, E_AXIS);
   }
 
   bool isPositionKnown() { return all_axes_known(); }

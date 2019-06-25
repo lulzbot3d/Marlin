@@ -857,6 +857,7 @@
 #if defined(LULZBOT_IS_MINI)
     #define LULZBOT_EXTRUDER_MOTOR_SHUTOFF_ON_PROBE(probing) \
         if(probing) { \
+            planner.synchronize(); \
             disable_E0(); \
         } else { \
             enable_E0(); \

@@ -145,7 +145,7 @@ void Sd2Card::idle() {
       static uint8_t laststate = 232;
       if(task_state != laststate) {
         laststate = task_state;
-        #define UHS_USB_DEBUG(x) case x: SERIAL_ECHOLNPGM(UHS_STATE(x)); break
+        #define UHS_USB_DEBUG(x) case UHS_STATE(x): SERIAL_ECHOLNPGM(#x); break
         switch(task_state) {
           UHS_USB_DEBUG(IDLE);
           UHS_USB_DEBUG(RESET_DEVICE);

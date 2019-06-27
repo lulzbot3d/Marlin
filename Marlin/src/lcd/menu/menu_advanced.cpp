@@ -43,6 +43,11 @@
   #include "../../module/temperature.h"
 #endif
 
+#ifdef FILAMENT_RUNOUT_DISTANCE_MM
+  #include "../../feature/runout.h"
+  float lcd_runout_distance_mm;
+#endif
+
 void menu_tmc();
 void menu_backlash();
 
@@ -96,7 +101,7 @@ void menu_backlash();
   // Set the home offset based on the current_position
   //
   void _lcd_set_home_offsets() {
-    enqueue_and_echo_commands_P(PSTR("M428"));
+    queue.inject_P(PSTR("M428"));
     ui.return_to_status();
   }
 #endif
@@ -214,6 +219,12 @@ void menu_backlash();
       #endif // EXTRUDERS > 1
     #endif
 
+    #ifdef FILAMENT_RUNOUT_DISTANCE_MM
+      MENU_ITEM_EDIT_CALLBACK(float3, MSG_RUNOUT_DISTANCE_MM, &lcd_runout_distance_mm, 1, 30, []{
+        runout.set_runout_distance(lcd_runout_distance_mm);
+      });
+    #endif
+
     END_MENU();
   }
 
@@ -244,7 +255,7 @@ void menu_backlash();
         autotune_temp[e]
       #endif
     );
-    lcd_enqueue_command(cmd);
+    lcd_enqueue_one_now(cmd);
   }
 
 #endif // PID_AUTOTUNE_MENU
@@ -603,6 +614,9 @@ void menu_backlash();
 #endif // !SLIM_LCD_MENUS
 
 void menu_advanced_settings() {
+  #ifdef FILAMENT_RUNOUT_DISTANCE_MM
+    lcd_runout_distance_mm = runout.runout_distance();
+  #endif
   START_MENU();
   MENU_BACK(MSG_CONFIGURATION);
 
@@ -674,7 +688,7 @@ void menu_advanced_settings() {
   #endif
 
   // M540 S - Abort on endstop hit when SD printing
-  #if ENABLED(ABORT_ON_ENDSTOP_HIT_FEATURE_ENABLED)
+  #if ENABLED(SD_ABORT_ON_ENDSTOP_HIT)
     MENU_ITEM_EDIT(bool, MSG_ENDSTOP_ABORT, &planner.abort_on_endstop_hit);
   #endif
 

@@ -432,6 +432,10 @@ void menu_motion() {
   #endif
       MENU_ITEM(submenu, MSG_MOVE_AXIS, menu_move);
 
+  #if defined(LULZBOT_MENU_AXIS_LEVELING_COMMANDS)
+    MENU_ITEM(gcode, _UxGT("Level X axis"), PSTR(LULZBOT_MENU_AXIS_LEVELING_COMMANDS));
+  #endif
+
   //
   // Auto Home
   //
@@ -442,8 +446,8 @@ void menu_motion() {
     MENU_ITEM(gcode, MSG_AUTO_HOME_Z, PSTR("G28 Z"));
   #endif
 
-  #if defined(LULZBOT_MENU_AXIS_LEVELING_COMMANDS)
-    MENU_ITEM(gcode, _UxGT("Level X Axis"), PSTR(LULZBOT_MENU_AXIS_LEVELING_COMMANDS));
+  #if ENABLED(LULZBOT_CALIBRATION_GCODE) && defined(LULZBOT_CALIBRATION_SCRIPT)
+    MENU_ITEM(gcode, _UxGT("Auto calibrate"), PSTR(LULZBOT_CALIBRATION_SCRIPT));
   #endif
 
   //
@@ -481,10 +485,6 @@ void menu_motion() {
 
   #if ENABLED(LEVEL_BED_CORNERS) && DISABLED(LCD_BED_LEVELING)
     MENU_ITEM(function, MSG_LEVEL_CORNERS, _lcd_level_bed_corners);
-  #endif
-
-  #if ENABLED(LULZBOT_CALIBRATION_GCODE) && defined(LULZBOT_CALIBRATION_SCRIPT)
-    MENU_ITEM(gcode, _UxGT("Auto-calibrate"), PSTR(LULZBOT_CALIBRATION_SCRIPT));
   #endif
 
   //

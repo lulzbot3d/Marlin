@@ -336,7 +336,7 @@
 #if defined(LULZBOT_KangarooPaw_Experimental)
     #define LULZBOT_CUSTOM_MACHINE_NAME "KangarooPaw"
     #define LULZBOT_LCD_MACHINE_NAME "KangarooPaw"
-    #define LULZBOT_NO_HEATERS
+    #define LULZBOT_NO_EXTRUDER_HEATER
     #define LULZBOT_IS_MINI
     #define LULZBOT_MINI_BED
     #define LULZBOT_USE_AUTOLEVELING
@@ -422,9 +422,7 @@
     #define LULZBOT_IS_MINI
     #define LULZBOT_USE_EINSY_RETRO
     #define LULZBOT_MINI_BED
-    //#define LULZBOT_NO_HEATERS
     #define LULZBOT_USE_Z_SCREW
-    //#define LULZBOT_USE_PORTRAIT_UI
     #define LULZBOT_USE_AUTOLEVELING
     #define LULZBOT_BACKLASH_COMPENSATION
     #define LULZBOT_CALIBRATION_GCODE
@@ -490,9 +488,7 @@
     #define LULZBOT_IS_MINI
     #define LULZBOT_USE_EINSY_RETRO
     #define LULZBOT_MINI_BED
-    //#define LULZBOT_NO_HEATERS
     #define LULZBOT_USE_Z_SCREW
-    //#define LULZBOT_USE_PORTRAIT_UI
     #define LULZBOT_USE_AUTOLEVELING
     #define LULZBOT_BACKLASH_COMPENSATION
     #define LULZBOT_CALIBRATION_GCODE
@@ -1332,17 +1328,15 @@
 
 /*************************** TEMPERATURE SETTINGS *****************************/
 
-#if defined(LULZBOT_NO_HEATERS)
-    #define LULZBOT_TEMP_SENSOR_0                        5
-    #define LULZBOT_TEMP_SENSOR_BED                      0
+#if defined(LULZBOT_NO_EXTRUDER_HEATER)
     #define LULZBOT_EXTRUDE_MINTEMP                      0
 #else
-    #define LULZBOT_TEMP_SENSOR_0                        5
-    #define LULZBOT_TEMP_SENSOR_BED                      7
-
     #define LULZBOT_PREVENT_COLD_EXTRUSION
     #define LULZBOT_EXTRUDE_MINTEMP                    120
 #endif
+
+#define LULZBOT_TEMP_SENSOR_0                        5
+#define LULZBOT_TEMP_SENSOR_BED                      7
 
 #define LULZBOT_TEMP_RESIDENCY_TIME                  1
 #define LULZBOT_TEMP_HYSTERESIS                     10

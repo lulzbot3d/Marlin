@@ -400,7 +400,7 @@ void GcodeSuite::process_parsed_command(const bool no_ok/*=false*/) {
         case 100: M100(); break;                                  // M100: Free Memory Report
       #endif
 
-      #if !defined(LULZBOT_NO_HEATERS)
+      #if !defined(LULZBOT_NO_EXTRUDER_HEATER)
       case 104: M104(); break;                                    // M104: Set hot end temperature
       case 109: M109(); break;                                    // M109: Wait for hotend temperature to reach target
       #endif
@@ -427,7 +427,7 @@ void GcodeSuite::process_parsed_command(const bool no_ok/*=false*/) {
         case 113: M113(); break;                                  // M113: Set Host Keepalive interval
       #endif
 
-      #if HAS_HEATED_BED && !defined(LULZBOT_NO_HEATERS)
+      #if HAS_HEATED_BED
         case 140: M140(); break;                                  // M140: Set bed temperature
         case 190: M190(); break;                                  // M190: Wait for bed temperature to reach target
       #endif

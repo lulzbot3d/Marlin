@@ -20,6 +20,7 @@
  ****************************************************************************/
 
 #include "Marlin.h"
+#include "module/planner.h"
 #include "module/endstops.h"
 #include "module/stepper_indirection.h"
 #include "gcode/gcode.h"

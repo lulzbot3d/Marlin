@@ -198,6 +198,7 @@
 #define BOARD_BIGTREE_SKR_V1_3        1761  // BIGTREE SKR_V1.3 (Power outputs: Hotend0, Hotend1, Fan, Bed)
 #define BOARD_AZTEEG_X5_MINI          1762  // Azteeg X5 Mini (Power outputs: Hotend0, Bed, Fan)
 #define BOARD_MKS_SGEN                1763  // MKS-SGen (Power outputs: Hotend0, Hotend1, Bed, Fan)
+#define BOARD_MKS_SGEN_L              1764  // MKS-SGen-L (Power outputs: Hotend0, Hotend1, Bed, Fan)
 
 //
 // SAM3X8E ARM Cortex M3
@@ -250,6 +251,8 @@
 #define BOARD_MKS_ROBIN_MINI          1813  // MKS Robin Mini / STM32F103VET6
 #define BOARD_BIGTREE_SKR_MINI_V1_1   1814  // STM32F103RC
 #define BOARD_JGAURORA_A5S_A1         1820  // JGAurora A5S A1 / STM32F103ZET6
+#define BOARD_FYSETC_AIO_II           1890  // FYSETC AIO_II
+#define BOARD_FYSETC_CHEETAH          1891  // FYSETC CHEETAH
 
 //
 // STM32 ARM Cortex-M4F

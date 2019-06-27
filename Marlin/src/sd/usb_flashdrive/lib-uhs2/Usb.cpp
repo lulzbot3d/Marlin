@@ -26,7 +26,7 @@
 
 #include "../../../inc/MarlinConfigPre.h"
 
-#if ENABLED(USB_FLASH_DRIVE_SUPPORT)
+#if ENABLED(USB_FLASH_DRIVE_SUPPORT) && !defined(LULZBOT_USB_USE_UHS3)
 
 #include "Usb.h"
 
@@ -46,7 +46,7 @@ void USB::init() {
 }
 
 uint8_t USB::getUsbTaskState(void) {
-  return ( usb_task_state);
+  return usb_task_state;
 }
 
 void USB::setUsbTaskState(uint8_t state) {

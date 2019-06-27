@@ -6,7 +6,16 @@ uint32_t TMC2130Stepper::spi_speed = 16000000/8;
 TMC2130Stepper::TMC2130Stepper(uint16_t pinCS, float RS) :
   TMCStepper(RS),
   _pinCS(pinCS)
-  {}
+  { defaults(); }
+
+TMC2130Stepper::TMC2130Stepper(uint16_t pinCS, uint16_t pinMOSI, uint16_t pinMISO, uint16_t pinSCK) :
+  TMCStepper(default_RS),
+  _pinCS(pinCS)
+  {
+    SW_SPIClass *SW_SPI_Obj = new SW_SPIClass(pinMOSI, pinMISO, pinSCK);
+    TMC_SW_SPI = SW_SPI_Obj;
+    defaults();
+  }
 
 TMC2130Stepper::TMC2130Stepper(uint16_t pinCS, float RS, uint16_t pinMOSI, uint16_t pinMISO, uint16_t pinSCK) :
   TMCStepper(RS),
@@ -14,14 +23,27 @@ TMC2130Stepper::TMC2130Stepper(uint16_t pinCS, float RS, uint16_t pinMOSI, uint1
   {
     SW_SPIClass *SW_SPI_Obj = new SW_SPIClass(pinMOSI, pinMISO, pinSCK);
     TMC_SW_SPI = SW_SPI_Obj;
+    defaults();
   }
+
+void TMC2130Stepper::defaults() {
+  //MSLUT0_register.sr = ???;
+  //MSLUT1_register.sr = ???;
+  //MSLUT2_register.sr = ???;
+  //MSLUT3_register.sr = ???;
+  //MSLUT4_register.sr = ???;
+  //MSLUT5_register.sr = ???;
+  //MSLUT6_register.sr = ???;
+  //MSLUT7_register.sr = ???;
+  //MSLUTSTART_register.start_sin90 = 247;
+  PWMCONF_register.sr = 0x00050480;
+}
 
 void TMC2130Stepper::setSPISpeed(uint32_t speed) {
   spi_speed = speed;
 }
 
 void TMC2130Stepper::switchCSpin(bool state) {
-  // Allows for overriding in child class to make use of fast io
   digitalWrite(_pinCS, state);
 }
 
@@ -122,6 +144,7 @@ void TMC2130Stepper::push() {
   VDCMIN(VDCMIN_register.sr);
   CHOPCONF(CHOPCONF_register.sr);
   COOLCONF(COOLCONF_register.sr);
+  DCCTRL(DCCTRL_register.sr);
   PWMCONF(PWMCONF_register.sr);
   ENCM_CTRL(ENCM_CTRL_register.sr);
 }
@@ -170,6 +193,33 @@ uint32_t TMC2130Stepper::VDCMIN() { return VDCMIN_register.sr; }
 void TMC2130Stepper::VDCMIN(uint32_t input) {
   VDCMIN_register.sr = input;
   write(VDCMIN_register.address, VDCMIN_register.sr);
+}
+///////////////////////////////////////////////////////////////////////////////////////
+// RW: DCCTRL
+void TMC2130Stepper::DCCTRL(uint32_t input) {
+	DCCTRL_register.sr = input;
+	write(DCCTRL_register.address, DCCTRL_register.sr);
+}
+void TMC2130Stepper::dc_time(uint16_t input) {
+	DCCTRL_register.dc_time = input;
+	write(DCCTRL_register.address, DCCTRL_register.sr);
+}
+void TMC2130Stepper::dc_sg(uint8_t input) {
+	DCCTRL_register.dc_sg = input;
+	write(DCCTRL_register.address, DCCTRL_register.sr);
+}
+
+uint32_t TMC2130Stepper::DCCTRL() {
+	DCCTRL_register.sr = read(DCCTRL_register.address);
+	return DCCTRL_register.sr;
+}
+uint16_t TMC2130Stepper::dc_time() {
+	DCCTRL();
+	return DCCTRL_register.dc_time;
+}
+uint8_t TMC2130Stepper::dc_sg() {
+	DCCTRL();
+	return DCCTRL_register.dc_sg;
 }
 ///////////////////////////////////////////////////////////////////////////////////////
 // R: PWM_SCALE

@@ -22,6 +22,7 @@
 #pragma once
 
 #include "../ultralcd.h"
+#include "../../libs/numtostr.h"
 #include "../../inc/MarlinConfig.h"
 
 #include "limits.h"
@@ -374,8 +375,8 @@ void _lcd_draw_homing();
 #endif
 
 #if ANY(AUTO_BED_LEVELING_UBL, PID_AUTOTUNE_MENU, ADVANCED_PAUSE_FEATURE)
-  void lcd_enqueue_command(const char * const cmd);
-  void lcd_enqueue_commands_P(PGM_P const cmd);
+  void lcd_enqueue_one_now(const char * const cmd);
+  void lcd_enqueue_one_now_P(PGM_P const cmd);
 #endif
 
 #if ENABLED(LEVEL_BED_CORNERS)

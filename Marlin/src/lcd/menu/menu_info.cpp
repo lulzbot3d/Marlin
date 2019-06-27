@@ -28,6 +28,10 @@
 
 #if HAS_LCD_MENU && ENABLED(LCD_INFO_MENU)
 
+#if HAS_GAMES
+  #include "game/game.h"
+#endif
+
 #include "menu.h"
 // #include "../../module/motion.h"
 // #include "../../module/planner.h"
@@ -259,9 +263,10 @@ void menu_info() {
 
   #if ENABLED(PRINTCOUNTER)
     MENU_ITEM(submenu, MSG_INFO_STATS_MENU, menu_info_stats);          // Printer Stats >
+  #else
+    MENU_ITEM_DUMMY();
   #endif
-
-  #if ANY(MARLIN_BRICKOUT, MARLIN_INVADERS, MARLIN_SNAKE)
+  #if HAS_GAMES
     MENU_ITEM_DUMMY();
     MENU_ITEM_DUMMY();
     MENU_ITEM(submenu, MSG_GAMES, (
@@ -278,7 +283,6 @@ void menu_info() {
       #endif
     ));
   #endif
-
   END_MENU();
 }
 

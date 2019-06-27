@@ -27,6 +27,10 @@
 /********************************* SPI Functions *********************************/
 
 namespace FTDI {
+  #if !defined(CLCD_USE_SOFT_SPI)
+    SPISettings SPI::spi_settings(SPI_FREQUENCY, MSBFIRST, SPI_MODE0);
+  #endif
+
   void SPI::spi_init (void) {
     SET_OUTPUT(CLCD_MOD_RESET); // Module Reset (a.k.a. PD, not SPI)
     WRITE(CLCD_MOD_RESET, 0); // start with module in power-down
@@ -47,9 +51,8 @@ namespace FTDI {
       WRITE(CLCD_SOFT_SPI_SCLK, 0);
 
       SET_INPUT_PULLUP(CLCD_SOFT_SPI_MISO);
-    #elif defined(__MARLIN_FIRMWARE__)
-      spiBegin();
-      spiInit(SPI_SPEED);
+    #else
+      ::SPI.begin();
     #endif
   }
 
@@ -101,8 +104,8 @@ namespace FTDI {
 
   void SPI::spi_read_bulk (void *data, uint16_t len) {
     uint8_t* p = (uint8_t *)data;
-    #if defined(__MARLIN_FIRMWARE__) && !defined(CLCD_USE_SOFT_SPI)
-      spiRead(p, len);
+    #if !defined(CLCD_USE_SOFT_SPI)
+      ::SPI.transfer(p, len);
     #else
       while(len--) *p++ = spi_recv();
     #endif
@@ -116,9 +119,8 @@ namespace FTDI {
 
   // CLCD SPI - Chip Select
   void SPI::spi_ftdi_select (void) {
-    #if !defined(CLCD_USE_SOFT_SPI) && !defined(__MARLIN_FIRMWARE__)
-      ::SPI.begin();
-      ::SPI.beginTransaction(SPISettings(14000000, MSBFIRST, SPI_MODE0));
+    #if !defined(CLCD_USE_SOFT_SPI)
+      ::SPI.beginTransaction(spi_settings);
     #endif
     WRITE(CLCD_SPI_CS, 0);
     delayMicroseconds(1);
@@ -127,15 +129,17 @@ namespace FTDI {
   // CLCD SPI - Chip Deselect
   void SPI::spi_ftdi_deselect (void) {
     WRITE(CLCD_SPI_CS, 1);
-    #if !defined(CLCD_USE_SOFT_SPI) && !defined(__MARLIN_FIRMWARE__)
+    #if !defined(CLCD_USE_SOFT_SPI)
       ::SPI.endTransaction();
-      ::SPI.end();
     #endif
   }
 
   #if defined(SPI_FLASH_SS)
   // Serial SPI Flash SPI - Chip Select
   void SPI::spi_flash_select () {
+    #if !defined(CLCD_USE_SOFT_SPI)
+    ::SPI.beginTransaction(spi_settings);
+    #endif
     WRITE(SPI_FLASH_SS, 0);
     delayMicroseconds(1);
   }
@@ -143,6 +147,9 @@ namespace FTDI {
   // Serial SPI Flash SPI - Chip Deselect
   void SPI::spi_flash_deselect () {
     WRITE(SPI_FLASH_SS, 1);
+    #if !defined(CLCD_USE_SOFT_SPI)
+    ::SPI.endTransaction();
+    #endif
   }
   #endif
 

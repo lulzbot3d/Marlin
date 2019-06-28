@@ -1,6 +1,6 @@
-/**************************
- * spinner_dialog_box.cpp *
- **************************/
+/****************************
+ * bio_confirm_home_xyz.cpp *
+ ****************************/
 
 /****************************************************************************
  *   Written By Mark Pelletier  2017 - Aleph Objects, Inc.                  *
@@ -25,38 +25,35 @@
 #if ENABLED(EXTENSIBLE_UI)
 
 #include "screens.h"
-#include "screen_data.h"
 
 using namespace FTDI;
-using namespace ExtUI;
 
-void SpinnerDialogBox::onRedraw(draw_mode_t what) {
+void BioConfirmHomeXYZ::onRedraw(draw_mode_t what) {
+  drawMessage(
+    F("About to re-home. Ensure"),
+    F("top and bed of the printer"),
+    F("is clear. Continue?")
+  );
+  drawYesNoButtons();
 }
 
-void SpinnerDialogBox::show(const progmem_str line1, const progmem_str line2, const progmem_str line3) {
-  drawMessage(line1, line2, line3);
-  drawSpinner();
-  storeBackground();
-  screen_data.SpinnerDialogBox.auto_hide = false;
-}
-
-void SpinnerDialogBox::hide() {
-  CommandProcessor cmd;
-  cmd.stop().execute();
-}
-
-void SpinnerDialogBox::enqueueAndWait_P(PGM_P const commands) {
-  GOTO_SCREEN(SpinnerDialogBox);
-  ExtUI::enqueueCommands_P(commands);
-  screen_data.SpinnerDialogBox.auto_hide = true;
-}
-
-void SpinnerDialogBox::onIdle() {
-  if(screen_data.SpinnerDialogBox.auto_hide && !commandsInQueue()) {
-    screen_data.SpinnerDialogBox.auto_hide = false;
-    hide();
-    GOTO_PREVIOUS();
+bool BioConfirmHomeXYZ::onTouchEnd(uint8_t tag) {
+  switch(tag) {
+    case 1:
+      SpinnerDialogBox::show(F("Please wait..."));
+      SpinnerDialogBox::enqueueAndWait_P(PSTR(
+        "G28 X Y Z\n"             /* Home all axis */
+        "G0 X115 Z50 F6000"       /* Move to park position */
+      ));
+      // Change the screen we will return to
+      current_screen.forget();
+      PUSH_SCREEN(BioConfirmHomeE);
+      break;
+    case 2:
+      GOTO_SCREEN(StatusScreen);
+      return true;
+    default:
+      return DialogBoxBaseClass::onTouchEnd(tag);
   }
 }
-
 #endif // EXTENSIBLE_UI

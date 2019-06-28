@@ -197,8 +197,11 @@ class ConfirmUserRequestAlertBox : public AlertDialogBox {
 class SpinnerDialogBox : public DialogBoxBaseClass, public CachedScreen<SPINNER_CACHE,SPINNER_DL_SIZE> {
   public:
     static void onRedraw(draw_mode_t);
+    static void onIdle();
+
     static void show(const progmem_str, const progmem_str = 0, const progmem_str = 0);
     static void hide();
+    static void enqueueAndWait_P(PGM_P const);
 };
 
 #if !defined(LULZBOT_USE_BIOPRINTER_UI)
@@ -225,12 +228,14 @@ class StatusScreen : public BaseScreen, public CachedScreen<STATUS_SCREEN_CACHE,
       static float increment;
       static bool  jog_xy;
 
+      static void draw_temperature(draw_mode_t what);
     public:
       static void unlockMotors();
 
       static void setStatusMessage(const char *);
       static void setStatusMessage(progmem_str);
 
+      static void onStartup();
       static void onRedraw(draw_mode_t);
       static bool onTouchHeld(uint8_t tag);
       static bool onTouchEnd(uint8_t tag);
@@ -245,6 +250,18 @@ class StatusScreen : public BaseScreen, public CachedScreen<STATUS_SCREEN_CACHE,
       static void show();
 
       static void onIdle();
+      static bool onTouchEnd(uint8_t tag);
+  };
+
+  class BioConfirmHomeXYZ : public DialogBoxBaseClass, public UncachedScreen {
+    public:
+      static void onRedraw(draw_mode_t);
+      static bool onTouchEnd(uint8_t tag);
+  };
+
+  class BioConfirmHomeE : public DialogBoxBaseClass, public UncachedScreen {
+    public:
+      static void onRedraw(draw_mode_t);
       static bool onTouchEnd(uint8_t tag);
   };
 #endif

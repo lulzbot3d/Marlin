@@ -73,7 +73,11 @@ void BootScreen::onIdle() {
       if(!MediaPlayerScreen::playBootMedia())
         showSplashScreen();
     }
-    GOTO_SCREEN(StatusScreen);
+    #if defined(LULZBOT_USE_BIOPRINTER_UI)
+      GOTO_SCREEN(BioConfirmHomeXYZ);
+    #else
+      GOTO_SCREEN(StatusScreen);
+    #endif
   }
 }
 

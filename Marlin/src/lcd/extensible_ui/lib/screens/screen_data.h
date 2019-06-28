@@ -30,6 +30,7 @@ union screen_data_t {
   struct {uint8_t volume; uint8_t brightness;} InterfaceSettingsScreen;
   struct {char passcode[5];}                   LockScreen;
   struct {bool isError;}                       AlertDialogBox;
+  struct {bool auto_hide;}                     SpinnerDialogBox;
   struct {
     uint8_t e_tag, t_tag, repeat_tag;
     ExtUI::extruder_t saved_extruder;

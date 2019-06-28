@@ -31,8 +31,8 @@
 
 #define E_TRAVEL_LIMIT 60
 
-#define GRID_COLS 4
-#define GRID_ROWS 9
+#define GRID_COLS 2
+#define GRID_ROWS 10
 
 #if ENABLED(SDSUPPORT) && defined(LULZBOT_MANUAL_USB_STARTUP)
   #include "../../../../sd/cardreader.h"
@@ -62,6 +62,44 @@ static void buttonsEnabled(PolyUI &ui, bool enabled, uint8_t shadow = 5) {
   }
 }
 
+void StatusScreen::draw_temperature(draw_mode_t what) {
+  CommandProcessor cmd;
+  cmd.tag(15);
+
+  if(what & BACKGROUND) {
+    // Draw Bed Heat Bitmap on Bed Heat Button
+    cmd.cmd(COLOR_RGB(bg_color))
+       .rectangle( BTN_POS(1,2), BTN_SIZE(1,3))
+       .cmd(COLOR_RGB(bg_text_enabled))
+       .cmd(BITMAP_SOURCE(Bed_Heat_Icon_Info))
+       .cmd(BITMAP_LAYOUT(Bed_Heat_Icon_Info))
+       .cmd(BITMAP_SIZE  (Bed_Heat_Icon_Info))
+       .icon (BTN_POS(1,3), BTN_SIZE(1,1), Bed_Heat_Icon_Info, icon_scale * 2);
+  }
+
+  if(what & FOREGROUND) {
+    char bed_str[15];
+
+    cmd.font(font_xlarge)
+       .cmd(COLOR_RGB(bg_text_enabled));
+
+    if(!isHeaterIdle(BED) && getTargetTemp_celsius(BED) > 0) {
+      sprintf_P(bed_str, PSTR("%-3d C"), ROUND(getTargetTemp_celsius(BED)));
+
+      cmd.text(BTN_POS(1,2), BTN_SIZE(1,1), bed_str);
+    }
+
+    sprintf_P(bed_str, PSTR("%-3d C"), ROUND(getActualTemp_celsius(BED)));
+    cmd.text(BTN_POS(1,4), BTN_SIZE(1,1), bed_str);
+  }
+}
+
+void StatusScreen::onStartup() {
+  // Load the bitmaps for the status screen
+  constexpr uint32_t base = ftdi_memory_map::RAM_G;
+  CLCD::mem_write_pgm(base + Bed_Heat_Icon_Info.RAMG_offset, Bed_Heat_Icon, sizeof(Bed_Heat_Icon));
+}
+
 void StatusScreen::onRedraw(draw_mode_t what) {
   int16_t x, y, h, v;
   const float fill_level = 1.0 - min(1.0, max(0.0, getAxisPosition_mm(E0) / E_TRAVEL_LIMIT));
@@ -72,6 +110,8 @@ void StatusScreen::onRedraw(draw_mode_t what) {
   cmd.cmd(CLEAR_COLOR_RGB(bg_color));
   cmd.cmd(CLEAR(true,true,true));
   cmd.tag(0);
+
+  draw_temperature(what);
 
   #define POLY(A) PolyUI::poly_reader_t(A, sizeof(A)/sizeof(A[0]))
 
@@ -186,6 +226,7 @@ bool StatusScreen::onTouchEnd(uint8_t tag) {
     case 10: GOTO_SCREEN(MainMenu); break;
     case 13: enqueueCommands_P(PSTR("G112"));  break;
     case 14: enqueueCommands_P(PSTR("G28 Z")); break;
+    case 15: GOTO_SCREEN(TemperatureScreen);   break;
     default: return false;
   }
   // If a passcode is enabled, the LockScreen will prevent the

@@ -1330,6 +1330,7 @@
 
 #if defined(LULZBOT_NO_EXTRUDER_HEATER)
     #define LULZBOT_EXTRUDE_MINTEMP                      0
+    #define FAN_PIN                                     -1
 #else
     #define LULZBOT_PREVENT_COLD_EXTRUSION
     #define LULZBOT_EXTRUDE_MINTEMP                    120

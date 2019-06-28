@@ -242,11 +242,19 @@ namespace ExtUI {
   }
 
   float getTargetFan_percent(const fan_t fan) {
-    return thermalManager.fanPercent(thermalManager.fan_speed[fan - FAN0]);
+    #if FAN_COUNT > 0
+      return thermalManager.fanPercent(thermalManager.fan_speed[fan - FAN0]);
+    #else
+      return 0;
+    #endif
   }
 
   float getActualFan_percent(const fan_t fan) {
+    #if FAN_COUNT > 0
     return thermalManager.fanPercent((thermalManager.fan_speed[fan - FAN0] * uint16_t(thermalManager.fan_speed_scaler[fan - FAN0])) >> 7);
+    #else
+      return 0;
+    #endif
   }
 
   float getAxisPosition_mm(const axis_t axis) {
@@ -780,7 +788,7 @@ namespace ExtUI {
     queue.inject_P(gcode);
   }
 
-  bool commandsInQueue() { return (planner.movesplanned() || queue.length); }
+  bool commandsInQueue() { return (planner.movesplanned() || queue.has_commands_queued()); }
 
   bool isAxisPositionKnown(const axis_t axis) {
     return TEST(axis_known_position, axis);
@@ -818,8 +826,10 @@ namespace ExtUI {
   }
 
   void setTargetFan_percent(const float value, const fan_t fan) {
-    if (fan < FAN_COUNT)
-      thermalManager.set_fan_speed(fan - FAN0, map(clamp(value, 0, 100), 0, 100, 0, 255));
+    #if FAN_COUNT > 0
+      if (fan < FAN_COUNT)
+        thermalManager.set_fan_speed(fan - FAN0, map(clamp(value, 0, 100), 0, 100, 0, 255));
+    #endif
   }
 
   void setFeedrate_percent(const float value) {

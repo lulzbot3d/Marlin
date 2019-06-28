@@ -496,12 +496,14 @@ void CLCD::CommandFifo::number (int16_t x, int16_t y, int16_t font, uint16_t opt
     int32_t  type = CMD_NUMBER;
     int16_t  x;
     int16_t  y;
+    int16_t  font;
     uint16_t options;
     int16_t n;
   } cmd_data;
 
   cmd_data.x       = x;
   cmd_data.y       = y;
+  cmd_data.font    = font;
   cmd_data.options = options;
   cmd_data.n       = n;
 

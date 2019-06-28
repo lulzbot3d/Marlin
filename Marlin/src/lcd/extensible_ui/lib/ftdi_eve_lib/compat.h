@@ -199,4 +199,13 @@
   #define SERIAL_ECHOPAIR(str, val)   {Serial.print(F(str)); Serial.print(val);}
 
   #define safe_delay delay
+
+  // Remove compiler warning on an unused variable
+  #ifndef UNUSED
+    #if defined(ARDUINO_ARCH_STM32) && !defined(STM32GENERIC)
+      #define UNUSED(X) (void)X
+    #else
+      #define UNUSED(x) ((void)(x))
+    #endif
+  #endif
 #endif //!defined(__MARLIN_FIRMWARE__)

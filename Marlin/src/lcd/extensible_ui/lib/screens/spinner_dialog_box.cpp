@@ -30,7 +30,7 @@
 using namespace FTDI;
 using namespace ExtUI;
 
-void SpinnerDialogBox::onRedraw(draw_mode_t what) {
+void SpinnerDialogBox::onRedraw(draw_mode_t) {
 }
 
 void SpinnerDialogBox::show(const progmem_str line1, const progmem_str line2, const progmem_str line3) {

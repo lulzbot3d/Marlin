@@ -105,10 +105,12 @@ namespace ExtUI {
       if(success && InterfaceSettingsScreen::backupEEPROM()) {
         SERIAL_ECHOLNPGM("Made backup of EEPROM to SPI Flash");
       }
+    #else
+      UNUSED(success);
     #endif
   }
 
-  void onConfigurationStoreRead(bool success) {
+  void onConfigurationStoreRead(bool) {
   }
 
   void onPlayTone(const uint16_t frequency, const uint16_t duration) {

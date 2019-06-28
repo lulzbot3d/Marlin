@@ -29,7 +29,7 @@
 using namespace FTDI;
 using namespace Theme;
 
-void TouchRegistersScreen::onRedraw(draw_mode_t what) {
+void TouchRegistersScreen::onRedraw(draw_mode_t) {
    const uint32_t T_Transform_A = CLCD::mem_read_32(CLCD::REG::TOUCH_TRANSFORM_A);
    const uint32_t T_Transform_B = CLCD::mem_read_32(CLCD::REG::TOUCH_TRANSFORM_B);
    const uint32_t T_Transform_C = CLCD::mem_read_32(CLCD::REG::TOUCH_TRANSFORM_C);

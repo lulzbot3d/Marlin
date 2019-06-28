@@ -47,7 +47,7 @@ class CommandProcessor : public CLCD::CommandFifo {
     static constexpr uint8_t STYLE_DISABLED = 0x80;
 
   private:
-    static bool default_button_style_func(CommandProcessor &cmd, uint8_t tag, uint8_t &style, uint16_t &options, bool post) {
+    static bool default_button_style_func(CommandProcessor &, uint8_t tag, uint8_t & /*style*/, uint16_t &options, bool) {
       if(tag != 0 && FTDI::EventLoop::get_pressed_tag() == tag) {
         options = FTDI::OPT_FLAT;
       }

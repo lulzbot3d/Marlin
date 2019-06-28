@@ -117,7 +117,7 @@ void MoveAxisScreen::setManualFeedrate(ExtUI::axis_t axis, float increment_mm) {
   ExtUI::setFeedrate_mm_s(getManualFeedrate(X_AXIS + (axis - ExtUI::X), increment_mm));
 }
 
-void MoveAxisScreen::setManualFeedrate(ExtUI::extruder_t extruder, float increment_mm) {
+void MoveAxisScreen::setManualFeedrate(ExtUI::extruder_t, float increment_mm) {
   ExtUI::setFeedrate_mm_s(getManualFeedrate(E_AXIS, increment_mm));
 }
 

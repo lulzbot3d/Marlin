@@ -30,7 +30,7 @@ using namespace ExtUI;
 
 bool SaveSettingsDialogBox::needs_save = false;
 
-void SaveSettingsDialogBox::onRedraw(draw_mode_t what) {
+void SaveSettingsDialogBox::onRedraw(draw_mode_t) {
   drawMessage(
     F("Do you wish to save these"),
     F("settings as defaults?")

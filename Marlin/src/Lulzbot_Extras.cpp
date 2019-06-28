@@ -104,7 +104,7 @@ void LULZBOT_ON_REFLASH() {
 
 #else
 
-     void EnableProbePins::enable(const bool enable) {
+     void EnableProbePins::enable(const bool) {
      }
 
 #endif

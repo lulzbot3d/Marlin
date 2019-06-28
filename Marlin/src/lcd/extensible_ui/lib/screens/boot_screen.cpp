@@ -37,7 +37,7 @@
 
 using namespace FTDI;
 
-void BootScreen::onRedraw(draw_mode_t what) {
+void BootScreen::onRedraw(draw_mode_t) {
   CommandProcessor cmd;
   cmd.cmd(CLEAR_COLOR_RGB(0x000000));
   cmd.cmd(CLEAR(true,true,true));

@@ -38,7 +38,7 @@ void AboutScreen::onEntry() {
   sound.play(chimes, PLAY_ASYNCHRONOUS);
 }
 
-void AboutScreen::onRedraw(draw_mode_t what) {
+void AboutScreen::onRedraw(draw_mode_t) {
   CommandProcessor cmd;
   cmd.cmd(CLEAR_COLOR_RGB(bg_color))
      .cmd(CLEAR(true,true,true))

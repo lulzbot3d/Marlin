@@ -35,7 +35,7 @@ using namespace Theme;
 #define GRID_COLS 2
 #define GRID_ROWS 9
 
-void BioPrintingDialogBox::onRedraw(draw_mode_t what) {
+void BioPrintingDialogBox::onRedraw(draw_mode_t) {
   const uint32_t elapsed = getProgress_seconds_elapsed();
   const uint8_t hrs = elapsed/3600;
   const uint8_t min = (elapsed/60)%60;

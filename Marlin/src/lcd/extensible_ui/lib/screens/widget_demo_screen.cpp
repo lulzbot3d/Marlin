@@ -39,7 +39,7 @@ void WidgetsScreen::onEntry() {
   SoundPlayer::set_volume(255);
 }
 
-void WidgetsScreen::onRedraw(draw_mode_t what) {
+void WidgetsScreen::onRedraw(draw_mode_t) {
   using namespace ExtUI;
   CommandProcessor cmd;
   cmd.cmd(CLEAR_COLOR_RGB(bg_color))

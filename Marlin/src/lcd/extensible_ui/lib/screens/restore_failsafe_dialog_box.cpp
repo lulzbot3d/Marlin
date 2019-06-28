@@ -28,7 +28,7 @@
 
 using namespace ExtUI;
 
-void RestoreFailsafeDialogBox::onRedraw(draw_mode_t what) {
+void RestoreFailsafeDialogBox::onRedraw(draw_mode_t) {
   drawMessage(
     F("Are you sure?"),
     F("Customizations will be lost.")

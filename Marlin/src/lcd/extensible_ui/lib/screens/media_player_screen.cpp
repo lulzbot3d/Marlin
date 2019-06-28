@@ -54,7 +54,7 @@ void MediaPlayerScreen::onEntry() {
   SoundPlayer::set_volume(255);
 }
 
-void MediaPlayerScreen::onRedraw(draw_mode_t what) {
+void MediaPlayerScreen::onRedraw(draw_mode_t) {
 }
 
 bool MediaPlayerScreen::playCardMedia() {

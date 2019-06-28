@@ -44,7 +44,7 @@ void EndstopStatesScreen::onExit() {
   #endif
 }
 
-void EndstopStatesScreen::onRedraw(draw_mode_t what) {
+void EndstopStatesScreen::onRedraw(draw_mode_t) {
   CommandProcessor cmd;
   cmd.cmd(CLEAR_COLOR_RGB(bg_color))
      .cmd(COLOR_RGB(bg_text_enabled))

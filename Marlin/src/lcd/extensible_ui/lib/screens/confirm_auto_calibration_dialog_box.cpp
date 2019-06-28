@@ -29,7 +29,7 @@
 using namespace ExtUI;
 using namespace Theme;
 
-void ConfirmAutoCalibrationDialogBox::onRedraw(draw_mode_t what) {
+void ConfirmAutoCalibrationDialogBox::onRedraw(draw_mode_t) {
   drawMessage(
     F("For best results, unload filament"),
     F("and clean hotend prior to"),

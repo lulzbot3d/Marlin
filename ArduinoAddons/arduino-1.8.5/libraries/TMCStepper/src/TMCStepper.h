@@ -788,11 +788,11 @@ class TMC5161Stepper : public TMC5160Stepper {
 
 class TMC2208Stepper : public TMCStepper {
 	public:
-		TMC2208Stepper(Stream * SerialPort, float RS, bool has_rx=true) :
+		TMC2208Stepper(Stream * SerialPort, float RS, __attribute__((unused)) bool has_rx=true) :
 			TMC2208Stepper(SerialPort, RS, TMC2208_SLAVE_ADDR)
 			{}
 		#if SW_CAPABLE_PLATFORM
-			TMC2208Stepper(uint16_t SW_RX_pin, uint16_t SW_TX_pin, float RS, bool has_rx=true) :
+			TMC2208Stepper(uint16_t SW_RX_pin, uint16_t SW_TX_pin, float RS, bool has_rx = true) :
 				TMC2208Stepper(SW_RX_pin, SW_TX_pin, RS, TMC2208_SLAVE_ADDR, has_rx)
 				{}
 		#endif

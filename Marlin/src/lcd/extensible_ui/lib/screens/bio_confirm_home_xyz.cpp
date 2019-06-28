@@ -22,13 +22,13 @@
 
 #include "../config.h"
 
-#if ENABLED(EXTENSIBLE_UI)
+#if ENABLED(EXTENSIBLE_UI) && defined(LULZBOT_USE_BIOPRINTER_UI)
 
 #include "screens.h"
 
 using namespace FTDI;
 
-void BioConfirmHomeXYZ::onRedraw(draw_mode_t what) {
+void BioConfirmHomeXYZ::onRedraw(draw_mode_t) {
   drawMessage(
     F("About to re-home. Ensure"),
     F("top and bed of the printer"),
@@ -51,9 +51,10 @@ bool BioConfirmHomeXYZ::onTouchEnd(uint8_t tag) {
       break;
     case 2:
       GOTO_SCREEN(StatusScreen);
-      return true;
+      break;
     default:
       return DialogBoxBaseClass::onTouchEnd(tag);
   }
+  return true;
 }
 #endif // EXTENSIBLE_UI

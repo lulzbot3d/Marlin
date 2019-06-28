@@ -93,7 +93,7 @@ void BaseNumericAdjustmentScreen::widgets_t::heading(const char *label) {
   #endif
 #endif
 
-void BaseNumericAdjustmentScreen::widgets_t::_draw_increment_btn(uint8_t line, const uint8_t tag) {
+void BaseNumericAdjustmentScreen::widgets_t::_draw_increment_btn(uint8_t, const uint8_t tag) {
   CommandProcessor  cmd;
   const char        *label = PSTR("?");
   uint8_t            pos;

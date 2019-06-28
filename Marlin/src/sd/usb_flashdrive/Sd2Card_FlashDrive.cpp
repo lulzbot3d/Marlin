@@ -264,7 +264,7 @@ bool Sd2Card::ready() {
 }
 
 // Marlin calls this to initialize an SD card once it is inserted.
-bool Sd2Card::init(const uint8_t sckRateID/*=0*/, const pin_t chipSelectPin/*=SD_CHIP_SELECT_PIN*/) {
+bool Sd2Card::init(const uint8_t, const pin_t) {
   if (!isInserted()) return false;
 
   #if USB_DEBUG >= 1

@@ -28,7 +28,7 @@
 
 using namespace ExtUI;
 
-void ConfirmAbortPrintDialogBox::onRedraw(draw_mode_t what) {
+void ConfirmAbortPrintDialogBox::onRedraw(draw_mode_t) {
   drawMessage(
     F("Are you sure you want"),
     F("to cancel the print?")

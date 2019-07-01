@@ -32,6 +32,7 @@
 
    Universal Toolheads (Mini/Mini 2/TAZ):
       CecropiaSilk_SingleExtruderAeroV2 // SE  | 0.5 mm (Aero v2)
+      Goldenrod_HardenedExtruder        // HE  | 0.5 mm
       AchemonSphinx_SmallLayer          // SL  | 0.25 mm (Micro)
       BandedTiger_HardenedSteel         // HS  | 0.8 mm
       DingyCutworm_HardenedSteelPlus    // HS+ | 1.2 mm

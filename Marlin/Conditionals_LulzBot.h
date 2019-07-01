@@ -100,6 +100,7 @@
     !defined(TOOLHEAD_Albatross_Flexystruder) && \
     !defined(TOOLHEAD_Finch_Aerostruder) && \
     !defined(TOOLHEAD_CecropiaSilk_SingleExtruderAeroV2) && \
+    !defined(TOOLHEAD_Goldenrod_HardenedExtruder) && \
     !defined(TOOLHEAD_AchemonSphinx_SmallLayer) && \
     !defined(TOOLHEAD_BandedTiger_HardenedSteel) && \
     !defined(TOOLHEAD_DingyCutworm_HardenedSteelPlus) && \
@@ -924,7 +925,7 @@
 
 /**************************** MINI TOOLHEADS ***********************************/
 
-#if defined(TOOLHEAD_Gladiola_SingleExtruder) || defined(TOOLHEAD_Albatross_Flexystruder) || defined(TOOLHEAD_Finch_Aerostruder) || defined(TOOLHEAD_CecropiaSilk_SingleExtruderAeroV2) || defined(TOOLHEAD_AchemonSphinx_SmallLayer) || defined(TOOLHEAD_BandedTiger_HardenedSteel) || defined(TOOLHEAD_DingyCutworm_HardenedSteelPlus)
+#if defined(TOOLHEAD_Gladiola_SingleExtruder) || defined(TOOLHEAD_Albatross_Flexystruder) || defined(TOOLHEAD_Finch_Aerostruder) || defined(TOOLHEAD_CecropiaSilk_SingleExtruderAeroV2) || defined(TOOLHEAD_AchemonSphinx_SmallLayer) || defined(TOOLHEAD_BandedTiger_HardenedSteel) || defined(TOOLHEAD_DingyCutworm_HardenedSteelPlus) || defined(TOOLHEAD_Goldenrod_HardenedExtruder)
 
     #define LULZBOT_EXTRUDERS                  1
     #define LULZBOT_TOOLHEAD_X_MAX_ADJ         0
@@ -937,6 +938,7 @@
     #if defined(LULZBOT_USE_EINSY_RETRO) || \
         defined(LULZBOT_USE_ARCHIM2) || \
         defined(TOOLHEAD_CecropiaSilk_SingleExtruderAeroV2) || \
+        defined(TOOLHEAD_Goldenrod_HardenedExtruder) || \
         defined(TOOLHEAD_AchemonSphinx_SmallLayer) || \
         defined(TOOLHEAD_BandedTiger_HardenedSteel) || \
         defined(TOOLHEAD_DingyCutworm_HardenedSteelPlus)
@@ -1147,6 +1149,16 @@
     #define LULZBOT_E_STEPS                        420
     #define LULZBOT_UNIVERSAL_MOUNT
 #endif /* TOOLHEAD_CecropiaSilk_SingleExtruderAeroV2 */
+
+#if defined(TOOLHEAD_Goldenrod_HardenedExtruder)
+    #define LULZBOT_LCD_TOOLHEAD_NAME              "HE 0.5mm"
+//          16 chars max                            ^^^^^^^^^^^^^^^
+    #define LULZBOT_M115_EXTRUDER_TYPE             "HardenedExtruder"
+    #define LULZBOT_X_MAX_ENDSTOP_INVERTING        LULZBOT_NORMALLY_CLOSED_ENDSTOP
+    #define LULZBOT_E3D_Titan_Aero_V6
+    #define LULZBOT_E_STEPS                        420
+    #define LULZBOT_UNIVERSAL_MOUNT
+#endif /* TOOLHEAD_Goldenrod_HardenedExtruder */
 
 #if defined(TOOLHEAD_AchemonSphinx_SmallLayer)
     #define LULZBOT_LCD_TOOLHEAD_NAME              "SL 0.25mm Micro"

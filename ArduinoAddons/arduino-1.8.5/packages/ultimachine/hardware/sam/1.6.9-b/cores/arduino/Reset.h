@@ -24,8 +24,8 @@ extern "C" {
 #endif
 
 void initiateReset(int ms);
-void tickReset();
-void cancelReset();
+void tickReset(void);
+void cancelReset(void);
 
 #ifdef __cplusplus
 }

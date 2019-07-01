@@ -288,12 +288,7 @@
     #define LULZBOT_USE_NORMALLY_CLOSED_ENDSTOPS
     #define LULZBOT_USE_Z_BELT
     #define LULZBOT_BACKLASH_COMPENSATION
-    #ifndef TOOLHEAD_Yellowfin_DualExtruderV3
-        // The nozzles on the yellowfin are too close together
-        // to run the calibration routine on the cube
-        #define LULZBOT_HAS_CALIBRATION_CUBE
-        #define LULZBOT_CALIBRATION_GCODE
-    #endif
+    #define LULZBOT_CALIBRATION_GCODE
     #define LULZBOT_BAUDRATE 250000
     #define LULZBOT_PRINTCOUNTER
     #define LULZBOT_MACHINE_UUID "fd546ced-5941-44e4-8d17-5d494bfc2ca3"
@@ -1126,6 +1121,12 @@
         #define LULZBOT_NO_MOVE_ON_TOOLHEAD_CHANGE
         #define LULZBOT_EXTRUDER_FAN_ON_PIN_6 // For backwards compatibility with TAZ 4
         #define LULZBOT_X_MAX_ENDSTOP_INVERTING LULZBOT_NORMALLY_CLOSED_ENDSTOP
+    #endif
+    #ifdef TOOLHEAD_Yellowfin_DualExtruderV3
+        // The nozzles on Yellowfin are too close together
+        // to run the calibration routine on the cube
+        #undef LULZBOT_HAS_CALIBRATION_CUBE
+        #undef LULZBOT_CALIBRATION_GCODE
     #endif
     // Adjust so left nozzle probes on the left washers;
     // right nozzles on the right nozzle.

@@ -61,9 +61,9 @@ bool MainMenu::onTouchEnd(uint8_t tag) {
 
   switch(tag) {
     case 1: SaveSettingsDialogBox::promptToSaveSettings();                 break;
-    case 2: enqueueCommands_P(PSTR("G112"));                               break;
-    case 3: enqueueCommands_P(PSTR("G28"));                                break;
-    case 4: enqueueCommands_P(PSTR(LULZBOT_MENU_AXIS_LEVELING_COMMANDS));  break;
+    case 2: injectCommands_P(PSTR("G112"));                               break;
+    case 3: injectCommands_P(PSTR("G28"));                                break;
+    case 4: injectCommands_P(PSTR(LULZBOT_MENU_AXIS_LEVELING_COMMANDS));  break;
     case 5: StatusScreen::unlockMotors();                                  break;
     case 6: GOTO_SCREEN(InterfaceSettingsScreen);                          break;
     case 7: GOTO_SCREEN(AdvancedSettingsMenu);                             break;

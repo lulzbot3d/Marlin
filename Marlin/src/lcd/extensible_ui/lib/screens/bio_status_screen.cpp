@@ -46,7 +46,7 @@ float StatusScreen::increment;
 bool  StatusScreen::jog_xy;
 
 void StatusScreen::unlockMotors() {
-  enqueueCommands_P(PSTR("M84 XY"));
+  injectCommands_P(PSTR("M84 XY"));
   jog_xy = false;
 }
 
@@ -208,7 +208,7 @@ bool StatusScreen::onTouchEnd(uint8_t tag) {
     case 12:
       if(!jog_xy) {
         jog_xy = true;
-        enqueueCommands_P(PSTR("M17"));
+        injectCommands_P(PSTR("M17"));
       }
       break;
     case 9:
@@ -224,8 +224,8 @@ bool StatusScreen::onTouchEnd(uint8_t tag) {
       #endif
       break;
     case 10: GOTO_SCREEN(MainMenu); break;
-    case 13: enqueueCommands_P(PSTR("G112"));  break;
-    case 14: enqueueCommands_P(PSTR("G28 Z")); break;
+    case 13: injectCommands_P(PSTR("G112"));  break;
+    case 14: injectCommands_P(PSTR("G28 Z")); break;
     case 15: GOTO_SCREEN(TemperatureScreen);   break;
     default: return false;
   }

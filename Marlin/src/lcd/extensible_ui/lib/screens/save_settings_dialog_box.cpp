@@ -42,7 +42,7 @@ bool SaveSettingsDialogBox::onTouchEnd(uint8_t tag) {
   needs_save = false;
   switch(tag) {
     case 1:
-      enqueueCommands_P(PSTR("M500"));
+      injectCommands_P(PSTR("M500"));
       AlertDialogBox::show(F("Settings saved!"));
       // Remove SaveSettingsDialogBox from the stack
       // so the alert box doesn't return to me.

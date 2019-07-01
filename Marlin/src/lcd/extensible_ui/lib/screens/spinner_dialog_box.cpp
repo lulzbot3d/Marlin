@@ -47,7 +47,7 @@ void SpinnerDialogBox::hide() {
 
 void SpinnerDialogBox::enqueueAndWait_P(PGM_P const commands) {
   GOTO_SCREEN(SpinnerDialogBox);
-  ExtUI::enqueueCommands_P(commands);
+  ExtUI::injectCommands_P(commands);
   screen_data.SpinnerDialogBox.auto_hide = true;
 }
 

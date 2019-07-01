@@ -43,7 +43,7 @@ bool ConfirmAutoCalibrationDialogBox::onTouchEnd(uint8_t tag) {
   switch(tag) {
     case 1:
       GOTO_SCREEN(StatusScreen);
-      enqueueCommands_P(PSTR(LULZBOT_CALIBRATION_SCRIPT));
+      injectCommands_P(PSTR(LULZBOT_CALIBRATION_SCRIPT));
       return true;
     default:
       return DialogBoxBaseClass::onTouchEnd(tag);

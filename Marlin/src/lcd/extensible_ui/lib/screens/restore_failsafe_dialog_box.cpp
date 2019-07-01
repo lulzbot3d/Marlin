@@ -39,7 +39,7 @@ void RestoreFailsafeDialogBox::onRedraw(draw_mode_t) {
 bool RestoreFailsafeDialogBox::onTouchEnd(uint8_t tag) {
   switch(tag) {
     case 1:
-      ExtUI::enqueueCommands_P(PSTR("M502"));
+      ExtUI::injectCommands_P(PSTR("M502"));
       AlertDialogBox::show(F("Factory settings restored."));
       // Remove RestoreFailsafeDialogBox from the stack
       // so the alert box doesn't return to it.

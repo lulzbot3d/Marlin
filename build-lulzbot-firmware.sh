@@ -92,12 +92,12 @@ get_arch_info() {
     Quiver_TAZPro | OliveoilArchim_Experimental | RedgumArchim_Experimental)
       gcc_path=$ARM_TOOLS_PATH
       format=bin
-      HARDWARE_MOTHERBOARD=1592
+      HARDWARE_MOTHERBOARD=3024
       ;;
     *)
       gcc_path=$AVR_TOOLS_PATH
       format=hex
-      HARDWARE_MOTHERBOARD=301
+      HARDWARE_MOTHERBOARD=1211
       ;;
   esac
 }

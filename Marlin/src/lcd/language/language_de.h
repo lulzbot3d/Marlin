@@ -1,9 +1,9 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (C) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (c) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
- * Copyright (C) 2011 Camiel Gubbels / Erik van der Zalm
+ * Copyright (c) 2011 Camiel Gubbels / Erik van der Zalm
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -195,6 +195,7 @@
 #define MSG_MOVE_Z                          _UxGT("Bewege Z")
 #define MSG_MOVE_E                          _UxGT("Bewege Extruder")
 #define MSG_HOTEND_TOO_COLD                 _UxGT("Hotend zu kalt")
+#define MSG_MOVE_0025MM                     _UxGT(" 0,025 mm")
 #define MSG_MOVE_01MM                       _UxGT(" 0,1 mm")
 #define MSG_MOVE_1MM                        _UxGT(" 1,0 mm")
 #define MSG_MOVE_10MM                       _UxGT("10,0 mm")

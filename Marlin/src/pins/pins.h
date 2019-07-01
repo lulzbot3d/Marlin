@@ -1,9 +1,9 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (C) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (c) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
- * Copyright (C) 2011 Camiel Gubbels / Erik van der Zalm
+ * Copyright (c) 2011 Camiel Gubbels / Erik van der Zalm
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -422,6 +422,8 @@
   #include "pins_STM3R_MINI.h"        // STM32F1                                    env:STM32F1
 #elif MB(BIGTREE_SKR_MINI_V1_1)
   #include "pins_BIGTREE_SKR_MINI_V1_1.h" // STM32F1                                env:BIGTREE_SKR_MINI
+#elif MB(BIGTREE_SKR_MINI_E3)
+  #include "pins_BIGTREE_SKR_MINI_E3.h" // STM32F1                                  env:BIGTREE_SKR_MINI
 #elif MB(MALYAN_M200)
   #include "pins_MALYAN_M200.h"       // STM32F1                                    env:malyanm200
 #elif MB(CHITU3D)
@@ -434,6 +436,8 @@
   #include "pins_MKS_ROBIN.h"         // STM32F1                                    env:mks_robin
 #elif MB(MKS_ROBIN_MINI)
   #include "pins_MKS_ROBIN_MINI.h"    // STM32F1                                    env:mks_robin_mini
+#elif MB(MKS_ROBIN_NANO)
+  #include "pins_MKS_ROBIN_NANO.h"    // STM32F1                                    env:mks_robin_nano
 #elif MB(JGAURORA_A5S_A1)
   #include "pins_JGAURORA_A5S_A1.h"   // STM32F1                                    env:JGAURORA_A5S_A1
 #elif MB(FYSETC_AIO_II)
@@ -658,6 +662,7 @@
 #ifndef FAN_PIN
   #define FAN_PIN -1
 #endif
+#define FAN0_PIN FAN_PIN
 #ifndef FAN1_PIN
   #define FAN1_PIN -1
 #endif
@@ -876,14 +881,21 @@
 #ifndef LCD_PINS_D4
   #define LCD_PINS_D4 -1
 #endif
-#ifndef LCD_PINS_D5
-  #define LCD_PINS_D5 -1
-#endif
-#ifndef LCD_PINS_D6
-  #define LCD_PINS_D6 -1
-#endif
-#ifndef LCD_PINS_D7
-  #define LCD_PINS_D7 -1
+
+#if HAS_CHARACTER_LCD
+  #ifndef LCD_PINS_D5
+    #define LCD_PINS_D5 -1
+  #endif
+  #ifndef LCD_PINS_D6
+    #define LCD_PINS_D6 -1
+  #endif
+  #ifndef LCD_PINS_D7
+    #define LCD_PINS_D7 -1
+  #endif
+#else
+  #undef LCD_PINS_D5
+  #undef LCD_PINS_D6
+  #undef LCD_PINS_D7
 #endif
 
 /**

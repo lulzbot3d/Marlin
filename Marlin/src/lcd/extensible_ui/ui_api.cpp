@@ -105,7 +105,7 @@ inline float clamp(const float value, const float minimum, const float maximum) 
 static struct {
   uint8_t printer_killed  : 1;
   uint8_t manual_motion : 1;
-} flags = {0,0};
+} flags;
 
 namespace ExtUI {
   #ifdef __SAM3X8E__

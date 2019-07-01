@@ -39,7 +39,7 @@
   #include "../../feature/tmc_util.h"
 #endif
 
-#if HAS_BED_PROBE
+#if HOMING_Z_WITH_PROBE || ENABLED(BLTOUCH)
   #include "../../module/probe.h"
 #endif
 

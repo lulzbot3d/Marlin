@@ -49,33 +49,29 @@ void CLCD::turn_on_backlight (void) {
   mem_write_8(REG::PWM_DUTY, 128);
 }
 
-void CLCD::get_font_metrics(uint8_t font, struct FontMetrics &fm) {
+void CLCD::FontMetrics::load(const uint8_t font) {
   uint32_t rom_fontroot = mem_read_32(MAP::ROM_FONT_ADDR);
-  mem_read_bulk(rom_fontroot + 148 * (font - 16), (uint8_t*) &fm, 148);
+  mem_read_bulk(rom_fontroot + 148 * (font - 16), (uint8_t*) this, 148);
 }
 
-uint16_t CLCD::get_text_width(const uint8_t font, const char *str) {
+uint16_t CLCD::FontMetrics::get_text_width(const char *str, size_t n) const {
   uint16_t width = 0;
   const uint8_t *p = (const uint8_t *) str;
-  FontMetrics fm;
-  get_font_metrics(font, fm);
   for(;;) {
-    const uint8_t val = *p++;
-    if(!val) break;
-    width += val < 128 ? fm.char_widths[val] : 0;
+    const uint8_t val = *p++; n--;
+    if(!val || n == 0) break;
+    width += val < 128 ? char_widths[val] : 0;
   }
   return width;
 }
 
-uint16_t CLCD::get_text_width_P(const uint8_t font, const char *str) {
+uint16_t CLCD::FontMetrics::get_text_width_P(const char *str, size_t n) const {
   uint16_t width = 0;
   const uint8_t *p = (const uint8_t *) str;
-  FontMetrics fm;
-  get_font_metrics(font, fm);
   for(;;) {
-    const uint8_t val = pgm_read_byte(p++);
-    if(!val) break;
-    width += val < 128 ? fm.char_widths[val] : 0;
+    const uint8_t val = pgm_read_byte(p++); n--;
+    if(!val || n == 0) break;
+    width += val < 128 ? char_widths[val] : 0;
   }
   return width;
 }

@@ -64,8 +64,7 @@ class CommandProcessor : public CLCD::CommandFifo {
   protected:
     // Returns the cannonical thickness of a widget (i.e. the height of a toggle element)
     uint16_t widget_thickness() {
-      FontMetrics fm;
-      CLCD::get_font_metrics(_font, fm);
+      CLCD::FontMetrics fm(_font);
       return fm.height * 20.0/16;
     }
 
@@ -209,8 +208,7 @@ class CommandProcessor : public CLCD::CommandFifo {
 
     template<typename T>
     FORCEDINLINE CommandProcessor& toggle(int16_t x, int16_t y, int16_t w, int16_t h, T text, bool state, uint16_t options = FTDI::OPT_3D) {
-      FontMetrics fm;
-      CLCD::get_font_metrics(_font, fm);
+      CLCD::FontMetrics fm(_font);
       const int16_t widget_h = fm.height * 20.0/16;
       //const int16_t outer_bar_r = widget_h / 2;
       //const int16_t knob_r      = outer_bar_r - 1.5;

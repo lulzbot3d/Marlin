@@ -122,6 +122,7 @@ class CLCD {
 
   public:
     class CommandFifo;
+    class FontMetrics;
 
     static void init (void);
     static void default_touch_transform (void);
@@ -147,15 +148,24 @@ class CLCD {
     }
 };
 
-/********************************* FT800/810 Commands *********************************/
+/*************************** FT800/810 Font Metrics ****************************/
 
-struct FontMetrics {
-  uint8_t   char_widths[128];
-  uint32_t  format;
-  uint32_t  stride;
-  uint32_t  width;
-  uint32_t  height;
-  uint32_t  ptr;
+class CLCD::FontMetrics {
+  public:
+    uint8_t   char_widths[128];
+    uint32_t  format;
+    uint32_t  stride;
+    uint32_t  width;
+    uint32_t  height;
+    uint32_t  ptr;
+
+    FontMetrics(uint8_t font) {load(font);}
+
+    void load(uint8_t font);
+
+    // Returns width of string, up to a maximum of n characters.
+    uint16_t get_text_width(const char *str, size_t n = SIZE_MAX) const;
+    uint16_t get_text_width_P(const char *str, size_t n = SIZE_MAX) const;
 };
 
 /******************* FT800/810 Graphic Commands *********************************/

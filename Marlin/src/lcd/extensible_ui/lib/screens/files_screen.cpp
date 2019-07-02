@@ -234,7 +234,8 @@ bool FilesScreen::onTouchEnd(uint8_t tag) {
           if(FTDI::ftdi_chip >= 810) {
             const char *longFilename = getSelectedLongFilename();
             if(longFilename[0]) {
-              uint16_t text_width = CLCD::get_text_width(font_medium, longFilename);
+              CLCD::FontMetrics fm(font_medium);
+              uint16_t text_width = fm.get_text_width(longFilename);
               screen_data.FilesScreen.scroll_pos = 0;
               if(text_width > display_width)
                 screen_data.FilesScreen.scroll_max = text_width - display_width + MARGIN_L + MARGIN_R;

@@ -83,10 +83,10 @@ void controllerfan_update() {
     WRITE(CONTROLLER_FAN_PIN, speed);
     #if defined(LULZBOT_CONTROLLERFAN_SPEED_WHEN_ONLY_Z_ACTIVE)
       if(X_ENABLE_READ != X_ENABLE_ON && Y_ENABLE_READ != Y_ENABLE_ON)
-        analogWrite(CONTROLLER_FAN_PIN, speed ? LULZBOT_CONTROLLERFAN_SPEED_WHEN_ONLY_Z_ACTIVE : 0);
+        analogWrite(pin_t(CONTROLLER_FAN_PIN), speed ? LULZBOT_CONTROLLERFAN_SPEED_WHEN_ONLY_Z_ACTIVE : 0);
       else
     #endif
-    analogWrite(CONTROLLER_FAN_PIN, speed);
+    analogWrite(pin_t(CONTROLLER_FAN_PIN), speed);
   }
 }
 

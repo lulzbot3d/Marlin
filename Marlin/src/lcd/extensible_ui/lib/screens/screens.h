@@ -134,7 +134,7 @@ class KillScreen {
 
 class DialogBoxBaseClass : public BaseScreen {
   protected:
-    template<typename T> static void drawMessage(const T, const T = 0, const T = 0, int16_t font = 0);
+    template<typename T> static void drawMessage(const T, int16_t font = 0);
     static void drawYesNoButtons();
     static void drawOkayButton();
     static void drawSpinner();
@@ -149,8 +149,8 @@ class AlertDialogBox : public DialogBoxBaseClass, public CachedScreen<ALERT_BOX_
   public:
     static void onEntry();
     static void onRedraw(draw_mode_t);
-    template<typename T> static void show(const T, const T = 0, const T = 0);
-    template<typename T> static void showError(const T, const T = 0, const T = 0);
+    template<typename T> static void show(const T);
+    template<typename T> static void showError(const T);
     static void hide();
 };
 
@@ -199,7 +199,7 @@ class SpinnerDialogBox : public DialogBoxBaseClass, public CachedScreen<SPINNER_
     static void onRedraw(draw_mode_t);
     static void onIdle();
 
-    static void show(const progmem_str, const progmem_str = 0, const progmem_str = 0);
+    static void show(const progmem_str);
     static void hide();
     static void enqueueAndWait_P(PGM_P const);
 };

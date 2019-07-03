@@ -42,16 +42,16 @@ void AlertDialogBox::onRedraw(draw_mode_t what) {
 }
 
 template<typename T>
-void AlertDialogBox::show(const T line1, const T line2, const T line3) {
-  drawMessage(line1, line2, line3);
+void AlertDialogBox::show(const T message) {
+  drawMessage(message);
   storeBackground();
   screen_data.AlertDialogBox.isError = false;
   GOTO_SCREEN(AlertDialogBox);
 }
 
 template<typename T>
-void AlertDialogBox::showError(const T line1, const T line2, const T line3) {
-  drawMessage(line1, line2, line3);
+void AlertDialogBox::showError(const T message) {
+  drawMessage(message);
   storeBackground();
   screen_data.AlertDialogBox.isError = true;
   GOTO_SCREEN(AlertDialogBox);
@@ -62,9 +62,9 @@ void AlertDialogBox::hide() {
     GOTO_PREVIOUS();
 }
 
-template void AlertDialogBox::show(const char *, const char *, const char *);
-template void AlertDialogBox::show(const progmem_str, const progmem_str, const progmem_str);
-template void AlertDialogBox::showError(const char *, const char *, const char *);
-template void AlertDialogBox::showError(const progmem_str, const progmem_str, const progmem_str);
+template void AlertDialogBox::show(const char *);
+template void AlertDialogBox::show(const progmem_str);
+template void AlertDialogBox::showError(const char *);
+template void AlertDialogBox::showError(const progmem_str);
 
 #endif // EXTENSIBLE_UI

@@ -31,10 +31,7 @@
 using namespace FTDI;
 
 void ConfirmEraseFlashDialogBox::onRedraw(draw_mode_t) {
-  drawMessage(
-    F("Are you sure?"),
-    F("SPI flash will be erased.")
-  );
+  drawMessage(F("Are you sure? SPI flash will be erased."));
   drawYesNoButtons();
 }
 

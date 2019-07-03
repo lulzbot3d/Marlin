@@ -29,11 +29,7 @@
 using namespace FTDI;
 
 void BioConfirmHomeE::onRedraw(draw_mode_t) {
-  drawMessage(
-    F("About to re-home plunger."),
-    F("Remove syringe prior to"),
-    F("proceeding. Continue?")
-  );
+  drawMessage(F("About to re-home plunger. Remove syringe prior to proceeding. Continue?"));
   drawYesNoButtons();
 }
 

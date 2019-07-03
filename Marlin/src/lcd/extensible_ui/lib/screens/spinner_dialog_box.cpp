@@ -33,8 +33,8 @@ using namespace ExtUI;
 void SpinnerDialogBox::onRedraw(draw_mode_t) {
 }
 
-void SpinnerDialogBox::show(const progmem_str line1, const progmem_str line2, const progmem_str line3) {
-  drawMessage(line1, line2, line3);
+void SpinnerDialogBox::show(const progmem_str message) {
+  drawMessage(message);
   drawSpinner();
   storeBackground();
   screen_data.SpinnerDialogBox.auto_hide = false;

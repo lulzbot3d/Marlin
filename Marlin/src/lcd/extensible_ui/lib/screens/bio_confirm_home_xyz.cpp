@@ -29,11 +29,7 @@
 using namespace FTDI;
 
 void BioConfirmHomeXYZ::onRedraw(draw_mode_t) {
-  drawMessage(
-    F("About to re-home. Ensure"),
-    F("top and bed of the printer"),
-    F("is clear. Continue?")
-  );
+  drawMessage(F("About to re-home. Ensure the top and the bed of the printer are clear. Continue?"));
   drawYesNoButtons();
 }
 

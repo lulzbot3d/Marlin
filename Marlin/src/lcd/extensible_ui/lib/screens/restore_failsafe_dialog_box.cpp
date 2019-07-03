@@ -29,10 +29,7 @@
 using namespace ExtUI;
 
 void RestoreFailsafeDialogBox::onRedraw(draw_mode_t) {
-  drawMessage(
-    F("Are you sure?"),
-    F("Customizations will be lost.")
-  );
+  drawMessage(F("Are you sure? Customizations will be lost."));
   drawYesNoButtons();
 }
 

@@ -29,17 +29,18 @@ namespace FTDI {
    * be broken so that the display width is less than w. The line will also
    * be broken after a '\n'. Returns the display width of the line.
    */
-  static uint16_t find_line_break_P(const CLCD::FontMetrics &fm, uint16_t w, const char *str, const char *&end) {
+  static uint16_t find_line_break(const CLCD::FontMetrics &fm, uint16_t w, const char *str, const char *&end) {
     const char *p  = str;
     uint16_t width = 0;
     for(;;) {
       // Find next tentative line break.
-      char delim = pgm_read_byte(p);
+      char delim = *(p);
       while(delim && delim != ' ' && delim != '\n') {
-        delim = pgm_read_byte(++p);
+        delim = *(++p);
       }
       // Check to see whether to break the line.
-      const uint16_t lw = p > str ? fm.get_text_width_P(str, p - str) : 0;
+      const uint16_t margin = fm.get_text_width("  ");
+      const uint16_t lw = p > str ? fm.get_text_width(str, p - str) + margin : 0;
       if(lw < w) {
         width = lw;
         switch(delim) {
@@ -61,13 +62,13 @@ namespace FTDI {
   /**
    * This function returns a measurements of the word-wrapped text box.
    */
-  static void measure_text_box_P(const CLCD::FontMetrics &fm, progmem_str str, uint16_t &width, uint16_t &height) {
+  static void measure_text_box(const CLCD::FontMetrics &fm, const char *str, uint16_t &width, uint16_t &height) {
     const char *line_start = (const char*)str;
     const char *line_end;
     const uint16_t wrap_width = width;
     width = height = 0;
     for(;;) {
-      uint16_t line_width = find_line_break_P(fm, wrap_width, line_start, line_end);
+      uint16_t line_width = find_line_break(fm, wrap_width, line_start, line_end);
       if(line_end == line_start) break;
       width  = max(width, line_width);
       height += fm.height;
@@ -78,14 +79,14 @@ namespace FTDI {
   /**
    * This function draws text inside a bounding box, doing word wrapping and using the largest font that will fit.
    */
-  void draw_text_box_P(CommandProcessor& cmd, int x, int y, int w, int h, progmem_str str, uint16_t options, uint8_t font) {
+  void draw_text_box(CommandProcessor& cmd, int x, int y, int w, int h, const char *str, uint16_t options, uint8_t font) {
     CLCD::FontMetrics fm(font);
 
     uint16_t box_width, box_height;
 
     for(;;) {
       box_width = w;
-      measure_text_box_P(fm, str, box_width, box_height);
+      measure_text_box(fm, str, box_width, box_height);
       if(box_width <= (uint16_t)w && box_height <= (uint16_t)h) break;
       fm.load(--font);
       if(font == 26) break;
@@ -97,12 +98,12 @@ namespace FTDI {
     const char *line_start = (const char*)str;
     const char *line_end;
     for(;;) {
-      find_line_break_P(fm, w, line_start, line_end);
+      find_line_break(fm, w, line_start, line_end);
       if(line_end == line_start) break;
 
       const size_t line_len = line_end - line_start;
       char line[line_len + 1];
-      strncpy_P(line, line_start, line_len);
+      strncpy(line, line_start, line_len);
       line[line_len] = 0;
       if(line[line_len - 1] == '\n' || line[line_len - 1] == ' ')
         line[line_len - 1] = 0;
@@ -113,6 +114,12 @@ namespace FTDI {
 
       line_start = line_end;
     }
+  }
+
+  void draw_text_box(CommandProcessor& cmd, int x, int y, int w, int h, progmem_str pstr, uint16_t options, uint8_t font) {
+    char str[strlen_P((const char*)pstr) + 1];
+    strcpy_P(str, (const char*)pstr);
+    draw_text_box(cmd, x, y, w, h, str, options, font);
   }
 } // namespace FTDI
 

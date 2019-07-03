@@ -20,7 +20,6 @@
  ****************************************************************************/
 
 #include "src/ftdi_eve_lib/ftdi_eve_lib.h"
-#include "src/ftdi_eve_lib/extras/text_box.h"
 
 using namespace FTDI;
 

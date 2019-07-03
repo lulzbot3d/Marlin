@@ -21,9 +21,9 @@
 
 #pragma once
 
-#include "../extended/ftdi_extended.h"
-
 /**
  * This function draws text inside a bounding box, doing word wrapping and using the largest font that will fit.
  */
-void draw_text_box_P(CommandProcessor& cmd, int x, int y, int w, int h, progmem_str str, uint16_t options = 0, uint8_t font = 31);
+namespace FTDI {
+  void draw_text_box_P(class CommandProcessor& cmd, int x, int y, int w, int h, progmem_str str, uint16_t options = 0, uint8_t font = 31);
+}

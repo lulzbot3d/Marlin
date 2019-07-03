@@ -41,4 +41,5 @@
   #include "sound_player.h"
   #include "sound_list.h"
   #include "polygon.h"
+  #include "text_box.h"
 #endif

@@ -1922,8 +1922,8 @@
 
 #elif defined(LULZBOT_USE_AUTOLEVELING) && defined(LULZBOT_TAZ_BED)
     // TAZ has a vertical wiping pad on the left side of the bed
-    #define LULZBOT_LEFT_WIPE_X1                      -16
-    #define LULZBOT_LEFT_WIPE_X2                      -16
+    #define LULZBOT_LEFT_WIPE_X1                      -17
+    #define LULZBOT_LEFT_WIPE_X2                      -17
     #define LULZBOT_LEFT_WIPE_Y1                       95
     #if defined(TOOLHEAD_Javelin_DualExtruderV2) || defined(TOOLHEAD_Longfin_FlexyDually)
         // These dual toolheads have nozzles front and back, so the wiping location is shortened in Y
@@ -1935,8 +1935,8 @@
 
     #if defined(LULZBOT_Quiver_TAZPro)
         // The Quiver has an wipe pad on the right side of the bed.
-        #define LULZBOT_RIGHT_WIPE_X1                   293
-        #define LULZBOT_RIGHT_WIPE_X2                   293
+        #define LULZBOT_RIGHT_WIPE_X1                   297
+        #define LULZBOT_RIGHT_WIPE_X2                   297
         #define LULZBOT_RIGHT_WIPE_Y1                    95
         #define LULZBOT_RIGHT_WIPE_Y2                    25
         #define LULZBOT_RIGHT_WIPE_Z                      1

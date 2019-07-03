@@ -921,7 +921,9 @@
 
 /**************************** MINI TOOLHEADS ***********************************/
 
-#if defined(TOOLHEAD_Gladiola_SingleExtruder) || defined(TOOLHEAD_Albatross_Flexystruder) || defined(TOOLHEAD_Finch_Aerostruder) || defined(TOOLHEAD_CecropiaSilk_SingleExtruderAeroV2) || defined(TOOLHEAD_AchemonSphinx_SmallLayer) || defined(TOOLHEAD_BandedTiger_HardenedSteel) || defined(TOOLHEAD_DingyCutworm_HardenedSteelPlus) || defined(TOOLHEAD_Goldenrod_HardenedExtruder)
+#if defined(TOOLHEAD_Gladiola_SingleExtruder) || \
+    defined(TOOLHEAD_Albatross_Flexystruder) || \
+    defined(TOOLHEAD_Finch_Aerostruder)
 
     #define LULZBOT_EXTRUDERS                  1
     #define LULZBOT_TOOLHEAD_X_MAX_ADJ         0
@@ -933,16 +935,12 @@
 
     #if defined(LULZBOT_USE_EINSY_RETRO) || \
         defined(LULZBOT_USE_ARCHIM2) || \
-        defined(TOOLHEAD_CecropiaSilk_SingleExtruderAeroV2) || \
-        defined(TOOLHEAD_Goldenrod_HardenedExtruder) || \
-        defined(TOOLHEAD_AchemonSphinx_SmallLayer) || \
-        defined(TOOLHEAD_BandedTiger_HardenedSteel) || \
-        defined(TOOLHEAD_DingyCutworm_HardenedSteelPlus)
+        defined(TOOLHEAD_Finch_Aerostruder)
         #define LULZBOT_MOTOR_CURRENT_E          960 // mA
     #else
         #define LULZBOT_MOTOR_CURRENT_E         1250 // mA
     #endif
-#endif /* TOOLHEAD_Gladiola_SingleExtruder || TOOLHEAD_Albatross_Flexystruder || TOOLHEAD_Finch_Aerostruder || TOOLHEAD_AchemonSphinx_SmallLayer || TOOLHEAD_BandedTiger_HardenedSteel) || TOOLHEAD_DingyCutworm_HardenedSteelPlus */
+#endif
 
 #if defined(TOOLHEAD_Gladiola_SingleExtruder)
     #define LULZBOT_LCD_TOOLHEAD_NAME              "Single Extruder"
@@ -959,7 +957,7 @@
     #define LULZBOT_M115_EXTRUDER_TYPE             "Flexystruder"
     #define LULZBOT_X_MAX_ENDSTOP_INVERTING        LULZBOT_NORMALLY_OPEN_ENDSTOP
     #define LULZBOT_AO_Hexagon
-        #define LULZBOT_E_STEPS                    833
+    #define LULZBOT_E_STEPS                        833
 #endif /* TOOLHEAD_Albatross_Flexystruder */
 
 #if defined(TOOLHEAD_Finch_Aerostruder)
@@ -974,7 +972,8 @@
 
 /****************************** TAZ 4/5/6 TOOLHEADS ********************************/
 
-#if defined(TOOLHEAD_Tilapia_SingleExtruder) || defined(TOOLHEAD_Angelfish_Aerostruder)
+#if defined(TOOLHEAD_Tilapia_SingleExtruder) || \
+    defined(TOOLHEAD_Angelfish_Aerostruder)
     #define LULZBOT_EXTRUDERS                  1
     #define LULZBOT_TOOLHEAD_X_MAX_ADJ         0
     #define LULZBOT_TOOLHEAD_X_MIN_ADJ         0
@@ -1141,6 +1140,22 @@
 #endif /* TOOLHEAD_Yellowfin_DualExtruderV3 */
 
 /******************************** UNIVERSAL TOOLHEADS *************************/
+
+#if defined(TOOLHEAD_CecropiaSilk_SingleExtruderAeroV2) || \
+    defined(TOOLHEAD_AchemonSphinx_SmallLayer) || \
+    defined(TOOLHEAD_BandedTiger_HardenedSteel) || \
+    defined(TOOLHEAD_DingyCutworm_HardenedSteelPlus) || \
+    defined(TOOLHEAD_Goldenrod_HardenedExtruder)
+
+    #define LULZBOT_EXTRUDERS                  1
+    #define LULZBOT_TOOLHEAD_X_MAX_ADJ         0
+    #define LULZBOT_TOOLHEAD_X_MIN_ADJ         0
+    #define LULZBOT_TOOLHEAD_Y_MAX_ADJ         0
+    #define LULZBOT_TOOLHEAD_Y_MIN_ADJ         0
+    #define LULZBOT_TOOLHEAD_Z_MAX_ADJ         0
+    #define LULZBOT_TOOLHEAD_Z_MIN_ADJ         0
+    #define LULZBOT_MOTOR_CURRENT_E          960 // mA
+#endif
 
 #if defined(TOOLHEAD_CecropiaSilk_SingleExtruderAeroV2)
     #define LULZBOT_LCD_TOOLHEAD_NAME              "SE 0.5mm AeroV2"

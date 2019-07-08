@@ -171,17 +171,17 @@ void UHS_NI MAX3421E_HOST::VBUS_changed(void) {
                                         usb_task_state = UHS_USB_HOST_STATE_DEBOUNCE;
                                 }
                         }
-                        sof_timer.set(0);
+                        sof_countdown = 0;
                         break;
                 case SE1: //illegal state
-                        sof_timer.set(0);
+                        sof_countdown = 0;
                         doingreset = false;
                         ReleaseChildren();
                         usb_task_state = UHS_USB_HOST_STATE_ILLEGAL;
                         break;
                 case SE0: //disconnected
                 default:
-                        sof_timer.set(0);
+                        sof_countdown = 0;
                         doingreset = false;
                         ReleaseChildren();
                         usb_task_state = UHS_USB_HOST_STATE_IDLE;
@@ -211,7 +211,7 @@ void UHS_NI MAX3421E_HOST::busprobe(void) {
                                 regWr(rMODE, MODE_LS_HOST); // start low-speed host
                                 vbusState = LSHOST;
                         }
-                        sof_timer.wake();
+                        enable_frame_irq(true);
                         tmpdata = regRd(rMODE) | bmSOFKAENAB; // start SOF generation
                         regWr(rHIRQ, bmFRAMEIRQ); // see data sheet.
                         regWr(rMODE, tmpdata);
@@ -225,7 +225,7 @@ void UHS_NI MAX3421E_HOST::busprobe(void) {
                                 regWr(rMODE, MODE_FS_HOST); // start full-speed host
                                 vbusState = FSHOST;
                         }
-                        sof_timer.wake();
+                        enable_frame_irq(true);
                         tmpdata = regRd(rMODE) | bmSOFKAENAB; // start SOF generation
                         regWr(rHIRQ, bmFRAMEIRQ); // see data sheet.
                         regWr(rMODE, tmpdata);
@@ -789,12 +789,12 @@ void UHS_NI MAX3421E_HOST::ISRbottom(void) {
                 case UHS_USB_HOST_STATE_DEBOUNCE:
                         MAX_HOST_DEBUG("UHS_USB_HOST_STATE_DEBOUNCE\r\n");
                         // This seems to not be needed. The host controller has debounce built in.
-                        sof_timer.set(UHS_HOST_DEBOUNCE_DELAY_MS);
+                        sof_countdown = UHS_HOST_DEBOUNCE_DELAY_MS;
                         usb_task_state = UHS_USB_HOST_STATE_DEBOUNCE_NOT_COMPLETE;
                         break;
                 case UHS_USB_HOST_STATE_DEBOUNCE_NOT_COMPLETE:
                         MAX_HOST_DEBUG("UHS_USB_HOST_STATE_DEBOUNCE_NOT_COMPLETE\r\n");
-                        if(sof_timer.expired()) usb_task_state = UHS_USB_HOST_STATE_RESET_DEVICE;
+                        if(!sof_countdown) usb_task_state = UHS_USB_HOST_STATE_RESET_DEVICE;
                         break;
                 case UHS_USB_HOST_STATE_RESET_DEVICE:
                         MAX_HOST_DEBUG("UHS_USB_HOST_STATE_RESET_DEVICE\r\n");
@@ -838,20 +838,20 @@ void UHS_NI MAX3421E_HOST::ISRbottom(void) {
                         break;
                 case UHS_USB_HOST_STATE_RUNNING:
                         #if USB_HOST_MANUAL_POLL && USB_HOST_SHIELD_USE_ISR
-                                sof_timer.sleep();
+                                enable_frame_irq(false);
                         #else
                                 // If no device requires polling, it is okay to shutoff
-                                // the sof_timer to free up some CPU cycles until the
+                                // the frame irq to free up some CPU cycles until the
                                 // next device insertion/removal
                                 if(!pollDevices()) {
-                                        sof_timer.sleep();
+                                        enable_frame_irq(false);
                                 }
                         #endif
                         break;
                 case UHS_USB_HOST_STATE_ERROR:
                 case UHS_USB_HOST_STATE_IDLE:
                 case UHS_USB_HOST_STATE_ILLEGAL:
-                        sof_timer.sleep();
+                        enable_frame_irq(false);
                         break;
                 default:
                         // Do nothing
@@ -961,11 +961,10 @@ void UHS_NI MAX3421E_HOST::ISRTask(void)
                 counted = false;
                 if(HIRQ & bmFRAMEIRQ) {
                         HIRQ_sendback |= bmFRAMEIRQ;
-                        counted = sof_timer.decrement();
-                        //if(sofevent && usb_task_state == UHS_USB_HOST_STATE_WAIT_SOF) {
-                        //        sof_countdown = 20;
-                        //        usb_task_state = UHS_USB_HOST_STATE_WAIT_BUS_READY;
-                        //}
+                        if(sof_countdown) {
+                                sof_countdown--;
+                                counted = true;
+                        }
                         sofevent = false;
                 }
 
@@ -976,7 +975,7 @@ void UHS_NI MAX3421E_HOST::ISRTask(void)
                 DDSB();
                 regWr(rHIRQ, HIRQ_sendback);
 
-                if(sof_timer.expired() && !counted && !usb_task_polling_disabled) {
+                if(!sof_countdown && !counted && !usb_task_polling_disabled) {
                         DisablePoll();
                         //usb_task_polling_disabled++;
 #ifdef USB_HOST_SHIELD_TIMING_PIN

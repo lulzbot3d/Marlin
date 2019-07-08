@@ -298,64 +298,9 @@ public UHS_USB_HOST_BASE
 , public dyn_SWI
 #endif
 {
-        class SOF_Timer {
-                private:
-                        MAX3421E_HOST &host;
-                        volatile uint16_t countdown = 0;
-                        volatile bool asleep = true;
-
-                public:
-                        SOF_Timer(MAX3421E_HOST &h) : host(h) {
-                        }
-
-                        /* The state machine should call sleep() to shutoff the
-                         * timer when it reaches a RUNNING or an ERROR state
-                         * and no further state transitions are expected.
-                         *
-                         * The IRQ will wake the timer whenever a perhipheral
-                         * is plugged in or unplugged.
-                         */
-                        void sleep() {
-                                if(!asleep) {
-                                        host.regWr(rHIEN, host.regRd(rHIEN) & ~bmFRAMEIE);
-                                        asleep = true;
-                                }
-                        }
-
-                        void wake() {
-                                if(asleep) {
-                                        host.regWr(rHIEN, host.regRd(rHIEN) |  bmFRAMEIE);
-                                        asleep = false;
-                                }
-                        }
-
-                        bool decrement() {
-                                if(countdown) {
-                                        countdown--;
-                                        return true;
-                                }
-                                return false;
-                        }
-
-                        void set(const uint16_t start) {
-                                countdown = start;
-                        }
-
-                        bool expired() {
-                                return countdown == 0;
-                        }
-
-                        bool running() {
-                                return countdown != 0;
-                        }
-
-                        bool isAsleep() {
-                                return asleep;
-                        }
-        } sof_timer;
-
         // TO-DO: move these into the parent class.
         volatile uint8_t vbusState;
+        volatile uint16_t sof_countdown = 0;
 
         // TO-DO: pack into a struct/union and use one byte
         volatile bool busevent;
@@ -365,6 +310,22 @@ public UHS_USB_HOST_BASE
         volatile bool doingreset;
 
         bool UHS_NI pollDevices(void);
+        // Frame timer control
+
+        volatile bool frame_irq_enabled = false;
+
+        bool enable_frame_irq(bool enable) {
+                const bool prev_state = frame_irq_enabled;
+                if(prev_state != enable) {
+                        if(enable)
+                                regWr(rHIEN, regRd(rHIEN) |  bmFRAMEIE);
+                        else
+                                regWr(rHIEN, regRd(rHIEN) & ~bmFRAMEIE);
+                        frame_irq_enabled = enable;
+                }
+                return prev_state;
+        }
+
 
 public:
         SPISettings MAX3421E_SPI_Settings;
@@ -372,7 +333,7 @@ public:
         uint8_t irq_pin;
         // Will use the defaults UHS_MAX3421E_SS, UHS_MAX3421E_INT and speed
 
-        UHS_NI MAX3421E_HOST(void) : sof_timer(*this) {
+        UHS_NI MAX3421E_HOST(void) {
                 busevent = false;
                 doingreset= false;
                 sofevent = false;
@@ -385,7 +346,7 @@ public:
 
         // Will use user supplied pins, and UHS_MAX3421E_SPD
 
-        UHS_NI MAX3421E_HOST(uint8_t pss, uint8_t pirq) : sof_timer(*this) {
+        UHS_NI MAX3421E_HOST(uint8_t pss, uint8_t pirq) {
                 busevent = false;
                 doingreset= false;
                 sofevent = false;
@@ -398,7 +359,7 @@ public:
 
         // Will use user supplied pins, and speed
 
-        UHS_NI MAX3421E_HOST(uint8_t pss, uint8_t pirq, uint32_t pspd) : sof_timer(*this) {
+        UHS_NI MAX3421E_HOST(uint8_t pss, uint8_t pirq, uint32_t pspd) {
                 doingreset= false;
                 busevent = false;
                 sofevent = false;
@@ -410,10 +371,9 @@ public:
         };
 
         virtual bool UHS_NI sof_delay(uint16_t x) {
-                const bool wasAsleep = sof_timer.isAsleep();
-                if(wasAsleep) sof_timer.wake();
-                sof_timer.set(x);
-                while(sof_timer.running() && !condet) {
+                const bool saved_state = enable_frame_irq(true);
+                sof_countdown = x;
+                while(sof_countdown && !condet) {
 #if defined(__MARLIN_FIRMWARE__)
                         marlin_yield();
 #endif
@@ -421,7 +381,7 @@ public:
                         Task();
 #endif
                 }
-                if(wasAsleep) sof_timer.sleep();
+                enable_frame_irq(saved_state);
                 return (!condet);
         };
 
@@ -479,7 +439,7 @@ public:
                         // Enable interrupts
                 noInterrupts();
 #endif
-                sof_timer.wake();
+                enable_frame_irq(true);
                 sofevent = true;
 #if USB_HOST_SHIELD_USE_ISR
                 DDSB();

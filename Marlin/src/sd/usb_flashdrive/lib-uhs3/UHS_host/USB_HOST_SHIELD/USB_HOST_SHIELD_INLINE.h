@@ -661,9 +661,6 @@ uint8_t UHS_NI MAX3421E_HOST::dispatchPkt(uint8_t token, uint8_t ep, uint16_t na
                                 if(nak_limit && (nak_count == nak_limit))
                                         return (rcode);
                                 delayMicroseconds(200);
-                                #if defined(__MARLIN_FIRMWARE__)
-                                        marlin_yield();
-                                #endif
                                 break;
                         case UHS_HOST_ERROR_TIMEOUT:
                                 retry_count++;

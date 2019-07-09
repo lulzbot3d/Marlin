@@ -83,14 +83,7 @@ e-mail   :  support@circuitsathome.com
 /* Set this to 1 to disable device polling within the IRQ. If you enable this,
  * you will need to call usb.Task() periodically instead. */
 #ifndef USB_HOST_MANUAL_POLL
-#define USB_HOST_MANUAL_POLL 1
-#endif
-
-/* Set this to limit the number of NAK that will be accepted prior to timing
- * out, this can speed up the initialization of certain devices (0 means no
- * timeout). */
-#ifndef USB_HOST_NAK_LIMIT
-#define USB_HOST_NAK_LIMIT 1000
+#define USB_HOST_MANUAL_POLL 0
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////

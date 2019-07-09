@@ -30,7 +30,6 @@ e-mail   :  support@circuitsathome.com
 // uncomment to get 'printf' console debugging. NOT FOR UNO!
 //#define DEBUG_PRINTF_EXTRA_HUGE_UHS_BULK_STORAGE
 
-#ifndef BS_HOST_DEBUG
 #if DEBUG_PRINTF_EXTRA_HUGE
 #ifdef DEBUG_PRINTF_EXTRA_HUGE_UHS_BULK_STORAGE
 #define BS_HOST_DEBUG(...) printf(__VA_ARGS__)
@@ -39,7 +38,6 @@ e-mail   :  support@circuitsathome.com
 #endif
 #else
 #define BS_HOST_DEBUG(...) VOID0
-#endif
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -350,7 +348,7 @@ uint8_t UHS_NI UHS_Bulk_Storage::SetInterface(ENUMERATION_INFO *ei) {
         uint8_t index;
 
         bAddress = ei->address;
-        USBTRACE("BS SetInterface\r\n");
+        BS_HOST_DEBUG("BS SetInterface\r\n");
         // Fill in the endpoint info structure
         for(uint8_t ep = 0; ep < ei->interface.numep; ep++) {
                 BS_HOST_DEBUG("ep: 0x%2.2x bmAttributes: 0x%2.2x ", ep, ei->interface.epInfo[ep].bmAttributes);
@@ -388,7 +386,7 @@ uint8_t UHS_NI UHS_Bulk_Storage::Start(void) {
         //        Serial.println((uint32_t)pUsb->GetAddressPool(), HEX);
 
         BS_HOST_DEBUG("BS Start, speed: %i\r\n", pUsb->GetAddressPool()->GetUsbDevicePtr(bAddress)->speed);
-        USBTRACE("BS Start\r\n");
+        BS_HOST_DEBUG("BS Start\r\n");
         rcode = pUsb->setEpInfoEntry(bAddress, bIface, 3, epInfo);
         //        Serial.println(rcode,HEX);
         if(rcode) goto FailOnInit;
@@ -505,7 +503,6 @@ uint8_t UHS_NI UHS_Bulk_Storage::Start(void) {
         qNextPollTime = millis() + 100;
         bPollEnable = true;
 
-        //USBTRACE("Poll enabled\r\n");
         return 0;
 FailUnPlug:
         rcode = UHS_BULK_ERR_DEVICE_DISCONNECTED;

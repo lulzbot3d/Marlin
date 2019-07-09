@@ -38,16 +38,14 @@ e-mail   :  support@circuitsathome.com
 #endif
 
 #endif
-#ifndef MAX_HOST_DEBUG
 #if DEBUG_PRINTF_EXTRA_HUGE
 #ifdef DEBUG_PRINTF_EXTRA_HUGE_USB_HOST_SHIELD
-#define MAX_HOST_DEBUG(...) printf(__VA_ARGS__)
+#define MAX_HOST_DEBUG(...) printf_P(__VA_ARGS__)
 #else
 #define MAX_HOST_DEBUG(...) VOID0
 #endif
 #else
 #define MAX_HOST_DEBUG(...) VOID0
-#endif
 #endif
 
 #if !defined(USB_HOST_SHIELD_USE_ISR)
@@ -290,8 +288,6 @@ e-mail   :  support@circuitsathome.com
 #endif
 #endif
 
-
-
 class MAX3421E_HOST :
 public UHS_USB_HOST_BASE
 #if defined(SWI_IRQ_NUM)
@@ -300,7 +296,7 @@ public UHS_USB_HOST_BASE
 {
         // TO-DO: move these into the parent class.
         volatile uint8_t vbusState;
-        volatile uint16_t sof_countdown = 0;
+        volatile uint16_t sof_countdown;
 
         // TO-DO: pack into a struct/union and use one byte
         volatile bool busevent;
@@ -334,6 +330,7 @@ public:
         // Will use the defaults UHS_MAX3421E_SS, UHS_MAX3421E_INT and speed
 
         UHS_NI MAX3421E_HOST(void) {
+                sof_countdown = 0;
                 busevent = false;
                 doingreset= false;
                 sofevent = false;
@@ -347,6 +344,7 @@ public:
         // Will use user supplied pins, and UHS_MAX3421E_SPD
 
         UHS_NI MAX3421E_HOST(uint8_t pss, uint8_t pirq) {
+                sof_countdown = 0;
                 busevent = false;
                 doingreset= false;
                 sofevent = false;
@@ -360,6 +358,7 @@ public:
         // Will use user supplied pins, and speed
 
         UHS_NI MAX3421E_HOST(uint8_t pss, uint8_t pirq, uint32_t pspd) {
+                sof_countdown = 0;
                 doingreset= false;
                 busevent = false;
                 sofevent = false;
@@ -371,17 +370,16 @@ public:
         };
 
         virtual bool UHS_NI sof_delay(uint16_t x) {
-                const bool saved_state = enable_frame_irq(true);
+                const bool saved_irq_state = enable_frame_irq(true);
                 sof_countdown = x;
-                while(sof_countdown && !condet) {
-#if defined(__MARLIN_FIRMWARE__)
-                        marlin_yield();
-#endif
+                while((sof_countdown != 0) && !condet) {
+                SYSTEM_OR_SPECIAL_YIELD();
 #if !USB_HOST_SHIELD_USE_ISR
                         Task();
 #endif
                 }
-                enable_frame_irq(saved_state);
+                enable_frame_irq(saved_irq_state);
+                //                Serial.println("...Wake");
                 return (!condet);
         };
 
@@ -419,7 +417,7 @@ public:
 
         virtual void UHS_NI doHostReset(void) {
 #if USB_HOST_SHIELD_USE_ISR
-                        // Enable interrupts
+                // Enable interrupts
                 noInterrupts();
 #endif
                 doingreset = true;
@@ -436,7 +434,7 @@ public:
                 }
 #endif
 #if USB_HOST_SHIELD_USE_ISR
-                        // Enable interrupts
+                // Enable interrupts
                 noInterrupts();
 #endif
                 enable_frame_irq(true);
@@ -450,7 +448,7 @@ public:
                 while(sofevent) {
                 }
 #if USB_HOST_SHIELD_USE_ISR
-                        // Enable interrupts
+                // Enable interrupts
                 noInterrupts();
 #endif
                 doingreset = false;
@@ -482,13 +480,24 @@ public:
 
         // ARM/NVIC specific, used to emulate reentrant ISR.
 #if defined(SWI_IRQ_NUM)
+
         void dyn_SWISR(void) {
                 ISRbottom();
         };
 #endif
 
+        virtual void UHS_NI suspend_host(void) {
+                // Used on MCU that lack control of IRQ priority (AVR).
+                // Suspends ISRs, for critical code. IRQ will be serviced after it is resumed.
+                // NOTE: you must track the state yourself!
+#if defined(__AVR__)
+                noInterrupts();
+                detachInterrupt(UHS_GET_DPI(irq_pin));
+                interrupts();
+#endif
+        };
 
-
+        virtual void UHS_NI resume_host(void);
 };
 #if !defined(SPIclass)
 #define SPIclass SPI

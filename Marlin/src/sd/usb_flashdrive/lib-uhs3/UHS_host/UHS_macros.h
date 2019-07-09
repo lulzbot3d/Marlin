@@ -94,6 +94,7 @@ e-mail   :  support@circuitsathome.com
 
 #elif defined(ESP8266)
 #define UHS_BIG_FLASH 1
+#define SYSTEM_OR_SPECIAL_YIELD(...) yield()
 
 #elif defined(__arm__) && defined(CORE_TEENSY)
 #define UHS_BIG_FLASH 1
@@ -117,11 +118,14 @@ e-mail   :  support@circuitsathome.com
 #if defined(__arm__) && defined(CORE_TEENSY)
 #define UHS_PIN_WRITE(p, v) digitalWriteFast(p, v)
 #define UHS_PIN_READ(p) digitalReadFast(p)
-#else
+#endif
 // TODO: Fast inline code for AVR and SAM based microcontrollers
 //       This can be done pretty easily.
 //       For now, this will just work out-of-the-box.
+#if !defined(UHS_PIN_WRITE)
 #define UHS_PIN_WRITE(p, v) digitalWrite(p, v)
+#endif
+#if !defined(UHS_PIN_READ)
 #define UHS_PIN_READ(p) digitalRead(p)
 #endif
 
@@ -376,7 +380,11 @@ e-mail   :  support@circuitsathome.com
 #define UHS_BYTES_TO_UINT64(__usc7__,__usc6__,__usc5__,__usc4__,__usc3__,__usc2__,__usc1__,__usc0__) ((uint64_t)((uint64_t)__usc0__ | UHS_UINT64_SET_BYTE1(__usc1__) | UHS_UINT64_SET_BYTE2(__usc2__) | UHS_UINT64_SET_BYTE3(__usc3__) | UHS_UINT64_SET_BYTE4(__usc4__) | UHS_UINT64_SET_BYTE5(__usc5__) | UHS_UINT64_SET_BYTE6(__usc6__) | UHS_UINT64_SET_BYTE7(__usc7__)))
 #endif
 /*
- * Debug macros: Strings are stored in progmem (flash) instead of RAM.
+ * Debug macros.
+ * Useful when porting from UHS2.
+ * Do not use these for any new code.
+ * Change to better debugging after port is completed.
+ * Strings are stored in progmem (flash) instead of RAM.
  */
 #define USBTRACE1(s,l) (Notify(PSTR(s), l))
 #define USBTRACE(s) (USBTRACE1((s), 0x80)); USB_HOST_SERIAL.flush()
@@ -384,11 +392,6 @@ e-mail   :  support@circuitsathome.com
 #define USBTRACE3X(s,r,l) (Notify(PSTR(s), l), D_PrintHex((r), l))
 #define USBTRACE2(s,r) (USBTRACE3((s),(r),0x80)); USB_HOST_SERIAL.flush()
 #define USBTRACE2X(s,r) (USBTRACE3X((s),(r),0x80)); USB_HOST_SERIAL.flush()
-
-#ifdef __MARLIN_FIRMWARE__
-  #undef USBTRACE
-  #define USBTRACE(s) (USBTRACE1((s), 0x80))
-#endif
 
 #define VOID0 ((void)0)
 #if !defined(NOTUSED)

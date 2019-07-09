@@ -31,7 +31,6 @@ e-mail   :  support@circuitsathome.com
 #define DEBUG_PRINTF_EXTRA_HUGE_UHS_HOST 0
 #endif
 
-#ifndef HOST_DEBUG
 #if DEBUG_PRINTF_EXTRA_HUGE
 #if DEBUG_PRINTF_EXTRA_HUGE_UHS_HOST
 #define HOST_DEBUG(...) printf(__VA_ARGS__)
@@ -40,7 +39,6 @@ e-mail   :  support@circuitsathome.com
 #endif
 #else
 #define HOST_DEBUG(...) VOID0
-#endif
 #endif
 
 UHS_EpInfo* UHS_USB_HOST_BASE::getEpInfoEntry(uint8_t addr, uint8_t ep) {
@@ -1009,6 +1007,7 @@ uint8_t UHS_USB_HOST_BASE::ctrlReq(uint8_t addr, uint64_t Request, uint16_t nbyt
                                 rcode = ctrlReqRead(pep, &left, &read, nbytes, dataptr);
 
 #if UHS_DEVICE_WINDOWS_USB_SPEC_VIOLATION_DESCRIPTOR_DEVICE
+                                HOST_DEBUG("RESULT: 0x%2.2x 0x%2.2x 0x%2.2x 0x%8.8lx%8.8lx\r\n", rcode, addr, read, (uint32_t)((Request>>32)&0xfffffffflu), (uint32_t)(Request&0xfffffffflu));
                                 // Should only be used for GET_DESCRIPTOR USB_DESCRIPTOR_DEVICE
                                 constexpr uint32_t req_match = ((uint32_t)USB_DESCRIPTOR_DEVICE      << 24) |
                                                                ((uint32_t)USB_REQUEST_GET_DESCRIPTOR <<  8);

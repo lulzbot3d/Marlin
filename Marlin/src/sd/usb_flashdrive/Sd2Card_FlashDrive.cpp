@@ -44,10 +44,6 @@
 #include "../../core/serial.h"
 #include "../../module/temperature.h"
 
-#define LOAD_USB_HOST_SYSTEM
-#define LOAD_USB_HOST_SHIELD
-#define LOAD_UHS_BULK_STORAGE
-
 static_assert(USB_CS_PIN   != -1, "USB_CS_PIN must be defined");
 static_assert(USB_INTR_PIN != -1, "USB_INTR_PIN must be defined");
 
@@ -63,12 +59,20 @@ static_assert(USB_INTR_PIN != -1, "USB_INTR_PIN must be defined");
   void marlin_yield() {
     thermalManager.manage_heater();
   }
+  #define SYSTEM_OR_SPECIAL_YIELD(...) marlin_yield();
+  #define delay(x) safe_delay(x)
+
   #define LULZBOT_USB_NO_TEST_UNIT_READY
   #define LULZBOT_SKIP_PAGE3F
+  #define USB_HOST_MANUAL_POLL 1
 
   // Speed up I/O operations using Marlin functions
   #define UHS_WRITE_SS(v)    WRITE(USB_CS_PIN, v)
   #define UHS_READ_IRQ()     READ(USB_INTR_PIN)
+
+  #define LOAD_USB_HOST_SYSTEM
+  #define LOAD_USB_HOST_SHIELD
+  #define LOAD_UHS_BULK_STORAGE
 
   #include "lib-uhs3/UHS_host/UHS_host.h"
 
@@ -197,9 +201,12 @@ void Sd2Card::idle() {
         /* USB device is inserted, but if it is an SD card,
          * adapter it may not have an SD card in it yet. */
         if(bulk.LUNIsGood(0)) {
+          #if USB_DEBUG >= 1
+            SERIAL_ECHOLNPGM("LUN is good");
+          #endif
           GOTO_STATE_AFTER_DELAY( MEDIA_READY, 100 );
         } else {
-          #if defined(LULZBOT_USB_USE_UHS3)
+          #ifdef USB_HOST_MANUAL_POLL
             // Make sure we catch disconnect events
             usb.busprobe();
             usb.VBUS_changed();

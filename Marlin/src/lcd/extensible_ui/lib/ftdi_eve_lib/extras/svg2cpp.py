@@ -15,7 +15,8 @@
 # To view a copy of the GNU General Public License, go to the following
 # location: <http://www.gnu.org/licenses/>.
 
-import argparse, re
+from __future__ import print_function
+import argparse, re, sys
 
 usage = '''
 This program extracts line segments from a SVG file and writes
@@ -100,10 +101,10 @@ class ComputeBoundingBox:
     pass
 
   def write(self):
-    print "constexpr float x_min = %f;\n" % self.x_min
-    print "constexpr float x_max = %f;\n" % self.x_max
-    print "constexpr float y_min = %f;\n" % self.y_min
-    print "constexpr float y_max = %f;\n" % self.y_max
+    print("constexpr float x_min = %f;\n" % self.x_min)
+    print("constexpr float x_max = %f;\n" % self.x_max)
+    print("constexpr float y_min = %f;\n" % self.y_min)
+    print("constexpr float y_max = %f;\n" % self.y_max)
 
   def from_svg_view_box(self, svg):
     s = re.search('<svg[^>]+>', svg);
@@ -137,7 +138,7 @@ class WriteDataStructure:
   def path_finished(self, id):
     if self.hex_words and self.hex_words[0] == "0xFFFF":
       self.hex_words.pop(0)
-    print "const PROGMEM uint16_t", id + "[] = {" + ", ".join (self.hex_words) + "};\n"
+    print("const PROGMEM uint16_t", id + "[] = {" + ", ".join (self.hex_words) + "};\n")
     self.hex_words = []
 
 class Parser:
@@ -159,7 +160,7 @@ class Parser:
       self.initial_x = x
       self.initial_y = y
 
-  def process_svg_path_data_cmd(self, cmd, a, b):
+  def process_svg_path_data_cmd(self, id, cmd, a, b):
     """Converts the various types of moves into L or M commands
     and dispatches to process_svg_path_L_or_M for futher processing."""
     if cmd == "Z" or cmd == "z":
@@ -181,7 +182,7 @@ class Parser:
     elif cmd == "m":
       self.process_svg_path_L_or_M("M", self.last_x + a, self.last_y + b)
     else:
-      print("Unsupported path data command: ", cmd, "\n")
+      print("Unsupported path data command:", cmd, "in path", id, "\n", file=sys.stderr)
       quit()
 
   def eat_token(self, regex):
@@ -192,7 +193,7 @@ class Parser:
       self.d = self.d[self.m.end():]
     return self.m
 
-  def process_svg_path_data(self, d):
+  def process_svg_path_data(self, id, d):
     """Breaks up the "d" attribute into individual commands
        and calls "process_svg_path_data_cmd" for each"""
 
@@ -205,10 +206,10 @@ class Parser:
         cmd = self.m.group(1)
         # The following commands take no arguments
         if cmd == "Z" or cmd == "z":
-          self.process_svg_path_data_cmd(cmd, 0, 0)
+          self.process_svg_path_data_cmd(id, cmd, 0, 0)
 
       elif self.eat_token('([CScsQqTtAa])'):
-        print "Unsupported path data command: ", self.m.group(1), "\n"
+        print("Unsupported path data command:", self.m.group(1), "in path", id, "\n", file=sys.stderr)
         quit()
 
       elif self.eat_token('([ ,]*[-0-9e.]+)+'):
@@ -217,40 +218,41 @@ class Parser:
         # The following commands take two arguments
         if cmd == "L" or cmd == "l":
           while coords:
-            self.process_svg_path_data_cmd(cmd, float(coords.pop(0)), float(coords.pop(0)))
+            self.process_svg_path_data_cmd(id, cmd, float(coords.pop(0)), float(coords.pop(0)))
         elif cmd == "M":
           while coords:
-            self.process_svg_path_data_cmd(cmd, float(coords.pop(0)), float(coords.pop(0)))
+            self.process_svg_path_data_cmd(id, cmd, float(coords.pop(0)), float(coords.pop(0)))
             # If a MOVETO has multiple points, the subsequent ones are assumed to be LINETO
             cmd = "L"
         elif cmd == "m":
           while coords:
-            self.process_svg_path_data_cmd(cmd, float(coords.pop(0)), float(coords.pop(0)))
+            self.process_svg_path_data_cmd(id, cmd, float(coords.pop(0)), float(coords.pop(0)))
             # If a MOVETO has multiple points, the subsequent ones are assumed to be LINETO
             cmd = "l"
         # Assume all other commands are single argument
         else:
           while coords:
-            self.process_svg_path_data_cmd(cmd, float(coords.pop(0)), 0)
+            self.process_svg_path_data_cmd(id, cmd, float(coords.pop(0)), 0)
       else:
-        print "Syntax error: ", d, "\n"
+        print("Syntax error:", d, "in path", id, "\n", file=sys.stderr)
         quit()
 
   def process_svg_paths(self, svg):
     self.op.reset()
     for path in re.findall('<path[^>]+>', svg):
+      id = "<none>"
       m = re.search(' id="(.*)"', path)
       if m:
         id = m.group(1)
 
       m = re.search(' transform="(.*)"', path)
       if m:
-        print "Found transform in path! Cannot process file!"
+        print("Found transform in path", id, "! Cannot process file!", file=sys.stderr)
         quit()
 
       m = re.search(' d="(.*)"', path)
       if m:
-        self.process_svg_path_data(m.group(1))
+        self.process_svg_path_data(id, m.group(1))
         self.op.path_finished(id)
         self.reset()
 

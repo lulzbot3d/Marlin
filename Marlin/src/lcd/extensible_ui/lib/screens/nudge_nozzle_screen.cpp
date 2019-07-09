@@ -56,16 +56,21 @@ void NudgeNozzleScreen::onRedraw(draw_mode_t what) {
   #if EXTRUDERS > 1
     w.toggle  (8,  PSTR("Adjust Both Nozzles:"), PSTR("no\xFFyes"), screen_data.NudgeNozzleScreen.link_nozzles, PSTR("Yes\nNo"));
   #endif
+  #if EXTRUDERS > 1 || HAS_BED_PROBE
   w.toggle  (9,  PSTR("Show Offsets:"), PSTR("no\xFFyes"), screen_data.NudgeNozzleScreen.show_offsets, PSTR("Yes\nNo"));
+  #endif
 
   if(screen_data.NudgeNozzleScreen.show_offsets) {
     char str[19], num1[7];
-    dtostrf(getZOffset_mm(), 4, 2, num1);
-    sprintf_P(str, PSTR("%s mm"), num1);
 
     w.draw_mode(BOTH);
     w.color(other);
-    w.text_field  (0,  PSTR("Z Offset"), str);
+
+    #if HAS_BED_PROBE
+      dtostrf(getZOffset_mm(), 4, 2, num1);
+      sprintf_P(str, PSTR("%s mm"), num1);
+      w.text_field  (0,  PSTR("Z Offset"), str);
+    #endif
 
     #if EXTRUDERS > 1
       char num2[7], num3[7];
@@ -100,7 +105,9 @@ bool NudgeNozzleScreen::onTouchHeld(uint8_t tag) {
     default:
       return false;
   }
-  SaveSettingsDialogBox::settingsChanged();
+  #if EXTRUDERS > 1 || HAS_BED_PROBE
+    SaveSettingsDialogBox::settingsChanged();
+  #endif
   return true;
 }
 

@@ -248,10 +248,12 @@ class GenericPolyUI {
     uint32_t btn_stroke_color = 0x000000;
     uint8_t  btn_stroke_width = 28;
 
+    draw_mode_t mode;
+
   public:
     typedef POLY_READER poly_reader_t;
 
-    GenericPolyUI(CommandProcessor &c) : cmd(c) {}
+    GenericPolyUI(CommandProcessor &c, draw_mode_t what = BOTH) : cmd(c), mode(what) {}
 
     // Fills a polygon with the current COLOR_RGB
     void fill(poly_reader_t r, bool clip = true) {
@@ -352,26 +354,37 @@ class GenericPolyUI {
 
     void button(const uint8_t tag, poly_reader_t r) {
       using namespace FTDI;
-      cmd.cmd(SAVE_CONTEXT());
-      cmd.cmd(TAG(tag));
       // Draw the shadow
       #if FTDI_API_LEVEL >= 810
+      if(mode & BACKGROUND) {
+        cmd.cmd(SAVE_CONTEXT());
+        cmd.cmd(TAG(tag));
         cmd.cmd(VERTEX_TRANSLATE_X(btn_shadow_depth * 16));
         cmd.cmd(VERTEX_TRANSLATE_Y(btn_shadow_depth * 16));
-        if(EventLoop::get_pressed_tag() != tag) {
-          cmd.cmd(COLOR_RGB(btn_shadow_color));
-          fill(r, false);
-          cmd.cmd(VERTEX_TRANSLATE_X(0));
-          cmd.cmd(VERTEX_TRANSLATE_Y(0));
-        }
+        cmd.cmd(COLOR_RGB(btn_shadow_color));
+        fill(r, false);
+        cmd.cmd(RESTORE_CONTEXT());
+      }
       #endif
-      // Draw the fill and stroke
-      cmd.cmd(COLOR_RGB(btn_fill_color));
-      fill(r, false);
-      cmd.cmd(COLOR_RGB(btn_stroke_color));
-      cmd.cmd(LINE_WIDTH(btn_stroke_width));
-      stroke(r);
-      cmd.cmd(RESTORE_CONTEXT());
+
+      if(mode & FOREGROUND) {
+        cmd.cmd(SAVE_CONTEXT());
+        #if FTDI_API_LEVEL >= 810
+          if(EventLoop::get_pressed_tag() == tag) {
+            // "Push" the button
+            cmd.cmd(VERTEX_TRANSLATE_X(btn_shadow_depth * 16));
+            cmd.cmd(VERTEX_TRANSLATE_Y(btn_shadow_depth * 16));
+          }
+        #endif
+        // Draw the fill and stroke
+        cmd.cmd(TAG(tag));
+        cmd.cmd(COLOR_RGB(btn_fill_color));
+        fill(r, false);
+        cmd.cmd(COLOR_RGB(btn_stroke_color));
+        cmd.cmd(LINE_WIDTH(btn_stroke_width));
+        stroke(r);
+        cmd.cmd(RESTORE_CONTEXT());
+      }
     }
 
     void color(const uint32_t color) {

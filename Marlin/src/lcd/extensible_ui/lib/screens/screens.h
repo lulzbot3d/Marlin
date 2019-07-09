@@ -201,7 +201,8 @@ class SpinnerDialogBox : public DialogBoxBaseClass, public CachedScreen<SPINNER_
 
     static void show(const progmem_str);
     static void hide();
-    static void enqueueAndWait_P(PGM_P const);
+    static void enqueueAndWait_P(const progmem_str commands);
+    static void enqueueAndWait_P(const progmem_str message, const progmem_str commands);
 };
 
 #if !defined(LULZBOT_USE_BIOPRINTER_UI)
@@ -223,12 +224,18 @@ class StatusScreen : public BaseScreen, public CachedScreen<STATUS_SCREEN_CACHE,
     static bool onTouchEnd(uint8_t tag);
 };
 #else
-  class StatusScreen : public BaseScreen, public UncachedScreen {
+  class StatusScreen : public BaseScreen, public CachedScreen<STATUS_SCREEN_CACHE,STATUS_SCREEN_DL_SIZE> {
     private:
       static float increment;
       static bool  jog_xy;
+      static bool  fine_motion;
 
       static void draw_temperature(draw_mode_t what);
+      static void draw_syringe(draw_mode_t what);
+      static void draw_arrows(draw_mode_t what);
+      static void draw_overlay_icons(draw_mode_t what);
+      static void draw_fine_motion(draw_mode_t what);
+      static void draw_buttons(draw_mode_t what);
     public:
       static void unlockMotors();
 
@@ -237,6 +244,8 @@ class StatusScreen : public BaseScreen, public CachedScreen<STATUS_SCREEN_CACHE,
 
       static void onStartup();
       static void onRedraw(draw_mode_t);
+
+      static bool onTouchStart(uint8_t tag);
       static bool onTouchHeld(uint8_t tag);
       static bool onTouchEnd(uint8_t tag);
       static void onIdle();

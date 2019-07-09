@@ -1,6 +1,6 @@
-/****************************
- * bio_confirm_home_xyz.cpp *
- ****************************/
+/*********************
+ * bio_tune_menu.cpp *
+ *********************/
 
 /****************************************************************************
  *   Written By Mark Pelletier  2017 - Aleph Objects, Inc.                  *
@@ -27,29 +27,52 @@
 #include "screens.h"
 
 using namespace FTDI;
+using namespace Theme;
 
-void BioConfirmHomeXYZ::onRedraw(draw_mode_t) {
-  drawMessage(F("About to re-home. Ensure the top and the bed of the printer are clear. Continue?"));
-  drawYesNoButtons();
+void TuneMenu::onRedraw(draw_mode_t what) {
+  if(what & BACKGROUND) {
+    CommandProcessor cmd;
+    cmd.cmd(CLEAR_COLOR_RGB(bg_color))
+       .cmd(CLEAR(true,true,true))
+       .font(font_medium);
+  }
+
+  #define GRID_ROWS 8
+  #define GRID_COLS 2
+
+  if(what & FOREGROUND) {
+    using namespace ExtUI;
+
+    CommandProcessor cmd;
+    cmd.colors(normal_btn)
+       .font(font_medium)
+       .tag(2).button( BTN_POS(1,1), BTN_SIZE(2,1), F("Print Speed"))
+       .tag(3).button( BTN_POS(1,2), BTN_SIZE(2,1), F("Bed Temperature"))
+        #if ENABLED(BABYSTEPPING)
+          .enabled(true)
+        #else
+          .enabled(false)
+        #endif
+       .tag(4).button( BTN_POS(1,3), BTN_SIZE(2,1), F("Nudge Nozzle"))
+       .colors(action_btn)
+       .tag(1).button( BTN_POS(1,8), BTN_SIZE(2,1), F("Back"));
+  }
+  #undef GRID_COLS
+  #undef GRID_ROWS
 }
 
-bool BioConfirmHomeXYZ::onTouchEnd(uint8_t tag) {
+bool TuneMenu::onTouchEnd(uint8_t tag) {
+  using namespace Theme;
+  using namespace ExtUI;
   switch(tag) {
-    case 1:
-      SpinnerDialogBox::enqueueAndWait_P(F(
-        "G28 X Y Z\n"             /* Home all axis */
-        "G0 X115 Z50 F6000"       /* Move to park position */
-      ));
-      // Change the screen we will return to
-      current_screen.forget();
-      PUSH_SCREEN(BioConfirmHomeE);
-      break;
-    case 2:
-      GOTO_SCREEN(StatusScreen);
-      break;
+    case 1:  GOTO_PREVIOUS();                    break;
+    case 2:  GOTO_SCREEN(FeedratePercentScreen); break;
+    case 3:  GOTO_SCREEN(TemperatureScreen);     break;
+    case 4:  GOTO_SCREEN(NudgeNozzleScreen);     break;
     default:
-      return DialogBoxBaseClass::onTouchEnd(tag);
+      return false;
   }
   return true;
 }
+
 #endif // EXTENSIBLE_UI

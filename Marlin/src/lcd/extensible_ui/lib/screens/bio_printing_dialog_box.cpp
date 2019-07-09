@@ -60,28 +60,20 @@ void BioPrintingDialogBox::onRedraw(draw_mode_t) {
 
   cmd.colors(normal_btn)
      .font(font_medium)
+     .tag(3).button( BTN_POS(1,9), BTN_SIZE(1,1), F("Tune"))
       #if ENABLED(SDSUPPORT)
         .enabled(isPrintingFromMedia())
       #else
         .enabled(0)
       #endif
-     .tag(2).button( BTN_POS(1,9), BTN_SIZE(1,1), F("Cancel"))
-     .tag(isPrintingFromMediaPaused() ? 4 : 3)
-     .colors(action_btn)
-      #if ENABLED(SDSUPPORT)
-        .enabled(isPrintingFromMedia())
-      #else
-        .enabled(0)
-      #endif
-        .button( BTN_POS(2,9), BTN_SIZE(1,1), isPrintingFromMediaPaused() ? F("Resume") : F("Pause"));
+     .tag(3).button( BTN_POS(2,9), BTN_SIZE(1,1), F("Cancel"));
 }
 
 bool BioPrintingDialogBox::onTouchEnd(uint8_t tag) {
   switch(tag) {
     case 1: GOTO_SCREEN(FeedratePercentScreen);      break;
-    case 2: GOTO_SCREEN(ConfirmAbortPrintDialogBox); break;
-    case 3:  sound.play(twinkle, PLAY_ASYNCHRONOUS); ExtUI::pausePrint();  break;
-    case 4:  sound.play(twinkle, PLAY_ASYNCHRONOUS); ExtUI::resumePrint(); break;
+    case 2: GOTO_SCREEN(TuneMenu);                   break;
+    case 3: GOTO_SCREEN(ConfirmAbortPrintDialogBox); break;
     default: return false;
   }
   return true;

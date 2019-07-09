@@ -60,14 +60,14 @@ bool MainMenu::onTouchEnd(uint8_t tag) {
   using namespace ExtUI;
 
   switch(tag) {
-    case 1: SaveSettingsDialogBox::promptToSaveSettings();                 break;
-    case 2: injectCommands_P(PSTR("G112"));                               break;
-    case 3: injectCommands_P(PSTR("G28"));                                break;
-    case 4: injectCommands_P(PSTR(LULZBOT_MENU_AXIS_LEVELING_COMMANDS));  break;
-    case 5: StatusScreen::unlockMotors();                                  break;
-    case 6: GOTO_SCREEN(InterfaceSettingsScreen);                          break;
-    case 7: GOTO_SCREEN(AdvancedSettingsMenu);                             break;
-    case 8: GOTO_SCREEN(AboutScreen);                                      break;
+    case 1: SaveSettingsDialogBox::promptToSaveSettings();                               break;
+    case 2: SpinnerDialogBox::enqueueAndWait_P(F("G112"));                               break;
+    case 3: SpinnerDialogBox::enqueueAndWait_P(F("G28"));                                break;
+    case 4: SpinnerDialogBox::enqueueAndWait_P(F(LULZBOT_MENU_AXIS_LEVELING_COMMANDS));  break;
+    case 5: StatusScreen::unlockMotors();                                                break;
+    case 6: GOTO_SCREEN(InterfaceSettingsScreen);                                        break;
+    case 7: GOTO_SCREEN(AdvancedSettingsMenu);                                           break;
+    case 8: GOTO_SCREEN(AboutScreen);                                                    break;
     default:
       return false;
   }

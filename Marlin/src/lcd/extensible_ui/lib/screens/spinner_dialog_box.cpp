@@ -45,9 +45,14 @@ void SpinnerDialogBox::hide() {
   cmd.stop().execute();
 }
 
-void SpinnerDialogBox::enqueueAndWait_P(PGM_P const commands) {
+void SpinnerDialogBox::enqueueAndWait_P(const progmem_str commands) {
+  enqueueAndWait_P(F("Please wait..."), commands);
+}
+
+void SpinnerDialogBox::enqueueAndWait_P(const progmem_str message, const progmem_str commands) {
+  show(message);
   GOTO_SCREEN(SpinnerDialogBox);
-  ExtUI::injectCommands_P(commands);
+  ExtUI::injectCommands_P((const char*)commands);
   screen_data.SpinnerDialogBox.auto_hide = true;
 }
 

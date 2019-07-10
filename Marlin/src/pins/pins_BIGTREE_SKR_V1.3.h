@@ -25,12 +25,10 @@
   #error "Oops!  Make sure you have the LPC1768 environment selected in your IDE."
 #endif
 
-#ifndef BOARD_NAME
-  #define BOARD_NAME "BIGTREE SKR V1.3"
-#endif
+#define BOARD_NAME "BIGTREE SKR 1.3"
 
-// Ignore temp readings during develpment.
-//#define BOGUS_TEMPERATURE_FAILSAFE_OVERRIDE
+// Ignore temp readings during development.
+//#define BOGUS_TEMPERATURE_GRACE_PERIOD 2000
 
 //
 // Servos
@@ -114,8 +112,8 @@
   #endif
 #endif
 
-#if HAS_DRIVER(TMC2208) || HAS_DRIVER(TMC2209)
-    /**
+#if HAS_TMC220x
+  /**
    * TMC2208/TMC2209 stepper drivers
    *
    * Hardware serial communication ports.

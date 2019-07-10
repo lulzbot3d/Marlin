@@ -64,8 +64,8 @@ void BaseScreen::onIdle() {
   #if defined(MENU_TIMEOUT)
     const uint32_t elapsed = millis() - last_interaction;
     if(elapsed > uint32_t(MENU_TIMEOUT) * 1000) {
-      GOTO_SCREEN(StatusScreen);
       reset_menu_timeout();
+      GOTO_SCREEN(StatusScreen);
     }
   #endif
 }

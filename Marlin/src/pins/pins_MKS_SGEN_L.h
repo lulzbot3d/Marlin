@@ -29,7 +29,7 @@
   #error "Oops! Make sure you have the LPC1768 environment selected in your IDE."
 #endif
 
-#define BOARD_NAME        "MKS SGEN-L"
+#define BOARD_NAME        "MKS SGen-L"
 #define BOARD_WEBSITE_URL "https://github.com/makerbase-mks/MKS-SGEN_L"
 
 //
@@ -108,7 +108,7 @@
   #endif
 #endif
 
-#if HAS_DRIVER(TMC2208) || HAS_DRIVER(TMC2209)
+#if HAS_TMC220x
   /**
    * TMC2208 stepper drivers
    *

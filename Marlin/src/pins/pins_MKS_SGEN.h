@@ -29,7 +29,7 @@
   #error "Oops! Make sure you have the LPC1769 environment selected in your IDE."
 #endif
 
-#define BOARD_NAME        "MKS SGEN"
+#define BOARD_NAME        "MKS SGen"
 #define BOARD_WEBSITE_URL "https://github.com/makerbase-mks/MKS-SGEN"
 
 #include "pins_MKS_SBASE.h"
@@ -43,7 +43,7 @@
 //#define BTN_EN1        P1_23   // EXP2.5
 //#define BTN_EN2        P1_22   // EXP2.3
 
-#if HAS_DRIVER(TMC2208) || HAS_DRIVER(TMC2209)
+#if HAS_TMC220x
   // The shortage of pins becomes apparent.
   // In the worst case you may have to give up the LCD.
   // RX pins must be interrupt-capable.

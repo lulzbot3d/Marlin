@@ -102,6 +102,7 @@ SCREEN_TABLE {
   DECL_SCREEN(ConfirmEraseFlashDialogBox),
   DECL_SCREEN(WidgetsScreen),
   DECL_SCREEN(TouchRegistersScreen),
+  DECL_SCREEN(StressTestScreen),
 #endif
   DECL_SCREEN(MediaPlayerScreen),
   DECL_SCREEN(DisplayTuningScreen)

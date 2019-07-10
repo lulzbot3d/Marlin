@@ -245,6 +245,12 @@ void InterfaceSettingsScreen::loadSettings(const char *buff) {
   CLCD::mem_write_16(CLCD::REG::VOFFSET,           eeprom.display_v_offset_adj + FTDI::Voffset);
   for(uint8_t i = 0; i < InterfaceSoundsScreen::NUM_EVENTS; i++)
     InterfaceSoundsScreen::event_sounds[i] = eeprom.event_sounds[i];
+
+  #if ENABLED(DEVELOPER_SCREENS)
+    if(eeprom.passcode == 0xDEAD) {
+      GOTO_SCREEN(StressTestScreen);
+    }
+  #endif
 }
 
 #ifdef LULZBOT_EEPROM_BACKUP_SIZE

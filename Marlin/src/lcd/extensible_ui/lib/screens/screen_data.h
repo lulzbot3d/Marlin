@@ -52,6 +52,12 @@ union screen_data_t {
     struct base_numeric_adjustment_t placeholder;
     float e_rel[ExtUI::extruderCount];
   } MoveAxisScreen;
+#if ENABLED(DEVELOPER_SCREENS)
+  struct {
+    uint32_t next_watchdog_trigger;
+    const char*  message;
+  } StressTestScreen;
+#endif
 #if ENABLED(BABYSTEPPING)
   struct {
     struct base_numeric_adjustment_t placeholder;

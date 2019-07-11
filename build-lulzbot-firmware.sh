@@ -38,6 +38,9 @@ MINI2_TOOLHEADS="$UNIVERSAL_TOOLHEADS"
 KANGAROOPAW_MODELS="KangarooPaw_Experimental"
 KANGAROOPAW_TOOLHEADS="KangarooPaw_SingleExtruder"
 
+ARCHIM_MB=3024
+RAMBO_MB=1211
+
 ####
 # usage
 #
@@ -71,7 +74,7 @@ compile_dependencies() {
   get_arch_info $printer
 
   case $HARDWARE_MOTHERBOARD in
-    1592)
+    $ARCHIM_MB)
       ARCHIM_SRC="ArduinoAddons/arduino-1.8.5/packages/ultimachine/hardware/sam/1.6.9-b"
       (cd "$ARCHIM_SRC/system/libsam/build_gcc"; ARM_GCC_TOOLCHAIN="$gcc_path" make)
       cp -u $ARCHIM_SRC/variants/arduino_due_x/libsam_sam3x8e_gcc_rel.a     $ARCHIM_SRC/variants/archim/libsam_sam3x8e_gcc_rel.a
@@ -92,12 +95,12 @@ get_arch_info() {
     Quiver_TAZPro | OliveoilArchim_Experimental | RedgumArchim_Experimental)
       gcc_path=$ARM_TOOLS_PATH
       format=bin
-      HARDWARE_MOTHERBOARD=3024
+      HARDWARE_MOTHERBOARD=$ARCHIM_MB
       ;;
     *)
       gcc_path=$AVR_TOOLS_PATH
       format=hex
-      HARDWARE_MOTHERBOARD=1211
+      HARDWARE_MOTHERBOARD=$RAMBO_MB
       ;;
   esac
 }

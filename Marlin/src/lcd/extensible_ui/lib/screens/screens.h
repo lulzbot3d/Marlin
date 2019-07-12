@@ -590,7 +590,8 @@ class LockScreen : public BaseScreen, public CachedScreen<LOCK_SCREEN_CACHE> {
     static void enable();
     static void disable();
 
-    static void set(uint16_t pass) {passcode = pass;};
+    static void set_hash(uint16_t pass) {passcode = pass;};
+    static uint16_t get_hash() {return passcode;};
 
     static void onEntry();
     static void onRedraw(draw_mode_t);
@@ -672,10 +673,12 @@ class DisplayTuningScreen : public BaseNumericAdjustmentScreen, public CachedScr
       static bool watchDogTestNow();
       static void recursiveLockup();
       static void iterativeLockup();
+      static void runTestOnBootup(bool enable);
 
     public:
+      static void startupCheck();
+
       static void onEntry();
-      static void onExit();
       static void onRedraw(draw_mode_t);
       static bool onTouchEnd(uint8_t tag);
       static void onIdle();

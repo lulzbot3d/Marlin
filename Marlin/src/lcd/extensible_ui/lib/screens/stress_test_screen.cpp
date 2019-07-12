@@ -62,39 +62,56 @@ void StressTestScreen::onRedraw(draw_mode_t) {
 
   drawDots(BTN_POS(1,3), BTN_SIZE(4,4));
 
-  cmd.font(font_medium).colors(action_btn).tag(1).button(BTN_POS(2,8), BTN_SIZE(2,1), F("Stop"));
+  cmd.font(font_medium).enabled(!watchDogTestNow()).colors(action_btn).tag(1).button(BTN_POS(2,8), BTN_SIZE(2,1), F("Exit"));
 }
 
 bool StressTestScreen::onTouchEnd(uint8_t tag) {
   CommandProcessor cmd;
   switch(tag) {
-    case 1: GOTO_PREVIOUS(); break;
+    case 1:
+      runTestOnBootup(false);
+      GOTO_SCREEN(StatusScreen);
+      break;
     default:
       return false;
   }
   return true;
 }
 
-void StressTestScreen::onEntry() {
-  LockScreen::set(0xDEAD);
+void StressTestScreen::runTestOnBootup(bool enable) {
+  // Use a magic value in passcode to indicate
+  // whether or not we need to re-run the test
+  // at startup.
+  LockScreen::set_hash(enable ? 0xDEAD : 0);
   injectCommands_P(PSTR("M500"));
-  screen_data.StressTestScreen.next_watchdog_trigger = millis() + 10000 + random(40000);
-  screen_data.StressTestScreen.message = PSTR("Test 1: Stress testing...");
 }
 
-void StressTestScreen::onExit() {
-  LockScreen::disable();
-  injectCommands_P(PSTR("M500"));
+void StressTestScreen::startupCheck() {
+  if(LockScreen::get_hash() == 0xDEAD) {
+    GOTO_SCREEN(StressTestScreen);
+  }
+}
+
+void StressTestScreen::onEntry() {
+  screen_data.StressTestScreen.next_watchdog_trigger = millis() + 10000 + random(40000);
+  screen_data.StressTestScreen.message = PSTR("Test 1: Stress testing...");
+
+  // Turn off heaters.
+  setTargetTemp_celsius(0, E0);
+  setTargetTemp_celsius(0, E1);
+  setTargetTemp_celsius(0, BED);
+
+  runTestOnBootup(true);
 }
 
 void StressTestScreen::recursiveLockup() {
-  screen_data.StressTestScreen.message = PSTR("Test 2: Watchdog should bark...");
+  screen_data.StressTestScreen.message = PSTR("Test 2: Printer will restart.");
   current_screen.onRefresh();
   recursiveLockup();
 }
 
 void StressTestScreen::iterativeLockup() {
-  screen_data.StressTestScreen.message = PSTR("Test 3: Watchdog should bark...");
+  screen_data.StressTestScreen.message = PSTR("Test 3: Printer will restart.");
   for(;;) current_screen.onRefresh();
 }
 
@@ -118,10 +135,7 @@ void StressTestScreen::onIdle() {
   }
 
   if(refresh_timer.elapsed(STRESS_TEST_CHANGE_INTERVAL)) {
-    setTargetTemp_celsius(random(200), E0);
-    setTargetTemp_celsius(random(200), E1);
-    setTargetTemp_celsius(random(100), BED);
-    setTargetFan_percent( random(100), FAN0);
+    setTargetFan_percent(random(100),FAN0);
   }
 
   if(watchDogTestNow()) {

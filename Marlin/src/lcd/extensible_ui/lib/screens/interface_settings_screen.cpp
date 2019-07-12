@@ -247,9 +247,7 @@ void InterfaceSettingsScreen::loadSettings(const char *buff) {
     InterfaceSoundsScreen::event_sounds[i] = eeprom.event_sounds[i];
 
   #if ENABLED(DEVELOPER_SCREENS)
-    if(eeprom.passcode == 0xDEAD) {
-      GOTO_SCREEN(StressTestScreen);
-    }
+    StressTestScreen::startupCheck();
   #endif
 }
 

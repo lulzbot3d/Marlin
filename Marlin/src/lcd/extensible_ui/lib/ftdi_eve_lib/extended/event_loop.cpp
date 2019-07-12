@@ -214,15 +214,15 @@ namespace FTDI {
 
   void EventLoop::loop() {
     sound.onIdle();
-    current_screen.onIdle();
 
     /**
-      * Guard against re-entry of the processEvents method,
-      * which can crash. Re-entry can happen because some
-      * functions (e.g. planner.synchronize) call idle().
+      * Guard against re-entry of UI methods, which can
+      * crash. Re-entry can happen because some functions
+      * (e.g. planner.synchronize) call idle().
       */
     if(!UIData::flags.bits.prevent_reentry) {
       UIData::flags.bits.prevent_reentry = true;
+      current_screen.onIdle();
       process_events();
       UIData::flags.bits.prevent_reentry = false;
     }

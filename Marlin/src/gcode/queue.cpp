@@ -178,7 +178,7 @@ bool GCodeQueue::process_injected_command() {
   injected_commands_P = c ? injected_commands_P + i + 1 : nullptr;
 
   // Execute command if non-blank
-  if(i) {
+  if (i) {
     parser.parse(cmd);
     PORT_REDIRECT(SERIAL_PORT);
     gcode.process_parsed_command();

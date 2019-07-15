@@ -240,13 +240,16 @@ e-mail   :  support@circuitsathome.com
 
 // NOTE: On the max3421e the irq enable and irq bits are in the same position.
 
+// IRQs used if CPU polls
+#define   ENIBITSPOLLED (bmCONDETIE | bmBUSEVENTIE  | bmFRAMEIE)
+// IRQs used if CPU is interrupted
+#define      ENIBITSISR (bmCONDETIE | bmBUSEVENTIE | bmFRAMEIE /* | bmRCVDAVIRQ | bmSNDBAVIRQ | bmHXFRDNIRQ */ )
+
 #if !USB_HOST_SHIELD_USE_ISR
-        // IRQs used if CPU polls
-        #define IRQ_CHECK_MASK (bmCONDETIE | bmBUSEVENTIE | bmFRAMEIE)
-        #define IRQ_IS_EDGE 0
+#define IRQ_CHECK_MASK (ENIBITSPOLLED & ICLRALLBITS)
+#define IRQ_IS_EDGE 0
 #else
-        // IRQs used if CPU is interrupted
-        #define IRQ_CHECK_MASK (bmCONDETIE | bmBUSEVENTIE | bmFRAMEIE /* | bmRCVDAVIRQ | bmSNDBAVIRQ | bmHXFRDNIRQ */ )
+#define IRQ_CHECK_MASK (ENIBITSISR & ICLRALLBITS)
 #endif
 
 #if IRQ_IS_EDGE
@@ -305,23 +308,7 @@ public UHS_USB_HOST_BASE
         volatile bool condet;
         volatile bool doingreset;
 
-        bool UHS_NI pollDevices(void);
-        // Frame timer control
-
-        volatile bool frame_irq_enabled = false;
-
-        bool enable_frame_irq(bool enable) {
-                const bool prev_state = frame_irq_enabled;
-                if(prev_state != enable) {
-                        if(enable)
-                                regWr(rHIEN, regRd(rHIEN) |  bmFRAMEIE);
-                        else
-                                regWr(rHIEN, regRd(rHIEN) & ~bmFRAMEIE);
-                        frame_irq_enabled = enable;
-                }
-                return prev_state;
-        }
-
+        LULZBOT_ENABLE_FRAME_IRQ_DEFN
 
 public:
         SPISettings MAX3421E_SPI_Settings;
@@ -332,7 +319,7 @@ public:
         UHS_NI MAX3421E_HOST(void) {
                 sof_countdown = 0;
                 busevent = false;
-                doingreset= false;
+                doingreset = false;
                 sofevent = false;
                 condet = false;
                 ss_pin = UHS_MAX3421E_SS;
@@ -346,7 +333,7 @@ public:
         UHS_NI MAX3421E_HOST(uint8_t pss, uint8_t pirq) {
                 sof_countdown = 0;
                 busevent = false;
-                doingreset= false;
+                doingreset = false;
                 sofevent = false;
                 condet = false;
                 ss_pin = pss;
@@ -359,7 +346,7 @@ public:
 
         UHS_NI MAX3421E_HOST(uint8_t pss, uint8_t pirq, uint32_t pspd) {
                 sof_countdown = 0;
-                doingreset= false;
+                doingreset = false;
                 busevent = false;
                 sofevent = false;
                 condet = false;
@@ -370,15 +357,15 @@ public:
         };
 
         virtual bool UHS_NI sof_delay(uint16_t x) {
-                const bool saved_irq_state = enable_frame_irq(true);
+                LULZBOT_FRAME_IRQ_SAVE(true);
                 sof_countdown = x;
                 while((sof_countdown != 0) && !condet) {
-                SYSTEM_OR_SPECIAL_YIELD();
+                        SYSTEM_OR_SPECIAL_YIELD();
 #if !USB_HOST_SHIELD_USE_ISR
                         Task();
 #endif
                 }
-                enable_frame_irq(saved_irq_state);
+                LULZBOT_FRAME_IRQ_RESTORE();
                 //                Serial.println("...Wake");
                 return (!condet);
         };
@@ -430,14 +417,15 @@ public:
                 interrupts();
 #endif
                 while(busevent) {
-                DDSB();
+                        DDSB();
+                        SYSTEM_OR_SPECIAL_YIELD();
                 }
 #endif
 #if USB_HOST_SHIELD_USE_ISR
                 // Enable interrupts
                 noInterrupts();
 #endif
-                enable_frame_irq(true);
+                LULZBOT_ENABLE_FRAME_IRQ(true);
                 sofevent = true;
 #if USB_HOST_SHIELD_USE_ISR
                 DDSB();

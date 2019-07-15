@@ -62,14 +62,6 @@ static_assert(USB_INTR_PIN != -1, "USB_INTR_PIN must be defined");
   #define SYSTEM_OR_SPECIAL_YIELD(...) marlin_yield();
   #define delay(x) safe_delay(x)
 
-  #define LULZBOT_USB_NO_TEST_UNIT_READY
-  #define LULZBOT_SKIP_PAGE3F
-  #define USB_HOST_MANUAL_POLL 1
-
-  // Speed up I/O operations using Marlin functions
-  #define UHS_WRITE_SS(v)    WRITE(USB_CS_PIN, v)
-  #define UHS_READ_IRQ()     READ(USB_INTR_PIN)
-
   #define LOAD_USB_HOST_SYSTEM
   #define LOAD_USB_HOST_SHIELD
   #define LOAD_UHS_BULK_STORAGE

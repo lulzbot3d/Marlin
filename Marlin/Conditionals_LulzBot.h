@@ -70,6 +70,7 @@
  *  31. LCD OPTIONS
  *  32. CUSTOM SPLASH SCREEN
  *  33. Z-OFFSET AUTO-SAVE
+ *  34. USB THUMBDRIVE SUPPORT
  *
  */
 
@@ -2511,4 +2512,51 @@
     #define LULZBOT_SAVE_ZOFFSET_TO_EEPROM_DECL
     #define LULZBOT_SAVE_ZOFFSET_TO_EEPROM_IMPL
     #define LULZBOT_SAVE_ZOFFSET_TO_EEPROM
+#endif
+
+/************************* USB THUMBDRIVE SUPPORT *************************/
+
+#if defined(LULZBOT_USB_USE_UHS3)
+  #define LULZBOT_USB_NO_TEST_UNIT_READY // Required for removable media adapter
+  #define LULZBOT_SKIP_PAGE3F // Required for IOGEAR media adapter
+  #define LULZBOT_USB_HOST_MANUAL_POLL // Optimization to shut off IRQ automatically
+
+  // Speed up I/O operations using Marlin functions
+  #define LULZBOT_UHS_WRITE_SS(v)    WRITE(USB_CS_PIN, v)
+  #define LULZBOT_UHS_READ_IRQ()     READ(USB_INTR_PIN)
+
+  #if defined(LULZBOT_USB_HOST_MANUAL_POLL)
+      #define LULZBOT_ENABLE_FRAME_IRQ(en) enable_frame_irq(en)
+      #define LULZBOT_ENABLE_FRAME_IRQ_DEFN \
+            volatile bool frame_irq_enabled = false; \
+            bool enable_frame_irq(bool enable) { \
+                    const bool prev_state = frame_irq_enabled; \
+                    if(prev_state != enable) { \
+                            if(enable) \
+                                    regWr(rHIEN, regRd(rHIEN) |  bmFRAMEIE); \
+                            else \
+                                    regWr(rHIEN, regRd(rHIEN) & ~bmFRAMEIE); \
+                            frame_irq_enabled = enable; \
+                    } \
+                    return prev_state; \
+            }
+        #define LULZBOT_USB_IDLE_TASK \
+            if(usb_task_state == UHS_USB_HOST_STATE_RUNNING) { \
+                    noInterrupts(); \
+                    for(uint8_t x = 0; x < UHS_HOST_MAX_INTERFACE_DRIVERS; x++) { \
+                            if(devConfig[x] && devConfig[x]->bPollEnable) { \
+                                    devConfig[x]->Poll(); \
+                            } \
+                    } \
+                    interrupts(); \
+            }
+        #define LULZBOT_FRAME_IRQ_SAVE(en) const bool saved_irq_state = enable_frame_irq(en)
+        #define LULZBOT_FRAME_IRQ_RESTORE() enable_frame_irq(saved_irq_state)
+    #else
+        #define LULZBOT_ENABLE_FRAME_IRQ(en)
+        #define LULZBOT_ENABLE_FRAME_IRQ_DEFN
+        #define LULZBOT_FRAME_IRQ_SAVE(en)
+        #define LULZBOT_FRAME_IRQ_RESTORE()
+        #define LULZBOT_USB_IDLE_TASK
+    #endif
 #endif

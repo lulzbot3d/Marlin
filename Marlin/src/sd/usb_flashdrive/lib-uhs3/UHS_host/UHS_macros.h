@@ -129,15 +129,7 @@ e-mail   :  support@circuitsathome.com
 #define UHS_PIN_READ(p) digitalRead(p)
 #endif
 
-#ifndef UHS_WRITE_SS
-#define UHS_WRITE_SS(v) UHS_PIN_WRITE(ss_pin, v)
-#endif
-
-#ifndef UHS_READ_IRQ
-#define UHS_READ_IRQ(v) UHS_PIN_READ(irq_pin)
-#endif
-
-#if defined( __PIC32MX__ ) && !defined(interrupts) //compiling with Microchip XC32 compiler
+#if defined( __PIC32MX__ ) && !defined(interrupts) // compiling with Microchip XC32 compiler
 #define interrupts() __builtin_enable_interrupts()
 #edfine noInterrupts() __builtin_disable_interrupts()
 #endif

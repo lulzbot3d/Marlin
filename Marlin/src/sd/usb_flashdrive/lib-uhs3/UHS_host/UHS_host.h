@@ -33,7 +33,7 @@ e-mail   :  support@circuitsathome.com
 #include <stdio.h>
 #include <stdint.h>
 
-#ifndef __MARLIN_FIRMWARE__
+#if !defined(LULZBOT_USB_USE_UHS3)
 #include <ISR_safe_memory.h>
 #include <Wire.h>
 #include <SPI.h>

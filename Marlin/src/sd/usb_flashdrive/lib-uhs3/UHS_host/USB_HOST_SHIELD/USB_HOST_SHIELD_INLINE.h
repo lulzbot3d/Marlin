@@ -65,10 +65,10 @@ void UHS_NI MAX3421E_HOST::resume_host(void) {
 /* write single byte into MAX3421e register */
 void UHS_NI MAX3421E_HOST::regWr(uint8_t reg, uint8_t data) {
         SPIclass.beginTransaction(MAX3421E_SPI_Settings);
-        UHS_WRITE_SS(LOW);
+        LULZBOT_UHS_WRITE_SS(LOW);
         SPIclass.transfer(reg | 0x02);
         SPIclass.transfer(data);
-        UHS_WRITE_SS(HIGH);
+        LULZBOT_UHS_WRITE_SS(HIGH);
         SPIclass.endTransaction();
 }
 
@@ -78,7 +78,7 @@ void UHS_NI MAX3421E_HOST::regWr(uint8_t reg, uint8_t data) {
 /* returns a pointer to memory position after last written */
 uint8_t* UHS_NI MAX3421E_HOST::bytesWr(uint8_t reg, uint8_t nbytes, uint8_t* data_p) {
         SPIclass.beginTransaction(MAX3421E_SPI_Settings);
-        UHS_WRITE_SS(LOW);
+        LULZBOT_UHS_WRITE_SS(LOW);
         SPIclass.transfer(reg | 0x02);
         //printf("%2.2x :", reg);
 
@@ -88,7 +88,7 @@ uint8_t* UHS_NI MAX3421E_HOST::bytesWr(uint8_t reg, uint8_t nbytes, uint8_t* dat
                 nbytes--;
                 data_p++; // advance data pointer
         }
-        UHS_WRITE_SS(HIGH);
+        LULZBOT_UHS_WRITE_SS(HIGH);
         SPIclass.endTransaction();
         //printf("\r\n");
         return (data_p);
@@ -107,10 +107,10 @@ void UHS_NI MAX3421E_HOST::gpioWr(uint8_t data) {
 /* single host register read    */
 uint8_t UHS_NI MAX3421E_HOST::regRd(uint8_t reg) {
         SPIclass.beginTransaction(MAX3421E_SPI_Settings);
-        UHS_WRITE_SS(LOW);
+        LULZBOT_UHS_WRITE_SS(LOW);
         SPIclass.transfer(reg);
         uint8_t rv = SPIclass.transfer(0);
-        UHS_WRITE_SS(HIGH);
+        LULZBOT_UHS_WRITE_SS(HIGH);
         SPIclass.endTransaction();
         return (rv);
 }
@@ -119,13 +119,13 @@ uint8_t UHS_NI MAX3421E_HOST::regRd(uint8_t reg) {
 /* returns a pointer to a memory position after last read   */
 uint8_t* UHS_NI MAX3421E_HOST::bytesRd(uint8_t reg, uint8_t nbytes, uint8_t* data_p) {
         SPIclass.beginTransaction(MAX3421E_SPI_Settings);
-        UHS_WRITE_SS(LOW);
+        LULZBOT_UHS_WRITE_SS(LOW);
         SPIclass.transfer(reg);
         while(nbytes) {
                 *data_p++ = SPIclass.transfer(0);
                 nbytes--;
         }
-        UHS_WRITE_SS(HIGH);
+        LULZBOT_UHS_WRITE_SS(HIGH);
         SPIclass.endTransaction();
         return ( data_p);
 }
@@ -229,7 +229,7 @@ void UHS_NI MAX3421E_HOST::busprobe(void) {
                                 regWr(rMODE, MODE_LS_HOST); // start low-speed host
                                 vbusState = LSHOST;
                         }
-                        enable_frame_irq(true);
+                        LULZBOT_ENABLE_FRAME_IRQ(true);
                         tmpdata = regRd(rMODE) | bmSOFKAENAB; // start SOF generation
                         regWr(rHIRQ, bmFRAMEIRQ); // see data sheet.
                         regWr(rMODE, tmpdata);
@@ -243,7 +243,7 @@ void UHS_NI MAX3421E_HOST::busprobe(void) {
                                 regWr(rMODE, MODE_FS_HOST); // start full-speed host
                                 vbusState = FSHOST;
                         }
-                        enable_frame_irq(true);
+                        LULZBOT_ENABLE_FRAME_IRQ(true);
                         tmpdata = regRd(rMODE) | bmSOFKAENAB; // start SOF generation
                         regWr(rHIRQ, bmFRAMEIRQ); // see data sheet.
                         regWr(rMODE, tmpdata);
@@ -297,7 +297,7 @@ int16_t UHS_NI MAX3421E_HOST::Init(int16_t mseconds) {
                 pinMode(irq_pin, INPUT_PULLUP);
         //UHS_PIN_WRITE(irq_pin, HIGH);
         pinMode(ss_pin, OUTPUT);
-        UHS_WRITE_SS(HIGH);
+        LULZBOT_UHS_WRITE_SS(HIGH);
 
 #ifdef USB_HOST_SHIELD_TIMING_PIN
         pinMode(USB_HOST_SHIELD_TIMING_PIN, OUTPUT);
@@ -374,8 +374,8 @@ again:
 
         regWr(rMODE, bmDPPULLDN | bmDMPULLDN | bmHOST); // set pull-downs, Host
 
-        // Set the MAX3421e to issue interrupts on bus condition detections and events
-        regWr(rHIEN, bmCONDETIE | bmBUSEVENTIE);
+        // Enable interrupts on the MAX3421e
+        regWr(rHIEN, IRQ_CHECK_MASK);
         // Enable interrupt pin on the MAX3421e, set pulse width for edge
         regWr(rCPUCTL, (bmIE | bmPULSEWIDTH));
 
@@ -563,6 +563,7 @@ uint8_t UHS_NI MAX3421E_HOST::OutTransfer(UHS_EpInfo *pep, uint16_t nak_limit, u
         regWr(rHCTL, (pep->bmSndToggle) ? bmSNDTOG1 : bmSNDTOG0); //set toggle value
 
         while(bytes_left) {
+                SYSTEM_OR_SPECIAL_YIELD();
                 retry_count = 0;
                 nak_count = 0;
                 bytes_tosend = (bytes_left >= maxpktsize) ? maxpktsize : bytes_left;
@@ -602,6 +603,7 @@ uint8_t UHS_NI MAX3421E_HOST::OutTransfer(UHS_EpInfo *pep, uint16_t nak_limit, u
                         while(!(regRd(rHIRQ) & bmHXFRDNIRQ)); //wait for the completion IRQ
                         regWr(rHIRQ, bmHXFRDNIRQ); //clear IRQ
                         rcode = (regRd(rHRSL) & 0x0f);
+                        SYSTEM_OR_SPECIAL_YIELD();
                 }//while( rcode && ....
                 bytes_left -= bytes_tosend;
                 data_p += bytes_tosend;
@@ -633,16 +635,11 @@ uint8_t UHS_NI MAX3421E_HOST::dispatchPkt(uint8_t token, uint8_t ep, uint16_t na
         uint8_t retry_count = 0;
         uint16_t nak_count = 0;
 
-        #if USB_HOST_NAK_LIMIT > 0
-                if(nak_limit <  USB_HOST_NAK_LIMIT) {
-                        nak_limit = USB_HOST_NAK_LIMIT;
-                }
-        #endif
-
         for(;;) {
                 regWr(rHXFR, (token | ep)); //launch the transfer
                 while((long)(millis() - timeout) < 0L) //wait for transfer completion
                 {
+                        SYSTEM_OR_SPECIAL_YIELD();
                         tmpdata = regRd(rHIRQ);
 
                         if(tmpdata & bmHXFRDNIRQ) {
@@ -834,23 +831,23 @@ void UHS_NI MAX3421E_HOST::ISRbottom(void) {
                 case UHS_USB_HOST_STATE_CONFIGURING_DONE:
                         usb_task_state = UHS_USB_HOST_STATE_RUNNING;
                         break;
+                #if defined(LULZBOT_USB_HOST_MANUAL_POLL)
                 case UHS_USB_HOST_STATE_RUNNING:
-                        #if USB_HOST_MANUAL_POLL && USB_HOST_SHIELD_USE_ISR
-                                enable_frame_irq(false);
-                        #else
-                                // If no device requires polling, it is okay to shutoff
-                                // the frame irq to free up some CPU cycles until the
-                                // next device insertion/removal
-                                if(!pollDevices()) {
-                                        enable_frame_irq(false);
-                                }
-                        #endif
-                        break;
                 case UHS_USB_HOST_STATE_ERROR:
                 case UHS_USB_HOST_STATE_IDLE:
                 case UHS_USB_HOST_STATE_ILLEGAL:
-                        enable_frame_irq(false);
+                        LULZBOT_ENABLE_FRAME_IRQ(false);
                         break;
+                #else
+                case UHS_USB_HOST_STATE_RUNNING:
+                        Poll_Others();
+                        for(x = 0; (usb_task_state == UHS_USB_HOST_STATE_RUNNING) && (x < UHS_HOST_MAX_INTERFACE_DRIVERS); x++) {
+                                if(devConfig[x]) {
+                                        if(devConfig[x]->bPollEnable) devConfig[x]->Poll();
+                                }
+                        }
+                        // fall thru
+                #endif
                 default:
                         // Do nothing
                         break;
@@ -874,24 +871,6 @@ void UHS_NI MAX3421E_HOST::ISRbottom(void) {
         DDSB();
 }
 
-/* Allows devices to run periodic tasks. Returns "true" if any devices
- * have polling enabled. */
-bool UHS_NI MAX3421E_HOST::pollDevices(void) {
-        bool is_polling = false;
-        #if defined(UHS_LOAD_BT) || defined(UHS_LOAD_HID)
-                Poll_Others();
-                is_polling = true;
-        #endif
-
-        for(uint8_t x = 0; x < UHS_HOST_MAX_INTERFACE_DRIVERS; x++) {
-                if(devConfig[x] && devConfig[x]->bPollEnable) {
-                        devConfig[x]->Poll();
-                        is_polling = true;
-                }
-        }
-        return is_polling;
-}
-
 
 /* USB main task. Services the MAX3421e */
 #if !USB_HOST_SHIELD_USE_ISR
@@ -902,13 +881,7 @@ void UHS_NI MAX3421E_HOST::Task(void)
 #else
 
 void UHS_NI MAX3421E_HOST::Task(void) {
-        #if USB_HOST_MANUAL_POLL
-                if(usb_task_state == UHS_USB_HOST_STATE_RUNNING) {
-                        noInterrupts();
-                        pollDevices();
-                        interrupts();
-                }
-        #endif
+        LULZBOT_USB_IDLE_TASK
 }
 
 void UHS_NI MAX3421E_HOST::ISRTask(void)
@@ -916,8 +889,16 @@ void UHS_NI MAX3421E_HOST::ISRTask(void)
 {
         DDSB();
 
+#if !defined(SWI_IRQ_NUM)
+        suspend_host();
+#if USB_HOST_SHIELD_USE_ISR
+        // Enable interrupts
+        interrupts();
+#endif
+#endif
+
         counted = false;
-        if(!UHS_READ_IRQ()) {
+        if(!LULZBOT_UHS_READ_IRQ()) {
                 uint8_t HIRQALL = regRd(rHIRQ); //determine interrupt source
                 uint8_t HIRQ = HIRQALL & IRQ_CHECK_MASK;
                 uint8_t HIRQ_sendback = 0x00;
@@ -972,6 +953,13 @@ void UHS_NI MAX3421E_HOST::ISRTask(void)
                 //        usb_task_polling_disabled? "T" : "F");
                 DDSB();
                 regWr(rHIRQ, HIRQ_sendback);
+#if !defined(SWI_IRQ_NUM)
+        resume_host();
+#if USB_HOST_SHIELD_USE_ISR
+        // Disable interrupts
+        noInterrupts();
+#endif
+#endif
                 if(!sof_countdown && !counted && !usb_task_polling_disabled) {
                         DisablePoll();
                         //usb_task_polling_disabled++;

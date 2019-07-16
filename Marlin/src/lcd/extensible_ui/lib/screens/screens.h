@@ -139,7 +139,7 @@ class KillScreen {
 class DialogBoxBaseClass : public BaseScreen {
   protected:
     template<typename T> static void drawMessage(const T, int16_t font = 0);
-    static void drawYesNoButtons();
+    static void drawYesNoButtons(uint8_t default_btn = 0);
     static void drawOkayButton();
     static void drawSpinner();
     static void drawButton(const progmem_str);

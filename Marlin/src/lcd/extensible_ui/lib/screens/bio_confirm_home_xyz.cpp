@@ -30,7 +30,7 @@ using namespace FTDI;
 
 void BioConfirmHomeXYZ::onRedraw(draw_mode_t) {
   drawMessage(F("About to home to loading position.\nEnsure the top and the bed of the printer are clear.\n\nContinue?"));
-  drawYesNoButtons();
+  drawYesNoButtons(1);
 }
 
 bool BioConfirmHomeXYZ::onTouchEnd(uint8_t tag) {

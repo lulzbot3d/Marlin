@@ -69,6 +69,9 @@ enum {
 #if ENABLED(FILAMENT_RUNOUT_SENSOR)
   FILAMENT_RUNOUT_SCREEN_CACHE,
 #endif
+#if defined(LULZBOT_USE_BIOPRINTER_UI)
+  PRINTING_SCREEN_CACHE,
+#endif
   CHANGE_FILAMENT_SCREEN_CACHE,
   INTERFACE_SETTINGS_SCREEN_CACHE,
   INTERFACE_SOUNDS_SCREEN_CACHE,
@@ -84,6 +87,7 @@ enum {
 #define ALERT_BOX_DL_SIZE            3072
 #define SPINNER_DL_SIZE              3072
 #define FILE_SCREEN_DL_SIZE          3072
+#define PRINTING_SCREEN_DL_SIZE      2048
 
 /************************* MENU SCREEN DECLARATIONS *************************/
 
@@ -149,8 +153,8 @@ class AlertDialogBox : public DialogBoxBaseClass, public CachedScreen<ALERT_BOX_
   public:
     static void onEntry();
     static void onRedraw(draw_mode_t);
-    template<typename T> static void show(const T);
-    template<typename T> static void showError(const T);
+    template<typename T> static void show(T);
+    template<typename T> static void showError(T);
     static void hide();
 };
 
@@ -224,7 +228,7 @@ class StatusScreen : public BaseScreen, public CachedScreen<STATUS_SCREEN_CACHE,
     static bool onTouchEnd(uint8_t tag);
 };
 #else
-  class StatusScreen : public BaseScreen, public CachedScreen<STATUS_SCREEN_CACHE,STATUS_SCREEN_DL_SIZE> {
+  class StatusScreen : public BaseScreen, public CachedScreen<STATUS_SCREEN_CACHE> {
     private:
       static float increment;
       static bool  jog_xy;
@@ -252,11 +256,19 @@ class StatusScreen : public BaseScreen, public CachedScreen<STATUS_SCREEN_CACHE,
 
   };
 
-  class BioPrintingDialogBox : public BaseScreen, public UncachedScreen {
+  class BioPrintingDialogBox : public BaseScreen, public CachedScreen<PRINTING_SCREEN_CACHE,PRINTING_SCREEN_DL_SIZE> {
+    private:
+      static void draw_status_message(draw_mode_t, const char * const);
+      static void draw_progress(draw_mode_t);
+      static void draw_time_remaining(draw_mode_t);
+      static void draw_interaction_buttons(draw_mode_t);
     public:
       static void onRedraw(draw_mode_t);
 
       static void show();
+
+      static void setStatusMessage(const char *);
+      static void setStatusMessage(progmem_str);
 
       static void onIdle();
       static bool onTouchEnd(uint8_t tag);

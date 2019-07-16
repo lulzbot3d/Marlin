@@ -32,7 +32,7 @@
 #define E_TRAVEL_LIMIT 60
 
 #define GRID_COLS 2
-#define GRID_ROWS 10
+#define GRID_ROWS 9
 
 #define POLY(A) PolyUI::poly_reader_t(A, sizeof(A)/sizeof(A[0]))
 
@@ -168,18 +168,20 @@ void StatusScreen::draw_fine_motion(draw_mode_t what) {
   CommandProcessor cmd;
   PolyUI ui(cmd, what);
 
-  cmd.cmd(COLOR_RGB(bg_text_enabled))
-     .font(font_medium)
+  cmd.font(font_medium)
      .tag(16);
 
   if(what & BACKGROUND) {
+
     ui.bounds(POLY(fine_label), x, y, h, v);
-    cmd.text(x, y, h, v, F("Fine motion:"));
+    cmd.cmd(COLOR_RGB(bg_text_enabled))
+       .text(x, y, h, v, F("Fine motion:"));
   }
 
   if(what & FOREGROUND) {
     ui.bounds(POLY(fine_toggle), x, y, h, v);
-    cmd.toggle(x, y, h, v, F("no\xFFyes"), fine_motion);
+    cmd.colors(ui_toggle)
+       .toggle(x, y, h, v, F("no\xFFyes"), fine_motion);
   }
 }
 
@@ -209,14 +211,11 @@ void StatusScreen::draw_overlay_icons(draw_mode_t what) {
   }
 }
 
-void StatusScreen::draw_buttons(draw_mode_t what) {
-  int16_t x, y, h, v;
+void StatusScreen::draw_buttons(draw_mode_t) {
   const bool has_media = isMediaInserted() && !isPrintingFromMedia();
 
   CommandProcessor cmd;
-  PolyUI ui(cmd, what);
 
-  ui.bounds(POLY(usb_btn), x, y, h, v);
   cmd.font(font_medium)
      .colors(normal_btn)
     #if ENABLED(USB_FLASH_DRIVE_SUPPORT) && defined(LULZBOT_MANUAL_USB_STARTUP)
@@ -225,7 +224,7 @@ void StatusScreen::draw_buttons(draw_mode_t what) {
       .enabled(has_media)
     #endif
      .colors(has_media ? action_btn : normal_btn)
-     .tag(9).button(x, y, h, v,
+     .tag(9).button(BTN_POS(1,9), BTN_SIZE(1,1),
         isPrintingFromMedia() ?
           F("Printing") :
       #if ENABLED(USB_FLASH_DRIVE_SUPPORT)
@@ -239,8 +238,7 @@ void StatusScreen::draw_buttons(draw_mode_t what) {
       #endif
       );
 
-  ui.bounds(POLY(menu_btn), x, y, h, v);
-  cmd.colors(!has_media ? action_btn : normal_btn).tag(10).button(x, y, h, v, F("Menu"));
+  cmd.colors(!has_media ? action_btn : normal_btn).tag(10).button(BTN_POS(2,9), BTN_SIZE(1,1), F("Menu"));
 }
 
 void StatusScreen::onStartup() {
@@ -330,10 +328,12 @@ bool StatusScreen::onTouchHeld(uint8_t tag) {
   return false;
 }
 
-void StatusScreen::setStatusMessage(progmem_str) {
+void StatusScreen::setStatusMessage(progmem_str pstr) {
+  BioPrintingDialogBox::setStatusMessage(pstr);
 }
 
-void StatusScreen::setStatusMessage(const char * const) {
+void StatusScreen::setStatusMessage(const char * const str) {
+  BioPrintingDialogBox::setStatusMessage(str);
 }
 
 void StatusScreen::onIdle() {

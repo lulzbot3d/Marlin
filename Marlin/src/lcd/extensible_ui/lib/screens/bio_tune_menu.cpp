@@ -44,16 +44,20 @@ void TuneMenu::onRedraw(draw_mode_t what) {
     using namespace ExtUI;
 
     CommandProcessor cmd;
-    cmd.colors(normal_btn)
+    cmd.cmd(COLOR_RGB(bg_text_enabled))
+       .font(font_large).text  ( BTN_POS(1,1), BTN_SIZE(2,1), F("Print Menu"))
+       .colors(normal_btn)
        .font(font_medium)
-       .tag(2).button( BTN_POS(1,1), BTN_SIZE(2,1), F("Print Speed"))
-       .tag(3).button( BTN_POS(1,2), BTN_SIZE(2,1), F("Bed Temperature"))
+       .enabled(!isPrinting())
+       .tag(2).button( BTN_POS(1,2), BTN_SIZE(2,1), isPrinting() ? F("Printing...") : F("Print Again"))
+       .tag(3).button( BTN_POS(1,3), BTN_SIZE(2,1), F("Print Speed"))
+       .tag(4).button( BTN_POS(1,4), BTN_SIZE(2,1), F("Bed Temperature"))
         #if ENABLED(BABYSTEPPING)
           .enabled(true)
         #else
           .enabled(false)
         #endif
-       .tag(4).button( BTN_POS(1,3), BTN_SIZE(2,1), F("Nudge Nozzle"))
+       .tag(5).button( BTN_POS(1,5), BTN_SIZE(2,1), F("Nudge Nozzle"))
        .colors(action_btn)
        .tag(1).button( BTN_POS(1,8), BTN_SIZE(2,1), F("Back"));
   }
@@ -66,9 +70,15 @@ bool TuneMenu::onTouchEnd(uint8_t tag) {
   using namespace ExtUI;
   switch(tag) {
     case 1:  GOTO_PREVIOUS();                    break;
-    case 2:  GOTO_SCREEN(FeedratePercentScreen); break;
-    case 3:  GOTO_SCREEN(TemperatureScreen);     break;
-    case 4:  GOTO_SCREEN(NudgeNozzleScreen);     break;
+    case 2: {
+      FileList files;
+      printFile(files.shortFilename());
+      GOTO_PREVIOUS();
+      break;
+    }
+    case 3:  GOTO_SCREEN(FeedratePercentScreen); break;
+    case 4:  GOTO_SCREEN(TemperatureScreen);     break;
+    case 5:  GOTO_SCREEN(NudgeNozzleScreen);     break;
     default:
       return false;
   }

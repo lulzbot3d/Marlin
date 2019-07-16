@@ -36,7 +36,7 @@ void ConfirmAbortPrintDialogBox::onRedraw(draw_mode_t) {
 bool ConfirmAbortPrintDialogBox::onTouchEnd(uint8_t tag) {
   switch(tag) {
     case 1:
-      GOTO_SCREEN(StatusScreen);
+      GOTO_PREVIOUS();
       stopPrint();
       return true;
     default:

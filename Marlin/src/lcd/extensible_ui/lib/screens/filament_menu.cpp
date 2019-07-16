@@ -22,7 +22,7 @@
 
 #include "../config.h"
 
-#if ENABLED(EXTENSIBLE_UI)
+#if ENABLED(EXTENSIBLE_UI) && ANY(LIN_ADVANCE, FILAMENT_RUNOUT_SENSOR)
 
 #include "screens.h"
 

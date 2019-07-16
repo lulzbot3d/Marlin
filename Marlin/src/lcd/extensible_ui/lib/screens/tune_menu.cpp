@@ -150,7 +150,11 @@ bool TuneMenu::onTouchEnd(uint8_t tag) {
     case 5:  GOTO_SCREEN(FeedratePercentScreen);     break;
     case 6:  sound.play(twinkle, PLAY_ASYNCHRONOUS); ExtUI::pausePrint();  GOTO_SCREEN(StatusScreen); break;
     case 7:  sound.play(twinkle, PLAY_ASYNCHRONOUS); ExtUI::resumePrint(); GOTO_SCREEN(StatusScreen); break;
-    case 8:  GOTO_SCREEN(ConfirmAbortPrintDialogBox);     break;
+    case 8:
+      GOTO_SCREEN(ConfirmAbortPrintDialogBox);
+      current_screen.forget();
+      PUSH_SCREEN(StatusScreen);
+      break;
     #if ENABLED(LIN_ADVANCE) || ENABLED(FILAMENT_RUNOUT_SENSOR)
     case 9:  GOTO_SCREEN(FilamentMenu); break;
     #endif

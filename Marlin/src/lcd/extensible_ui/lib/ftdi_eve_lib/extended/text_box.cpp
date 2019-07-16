@@ -95,21 +95,23 @@ namespace FTDI {
     const uint16_t dx = (options & OPT_RIGHTX) ? w : (options & OPT_CENTERX) ? w/2 : 0;
     const uint16_t dy = (options & OPT_CENTERY) ? (h - box_height)/2 : 0;
 
-    const char *line_start = (const char*)str;
+    const char *line_start = str;
     const char *line_end;
     for(;;) {
       find_line_break(fm, w, line_start, line_end);
       if(line_end == line_start) break;
 
       const size_t line_len = line_end - line_start;
-      char line[line_len + 1];
-      strncpy(line, line_start, line_len);
-      line[line_len] = 0;
-      if(line[line_len - 1] == '\n' || line[line_len - 1] == ' ')
-        line[line_len - 1] = 0;
+      if(line_len) {
+        char line[line_len + 1];
+        strncpy(line, line_start, line_len);
+        line[line_len] = 0;
+        if(line[line_len - 1] == '\n' || line[line_len - 1] == ' ')
+          line[line_len - 1] = 0;
 
-      cmd.CLCD::CommandFifo::text(x + dx, y + dy, font, options & ~OPT_CENTERY);
-      cmd.CLCD::CommandFifo::str(line);
+        cmd.CLCD::CommandFifo::text(x + dx, y + dy, font, options & ~OPT_CENTERY);
+        cmd.CLCD::CommandFifo::str(line);
+      }
       y += fm.height;
 
       line_start = line_end;
@@ -119,7 +121,7 @@ namespace FTDI {
   void draw_text_box(CommandProcessor& cmd, int x, int y, int w, int h, progmem_str pstr, uint16_t options, uint8_t font) {
     char str[strlen_P((const char*)pstr) + 1];
     strcpy_P(str, (const char*)pstr);
-    draw_text_box(cmd, x, y, w, h, str, options, font);
+    draw_text_box(cmd, x, y, w, h, (const char*) str, options, font);
   }
 } // namespace FTDI
 

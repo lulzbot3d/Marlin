@@ -1026,7 +1026,7 @@ template bool CLCD::CommandFifo::write(progmem_str, uint16_t);
 
 // CO_PROCESSOR COMMANDS
 
-void CLCD::CommandFifo::str (const char * const data) {
+void CLCD::CommandFifo::str (const char * data) {
   write(data, strlen(data)+1);
 }
 

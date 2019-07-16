@@ -228,12 +228,14 @@ void BaseNumericAdjustmentScreen::widgets_t::text_field(uint8_t tag, const char 
   if(_what & BACKGROUND) {
     cmd.enabled(1)
        .font(font_small)
-       .fgcolor(_color)            .tag(0).button( BTN_POS(5,_line), BTN_SIZE(9,1), F(""),               OPT_FLAT)
+       .cmd(COLOR_RGB(bg_text_enabled))
+       .fgcolor(_color).tag(0).button( BTN_POS(5,_line), BTN_SIZE(9,1), F(""),               OPT_FLAT)
        .fgcolor(bg_color) .tag(0).button( BTN_POS(1,_line), BTN_SIZE(4,1), (progmem_str) label, OPT_FLAT);
   }
 
   if(_what & FOREGROUND) {
-    cmd.font(font_medium)
+    cmd.colors(normal_btn)
+       .font(font_medium)
        .tag(tag).font(font_small).text ( BTN_POS(5,_line), BTN_SIZE(9,1), is_enabled ? value : "-");
   }
 

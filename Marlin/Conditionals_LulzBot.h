@@ -329,6 +329,7 @@
     #define LULZBOT_SDSUPPORT
     #define LULZBOT_USB_FLASH_DRIVE_SUPPORT
     #define LULZBOT_USB_USE_UHS3
+    #define LULZBOT_CONSERVE_MEMORY
     #define LULZBOT_MANUAL_USB_STARTUP
 #endif
 
@@ -338,10 +339,10 @@
     #define LULZBOT_NO_EXTRUDER_HEATER
     #define LULZBOT_IS_MINI
     #define LULZBOT_MINI_BED
-    #define LULZBOT_USE_AUTOLEVELING
+    //#define LULZBOT_USE_AUTOLEVELING
     #define LULZBOT_USE_EINSY_RETRO
     #define LULZBOT_SENSORLESS_HOMING
-    #define LULZBOT_BACKLASH_COMPENSATION
+    //#define LULZBOT_BACKLASH_COMPENSATION
     #define LULZBOT_BIOPRINTER_GCODE
     #define LULZBOT_USE_NORMALLY_CLOSED_ENDSTOPS
     #define LULZBOT_STEALTHCHOP_Z
@@ -360,6 +361,7 @@
     #define LULZBOT_SDSUPPORT
     #define LULZBOT_USB_FLASH_DRIVE_SUPPORT
     #define LULZBOT_USB_USE_UHS3
+    #define LULZBOT_CONSERVE_MEMORY
     //#define LULZBOT_MANUAL_USB_STARTUP
 #endif
 
@@ -388,6 +390,7 @@
     #define LCD_480x272
     #define LULZBOT_SDSUPPORT
     #define LULZBOT_USB_FLASH_DRIVE_SUPPORT
+    #define LULZBOT_CONSERVE_MEMORY
 #endif
 
 #if defined(LULZBOT_GladiolaEinsyLCD_Experimental)
@@ -523,7 +526,11 @@
 #define LULZBOT_PAUSE_PARK_NOZZLE_TIMEOUT 300
 #define LULZBOT_ADVANCED_OK
 #define LULZBOT_TX_BUFFER_SIZE 32
-#define LULZBOT_BUFSIZE 5
+#if defined(LULZBOT_CONSERVE_MEMORY)
+    #define LULZBOT_BUFSIZE 2
+#else
+    #define LULZBOT_BUFSIZE 5
+#endif
 #define LULZBOT_PRINTJOB_TIMER_AUTOSTART_DISABLED
 #define LULZBOT_HOST_ACTION_COMMANDS
 
@@ -539,7 +546,7 @@
 
 /************************* EXPERIMENTAL FEATURES ******************************/
 
-#if defined(LULZBOT_USE_EXPERIMENTAL_FEATURES)
+#if defined(LULZBOT_USE_EXPERIMENTAL_FEATURES) && !defined(LULZBOT_CONSERVE_MEMORY)
     //#define LULZBOT_USE_STATUS_LED
 
     //#define LULZBOT_JUNCTION_DEVIATION
@@ -581,8 +588,6 @@
     #define LULZBOT_SERIAL_PORT                   -1
     #define LULZBOT_SPI_SPEED                     SPI_SIXTEENTH_SPEED
 
-    #define LULZBOT_USB_INTR_PIN                  SD_DETECT_PIN
-
     // Force Archim to use same USB ID as Mini-Rambo and Rambo when flashed
     // NOTE: While in "erase" (bootloader) mode, the ID will be 03eb:6124
     #define LULZBOT_USB_DEVICE_VENDOR_ID          0x27b1
@@ -597,14 +602,12 @@
     #else
         #define LULZBOT_SPI_SPEED                 SPI_FULL_SPEED
     #endif
-    #define LULZBOT_USB_INTR_PIN                  21
 
 #elif defined(LULZBOT_IS_MINI)
     #define LULZBOT_MOTHERBOARD                   BOARD_MINIRAMBO
     #define LULZBOT_CONTROLLER_FAN_PIN            FAN1_PIN  // Digital pin 6
     #define LULZBOT_SERIAL_PORT                   0
     #define LULZBOT_SPI_SPEED                     SPI_FULL_SPEED
-    #define LULZBOT_USB_INTR_PIN                  SD_DETECT_PIN
 
 #elif defined(LULZBOT_IS_TAZ)
     #define LULZBOT_MOTHERBOARD                   BOARD_RAMBO
@@ -1693,8 +1696,10 @@
 
 // Enable linear advance, but leave K at zero so
 // it is not used unless the user requests it.
-#define LULZBOT_LIN_ADVANCE
-#define LULZBOT_LIN_ADVANCE_K 0.0
+#if !defined(LULZBOT_CONSERVE_MEMORY)
+    #define LULZBOT_LIN_ADVANCE
+    #define LULZBOT_LIN_ADVANCE_K 0.0
+#endif
 
 #define LULZBOT_NO_VOLUMETRICS
 
@@ -2410,7 +2415,9 @@
     #define LULZBOT_DISABLE_DUE_SD_MMC
     #define LULZBOT_LCD_SET_PROGRESS_MANUALLY
     #define LULZBOT_COOLING_MESSAGES
-    #define LULZBOT_SCROLL_LONG_FILENAMES
+    #if !defined(LULZBOT_CONSERVE_MEMORY)
+        #define LULZBOT_SCROLL_LONG_FILENAMES
+    #endif
     #define LULZBOT_NO_PAUSE_AFTER_REHEAT_WORKAROUND
 #endif
 
@@ -2435,12 +2442,15 @@
     #define MSG_SD_REMOVED  "Media removed"
 #endif
 
-#if defined(LULZBOT_USE_AUTOLEVELING) && (defined(LULZBOT_USE_REPRAP_LCD_DISPLAY) || defined(LULZBOT_USE_TOUCH_UI))
+#if defined(LULZBOT_USE_REPRAP_LCD_DISPLAY) || defined(LULZBOT_USE_TOUCH_UI)
     #define LULZBOT_BABYSTEPPING
-    #define LULZBOT_BABYSTEP_ZPROBE_OFFSET
     #define LULZBOT_BABYSTEP_XY
-    #if LULZBOT_EXTRUDERS > 1
-        #define LULZBOT_BABYSTEP_HOTEND_Z_OFFSET
+
+    #if defined(LULZBOT_USE_AUTOLEVELING)
+        #define LULZBOT_BABYSTEP_ZPROBE_OFFSET
+        #if LULZBOT_EXTRUDERS > 1
+            #define LULZBOT_BABYSTEP_HOTEND_Z_OFFSET
+        #endif
     #endif
 #endif
 
@@ -2515,6 +2525,10 @@
 #endif
 
 /************************* USB THUMBDRIVE SUPPORT *************************/
+
+#if defined(LULZBOT_USB_FLASH_DRIVE_SUPPORT)
+  #define LULZBOT_USB_INTR_PIN                  SD_DETECT_PIN
+#endif
 
 #if defined(LULZBOT_USB_USE_UHS3)
   #define LULZBOT_USB_NO_TEST_UNIT_READY // Required for removable media adapter

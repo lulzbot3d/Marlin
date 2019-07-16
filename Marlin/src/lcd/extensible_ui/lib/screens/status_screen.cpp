@@ -317,7 +317,7 @@ void StatusScreen::draw_interaction_buttons(draw_mode_t what) {
   #undef  GRID_COLS
 }
 
-void StatusScreen::draw_status_message(draw_mode_t what, const char * const message) {
+void StatusScreen::draw_status_message(draw_mode_t what, const char* message) {
   #define GRID_COLS 1
   if(what & BACKGROUND) {
     CommandProcessor cmd;
@@ -336,10 +336,10 @@ void StatusScreen::draw_status_message(draw_mode_t what, const char * const mess
 void StatusScreen::setStatusMessage(progmem_str message) {
   char buff[strlen_P((const char * const)message)+1];
   strcpy_P(buff, (const char * const) message);
-  setStatusMessage(buff);
+  setStatusMessage((const char *) buff);
 }
 
-void StatusScreen::setStatusMessage(const char * const message) {
+void StatusScreen::setStatusMessage(const char* message) {
   CommandProcessor cmd;
   cmd.cmd(CMD_DLSTART)
      .cmd(CLEAR_COLOR_RGB(Theme::bg_color))

@@ -38,10 +38,7 @@ using namespace Theme;
 void BioPrintingDialogBox::draw_status_message(draw_mode_t what, const char* message) {
   if(what & BACKGROUND) {
     CommandProcessor cmd;
-    cmd.cmd(COLOR_RGB(bg_text_enabled))
-       .font(font_large);
-    if(isPrinting())
-      cmd.text(BTN_POS(1,1), BTN_SIZE(2,2), F("Printing..."));
+    cmd.cmd(COLOR_RGB(bg_text_enabled));
     draw_text_box(cmd, BTN_POS(1,2), BTN_SIZE(2,2), message, OPT_CENTER, font_large);
   }
 }
@@ -49,7 +46,9 @@ void BioPrintingDialogBox::draw_status_message(draw_mode_t what, const char* mes
 void BioPrintingDialogBox::draw_progress(draw_mode_t what) {
   if(what & FOREGROUND) {
     CommandProcessor cmd;
-    cmd.tag(1)
+    cmd.font(font_large)
+       .text(BTN_POS(1,1), BTN_SIZE(2,2), isPrinting() ? F("Printing...") : F("Finished."))
+       .tag(1)
        .font(font_xlarge);
 
     draw_circular_progress(cmd, BTN_POS(1,4), BTN_SIZE(2,3), getProgress_percent(), theme_dark, theme_darkest);

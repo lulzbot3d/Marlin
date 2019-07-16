@@ -2419,6 +2419,10 @@
         #define LULZBOT_SCROLL_LONG_FILENAMES
     #endif
     #define LULZBOT_NO_PAUSE_AFTER_REHEAT_WORKAROUND
+
+    #if defined(LULZBOT_USE_BIOPRINTER_UI)
+        #define LULZBOT_KEEP_STATUS_AT_END_OF_PRINT
+    #endif
 #endif
 
 #if defined(LULZBOT_SDSUPPORT_DEBUG)

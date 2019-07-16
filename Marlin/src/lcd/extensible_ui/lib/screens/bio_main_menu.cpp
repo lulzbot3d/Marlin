@@ -30,6 +30,9 @@ using namespace FTDI;
 using namespace Theme;
 
 void MainMenu::onRedraw(draw_mode_t what) {
+  #define GRID_ROWS 8
+  #define GRID_COLS 2
+
   if(what & BACKGROUND) {
     CommandProcessor cmd;
     cmd.cmd(CLEAR_COLOR_RGB(Theme::bg_color))
@@ -38,21 +41,22 @@ void MainMenu::onRedraw(draw_mode_t what) {
 
   if(what & FOREGROUND) {
     CommandProcessor cmd;
-    cmd.colors(normal_btn)
-       .font(Theme::font_medium)
-    #define GRID_ROWS 8
-    #define GRID_COLS 2
-       .tag(2).button( BTN_POS(1,1), BTN_SIZE(2,1), F("Load Syringe"))
-       .tag(3).button( BTN_POS(1,2), BTN_SIZE(2,1), F("Unlock XY Axis"))
-       .tag(4).button( BTN_POS(1,3), BTN_SIZE(2,1), F("Bed Temperature"))
-       .tag(5).button( BTN_POS(1,4), BTN_SIZE(2,1), F("Interface Settings"))
-       .tag(6).button( BTN_POS(1,5), BTN_SIZE(2,1), F("Advanced Settings"))
-       .tag(7).button( BTN_POS(1,6), BTN_SIZE(2,1), F("About Printer"))
+    cmd.cmd(COLOR_RGB(bg_text_enabled))
+       .font(font_large).text( BTN_POS(1,1), BTN_SIZE(2,1), F("Main Menu"))
+       .colors(normal_btn)
+       .font(font_medium)
+       .tag(2).button( BTN_POS(1,2), BTN_SIZE(2,1), F("Load Syringe"))
+       .tag(3).button( BTN_POS(1,3), BTN_SIZE(2,1), F("Unlock XY Axis"))
+       .tag(4).button( BTN_POS(1,4), BTN_SIZE(2,1), F("Bed Temperature"))
+       .tag(5).button( BTN_POS(1,5), BTN_SIZE(2,1), F("Interface Settings"))
+       .tag(6).button( BTN_POS(1,6), BTN_SIZE(2,1), F("Advanced Settings"))
+       .tag(7).button( BTN_POS(1,7), BTN_SIZE(2,1), F("About Printer"))
        .colors(action_btn)
        .tag(1).button( BTN_POS(1,8), BTN_SIZE(2,1), F("Back"));
-    #undef GRID_COLS
-    #undef GRID_ROWS
   }
+
+  #undef GRID_COLS
+  #undef GRID_ROWS
 }
 
 bool MainMenu::onTouchEnd(uint8_t tag) {

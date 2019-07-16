@@ -28,6 +28,7 @@
 
 using namespace FTDI;
 using namespace Theme;
+using namespace ExtUI;
 
 void TuneMenu::onRedraw(draw_mode_t what) {
   if(what & BACKGROUND) {
@@ -41,8 +42,6 @@ void TuneMenu::onRedraw(draw_mode_t what) {
   #define GRID_COLS 2
 
   if(what & FOREGROUND) {
-    using namespace ExtUI;
-
     CommandProcessor cmd;
     cmd.cmd(COLOR_RGB(bg_text_enabled))
        .font(font_large).text  ( BTN_POS(1,1), BTN_SIZE(2,1), F("Print Menu"))
@@ -66,8 +65,6 @@ void TuneMenu::onRedraw(draw_mode_t what) {
 }
 
 bool TuneMenu::onTouchEnd(uint8_t tag) {
-  using namespace Theme;
-  using namespace ExtUI;
   switch(tag) {
     case 1:  GOTO_PREVIOUS();                    break;
     case 2: {

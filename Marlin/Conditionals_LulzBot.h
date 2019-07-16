@@ -878,7 +878,7 @@
     }
 
 #if defined(LULZBOT_KangarooPaw_Experimental)
-    #define LULZBOT_XLEVEL_POS "G0 X170 Y-6 F9999\n"
+    #define LULZBOT_XLEVEL_POS "G0 X170 Y75 F9999\n"
 #else
     #define LULZBOT_XLEVEL_POS "G0 X150 F9999\n"
 #endif

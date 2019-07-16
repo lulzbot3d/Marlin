@@ -29,7 +29,7 @@
 using namespace FTDI;
 
 void BioConfirmHomeXYZ::onRedraw(draw_mode_t) {
-  drawMessage(F("About to re-home. Ensure the top and the bed of the printer are clear. Continue?"));
+  drawMessage(F("About to home to loading position.\nEnsure the top and the bed of the printer are clear.\n\nContinue?"));
   drawYesNoButtons();
 }
 
@@ -40,9 +40,7 @@ bool BioConfirmHomeXYZ::onTouchEnd(uint8_t tag) {
         "G28 X Y Z\n"             /* Home all axis */
         "G0 X115 Z50 F6000"       /* Move to park position */
       ));
-      // Change the screen we will return to
       current_screen.forget();
-      PUSH_SCREEN(BioConfirmHomeE);
       break;
     case 2:
       GOTO_SCREEN(StatusScreen);

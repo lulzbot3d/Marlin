@@ -29,7 +29,7 @@
 using namespace FTDI;
 
 void BioConfirmHomeE::onRedraw(draw_mode_t) {
-  drawMessage(F("About to re-home plunger. Remove syringe prior to proceeding. Continue?"));
+  drawMessage(F("About to re-home plunger and auto-level. Remove syringe prior to proceeding.\n\nContinue?"));
   drawYesNoButtons();
 }
 
@@ -43,9 +43,7 @@ bool BioConfirmHomeE::onTouchEnd(uint8_t tag) {
         "M400\n"                            /* Wait for moves to finish */
         "M18 X Y"                           /* Unlock motors */
       ));
-      // Change the screen we will return to
       current_screen.forget();
-      PUSH_SCREEN(StatusScreen);
       break;
     case 2:
       GOTO_SCREEN(StatusScreen);

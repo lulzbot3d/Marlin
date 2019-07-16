@@ -75,6 +75,9 @@ void BootScreen::onIdle() {
     }
     #if defined(LULZBOT_USE_BIOPRINTER_UI)
       GOTO_SCREEN(BioConfirmHomeXYZ);
+      current_screen.forget();
+      PUSH_SCREEN(StatusScreen);
+      PUSH_SCREEN(BioConfirmHomeE);
     #else
       GOTO_SCREEN(StatusScreen);
     #endif

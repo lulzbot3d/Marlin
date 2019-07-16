@@ -164,15 +164,15 @@
 
     switch (pattern) {
       case 1:
-        zigzag(NOZZLE_CLEAN_START_POINT, NOZZLE_CLEAN_END_POINT, strokes, objects);
+        zigzag(start, end, strokes, objects);
         break;
 
       case 2:
-        circle(NOZZLE_CLEAN_START_POINT, NOZZLE_CLEAN_CIRCLE_MIDDLE, strokes, radius);
+        circle(start, NOZZLE_CLEAN_CIRCLE_MIDDLE, strokes, radius);
         break;
 
       default:
-        stroke(NOZZLE_CLEAN_START_POINT, NOZZLE_CLEAN_END_POINT, strokes);
+        stroke(start, end, strokes);
     }
   }
 

@@ -56,31 +56,32 @@ void NudgeNozzleScreen::onRedraw(draw_mode_t what) {
   #if EXTRUDERS > 1
     w.toggle  (8,  PSTR("Adjust Both Nozzles:"), PSTR("no\xFFyes"), screen_data.NudgeNozzleScreen.link_nozzles, PSTR("Yes\nNo"));
   #endif
+
   #if EXTRUDERS > 1 || HAS_BED_PROBE
-  w.toggle  (9,  PSTR("Show Offsets:"), PSTR("no\xFFyes"), screen_data.NudgeNozzleScreen.show_offsets, PSTR("Yes\nNo"));
+    w.toggle  (9,  PSTR("Show Offsets:"), PSTR("no\xFFyes"), screen_data.NudgeNozzleScreen.show_offsets, PSTR("Yes\nNo"));
+
+    if(screen_data.NudgeNozzleScreen.show_offsets) {
+      char str[19], num1[7];
+
+      w.draw_mode(BOTH);
+      w.color(other);
+
+      #if HAS_BED_PROBE
+        dtostrf(getZOffset_mm(), 4, 2, num1);
+        sprintf_P(str, PSTR("%s mm"), num1);
+        w.text_field  (0,  PSTR("Z Offset"), str);
+      #endif
+
+      #if EXTRUDERS > 1
+        char num2[7], num3[7];
+        dtostrf(getNozzleOffset_mm(X, E1), 4, 2, num1);
+        dtostrf(getNozzleOffset_mm(Y, E1), 4, 2, num2);
+        dtostrf(getNozzleOffset_mm(Z, E1), 4, 2, num3);
+        sprintf_P(str, PSTR("%s; %s; %s mm"), num1, num2, num3);
+        w.text_field  (0,  PSTR("Noz. Offset"), str);
+      #endif
+    }
   #endif
-
-  if(screen_data.NudgeNozzleScreen.show_offsets) {
-    char str[19], num1[7];
-
-    w.draw_mode(BOTH);
-    w.color(other);
-
-    #if HAS_BED_PROBE
-      dtostrf(getZOffset_mm(), 4, 2, num1);
-      sprintf_P(str, PSTR("%s mm"), num1);
-      w.text_field  (0,  PSTR("Z Offset"), str);
-    #endif
-
-    #if EXTRUDERS > 1
-      char num2[7], num3[7];
-      dtostrf(getNozzleOffset_mm(X, E1), 4, 2, num1);
-      dtostrf(getNozzleOffset_mm(Y, E1), 4, 2, num2);
-      dtostrf(getNozzleOffset_mm(Z, E1), 4, 2, num3);
-      sprintf_P(str, PSTR("%s; %s; %s mm"), num1, num2, num3);
-      w.text_field  (0,  PSTR("Noz. Offset"), str);
-    #endif
-  }
 }
 
 bool NudgeNozzleScreen::onTouchHeld(uint8_t tag) {

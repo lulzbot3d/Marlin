@@ -109,10 +109,16 @@ void MarlinUI::set_font(const MarlinFont font_nr) {
       LULZBOT_CUSTOM_BOOTSCREEN
     #else
 
+<<<<<<< HEAD
     // Draws a page of a particular frame of the custom bootscreen, without the u8g loop
     void MarlinUI::draw_custom_bootscreen(const uint8_t frame, const bool erase) {
       constexpr u8g_uint_t left = (LCD_PIXEL_WIDTH  - (CUSTOM_BOOTSCREEN_BMPWIDTH)) / 2,
                            top = (LCD_PIXEL_HEIGHT - (CUSTOM_BOOTSCREEN_BMPHEIGHT)) / 2;
+=======
+    FORCE_INLINE void draw_custom_bootscreen(const u8g_pgm_uint8_t * const bmp, const bool erase=true) {
+      constexpr u8g_uint_t left = u8g_uint_t((LCD_PIXEL_WIDTH  - (CUSTOM_BOOTSCREEN_BMPWIDTH)) / 2),
+                           top = u8g_uint_t((LCD_PIXEL_HEIGHT - (CUSTOM_BOOTSCREEN_BMPHEIGHT)) / 2);
+>>>>>>> upstream/bugfix-2.0.x
       #if ENABLED(CUSTOM_BOOTSCREEN_INVERTED)
         constexpr u8g_uint_t right = left + CUSTOM_BOOTSCREEN_BMPWIDTH,
                             bottom = top + CUSTOM_BOOTSCREEN_BMPHEIGHT;

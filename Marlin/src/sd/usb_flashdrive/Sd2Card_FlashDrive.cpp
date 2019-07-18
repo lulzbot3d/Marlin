@@ -86,7 +86,7 @@ static_assert(USB_INTR_PIN != -1, "USB_INTR_PIN must be defined");
 
 #include "Sd2Card_FlashDrive.h"
 
-#if EITHER(ULTRA_LCD, EXTENSIBLE_UI)
+#if HAS_DISPLAY
   #include "../../lcd/ultralcd.h"
 #endif
 

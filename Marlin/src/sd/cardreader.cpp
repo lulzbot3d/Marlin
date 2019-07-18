@@ -1016,8 +1016,8 @@ void CardReader::printingHasFinished() {
       presort();
     #endif
 
-    #if EITHER(ULTRA_LCD, EXTENSIBLE_UI) && ENABLED(LCD_SET_PROGRESS_MANUALLY)
-      ui.progress_bar_percent = 100;
+    #if ENABLED(LCD_SET_PROGRESS_MANUALLY)
+      ui.set_progress_done();
     #endif
 
     #if ENABLED(SD_REPRINT_LAST_SELECTED_FILE)

@@ -1,6 +1,6 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (C) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (c) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,10 +30,8 @@
 
 #ifdef __STM32F1__
   #include "../HAL_STM32F1/fastio_STM32F1.h"
-#elif defined(STM32F4)
-  #include "../HAL_STM32F4/fastio_STM32F4.h"
-#elif defined(STM32F7)
-  #include "../HAL_STM32F7/fastio_STM32F7.h"
+#elif defined(STM32F4) || defined(STM32F7)
+  #include "../HAL_STM32_F4_F7/fastio_STM32_F4_F7.h"
 #endif
 
 extern const stm32_pin_info PIN_MAP[BOARD_NR_GPIO_PINS];
@@ -44,7 +42,6 @@ extern const stm32_pin_info PIN_MAP[BOARD_NR_GPIO_PINS];
 #define GET_ARRAY_PIN(p) pin_t(pin_array[p].pin)
 #define pwm_status(pin) PWM_PIN(pin)
 #define digitalRead_mod(p) extDigitalRead(p)
-#define NAME_FORMAT(p) PSTR("%-##p##s")
 #define PRINT_PIN(p) do{ sprintf_P(buffer, PSTR("%3hd "), int16_t(p)); SERIAL_ECHO(buffer); }while(0)
 #define PRINT_PORT(p) print_port(p)
 #define PRINT_ARRAY_NAME(x) do{ sprintf_P(buffer, PSTR("%-" STRINGIFY(MAX_NAME_LENGTH) "s"), pin_array[x].name); SERIAL_ECHO(buffer); }while(0)

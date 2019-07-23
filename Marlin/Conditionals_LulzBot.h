@@ -74,7 +74,7 @@
  *
  */
 
-#define LULZBOT_FW_VERSION ".145" // Change this with each update
+#define LULZBOT_FW_VERSION ".146" // Change this with each update
 
 #if ( \
     !defined(LULZBOT_Gladiola_Mini) && \
@@ -342,7 +342,7 @@
     //#define LULZBOT_USE_AUTOLEVELING
     #define LULZBOT_USE_EINSY_RETRO
     #define LULZBOT_SENSORLESS_HOMING
-    //#define LULZBOT_BACKLASH_COMPENSATION
+    #define LULZBOT_BACKLASH_COMPENSATION
     #define LULZBOT_BIOPRINTER_GCODE
     #define LULZBOT_USE_NORMALLY_CLOSED_ENDSTOPS
     #define LULZBOT_STEALTHCHOP_Z
@@ -359,10 +359,6 @@
     #define AO_EXP1_PINOUT_REV_C
     #define LCD_480x272
     #define LULZBOT_SDSUPPORT
-    #define LULZBOT_USB_FLASH_DRIVE_SUPPORT
-    #define LULZBOT_USB_USE_UHS3
-    #define LULZBOT_CONSERVE_MEMORY
-    //#define LULZBOT_MANUAL_USB_STARTUP
 #endif
 
 #if defined(LULZBOT_GladiolaTouchLCD_Experimental)
@@ -390,6 +386,7 @@
     #define LCD_480x272
     #define LULZBOT_SDSUPPORT
     #define LULZBOT_USB_FLASH_DRIVE_SUPPORT
+    #define LULZBOT_USB_USE_UHS3
     #define LULZBOT_CONSERVE_MEMORY
 #endif
 

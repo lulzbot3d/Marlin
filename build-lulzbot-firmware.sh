@@ -70,8 +70,8 @@ compile_dependencies() {
 
   get_arch_info $printer
 
-  case $HARDWARE_MOTHERBOARD in
-    $ARCHIM_MB)
+  case $board in
+    BOARD_ARCHIM2)
       ARCHIM_SRC="ArduinoAddons/arduino-1.8.5/packages/ultimachine/hardware/sam/1.6.9-b"
       (cd "$ARCHIM_SRC/system/libsam/build_gcc"; ARM_GCC_TOOLCHAIN="$gcc_path" make)
       cp -u $ARCHIM_SRC/variants/arduino_due_x/libsam_sam3x8e_gcc_rel.a     $ARCHIM_SRC/variants/archim/libsam_sam3x8e_gcc_rel.a
@@ -82,12 +82,12 @@ compile_dependencies() {
 }
 
 ####
-# get_board_number <board>
+# get_board_id <board>
 #
 # Returns the board number for a specific board
 #
-get_board_number() {
-  grep $1 Marlin/src/core/boards.h | awk '{print $3}'
+get_board_id() {
+  grep "$1\b" Marlin/src/core/boards.h | awk '{print $3}'
 }
 
 
@@ -100,32 +100,38 @@ get_arch_info() {
   printer=$1   ; shift 1
   case $printer in
     Quiver_TAZPro | OliveoilArchim_Experimental | RedgumArchim_Experimental)
-      gcc_path=$ARM_TOOLS_PATH
-      format=bin
-      MOTHERBOARD_NAME=BOARD_ARCHIM2
+      board=BOARD_ARCHIM2
       ;;
     Juniper_TAZ5 | Oliveoil_TAZ6 | Redgum_TAZWorkhorse)
-      gcc_path=$AVR_TOOLS_PATH
-      format=hex
-      MOTHERBOARD_NAME=BOARD_RAMBO
+      board=BOARD_RAMBO
       ;;
     Gladiola_Mini | Gladiola_MiniLCD | GladiolaTouchLCD)
       gcc_path=$AVR_TOOLS_PATH
-      format=hex
-      MOTHERBOARD_NAME=BOARD_MINIRAMBO
+      board=BOARD_MINIRAMBO
       ;;
-    Hibiscus_Mini2 | HibiscusTouchLCD | GladiolaEinsyLCD | GladiolaEinsyTouchLCD | CLCDTestStand_Experimental)
-      gcc_path=$AVR_TOOLS_PATH
-      format=hex
-      MOTHERBOARD_NAME=BOARD_EINSY_RETRO
+    Hibiscus_Mini2 | KangarooPaw_Experimental | HibiscusTouchLCD | GladiolaEinsyLCD | GladiolaEinsyTouchLCD | CLCDTestStand_Experimental)
+      board=BOARD_EINSY_RETRO
       ;;
     *)
-      echo MOTHERBOARD_NAME is not defined for this printer
+      echo board type is not defined for $printer
       exit 1
       ;;
   esac
 
-  HARDWARE_MOTHERBOARD=`get_board_number $MOTHERBOARD_NAME`
+  case $board in
+    BOARD_ARCHIM2)
+      gcc_path=$ARM_TOOLS_PATH
+      format=bin
+      ;;
+    BOARD_RAMBO | BOARD_MINIRAMBO | BOARD_EINSY_RETRO)
+      gcc_path=$AVR_TOOLS_PATH
+      format=hex
+      ;;
+    *)
+      echo $board is not a valid board selection
+      exit 1
+      ;;
+  esac
 }
 
 ####
@@ -137,7 +143,8 @@ compile_firmware() {
   printer=$1   ; shift 1
   toolhead=$1  ; shift 1
   # Build the firmware
-  (cd Marlin; make clean; make $MAKE_FLAGS HARDWARE_MOTHERBOARD=${HARDWARE_MOTHERBOARD} AVR_TOOLS_PATH=${gcc_path}/ MODEL=${printer} TOOLHEAD=${toolhead} $*) || exit
+  board_id=`get_board_id $board`
+  (cd Marlin; make clean; make $MAKE_FLAGS HARDWARE_MOTHERBOARD=${board_id} AVR_TOOLS_PATH=${gcc_path}/ MODEL=${printer} TOOLHEAD=${toolhead} $*) || exit
 }
 
 ####

@@ -38,9 +38,6 @@ MINI2_TOOLHEADS="$UNIVERSAL_TOOLHEADS"
 KANGAROOPAW_MODELS="KangarooPaw_Experimental"
 KANGAROOPAW_TOOLHEADS="KangarooPaw_SingleExtruder"
 
-ARCHIM_MB=3024
-RAMBO_MB=1211
-
 ####
 # usage
 #
@@ -85,6 +82,16 @@ compile_dependencies() {
 }
 
 ####
+# get_board_number <board>
+#
+# Returns the board number for a specific board
+#
+get_board_number() {
+  grep $1 Marlin/src/core/boards.h | awk '{print $3}'
+}
+
+
+####
 # compile_firmware <printer> <toolhead> [makeopts]
 #
 # Compiles firmware for the specified printer and toolhead
@@ -95,14 +102,30 @@ get_arch_info() {
     Quiver_TAZPro | OliveoilArchim_Experimental | RedgumArchim_Experimental)
       gcc_path=$ARM_TOOLS_PATH
       format=bin
-      HARDWARE_MOTHERBOARD=$ARCHIM_MB
+      MOTHERBOARD_NAME=BOARD_ARCHIM2
       ;;
-    *)
+    Juniper_TAZ5 | Oliveoil_TAZ6 | Redgum_TAZWorkhorse)
       gcc_path=$AVR_TOOLS_PATH
       format=hex
-      HARDWARE_MOTHERBOARD=$RAMBO_MB
+      MOTHERBOARD_NAME=BOARD_RAMBO
+      ;;
+    Gladiola_Mini | Gladiola_MiniLCD | GladiolaTouchLCD)
+      gcc_path=$AVR_TOOLS_PATH
+      format=hex
+      MOTHERBOARD_NAME=BOARD_MINIRAMBO
+      ;;
+    Hibiscus_Mini2 | HibiscusTouchLCD | GladiolaEinsyLCD | GladiolaEinsyTouchLCD | CLCDTestStand_Experimental)
+      gcc_path=$AVR_TOOLS_PATH
+      format=hex
+      MOTHERBOARD_NAME=BOARD_EINSY_RETRO
+      ;;
+    *)
+      echo MOTHERBOARD_NAME is not defined for this printer
+      exit 1
       ;;
   esac
+
+  HARDWARE_MOTHERBOARD=`get_board_number $MOTHERBOARD_NAME`
 }
 
 ####

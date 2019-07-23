@@ -923,6 +923,7 @@
 
 #define LULZBOT_DEFAULT_EJERK                10.0
 #define LULZBOT_MANUAL_FEEDRATE_E             1.0 // mm/sec
+#define LULZBOT_NUM_SERVOS                    0
 
 /**************************** MINI TOOLHEADS ***********************************/
 
@@ -1254,6 +1255,7 @@
     #define LULZBOT_TOOLHEAD_Z_MIN_ADJ             -7
     #define LULZBOT_EXTRUDERS                       2
     #define LULZBOT_TOOLCHANGE_ZRAISE               0
+    #undef  LULZBOT_NUM_SERVOS
     #define LULZBOT_NUM_SERVOS                      2
     #define LULZBOT_SERVO_DELAY                    {1000, 1000}
     #define LULZBOT_SWITCHING_NOZZLE

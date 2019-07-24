@@ -99,17 +99,28 @@ get_board_id() {
 get_arch_info() {
   printer=$1   ; shift 1
   case $printer in
-    Quiver_TAZPro | OliveoilArchim_Experimental | RedgumArchim_Experimental)
+    Quiver_TAZPro | \
+    OliveoilArchim_Experimental | \
+    RedgumArchim_Experimental)
       board=BOARD_ARCHIM2
       ;;
-    Juniper_TAZ5 | Oliveoil_TAZ6 | Redgum_TAZWorkhorse)
+    Juniper_TAZ5 | \
+    Oliveoil_TAZ6 | \
+    Redgum_TAZWorkhorse)
       board=BOARD_RAMBO
       ;;
-    Gladiola_Mini | Gladiola_MiniLCD | GladiolaTouchLCD)
+    Gladiola_Mini | \
+    Gladiola_MiniLCD | \
+    GladiolaTouchLCD_Experimental)
       gcc_path=$AVR_TOOLS_PATH
       board=BOARD_MINIRAMBO
       ;;
-    Hibiscus_Mini2 | KangarooPaw_Experimental | HibiscusTouchLCD | GladiolaEinsyLCD | GladiolaEinsyTouchLCD | CLCDTestStand_Experimental)
+    Hibiscus_Mini2 | \
+    KangarooPaw_Experimental | \
+    HibiscusTouchLCD_Experimental | \
+    GladiolaEinsyLCD_Experimental | \
+    GladiolaEinsyTouchLCD_Experimental | \
+    CLCDTestStand_Experimental)
       board=BOARD_EINSY_RETRO
       ;;
     *)

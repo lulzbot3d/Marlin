@@ -791,7 +791,6 @@ void tool_change(const uint8_t new_tool, bool no_move/*=false*/) {
   #elif EXTRUDERS < 2
 
     UNUSED(no_move);
-    UNUSED(old_tool);
 
     if (new_tool) invalid_extruder_error(new_tool);
     return;

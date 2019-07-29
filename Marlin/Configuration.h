@@ -313,11 +313,11 @@
 // Offset of the extruders (uncomment if using more than one and relying on firmware to position when changing).
 // The offset has to be X=0, Y=0 for the extruder 0 hotend (default extruder).
 // For the other hotends it is their distance from the extruder 0 hotend.
-#if defined(LULZBOT_HOTEND_OFFSET_X) && defined(LULZBOT_HOTEND_OFFSET_Y)
+#if defined(LULZBOT_HOTEND_OFFSET_X) && defined(LULZBOT_HOTEND_OFFSET_Y) && defined(LULZBOT_HOTEND_OFFSET_Z)
 #define HOTEND_OFFSET_X LULZBOT_HOTEND_OFFSET_X // (mm) relative X-offset for each nozzle
 #define HOTEND_OFFSET_Y LULZBOT_HOTEND_OFFSET_Y // (mm) relative Y-offset for each nozzle
+#define HOTEND_OFFSET_Z LULZBOT_HOTEND_OFFSET_Z // (mm) relative Z-offset for each nozzle
 #endif
-//#define HOTEND_OFFSET_Z { 0.0, 0.00 }  // (mm) relative Z-offset for each nozzle
 
 // @section machine
 

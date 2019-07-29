@@ -1105,8 +1105,7 @@
     #define LULZBOT_TOOLHEAD_Z_MAX_ADJ         0
     #define LULZBOT_TOOLHEAD_Z_MIN_ADJ         0
     #define LULZBOT_TOOLCHANGE_ZRAISE          2
-    #define LULZBOT_HOTEND_OFFSET_X           {0.0, 13}
-    #define LULZBOT_HOTEND_OFFSET_Y           {0.0,  0}
+    #define LULZBOT_T1_OFFSET_X                13
     #if defined(LULZBOT_USE_HOME_BUTTON)
         // Legacy configuration for TAZ 6 with homing button riser
         #define LULZBOT_MANUAL_Z_HOME_POS             5.5
@@ -1259,8 +1258,9 @@
     #define LULZBOT_SWITCHING_NOZZLE_E1_SERVO_NR   1
     #define LULZBOT_SWITCHING_NOZZLE_SERVO_ANGLES  { 55,   120}
     #define LULZBOT_SWITCHING_NOZZLE_OPPOSING_SERVOS
-    #define LULZBOT_HOTEND_OFFSET_X                {0.0, 45}
-    #define LULZBOT_HOTEND_OFFSET_Y                {0.0,  0}
+    #define LULZBOT_T1_OFFSET_X                    44.576
+    #define LULZBOT_T1_OFFSET_Y                    0.095
+    #define LULZBOT_T1_OFFSET_Z                    0.005
     #define LULZBOT_E_STEPS                        420
     #define LULZBOT_X_MAX_ENDSTOP_INVERTING        LULZBOT_NO_ENDSTOP
     #define LULZBOT_E3D_Titan_Aero_V6
@@ -1343,11 +1343,31 @@
     #endif
 #endif
 
+#ifndef LULZBOT_T1_OFFSET_X
+    #define LULZBOT_T1_OFFSET_X 0
+#endif
+
+#ifndef LULZBOT_T1_OFFSET_Y
+    #define LULZBOT_T1_OFFSET_Y 0
+#endif
+
+#ifndef LULZBOT_T1_OFFSET_Z
+    #define LULZBOT_T1_OFFSET_Z 0
+#endif
+
 #if defined(LULZBOT_CALIBRATION_GCODE)
+    #define __LULZBOT_NOZZLE_OFFSET_COMMAND(x,y,z) "M218 T1 X" #x " Y" #y " Z" #z "\n"
+    #define _LULZBOT_NOZZLE_OFFSET_COMMAND(x,y,z) __LULZBOT_NOZZLE_OFFSET_COMMAND(x,y,z)
+    #define LULZBOT_NOZZLE_OFFSET_COMMAND \
+        _LULZBOT_NOZZLE_OFFSET_COMMAND( \
+            LULZBOT_T1_OFFSET_X, LULZBOT_T1_OFFSET_Y, LULZBOT_T1_OFFSET_Z )
+
+    //#pragma message("\n\LULZBOT_NOZZLE_OFFSET_COMMAND:\n\n" LULZBOT_NOZZLE_OFFSET_COMMAND "\n\n")
+
     #define LULZBOT_CALIBRATION_SCRIPT \
         "M117 Starting Auto-Calibration\n"   /* Status message */ \
         "T0\n"                               /* Switch to first nozzle */ \
-        "M218 T1 X43 Y0 Z0\n"                /* Restore default nozzle offset */ \
+        LULZBOT_NOZZLE_OFFSET_COMMAND        /* Restore default nozzle offset */ \
         "G28\n"                              /* Auto-Home */ \
         LULZBOT_MENU_AXIS_LEVELING_COMMANDS  /* Level X-Axis */ \
         "G12\n"                              /* Wipe the Nozzles */ \
@@ -1358,6 +1378,10 @@
 #endif
 
 #define LULZBOT_CALIBRATION_REPORTING
+
+#define LULZBOT_HOTEND_OFFSET_X {0.0, LULZBOT_T1_OFFSET_X}
+#define LULZBOT_HOTEND_OFFSET_Y {0.0, LULZBOT_T1_OFFSET_Y}
+#define LULZBOT_HOTEND_OFFSET_Z {0.0, LULZBOT_T1_OFFSET_Z}
 
 /*************************** TEMPERATURE SETTINGS *****************************/
 
@@ -2149,6 +2173,14 @@
     #if defined(LULZBOT_IS_MINI)
         #define LULZBOT_MEASURE_BACKLASH_WHEN_PROBING
     #endif
+
+    #if defined(LULZBOT_Quiver_TAZPro)
+        #define LULZBOT_BACKLASH_CORRECTION 1.0
+        #define LULZBOT_BACKLASH_DISTANCE_MM { 0.252, 0.183, 0.075 }
+    #else
+        #define LULZBOT_BACKLASH_CORRECTION 0.0
+        #define LULZBOT_BACKLASH_DISTANCE_MM { 0, 0, 0 }
+    #endif
 #endif
 
 /******************************** MOTOR CURRENTS *******************************/
@@ -2259,7 +2291,9 @@
     #define LULZBOT_DEFAULT_ZJERK                  0.4
 
     #if ! defined(LULZBOT_Z_PROBE_OFFSET_FROM_EXTRUDER)
-        #if defined(LULZBOT_USE_Z_BELT)
+        #if defined(LULZBOT_Quiver_TAZPro)
+            #define LULZBOT_Z_PROBE_OFFSET_FROM_EXTRUDER  -1.102
+        #elif defined(LULZBOT_USE_Z_BELT)
             #define LULZBOT_Z_PROBE_OFFSET_FROM_EXTRUDER  -1.1
         #else
             #define LULZBOT_Z_PROBE_OFFSET_FROM_EXTRUDER  -1.375

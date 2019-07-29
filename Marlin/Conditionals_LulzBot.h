@@ -2391,6 +2391,7 @@
     #define LULZBOT_LCD_HOTEND_OFFSET_MIN -20
     #define LULZBOT_LCD_HOTEND_OFFSET_MAX  20
     // Enable the games as easter eggs :)
+    #define LULZBOT_GAMES_EASTER_EGG
     #define LULZBOT_MARLIN_BRICKOUT
     #define LULZBOT_MARLIN_INVADERS
     #define LULZBOT_MARLIN_SNAKE
@@ -2463,7 +2464,7 @@
 /***************************** CUSTOM SPLASH SCREEN *****************************/
 
 #define LULZBOT_CUSTOM_BOOTSCREEN \
-    void MarlinUI::draw_custom_bootscreen(const uint8_t, const bool) { \
+    void MarlinUI::draw_custom_bootscreen(const uint8_t) { \
         u8g.drawBitmapP(0,0,CEILING(CUSTOM_BOOTSCREEN_BMPWIDTH, 8),CUSTOM_BOOTSCREEN_BMPHEIGHT,custom_start_bmp); \
         u8g.setFont(u8g_font_6x13); \
         u8g.drawStr(57,17,LULZBOT_LCD_MACHINE_NAME); \

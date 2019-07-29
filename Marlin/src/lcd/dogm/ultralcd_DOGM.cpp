@@ -108,8 +108,8 @@ void MarlinUI::set_font(const MarlinFont font_nr) {
     #ifdef LULZBOT_CUSTOM_BOOTSCREEN
       LULZBOT_CUSTOM_BOOTSCREEN
     #else
-
-    FORCE_INLINE void draw_custom_bootscreen(const u8g_pgm_uint8_t * const bmp, const bool erase=true) {
+    // Draws a slice of a particular frame of the custom bootscreen, without the u8g loop
+    void MarlinUI::draw_custom_bootscreen(const uint8_t frame/*=0*/) {
       constexpr u8g_uint_t left = u8g_uint_t((LCD_PIXEL_WIDTH  - (CUSTOM_BOOTSCREEN_BMPWIDTH)) / 2),
                            top = u8g_uint_t((LCD_PIXEL_HEIGHT - (CUSTOM_BOOTSCREEN_BMPHEIGHT)) / 2);
       #if ENABLED(CUSTOM_BOOTSCREEN_INVERTED)
@@ -118,11 +118,12 @@ void MarlinUI::set_font(const MarlinFont font_nr) {
       #endif
 
       const u8g_pgm_uint8_t * const bmp =
-      #if ENABLED(ANIMATED_BOOTSCREEN)
-        (u8g_pgm_uint8_t*)pgm_read_ptr(&custom_bootscreen_animation[frame]);
-      #else
-        custom_start_bmp;
-      #endif
+        #if ENABLED(ANIMATED_BOOTSCREEN)
+          (u8g_pgm_uint8_t*)pgm_read_ptr(&custom_bootscreen_animation[frame])
+        #else
+          custom_start_bmp
+        #endif
+      ;
 
       u8g.drawBitmapP(
         left, top,
@@ -130,35 +131,31 @@ void MarlinUI::set_font(const MarlinFont font_nr) {
       );
 
       #if ENABLED(CUSTOM_BOOTSCREEN_INVERTED)
-        if (erase) {
+        if (frame == 0) {
           u8g.setColorIndex(1);
           if (top) u8g.drawBox(0, 0, LCD_PIXEL_WIDTH, top);
           if (left) u8g.drawBox(0, top, left, CUSTOM_BOOTSCREEN_BMPHEIGHT);
           if (right < LCD_PIXEL_WIDTH) u8g.drawBox(right, top, LCD_PIXEL_WIDTH - right, CUSTOM_BOOTSCREEN_BMPHEIGHT);
           if (bottom < LCD_PIXEL_HEIGHT) u8g.drawBox(0, bottom, LCD_PIXEL_WIDTH, LCD_PIXEL_HEIGHT - bottom);
         }
-      #else
-        UNUSED(erase);
       #endif
     }
     #endif // LULZBOT_CUSTOM_BOOTSCREEN
 
     // Shows the custom bootscreen, with the u8g loop, animations and delays
     void MarlinUI::show_custom_bootscreen() {
-      #if ENABLED(ANIMATED_BOOTSCREEN)
-        constexpr millis_t d = CUSTOM_BOOTSCREEN_FRAME_TIME;
-        LOOP_L_N(f, COUNT(custom_bootscreen_animation))
-      #else
+      #if DISABLED(ANIMATED_BOOTSCREEN)
         constexpr millis_t d = 0;
         constexpr uint8_t f = 0;
+      #else
+        constexpr millis_t d = CUSTOM_BOOTSCREEN_FRAME_TIME;
+        LOOP_L_N(f, COUNT(custom_bootscreen_animation))
       #endif
-      {
-        u8g.firstPage();
-        do {
-          draw_custom_bootscreen(f, f == 0);
-        } while (u8g.nextPage());
-        if(d) safe_delay(d);
-      }
+        {
+          u8g.firstPage();
+          do { draw_custom_bootscreen(f); } while (u8g.nextPage());
+          if (d) safe_delay(d);
+        }
 
       #ifndef CUSTOM_BOOTSCREEN_TIMEOUT
         #define CUSTOM_BOOTSCREEN_TIMEOUT 2500
@@ -167,7 +164,7 @@ void MarlinUI::set_font(const MarlinFont font_nr) {
     }
   #endif // SHOW_CUSTOM_BOOTSCREEN
 
-  // Draws a page of the Marlin bootscreen, without the u8g loop
+  // Draws a slice of the Marlin bootscreen, without the u8g loop
   void MarlinUI::draw_marlin_bootscreen() {
     // Screen dimensions.
     //const uint8_t width = u8g.getWidth(), height = u8g.getHeight();
@@ -223,9 +220,7 @@ void MarlinUI::set_font(const MarlinFont font_nr) {
       #define BOOTSCREEN_TIMEOUT 2500
     #endif
     u8g.firstPage();
-    do {
-      draw_marlin_bootscreen();
-    } while (u8g.nextPage());
+    do { draw_marlin_bootscreen(); } while (u8g.nextPage());
     safe_delay(BOOTSCREEN_TIMEOUT);
   }
 
@@ -409,8 +404,9 @@ void MarlinUI::clear_lcd() { } // Automatically cleared by Picture Loop
   }
 
   void draw_edit_screen(PGM_P const pstr, const char* const value/*=nullptr*/) {
-    const uint8_t labellen = utf8_strlen_P(pstr), vallen = utf8_strlen(value);
+    ui.encoder_direction_normal();
 
+    const uint8_t labellen = utf8_strlen_P(pstr), vallen = utf8_strlen(value);
     bool extra_row = labellen > LCD_WIDTH - 2 - vallen;
 
     #if ENABLED(USE_BIG_EDIT_FONT)

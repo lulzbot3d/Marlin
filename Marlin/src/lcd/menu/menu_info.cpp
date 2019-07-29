@@ -28,31 +28,10 @@
 
 #if HAS_LCD_MENU && ENABLED(LCD_INFO_MENU)
 
-#if HAS_GAMES
-  #include "game/game.h"
-#endif
-
 #include "menu.h"
-// #include "../../module/motion.h"
-// #include "../../module/planner.h"
-// #include "../../module/temperature.h"
-// #include "../../Marlin.h"
-
-// #if HAS_LEVELING
-//   #include "../../feature/bedlevel/bedlevel.h"
-// #endif
 
 #if HAS_GAMES
   #include "game/game.h"
-  #if HAS_GAME_MENU
-    void menu_game();
-  #elif ENABLED(MARLIN_BRICKOUT)
-    void lcd_goto_brickout();
-  #elif ENABLED(MARLIN_INVADERS)
-    void lcd_goto_invaders();
-  #elif ENABLED(MARLIN_SNAKE)
-    void lcd_goto_snake();
-  #endif
 #endif
 
 #if ENABLED(PRINTCOUNTER)
@@ -196,7 +175,7 @@ void menu_info_board() {
 //
 // About Printer > Printer Info
 //
-#if DISABLED(LCD_INFO_PRINTER_SHOWS_BOOTSCREEN)
+#if DISABLED(LCD_PRINTER_INFO_IS_BOOTSCREEN)
   void menu_info_printer() {
     if (ui.use_click()) return ui.goto_previous_screen();
     START_SCREEN();
@@ -231,9 +210,7 @@ void menu_info_board() {
       ui.draw_custom_bootscreen();
     }
   #endif
-#endif // LCD_INFO_PRINTER_SHOWS_BOOTSCREEN
-
-void menu_game();
+#endif // LCD_PRINTER_INFO_IS_BOOTSCREEN
 
 //
 // "About Printer" submenu
@@ -241,7 +218,7 @@ void menu_game();
 void menu_info() {
   START_MENU();
   MENU_BACK(MSG_MAIN);
-  #if ENABLED(LCD_INFO_PRINTER_SHOWS_BOOTSCREEN)
+  #if ENABLED(LCD_PRINTER_INFO_IS_BOOTSCREEN)
     MENU_ITEM(submenu, MSG_INFO_PRINTER_MENU, (
       #if ENABLED(SHOW_CUSTOM_BOOTSCREEN)
         menu_show_custom_bootscreen
@@ -260,9 +237,12 @@ void menu_info() {
   #else
     MENU_ITEM_DUMMY();
   #endif
+
   #if HAS_GAMES
-    MENU_ITEM_DUMMY();
-    MENU_ITEM_DUMMY();
+    #if ENABLED(GAMES_EASTER_EGG)
+      MENU_ITEM_DUMMY();
+      MENU_ITEM_DUMMY();
+    #endif
     MENU_ITEM(submenu, MSG_GAMES, (
       #if HAS_GAME_MENU
         menu_game
@@ -277,6 +257,7 @@ void menu_info() {
       #endif
     ));
   #endif
+
   END_MENU();
 }
 

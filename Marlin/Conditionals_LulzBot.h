@@ -2046,9 +2046,7 @@
     #define LULZBOT_NOZZLE_CLEAN_GOBACK_DISABLED
 
     // Limit on pushing into the bed
-    #if defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_SCREW)
-        #define LULZBOT_Z_PROBE_LOW_POINT    0
-    #elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT)
+    #if defined(LULZBOT_IS_TAZ)
         #define LULZBOT_Z_PROBE_LOW_POINT   -2
     #elif defined(LULZBOT_IS_MINI)
         #define LULZBOT_Z_PROBE_LOW_POINT   -4

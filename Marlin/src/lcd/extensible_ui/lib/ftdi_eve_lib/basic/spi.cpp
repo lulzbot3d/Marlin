@@ -62,6 +62,7 @@ namespace FTDI {
       uint8_t spiInByte = 0;
       uint8_t k;
 
+      noInterrupts();
       for(k = 0; k <8; k++) {  // Output and Read each bit of spiOutByte and spiInByte
         if(spiOutByte & spiIndex) {   // Output MOSI Bit
           WRITE(CLCD_SOFT_SPI_MOSI, 1);
@@ -78,6 +79,7 @@ namespace FTDI {
 
         spiIndex >>= 1;
       }
+      interrupts();
       return spiInByte;
     }
   #endif
@@ -87,6 +89,7 @@ namespace FTDI {
       uint8_t spiIndex  = 0x80;
       uint8_t k;
 
+      noInterrupts();
       for(k = 0; k <8; k++) {         // Output each bit of spiOutByte
         if(spiOutByte & spiIndex) {   // Output MOSI Bit
           WRITE(CLCD_SOFT_SPI_MOSI, 1);
@@ -99,6 +102,7 @@ namespace FTDI {
 
         spiIndex >>= 1;
       }
+      interrupts();
     }
   #endif
 

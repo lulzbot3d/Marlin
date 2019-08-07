@@ -400,6 +400,9 @@ void GcodeSuite::G28(const bool always_home_all) {
                 backoff_z = doZ ? ABS(endstop_backoff[Z_AXIS]) * (Z_HOME_DIR) : 0;
     if (backoff_z) do_blocking_move_to_z(current_position[Z_AXIS] - backoff_z);
     if (backoff_x || backoff_y) do_blocking_move_to_xy(current_position[X_AXIS] - backoff_x, current_position[Y_AXIS] - backoff_y);
+    #if defined(LULZBOT_HOMING_BACKOFF_FIX)
+      planner.synchronize();
+    #endif
   #endif
   endstops.not_homing();
 

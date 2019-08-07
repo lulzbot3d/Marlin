@@ -541,6 +541,9 @@
 #define LULZBOT_M226_PIN_PROTECTION_WORKAROUND
 #define LULZBOT_M226_NON_ARDUINO_PINS_WORKAROUND
 
+// Fix for homing backoff
+#define LULZBOT_HOMING_BACKOFF_FIX
+
 /************************* EXPERIMENTAL FEATURES ******************************/
 
 #if defined(LULZBOT_USE_EXPERIMENTAL_FEATURES) && !defined(LULZBOT_CONSERVE_MEMORY)

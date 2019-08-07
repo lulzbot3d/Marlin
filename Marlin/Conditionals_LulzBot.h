@@ -754,34 +754,19 @@
 
 /*********************** AUTOLEVELING / BED PROBE *******************************/
 
-#if defined(LULZBOT_KangarooPaw_Experimental)
-    // KangarooPaw only has a single force sensitive resistor for probing.
-    #define LULZBOT_STANDARD_LEFT_PROBE_BED_POSITION        12
-    #define LULZBOT_STANDARD_RIGHT_PROBE_BED_POSITION      134
-    #define LULZBOT_STANDARD_BACK_PROBE_BED_POSITION       170
-    #define LULZBOT_STANDARD_FRONT_PROBE_BED_POSITION        8
-
-#elif defined(LULZBOT_USE_AUTOLEVELING) && defined(LULZBOT_MINI_BED) && defined(LULZBOT_USE_Z_BELT)
-    #define LULZBOT_STANDARD_LEFT_PROBE_BED_POSITION        -3
+#if defined(LULZBOT_USE_AUTOLEVELING) && defined(LULZBOT_MINI_BED)
+    #define LULZBOT_STANDARD_LEFT_PROBE_BED_POSITION       -3
     #define LULZBOT_STANDARD_RIGHT_PROBE_BED_POSITION      163
     #define LULZBOT_STANDARD_BACK_PROBE_BED_POSITION       168
-    #define LULZBOT_STANDARD_FRONT_PROBE_BED_POSITION       -4
+    #define LULZBOT_STANDARD_FRONT_PROBE_BED_POSITION      -4
 
-#elif defined(LULZBOT_USE_AUTOLEVELING) && defined(LULZBOT_MINI_BED)
-    // In order to work with the Gladiola printers, we need to
-    // perform the probe right against the left and front endstops.
-    // This is extremely problematic and leads to other problems
-    // which are corrected for in the start GCODE.
-    #define LULZBOT_STANDARD_LEFT_PROBE_BED_POSITION      LULZBOT_X_MIN_POS
-    #define LULZBOT_STANDARD_FRONT_PROBE_BED_POSITION     LULZBOT_Y_MIN_POS
-
-    // The Gladiola has the probe points spaced further apart than
-    // earlier models. Since Gladiola FW has to work on earlier
-    // printers, we need to add a workaround because G29 hits the
-    // endstops and shifts the coordinate system around.
-    #define LULZBOT_STANDARD_RIGHT_PROBE_BED_POSITION     161
-    #define LULZBOT_STANDARD_BACK_PROBE_BED_POSITION      161
-    #define LULZBOT_USE_PRE_GLADIOLA_G29_WORKAROUND
+    #if defined(LULZBOT_USE_Z_SCREW)
+        // The Gladiola has the probe points spaced further apart than
+        // earlier models. Since Gladiola FW has to work on earlier
+        // printers, we need to add a workaround because G29 hits the
+        // endstops and shifts the coordinate system around.
+        #define LULZBOT_USE_PRE_GLADIOLA_G29_WORKAROUND
+    #endif
 
 #elif defined(LULZBOT_USE_AUTOLEVELING) && defined(LULZBOT_TAZ_BED)
     #define LULZBOT_STANDARD_LEFT_PROBE_BED_POSITION      -10
@@ -1540,10 +1525,10 @@
  */
 
 #if defined(LULZBOT_IS_MINI) && defined(LULZBOT_USE_Z_SCREW)
-    #define LULZBOT_STANDARD_X_MAX_POS         162
-    #define LULZBOT_STANDARD_X_MIN_POS          -3
-    #define LULZBOT_STANDARD_Y_MAX_POS         190
-    #define LULZBOT_STANDARD_Y_MIN_POS          -7
+    #define LULZBOT_STANDARD_X_MAX_POS         165
+    #define LULZBOT_STANDARD_X_MIN_POS           0
+    #define LULZBOT_STANDARD_Y_MAX_POS         195
+    #define LULZBOT_STANDARD_Y_MIN_POS          -8
 
     #define LULZBOT_STANDARD_X_BED_SIZE        155
     #define LULZBOT_STANDARD_Y_BED_SIZE        155
@@ -1944,21 +1929,17 @@
 /*********************************** WIPER PAD **********************************/
 
 // Nozzle wiping points (varies by toolhead, as the nozzle position varies)
-#if defined(LULZBOT_USE_AUTOLEVELING) && defined(LULZBOT_MINI_BED) && defined(LULZBOT_USE_Z_BELT)
+#if defined(LULZBOT_USE_AUTOLEVELING) && defined(LULZBOT_MINI_BED)
     // Mini has a horizontal wiping pad on the back of the bed
     #define LULZBOT_LEFT_WIPE_X1                       45
     #define LULZBOT_LEFT_WIPE_X2                       115
     #define LULZBOT_LEFT_WIPE_Y1                       174
     #define LULZBOT_LEFT_WIPE_Y2                       174
-    #define LULZBOT_LEFT_WIPE_Z                        1
-
-#elif defined(LULZBOT_USE_AUTOLEVELING) && defined(LULZBOT_MINI_BED) && defined(LULZBOT_USE_Z_SCREW)
-    // Mini has a horizontal wiping pad on the back of the bed
-    #define LULZBOT_LEFT_WIPE_X1                       45
-    #define LULZBOT_LEFT_WIPE_X2                       115
-    #define LULZBOT_LEFT_WIPE_Y1                       172
-    #define LULZBOT_LEFT_WIPE_Y2                       172
-    #define LULZBOT_LEFT_WIPE_Z                       -0.5
+    #if defined(LULZBOT_USE_Z_SCREW)
+        // Wipe very deep because Minis older than
+        // Gladiolas are a few milimeters taller
+        #define LULZBOT_LEFT_WIPE_Z                    -0.5
+    #endif
 
 #elif defined(LULZBOT_USE_AUTOLEVELING) && defined(LULZBOT_TAZ_BED) && defined(TOOLHEAD_Yellowfin_DualExtruderV3)
     // When using a Yellowfin toolhead, a wider wiping pad will be installed

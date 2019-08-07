@@ -1939,6 +1939,8 @@
         // Wipe very deep because Minis older than
         // Gladiolas are a few milimeters taller
         #define LULZBOT_LEFT_WIPE_Z                    -0.5
+    #else
+        #define LULZBOT_LEFT_WIPE_Z                    1
     #endif
 
 #elif defined(LULZBOT_USE_AUTOLEVELING) && defined(LULZBOT_TAZ_BED) && defined(TOOLHEAD_Yellowfin_DualExtruderV3)

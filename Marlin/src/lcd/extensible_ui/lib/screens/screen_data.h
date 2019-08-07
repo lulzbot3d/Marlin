@@ -20,6 +20,10 @@
  *   location: <http://www.gnu.org/licenses/>.                              *
  ****************************************************************************/
 
+#pragma once
+
+#include "../ftdi_eve_lib/ftdi_eve_lib.h"
+
 // To save RAM, store state information related to a particular screen
 // in a union. The values should be initialized in the onEntry method.
 

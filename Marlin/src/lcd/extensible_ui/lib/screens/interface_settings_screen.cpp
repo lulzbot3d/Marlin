@@ -21,11 +21,11 @@
  ****************************************************************************/
 
 #include "../config.h"
-#include "screen_data.h"
 
 #if ENABLED(EXTENSIBLE_UI)
 
 #include "screens.h"
+#include "screen_data.h"
 
 #include "../io/flash_storage.h"
 

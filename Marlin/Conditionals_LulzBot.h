@@ -1592,7 +1592,7 @@
 #endif
 
 #if defined(LULZBOT_IS_MINI) && defined(LULZBOT_USE_Z_SCREW)
-    #define LULZBOT_STANDARD_Z_MIN_POS          -2
+    #define LULZBOT_STANDARD_Z_MIN_POS          -5
     #define LULZBOT_STANDARD_Z_MAX_POS         159
 
 #elif defined(LULZBOT_IS_MINI) && defined(LULZBOT_USE_Z_BELT)
@@ -2049,7 +2049,7 @@
     #if defined(LULZBOT_IS_TAZ)
         #define LULZBOT_Z_PROBE_LOW_POINT   -2
     #elif defined(LULZBOT_IS_MINI)
-        #define LULZBOT_Z_PROBE_LOW_POINT   -4
+        #define LULZBOT_Z_PROBE_LOW_POINT   -5
     #endif
 
     #if LULZBOT_EXTRUDERS == 1

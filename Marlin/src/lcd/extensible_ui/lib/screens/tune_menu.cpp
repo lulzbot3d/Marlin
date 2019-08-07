@@ -53,7 +53,7 @@ void TuneMenu::onRedraw(draw_mode_t what) {
        .font(font_medium)
     #if defined(USE_PORTRAIT_ORIENTATION)
        .tag(2).enabled(1)      .button( BTN_POS(1,1), BTN_SIZE(2,1), F("Temperature"))
-       .tag(3).enabled(1)      .button( BTN_POS(1,2), BTN_SIZE(2,1), F("Change Filament"))
+       .tag(3).enabled(!isPrinting()).button( BTN_POS(1,2), BTN_SIZE(2,1), F("Change Filament"))
        #if ENABLED(LIN_ADVANCE) || ENABLED(FILAMENT_RUNOUT_SENSOR)
           .enabled(1)
         #else
@@ -88,7 +88,7 @@ void TuneMenu::onRedraw(draw_mode_t what) {
                           .button( BTN_POS(1,8), BTN_SIZE(2,1), F("Back"));
     #else // USE_PORTRAIT_ORIENTATION
        .tag(2).enabled(1) .button( BTN_POS(1,1), BTN_SIZE(1,1), F("Temperature"))
-       .tag(3).enabled(1) .button( BTN_POS(1,2), BTN_SIZE(1,1), F("Change Filament"))
+       .tag(3).enabled(!isPrinting()).button( BTN_POS(1,2), BTN_SIZE(1,1), F("Change Filament"))
       #if ENABLED(BABYSTEPPING)
        .enabled(1)
       #else

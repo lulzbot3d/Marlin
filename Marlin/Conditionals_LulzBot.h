@@ -2289,9 +2289,7 @@
     #define LULZBOT_DEFAULT_ZJERK                  0.4
 
     #if ! defined(LULZBOT_Z_PROBE_OFFSET_FROM_EXTRUDER)
-        #if defined(LULZBOT_Quiver_TAZPro)
-            #define LULZBOT_Z_PROBE_OFFSET_FROM_EXTRUDER  -1.102
-        #elif defined(LULZBOT_USE_Z_BELT)
+        #if defined(LULZBOT_USE_Z_BELT)
             #define LULZBOT_Z_PROBE_OFFSET_FROM_EXTRUDER  -1.1
         #else
             #define LULZBOT_Z_PROBE_OFFSET_FROM_EXTRUDER  -1.375
@@ -2310,7 +2308,11 @@
     #endif
 
     #if !defined(LULZBOT_Z_PROBE_OFFSET_FROM_EXTRUDER)
-        #define LULZBOT_Z_PROBE_OFFSET_FROM_EXTRUDER -1.200
+        #if defined(LULZBOT_Quiver_TAZPro)
+            #define LULZBOT_Z_PROBE_OFFSET_FROM_EXTRUDER -1.102
+        #else
+            #define LULZBOT_Z_PROBE_OFFSET_FROM_EXTRUDER -1.200
+        #endif
     #endif
 #endif
 

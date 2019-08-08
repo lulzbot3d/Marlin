@@ -18,7 +18,7 @@
 from __future__ import print_function
 import argparse, re, sys, os
 
-FW_VERSION = ".150"
+FW_VERSION = ".151"
 
 PRINTER_CHOICES = [
     "Gladiola_Mini",

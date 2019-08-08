@@ -2204,7 +2204,7 @@
  */
 
 #ifndef LULZBOT_FW_VERSION
-  #define LULZBOT_FW_VERSION ".150" // <-- changed
+  #define LULZBOT_FW_VERSION ".151" // <-- changed
 #endif
 #define LULZBOT_SOURCE_CODE_URL "https://code.alephobjects.com/diffusion/MARLIN" // <-- changed
 #define LULZBOT_LCD_MACHINE_NAME "Mini" // <-- changed

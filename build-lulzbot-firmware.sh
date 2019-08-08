@@ -131,7 +131,7 @@ compile_firmware() {
 # Records the md5sum of the compiled firmware to the checksum file
 #
 record_checksum() {
-  cat Marlin/applet/Marlin.hex Marlin/applet/Marlin.bin | md5sum  | sed "s/-/${printer}_${toolhead}/g" >> ${1}-${fw_version}_${fw_hash}.txt
+  cat Marlin/applet/Marlin.hex Marlin/applet/Marlin.bin | md5sum  | sed "s/-/${printer}_${toolhead}/g" >> ${1}-${fw_version}-${fw_hash}.txt
 }
 
 ####

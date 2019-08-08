@@ -91,7 +91,7 @@
 #define DEVELOPER_SCREENS
 
 // Maximum feed rate for manual extrusion (mm/s)
-#define MAX_MANUAL_FEEDRATE LULZBOT_MAX_MANUAL_FEEDRATE
+//#define MAX_MANUAL_FEEDRATE 240
 
 // Sets the SPI speed in Hz
 

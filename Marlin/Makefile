@@ -56,13 +56,16 @@
 # Or, try disconnecting USB to power down and then reconnecting before running avrdude.
 #
 
+# Extra options from Lulzbot build script
+LULZBOT_EXTRAS ?=
+
 # This defines the board to compile for (see boards.h for your board's ID)
-HARDWARE_MOTHERBOARD ?= 301
+HARDWARE_MOTHERBOARD ?= 11
 
 # Arduino source install directory, and version number
 # On most linuxes this will be /usr/share/arduino
-ARDUINO_INSTALL_DIR  ?= ../ArduinoAddons/arduino-1.8.5
-ARDUINO_VERSION      ?= 10805
+ARDUINO_INSTALL_DIR  ?= ${HOME}/Arduino
+ARDUINO_VERSION      ?= 106
 
 # The installed Libraries are in the User folder
 ARDUINO_USER_DIR ?= ${HOME}/Arduino
@@ -105,15 +108,6 @@ ifeq ($(shell test $(CC_VER) -lt 40901 && echo 1),1)
   @echo This version of GCC is likely broken. Enabling relocation workaround.
   RELOC_WORKAROUND = 1
 endif
-
-############
-# The following added by AlephObjects for adjusting the name of the output
-# hex file
-VERSION=$(shell grep "define SHORT_BUILD_VERSION" src/inc/Version.h | cut -d \" -f 2)
-REVISION=$(shell grep -m 1 "define LULZBOT_FW" Conditionals_LulzBot.h | cut -d \" -f 2)
-HASH = $(shell git rev-parse --verify HEAD --short)
-HEX_FILENAME=Marlin_$(MODEL)_$(TOOLHEAD)_$(VERSION)$(REVISION)_$(HASH)
-LULZBOT_EXTRAS=-DLULZBOT_$(MODEL) -DTOOLHEAD_$(TOOLHEAD) -DCONFIGURATION_LULZBOT -Wfatal-errors
 
 ############################################################################
 # Below here nothing should be changed...
@@ -662,21 +656,6 @@ MV = mv -f
 CDEFS    = -DF_CPU=$(F_CPU) ${addprefix -D , $(DEFINES)} -DARDUINO=$(ARDUINO_VERSION)
 CXXDEFS  = $(CDEFS)
 
-# Disabling the timestamp and/or timestamp in the .hex file is useful for
-# binary diffing between different builds of .hex files to detect unintended
-# changes.
-ifeq ($(NO_TIMESTAMP), 1)
-CDEFS +='-D__DATE__="??? ?? ????"'
-CDEFS +='-D__TIME__="??:??:??"'
-LULZBOT_EXTRAS += -Wno-builtin-macro-redefined
-endif
-
-#Disabling the versions is useful for diffing binaries between different
-#versions
-ifeq ($(NO_VERSION), 1)
-CDEFS +='-DLULZBOT_MASK_VERSION'
-endif
-
 ifeq ($(HARDWARE_VARIANT), Teensy)
   CDEFS  += -DUSB_SERIAL
   LIB_SRC    += usb.c pins_teensy.c
@@ -708,8 +687,7 @@ CXXWARN = -Wall                     -Wno-packed-bitfield-compat -Wno-pragmas -Wu
 CTUNING = -fsigned-char -funsigned-bitfields -fno-exceptions \
           -fshort-enums -ffunction-sections -fdata-sections
 ifneq ($(HARDWARE_MOTHERBOARD),)
-  # LulzBot: Commented out this line since this is set by Conditionals_LulzBot.h
-  #CTUNING += -DMOTHERBOARD=${HARDWARE_MOTHERBOARD}
+  CTUNING += -DMOTHERBOARD=${HARDWARE_MOTHERBOARD}
 endif
 #CEXTRA = -Wa,-adhlns=$(<:.c=.lst)
 CXXEXTRA = -fno-use-cxa-atexit -fno-threadsafe-statics -fno-rtti
@@ -777,37 +755,7 @@ $(shell mkdir -p $(dir $(OBJ)))
 # Default target.
 all: sizeafter
 
-build: elf hex bin $(BUILD_DIR)/$(HEX_FILENAME).hex  $(BUILD_DIR)/$(HEX_FILENAME).bin
-
-# The following target renames the .hex/.bin file according to LulzBot conventions.
-
-$(BUILD_DIR)/$(HEX_FILENAME).hex: $(BUILD_DIR)/$(TARGET).hex
-	mv $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(HEX_FILENAME).hex
-
-$(BUILD_DIR)/$(HEX_FILENAME).bin: $(BUILD_DIR)/$(TARGET).bin
-	mv $(BUILD_DIR)/$(TARGET).bin $(BUILD_DIR)/$(HEX_FILENAME).bin
-
-# This "config" target uses the C preprocessor to output a snapshot of the
-# "Configuration.h" and "Configuration_adv.h" for the current printer
-# and toolhead. This is useful for when Marlin developers ask for a copy
-# of your config files when you submit an issue.
-
-config: $(BUILD_DIR)
-	$P # Dump the values defined in "Configuration.h"
-	$P echo '#include "src/Marlin.h"' > /tmp/macros.cpp
-	$P cat Configuration.h >> /tmp/macros.cpp
-	$P sed -i 's/#define *\(\w*\)/pound_defined_\1/g; s/#ifndef CONFIGURATION_H/#ifndef FOO/g' /tmp/macros.cpp
-	$P $(CXX) $(ALL_CXXFLAGS) -E /tmp/macros.cpp -o /tmp/preprocessed.h
-	$P echo "/* Configuration.h */" > $(BUILD_DIR)/$(HEX_FILENAME).config
-	$P grep pound_defined /tmp/preprocessed.h | sed 's/ *pound_defined_\(\w*\)/#define \1/g' >>  $(BUILD_DIR)/$(HEX_FILENAME).config
-
-	$P # Dump the values defined in "Configuration_adv.h"
-	$P echo '#include "src/Marlin.h"' > /tmp/macros.cpp
-	$P cat Configuration_adv.h >> /tmp/macros.cpp
-	$P sed -i 's/#define *\(\w*\)/pound_defined_\1/g; s/#ifndef CONFIGURATION_ADV_H/#ifndef FOO/g' /tmp/macros.cpp
-	$P $(CXX) $(ALL_CXXFLAGS) -E /tmp/macros.cpp -o /tmp/preprocessed.h
-	$P echo "/* Configuration_adv.h */" >>  $(BUILD_DIR)/$(HEX_FILENAME).config
-	$P grep pound_defined /tmp/preprocessed.h | sed 's/ *pound_defined_\(\w*\)/#define \1/g' >>  $(BUILD_DIR)/$(HEX_FILENAME).config
+build: elf hex bin
 
 elf: $(BUILD_DIR)/$(TARGET).elf
 bin: $(BUILD_DIR)/$(TARGET).bin

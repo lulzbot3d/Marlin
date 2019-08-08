@@ -2196,3 +2196,107 @@
 
 // Allow servo angle to be edited and saved to EEPROM
 //#define EDITABLE_SERVO_ANGLES
+
+/*************************** EXTRA LULZBOT OPTIONS ***************************/
+
+/**
+ * Versioning information for firmware
+ */
+
+#ifndef LULZBOT_FW_VERSION
+  //#define LULZBOT_FW_VERSION
+#endif
+//#define LULZBOT_SOURCE_CODE_URL
+//#define LULZBOT_LCD_MACHINE_NAME
+//#define LULZBOT_LCD_TOOLHEAD_NAME
+//#define LULZBOT_DETAILED_BUILD_VERSION
+//#define LULZBOT_STRING_DISTRIBUTION_DATE
+
+/**
+ * Extra modifications to Marlin
+ */
+
+//#define LULZBOT_WIPE_SEQUENCE_COMMANDS
+//#define LULZBOT_AXIS_LEVELING_COMMANDS
+//#define LULZBOT_CALIBRATION_COMMANDS
+//#define LULZBOT_G29_DISABLES_E0_STEPPER
+//#define LULZBOT_M226_PIN_PROTECTION_WORKAROUND
+//#define LULZBOT_M226_NON_ARDUINO_PINS_WORKAROUND
+//#define LULZBOT_RUNOUT_HANDLING_WORKAROUND
+//#define LULZBOT_ADVANCED_PAUSE_PURGE_WORKAROUND
+//#define LULZBOT_NO_PAUSE_FOR_REHEAT_WORKAROUND
+//#define LULZBOT_AERO_UNLOAD_WORKAROUND
+//#define LULZBOT_AERO_UNLOAD_PURGE_LENGTH
+//#define LULZBOT_AERO_UNLOAD_PURGE_FEEDRATE
+//#define LULZBOT_DISABLE_KILL_BUTTON
+//#define LULZBOT_DISABLE_DUE_SD_MMC
+//#define LULZBOT_USE_UHS3_USB
+//#define LULZBOT_ENERGIZE_Z_AT_STARTUP
+//#define LULZBOT_HOME_Z_AT_STARTUP
+//#define LULZBOT_EXTRUDER_FAN_ON_PIN_6
+//#define LULZBOT_NO_MOVE_ON_TOOLHEAD_CHANGE
+//#define LULZBOT_SWAP_EXTRUDERS
+//#define LULZBOT_G29_ENDS_ON_BACK_LEFT_CORNER
+//#define LULZBOT_CONTROLLERFAN_SPEED_WHEN_ONLY_Z_ACTIVE
+//#define LULZBOT_Z_MIN_USES_Z_PROBE_ENABLED
+//#define LULZBOT_HOMING_BACKOFF_FIX
+
+/**
+ * Extra options for RepRapDiscount Full Graphics Smart Controller
+ */
+
+//#define LULZBOT_ENHANCED_BOOTSCREEN
+//#define LULZBOT_HIDE_ACTIVE_NOZZLE_IN_MENU
+//#define LULZBOT_HIDE_UNUSED_FANS_IN_MENU
+//#define LULZBOT_HIDE_PREHEAT_IN_MENU
+//#define LULZBOT_HIDE_INIT_EEPROM_IN_MENU
+//#define LULZBOT_HIDE_BED_LEVELING_IN_MENU
+//#define LULZBOT_JUMP_TO_TOP_ON_MENU_BACK
+//#define LULZBOT_LCD_ZOFFSET_FORMAT
+//#define LULZBOT_LCD_KEEPS_STATUS_AFTER_PRINT
+
+/**
+ * Extra options for Archim
+ */
+//#define LULZBOT_USB_DEVICE_VENDOR_ID
+//#define LULZBOT_USB_DEVICE_PRODUCT_ID
+//#define LULZBOT_EEPROM_BACKUP_SIZE
+
+/**
+ * Extra options for AlephObjects Color LCD display
+ */
+
+//#define LCD_ALEPHOBJECTS_CLCD_UI
+//#define LCD_HAOYU_FT800CB
+//#define USE_PORTRAIT_ORIENTATION
+//#define AO_EXP1_PINOUT_REV_C
+//#define AO_EXP2_PINOUT_REV_C
+//#define AO_EXP1_PINOUT_REV_B
+//#define MAX_MANUAL_FEEDRATE
+//#define LCD_480x272
+//#define LCD_800x480
+
+/**
+ * Extra option for KangarooPaw
+ */
+//#define LULZBOT_USE_BIOPRINTER_GCODE
+//#define LULZBOT_USE_BIOPRINTER_UI
+//#define LULZBOT_DISABLE_TOOLHEAD_HEATER
+//#define E_MIN_PIN
+//#define E_MIN_PIN_INVERTING
+
+/**
+ * Override certain other Marlin options
+ */
+
+//#define MAX_PROBE_Y
+//#define MAX_PROBE_X
+//#define MIN_PROBE_Y
+//#define MIN_PROBE_X
+//#define ACTION_ON_FILAMENT_RUNOUT
+//#define FAN_PIN
+
+/**
+ * Extra Lulzbot specific code
+ */
+#include "src/Lulzbot_Extras.h"

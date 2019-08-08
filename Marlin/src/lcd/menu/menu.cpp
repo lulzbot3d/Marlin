@@ -92,7 +92,7 @@ void MarlinUI::goto_previous_screen() {
   if (screen_history_depth > 0) {
     menuPosition &sh = screen_history[--screen_history_depth];
     goto_screen(sh.menu_function,
-    #if !defined(LULZBOT_RESET_SELECTION_TO_FIRST_ON_MENU_BACK)
+    #if !defined(LULZBOT_JUMP_TO_TOP_ON_MENU_BACK)
     sh.encoder_position,
     #else
     0ul,
@@ -413,10 +413,10 @@ void scroll_screen(const uint8_t limit, const bool is_menu) {
     if (ui.should_draw()) {
       #if ENABLED(BABYSTEP_HOTEND_Z_OFFSET)
         if (!do_probe)
-          draw_edit_screen(PSTR(MSG_Z_OFFSET), LULZBOT_PRECISION_ZOFFSET(hotend_offset[Z_AXIS][active_extruder]));
+          draw_edit_screen(PSTR(MSG_Z_OFFSET), LULZBOT_LCD_ZOFFSET_FORMAT(hotend_offset[Z_AXIS][active_extruder]));
         else
       #endif
-          draw_edit_screen(PSTR(MSG_ZPROBE_ZOFFSET), LULZBOT_PRECISION_ZOFFSET(zprobe_zoffset));
+          draw_edit_screen(PSTR(MSG_ZPROBE_ZOFFSET), LULZBOT_LCD_ZOFFSET_FORMAT(zprobe_zoffset));
 
       #if ENABLED(BABYSTEP_ZPROBE_GFX_OVERLAY)
         if (do_probe) _lcd_zoffset_overlay_gfx(zprobe_zoffset);

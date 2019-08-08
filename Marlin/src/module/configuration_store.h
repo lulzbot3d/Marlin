@@ -88,7 +88,9 @@ class MarlinSettings {
       static void report(const bool forReplay=false) { UNUSED(forReplay); }
     #endif
 
-    LULZBOT_SAVE_ZOFFSET_TO_EEPROM_DECL
+    #ifdef LULZBOT_SAVE_ZOFFSET_TO_EEPROM_DECL
+      LULZBOT_SAVE_ZOFFSET_TO_EEPROM_DECL
+    #endif
 
   private:
     static void postprocess();

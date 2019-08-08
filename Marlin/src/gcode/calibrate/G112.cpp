@@ -22,15 +22,12 @@
 
 #include "../../Marlin.h"
 
-#if ENABLED(LULZBOT_BIOPRINTER_GCODE)
+#if ENABLED(LULZBOT_USE_BIOPRINTER_GCODE)
 
 #include "../gcode.h"
 #include "../../module/motion.h"
 #include "../../module/planner.h"
 #include "../../module/temperature.h"
-
-#define E_MIN_PIN             X_MAX_PIN
-#define E_MIN_PIN_INVERTING   LULZBOT_NORMALLY_CLOSED_ENDSTOP
 
 /**
  * G112 runs the extruder backwards until an endstop is triggered
@@ -68,4 +65,4 @@ void GcodeSuite::G112() {
   home_e();
 }
 
-#endif // LULZBOT_BIOPRINTER_GCODE
+#endif // LULZBOT_USE_BIOPRINTER_GCODE

@@ -347,7 +347,7 @@ void disable_all_steppers() {
       host_action_prompt_show();
     #endif
 
-    #if defined(LULZBOT_RUNOUT_HANDLING_WORKAROUNDS)
+    #if defined(LULZBOT_RUNOUT_HANDLING_WORKAROUND)
     const bool run_runout_script = IS_SD_PRINTING();
     #else
     const bool run_runout_script = !runout.host_handling;
@@ -1071,7 +1071,9 @@ void setup() {
     i2c.onRequest(i2c_on_request);
   #endif
 
-  LULZBOT_ON_STARTUP();
+  #ifdef LULZBOT_ON_STARTUP
+    LULZBOT_ON_STARTUP();
+  #endif
 
   #if DO_SWITCH_EXTRUDER
     move_extruder_servo(0);   // Initialize extruder servo

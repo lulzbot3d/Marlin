@@ -183,13 +183,13 @@ void menu_tune() {
         MENU_MULTIPLIER_ITEM_EDIT(uint8, MSG_EXTRA_FAN_SPEED FAN_SPEED_1_SUFFIX, &thermalManager.new_fan_speed[0], 3, 255);
       #endif
     #endif
-    #if (HAS_FAN1 && !defined(LULZBOT_HIDE_EXTRA_FAN_CONFIG_IN_LCD)) || (ENABLED(SINGLENOZZLE) && EXTRUDERS > 1)
+    #if (HAS_FAN1 && !defined(LULZBOT_HIDE_UNUSED_FANS_IN_MENU)) || (ENABLED(SINGLENOZZLE) && EXTRUDERS > 1)
       MENU_MULTIPLIER_ITEM_EDIT_CALLBACK(uint8, MSG_FAN_SPEED " 2", &thermalManager.lcd_tmpfan_speed[1], 0, 255, thermalManager.lcd_setFanSpeed1);
       #if ENABLED(EXTRA_FAN_SPEED)
         MENU_MULTIPLIER_ITEM_EDIT(uint8, MSG_EXTRA_FAN_SPEED " 2", &thermalManager.new_fan_speed[1], 3, 255);
       #endif
     #endif
-    #if (HAS_FAN2 && !defined(LULZBOT_HIDE_EXTRA_FAN_CONFIG_IN_LCD)) || (ENABLED(SINGLENOZZLE) && EXTRUDERS > 2)
+    #if (HAS_FAN2 && !defined(LULZBOT_HIDE_UNUSED_FANS_IN_MENU)) || (ENABLED(SINGLENOZZLE) && EXTRUDERS > 2)
       MENU_MULTIPLIER_ITEM_EDIT_CALLBACK(uint8, MSG_FAN_SPEED " 3", &thermalManager.lcd_tmpfan_speed[2], 0, 255, thermalManager.lcd_setFanSpeed2);
       #if ENABLED(EXTRA_FAN_SPEED)
         MENU_MULTIPLIER_ITEM_EDIT(uint8, MSG_EXTRA_FAN_SPEED " 3", &thermalManager.new_fan_speed[2], 3, 255);
@@ -204,7 +204,7 @@ void menu_tune() {
   #if EXTRUDERS == 1
     MENU_ITEM_EDIT_CALLBACK(int3, MSG_FLOW, &planner.flow_percentage[0], 10, 999, _lcd_refresh_e_factor_0);
   #elif EXTRUDERS
-    #if not defined(LULZBOT_HIDE_ACTIVE_NOZZLE_IN_LCD)
+    #if not defined(LULZBOT_HIDE_ACTIVE_NOZZLE_IN_MENU)
     MENU_ITEM_EDIT_CALLBACK(int3, MSG_FLOW, &planner.flow_percentage[active_extruder], 10, 999, _lcd_refresh_e_factor);
     #endif
     #define EDIT_FLOW(N) MENU_ITEM_EDIT_CALLBACK(int3, MSG_FLOW MSG_LCD_N##N, &planner.flow_percentage[N], 10, 999, _lcd_refresh_e_factor_##N)

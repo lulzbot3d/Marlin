@@ -27,6 +27,8 @@
  * M119: Output endstop states to serial output
  */
 void GcodeSuite::M119() {
-  LULZBOT_ENABLE_PROBE_PINS
+  #ifdef LULZBOT_ENABLE_PROBE_PINS
+    LULZBOT_ENABLE_PROBE_PINS
+  #endif
   endstops.M119();
 }

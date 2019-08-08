@@ -35,7 +35,7 @@ void TemperatureScreen::onRedraw(draw_mode_t what) {
   w.precision(0).color(temp).units(PSTR("C"));
   w.heading(         PSTR("Temperature:"));
   w.button(30, PSTR("Cooldown (All Off)"));
-  #ifndef LULZBOT_NO_EXTRUDER_HEATER
+  #ifndef LULZBOT_DISABLE_TOOLHEAD_HEATER
     #if HOTENDS == 1
       w.adjuster(   2, PSTR("Hot End:"),   getTargetTemp_celsius(E0));
     #else
@@ -64,7 +64,7 @@ bool TemperatureScreen::onTouchHeld(uint8_t tag) {
   switch(tag) {
     case 20: UI_DECREMENT(TargetTemp_celsius, BED); break;
     case 21: UI_INCREMENT(TargetTemp_celsius, BED); break;
-    #ifndef LULZBOT_NO_EXTRUDER_HEATER
+    #ifndef LULZBOT_DISABLE_TOOLHEAD_HEATER
     case  2: UI_DECREMENT(TargetTemp_celsius, E0); break;
     case  3: UI_INCREMENT(TargetTemp_celsius, E0); break;
     #endif

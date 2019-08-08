@@ -460,7 +460,7 @@ void menu_backlash();
 
     #if ENABLED(DISTINCT_E_FACTORS)
       #define EDIT_VMAX_E(N) MENU_MULTIPLIER_ITEM_EDIT(float3, MSG_VMAX MSG_E##N, &planner.settings.max_feedrate_mm_s[E_AXIS_N(N-1)], 1, 999)
-      #if not defined(LULZBOT_HIDE_ACTIVE_NOZZLE_IN_LCD)
+      #if not defined(LULZBOT_HIDE_ACTIVE_NOZZLE_IN_MENU)
       MENU_MULTIPLIER_ITEM_EDIT(float3, MSG_VMAX MSG_E, &planner.settings.max_feedrate_mm_s[E_AXIS_N(active_extruder)], 1, 999);
       #endif
       EDIT_VMAX_E(1);
@@ -513,7 +513,7 @@ void menu_backlash();
 
     #if ENABLED(DISTINCT_E_FACTORS)
       #define EDIT_AMAX_E(N,E) MENU_MULTIPLIER_ITEM_EDIT_CALLBACK(long5, MSG_AMAX MSG_E##N, &planner.settings.max_acceleration_mm_per_s2[E_AXIS_N(E)], 100, 99000, _reset_e##E##_acceleration_rate)
-      #if not defined(LULZBOT_HIDE_ACTIVE_NOZZLE_IN_LCD)
+      #if not defined(LULZBOT_HIDE_ACTIVE_NOZZLE_IN_MENU)
       MENU_MULTIPLIER_ITEM_EDIT_CALLBACK(long5, MSG_AMAX MSG_E, &planner.settings.max_acceleration_mm_per_s2[E_AXIS_N(active_extruder)], 100, 99000, _reset_acceleration_rates);
       #endif
       EDIT_AMAX_E(1,0);
@@ -578,7 +578,7 @@ void menu_backlash();
 
     #if ENABLED(DISTINCT_E_FACTORS)
       #define EDIT_ESTEPS(N,E) MENU_MULTIPLIER_ITEM_EDIT_CALLBACK(float51, MSG_E##N##STEPS, &planner.settings.axis_steps_per_mm[E_AXIS_N(E)], 5, 9999, _planner_refresh_e##E##_positioning)
-      #if not defined(LULZBOT_HIDE_ACTIVE_NOZZLE_IN_LCD)
+      #if not defined(LULZBOT_HIDE_ACTIVE_NOZZLE_IN_MENU)
       MENU_MULTIPLIER_ITEM_EDIT_CALLBACK(float51, MSG_ESTEPS, &planner.settings.axis_steps_per_mm[E_AXIS_N(active_extruder)], 5, 9999, _planner_refresh_positioning);
       #endif
       EDIT_ESTEPS(1,0);
@@ -602,7 +602,7 @@ void menu_backlash();
     END_MENU();
   }
 
-  #if ENABLED(EEPROM_SETTINGS) && DISABLED(LULZBOT_HIDE_INITIALIZE_EEPROM)
+  #if ENABLED(EEPROM_SETTINGS) && DISABLED(LULZBOT_HIDE_INIT_EEPROM_IN_MENU)
 
     #include "../../module/configuration_store.h"
 
@@ -719,7 +719,7 @@ void menu_advanced_settings() {
     });
   #endif
 
-  #if ENABLED(EEPROM_SETTINGS) && DISABLED(SLIM_LCD_MENUS) && DISABLED(LULZBOT_HIDE_INITIALIZE_EEPROM)
+  #if ENABLED(EEPROM_SETTINGS) && DISABLED(SLIM_LCD_MENUS) && DISABLED(LULZBOT_HIDE_INIT_EEPROM_IN_MENU)
     MENU_ITEM(submenu, MSG_INIT_EEPROM, lcd_init_eeprom_confirm);
   #endif
 

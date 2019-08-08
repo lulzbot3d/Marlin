@@ -24,46 +24,73 @@
 #include "module/endstops.h"
 #include "module/stepper_indirection.h"
 #include "gcode/gcode.h"
-#if ENABLED(LULZBOT_USE_TOUCH_UI)
-    #include "lcd/extensible_ui/lib/ftdi_eve_lib/basic/ftdi_basic.h"
+#include "libs/vector_3.h"
+
+#if HAS_BED_PROBE
+  #include "module/probe.h"
 #endif
+
+#if EITHER(EEPROM_SETTINGS, SD_FIRMWARE_UPDATE)
+  #include "HAL/shared/persistent_store_api.h"
+#endif
+
+#if ENABLED(EXTENSIBLE_UI)
+  #include "lcd/extensible_ui/lib/ftdi_eve_lib/basic/ftdi_basic.h"
+#endif
+
+#if ENABLED(LULZBOT_ENHANCED_BOOTSCREEN)
+  #include "lcd/dogm/fontdata/fontdata_ISO10646_1.h"
+  #include "lcd/dogm/ultralcd_DOGM.h"
+  #include "lcd/dogm/u8g_fontutf8.h"
+  #include "lcd/ultralcd.h"
+
+  #if ENABLED(SHOW_BOOTSCREEN)
+    #include "lcd/dogm/dogm_Bootscreen.h"
+  #endif
+#endif
+
 #include "Lulzbot_Extras.h"
 
 /******************************** EMI MITIGATION *******************************/
 
-#define LULZBOT_EMI_SHUTOFF(pin)             SET_OUTPUT(pin); WRITE(pin, LOW);
+#define LULZBOT_EMI_SHUTOFF(pin)  SET_OUTPUT(pin); WRITE(pin, LOW);
+
+#define LULZBOT_SET_PIN_STATE(pin, enable) \
+  if(enable) { \
+    /* Set as inputs with pull-up resistor */ \
+    SET_INPUT(pin); \
+    WRITE(pin, HIGH); \
+    delay(5); /* The bed acts as a capacitor and takes a while to charge up */ \
+  } else { \
+    SET_OUTPUT(pin); \
+    WRITE(pin, LOW); \
+  }
 
 void LULZBOT_ON_STARTUP(void) {
-    EnableProbePins::enable(false);
+  EnableProbePins::enable(false);
 
-    #if defined(LULZBOT_USE_ARCHIM2)
-        LULZBOT_EMI_SHUTOFF(GPIO_PB1_J20_5)
-        LULZBOT_EMI_SHUTOFF(GPIO_PB0_J20_6)
-        LULZBOT_EMI_SHUTOFF(GPIO_PB3_J20_7)
-        LULZBOT_EMI_SHUTOFF(GPIO_PB2_J20_8)
-        LULZBOT_EMI_SHUTOFF(GPIO_PB6_J20_9)
-        LULZBOT_EMI_SHUTOFF(GPIO_PB5_J20_10)
-        LULZBOT_EMI_SHUTOFF(GPIO_PB8_J20_11)
-        LULZBOT_EMI_SHUTOFF(GPIO_PB4_J20_12)
-        LULZBOT_EMI_SHUTOFF(GPIO_PB9_J20_13)
-        LULZBOT_EMI_SHUTOFF(GPIO_PB7_J20_14)
-        LULZBOT_EMI_SHUTOFF(GPIO_PB14_J20_17)
-        LULZBOT_EMI_SHUTOFF(GPIO_PA18_J20_21)
-        LULZBOT_EMI_SHUTOFF(GPIO_PA17_J20_22)
-    #endif
+  #if MB(ARCHIM2)
+    LULZBOT_EMI_SHUTOFF(GPIO_PB1_J20_5)
+    LULZBOT_EMI_SHUTOFF(GPIO_PB0_J20_6)
+    LULZBOT_EMI_SHUTOFF(GPIO_PB3_J20_7)
+    LULZBOT_EMI_SHUTOFF(GPIO_PB2_J20_8)
+    LULZBOT_EMI_SHUTOFF(GPIO_PB6_J20_9)
+    LULZBOT_EMI_SHUTOFF(GPIO_PB5_J20_10)
+    LULZBOT_EMI_SHUTOFF(GPIO_PB8_J20_11)
+    LULZBOT_EMI_SHUTOFF(GPIO_PB4_J20_12)
+    LULZBOT_EMI_SHUTOFF(GPIO_PB9_J20_13)
+    LULZBOT_EMI_SHUTOFF(GPIO_PB7_J20_14)
+    LULZBOT_EMI_SHUTOFF(GPIO_PB14_J20_17)
+    LULZBOT_EMI_SHUTOFF(GPIO_PA18_J20_21)
+    LULZBOT_EMI_SHUTOFF(GPIO_PA17_J20_22)
+  #endif
 
-    #if defined(LULZBOT_USE_Z_BELT)
-        enable_Z();
-        #if defined(LULZBOT_IS_TAZ)
-            queue.inject_P(PSTR("G28 Z"));
-        #endif
-    #endif
-}
-
-void LULZBOT_ON_REFLASH() {
-    #if ENABLED(LULZBOT_USE_TOUCH_UI)
-        CLCD::set_brightness(0);
-    #endif
+  #if defined(LULZBOT_ENERGIZE_Z_AT_STARTUP)
+    enable_Z();
+  #endif
+  #if defined(LULZBOT_HOME_Z_AT_STARTUP)
+    queue.inject_P(PSTR("G28 Z"));
+  #endif
 }
 
 /* Enable the probe pins only only when homing/probing,
@@ -76,35 +103,83 @@ void LULZBOT_ON_REFLASH() {
  *   Z_MIN_PIN corresponds to the Z-Home push button.
  *   Z_MIN_PROBE_PIN are the bed washers.
  */
-#define LULZBOT_SET_PIN_STATE(pin, enable) \
-    if(enable) { \
-        /* Set as inputs with pull-up resistor */ \
-        SET_INPUT(pin); \
-        WRITE(pin, HIGH); \
-        delay(5); /* The bed acts as a capacitor and takes a while to charge up */ \
-    } else { \
-        LULZBOT_EMI_SHUTOFF(pin); \
+void EnableProbePins::enable(const bool enable) {
+  #if ENABLED(AUTO_BED_LEVELING_LINEAR)
+    endstops.enable_z_probe(enable);
+    LULZBOT_SET_PIN_STATE(Z_MIN_PIN, enable)
+    #if PIN_EXISTS(Z_MIN_PROBE)
+      LULZBOT_SET_PIN_STATE(Z_MIN_PROBE_PIN, enable)
+    #endif
+    #if ENABLED(LULZBOT_G29_DISABLES_E0_STEPPER)
+      /* We need to disable the extruder motor during probing as
+         it causes noise on the probe line of some Minis. */
+      if(enable) {
+        planner.synchronize();
+        disable_E0();
+      } else {
+        enable_E0();
+      }
+    #endif
+  #else
+    UNUSED(enable);
+  #endif
+}
+
+/******************************** EXTRA FEATURES *******************************/
+
+void LULZBOT_ON_REFLASH() {
+  /* Turn off LCD prior to initiating flash on TAZ Pro */
+  #if ENABLED(EXTENSIBLE_UI)
+    CLCD::set_brightness(0);
+  #endif
+}
+
+void BedLevelingReport::report() {
+  vector_3 bp[4] = {
+    vector_3(x[0],y[0],z[0]),
+    vector_3(x[1],y[1],z[1]),
+    vector_3(x[2],y[2],z[2])
+  };
+  vector_3 norm = vector_3::cross(bp[0]-bp[1],bp[1]-bp[2]);
+  float a = norm.x, b = norm.y, c = norm.z, d = -bp[0].x*a -bp[0].y*b -bp[0].z*c;
+  float dist = abs(a * bp[3].x + b * bp[3].y + c * bp[3].z + d)/sqrt( a*a + b*b + c*c );
+  SERIAL_ECHOPAIR("4th probe point, distance from plane: ", dist);
+  SERIAL_EOL();
+}
+
+/*************************** Z-OFFSET AUTO-SAVE  ********************************/
+
+#if HAS_BED_PROBE && EITHER(EEPROM_SETTINGS, SD_FIRMWARE_UPDATE)
+  int AutoSaveZOffset::eeprom_offset = -1;
+
+  void AutoSaveZOffset::store() {
+    if(eeprom_offset > 0) {
+      uint16_t crc;
+      persistentStore.write_data(eeprom_offset, (uint8_t*)&zprobe_zoffset, sizeof(zprobe_zoffset), &crc);
+      SERIAL_ECHO_START();
+      SERIAL_ECHOPAIR("Updating zoffset in EEPROM: ", zprobe_zoffset);
+      SERIAL_ECHOPAIR("; EEPROM Index: ", eeprom_offset);
+      SERIAL_ECHOLNPGM("");
     }
-
-#if defined(LULZBOT_USE_AUTOLEVELING) && !defined(LULZBOT_Z_MIN_PROBE_PIN)
-
-     void EnableProbePins::enable(const bool enable) {
-         endstops.enable_z_probe(enable);
-         LULZBOT_SET_PIN_STATE(Z_MIN_PIN, enable)
-         LULZBOT_EXTRUDER_MOTOR_SHUTOFF_ON_PROBE(enable)
-     }
-
-#elif defined(LULZBOT_USE_AUTOLEVELING) && defined(LULZBOT_Z_MIN_PROBE_PIN)
-
-     void EnableProbePins::enable(const bool enable) {
-         endstops.enable_z_probe(enable);
-         LULZBOT_SET_PIN_STATE(Z_MIN_PIN, enable)
-         LULZBOT_SET_PIN_STATE(LULZBOT_Z_MIN_PROBE_PIN, enable)
-     }
-
+  }
 #else
+  void AutoSaveZOffset::store() {}
+#endif
 
-     void EnableProbePins::enable(const bool) {
-     }
+/***************************** CUSTOM SPLASH SCREEN *****************************/
 
+#if ENABLED(LULZBOT_ENHANCED_BOOTSCREEN)
+  void MarlinUI::draw_custom_bootscreen(const uint8_t) {
+    u8g.drawBitmapP(0,0,CEILING(CUSTOM_BOOTSCREEN_BMPWIDTH, 8),CUSTOM_BOOTSCREEN_BMPHEIGHT,custom_start_bmp);
+    u8g.setFont(u8g_font_6x13);
+    u8g.drawStr(57,17,LULZBOT_LCD_MACHINE_NAME);
+    u8g.setFont(u8g_font_04b_03);
+    u8g.drawStr(58,28,LULZBOT_LCD_TOOLHEAD_NAME);
+    u8g.setFont(u8g_font_5x8);
+    u8g.drawStr(59,41,"LulzBot.com");
+    u8g.setFont(u8g_font_5x8);
+    u8g.drawStr(61,62,"v");
+    u8g.drawStr(66,62,SHORT_BUILD_VERSION);
+    u8g.setFont(MENU_FONT_NAME);
+  }
 #endif

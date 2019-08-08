@@ -359,7 +359,7 @@ void menu_temperature() {
         MENU_MULTIPLIER_ITEM_EDIT(percent, MSG_EXTRA_FAN_SPEED FAN_SPEED_1_SUFFIX, &thermalManager.new_fan_speed[0], 3, 255);
       #endif
     #endif
-    #if HAS_FAN1 && !defined(LULZBOT_HIDE_EXTRA_FAN_CONFIG_IN_LCD) || (ENABLED(SINGLENOZZLE) && EXTRUDERS > 1)
+    #if HAS_FAN1 && !defined(LULZBOT_HIDE_UNUSED_FANS_IN_MENU) || (ENABLED(SINGLENOZZLE) && EXTRUDERS > 1)
       MENU_MULTIPLIER_ITEM_EDIT_CALLBACK(percent, MSG_FAN_SPEED " 2", &thermalManager.lcd_tmpfan_speed[1], 0, 255, thermalManager.lcd_setFanSpeed1);
       #if ENABLED(EXTRA_FAN_SPEED)
         MENU_MULTIPLIER_ITEM_EDIT(percent, MSG_EXTRA_FAN_SPEED " 2", &thermalManager.new_fan_speed[1], 3, 255);
@@ -378,7 +378,7 @@ void menu_temperature() {
     //
     // Preheat for Material 1 and 2
     //
-    #if !defined(LULZBOT_HIDE_PREHEAT_CHOICES)
+    #if !defined(LULZBOT_HIDE_PREHEAT_IN_MENU)
     #if TEMP_SENSOR_1 != 0 || TEMP_SENSOR_2 != 0 || TEMP_SENSOR_3 != 0 || TEMP_SENSOR_4 != 0 || TEMP_SENSOR_5 != 0 || HAS_HEATED_BED
       MENU_ITEM(submenu, MSG_PREHEAT_1, menu_preheat_m1);
       MENU_ITEM(submenu, MSG_PREHEAT_2, menu_preheat_m2);
@@ -386,7 +386,7 @@ void menu_temperature() {
       MENU_ITEM(function, MSG_PREHEAT_1, lcd_preheat_m1_e0_only);
       MENU_ITEM(function, MSG_PREHEAT_2, lcd_preheat_m2_e0_only);
     #endif
-    #endif // LULZBOT_HIDE_PREHEAT_CHOICES
+    #endif // LULZBOT_HIDE_PREHEAT_IN_MENU
 
     //
     // Cooldown

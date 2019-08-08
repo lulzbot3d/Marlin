@@ -346,17 +346,22 @@
 #define MSG_LCD_N3 " 4"
 #define MSG_LCD_N4 " 5"
 #define MSG_LCD_N5 " 6"
-#if EXTRUDERS == 1
-  #define MSG_E1 LULZBOT_EXTRUDER_STR
-  #define MSG_E2 LULZBOT_EXTRUDER_STR
+#ifdef LULZBOT_EXTRUDER_STR
+  #if EXTRUDERS == 1
+    #define MSG_E1 LULZBOT_EXTRUDER_STR
+    #define MSG_E2 LULZBOT_EXTRUDER_STR
+  #else
+    #define MSG_E1 LULZBOT_EXTRUDER_STR " 1"
+    #define MSG_E2 LULZBOT_EXTRUDER_STR " 2"
+  #endif
 #else
-  #define MSG_E1 LULZBOT_EXTRUDER_STR " 1"
-  #define MSG_E2 LULZBOT_EXTRUDER_STR " 2"
-#endif
-#define MSG_E3 LULZBOT_EXTRUDER_STR " 3"
-#define MSG_E4 LULZBOT_EXTRUDER_STR " 4"
-#define MSG_E5 LULZBOT_EXTRUDER_STR " 5"
-#define MSG_E6 LULZBOT_EXTRUDER_STR " 6"
+#define MSG_E1 "E1"
+#define MSG_E2 "E2"
+#endif // LULZBOT_EXTRUDER_STR
+#define MSG_E3 "E3"
+#define MSG_E4 "E4"
+#define MSG_E5 "E5"
+#define MSG_E6 "E6"
 #define MSG_MOVE_E1 "1"
 #define MSG_MOVE_E2 "2"
 #define MSG_MOVE_E3 "3"

@@ -501,8 +501,6 @@ void MarlinSettings::postprocess() {
     return false;
   }
 
-  LULZBOT_SAVE_ZOFFSET_TO_EEPROM_IMPL
-
   /**
    * M500 - Store Configuration
    */
@@ -643,9 +641,13 @@ void MarlinSettings::postprocess() {
       #if !HAS_BED_PROBE
         const float zprobe_zoffset = 0;
       #endif
-      LULZBOT_EEPROM_BEFORE_ZOFFSET
+      #ifdef LULZBOT_EEPROM_BEFORE_ZOFFSET
+        LULZBOT_EEPROM_BEFORE_ZOFFSET
+      #endif
       EEPROM_WRITE(zprobe_zoffset);
-      LULZBOT_EEPROM_AFTER_ZOFFSET
+      #ifdef LULZBOT_EEPROM_AFTER_ZOFFSET
+        LULZBOT_EEPROM_AFTER_ZOFFSET
+      #endif
     }
 
     //
@@ -1449,9 +1451,13 @@ void MarlinSettings::postprocess() {
         #if !HAS_BED_PROBE
           float zprobe_zoffset;
         #endif
-        LULZBOT_EEPROM_BEFORE_ZOFFSET
+        #ifdef LULZBOT_EEPROM_BEFORE_ZOFFSET
+          LULZBOT_EEPROM_BEFORE_ZOFFSET
+        #endif
         EEPROM_READ(zprobe_zoffset);
-        LULZBOT_EEPROM_AFTER_ZOFFSET
+        #ifdef LULZBOT_EEPROM_AFTER_ZOFFSET
+          LULZBOT_EEPROM_AFTER_ZOFFSET
+        #endif
       }
 
       //

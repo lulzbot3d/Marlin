@@ -47,7 +47,7 @@
 static_assert(USB_CS_PIN   != -1, "USB_CS_PIN must be defined");
 static_assert(USB_INTR_PIN != -1, "USB_INTR_PIN must be defined");
 
-#if defined(LULZBOT_USB_USE_UHS3)
+#if defined(LULZBOT_USE_UHS3_USB)
   #define NO_AUTO_SPEED
   #define UHS_MAX3421E_SPD 8000000 >> SPI_SPEED
   #define UHS_DEVICE_WINDOWS_USB_SPEC_VIOLATION_DESCRIPTOR_DEVICE 1

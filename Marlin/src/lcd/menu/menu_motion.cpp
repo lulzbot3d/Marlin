@@ -437,7 +437,7 @@ void menu_motion() {
       MENU_ITEM(submenu, MSG_MOVE_AXIS, menu_move);
 
   #if defined(LULZBOT_MENU_AXIS_LEVELING_COMMANDS)
-    MENU_ITEM(gcode, _UxGT("Level X axis"), PSTR(LULZBOT_MENU_AXIS_LEVELING_COMMANDS));
+    MENU_ITEM(gcode, _UxGT("Level X axis"), PSTR(LULZBOT_AXIS_LEVELING_COMMANDS));
   #endif
 
   //
@@ -450,8 +450,8 @@ void menu_motion() {
     MENU_ITEM(gcode, MSG_AUTO_HOME_Z, PSTR("G28 Z"));
   #endif
 
-  #if ENABLED(LULZBOT_CALIBRATION_GCODE) && defined(LULZBOT_CALIBRATION_SCRIPT)
-    MENU_ITEM(gcode, _UxGT("Auto calibrate"), PSTR(LULZBOT_CALIBRATION_SCRIPT));
+  #if ENABLED(LULZBOT_CALIBRATION_GCODE) && defined(LULZBOT_CALIBRATION_COMMANDS)
+    MENU_ITEM(gcode, _UxGT("Auto calibrate"), PSTR(LULZBOT_CALIBRATION_COMMANDS));
   #endif
 
   //
@@ -472,7 +472,7 @@ void menu_motion() {
 
     if (!g29_in_progress) MENU_ITEM(submenu, MSG_BED_LEVELING, menu_bed_leveling);
 
-  #elif HAS_LEVELING && DISABLED(SLIM_LCD_MENUS) && DISABLED(LULZBOT_NO_BED_LEVELING_IN_LCD)
+  #elif HAS_LEVELING && DISABLED(SLIM_LCD_MENUS) && DISABLED(LULZBOT_HIDE_BED_LEVELING_IN_MENU)
 
     #if DISABLED(PROBE_MANUALLY)
       MENU_ITEM(gcode, MSG_LEVEL_BED, PSTR("G28\nG29"));

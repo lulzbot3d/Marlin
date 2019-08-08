@@ -105,9 +105,7 @@ void MarlinUI::set_font(const MarlinFont font_nr) {
 #if ENABLED(SHOW_BOOTSCREEN)
 
   #if ENABLED(SHOW_CUSTOM_BOOTSCREEN)
-    #ifdef LULZBOT_CUSTOM_BOOTSCREEN
-      LULZBOT_CUSTOM_BOOTSCREEN
-    #else
+    #ifndef LULZBOT_ENHANCED_BOOTSCREEN
     // Draws a slice of a particular frame of the custom bootscreen, without the u8g loop
     void MarlinUI::draw_custom_bootscreen(const uint8_t frame/*=0*/) {
       constexpr u8g_uint_t left = u8g_uint_t((LCD_PIXEL_WIDTH  - (CUSTOM_BOOTSCREEN_BMPWIDTH)) / 2),
@@ -140,7 +138,7 @@ void MarlinUI::set_font(const MarlinFont font_nr) {
         }
       #endif
     }
-    #endif // LULZBOT_CUSTOM_BOOTSCREEN
+    #endif // LULZBOT_ENHANCED_BOOTSCREEN
 
     // Shows the custom bootscreen, with the u8g loop, animations and delays
     void MarlinUI::show_custom_bootscreen() {

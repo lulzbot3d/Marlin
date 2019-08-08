@@ -1008,7 +1008,7 @@ void CardReader::printingHasFinished() {
     #endif
 
     print_job_timer.stop();
-    #ifndef LULZBOT_KEEP_STATUS_AT_END_OF_PRINT
+    #ifndef LULZBOT_LCD_KEEPS_STATUS_AFTER_PRINT
     queue.enqueue_now_P(print_job_timer.duration() > 60 ? PSTR("M31") : PSTR("M117"));
     #endif
 

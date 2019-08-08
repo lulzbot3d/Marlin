@@ -1,7 +1,7 @@
 #!/bin/sh
 
 ####
-# Copyright (C) 2017  AlephObjects, Inc.
+# Copyright (C) 2019  AlephObjects, Inc.
 #
 #
 # The bash script in this page is free software: you can
@@ -14,42 +14,17 @@
 #
 
 ####
-# The following variables list the models and toolheads to build for:
-
-LEGACY_MINI_TOOLHEADS="Gladiola_SingleExtruder Albatross_Flexystruder Finch_Aerostruder"
-LEGACY_TAZ_TOOLHEADS="Tilapia_SingleExtruder Kanyu_Flexystruder Opah_Moarstruder Javelin_DualExtruderV2 Longfin_FlexyDually Yellowfin_DualExtruderV3 Angelfish_Aerostruder"
-UNIVERSAL_TOOLHEADS="AchemonSphinx_SmallLayer CecropiaSilk_SingleExtruderAeroV2 BandedTiger_HardenedSteel DingyCutworm_HardenedSteelPlus Goldenrod_HardenedExtruder"
-
-MINI_MODELS="Gladiola_Mini Gladiola_MiniLCD"
-MINI_TOOLHEADS="$LEGACY_MINI_TOOLHEADS $UNIVERSAL_TOOLHEADS"
-
-TAZ_MODELS="Juniper_TAZ5 Oliveoil_TAZ6"
-TAZ_TOOLHEADS="$LEGACY_TAZ_TOOLHEADS $UNIVERSAL_TOOLHEADS"
-
-TAZ_WORKHORSE_MODELS="Redgum_TAZWorkhorse"
-TAZ_WORKHORSE_TOOLHEADS="$UNIVERSAL_TOOLHEADS Yellowfin_DualExtruderV3"
-
-TAZ_PRO_MODELS="Quiver_TAZPro"
-TAZ_PRO_TOOLHEADS="$UNIVERSAL_TOOLHEADS Quiver_DualExtruder"
-
-MINI2_MODELS="Hibiscus_Mini2"
-MINI2_TOOLHEADS="$UNIVERSAL_TOOLHEADS"
-
-KANGAROOPAW_MODELS="KangarooPaw_Experimental"
-KANGAROOPAW_TOOLHEADS="KangarooPaw_SingleExtruder"
-
-####
 # usage
 #
 # Prints out a usage summary
 #
 usage() {
   echo
-  echo "Usage: $0 [-s|--short-names] [-h|--hash] [-c|--config] [printer_model toolhead_name]"
+  echo "Usage: $0 [-s|--short-names] [-h|--hash] [-c|--config] [printer toolhead|config_file]"
   echo
-  echo "   -s|--short-names  Omits LulzBot code names from generated .hex files"
+  echo "   -s|--short-names  Omits LulzBot code names from generated firmware files"
   echo
-  echo "   -h|--hash         Records md5sum of the .hex files. These files will be generated:"
+  echo "   -h|--hash         Records md5sum of the firmware files. These files will be generated:"
   echo "                       md5sums-full*    Sum w/  embedded version str and timestamp"
   echo "                       md5sums-bare*    Sum w/o embedded version str and timestamp"
   echo
@@ -61,169 +36,168 @@ usage() {
 }
 
 ####
-# compile_dependencies <printer>
+# compile_deps_for_board <board>
 #
-# Compiles dependencies for the specific printer
+# Compiles dependencies for the specific board
 #
-compile_dependencies() {
-  printer=$1   ; shift 1
+compile_deps_for_board() {
+  board=$1 ; shift 1
 
-  get_arch_info $printer
+  # Only compile dependency once
+
+  case "$deps_built" in
+    *$board*) return ;;
+  esac
+
+  deps_built="$deps_built $board"
+
+  # Compile dependency
+
+  echo
+  echo Building dependencies for $board
+  echo
 
   case $board in
     BOARD_ARCHIM2)
-      ARCHIM_SRC="ArduinoAddons/arduino-1.8.5/packages/ultimachine/hardware/sam/1.6.9-b"
-      (cd "$ARCHIM_SRC/system/libsam/build_gcc"; ARM_GCC_TOOLCHAIN="$gcc_path" make)
-      cp -u $ARCHIM_SRC/variants/arduino_due_x/libsam_sam3x8e_gcc_rel.a     $ARCHIM_SRC/variants/archim/libsam_sam3x8e_gcc_rel.a
-      cp -u $ARCHIM_SRC/variants/arduino_due_x/libsam_sam3x8e_gcc_rel.a.txt $ARCHIM_SRC/variants/archim/libsam_sam3x8e_gcc_rel.a.txt
+      SRC="ArduinoAddons/arduino-1.8.5/packages/ultimachine/hardware/sam/1.6.9-b"
+      (cd "$SRC/system/libsam/build_gcc"; ARM_GCC_TOOLCHAIN="$TOOLS_PATH" make)
+      cp -u $SRC/variants/arduino_due_x/libsam_sam3x8e_gcc_rel.a     $SRC/variants/archim/libsam_sam3x8e_gcc_rel.a
+      cp -u $SRC/variants/arduino_due_x/libsam_sam3x8e_gcc_rel.a.txt $SRC/variants/archim/libsam_sam3x8e_gcc_rel.a.txt
       ;;
-    *) ;;
   esac
 }
 
 ####
-# get_board_id <board>
+# locate_gcc_for_board <board>
 #
-# Returns the board number for a specific board
+# Locates compilation tools for the specific board
 #
-get_board_id() {
-  grep "$1\b" Marlin/src/core/boards.h | awk '{print $3}'
-}
-
-
-####
-# compile_firmware <printer> <toolhead> [makeopts]
-#
-# Compiles firmware for the specified printer and toolhead
-#
-get_arch_info() {
-  printer=$1   ; shift 1
-  case $printer in
-    Quiver_TAZPro | \
-    OliveoilArchim_Experimental | \
-    RedgumArchim_Experimental)
-      board=BOARD_ARCHIM2
-      ;;
-    Juniper_TAZ5 | \
-    Oliveoil_TAZ6 | \
-    Redgum_TAZWorkhorse)
-      board=BOARD_RAMBO
-      ;;
-    Gladiola_Mini | \
-    Gladiola_MiniLCD | \
-    GladiolaTouchLCD_Experimental)
-      gcc_path=$AVR_TOOLS_PATH
-      board=BOARD_MINIRAMBO
-      ;;
-    Hibiscus_Mini2 | \
-    KangarooPaw_Experimental | \
-    HibiscusTouchLCD_Experimental | \
-    GladiolaEinsyLCD_Experimental | \
-    GladiolaEinsyTouchLCD_Experimental | \
-    CLCDTestStand_Experimental)
-      board=BOARD_EINSY_RETRO
-      ;;
-    *)
-      echo board type is not defined for $printer
-      exit 1
-      ;;
-  esac
+locate_gcc_for_board() {
+  board=$1 ; shift 1
 
   case $board in
     BOARD_ARCHIM2)
-      gcc_path=$ARM_TOOLS_PATH
-      format=bin
-      ;;
-    BOARD_RAMBO | BOARD_MINIRAMBO | BOARD_EINSY_RETRO)
-      gcc_path=$AVR_TOOLS_PATH
-      format=hex
+      locate_tools TOOLS_PATH arm-none-eabi
+      check_tools $TOOLS_PATH arm-none-eabi
       ;;
     *)
-      echo $board is not a valid board selection
-      exit 1
+      locate_tools TOOLS_PATH avr
+      check_tools $TOOLS_PATH avr
       ;;
   esac
 }
 
 ####
-# compile_firmware <printer> <toolhead> [makeopts]
+# get_config_info <config_dir>
+#
+# Generates a filename for the hex file in accordance to Lulzbot standards.
+# Extracts version and motherboard information from the configuration files.
+#
+get_config_info() {
+  config=$1; shift 1
+
+  parent=`dirname $config`
+  printer=`basename $parent`
+  toolhead=`basename $config`
+  marlin_version=`grep  -m 1 "define SHORT_BUILD_VERSION" Marlin/src/inc/Version.h | cut -d \" -f 2`
+  lulzbot_revision=`grep -m 1 "define LULZBOT_FW" $config/Configuration.h | cut -d \" -f 2`
+  fw_hash=`git rev-parse --verify HEAD --short`
+  fw_version=${marlin_version}${lulzbot_revision}
+  fw_filename=Marlin_${printer}_${toolhead}_${fw_version}_${fw_hash}
+  motherboard_name=`grep "define MOTHERBOARD" $config/Configuration.h | awk '{print $3}'`
+  motherboard_number=`grep "$motherboard_name\b" Marlin/src/core/boards.h | awk '{print $3}'`
+}
+
+####
+# compile_firmware [makeopts]
 #
 # Compiles firmware for the specified printer and toolhead
 #
 compile_firmware() {
-  printer=$1   ; shift 1
-  toolhead=$1  ; shift 1
-  # Build the firmware
-  board_id=`get_board_id $board`
-  (cd Marlin; make clean; make $MAKE_FLAGS HARDWARE_MOTHERBOARD=${board_id} AVR_TOOLS_PATH=${gcc_path}/ MODEL=${printer} TOOLHEAD=${toolhead} $*) || exit
+  (cd Marlin; make clean; make \
+    $MAKE_FLAGS \
+    AVR_TOOLS_PATH=$TOOLS_PATH/ \
+    ARDUINO_INSTALL_DIR=../ArduinoAddons/arduino-1.8.5 \
+    ARDUINO_VERSION=10805 \
+    HARDWARE_MOTHERBOARD=$motherboard_number \
+    LULZBOT_EXTRAS="$EXTRA_OPTS" \
+    DEFINES="$EXTRA_DEFS" \
+    $*) || exit
 }
 
 ####
-# record_checksum <hex_file> <checksum-file-prefix>
+# record_checksum <checksum-file-prefix>
 #
-# Records the md5sum of a hex file to the checksum file
+# Records the md5sum of the compiled firmware to the checksum file
 #
 record_checksum() {
-  HEX_NAME=`basename $1`
-  VERSION=`echo $HEX_NAME | sed -r "s/Marlin_(.+)_(.+)_(.+)_(.+)_(.+)_(.+).hex/\5-\6/"`
-  VARIANT=`echo $HEX_NAME | sed -r "s/Marlin_(.+)_(.+)_(.+)_(.+)_(.+)_(.+).hex/\1_\2 \3_\4/"`
-  cat $1 | md5sum | sed "s/-/$VARIANT/" >> ${2}-${VERSION}.txt
+  cat Marlin/applet/Marlin.hex Marlin/applet/Marlin.bin | md5sum  | sed "s/-/${printer}_${toolhead}/g" >> ${1}-${fw_version}_${fw_hash}.txt
 }
 
 ####
-# generate_bare_checksum <printer> <toolhead>
-#
-# Builds firmware without timestamp and version strings, and
-# saves md5sum to a file. These are useful to see if anything
-# actually changed between two versions.
-#
-generate_bare_checksum() {
-  echo
-  echo Generating bare checksum for $1 and $2
-  echo
-  compile_firmware $1 $2 NO_TIMESTAMP=1 NO_VERSION=1
-  record_checksum Marlin/applet/*.hex build/md5sums-bare
-}
-
-####
-# build_config <printer> <toolhead>
-#
-# Compiles Configuration.h and Configuration_adv.h for the specified printer and toolhead
-#
-build_config() {
-  echo
-  echo Generating config for $1 and $2
-  echo
-  compile_firmware $1 $2 config
-}
-
-####
-# build_firmware <printer> <toolhead> <dest-dir>
+# build_firmware <config_dir>
 #
 # Compiles firmware for the specified printer and toolhead
 #
 build_firmware() {
-  printer=$1   ; shift 1
-  toolhead=$1  ; shift 1
-  get_arch_info $printer
-  if [ $MAKE_HASHES ]; then
-    generate_bare_checksum $printer $toolhead
+  config=$1; shift 1
+
+  if [ ! -f $config/Configuration.h ]; then
+    echo Cannot locate $config
+    return
   fi
+
+  get_config_info $config
+  locate_gcc_for_board $motherboard_name
+  compile_deps_for_board $motherboard_name
+
+  if [ -z "$lulzbot_revision" ]; then
+    # Bail if the FW is not an official Lulzbot build
+    echo Skipping $config because it does not appear compatible with this script.
+    return
+  fi
+
+  # Copy over the configuration files
+  cp $config/Configuration.h $config/Configuration_adv.h Marlin
+
+  # Generate hashes
+  if [ $MAKE_HASHES ]; then
+    echo
+    echo Generating bare checksum for $printer and $toolhead
+    echo
+    EXTRA_OPTS='-Wfatal-errors -Wno-builtin-macro-redefined'
+    # Hide timestamps and versions so binaries can be diffed
+    EXTRA_DEFS='__DATE__=\"?\" __TIME__=\"?\" LULZBOT_FW_VERSION=\"?\"'
+    compile_firmware
+    record_checksum build/md5sums-bare
+  fi
+
+  # Compile the firmware
   echo
   echo Building for $printer and $toolhead
   echo
-  compile_firmware $printer $toolhead
+  EXTRA_OPTS='-Wfatal-errors'
+  EXTRA_DEFS=''
+  compile_firmware
   if [ $MAKE_HASHES ]; then
-    record_checksum Marlin/applet/*.hex build/md5sums-full
+    record_checksum build/md5sums-full
   fi
+
   if [ $DRY_RUN ]; then
     return
   fi
-  mv Marlin/applet/*.$format build
+
+  # Copy builds to build directory
+
+  if [ $motherboard_name = "BOARD_ARCHIM2" ]; then
+    mv Marlin/applet/Marlin.bin build/$fw_filename.bin
+  else
+    mv Marlin/applet/Marlin.hex build/$fw_filename.hex
+  fi
   chmod a-x build/*
+
   if [ $GENERATE_CONFIG ]; then
-    build_config $printer $toolhead
-    mv Marlin/applet/*.config build
+    cp $config/Configuration_summary.txt build/$fw_filename.config
   fi
 }
 
@@ -286,64 +260,6 @@ check_tools() {
 }
 
 ####
-# build_for_mini
-#
-# Build all the toolhead variants for the mini
-#
-build_for_mini() {
-  for model in $MINI_MODELS
-  do
-    for toolhead in $MINI_TOOLHEADS
-    do
-      build_firmware ${model} ${toolhead}
-    done
-  done
-  for model in $MINI2_MODELS
-  do
-    for toolhead in $MINI2_TOOLHEADS
-    do
-      build_firmware ${model} ${toolhead}
-    done
-  done
-  for model in $KANGAROOPAW_MODELS
-  do
-    for toolhead in $KANGAROOPAW_TOOLHEADS
-    do
-      build_firmware ${model} ${toolhead}
-    done
-  done
-}
-
-####
-# build_for_taz
-#
-# Build all the toolhead variants for the TAZ
-#
-build_for_taz() {
-  for model in $TAZ_MODELS
-  do
-    for toolhead in $TAZ_TOOLHEADS
-    do
-      build_firmware ${model} ${toolhead}
-    done
-  done
-  for model in $TAZ_PRO_MODELS
-  do
-    for toolhead in $TAZ_PRO_TOOLHEADS
-    do
-      build_firmware ${model} ${toolhead}
-    done
-  done
-  for model in $TAZ_WORKHORSE_MODELS
-  do
-    for toolhead in $TAZ_WORKHORSE_TOOLHEADS
-    do
-      build_firmware ${model} ${toolhead}
-    done
-  done
-}
-
-####
 # build_summary
 #
 # Print out a summary of hex files that were created
@@ -361,6 +277,8 @@ build_summary() {
 ############################################
 # MAIN SCRIPT
 ############################################
+
+# Parse command line options
 
 while true
 do
@@ -391,30 +309,39 @@ do
   esac
 done
 
-locate_tools AVR_TOOLS_PATH avr
-locate_tools ARM_TOOLS_PATH arm-none-eabi
-
-check_tools $AVR_TOOLS_PATH avr
-check_tools $ARM_TOOLS_PATH arm-none-eabi
-
 MAKE_FLAGS="$MAKE_FLAGS -j $(grep -c ^processor /proc/cpuinfo)"
 
 rm -rf build
 mkdir  build
 
-if [ $# -eq 2 ]
-then
-  compile_dependencies $1
-  build_firmware $1 $2
-else
-  compile_dependencies Quiver_TAZPro
-  build_for_mini
-  build_for_taz
-fi
+# Collect list of configuration directories to build
+
+case $# in
+  2)
+    # If the user specified a printer and toolhead, try finding the config files
+    CONFIG_DIRS="config/examples/AlephObjects/$1/$2"
+    if [ ! -f "$CONFIG_DIRS/Configuration.h" ]; then
+      CONFIG_DIRS="config/examples/AlephObjects/EXPERIMENTAL/$1/$2"
+    fi
+    ;;
+  1)
+    # If the user specified a configuration file, use that.
+    CONFIG_DIRS=`dirname $1`
+    ;;
+  0)
+    # Otherwise, build all AlephObjects configuration files
+    CONFIG_DIRS=`find config/examples/AlephObjects/ -name Configuration.h -exec dirname {} \;`
+    ;;
+esac
+
+# Build the firmware files
+
+for i in $CONFIG_DIRS; do
+  build_firmware $i
+done
 
 if [ $SHORTNAMES ]; then
-  rename 's/Marlin_(.+)_(.+)_(.+)_(.+)_(.+)_(.+).hex/Marlin_$2_$4_$5_$6.hex/'       build/*
-  rename 's/Marlin_(.+)_(.+)_(.+)_(.+)_(.+)_(.+).config/Marlin_$2_$4_$5_$6.config/' build/*
+  rename 's/Marlin_(.+)_(.+)_(.+)_(.+)_(.+)_(.+)/Marlin_$2_$4_$5_$6/'       build/*
 fi
 
 build_summary

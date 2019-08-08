@@ -2956,11 +2956,20 @@ void Temperature::isr() {
   #if HAS_DISPLAY
     void Temperature::set_heating_message(const uint8_t e) {
       const bool heating = isHeatingHotend(e);
+      #ifdef LULZBOT_EXTRUDER_STR
       #if HOTENDS > 1
+
         ui.status_printf_P(0, heating ? PSTR(LULZBOT_EXTRUDER_STR " %c " MSG_HEATING) : PSTR(LULZBOT_EXTRUDER_STR " %c " MSG_COOLING), '1' + e);
       #else
         ui.set_status_P(heating ? PSTR(LULZBOT_EXTRUDER_STR " " MSG_HEATING) : PSTR(LULZBOT_EXTRUDER_STR " " MSG_COOLING));
       #endif
+      #else
+        #if HOTENDS > 1
+        ui.status_printf_P(0, heating ? PSTR("E%c " MSG_HEATING) : PSTR("E%c " MSG_COOLING), '1' + e);
+      #else
+        ui.set_status_P(heating ? PSTR("E " MSG_HEATING) : PSTR("E " MSG_COOLING));
+      #endif
+      #endif // LULZBOT_EXTRUDER_STR
     }
   #endif
 

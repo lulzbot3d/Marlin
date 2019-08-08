@@ -331,9 +331,9 @@ bool unload_filament(const float &unload_length, const bool show_lcd/*=false*/,
     if (show_lcd) lcd_pause_show_message(PAUSE_MESSAGE_UNLOAD, mode);
   #endif
 
-  #if defined(LULZBOT_AEROSTRUDER_UNLOAD_WORKAROUND)
+  #if defined(LULZBOT_AERO_UNLOAD_WORKAROUND)
     // Retract filament
-    do_pause_e_move(LULZBOT_AEROSTRUDER_UNLOAD_PURGE_LENGTH, LULZBOT_AEROSTRUDER_UNLOAD_PURGE_FEEDRATE);
+    do_pause_e_move(LULZBOT_AERO_UNLOAD_PURGE_LENGTH, LULZBOT_AERO_UNLOAD_PURGE_FEEDRATE);
   #else
   // Retract filament
   do_pause_e_move(-(FILAMENT_UNLOAD_RETRACT_LENGTH) * mix_multiplier, (PAUSE_PARK_RETRACT_FEEDRATE) * mix_multiplier);
@@ -569,12 +569,12 @@ void wait_for_confirmation(const bool is_reload/*=false*/, const int8_t max_beep
       #if ENABLED(HOST_PROMPT_SUPPORT)
         host_prompt_do(PROMPT_USER_CONTINUE, PSTR("Reheat Done"), PSTR("Continue"));
       #endif
-      #if !defined(LULZBOT_NO_PAUSE_AFTER_REHEAT_WORKAROUND)
+      #if !defined(LULZBOT_NO_PAUSE_FOR_REHEAT_WORKAROUND)
       #if ENABLED(EXTENSIBLE_UI)
         ExtUI::onUserConfirmRequired("Reheat finished.");
       #endif
       wait_for_user = true;
-      #endif // LULZBOT_NO_PAUSE_AFTER_REHEAT_WORKAROUND
+      #endif // LULZBOT_NO_PAUSE_FOR_REHEAT_WORKAROUND
       nozzle_timed_out = false;
 
       #if HAS_BUZZER

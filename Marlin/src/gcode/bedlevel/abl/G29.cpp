@@ -162,7 +162,9 @@
  *
  */
 G29_TYPE GcodeSuite::G29() {
-  LULZBOT_ENABLE_PROBE_PINS
+  #ifdef LULZBOT_ENABLE_PROBE_PINS
+    LULZBOT_ENABLE_PROBE_PINS
+  #endif
 
   #if EITHER(DEBUG_LEVELING_FEATURE, PROBE_MANUALLY)
     const bool seenQ = parser.seen('Q');
@@ -672,7 +674,7 @@ G29_TYPE GcodeSuite::G29() {
 
     #if ABL_GRID
 
-      #if defined(LULZBOT_LAST_PROBE_POINT_ON_BACK_LEFT_CORNER)
+      #if defined(LULZBOT_G29_ENDS_ON_BACK_LEFT_CORNER)
       bool zig = !(PR_OUTER_END & 1);  // Always end at LEFT and BACK_PROBE_BED_POSITION
       #else
       bool zig = PR_OUTER_END & 1;   // Always end at RIGHT and BACK_PROBE_BED_POSITION

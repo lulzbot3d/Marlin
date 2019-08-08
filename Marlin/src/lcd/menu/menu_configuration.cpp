@@ -148,9 +148,9 @@ static void lcd_factory_settings() {
     #if ENABLED(DUAL_X_CARRIAGE)
       MENU_MULTIPLIER_ITEM_EDIT_CALLBACK(float51, MSG_X_OFFSET, &hotend_offset[X_AXIS][1], float(X2_HOME_POS - 25), float(X2_HOME_POS + 25), _recalc_offsets);
     #else
-      MENU_MULTIPLIER_ITEM_EDIT_CALLBACK(float52sign, MSG_X_OFFSET, &hotend_offset[X_AXIS][1], LULZBOT_LCD_HOTEND_OFFSET_MIN, LULZBOT_LCD_HOTEND_OFFSET_MAX, _recalc_offsets);
+      MENU_MULTIPLIER_ITEM_EDIT_CALLBACK(float52sign, MSG_X_OFFSET, &hotend_offset[X_AXIS][1], -99.0, 99.0, _recalc_offsets);
     #endif
-    MENU_MULTIPLIER_ITEM_EDIT_CALLBACK(float52sign, MSG_Y_OFFSET, &hotend_offset[Y_AXIS][1], LULZBOT_LCD_HOTEND_OFFSET_MIN, LULZBOT_LCD_HOTEND_OFFSET_MAX, _recalc_offsets);
+    MENU_MULTIPLIER_ITEM_EDIT_CALLBACK(float52sign, MSG_Y_OFFSET, &hotend_offset[Y_AXIS][1], -99.0, 99.0, _recalc_offsets);
     MENU_MULTIPLIER_ITEM_EDIT_CALLBACK(float52sign, MSG_Z_OFFSET, &hotend_offset[Z_AXIS][1], Z_PROBE_LOW_POINT, 10.0, _recalc_offsets);
     #if ENABLED(EEPROM_SETTINGS)
       MENU_ITEM(function, MSG_STORE_EEPROM, lcd_store_settings);
@@ -411,7 +411,7 @@ void menu_configuration() {
     MENU_ITEM_EDIT_CALLBACK(bool, MSG_OUTAGE_RECOVERY, &recovery.enabled, recovery.changed);
   #endif
 
-  #if DISABLED(SLIM_LCD_MENUS) && DISABLED(LULZBOT_HIDE_PREHEAT_CHOICES)
+  #if DISABLED(SLIM_LCD_MENUS) && DISABLED(LULZBOT_HIDE_PREHEAT_IN_MENU)
     // Preheat configurations
     MENU_ITEM(submenu, MSG_PREHEAT_1_SETTINGS, menu_preheat_material1_settings);
     MENU_ITEM(submenu, MSG_PREHEAT_2_SETTINGS, menu_preheat_material2_settings);

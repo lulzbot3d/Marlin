@@ -210,7 +210,7 @@ bool FilesScreen::onTouchEnd(uint8_t tag) {
       break;
     case 243:
       printFile(getSelectedShortFilename());
-      StatusScreen::setStatusMessage(PSTR("Print Starting"));
+      StatusScreen::setStatusMessage(F("Print Starting"));
       GOTO_SCREEN(StatusScreen);
       return true;
     case 244:

@@ -20,11 +20,12 @@
 #
 usage() {
   echo
-  echo "Usage: $0 [-i|--increment]"
+  echo "Usage: $0 [-i|--increment] [-c|--commit]"
   echo
-  echo When used without arguments, prints out the version.
+  echo Shows or manipulates the version of the firmware in the repo
   echo
-  echo "   -i|--increment    Increments the version number and checks in a commit with the change"
+  echo "   -i|--increment    Increments to the next version number"
+  echo "   -c|--commit       Commits a change to the version number"
   echo
   exit
 }
@@ -38,8 +39,12 @@ usage() {
 while true
 do
   case $1 in
-    -i|--i)
+    -i|--increment)
       INCREMENT=1
+      shift
+      ;;
+    -c|--commit)
+      COMMIT=1
       shift
       ;;
     -*|--*)
@@ -57,6 +62,9 @@ fw_revision=`grep  -m 1 "define LULZBOT_FW_VERSION" $SRC | cut -d \" -f 2 | cut 
 
 if [ $INCREMENT ]; then
   fw_revision=`expr $fw_revision + 1`
+fi
+
+if [ $COMMIT ]; then
   sed -i "s/LULZBOT_FW_VERSION \".[0-9]\\+\"/LULZBOT_FW_VERSION \".$fw_revision\"/" $SRC
   git add $SRC
   git commit -m "Change version number" -m "Changed version number to $fw_version.$fw_revision"

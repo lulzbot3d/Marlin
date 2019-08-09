@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 ####
 # Copyright (C) 2019  AlephObjects, Inc.
@@ -13,19 +13,25 @@
 # FOR A PARTICULAR PURPOSE.  See the GNU AGPL for more details.
 #
 
-# A helper script file that updates the FW version number, tags and pushes it.
+# A helper script file to standardize the procedure of pushing
+# changes to the repo: Tags, pushes and increments the version.
 
 VERSION=`./version.sh`
+
+# Tags and pushes the working directory to the repo
 
 git tag v$VERSION
 git push origin v$VERSION
 git push
 
-echo "Increment version to $NEXT_VERSION?"
+# Ask the user if they want to increment the version number
+# (typically, the answer should be yes)
+
+echo "Increment version to `./version.sh --increment`?"
 select yn in "Yes" "No"; do
   case $yn in
     Yes)
-      ./version.sh --increment
+      ./version.sh --increment --commit
       break;;
     No)
       break;;

@@ -18,8 +18,6 @@
 from __future__ import print_function
 import argparse, re, sys, os
 
-FW_VERSION = ".152"
-
 PRINTER_CHOICES = [
     "Gladiola_Mini",
     "Gladiola_MiniLCD",
@@ -108,9 +106,7 @@ def C_STRING(str):
     return '"' + str.strip().replace('\n','\\n') + '"'
 
 def make_config(PRINTER, TOOLHEAD):
-    MARLIN = {
-        "LULZBOT_FW_VERSION" : C_STRING(FW_VERSION)
-    }
+    MARLIN = {}
 
     def ENABLED(str):
         return str in MARLIN and MARLIN[str]
@@ -561,7 +557,6 @@ def make_config(PRINTER, TOOLHEAD):
 ############################ GENERAL CONFIGURATION ############################
 
     MARLIN["STRING_CONFIG_H_AUTHOR"]                     = C_STRING("(Aleph Objects Inc., LulzBot Git Repository)")
-    MARLIN["LULZBOT_SOURCE_CODE_URL"]                    = C_STRING("https://code.alephobjects.com/diffusion/MARLIN")
     MARLIN["EEPROM_SETTINGS"]                            = True
     MARLIN["EEPROM_AUTO_INIT"]                           = True
     MARLIN["EMERGENCY_PARSER"]                           = True
@@ -614,6 +609,10 @@ def make_config(PRINTER, TOOLHEAD):
         # NOTE: While in "erase" (bootloader) mode, the ID will be 03eb:6124
         MARLIN["LULZBOT_USB_DEVICE_VENDOR_ID"]           = '0x27b1'
         MARLIN["LULZBOT_USB_DEVICE_PRODUCT_ID"]          = '0x0001'
+
+        # The host MMC bridge is impractically slow and should not be used
+        if ENABLED("SDSUPPORT") or ENABLED("USB_FLASH_DRIVE_SUPPORT"):
+            MARLIN["LULZBOT_DISABLE_DUE_SD_MMC"]         = True
 
     elif USE_EINSY_RETRO:
         MARLIN["MOTHERBOARD"]                            = 'BOARD_EINSY_RETRO'
@@ -2133,7 +2132,6 @@ def make_config(PRINTER, TOOLHEAD):
     if USE_TOUCH_UI:
         MARLIN["EXTENSIBLE_UI"]                          = True
         MARLIN["SD_DETECT_INVERTED"]                     = False
-        MARLIN["LULZBOT_DISABLE_DUE_SD_MMC"]             = True
         MARLIN["LCD_SET_PROGRESS_MANUALLY"]              = True
         MARLIN["SCROLL_LONG_FILENAMES"]                  = False if USE_LESS_MEMORY else True
         MARLIN["LULZBOT_NO_PAUSE_FOR_REHEAT_WORKAROUND"] = True
@@ -2153,10 +2151,9 @@ def make_config(PRINTER, TOOLHEAD):
             if MARLIN["EXTRUDERS"] > 1:
                 MARLIN["BABYSTEP_HOTEND_Z_OFFSET"]       = True
 
-################################ VERSION STRINGS ################################
+#################################### CLEAN UP ###################################
 
-    MARLIN["LULZBOT_DETAILED_BUILD_VERSION"] = '" FIRMWARE_VERSION:" SHORT_BUILD_VERSION " EXTRUDER_TYPE:' + TOOLHEAD_M115_TYPE + '"'
-    MARLIN["LULZBOT_STRING_DISTRIBUTION_DATE"] = '__DATE__ __TIME__'
+    MARLIN["LULZBOT_TOOLHEAD_M115_TYPE"]                 = C_STRING(TOOLHEAD_M115_TYPE)
 
     return MARLIN
 ############################## END OF CONFIGURATION #############################

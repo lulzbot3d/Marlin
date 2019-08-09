@@ -99,13 +99,12 @@ get_config_info() {
   parent=`dirname $config`
   printer=`basename $parent`
   toolhead=`basename $config`
-  marlin_version=`grep  -m 1 "define SHORT_BUILD_VERSION" Marlin/src/inc/Version.h | cut -d \" -f 2`
-  lulzbot_revision=`grep -m 1 "define LULZBOT_FW" $config/Configuration.h | cut -d \" -f 2`
   fw_hash=`git rev-parse --verify HEAD --short`
-  fw_version=${marlin_version}${lulzbot_revision}
+  fw_version=`./version.sh`
   fw_filename=Marlin_${printer}_${toolhead}_${fw_version}_${fw_hash}
   motherboard_name=`grep "define MOTHERBOARD" $config/Configuration.h | awk '{print $3}'`
   motherboard_number=`grep "$motherboard_name\b" Marlin/src/core/boards.h | awk '{print $3}'`
+  is_lulzbot=`grep "define LULZBOT_" $config/Configuration.h`
 }
 
 ####
@@ -151,7 +150,7 @@ build_firmware() {
   locate_gcc_for_board $motherboard_name
   compile_deps_for_board $motherboard_name
 
-  if [ -z "$lulzbot_revision" ]; then
+  if [ -z "$is_lulzbot" ]; then
     # Bail if the FW is not an official Lulzbot build
     echo Skipping $config because it does not appear compatible with this script.
     return
@@ -339,6 +338,11 @@ esac
 for i in $CONFIG_DIRS; do
   build_firmware $i
 done
+
+if [ $# -eq 0 ]; then
+  # If compiling everything, clean up the config files after compilation is done
+  git checkout Marlin/Configuration.h Marlin/Configuration_adv.h
+fi
 
 if [ $SHORTNAMES ]; then
   rename 's/Marlin_(.+)_(.+)_(.+)_(.+)_(.+)_(.+)/Marlin_$2_$4_$5_$6/'       build/*

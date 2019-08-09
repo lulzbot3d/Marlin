@@ -1,26 +1,33 @@
+#!/bin/sh
+
+####
+# Copyright (C) 2019  AlephObjects, Inc.
+#
+#
+# The bash script in this page is free software: you can
+# redistribute it and/or modify it under the terms of the GNU Affero
+# General Public License (GNU AGPL) as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option)
+# any later version.  The code is distributed WITHOUT ANY WARRANTY;
+# without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See the GNU AGPL for more details.
+#
+
 # A helper script file that updates the FW version number, tags and pushes it.
 
-SCRIPT=config/examples/AlephObjects/build-config.py
+VERSION=`./version.sh`
 
-# Get the current version number
-THEIR_VERSION=`grep -m1 "#define SHORT_BUILD_VERSION " Marlin/src/inc/Version.h | cut -d \" -f 2`
-LULZ_VERSION=`grep -m1 "FW_VERSION " $SCRIPT | cut -d \" -f 2 | cut -d . -f 2`
-
-git tag v$THEIR_VERSION.$LULZ_VERSION HEAD
-git push origin v$THEIR_VERSION.$LULZ_VERSION
+git tag v$VERSION
+git push origin v$VERSION
 git push
 
-NEXT_VERSION=`expr $LULZ_VERSION + 1`
 echo "Increment version to $NEXT_VERSION?"
 select yn in "Yes" "No"; do
   case $yn in
     Yes)
-      sed -i "s/FW_VERSION = \".[0-9]\\+\"/FW_VERSION = \".$NEXT_VERSION\"/" $SCRIPT
-      git add $SCRIPT
-      git commit -m "Change version number" -m "Changed version number to $THEIR_VERSION.$NEXT_VERSION"
+      ./version.sh --increment
       break;;
     No)
-      NEXT_VERSION=$LULZ_VERSION
       break;;
   esac
 done

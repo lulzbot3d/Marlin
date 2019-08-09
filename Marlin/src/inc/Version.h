@@ -36,34 +36,27 @@
 #else
 
   /**
+   * LulzBot revision identifier
+   */
+  #define LULZBOT_FW_VERSION ".152"
+
+  /**
    * Marlin release version identifier
    */
-  #ifdef LULZBOT_FW_VERSION
   #define SHORT_BUILD_VERSION "2.0.0" LULZBOT_FW_VERSION
-  #else
-  #define SHORT_BUILD_VERSION "2.0.0"
-  #endif
 
   /**
    * Verbose version identifier which should contain a reference to the location
    * from where the binary was downloaded or the source code was compiled.
    */
-  #ifdef LULZBOT_DETAILED_BUILD_VERSION
-  #define DETAILED_BUILD_VERSION LULZBOT_DETAILED_BUILD_VERSION
-  #else
-  #define DETAILED_BUILD_VERSION SHORT_BUILD_VERSION " (Github)"
-  #endif
+  #define DETAILED_BUILD_VERSION " FIRMWARE_VERSION:" SHORT_BUILD_VERSION " EXTRUDER_TYPE:" LULZBOT_TOOLHEAD_M115_TYPE
 
   /**
    * The STRING_DISTRIBUTION_DATE represents when the binary file was built,
    * here we define this default string as the date where the latest release
    * version was tagged.
    */
-  #ifdef LULZBOT_STRING_DISTRIBUTION_DATE
-  #define STRING_DISTRIBUTION_DATE LULZBOT_STRING_DISTRIBUTION_DATE
-  #else
-  #define STRING_DISTRIBUTION_DATE "2019-07-19"
-  #endif
+  #define STRING_DISTRIBUTION_DATE __DATE__ __TIME__
 
   /**
    * Required minimum Configuration.h and Configuration_adv.h file versions.
@@ -93,11 +86,7 @@
    * has a distinct Github fork— the Source Code URL should just be the main
    * Marlin repository.
    */
-  #ifdef LULZBOT_SOURCE_CODE_URL
-  #define SOURCE_CODE_URL LULZBOT_SOURCE_CODE_URL
-  #else
-  #define SOURCE_CODE_URL "https://github.com/MarlinFirmware/Marlin"
-  #endif
+  #define SOURCE_CODE_URL "https://code.alephobjects.com/diffusion/MARLIN"
 
   /**
    * Default generic printer UUID.

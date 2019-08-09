@@ -131,15 +131,15 @@
 
 // Choose the name from boards.h that matches your setup
 #ifndef MOTHERBOARD
-  #define MOTHERBOARD BOARD_MINIRAMBO // <-- changed
+  #define MOTHERBOARD BOARD_EINSY_RETRO // <-- changed
 #endif
 
 // Name displayed in the LCD "Ready" message and Info menu
-#define CUSTOM_MACHINE_NAME "LulzBot Mini" // <-- changed
+#define CUSTOM_MACHINE_NAME "LulzBot Mini 2" // <-- changed
 
 // Printer's unique ID, used by some programs to differentiate between machines.
 // Choose your own or use a service like http://www.uuidgenerator.net/version4
-#define MACHINE_UUID "351487b6-ca9a-4c1a-8765-d668b1da6585" // <-- changed
+#define MACHINE_UUID "e5502411-d46d-421d-ba3a-a20126d7930f" // <-- changed
 
 // @section extruder
 
@@ -525,15 +525,15 @@
 
   //120V 250W silicone heater into 4mm borosilicate (MendelMax 1.5+)
   //from FOPDT model - kp=.39 Tp=405 Tdead=66, Tc set to 79.2, aggressive factor of .15 (vs .1, 1, 10)
-  #define DEFAULT_bedKp 294 // <-- changed
-  #define DEFAULT_bedKi 65 // <-- changed
-  #define DEFAULT_bedKd 382 // <-- changed
+  #define DEFAULT_bedKp 384.33 // <-- changed
+  #define DEFAULT_bedKi 72.17 // <-- changed
+  #define DEFAULT_bedKd 511.64 // <-- changed
 
   //120V 250W silicone heater into 4mm borosilicate (MendelMax 1.5+)
   //from pidautotune
-  #define DEFAULT_bedKp 294 // <-- changed
-  #define DEFAULT_bedKi 65 // <-- changed
-  #define DEFAULT_bedKd 382 // <-- changed
+  #define DEFAULT_bedKp 384.33 // <-- changed
+  #define DEFAULT_bedKi 72.17 // <-- changed
+  #define DEFAULT_bedKd 511.64 // <-- changed
 
   // FIND YOUR OWN: "M303 E-1 C8 S90" to run autotune on the bed at 90 degreesC for 8 cycles.
 #endif // PIDTEMPBED
@@ -605,7 +605,7 @@
 #define USE_XMIN_PLUG
 #define USE_YMIN_PLUG
 #define USE_ZMIN_PLUG
-#define USE_XMAX_PLUG // <-- changed
+//#define USE_XMAX_PLUG
 #define USE_YMAX_PLUG // <-- changed
 #define USE_ZMAX_PLUG // <-- changed
 
@@ -637,11 +637,11 @@
 
 // Mechanical endstop with COM to ground and NC to Signal uses "false" here (most common setup).
 #define X_MIN_ENDSTOP_INVERTING 1 // <-- changed:  Set to true to invert the logic of the endstop.
-#define Y_MIN_ENDSTOP_INVERTING 1 // <-- changed:  Set to true to invert the logic of the endstop.
+#define Y_MIN_ENDSTOP_INVERTING 0 // <-- changed:  Set to true to invert the logic of the endstop.
 #define Z_MIN_ENDSTOP_INVERTING 1 // <-- changed:  Set to true to invert the logic of the endstop.
-#define X_MAX_ENDSTOP_INVERTING 1 // <-- changed:  Set to true to invert the logic of the endstop.
+#define X_MAX_ENDSTOP_INVERTING 0 // <-- changed:  Set to true to invert the logic of the endstop.
 #define Y_MAX_ENDSTOP_INVERTING 1 // <-- changed:  Set to true to invert the logic of the endstop.
-#define Z_MAX_ENDSTOP_INVERTING 1 // <-- changed:  Set to true to invert the logic of the endstop.
+#define Z_MAX_ENDSTOP_INVERTING 0 // <-- changed:  Set to true to invert the logic of the endstop.
 #define Z_MIN_PROBE_ENDSTOP_INVERTING 1 // <-- changed:  Set to true to invert the logic of the probe.
 
 /**
@@ -659,14 +659,14 @@
  *          TMC5130, TMC5130_STANDALONE, TMC5160, TMC5160_STANDALONE
  * :['A4988', 'A5984', 'DRV8825', 'LV8729', 'L6470', 'TB6560', 'TB6600', 'TMC2100', 'TMC2130', 'TMC2130_STANDALONE', 'TMC2160', 'TMC2160_STANDALONE', 'TMC2208', 'TMC2208_STANDALONE', 'TMC2209', 'TMC2209_STANDALONE', 'TMC26X', 'TMC26X_STANDALONE', 'TMC2660', 'TMC2660_STANDALONE', 'TMC5130', 'TMC5130_STANDALONE', 'TMC5160', 'TMC5160_STANDALONE']
  */
-#define X_DRIVER_TYPE  A4988 // <-- changed
-#define Y_DRIVER_TYPE  A4988 // <-- changed
-#define Z_DRIVER_TYPE  A4988 // <-- changed
+#define X_DRIVER_TYPE  TMC2130 // <-- changed
+#define Y_DRIVER_TYPE  TMC2130 // <-- changed
+#define Z_DRIVER_TYPE  TMC2130 // <-- changed
 //#define X2_DRIVER_TYPE A4988
 //#define Y2_DRIVER_TYPE A4988
 //#define Z2_DRIVER_TYPE A4988
 //#define Z3_DRIVER_TYPE A4988
-#define E0_DRIVER_TYPE A4988 // <-- changed
+#define E0_DRIVER_TYPE TMC2130 // <-- changed
 //#define E1_DRIVER_TYPE A4988
 //#define E2_DRIVER_TYPE A4988
 //#define E3_DRIVER_TYPE A4988
@@ -689,7 +689,7 @@
  *
  * :[2,3,4,5,6,7]
  */
-#define ENDSTOP_NOISE_THRESHOLD 2 // <-- changed
+//#define ENDSTOP_NOISE_THRESHOLD 2
 
 //=============================================================================
 //============================== Movement Settings ============================
@@ -716,14 +716,14 @@
  * Override with M92
  *                                      X, Y, Z, E0 [, E1[, E2[, E3[, E4[, E5]]]]]
  */
-#define DEFAULT_AXIS_STEPS_PER_UNIT   {100.5, 100.5, 1600, 420} // <-- changed
+#define DEFAULT_AXIS_STEPS_PER_UNIT   {100, 100, 200, 420} // <-- changed
 
 /**
  * Default Max Feed Rate (mm/s)
  * Override with M203
  *                                      X, Y, Z, E0 [, E1[, E2[, E3[, E4[, E5]]]]]
  */
-#define DEFAULT_MAX_FEEDRATE          {300, 300, 8, 40} // <-- changed
+#define DEFAULT_MAX_FEEDRATE          {300, 300, 300, 40} // <-- changed
 
 /**
  * Default Max Acceleration (change/s) change = mm/s
@@ -731,7 +731,7 @@
  * Override with M201
  *                                      X, Y, Z, E0 [, E1[, E2[, E3[, E4[, E5]]]]]
  */
-#define DEFAULT_MAX_ACCELERATION      {9000, 9000, 100, 1000} // <-- changed
+#define DEFAULT_MAX_ACCELERATION      {9000, 9000, 200, 1000} // <-- changed
 
 /**
  * Default Acceleration (change/s) change = mm/s
@@ -907,7 +907,7 @@
  */
 #define X_PROBE_OFFSET_FROM_EXTRUDER 0 // <-- changed:  X offset: -left  +right  [of the nozzle]
 #define Y_PROBE_OFFSET_FROM_EXTRUDER 0 // <-- changed:  Y offset: -front +behind [the nozzle]
-#define Z_PROBE_OFFSET_FROM_EXTRUDER -1.375 // <-- changed:  Z offset: -below +above  [the nozzle]
+#define Z_PROBE_OFFSET_FROM_EXTRUDER -1.1 // <-- changed:  Z offset: -below +above  [the nozzle]
 
 // Certain types of probes need to stay away from edges
 //#define MIN_PROBE_EDGE 10 // <-- changed
@@ -916,7 +916,7 @@
 #define XY_PROBE_SPEED 6000 // <-- changed
 
 // Feedrate (mm/m) for the first approach when double-probing (MULTIPLE_PROBING == 2)
-#define Z_PROBE_SPEED_FAST 480 // <-- changed
+#define Z_PROBE_SPEED_FAST 1200 // <-- changed
 
 // Feedrate (mm/m) for the "accurate" probe of each point
 #define Z_PROBE_SPEED_SLOW 60 // <-- changed
@@ -1038,16 +1038,16 @@
 // @section machine
 
 // The size of the print bed
-#define X_BED_SIZE 155 // <-- changed
-#define Y_BED_SIZE 155 // <-- changed
+#define X_BED_SIZE 157 // <-- changed
+#define Y_BED_SIZE 157 // <-- changed
 
 // Travel limits (mm) after homing, corresponding to endstop positions.
-#define X_MIN_POS 0
-#define Y_MIN_POS -15.2 // <-- changed
-#define Z_MIN_POS -5 // <-- changed
-#define X_MAX_POS 165 // <-- changed
-#define Y_MAX_POS 187.8 // <-- changed
-#define Z_MAX_POS 159 // <-- changed
+#define X_MIN_POS -3 // <-- changed
+#define Y_MIN_POS -5 // <-- changed
+#define Z_MIN_POS 0
+#define X_MAX_POS 173 // <-- changed
+#define Y_MAX_POS 192 // <-- changed
+#define Z_MAX_POS 183 // <-- changed
 
 /**
  * Software Endstops
@@ -1200,7 +1200,7 @@
   #define GRID_MAX_POINTS_Y 2 // <-- changed
 
   // Set the boundaries for probing (where the probe can reach).
-  #define LEFT_PROBE_BED_POSITION 0 // <-- changed
+  #define LEFT_PROBE_BED_POSITION -3 // <-- changed
   #define RIGHT_PROBE_BED_POSITION 163 // <-- changed
   #define FRONT_PROBE_BED_POSITION -4 // <-- changed
   #define BACK_PROBE_BED_POSITION 168 // <-- changed
@@ -1328,8 +1328,8 @@
 #endif
 
 // Homing speeds (mm/m)
-#define HOMING_FEEDRATE_XY 1800 // <-- changed
-#define HOMING_FEEDRATE_Z  480 // <-- changed
+#define HOMING_FEEDRATE_XY 3000 // <-- changed
+#define HOMING_FEEDRATE_Z  2400 // <-- changed
 
 // Validate that endstops are triggered on homing moves
 #define VALIDATE_HOMING_ENDSTOPS
@@ -1466,7 +1466,7 @@
 
 #if ENABLED(NOZZLE_PARK_FEATURE)
   // Specify a park position as { X, Y, Z_raise }
-  #define NOZZLE_PARK_POINT {10, 177.8, 20} // <-- changed
+  #define NOZZLE_PARK_POINT {10, 182, 20} // <-- changed
   #define NOZZLE_PARK_XY_FEEDRATE 100   // (mm/s) X and Y axes feedrate (also used for delta Z axis)
   #define NOZZLE_PARK_Z_FEEDRATE 5      // (mm/s) Z axis feedrate (not used for delta printers)
 #endif
@@ -1519,8 +1519,8 @@
   #define NOZZLE_CLEAN_TRIANGLES  3
 
   // Specify positions as { X, Y, Z }
-  #define NOZZLE_CLEAN_START_POINT {45, 174, -0.5} // <-- changed
-  #define NOZZLE_CLEAN_END_POINT   {115, 174, -0.5} // <-- changed
+  #define NOZZLE_CLEAN_START_POINT {45, 174, 1} // <-- changed
+  #define NOZZLE_CLEAN_END_POINT   {115, 174, 1} // <-- changed
 
   // Circular pattern radius
   #define NOZZLE_CLEAN_CIRCLE_RADIUS 6.5
@@ -1565,7 +1565,7 @@
  *
  * View the current statistics with M78.
  */
-//#define PRINTCOUNTER
+#define PRINTCOUNTER // <-- changed
 
 //=============================================================================
 //============================= LCD and SD support ============================
@@ -1623,7 +1623,7 @@
  * you must uncomment the following option or it won't work.
  *
  */
-//#define SDSUPPORT  // <-- changed
+#define SDSUPPORT // <-- changed
 
 /**
  * SD CARD: SPI SPEED
@@ -1631,9 +1631,9 @@
  * Enable one of the following items for a slower SPI transfer speed.
  * This may be required to resolve "volume init" errors.
  */
-#define SPI_SPEED SPI_FULL_SPEED // <-- changed
-#define SPI_SPEED SPI_FULL_SPEED // <-- changed
-#define SPI_SPEED SPI_FULL_SPEED // <-- changed
+#define SPI_SPEED SPI_SIXTEENTH_SPEED // <-- changed
+#define SPI_SPEED SPI_SIXTEENTH_SPEED // <-- changed
+#define SPI_SPEED SPI_SIXTEENTH_SPEED // <-- changed
 
 /**
  * SD CARD: ENABLE CRC
@@ -2023,7 +2023,7 @@
 // Third-party or vendor-customized controller interfaces.
 // Sources should be installed in 'src/lcd/extensible_ui'.
 //
-//#define EXTENSIBLE_UI
+#define EXTENSIBLE_UI // <-- changed
 
 //=============================================================================
 //=============================== Graphical TFTs ==============================
@@ -2203,25 +2203,25 @@
  * Extra modifications to Marlin
  */
 #define LULZBOT_WIPE_SEQUENCE_COMMANDS "M117 Hot End Heating...\nM104 S170 T0\nG28 O1\nG1 Y25 Z10 F5000\nM117 Rewiping nozzle\nT0\nG1 X115 Y115 F5000\nM109 R170 T0\nG1 Z1\nG1 X115 Y115 F4000\nG1 X45 Y174 F4000\nG1 X115 Y115 F4000\nG1 X45 Y174 F4000\nG1 X115 Y115 F4000\nG1 X45 Y174 F4000\nG1 X115 Y115 F4000\nG1 X45 Y174 F4000\nG1 X115 Y115 F4000\nG1 X45 Y174 F4000\nG1 X115 Y115 F4000\nG1 X45 Y174 F4000\nG1 Z15\nM106 S255\nG0 X0 Y0\nM109 R160 T0\nM107" // <-- changed
-//#define LULZBOT_AXIS_LEVELING_COMMANDS
-#define LULZBOT_CALIBRATION_COMMANDS "M117 Starting Auto-Calibration\nT0\nG28\nG12\nM117 Calibrating...\nG425\nM500\nM117 Calibration data saved" // <-- changed
+#define LULZBOT_AXIS_LEVELING_COMMANDS "M117 Leveling X Axis\nG28\nG0 X150 F9999\nG0 Z5 F6000\nG91\nM211 S0\nM400\nM906 Z600\nG0 Z-15 F500\nG0 Z5 F500\nG90\nM400\nM906 Z960\nM211 S1\nG28\nM117 Leveling done." // <-- changed
+//#define LULZBOT_CALIBRATION_COMMANDS
 #define LULZBOT_G29_DISABLES_E0_STEPPER // <-- changed
 #define LULZBOT_M226_PIN_PROTECTION_WORKAROUND // <-- changed
 #define LULZBOT_M226_NON_ARDUINO_PINS_WORKAROUND // <-- changed
 //#define LULZBOT_RUNOUT_HANDLING_WORKAROUND
-//#define LULZBOT_ADVANCED_PAUSE_PURGE_WORKAROUND
-//#define LULZBOT_NO_PAUSE_FOR_REHEAT_WORKAROUND
-//#define LULZBOT_AERO_UNLOAD_WORKAROUND
-//#define LULZBOT_AERO_UNLOAD_PURGE_LENGTH
-//#define LULZBOT_AERO_UNLOAD_PURGE_FEEDRATE
+#define LULZBOT_ADVANCED_PAUSE_PURGE_WORKAROUND // <-- changed
+#define LULZBOT_NO_PAUSE_FOR_REHEAT_WORKAROUND // <-- changed
+#define LULZBOT_AERO_UNLOAD_WORKAROUND // <-- changed
+#define LULZBOT_AERO_UNLOAD_PURGE_LENGTH 6 // <-- changed
+#define LULZBOT_AERO_UNLOAD_PURGE_FEEDRATE 1.0 // <-- changed
 //#define LULZBOT_DISABLE_KILL_BUTTON
-//#define LULZBOT_ENERGIZE_Z_AT_STARTUP
+#define LULZBOT_ENERGIZE_Z_AT_STARTUP // <-- changed
 //#define LULZBOT_HOME_Z_AT_STARTUP
 //#define LULZBOT_EXTRUDER_FAN_ON_PIN_6
 //#define LULZBOT_NO_MOVE_ON_TOOLHEAD_CHANGE
 //#define LULZBOT_SWAP_EXTRUDERS
 //#define LULZBOT_G29_ENDS_ON_BACK_LEFT_CORNER
-//#define LULZBOT_CONTROLLERFAN_SPEED_WHEN_ONLY_Z_ACTIVE
+#define LULZBOT_CONTROLLERFAN_SPEED_WHEN_ONLY_Z_ACTIVE 120 // <-- changed
 //#define LULZBOT_Z_MIN_USES_Z_PROBE_ENABLED
 #define LULZBOT_HOMING_BACKOFF_FIX // <-- changed
 #define LULZBOT_TOOLHEAD_M115_TYPE "SingleExtruderAeroV2" // <-- changed
@@ -2229,8 +2229,8 @@
 /**
  * Extra options for USB support
  */
-//#define LULZBOT_MANUAL_USB_STARTUP
-//#define LULZBOT_USE_UHS3_USB
+#define LULZBOT_MANUAL_USB_STARTUP // <-- changed
+#define LULZBOT_USE_UHS3_USB // <-- changed
 
 /**
  * Extra options for Archim
@@ -2244,7 +2244,7 @@
  * Extra options for either display
  */
 //#define LULZBOT_LCD_KEEPS_STATUS_AFTER_PRINT
-#define LULZBOT_LCD_MACHINE_NAME "Mini" // <-- changed
+#define LULZBOT_LCD_MACHINE_NAME "Mini 2" // <-- changed
 #define LULZBOT_LCD_TOOLHEAD_NAME "SE 0.5mm AeroV2" // <-- changed
 
 /**
@@ -2262,15 +2262,15 @@
 /**
  * Extra options for AlephObjects Color LCD display
  */
-//#define LCD_ALEPHOBJECTS_CLCD_UI
+#define LCD_ALEPHOBJECTS_CLCD_UI // <-- changed
 //#define LCD_HAOYU_FT800CB
-//#define USE_PORTRAIT_ORIENTATION
-//#define AO_EXP1_PINOUT_REV_C
+#define USE_PORTRAIT_ORIENTATION // <-- changed
+#define AO_EXP1_PINOUT_REV_C // <-- changed
 //#define AO_EXP2_PINOUT_REV_C
 //#define AO_EXP1_PINOUT_REV_B
-//#define MAX_MANUAL_FEEDRATE
+#define MAX_MANUAL_FEEDRATE {18000, 18000, 18000, 60.0} // <-- changed
 //#define LCD_320x240
-//#define LCD_480x272
+#define LCD_480x272 // <-- changed
 //#define LCD_800x480
 //#define UI_FRAMEWORK_DEBUG
 
@@ -2289,7 +2289,7 @@
 #define MAX_PROBE_Y 168 // <-- changed
 #define MAX_PROBE_X 163 // <-- changed
 #define MIN_PROBE_Y -4 // <-- changed
-#define MIN_PROBE_X 0 // <-- changed
+#define MIN_PROBE_X -3 // <-- changed
 //#define ACTION_ON_FILAMENT_RUNOUT
 //#define FAN_PIN
 

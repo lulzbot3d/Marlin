@@ -2200,22 +2200,8 @@
 /*************************** EXTRA LULZBOT OPTIONS ***************************/
 
 /**
- * Versioning information for firmware
- */
-
-#ifndef LULZBOT_FW_VERSION
-  #define LULZBOT_FW_VERSION ".151" // <-- changed
-#endif
-#define LULZBOT_SOURCE_CODE_URL "https://code.alephobjects.com/diffusion/MARLIN" // <-- changed
-#define LULZBOT_LCD_MACHINE_NAME "TAZ 5" // <-- changed
-#define LULZBOT_LCD_TOOLHEAD_NAME "SL 0.25mm Micro" // <-- changed
-#define LULZBOT_DETAILED_BUILD_VERSION " FIRMWARE_VERSION:" SHORT_BUILD_VERSION " EXTRUDER_TYPE:SmallLayer" // <-- changed
-#define LULZBOT_STRING_DISTRIBUTION_DATE __DATE__ __TIME__ // <-- changed
-
-/**
  * Extra modifications to Marlin
  */
-
 //#define LULZBOT_WIPE_SEQUENCE_COMMANDS
 //#define LULZBOT_AXIS_LEVELING_COMMANDS
 //#define LULZBOT_CALIBRATION_COMMANDS
@@ -2229,8 +2215,6 @@
 #define LULZBOT_AERO_UNLOAD_PURGE_LENGTH 6 // <-- changed
 #define LULZBOT_AERO_UNLOAD_PURGE_FEEDRATE 0.7 // <-- changed
 #define LULZBOT_DISABLE_KILL_BUTTON // <-- changed
-//#define LULZBOT_DISABLE_DUE_SD_MMC
-//#define LULZBOT_USE_UHS3_USB
 //#define LULZBOT_ENERGIZE_Z_AT_STARTUP
 //#define LULZBOT_HOME_Z_AT_STARTUP
 //#define LULZBOT_EXTRUDER_FAN_ON_PIN_6
@@ -2240,11 +2224,32 @@
 //#define LULZBOT_CONTROLLERFAN_SPEED_WHEN_ONLY_Z_ACTIVE
 //#define LULZBOT_Z_MIN_USES_Z_PROBE_ENABLED
 #define LULZBOT_HOMING_BACKOFF_FIX // <-- changed
+#define LULZBOT_TOOLHEAD_M115_TYPE "SmallLayer" // <-- changed
+
+/**
+ * Extra options for USB support
+ */
+//#define LULZBOT_MANUAL_USB_STARTUP
+//#define LULZBOT_USE_UHS3_USB
+
+/**
+ * Extra options for Archim
+ */
+//#define LULZBOT_USB_DEVICE_VENDOR_ID
+//#define LULZBOT_USB_DEVICE_PRODUCT_ID
+//#define LULZBOT_EEPROM_BACKUP_SIZE
+//#define LULZBOT_DISABLE_DUE_SD_MMC
+
+/**
+ * Extra options for either display
+ */
+//#define LULZBOT_LCD_KEEPS_STATUS_AFTER_PRINT
+#define LULZBOT_LCD_MACHINE_NAME "TAZ 5" // <-- changed
+#define LULZBOT_LCD_TOOLHEAD_NAME "SL 0.25mm Micro" // <-- changed
 
 /**
  * Extra options for RepRapDiscount Full Graphics Smart Controller
  */
-
 #define LULZBOT_ENHANCED_BOOTSCREEN // <-- changed
 #define LULZBOT_HIDE_ACTIVE_NOZZLE_IN_MENU // <-- changed
 #define LULZBOT_HIDE_UNUSED_FANS_IN_MENU // <-- changed
@@ -2253,19 +2258,10 @@
 #define LULZBOT_HIDE_BED_LEVELING_IN_MENU // <-- changed
 #define LULZBOT_JUMP_TO_TOP_ON_MENU_BACK // <-- changed
 #define LULZBOT_LCD_ZOFFSET_FORMAT ftostr52 // <-- changed
-//#define LULZBOT_LCD_KEEPS_STATUS_AFTER_PRINT
-
-/**
- * Extra options for Archim
- */
-//#define LULZBOT_USB_DEVICE_VENDOR_ID
-//#define LULZBOT_USB_DEVICE_PRODUCT_ID
-//#define LULZBOT_EEPROM_BACKUP_SIZE
 
 /**
  * Extra options for AlephObjects Color LCD display
  */
-
 //#define LCD_ALEPHOBJECTS_CLCD_UI
 //#define LCD_HAOYU_FT800CB
 //#define USE_PORTRAIT_ORIENTATION
@@ -2273,8 +2269,10 @@
 //#define AO_EXP2_PINOUT_REV_C
 //#define AO_EXP1_PINOUT_REV_B
 //#define MAX_MANUAL_FEEDRATE
+//#define LCD_320x240
 //#define LCD_480x272
 //#define LCD_800x480
+//#define UI_FRAMEWORK_DEBUG
 
 /**
  * Extra option for KangarooPaw
@@ -2288,7 +2286,6 @@
 /**
  * Override certain other Marlin options
  */
-
 //#define MAX_PROBE_Y
 //#define MAX_PROBE_X
 //#define MIN_PROBE_Y

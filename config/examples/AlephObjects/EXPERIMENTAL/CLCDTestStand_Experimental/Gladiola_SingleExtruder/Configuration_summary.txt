@@ -81,7 +81,6 @@
 #define HOTEND_OFFSET_X {0.0, 0}
 #define HOTEND_OFFSET_Y {0.0, 0}
 #define HOTEND_OFFSET_Z {0.0, 0}
-#define HYBRID_THRESHOLD
 #define INVERT_E0_DIR true
 #define INVERT_E1_DIR true
 #define INVERT_X_DIR false
@@ -156,7 +155,6 @@
 #define SERIAL_PORT 0
 #define SOFT_PWM_SCALE 4
 #define SPI_SPEED SPI_SIXTEENTH_SPEED
-#define STEALTHCHOP_Z
 #define STRING_CONFIG_H_AUTHOR "(Aleph Objects Inc., LulzBot Git Repository)"
 #define TEMP_BED_HYSTERESIS 5
 #define TEMP_BED_RESIDENCY_TIME 1

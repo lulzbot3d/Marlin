@@ -249,7 +249,9 @@ def make_config(PRINTER, TOOLHEAD):
         MARLIN["LULZBOT_LCD_MACHINE_NAME"]               = C_STRING("Mini 2")
         MARLIN["BACKLASH_COMPENSATION"]                  = True
         MARLIN["SENSORLESS_HOMING"]                      = True
+        MARLIN["STEALTHCHOP_XY"]                         = False
         MARLIN["STEALTHCHOP_Z"]                          = True
+        MARLIN["STEALTHCHOP_E"]                          = False
         MARLIN["HYBRID_THRESHOLD"]                       = True
         MARLIN["BAUDRATE"]                               = 250000
         MARLIN["PRINTCOUNTER"]                           = True
@@ -272,7 +274,9 @@ def make_config(PRINTER, TOOLHEAD):
         MARLIN["LULZBOT_LCD_MACHINE_NAME"]               = C_STRING("TAZ Pro")
         MARLIN["BACKLASH_COMPENSATION"]                  = True
         MARLIN["SENSORLESS_HOMING"]                      = True
+        MARLIN["STEALTHCHOP_XY"]                         = False
         MARLIN["STEALTHCHOP_Z"]                          = True
+        MARLIN["STEALTHCHOP_E"]                          = False
         MARLIN["HYBRID_THRESHOLD"]                       = True
         MARLIN["BAUDRATE"]                               = 250000
         MARLIN["PRINTCOUNTER"]                           = True
@@ -323,6 +327,9 @@ def make_config(PRINTER, TOOLHEAD):
         USE_EXPERIMENTAL_FEATURES                        = True
         MARLIN["CUSTOM_MACHINE_NAME"]                    = C_STRING("LulzBot TAZ 5")
         MARLIN["LULZBOT_LCD_MACHINE_NAME"]               = C_STRING("TAZ 5")
+        MARLIN["STEALTHCHOP_XY"]                         = False
+        MARLIN["STEALTHCHOP_Z"]                          = True
+        MARLIN["STEALTHCHOP_E"]                          = False
         MARLIN["BACKLASH_COMPENSATION"]                  = True
         MARLIN["BAUDRATE"]                               = 250000
         MARLIN["MACHINE_UUID"]                           = C_STRING("c3255c96-4097-4884-8ed0-ded2ff9bae61")
@@ -366,7 +373,9 @@ def make_config(PRINTER, TOOLHEAD):
         MARLIN["LULZBOT_LCD_MACHINE_NAME"]               = C_STRING("Mini 2")
         MARLIN["BACKLASH_COMPENSATION"]                  = True
         MARLIN["SENSORLESS_HOMING"]                      = True
+        MARLIN["STEALTHCHOP_XY"]                         = False
         MARLIN["STEALTHCHOP_Z"]                          = True
+        MARLIN["STEALTHCHOP_E"]                          = False
         MARLIN["HYBRID_THRESHOLD"]                       = True
         MARLIN["BAUDRATE"]                               = 250000
         MARLIN["PRINTCOUNTER"]                           = True
@@ -397,7 +406,9 @@ def make_config(PRINTER, TOOLHEAD):
         MARLIN["LULZBOT_USE_BIOPRINTER_UI"]              = True
         MARLIN["SENSORLESS_HOMING"]                      = True
         MARLIN["BACKLASH_COMPENSATION"]                  = True
+        MARLIN["STEALTHCHOP_XY"]                         = False
         MARLIN["STEALTHCHOP_Z"]                          = True
+        MARLIN["STEALTHCHOP_E"]                          = False
         MARLIN["HYBRID_THRESHOLD"]                       = True
         MARLIN["BAUDRATE"]                               = 250000
         MARLIN["PRINTCOUNTER"]                           = True
@@ -452,7 +463,9 @@ def make_config(PRINTER, TOOLHEAD):
         MARLIN["CUSTOM_MACHINE_NAME"]                    = C_STRING("Einsy MiniLCD")
         MARLIN["LULZBOT_LCD_MACHINE_NAME"]               = C_STRING("Mini")
         MARLIN["BACKLASH_COMPENSATION"]                  = True
+        MARLIN["STEALTHCHOP_XY"]                         = False
         MARLIN["STEALTHCHOP_Z"]                          = True
+        MARLIN["STEALTHCHOP_E"]                          = False
         MARLIN["HYBRID_THRESHOLD"]                       = True
         MARLIN["BAUDRATE"]                               = 250000
         MARLIN["PRINTCOUNTER"]                           = True
@@ -475,7 +488,9 @@ def make_config(PRINTER, TOOLHEAD):
         MARLIN["CUSTOM_MACHINE_NAME"]                    = C_STRING("Einsy MiniCLCD")
         MARLIN["LULZBOT_LCD_MACHINE_NAME"]               = C_STRING("Mini")
         MARLIN["BACKLASH_COMPENSATION"]                  = True
+        MARLIN["STEALTHCHOP_XY"]                         = False
         MARLIN["STEALTHCHOP_Z"]                          = True
+        MARLIN["STEALTHCHOP_E"]                          = False
         MARLIN["HYBRID_THRESHOLD"]                       = True
         MARLIN["BAUDRATE"]                               = 250000
         MARLIN["PRINTCOUNTER"]                           = True
@@ -515,7 +530,9 @@ def make_config(PRINTER, TOOLHEAD):
         MARLIN["LULZBOT_LCD_MACHINE_NAME"]               = C_STRING("TAZ 6")
         MARLIN["BACKLASH_COMPENSATION"]                  = True
         MARLIN["ENDSTOPS_ALWAYS_ON_DEFAULT"]             = True
+        MARLIN["STEALTHCHOP_XY"]                         = False
         MARLIN["STEALTHCHOP_Z"]                          = True
+        MARLIN["STEALTHCHOP_E"]                          = False
         MARLIN["HYBRID_THRESHOLD"]                       = True
         MARLIN["BAUDRATE"]                               = 250000
         MARLIN["PRINTCOUNTER"]                           = True
@@ -538,8 +555,6 @@ def make_config(PRINTER, TOOLHEAD):
         MARLIN["CUSTOM_MACHINE_NAME"]                    = C_STRING("Einsy MiniCLCD")
         MARLIN["LULZBOT_LCD_MACHINE_NAME"]               = C_STRING("Mini")
         MARLIN["BACKLASH_COMPENSATION"]                  = True
-        MARLIN["STEALTHCHOP_Z"]                          = True
-        MARLIN["HYBRID_THRESHOLD"]                       = True
         MARLIN["BAUDRATE"]                               = 250000
         MARLIN["PRINTCOUNTER"]                           = True
         MARLIN["MACHINE_UUID"]                           = C_STRING("23421dc0-df9f-430b-8f91-0e3bcb55b4e4")
@@ -821,7 +836,7 @@ def make_config(PRINTER, TOOLHEAD):
             MARLIN["SD_FINISHED_STEPPERRELEASE"]         = 'true'
             MARLIN["SD_FINISHED_RELEASECOMMAND"]         = C_STRING("M84 X Y Z E")
 
-    MARLIN["DISABLE_INACTIVE_Z"]                     = 'false' if USE_Z_BELT else 'true'
+    MARLIN["DISABLE_INACTIVE_Z"]                         = 'false' if USE_Z_BELT else 'true'
 
     if USE_Z_BELT:
         MARLIN["LULZBOT_ENERGIZE_Z_AT_STARTUP"]          = True

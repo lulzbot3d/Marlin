@@ -1784,9 +1784,9 @@
    * Use Trinamic's ultra quiet stepping mode.
    * When disabled, Marlin will use spreadCycle stepping mode.
    */
-  #define STEALTHCHOP_XY
+  //#define STEALTHCHOP_XY  // <-- changed
   #define STEALTHCHOP_Z
-  #define STEALTHCHOP_E
+  //#define STEALTHCHOP_E  // <-- changed
 
   /**
    * Optimize spreadCycle chopper parameters by using predefined parameter sets

@@ -623,9 +623,6 @@ def make_config(PRINTER, TOOLHEAD):
     MARLIN["LULZBOT_M226_PIN_PROTECTION_WORKAROUND"]     = True
     MARLIN["LULZBOT_M226_NON_ARDUINO_PINS_WORKAROUND"]   = True
 
-    # Fix for homing backoff
-    MARLIN["LULZBOT_HOMING_BACKOFF_FIX"]                 = True
-
 ############################ EXPERIMENTAL FEATURES ############################
 
     if USE_EXPERIMENTAL_FEATURES and not USE_LESS_MEMORY:
@@ -702,25 +699,18 @@ def make_config(PRINTER, TOOLHEAD):
         # The Mini and TAZ Pro lack a home button and probe using the Z_MIN pin.
         MARLIN["Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN"]     = True
 
-    if USE_MIN_ENDSTOPS:
-        MARLIN["USE_XMIN_PLUG"]                          = True
-        MARLIN["USE_YMIN_PLUG"]                          = True
+    MARLIN["USE_XMIN_PLUG"]                              = USE_MIN_ENDSTOPS
+    MARLIN["USE_YMIN_PLUG"]                              = USE_MIN_ENDSTOPS
+    MARLIN["USE_ZMIN_PLUG"]                              = USE_MIN_ENDSTOPS or MARLIN["Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN"]
 
-    if USE_MIN_ENDSTOPS or MARLIN["Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN"]:
-        MARLIN["USE_ZMIN_PLUG"]                          = True
-
-    if USE_MAX_ENDSTOPS:
-        MARLIN["USE_XMAX_PLUG"]                          = True
-        MARLIN["USE_YMAX_PLUG"]                          = True
+    MARLIN["USE_XMAX_PLUG"]                              = USE_MAX_ENDSTOPS
+    MARLIN["USE_YMAX_PLUG"]                              = USE_MAX_ENDSTOPS
+    MARLIN["USE_ZMAX_PLUG"]                              = USE_MAX_ENDSTOPS or (IS_TAZ and not USE_HOME_BUTTON)
 
     if PRINTER in ["KangarooPaw_Experimental"]:
         MARLIN["USE_XMAX_PLUG"]                          = True
         MARLIN["E_MIN_PIN"]                              = 'X_MAX_PIN'
         MARLIN["E_MIN_PIN_INVERTING"]                    = NORMALLY_CLOSED_ENDSTOP
-
-    # Z-Max Endstops were introduced on the Mini and TAZ 6
-    if IS_MINI or (IS_TAZ and not USE_HOME_BUTTON):
-        MARLIN["USE_ZMAX_PLUG"]                          = True
 
     if ENABLED("SDSUPPORT"):
         MARLIN["SD_ABORT_ON_ENDSTOP_HIT"]                = True
@@ -1416,20 +1406,6 @@ def make_config(PRINTER, TOOLHEAD):
         MARLIN["Z_CLEARANCE_BETWEEN_PROBES"]             = 5
         MARLIN["MIN_PROBE_EDGE"]                         = False
 
-        if MARLIN["AUTO_BED_LEVELING_LINEAR"]:
-            # Traditionally LulzBot printers have employed a four-point leveling
-            # using a degenerate 2x2 grid. This is the traditional behavior.
-            MARLIN["GRID_MAX_POINTS_X"]                    = 2
-            MARLIN["GRID_MAX_POINTS_Y"]                    = 2
-            if IS_MINI:
-                # We can't control the order of probe points exactly, but
-                # this makes the probe start closer to the wiper pad.
-                MARLIN["PROBE_Y_FIRST"]                      = True
-            else:
-                # Restore the old probe sequence on the TAZ that starts
-                # probing on the washer underneath the wiper pad.
-                MARLIN["LULZBOT_G29_ENDS_ON_BACK_LEFT_CORNER"] = True
-
         MARLIN["LEFT_PROBE_BED_POSITION"]  = max(STANDARD_LEFT_PROBE_BED_POSITION  + TOOLHEAD_LEFT_PROBE_ADJ,  MARLIN["X_MIN_POS"])
         MARLIN["RIGHT_PROBE_BED_POSITION"] = min(STANDARD_RIGHT_PROBE_BED_POSITION + TOOLHEAD_RIGHT_PROBE_ADJ, MARLIN["X_MAX_POS"])
         MARLIN["BACK_PROBE_BED_POSITION"]  = min(STANDARD_BACK_PROBE_BED_POSITION  + TOOLHEAD_BACK_PROBE_ADJ,  MARLIN["Y_MAX_POS"])
@@ -1444,6 +1420,28 @@ def make_config(PRINTER, TOOLHEAD):
 
         if "Z_SAFE_HOMING_X_POINT" in MARLIN:
             MARLIN["MIN_PROBE_X"] = min(MARLIN["MIN_PROBE_X"], MARLIN["Z_SAFE_HOMING_X_POINT"])
+
+        # Adjustments for four point probing
+
+        if MARLIN["AUTO_BED_LEVELING_LINEAR"]:
+            # Traditionally LulzBot printers have employed a four-point leveling
+            # using a degenerate 2x2 grid. This is the traditional behavior.
+            MARLIN["GRID_MAX_POINTS_X"]                  = 2
+            MARLIN["GRID_MAX_POINTS_Y"]                  = 2
+            if IS_MINI:
+                # We can't control the order of probe points exactly, but
+                # this makes the probe start closer to the wiper pad.
+                MARLIN["PROBE_Y_FIRST"]                  = True
+                GOTO_1ST_PROBE_POINT = "G0 X{} Y{}".format(
+                    MARLIN["LEFT_PROBE_BED_POSITION"], MARLIN["BACK_PROBE_BED_POSITION"])
+            else:
+                # Restore the old probe sequence on the TAZ that starts
+                # probing on the washer underneath the wiper pad.
+                MARLIN["LULZBOT_G29_ENDS_ON_BACK_LEFT_CORNER"] = True
+                GOTO_1ST_PROBE_POINT = "G0 X{} Y{}".format(
+                    MARLIN["LEFT_PROBE_BED_POSITION"], MARLIN["FRONT_PROBE_BED_POSITION"])
+        else:
+            GOTO_1ST_PROBE_POINT                          = ""
 
 ############################# X AXIS LEVELING #############################
 
@@ -1801,31 +1799,31 @@ def make_config(PRINTER, TOOLHEAD):
 
             LEFT_WIPE_Y2 -= TOOLHEAD_WIPE_Y2_ADJ # Adjustments for legacy dual
 
-        def WIPE_GCODE(x1,x2,y1,y2,z,temp_command):
+        def WIPE_GCODE(x1,y1,x2,y2,z,temp_command):
             return (
-                "G1 X{} Y{} F5000\n".format(x2,y2)   # Move above wiper pad
+                "G1 X{} Y{} Z10 F4000\n".format(x2,y2)   # Move to pad while heating
                 + temp_command +
-                "G1 Z1\n"                            # Push nozzle into wiper
-                "G1 X{} Y{} F4000\n".format(x2,y2) + # Slow wipe
-                "G1 X{} Y{} F4000\n".format(x1,y1) + # Slow wipe
-                "G1 X{} Y{} F4000\n".format(x2,y2) + # Slow wipe
-                "G1 X{} Y{} F4000\n".format(x1,y1) + # Slow wipe
-                "G1 X{} Y{} F4000\n".format(x2,y2) + # Slow wipe
-                "G1 X{} Y{} F4000\n".format(x1,y1) + # Slow wipe
-                "G1 X{} Y{} F4000\n".format(x2,y2) + # Slow wipe
-                "G1 X{} Y{} F4000\n".format(x1,y1) + # Slow wipe
-                "G1 X{} Y{} F4000\n".format(x2,y2) + # Slow wipe
-                "G1 X{} Y{} F4000\n".format(x1,y1) + # Slow wipe
-                "G1 X{} Y{} F4000\n".format(x2,y2) + # Slow wipe
-                "G1 X{} Y{} F4000\n".format(x1,y1) + # Slow wipe
-                "G1 Z15\n"                           # Raise nozzle
+                "G1 Z1\n"                                # Push nozzle into wiper
+                "G1 X{} Y{} F4000\n".format(x2,y2) +     # Slow wipe
+                "G1 X{} Y{} F4000\n".format(x1,y1) +     # Slow wipe
+                "G1 X{} Y{} F4000\n".format(x2,y2) +     # Slow wipe
+                "G1 X{} Y{} F4000\n".format(x1,y1) +     # Slow wipe
+                "G1 X{} Y{} F4000\n".format(x2,y2) +     # Slow wipe
+                "G1 X{} Y{} F4000\n".format(x1,y1) +     # Slow wipe
+                "G1 X{} Y{} F4000\n".format(x2,y2) +     # Slow wipe
+                "G1 X{} Y{} F4000\n".format(x1,y1) +     # Slow wipe
+                "G1 X{} Y{} F4000\n".format(x2,y2) +     # Slow wipe
+                "G1 X{} Y{} F4000\n".format(x1,y1) +     # Slow wipe
+                "G1 X{} Y{} F4000\n".format(x2,y2) +     # Slow wipe
+                "G1 X{} Y{} F4000\n".format(x1,y1) +     # Slow wipe
+                "G1 Z15\n"                               # Raise nozzle
             )
 
         def LEFT_WIPE_GCODE(temp_command):
-            return WIPE_GCODE(LEFT_WIPE_X1, LEFT_WIPE_X2, LEFT_WIPE_Y1, LEFT_WIPE_X2, LEFT_WIPE_Z, temp_command)
+            return WIPE_GCODE(LEFT_WIPE_X1, LEFT_WIPE_Y1, LEFT_WIPE_X2, LEFT_WIPE_Y2, LEFT_WIPE_Z, temp_command)
 
         def RIGHT_WIPE_GCODE(temp_command):
-            return WIPE_GCODE(RIGHT_WIPE_X1, RIGHT_WIPE_X2, RIGHT_WIPE_Y1, RIGHT_WIPE_X2, RIGHT_WIPE_Z, temp_command)
+            return WIPE_GCODE(RIGHT_WIPE_X1, RIGHT_WIPE_Y1, RIGHT_WIPE_X2, RIGHT_WIPE_Y2, RIGHT_WIPE_Z, temp_command)
 
         if PRINTER in "Quiver_TAZPro" and MARLIN["EXTRUDERS"] == 1:
             MARLIN["NOZZLE_CLEAN_START_POINT"]               = [RIGHT_WIPE_X1, RIGHT_WIPE_Y1, RIGHT_WIPE_Z]
@@ -1868,8 +1866,8 @@ def make_config(PRINTER, TOOLHEAD):
         if PRINTER == "Quiver_TAZPro" and TOOLHEAD == "Quiver_DualExtruder":
             REWIPE_E1 = (
                 "G0 X150 F5000\n"                        # Move over to switch extruders
-                "T1\n"                                   # Switch to second extruder
-                + RIGHT_WIPE_GCODE(WIPE_WAIT_TEMP) +     # Wipe on the rightmost pad
+                "T1\n" +                                 # Switch to second extruder
+                  RIGHT_WIPE_GCODE(WIPE_WAIT_TEMP) +     # Wipe on the rightmost pad
                 "M106 S255 \n"                           # Turn on fan to blow away fuzzies
                 "G0 X150 F5000\n"                        # Move over to switch extruders
                 "T0\n"                                   # Switch to first extruder
@@ -1881,13 +1879,12 @@ def make_config(PRINTER, TOOLHEAD):
             "M117 Hot End Heating...\n"                  # Status message
             + WIPE_HEAT_TEMP +
             "G28 O1\n"                                   # Home if needed
-            "G1 Y25 Z10 F5000\n"                         # Move to pad while heating
-            "M117 Rewiping nozzle\n"                     # Status message
-            + REWIPE_E0                                  # Wipe first extruder
-            + REWIPE_E1 +                                # Wipe second extruder
-            "M106 S255\n"                                # Turn on fan to blow away fuzzies
-            "G0 X0 Y0\n"                                 # Move to probe corner while blowing
-            + WIPE_DONE_TEMP +                           # Drop to probe temp
+            "M117 Rewiping nozzle\n" +                   # Status message
+              REWIPE_E0 +                                # Wipe first extruder
+              REWIPE_E1 +                                # Wipe second extruder
+            "M106 S255\n" +                              # Turn on fan to blow away fuzzies
+              GOTO_1ST_PROBE_POINT +                     # Move to probe corner while blowing
+              WIPE_DONE_TEMP +                           # Drop to probe temp
             "M107\n"                                     # Turn off fan
         )
 
@@ -1897,6 +1894,7 @@ def make_config(PRINTER, TOOLHEAD):
                 AXIS_LEVELING_COMMANDS +                 # Level X axis
                 "G12\n"                                  # Perform wipe sequence
                 "M109 R160\n"                            # Setting probing temperature
+                "M400\n"                                 # Wait for motion to finish
                 "M117 Probing bed"                       # Status message
             )
 
@@ -1907,6 +1905,7 @@ def make_config(PRINTER, TOOLHEAD):
                 "G28 X0 Y0\n"                            # G29 on older minis shifts the coordinate system
                 "G12\n"                                  # Perform wipe sequence
                 "M109 R160\n"                            # Setting probing temperature
+                "M400\n"                                 # Wait for motion to finish
                 "M117 Probing bed"                       # Status message
             )
 
@@ -1915,6 +1914,7 @@ def make_config(PRINTER, TOOLHEAD):
                 "G0 Z10\n"                               # Raise nozzle
                 "G12\n"                                  # Perform wipe sequence
                 "M109 R160\n"                            # Set probing temperature
+                "M400\n"                                 # Wait for motion to finish
                 "M117 Probing bed"                       # Status message
             )
 

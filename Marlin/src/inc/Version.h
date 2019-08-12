@@ -38,7 +38,7 @@
   /**
    * LulzBot revision identifier
    */
-  #define LULZBOT_FW_VERSION ".155"
+  #define LULZBOT_FW_VERSION ".156"
 
   /**
    * Marlin release version identifier

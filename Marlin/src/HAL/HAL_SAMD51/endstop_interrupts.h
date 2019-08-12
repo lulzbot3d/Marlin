@@ -1,7 +1,7 @@
 /**
  * Marlin 3D Printer Firmware
  *
- * Copyright (C) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (c) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  * SAMD51 HAL developed by Giuliano Zaro (AKA GMagician)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -27,7 +27,7 @@
  * Any pin can be used for external interrupts, but there are some restrictions.
  * At most 16 different external interrupts can be used at one time.
  * Further, you can’t just pick any 16 pins to use. This is because every pin on the SAMD51
- * connects to what is called an EXTINT line, and only one pin per EXTINT line can be used for external 
+ * connects to what is called an EXTINT line, and only one pin per EXTINT line can be used for external
  * interrupts at a time
  */
 

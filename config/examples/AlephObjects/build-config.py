@@ -28,11 +28,12 @@ PRINTER_CHOICES = [
     "Redgum_TAZWorkhorse",
     "RedgumArchim_Experimental",
     "JuniperArchim_Experimental",
-    "HibiscusTouchLCD_Experimental",
+    "HibiscusTouchSD_Experimental",
+    "HibiscusTouchUSB_Experimental",
     "KangarooPaw_Experimental",
-    "GladiolaTouchLCD_Experimental",
+    "GladiolaTouchUSB_Experimental",
     "GladiolaEinsyLCD_Experimental",
-    "GladiolaEinsyTouchLCD_Experimental",
+    "GladiolaEinsyTouchUSB_Experimental",
     "OliveoilArchim_Experimental",
     "CLCDTestStand_Experimental"
 ]
@@ -347,7 +348,7 @@ def make_config(PRINTER, TOOLHEAD):
         USE_REPRAP_LCD_DISPLAY                           = True
         USE_ARCHIM2                                      = True
         USE_EXPERIMENTAL_FEATURES                        = True
-        MARLIN["CUSTOM_MACHINE_NAME"]                    = C_STRING("Archim Redgum")
+        MARLIN["CUSTOM_MACHINE_NAME"]                    = C_STRING("TAZ Workhorse Edition")
         MARLIN["LULZBOT_LCD_MACHINE_NAME"]               = C_STRING("Archim Redgum")
         # The LIGHTWEIGHT_UI is not currently compatible with 32-bit boards.
         MARLIN["LIGHTWEIGHT_UI"]                         = False
@@ -357,7 +358,36 @@ def make_config(PRINTER, TOOLHEAD):
         MARLIN["MACHINE_UUID"]                           = C_STRING("fd546ced-5941-44e4-8d17-5d494bfc2ca3")
         MARLIN["SDSUPPORT"]                              = True
 
-    if PRINTER == "HibiscusTouchLCD_Experimental":
+    if PRINTER == "HibiscusTouchSD_Experimental":
+        # Use a 480x272 display and SD adapter
+        IS_MINI                                          = True
+        MINI_BED                                         = True
+        USE_TWO_PIECE_BED                                = True
+        USE_Z_BELT                                       = True
+        USE_AUTOLEVELING                                 = True
+        USE_NORMALLY_CLOSED_ENDSTOPS                     = True
+        USE_TOUCH_UI                                     = True
+        USE_EINSY_RETRO                                  = True
+        USE_EXPERIMENTAL_FEATURES                        = True
+        USE_LESS_MEMORY                                  = True
+        MARLIN["CUSTOM_MACHINE_NAME"]                    = C_STRING("LulzBot Mini 2")
+        MARLIN["LULZBOT_LCD_MACHINE_NAME"]               = C_STRING("Mini 2")
+        MARLIN["BACKLASH_COMPENSATION"]                  = True
+        MARLIN["SENSORLESS_HOMING"]                      = True
+        MARLIN["STEALTHCHOP_XY"]                         = False
+        MARLIN["STEALTHCHOP_Z"]                          = True
+        MARLIN["STEALTHCHOP_E"]                          = False
+        MARLIN["HYBRID_THRESHOLD"]                       = True
+        MARLIN["BAUDRATE"]                               = 250000
+        MARLIN["PRINTCOUNTER"]                           = True
+        MARLIN["MACHINE_UUID"]                           = C_STRING("e5502411-d46d-421d-ba3a-a20126d7930f")
+        MARLIN["LCD_ALEPHOBJECTS_CLCD_UI"]               = True
+        MARLIN["USE_PORTRAIT_ORIENTATION"]               = True
+        MARLIN["AO_EXP1_PINOUT_REV_C"]                   = True
+        MARLIN["LCD_480x272"]                            = True
+        MARLIN["SDSUPPORT"]                              = True
+
+    if PRINTER == "HibiscusTouchUSB_Experimental":
         # Use a 480x272 display and USB flashdrive
         IS_MINI                                          = True
         MINI_BED                                         = True
@@ -419,7 +449,7 @@ def make_config(PRINTER, TOOLHEAD):
         MARLIN["LCD_480x272"]                            = True
         MARLIN["SDSUPPORT"]                              = True
 
-    if PRINTER == "GladiolaTouchLCD_Experimental":
+    if PRINTER == "GladiolaTouchUSB_Experimental":
         # Unsupported Mini with 480x272 Touch LCD and USB
         IS_MINI                                          = True
         MINI_BED                                         = True
@@ -432,7 +462,7 @@ def make_config(PRINTER, TOOLHEAD):
         USE_TOUCH_UI                                     = True
         USE_LESS_MEMORY                                  = True
         CALIBRATE_ON_WASHER                              = "Back Right"
-        MARLIN["CUSTOM_MACHINE_NAME"]                    = C_STRING("Mini CLCD")
+        MARLIN["CUSTOM_MACHINE_NAME"]                    = C_STRING("LulzBot Mini LCD")
         MARLIN["LULZBOT_LCD_MACHINE_NAME"]               = C_STRING("Mini")
         MARLIN["BACKLASH_COMPENSATION"]                  = True
         MARLIN["ENDSTOPS_ALWAYS_ON_DEFAULT"]             = True
@@ -460,7 +490,7 @@ def make_config(PRINTER, TOOLHEAD):
         USE_EINSY_RETRO                                  = True
         USE_EXPERIMENTAL_FEATURES                        = True
         CALIBRATE_ON_WASHER                              = "Back Right"
-        MARLIN["CUSTOM_MACHINE_NAME"]                    = C_STRING("Einsy MiniLCD")
+        MARLIN["CUSTOM_MACHINE_NAME"]                    = C_STRING("LulzBot Mini LCD")
         MARLIN["LULZBOT_LCD_MACHINE_NAME"]               = C_STRING("Mini")
         MARLIN["BACKLASH_COMPENSATION"]                  = True
         MARLIN["STEALTHCHOP_XY"]                         = False
@@ -472,7 +502,7 @@ def make_config(PRINTER, TOOLHEAD):
         MARLIN["MACHINE_UUID"]                           = C_STRING("b68ff322-3328-4543-bd93-bb8d8eb0c891")
         MARLIN["LIGHTWEIGHT_UI"]                         = True
 
-    if PRINTER == "GladiolaEinsyTouchLCD_Experimental":
+    if PRINTER == "GladiolaEinsyTouchUSB_Experimental":
         # Unsupported Mini with Einsy Retro and 480x272 Touch LCD and USB
         IS_MINI                                          = True
         MINI_BED                                         = True
@@ -485,7 +515,7 @@ def make_config(PRINTER, TOOLHEAD):
         USE_EINSY_RETRO                                  = True
         USE_LESS_MEMORY                                  = True
         CALIBRATE_ON_WASHER                              = "Back Right"
-        MARLIN["CUSTOM_MACHINE_NAME"]                    = C_STRING("Einsy MiniCLCD")
+        MARLIN["CUSTOM_MACHINE_NAME"]                    = C_STRING("LulzBot Mini LCD")
         MARLIN["LULZBOT_LCD_MACHINE_NAME"]               = C_STRING("Mini")
         MARLIN["BACKLASH_COMPENSATION"]                  = True
         MARLIN["STEALTHCHOP_XY"]                         = False
@@ -526,7 +556,7 @@ def make_config(PRINTER, TOOLHEAD):
         # bed washers will use Z_MIN pin (i.e. bed washers
         # and homing button wired together)
         BED_WASHERS_PIN                                  = 'SERVO0_PIN'
-        MARLIN["CUSTOM_MACHINE_NAME"]                    = C_STRING("Archim TAZ 6")
+        MARLIN["CUSTOM_MACHINE_NAME"]                    = C_STRING("LulzBot TAZ 6")
         MARLIN["LULZBOT_LCD_MACHINE_NAME"]               = C_STRING("TAZ 6")
         MARLIN["BACKLASH_COMPENSATION"]                  = True
         MARLIN["ENDSTOPS_ALWAYS_ON_DEFAULT"]             = True
@@ -552,7 +582,7 @@ def make_config(PRINTER, TOOLHEAD):
         USE_EINSY_RETRO                                  = True
         USE_EXPERIMENTAL_FEATURES                        = True
         CALIBRATE_ON_WASHER                              = "Back Right"
-        MARLIN["CUSTOM_MACHINE_NAME"]                    = C_STRING("Einsy MiniCLCD")
+        MARLIN["CUSTOM_MACHINE_NAME"]                    = C_STRING("LulzBot Mini LCD")
         MARLIN["LULZBOT_LCD_MACHINE_NAME"]               = C_STRING("Mini")
         MARLIN["BACKLASH_COMPENSATION"]                  = True
         MARLIN["BAUDRATE"]                               = 250000
@@ -564,7 +594,7 @@ def make_config(PRINTER, TOOLHEAD):
         MARLIN["AO_EXP1_PINOUT_REV_B"]                   = True
         MARLIN["LCD_480x272"]                            = True
         # SD or USB will only work on EXP2, but a 5
-        # pigtail to an endstop connector is neede
+        # pigtail to an endstop connector is needed
         # since EXP2 does not have 5V on pin 1
         MARLIN["SDSUPPORT"]                              = True
         MARLIN["USB_FLASH_DRIVE_SUPPORT"]                = False

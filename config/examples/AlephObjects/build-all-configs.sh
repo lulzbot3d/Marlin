@@ -94,11 +94,12 @@ build_config Redgum_TAZWorkhorse                Goldenrod_HardenedExtruder
 build_config Redgum_TAZWorkhorse                Yellowfin_DualExtruderV3
 
 build_config KangarooPaw_Experimental           KangarooPaw_SingleExtruder
-build_config HibiscusTouchLCD_Experimental      CecropiaSilk_SingleExtruderAeroV2
+build_config HibiscusTouchSD_Experimental       CecropiaSilk_SingleExtruderAeroV2
+build_config HibiscusTouchUSB_Experimental      CecropiaSilk_SingleExtruderAeroV2
 build_config RedgumArchim_Experimental          CecropiaSilk_SingleExtruderAeroV2
 build_config JuniperArchim_Experimental         Tilapia_SingleExtruder
 build_config OliveoilArchim_Experimental        Tilapia_SingleExtruder
-build_config GladiolaTouchLCD_Experimental      Gladiola_SingleExtruder
+build_config GladiolaTouchUSB_Experimental      Gladiola_SingleExtruder
 build_config GladiolaEinsyLCD_Experimental      Gladiola_SingleExtruder
-build_config GladiolaEinsyTouchLCD_Experimental Gladiola_SingleExtruder
+build_config GladiolaEinsyTouchUSB_Experimental Gladiola_SingleExtruder
 build_config CLCDTestStand_Experimental         Gladiola_SingleExtruder

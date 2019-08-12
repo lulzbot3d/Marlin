@@ -323,12 +323,19 @@ void StatusScreen::draw_status_message(draw_mode_t what, const char* message) {
     CommandProcessor cmd;
     cmd.fgcolor(Theme::status_msg)
        .tag(0)
-       .font(Theme::font_large)
     #if defined(USE_PORTRAIT_ORIENTATION)
-       .button( BTN_POS(1,4), BTN_SIZE(1,1), message, OPT_FLAT);
+       .button( BTN_POS(1,4), BTN_SIZE(1,1), F(""), OPT_FLAT);
     #else
-       .button( BTN_POS(1,3), BTN_SIZE(1,2), message, OPT_FLAT);
+       .button( BTN_POS(1,3), BTN_SIZE(1,2), F(""), OPT_FLAT);
     #endif
+
+    draw_text_box(cmd,
+    #if defined(USE_PORTRAIT_ORIENTATION)
+      BTN_POS(1,4), BTN_SIZE(1,1),
+    #else
+      BTN_POS(1,3), BTN_SIZE(1,2),
+    #endif
+      message, OPT_CENTER, font_large);
   }
   #undef  GRID_COLS
 }

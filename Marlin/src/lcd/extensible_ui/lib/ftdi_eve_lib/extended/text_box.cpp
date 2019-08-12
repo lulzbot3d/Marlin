@@ -30,8 +30,9 @@ namespace FTDI {
    * be broken after a '\n'. Returns the display width of the line.
    */
   static uint16_t find_line_break(const CLCD::FontMetrics &fm, uint16_t w, const char *str, const char *&end) {
-    const char *p  = str;
-    uint16_t width = 0;
+    const char *p = str;
+    end = str + strlen(str);
+    uint16_t width = fm.get_text_width(str);
     for(;;) {
       // Find next tentative line break.
       char delim = *(p);

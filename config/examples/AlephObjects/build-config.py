@@ -1375,7 +1375,6 @@ def make_config(PRINTER, TOOLHEAD):
             STANDARD_RIGHT_PROBE_BED_POSITION            = 163
             STANDARD_BACK_PROBE_BED_POSITION             = 168
             STANDARD_FRONT_PROBE_BED_POSITION            = -4
-            MARLIN["LULZBOT_G29_DISABLES_E0_STEPPER"]    = True
 
             if USE_Z_SCREW:
                 # The Gladiola has the probe points spaced further apart than
@@ -1406,6 +1405,10 @@ def make_config(PRINTER, TOOLHEAD):
         MARLIN["Z_CLEARANCE_DEPLOY_PROBE"]               = 5
         MARLIN["Z_CLEARANCE_BETWEEN_PROBES"]             = 5
         MARLIN["MIN_PROBE_EDGE"]                         = False
+
+        # Avoid electrical interference when probing (this is a problem on some Minis)
+        MARLIN["PROBING_FANS_OFF"]                       = True
+        MARLIN["PROBING_STEPPERS_OFF"]                   = True
 
         MARLIN["LEFT_PROBE_BED_POSITION"]  = max(STANDARD_LEFT_PROBE_BED_POSITION  + TOOLHEAD_LEFT_PROBE_ADJ,  MARLIN["X_MIN_POS"])
         MARLIN["RIGHT_PROBE_BED_POSITION"] = min(STANDARD_RIGHT_PROBE_BED_POSITION + TOOLHEAD_RIGHT_PROBE_ADJ, MARLIN["X_MAX_POS"])

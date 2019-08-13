@@ -979,8 +979,8 @@
 #if ENABLED(PROBING_HEATERS_OFF)
   //#define WAIT_FOR_BED_HEATER     // Wait for bed to heat back up between probes (to improve accuracy)
 #endif
-//#define PROBING_FANS_OFF          // Turn fans off when probing
-//#define PROBING_STEPPERS_OFF      // Turn steppers off (unless needed to hold position) when probing
+#define PROBING_FANS_OFF // <-- changed:  Turn fans off when probing
+#define PROBING_STEPPERS_OFF // <-- changed:  Turn steppers off (unless needed to hold position) when probing
 //#define DELAY_BEFORE_PROBING 200  // (ms) To prevent vibrations from triggering piezo sensors
 
 // For Inverting Stepper Enable Pins (Active Low) use 0, Non Inverting (Active High) use 1
@@ -2218,7 +2218,6 @@
 #define LULZBOT_WIPE_SEQUENCE_COMMANDS "M117 Hot end heating...\nM104 S170 T0\nM104 S170 T1\nG28 O1\nM117 Wiping nozzle\nT0\nG1 X-26 Y25 Z10 F4000\nM109 R170 T0\nM109 R170 T1\nG1 Z1\nM114\nG1 X-26 Y25\nG1 X-26 Y95\nG1 X-26 Y25\nG1 X-26 Y95\nG1 X-26 Y25\nG1 X-26 Y95\nG1 X-26 Y25\nG1 X-26 Y95\nG1 X-26 Y25\nG1 X-26 Y95\nG1 X-26 Y25\nG1 X-26 Y95\nG1 Z15\nM400\nM106 S255\nG0 X-10 Y-9M109 R160 T0\nM109 R160 T1\nM107" // <-- changed
 #define LULZBOT_AXIS_LEVELING_COMMANDS "M117 Leveling X Axis\nG0 X150 F9999\nG28 Z0\nM117 Leveling done." // <-- changed
 //#define LULZBOT_CALIBRATION_COMMANDS
-//#define LULZBOT_G29_DISABLES_E0_STEPPER
 #define LULZBOT_M226_PIN_PROTECTION_WORKAROUND // <-- changed
 #define LULZBOT_M226_NON_ARDUINO_PINS_WORKAROUND // <-- changed
 //#define LULZBOT_RUNOUT_HANDLING_WORKAROUND

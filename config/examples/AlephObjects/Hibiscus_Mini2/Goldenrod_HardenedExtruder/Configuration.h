@@ -979,8 +979,8 @@
 #if ENABLED(PROBING_HEATERS_OFF)
   //#define WAIT_FOR_BED_HEATER     // Wait for bed to heat back up between probes (to improve accuracy)
 #endif
-//#define PROBING_FANS_OFF          // Turn fans off when probing
-//#define PROBING_STEPPERS_OFF      // Turn steppers off (unless needed to hold position) when probing
+#define PROBING_FANS_OFF // <-- changed:  Turn fans off when probing
+#define PROBING_STEPPERS_OFF // <-- changed:  Turn steppers off (unless needed to hold position) when probing
 //#define DELAY_BEFORE_PROBING 200  // (ms) To prevent vibrations from triggering piezo sensors
 
 // For Inverting Stepper Enable Pins (Active Low) use 0, Non Inverting (Active High) use 1
@@ -2218,7 +2218,6 @@
 #define LULZBOT_WIPE_SEQUENCE_COMMANDS "M117 Hot end heating...\nM104 S170\nG28 O1\nM117 Wiping nozzle\nT0\nG1 X115 Y174 Z10 F4000\nM109 R170\nG1 Z1\nM114\nG1 X115 Y174\nG1 X45 Y174\nG1 X115 Y174\nG1 X45 Y174\nG1 X115 Y174\nG1 X45 Y174\nG1 X115 Y174\nG1 X45 Y174\nG1 X115 Y174\nG1 X45 Y174\nG1 X115 Y174\nG1 X45 Y174\nG1 Z15\nM400\nM106 S255\nG0 X-3 Y168M109 R160\nM107" // <-- changed
 #define LULZBOT_AXIS_LEVELING_COMMANDS "M117 Leveling X Axis\nG28\nG0 X150 F9999\nG0 Z5 F6000\nG91\nM211 S0\nM400\nM906 Z600\nG0 Z-15 F500\nG0 Z5 F500\nM400\nG90\nM906 Z960\nM211 S1\nG28\nM117 Leveling done." // <-- changed
 #define LULZBOT_CALIBRATION_COMMANDS "M117 Starting Auto-Calibration\nT0\nG28\nM117 Leveling X Axis\nG28\nG0 X150 F9999\nG0 Z5 F6000\nG91\nM211 S0\nM400\nM906 Z600\nG0 Z-15 F500\nG0 Z5 F500\nM400\nG90\nM906 Z960\nM211 S1\nG28\nM117 Leveling done.\nG12\nM117 Calibrating...\nG425\nM500\nM117 Calibration data saved" // <-- changed
-#define LULZBOT_G29_DISABLES_E0_STEPPER // <-- changed
 #define LULZBOT_M226_PIN_PROTECTION_WORKAROUND // <-- changed
 #define LULZBOT_M226_NON_ARDUINO_PINS_WORKAROUND // <-- changed
 //#define LULZBOT_RUNOUT_HANDLING_WORKAROUND

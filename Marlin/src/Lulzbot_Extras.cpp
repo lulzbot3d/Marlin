@@ -110,16 +110,6 @@ void EnableProbePins::enable(const bool enable) {
     #if PIN_EXISTS(Z_MIN_PROBE)
       LULZBOT_SET_PIN_STATE(Z_MIN_PROBE_PIN, enable)
     #endif
-    #if ENABLED(LULZBOT_G29_DISABLES_E0_STEPPER)
-      /* We need to disable the extruder motor during probing as
-         it causes noise on the probe line of some Minis. */
-      if(enable) {
-        planner.synchronize();
-        disable_E0();
-      } else {
-        enable_E0();
-      }
-    #endif
   #else
     UNUSED(enable);
   #endif

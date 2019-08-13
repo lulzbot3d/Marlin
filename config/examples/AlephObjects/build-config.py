@@ -694,6 +694,7 @@ def make_config(PRINTER, TOOLHEAD):
         # to "endstops.cpp"
         MARLIN["LULZBOT_Z_MIN_USES_Z_PROBE_ENABLED"]     = True
         MARLIN["Z_MIN_PROBE_PIN"]                        = BED_WASHERS_PIN
+        MARLIN["Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN"]     = False
 
     else:
         # The Mini and TAZ Pro lack a home button and probe using the Z_MIN pin.

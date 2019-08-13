@@ -53,11 +53,14 @@
       static void store();
   };
 
-  extern "C" void LULZBOT_ON_REFLASH();
-  extern "C" void LULZBOT_ON_STARTUP();
+  extern "C" void on_reflash();
+  extern "C" void on_startup();
+
+  #define LULZBOT_ON_REFLASH on_reflash();
+  #define LULZBOT_ON_STARTUP on_startup();
 #else
-  void LULZBOT_ON_REFLASH(void);
-  void LULZBOT_ON_STARTUP(void);
+  #define LULZBOT_ON_REFLASH
+  #define LULZBOT_ON_STARTUP
 #endif
 
 /*********************** AUTOLEVELING / BED PROBE *******************************/

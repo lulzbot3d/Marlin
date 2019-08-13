@@ -1084,7 +1084,7 @@ void setup() {
   #endif
 
   #ifdef LULZBOT_ON_STARTUP
-    LULZBOT_ON_STARTUP();
+    LULZBOT_ON_STARTUP
   #endif
 
   #if DO_SWITCH_EXTRUDER

@@ -112,7 +112,7 @@ void usb_task_cdc_set_dtr(const uint8_t port, const bool b_enable) {
     if (!b_enable) {
 
       #ifdef LULZBOT_ON_REFLASH
-        LULZBOT_ON_REFLASH();
+        LULZBOT_ON_REFLASH
       #endif
 
       // Set RST pin to go low for 65535 clock cycles on reset

@@ -66,7 +66,7 @@
     WRITE(pin, LOW); \
   }
 
-void LULZBOT_ON_STARTUP(void) {
+void on_startup(void) {
   EnableProbePins::enable(false);
 
   #if MB(ARCHIM2)
@@ -127,7 +127,7 @@ void EnableProbePins::enable(const bool enable) {
 
 /******************************** EXTRA FEATURES *******************************/
 
-void LULZBOT_ON_REFLASH() {
+void on_reflash() {
   /* Turn off LCD prior to initiating flash on TAZ Pro */
   #if ENABLED(EXTENSIBLE_UI)
     CLCD::set_brightness(0);

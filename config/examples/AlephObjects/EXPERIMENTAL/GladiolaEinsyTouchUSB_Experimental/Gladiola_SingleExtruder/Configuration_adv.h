@@ -743,10 +743,10 @@
 
   // Comment out any sides which are unreachable by the probe. For best
   // auto-calibration results, all sides must be reachable.
-  #define CALIBRATION_MEASURE_RIGHT
+  //#define CALIBRATION_MEASURE_RIGHT  // <-- changed
   #define CALIBRATION_MEASURE_FRONT
   #define CALIBRATION_MEASURE_LEFT
-  #define CALIBRATION_MEASURE_BACK
+  //#define CALIBRATION_MEASURE_BACK  // <-- changed
 
   // Probing at the exact top center only works if the center is flat. If
   // probing on a screwhead or hollow washer, probe near the edges.

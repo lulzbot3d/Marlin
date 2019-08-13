@@ -1450,7 +1450,6 @@ def make_config(PRINTER, TOOLHEAD):
     else:
         XLEVEL_POS                                       = "G0 X150 F9999\n"
 
-
     if USE_Z_BELT and IS_MINI:
         AXIS_LEVELING_COMMANDS = (
             "M117 Leveling X Axis\n"                     # Set LCD status
@@ -1463,8 +1462,8 @@ def make_config(PRINTER, TOOLHEAD):
             "M906 Z600\n"                                # Lower current to 600mA
             "G0 Z-15 F500\n"                             # Skip steppers against lower Z mounts
             "G0 Z5 F500\n"                               # Move Z-Axis up a bit
-            "G90\n"                                      # Return to absolute mode
             "M400\n"                                     # Finish moves
+            "G90\n"                                      # Return to absolute mode
             "M906 Z960\n"                                # Restore default current
             "M211 S1\n"                                  # Turn soft endstops back on
             "G28\n"                                      # Rehome
@@ -1520,34 +1519,42 @@ def make_config(PRINTER, TOOLHEAD):
             if CALIBRATE_ON_WASHER == "Front Left":
                 MARLIN["CALIBRATION_OBJECT_DIMENSIONS"]  = [22.0,   22.0,  1.5] # mm
                 MARLIN["CALIBRATION_OBJECT_CENTER"]      = [-8.9,   -7.6,  0  ] # mm
+                MARLIN["CALIBRATION_MEASURE_LEFT"]       = False
                 MARLIN["CALIBRATION_MEASURE_RIGHT"]      = True
+                MARLIN["CALIBRATION_MEASURE_FRONT"]      = False
                 MARLIN["CALIBRATION_MEASURE_BACK"]       = True
 
             elif CALIBRATE_ON_WASHER == "Front Right":
                 MARLIN["CALIBRATION_OBJECT_DIMENSIONS"]  = [ 22.0,   22.0, 1.5] # mm
                 MARLIN["CALIBRATION_OBJECT_CENTER"]      = [169.5,   -7.6, 0  ] # mm
                 MARLIN["CALIBRATION_MEASURE_LEFT"]       = True
+                MARLIN["CALIBRATION_MEASURE_RIGHT"]      = False
+                MARLIN["CALIBRATION_MEASURE_FRONT"]      = False
                 MARLIN["CALIBRATION_MEASURE_BACK"]       = True
 
             elif CALIBRATE_ON_WASHER == "Back Left":
                 MARLIN["CALIBRATION_OBJECT_DIMENSIONS"]  = [ 22.0,   22.0, 1.5] # mm
                 MARLIN["CALIBRATION_OBJECT_CENTER"]      = [ -8.9,  171.3, 0  ] # mm
+                MARLIN["CALIBRATION_MEASURE_LEFT"]       = False
                 MARLIN["CALIBRATION_MEASURE_RIGHT"]      = True
                 MARLIN["CALIBRATION_MEASURE_FRONT"]      = True
+                MARLIN["CALIBRATION_MEASURE_BACK"]       = False
 
             elif CALIBRATE_ON_WASHER == "Back Right":
                 MARLIN["CALIBRATION_OBJECT_DIMENSIONS"]  = [ 22.0,   22.0, 1.5] # mm
                 MARLIN["CALIBRATION_OBJECT_CENTER"]      = [169.5,  171.3, 0  ] # mm
                 MARLIN["CALIBRATION_MEASURE_LEFT"]       = True
+                MARLIN["CALIBRATION_MEASURE_RIGHT"]      = False
                 MARLIN["CALIBRATION_MEASURE_FRONT"]      = True
+                MARLIN["CALIBRATION_MEASURE_BACK"]       = False
 
         elif IS_TAZ and USE_Z_BELT and USE_CALIBRATION_CUBE:
             MARLIN["CALIBRATION_OBJECT_DIMENSIONS"]      = [ 10.0,  10.0,  10.0] # mm
             MARLIN["CALIBRATION_OBJECT_CENTER"]          = [ 261.0, -22.0, -2.0] # mm
 
             MARLIN["CALIBRATION_MEASURE_RIGHT"]          = True
-            if TOOLHEAD in ["Quiver_DualExtruder"]:
-                MARLIN["CALIBRATION_MEASURE_FRONT"]      = True
+            # Only the TAZ Pro can reach the front of the calibration cube
+            MARLIN["CALIBRATION_MEASURE_FRONT"]          = TOOLHEAD in ["Quiver_DualExtruder"]
             MARLIN["CALIBRATION_MEASURE_LEFT"]           = True
             MARLIN["CALIBRATION_MEASURE_BACK"]           = True
 
@@ -1758,44 +1765,44 @@ def make_config(PRINTER, TOOLHEAD):
     if USE_AUTOLEVELING:
         if MINI_BED:
             # Mini has a horizontal wiping pad on the back of the bed
-            LEFT_WIPE_X1                                     =  45
-            LEFT_WIPE_X2                                     = 115
-            LEFT_WIPE_Y1                                     = 174
-            LEFT_WIPE_Y2                                     = 174
+            LEFT_WIPE_X1                                 =  45
+            LEFT_WIPE_X2                                 = 115
+            LEFT_WIPE_Y1                                 = 174
+            LEFT_WIPE_Y2                                 = 174
             if USE_Z_BELT:
-                LEFT_WIPE_Z                                  =   1
+                LEFT_WIPE_Z                              =   1
             else:
                 # Wipe very deep because Minis older than
                 # Gladiolas are a few milimeters taller
-                LEFT_WIPE_Z                                  = -0.5
+                LEFT_WIPE_Z                              = -0.5
 
         elif TAZ_BED and TOOLHEAD in ["Yellowfin_DualExtruderV3"]:
             # When using a Yellowfin toolhead, a wider wiping pad will be installed
-            LEFT_WIPE_X1                                     = -26
-            LEFT_WIPE_X2                                     = -26
-            LEFT_WIPE_Y1                                     =  95
-            LEFT_WIPE_Y2                                     =  25
-            LEFT_WIPE_Z                                      =  1
+            LEFT_WIPE_X1                                 = -26
+            LEFT_WIPE_X2                                 = -26
+            LEFT_WIPE_Y1                                 =  95
+            LEFT_WIPE_Y2                                 =  25
+            LEFT_WIPE_Z                                  =  1
 
         elif TAZ_BED:
             # TAZ has a vertical wiping pad on the left side of the bed
-            LEFT_WIPE_X1                                     = -17
-            LEFT_WIPE_X2                                     = -17
-            LEFT_WIPE_Y1                                     =  95
+            LEFT_WIPE_X1                                 = -17
+            LEFT_WIPE_X2                                 = -17
+            LEFT_WIPE_Y1                                 =  95
             if TOOLHEAD in ["Javelin_DualExtruderV2", "Longfin_FlexyDually"]:
                 # These dual toolheads have nozzles front and back, so the wiping location is shortened in Y
-                LEFT_WIPE_Y2                                 =  73
+                LEFT_WIPE_Y2                             =  73
             else:
-                LEFT_WIPE_Y2                                 =  25
-            LEFT_WIPE_Z                                      =   1
+                LEFT_WIPE_Y2                             =  25
+            LEFT_WIPE_Z                                  =   1
 
             if PRINTER in ["Quiver_TAZPro"]:
                 # The Quiver has an wipe pad on the right side of the bed.
-                RIGHT_WIPE_X1                                = 297
-                RIGHT_WIPE_X2                                = 297
-                RIGHT_WIPE_Y1                                =  95
-                RIGHT_WIPE_Y2                                =  25
-                RIGHT_WIPE_Z                                 =   1
+                RIGHT_WIPE_X1                            = 297
+                RIGHT_WIPE_X2                            = 297
+                RIGHT_WIPE_Y1                            =  95
+                RIGHT_WIPE_Y2                            =  25
+                RIGHT_WIPE_Z                             =   1
 
             LEFT_WIPE_Y2 -= TOOLHEAD_WIPE_Y2_ADJ # Adjustments for legacy dual
 
@@ -1804,19 +1811,21 @@ def make_config(PRINTER, TOOLHEAD):
                 "G1 X{} Y{} Z10 F4000\n".format(x2,y2)   # Move to pad while heating
                 + temp_command +
                 "G1 Z1\n"                                # Push nozzle into wiper
-                "G1 X{} Y{} F4000\n".format(x2,y2) +     # Slow wipe
-                "G1 X{} Y{} F4000\n".format(x1,y1) +     # Slow wipe
-                "G1 X{} Y{} F4000\n".format(x2,y2) +     # Slow wipe
-                "G1 X{} Y{} F4000\n".format(x1,y1) +     # Slow wipe
-                "G1 X{} Y{} F4000\n".format(x2,y2) +     # Slow wipe
-                "G1 X{} Y{} F4000\n".format(x1,y1) +     # Slow wipe
-                "G1 X{} Y{} F4000\n".format(x2,y2) +     # Slow wipe
-                "G1 X{} Y{} F4000\n".format(x1,y1) +     # Slow wipe
-                "G1 X{} Y{} F4000\n".format(x2,y2) +     # Slow wipe
-                "G1 X{} Y{} F4000\n".format(x1,y1) +     # Slow wipe
-                "G1 X{} Y{} F4000\n".format(x2,y2) +     # Slow wipe
-                "G1 X{} Y{} F4000\n".format(x1,y1) +     # Slow wipe
-                "G1 Z15\n"                               # Raise nozzle
+                "M114\n"                                 # This seems to be required for the last command to run. Bug in Marlin?
+                "G1 X{} Y{}\n".format(x2,y2) +           # Slow wipe
+                "G1 X{} Y{}\n".format(x1,y1) +           # Slow wipe
+                "G1 X{} Y{}\n".format(x2,y2) +           # Slow wipe
+                "G1 X{} Y{}\n".format(x1,y1) +           # Slow wipe
+                "G1 X{} Y{}\n".format(x2,y2) +           # Slow wipe
+                "G1 X{} Y{}\n".format(x1,y1) +           # Slow wipe
+                "G1 X{} Y{}\n".format(x2,y2) +           # Slow wipe
+                "G1 X{} Y{}\n".format(x1,y1) +           # Slow wipe
+                "G1 X{} Y{}\n".format(x2,y2) +           # Slow wipe
+                "G1 X{} Y{}\n".format(x1,y1) +           # Slow wipe
+                "G1 X{} Y{}\n".format(x2,y2) +           # Slow wipe
+                "G1 X{} Y{}\n".format(x1,y1) +           # Slow wipe
+                "G1 Z15\n" +                             # Raise nozzle
+                "M400\n"                                 # Wait for motion to finish
             )
 
         def LEFT_WIPE_GCODE(temp_command):
@@ -1826,11 +1835,11 @@ def make_config(PRINTER, TOOLHEAD):
             return WIPE_GCODE(RIGHT_WIPE_X1, RIGHT_WIPE_Y1, RIGHT_WIPE_X2, RIGHT_WIPE_Y2, RIGHT_WIPE_Z, temp_command)
 
         if PRINTER in "Quiver_TAZPro" and MARLIN["EXTRUDERS"] == 1:
-            MARLIN["NOZZLE_CLEAN_START_POINT"]               = [RIGHT_WIPE_X1, RIGHT_WIPE_Y1, RIGHT_WIPE_Z]
-            MARLIN["NOZZLE_CLEAN_END_POINT"]                 = [RIGHT_WIPE_X2, RIGHT_WIPE_Y2, RIGHT_WIPE_Z]
+            MARLIN["NOZZLE_CLEAN_START_POINT"]           = [RIGHT_WIPE_X1, RIGHT_WIPE_Y1, RIGHT_WIPE_Z]
+            MARLIN["NOZZLE_CLEAN_END_POINT"]             = [RIGHT_WIPE_X2, RIGHT_WIPE_Y2, RIGHT_WIPE_Z]
         else:
-            MARLIN["NOZZLE_CLEAN_START_POINT"]               = [LEFT_WIPE_X1, LEFT_WIPE_Y1, LEFT_WIPE_Z]
-            MARLIN["NOZZLE_CLEAN_END_POINT"]                 = [LEFT_WIPE_X2, LEFT_WIPE_Y2, LEFT_WIPE_Z]
+            MARLIN["NOZZLE_CLEAN_START_POINT"]           = [LEFT_WIPE_X1, LEFT_WIPE_Y1, LEFT_WIPE_Z]
+            MARLIN["NOZZLE_CLEAN_END_POINT"]             = [LEFT_WIPE_X2, LEFT_WIPE_Y2, LEFT_WIPE_Z]
 
 ############################## REWIPE FUNCTIONALITY ##############################
 
@@ -1849,9 +1858,9 @@ def make_config(PRINTER, TOOLHEAD):
             MARLIN["Z_PROBE_LOW_POINT"]                  = -5
 
         if MARLIN["EXTRUDERS"] == 1:
-            WIPE_HEAT_TEMP                               = "M104 S170 T0\n" # Preheat to wipe temp
-            WIPE_WAIT_TEMP                               = "M109 R170 T0\n" # Wait for wipe temp
-            WIPE_DONE_TEMP                               = "M109 R160 T0\n" # Drop to probe temp
+            WIPE_HEAT_TEMP                               = "M104 S170\n" # Preheat to wipe temp
+            WIPE_WAIT_TEMP                               = "M109 R170\n" # Wait for wipe temp
+            WIPE_DONE_TEMP                               = "M109 R160\n" # Drop to probe temp
         else:
             WIPE_HEAT_TEMP                               = "M104 S170 T0\nM104 S170 T1\n" # Preheat to wipe temp
             WIPE_WAIT_TEMP                               = "M109 R170 T0\nM109 R170 T1\n" # Wait for wipe temp
@@ -1876,10 +1885,10 @@ def make_config(PRINTER, TOOLHEAD):
             REWIPE_E1 = ""
 
         WIPE_SEQUENCE_COMMANDS = (
-            "M117 Hot End Heating...\n"                  # Status message
+            "M117 Hot end heating...\n"                  # Status message
             + WIPE_HEAT_TEMP +
             "G28 O1\n"                                   # Home if needed
-            "M117 Rewiping nozzle\n" +                   # Status message
+            "M117 Wiping nozzle\n" +                     # Status message
               REWIPE_E0 +                                # Wipe first extruder
               REWIPE_E1 +                                # Wipe second extruder
             "M106 S255\n" +                              # Turn on fan to blow away fuzzies
@@ -1961,33 +1970,30 @@ def make_config(PRINTER, TOOLHEAD):
 
     # Values for XYZ vary by printer model, values for E vary by toolhead.
 
-    if IS_TAZ and USE_Z_BELT or USE_ARCHIM2:
-        # These values specify the maximum current, but actual
-        # currents may be lower when used with COOLCONF
-        MOTOR_CURRENT_X                                  = 975 # mA
-        MOTOR_CURRENT_Y                                  = 975 # mA
-        MOTOR_CURRENT_Z                                  = 975 # mA
+    if IS_MINI:
+        if USE_Z_BELT or USE_EINSY_RETRO:
+            # These values specify the maximum current, but actual
+            # currents may be lower when used with COOLCONF
+            MOTOR_CURRENT_X                              = 920 # mA
+            MOTOR_CURRENT_Y                              = 920 # mA
+            MOTOR_CURRENT_Z                              = 960 # mA
 
-    elif IS_MINI and USE_Z_BELT or USE_EINSY_RETRO:
-        # These values specify the maximum current, but actual
-        # currents may be lower when used with COOLCONF
-        MOTOR_CURRENT_X                                  = 920 # mA
-        MOTOR_CURRENT_Y                                  = 920 # mA
-        MOTOR_CURRENT_Z                                  = 960 # mA
+        elif USE_Z_SCREW:
+            MOTOR_CURRENT_XY                             = 1300 # mA
+            MOTOR_CURRENT_Z                              = 1630 # mA
 
-    elif IS_MINI and USE_Z_SCREW:
-        MOTOR_CURRENT_XY                                 = 1300 # mA
-        MOTOR_CURRENT_Z                                  = 1630 # mA
+    elif IS_TAZ:
+        if USE_Z_BELT or USE_ARCHIM2:
+            # These values specify the maximum current, but actual
+            # currents may be lower when used with COOLCONF
+            MOTOR_CURRENT_X                              = 975 # mA
+            MOTOR_CURRENT_Y                              = 975 # mA
+            MOTOR_CURRENT_Z                              = 975 # mA
 
-    elif PRINTER in ["Juniper_TAZ5"]:
-        MOTOR_CURRENT_X                                  = 950 # mA
-        MOTOR_CURRENT_Y                                  = 950 # mA
-        MOTOR_CURRENT_Z                                  = 1275 # mA
-
-    elif IS_TAZ and USE_Z_SCREW:
-        MOTOR_CURRENT_X                                  = 950 # mA
-        MOTOR_CURRENT_Y                                  = 950 # mA
-        MOTOR_CURRENT_Z                                  = 1075 # mA
+        elif USE_Z_SCREW:
+            MOTOR_CURRENT_X                              = 950 # mA
+            MOTOR_CURRENT_Y                              = 950 # mA
+            MOTOR_CURRENT_Z                              = 1275 if PRINTER == "Juniper_TAZ5" else 1075 # mA
 
     if USE_EINSY_RETRO or USE_ARCHIM2:
         # Neither define LULZBOT_PWM_MOTOR_CURRENT nor LULZBOT_DIGIPOT_MOTOR_CURRENT,

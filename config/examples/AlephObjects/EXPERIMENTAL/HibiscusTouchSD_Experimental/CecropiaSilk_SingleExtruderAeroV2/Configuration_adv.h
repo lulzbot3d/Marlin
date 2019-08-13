@@ -1243,7 +1243,7 @@
    * between attempts, and after the maximum number of retries have been tried.
    */
   #define G29_SUCCESS_COMMANDS "M117 Probe successful" // <-- changed
-  #define G29_RECOVER_COMMANDS "M104 S170 T0\nM117 Leveling X Axis\nG28\nG0 X150 F9999\nG0 Z5 F6000\nG91\nM211 S0\nM400\nM906 Z600\nG0 Z-15 F500\nG0 Z5 F500\nG90\nM400\nM906 Z960\nM211 S1\nG28\nM117 Leveling done.\nG12\nM109 R160\nM400\nM117 Probing bed" // <-- changed
+  #define G29_RECOVER_COMMANDS "M104 S170\nM117 Leveling X Axis\nG28\nG0 X150 F9999\nG0 Z5 F6000\nG91\nM211 S0\nM400\nM906 Z600\nG0 Z-15 F500\nG0 Z5 F500\nM400\nG90\nM906 Z960\nM211 S1\nG28\nM117 Leveling done.\nG12\nM109 R160\nM400\nM117 Probing bed" // <-- changed
   #define G29_FAILURE_COMMANDS "M117 Bed leveling failed.\nG0 Z10\nG0 E0\nM300 P25 S880\nM300 P50 S0\nM300 P25 S880\nM300 P50 S0\nM300 P25 S880\nG4 S1" // <-- changed
 
 #endif

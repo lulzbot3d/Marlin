@@ -455,8 +455,8 @@ void menu_motion() {
   #endif
       MENU_ITEM(submenu, MSG_MOVE_AXIS, menu_move);
 
-  #if defined(LULZBOT_MENU_AXIS_LEVELING_COMMANDS)
-    MENU_ITEM(gcode, _UxGT("Level X axis"), PSTR(LULZBOT_AXIS_LEVELING_COMMANDS));
+  #if defined(LULZBOT_AXIS_LEVELING_COMMANDS)
+    MENU_ITEM(gcode, _UxGT("Level X Axis"), PSTR(LULZBOT_AXIS_LEVELING_COMMANDS));
   #endif
 
   //
@@ -469,8 +469,8 @@ void menu_motion() {
     MENU_ITEM(gcode, MSG_AUTO_HOME_Z, PSTR("G28 Z"));
   #endif
 
-  #if ENABLED(LULZBOT_CALIBRATION_GCODE) && defined(LULZBOT_CALIBRATION_COMMANDS)
-    MENU_ITEM(gcode, _UxGT("Auto calibrate"), PSTR(LULZBOT_CALIBRATION_COMMANDS));
+  #if ENABLED(CALIBRATION_GCODE) && defined(LULZBOT_CALIBRATION_COMMANDS)
+    MENU_ITEM(gcode, _UxGT("Auto Calibrate"), PSTR(LULZBOT_CALIBRATION_COMMANDS));
   #endif
 
   //

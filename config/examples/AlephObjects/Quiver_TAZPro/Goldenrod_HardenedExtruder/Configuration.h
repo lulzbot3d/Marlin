@@ -2305,8 +2305,3 @@
 #define MIN_PROBE_X -6 // <-- changed
 #define ACTION_ON_FILAMENT_RUNOUT "pause: filament_runout" // <-- changed
 //#define FAN_PIN
-
-/**
- * Extra Lulzbot specific code
- */
-#include "src/Lulzbot_Extras.h"

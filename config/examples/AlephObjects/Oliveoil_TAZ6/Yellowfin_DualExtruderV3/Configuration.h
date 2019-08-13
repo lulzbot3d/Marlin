@@ -2305,8 +2305,3 @@
 #define MIN_PROBE_X -26 // <-- changed
 //#define ACTION_ON_FILAMENT_RUNOUT
 //#define FAN_PIN
-
-/**
- * Extra Lulzbot specific code
- */
-#include "src/Lulzbot_Extras.h"

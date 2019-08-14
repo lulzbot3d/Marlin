@@ -1413,7 +1413,6 @@ void set_axis_is_not_at_home(const AxisEnum axis) {
  */
 
 void homeaxis(const AxisEnum axis) {
-
   #if IS_SCARA
     // Only Z homing (with probe) is permitted
     if (axis != Z_AXIS) { BUZZ(100, 880); return; }
@@ -1450,6 +1449,10 @@ void homeaxis(const AxisEnum axis) {
   // Homing Z towards the bed? Deploy the Z probe or endstop.
   #if HOMING_Z_WITH_PROBE
     if (axis == Z_AXIS && DEPLOY_PROBE()) return;
+  #endif
+
+  #if ENABLED(LULZBOT_EMI_MITIGATION)
+    enable_emi_pins(true);
   #endif
 
   // Set flags for X, Y, Z motor locking
@@ -1665,6 +1668,10 @@ void homeaxis(const AxisEnum axis) {
       current_position[axis] -= ABS(backoff_mm) * axis_home_dir;
       line_to_current_position();
     }
+  #endif
+
+  #if ENABLED(LULZBOT_EMI_MITIGATION)
+    enable_emi_pins(false);
   #endif
 
   // Clear retracted status if homing the Z axis

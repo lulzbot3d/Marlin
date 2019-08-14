@@ -186,9 +186,6 @@
  *
  */
 void GcodeSuite::G28(const bool always_home_all) {
-  #ifdef LULZBOT_ENABLE_PROBE_PINS
-    LULZBOT_ENABLE_PROBE_PINS
-  #endif
   if (DEBUGGING(LEVELING)) {
     DEBUG_ECHOLNPGM(">>> G28");
     log_machine_info();

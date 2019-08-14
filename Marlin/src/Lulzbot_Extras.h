@@ -23,58 +23,24 @@
 #include <stdbool.h>
 
 #ifdef __cplusplus
-  class EnableProbePins {
-    public:
-      static void enable(const bool enable);
-
-      EnableProbePins() {enable(true);}
-      ~EnableProbePins() {enable(false);}
-  };
-
-  class BedLevelingReport {
-    private:
-      float x[4], y[4], z[4];
-
-    public:
-      void point(uint8_t i, float _x, float _y, float _z) {
-        x[i] = _x;
-        y[i] = _y;
-        z[i] = _z;
-      }
-
-      void report();
-  };
-
-  class AutoSaveZOffset {
-    private:
-      static int eeprom_offset;
-    public:
-      static void offset(int offset) {eeprom_offset = offset;}
-      static void store();
-  };
-
   extern "C" void on_reflash();
   extern "C" void on_startup();
-
-  #define LULZBOT_ON_REFLASH on_reflash();
-  #define LULZBOT_ON_STARTUP on_startup();
 #else
-  #define LULZBOT_ON_REFLASH
-  #define LULZBOT_ON_STARTUP
+  void on_reflash(void);
+  void on_startup(void);
 #endif
 
-/*********************** AUTOLEVELING / BED PROBE *******************************/
+#if ENABLED(EXTENSIBLE_UI)
+  #define LULZBOT_ON_REFLASH on_reflash();
+#endif
 
-#define LULZBOT_ENABLE_PROBE_PINS EnableProbePins epp;
-#define LULZBOT_SET_PROBE_PINS_STATE(en) EnableProbePins::enable(en);
+#define LULZBOT_ON_STARTUP on_startup();
 
-/* Make it so M42 S<state> controls the state of the
- * probe lines. This is useful for troubleshooting. */
-#define LULZBOT_M42_TOGGLES_PROBE_PINS \
-  if (!parser.seenval('P')) { \
-    LULZBOT_SET_PROBE_PINS_STATE(pin_status); \
-    return; \
-  }
+/******************************** EMI MITIGATION *******************************/
+
+#if ENABLED(LULZBOT_EMI_MITIGATION)
+  void enable_emi_pins(const bool);
+#endif
 
 /**************************** Z-OFFSET AUTO-SAVE  ******************************/
 
@@ -84,8 +50,19 @@
  * and EEPROM_WRITE routines such that the CRC ignores the Z-Offset value. That
  * code also captures the eeprom_index so we can write only that value later.
  */
+#define HAS_Z_AUTO_SAVE    HAS_BED_PROBE && HAS_LCD_MENU && EITHER(EEPROM_SETTINGS, SD_FIRMWARE_UPDATE)
 
-#if defined(LULZBOT_USE_AUTOLEVELING) && defined(LULZBOT_USE_REPRAP_LCD_DISPLAY)
+#if HAS_Z_AUTO_SAVE
+  #ifdef __cplusplus
+    class AutoSaveZOffset {
+      private:
+        static int eeprom_offset;
+      public:
+        static void offset(int offset) {eeprom_offset = offset;}
+        static void store();
+    };
+  #endif
+
   /* The following goes in "configuration_store.h" */
   #define LULZBOT_SAVE_ZOFFSET_TO_EEPROM_DECL static AutoSaveZOffset aszo;
 
@@ -99,23 +76,30 @@
 
   /* The following goes in "ultralcd.cpp" in "lcd_babystep_zoffset" */
   #define LULZBOT_SAVE_ZOFFSET_TO_EEPROM settings.aszo.store();
-#else
-  #define LULZBOT_EEPROM_BEFORE_ZOFFSET
-  #define LULZBOT_EEPROM_AFTER_ZOFFSET
-  #define LULZBOT_SAVE_ZOFFSET_TO_EEPROM_DECL
-  #define LULZBOT_SAVE_ZOFFSET_TO_EEPROM
 #endif
 
 /******************************** PROBE QUALITY CHECK *************************/
 
-#if defined(LULZBOT_USE_AUTOLEVELING)
+#if defined(AUTO_BED_LEVELING_LINEAR)
+  #ifdef __cplusplus
+    class BedLevelingReport {
+      private:
+        float x[4], y[4], z[4];
+
+      public:
+        void point(uint8_t i, float _x, float _y, float _z) {
+          x[i] = _x;
+          y[i] = _y;
+          z[i] = _z;
+        }
+
+        void report();
+    };
+  #endif
+
   #define LULZBOT_BED_LEVELING_DECL BedLevelingReport blr;
   #define LULZBOT_BED_LEVELING_POINT(i,x,y,z) blr.point(i,x,y,z);
   #define LULZBOT_BED_LEVELING_SUMMARY blr.report();
-#else
-  #define LULZBOT_BED_LEVELING_DECL
-  #define LULZBOT_BED_LEVELING_POINT(i,x,y,z)
-  #define LULZBOT_BED_LEVELING_SUMMARY
 #endif
 
 /**************************** SD SUPPORT DEBUGGING ***************************/
@@ -130,9 +114,6 @@
       SERIAL_ECHOLNPAIR("Likely SPI read error: ", cmd); \
       spi_error = false; \
     }
-#else
-  #define LULZBOT_SDCARD_CHECK_BYTE(n)
-  #define LULZBOT_SDCARD_COMMAND_DONE(cmd)
 #endif
 
 /**************************** USB THUMBDRIVE SUPPORT ***************************/

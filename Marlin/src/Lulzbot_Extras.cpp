@@ -20,71 +20,24 @@
  ****************************************************************************/
 
 #include "Marlin.h"
-#include "module/planner.h"
-#include "module/endstops.h"
-#include "module/stepper_indirection.h"
-#include "gcode/gcode.h"
-#include "libs/vector_3.h"
-
-#if HAS_BED_PROBE
-  #include "module/probe.h"
-#endif
-
-#if EITHER(EEPROM_SETTINGS, SD_FIRMWARE_UPDATE)
-  #include "HAL/shared/persistent_store_api.h"
-#endif
-
-#if ENABLED(EXTENSIBLE_UI)
-  #include "lcd/extensible_ui/lib/ftdi_eve_lib/basic/ftdi_basic.h"
-#endif
-
-#if ENABLED(LULZBOT_ENHANCED_BOOTSCREEN)
-  #include "lcd/dogm/fontdata/fontdata_ISO10646_1.h"
-  #include "lcd/dogm/ultralcd_DOGM.h"
-  #include "lcd/dogm/u8g_fontutf8.h"
-  #include "lcd/ultralcd.h"
-
-  #if ENABLED(SHOW_BOOTSCREEN)
-    #include "lcd/dogm/dogm_Bootscreen.h"
-  #endif
-#endif
 
 #include "Lulzbot_Extras.h"
 
-/******************************** EMI MITIGATION *******************************/
+/****************************** MACHINE STARTUP ******************************/
 
-#define LULZBOT_EMI_SHUTOFF(pin)  SET_OUTPUT(pin); WRITE(pin, LOW);
+#if defined(LULZBOT_ENERGIZE_Z_AT_STARTUP)
+  #include "module/stepper_indirection.h"
+#endif
+#if defined(LULZBOT_HOME_Z_AT_STARTUP)
+  #include "gcode/queue.h"
+#endif
 
-#define LULZBOT_SET_PIN_STATE(pin, enable) \
-  if(enable) { \
-    /* Set as inputs with pull-up resistor */ \
-    SET_INPUT(pin); \
-    WRITE(pin, HIGH); \
-    delay(5); /* The bed acts as a capacitor and takes a while to charge up */ \
-  } else { \
-    SET_OUTPUT(pin); \
-    WRITE(pin, LOW); \
-  }
+void emi_shutoff_pins();
 
 void on_startup(void) {
-  EnableProbePins::enable(false);
-
-  #if MB(ARCHIM2)
-    LULZBOT_EMI_SHUTOFF(GPIO_PB1_J20_5)
-    LULZBOT_EMI_SHUTOFF(GPIO_PB0_J20_6)
-    LULZBOT_EMI_SHUTOFF(GPIO_PB3_J20_7)
-    LULZBOT_EMI_SHUTOFF(GPIO_PB2_J20_8)
-    LULZBOT_EMI_SHUTOFF(GPIO_PB6_J20_9)
-    LULZBOT_EMI_SHUTOFF(GPIO_PB5_J20_10)
-    LULZBOT_EMI_SHUTOFF(GPIO_PB8_J20_11)
-    LULZBOT_EMI_SHUTOFF(GPIO_PB4_J20_12)
-    LULZBOT_EMI_SHUTOFF(GPIO_PB9_J20_13)
-    LULZBOT_EMI_SHUTOFF(GPIO_PB7_J20_14)
-    LULZBOT_EMI_SHUTOFF(GPIO_PB14_J20_17)
-    LULZBOT_EMI_SHUTOFF(GPIO_PA18_J20_21)
-    LULZBOT_EMI_SHUTOFF(GPIO_PA17_J20_22)
+  #if ENABLED(LULZBOT_EMI_MITIGATION)
+    emi_shutoff_pins();
   #endif
-
   #if defined(LULZBOT_ENERGIZE_Z_AT_STARTUP)
     enable_Z();
   #endif
@@ -93,53 +46,102 @@ void on_startup(void) {
   #endif
 }
 
-/* Enable the probe pins only only when homing/probing,
- * as this helps reduce EMI by grounding the lines.
- *
- * On Mini:
- *   Z_MIN_PIN are the bed washers.
- *
- * On TAZ:
- *   Z_MIN_PIN corresponds to the Z-Home push button.
- *   Z_MIN_PROBE_PIN are the bed washers.
- */
-void EnableProbePins::enable(const bool enable) {
-  #if ENABLED(AUTO_BED_LEVELING_LINEAR)
-    endstops.enable_z_probe(enable);
-    LULZBOT_SET_PIN_STATE(Z_MIN_PIN, enable)
-    #if PIN_EXISTS(Z_MIN_PROBE)
-      LULZBOT_SET_PIN_STATE(Z_MIN_PROBE_PIN, enable)
+/******************************** EMI MITIGATION *******************************/
+
+#if ENABLED(LULZBOT_EMI_MITIGATION)
+  void emi_shutoff_pins() {
+    #if ENABLED(LULZBOT_EMI_MITIGATION)
+      enable_emi_pins(false);
+
+      #define LULZBOT_EMI_SHUTOFF(pin)  SET_OUTPUT(pin); WRITE(pin, LOW);
+
+      #if MB(ARCHIM2)
+        LULZBOT_EMI_SHUTOFF(GPIO_PB1_J20_5)
+        LULZBOT_EMI_SHUTOFF(GPIO_PB0_J20_6)
+        LULZBOT_EMI_SHUTOFF(GPIO_PB3_J20_7)
+        LULZBOT_EMI_SHUTOFF(GPIO_PB2_J20_8)
+        LULZBOT_EMI_SHUTOFF(GPIO_PB6_J20_9)
+        LULZBOT_EMI_SHUTOFF(GPIO_PB5_J20_10)
+        LULZBOT_EMI_SHUTOFF(GPIO_PB8_J20_11)
+        LULZBOT_EMI_SHUTOFF(GPIO_PB4_J20_12)
+        LULZBOT_EMI_SHUTOFF(GPIO_PB9_J20_13)
+        LULZBOT_EMI_SHUTOFF(GPIO_PB7_J20_14)
+        LULZBOT_EMI_SHUTOFF(GPIO_PB14_J20_17)
+        LULZBOT_EMI_SHUTOFF(GPIO_PA18_J20_21)
+        LULZBOT_EMI_SHUTOFF(GPIO_PA17_J20_22)
+      #endif
     #endif
-  #else
-    UNUSED(enable);
-  #endif
-}
+  }
+
+  #define LULZBOT_SET_PIN_STATE(pin, enable) \
+    if(enable) { \
+      /* Set as inputs with pull-up resistor */ \
+      SET_INPUT(pin); \
+      WRITE(pin, HIGH); \
+    } else { \
+      SET_OUTPUT(pin); \
+      WRITE(pin, LOW); \
+    }
+
+  /* Enable the probe pins only only when homing/probing,
+   * as this helps reduce EMI by grounding the lines.
+   *
+   * On Mini:
+   *   Z_MIN_PIN are the bed washers.
+   *
+   * On TAZ:
+   *   Z_MIN_PIN corresponds to the Z-Home push button.
+   *   Z_MIN_PROBE_PIN are the bed washers.
+   */
+  void enable_emi_pins(const bool enable) {
+    #if HAS_BED_PROBE
+      LULZBOT_SET_PIN_STATE(Z_MIN_PIN, enable);
+      #if PIN_EXISTS(Z_MIN_PROBE)
+        LULZBOT_SET_PIN_STATE(Z_MIN_PROBE_PIN, enable)
+      #endif
+    #endif
+
+    /* Wait to charge up the lines */
+    if(enable) delay(5);
+  }
+#endif
 
 /******************************** EXTRA FEATURES *******************************/
 
-void on_reflash() {
-  /* Turn off LCD prior to initiating flash on TAZ Pro */
-  #if ENABLED(EXTENSIBLE_UI)
-    CLCD::set_brightness(0);
-  #endif
-}
+#if ENABLED(EXTENSIBLE_UI)
+  #include "lcd/extensible_ui/lib/ftdi_eve_lib/basic/ftdi_basic.h"
 
-void BedLevelingReport::report() {
-  vector_3 bp[4] = {
-    vector_3(x[0],y[0],z[0]),
-    vector_3(x[1],y[1],z[1]),
-    vector_3(x[2],y[2],z[2])
-  };
-  vector_3 norm = vector_3::cross(bp[0]-bp[1],bp[1]-bp[2]);
-  float a = norm.x, b = norm.y, c = norm.z, d = -bp[0].x*a -bp[0].y*b -bp[0].z*c;
-  float dist = abs(a * bp[3].x + b * bp[3].y + c * bp[3].z + d)/sqrt( a*a + b*b + c*c );
-  SERIAL_ECHOPAIR("4th probe point, distance from plane: ", dist);
-  SERIAL_EOL();
-}
+  void on_reflash() {
+    /* Turn off LCD prior to initiating flash on TAZ Pro */
+    CLCD::set_brightness(0);
+  }
+#endif
+
+/******************************** PROBE QUALITY CHECK *************************/
+
+#if ENABLED(AUTO_BED_LEVELING_LINEAR)
+  #include "libs/vector_3.h"
+
+  void BedLevelingReport::report() {
+    vector_3 bp[4] = {
+      vector_3(x[0],y[0],z[0]),
+      vector_3(x[1],y[1],z[1]),
+      vector_3(x[2],y[2],z[2])
+    };
+    vector_3 norm = vector_3::cross(bp[0]-bp[1],bp[1]-bp[2]);
+    float a = norm.x, b = norm.y, c = norm.z, d = -bp[0].x*a -bp[0].y*b -bp[0].z*c;
+    float dist = abs(a * bp[3].x + b * bp[3].y + c * bp[3].z + d)/sqrt( a*a + b*b + c*c );
+    SERIAL_ECHOPAIR("4th probe point, distance from plane: ", dist);
+    SERIAL_EOL();
+  }
+#endif
 
 /*************************** Z-OFFSET AUTO-SAVE  ********************************/
 
-#if HAS_BED_PROBE && EITHER(EEPROM_SETTINGS, SD_FIRMWARE_UPDATE)
+#if HAS_Z_AUTO_SAVE
+  #include "HAL/shared/persistent_store_api.h"
+  #include "module/probe.h"
+
   int AutoSaveZOffset::eeprom_offset = -1;
 
   void AutoSaveZOffset::store() {
@@ -152,13 +154,17 @@ void BedLevelingReport::report() {
       SERIAL_ECHOLNPGM("");
     }
   }
-#else
-  void AutoSaveZOffset::store() {}
 #endif
 
 /***************************** CUSTOM SPLASH SCREEN *****************************/
 
 #if ENABLED(LULZBOT_ENHANCED_BOOTSCREEN)
+  #include "lcd/dogm/fontdata/fontdata_ISO10646_1.h"
+  #include "lcd/dogm/ultralcd_DOGM.h"
+  #include "lcd/dogm/u8g_fontutf8.h"
+  #include "lcd/ultralcd.h"
+  #include "lcd/dogm/dogm_Bootscreen.h"
+
   void MarlinUI::draw_custom_bootscreen(const uint8_t) {
     u8g.drawBitmapP(0,0,CEILING(CUSTOM_BOOTSCREEN_BMPWIDTH, 8),CUSTOM_BOOTSCREEN_BMPHEIGHT,custom_start_bmp);
     u8g.setFont(u8g_font_6x13);

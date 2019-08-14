@@ -2234,9 +2234,8 @@
 //#define LULZBOT_SWAP_EXTRUDERS
 #define LULZBOT_G29_ENDS_ON_BACK_LEFT_CORNER // <-- changed
 //#define LULZBOT_CONTROLLERFAN_SPEED_WHEN_ONLY_Z_ACTIVE
-#define LULZBOT_Z_MIN_USES_Z_PROBE_ENABLED // <-- changed
-//#define LULZBOT_HOMING_BACKOFF_FIX
 #define LULZBOT_TOOLHEAD_M115_TYPE "SingleExtruder" // <-- changed
+#define LULZBOT_EMI_MITIGATION // <-- changed
 
 /**
  * Extra options for USB support

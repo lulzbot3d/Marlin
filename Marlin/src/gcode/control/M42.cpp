@@ -24,11 +24,6 @@
 #include "../../Marlin.h" // for pin_is_protected
 #include "../../inc/MarlinConfig.h"
 
-#if defined(LULZBOT_M42_TOGGLES_PROBE_PINS)
- #include "../../module/endstops.h"
- #include "../../module/stepper_indirection.h"
-#endif
-
 #if FAN_COUNT > 0
   #include "../../module/temperature.h"
 #endif
@@ -47,8 +42,13 @@ void GcodeSuite::M42() {
   if (!parser.seenval('S')) return;
   const byte pin_status = parser.value_byte();
 
-  #if defined(LULZBOT_M42_TOGGLES_PROBE_PINS)
-    LULZBOT_M42_TOGGLES_PROBE_PINS
+  #if defined(LULZBOT_EMI_MITIGATION)
+    /* Make it so M42 S<state> controls the state of the
+     * probe lines. This is useful for troubleshooting. */
+    if (!parser.seenval('P')) {
+      enable_emi_pins(pin_status);
+      return;
+    }
   #endif
 
   const int pin_index = PARSED_PIN_INDEX('P', GET_PIN_MAP_INDEX(LED_PIN));

@@ -27,7 +27,9 @@
 #if defined(LULZBOT_M226_NON_ARDUINO_PINS_WORKAROUND)
  #include "../../module/endstops.h"
  bool _digitalRead(const int pin_number) {
-   LULZBOT_ENABLE_PROBE_PINS
+   #if ENABLED(LULZBOT_EMI_MITIGATION)
+     enable_emi_pins(true);
+   #endif
    delayMicroseconds(10);
    bool val;
    #define TEST_PIN(PIN) case PIN##_PIN: val = READ(PIN##_PIN) != PIN##_ENDSTOP_INVERTING; break
@@ -55,6 +57,9 @@
     #endif
     default: val = extDigitalRead(pin_number); break;
    }
+   #if ENABLED(LULZBOT_EMI_MITIGATION)
+     enable_emi_pins(false);
+   #endif
    return val;
  }
  #undef  extDigitalRead

@@ -162,10 +162,6 @@
  *
  */
 G29_TYPE GcodeSuite::G29() {
-  #ifdef LULZBOT_ENABLE_PROBE_PINS
-    LULZBOT_ENABLE_PROBE_PINS
-  #endif
-
   #if EITHER(DEBUG_LEVELING_FEATURE, PROBE_MANUALLY)
     const bool seenQ = parser.seen('Q');
   #else

@@ -611,13 +611,14 @@ inline void calibrate_all() {
  *   no args     - Perform entire calibration sequence (backlash + position on all toolheads)
  */
 void GcodeSuite::G425() {
-  #ifdef LULZBOT_ENABLE_PROBE_PINS
-    LULZBOT_ENABLE_PROBE_PINS
-  #endif
   TEMPORARY_SOFT_ENDSTOP_STATE(false);
   TEMPORARY_BED_LEVELING_STATE(false);
 
   if (axis_unhomed_error()) return;
+
+   #if ENABLED(LULZBOT_EMI_MITIGATION)
+     enable_emi_pins(true);
+   #endif
 
   measurements_t m;
 
@@ -644,6 +645,10 @@ void GcodeSuite::G425() {
   #endif
   else
     calibrate_all();
+
+   #if ENABLED(LULZBOT_EMI_MITIGATION)
+     enable_emi_pins(false);
+   #endif
 }
 
 #endif // CALIBRATION_GCODE

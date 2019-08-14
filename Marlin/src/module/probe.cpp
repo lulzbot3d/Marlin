@@ -313,6 +313,9 @@ float zprobe_zoffset; // Initialized by settings.load()
 
 #if QUIET_PROBING
   void probing_pause(const bool p) {
+   #if ENABLED(LULZBOT_EMI_MITIGATION)
+     enable_emi_pins(p);
+   #endif
     #if ENABLED(PROBING_HEATERS_OFF)
       thermalManager.pause(p);
     #endif

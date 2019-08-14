@@ -688,11 +688,6 @@ def make_config(PRINTER, TOOLHEAD):
     NO_ENDSTOP                                           = 1
 
     if BED_WASHERS_PIN:
-        # On the TAZ 6, the bed washers are on Z_MIN_PROBE while the
-        # Z-Home button is on Z_MIN, yet we need both to be disabled
-        # when z_probe_enabled is false. We added this special case
-        # to "endstops.cpp"
-        MARLIN["LULZBOT_Z_MIN_USES_Z_PROBE_ENABLED"]     = True
         MARLIN["Z_MIN_PROBE_PIN"]                        = BED_WASHERS_PIN
         MARLIN["Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN"]     = False
 
@@ -745,6 +740,8 @@ def make_config(PRINTER, TOOLHEAD):
     # Electrical probing pins are always open until contact is made
     MARLIN["Z_MIN_ENDSTOP_INVERTING"]                    = NORMALLY_OPEN_ENDSTOP
     MARLIN["Z_MIN_PROBE_ENDSTOP_INVERTING"]              = NORMALLY_OPEN_ENDSTOP
+
+    MARLIN["LULZBOT_EMI_MITIGATION"]                     = True
 
 ########################## HOMING & AXIS DIRECTIONS ###########################
 

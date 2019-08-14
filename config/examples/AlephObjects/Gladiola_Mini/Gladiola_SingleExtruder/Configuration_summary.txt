@@ -75,6 +75,7 @@
 #define LIN_ADVANCE
 #define LIN_ADVANCE_K 0.0
 #define LULZBOT_CALIBRATION_COMMANDS "M117 Starting Auto-Calibration\nT0\nG28\nG12\nM117 Calibrating...\nG425\nM500\nM117 Calibration data saved"
+#define LULZBOT_EMI_MITIGATION
 #define LULZBOT_LCD_MACHINE_NAME "Mini"
 #define LULZBOT_LCD_TOOLHEAD_NAME "Single Extruder"
 #define LULZBOT_M226_NON_ARDUINO_PINS_WORKAROUND

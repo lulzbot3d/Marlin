@@ -1092,8 +1092,8 @@ void setup() {
     i2c.onRequest(i2c_on_request);
   #endif
 
-  #ifdef LULZBOT_ON_STARTUP
-    LULZBOT_ON_STARTUP
+  #if ENABLED(LULZBOT_EMI_MITIGATION)
+    emi_shutoff_pins();
   #endif
 
   #if DO_SWITCH_EXTRUDER

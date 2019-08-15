@@ -857,9 +857,9 @@ def make_config(PRINTER, TOOLHEAD):
     MARLIN["DISABLE_INACTIVE_Z"]                         = 'false' if USE_Z_BELT else 'true'
 
     if USE_Z_BELT:
-        MARLIN["LULZBOT_ENERGIZE_Z_AT_STARTUP"]          = True
+        MARLIN["STARTUP_COMMANDS"]                       = C_STRING("M17 Z")
     if USE_Z_BELT and IS_TAZ:
-        MARLIN["LULZBOT_HOME_Z_AT_STARTUP"]              = True
+        MARLIN["STARTUP_COMMANDS"]                       = C_STRING("G28 Z")
 
 ######################### COMMON TOOLHEADS PARAMETERS #########################
 
@@ -1258,11 +1258,11 @@ def make_config(PRINTER, TOOLHEAD):
 
     MARLIN["USE_CONTROLLER_FAN"]                         = True
     if USE_EINSY_RETRO:
-        # The TMC drivers need a bit more coolin
+        # The TMC drivers need a bit more cooling
         MARLIN["CONTROLLERFAN_SPEED"]                    = 255
         MARLIN["LULZBOT_CONTROLLERFAN_SPEED_WHEN_ONLY_Z_ACTIVE"] = 120
     elif IS_MINI:
-        # The Mini fan runs rather loud at full spee
+        # The Mini fan runs rather loud at full speed
         MARLIN["CONTROLLERFAN_SPEED"]                    = 120
     elif IS_TAZ:
         MARLIN["CONTROLLERFAN_SPEED"]                    = 255

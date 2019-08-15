@@ -23,29 +23,6 @@
 
 #include "Lulzbot_Extras.h"
 
-/****************************** MACHINE STARTUP ******************************/
-
-#if defined(LULZBOT_ENERGIZE_Z_AT_STARTUP)
-  #include "module/stepper_indirection.h"
-#endif
-#if defined(LULZBOT_HOME_Z_AT_STARTUP)
-  #include "gcode/queue.h"
-#endif
-
-void emi_shutoff_pins();
-
-void on_startup(void) {
-  #if ENABLED(LULZBOT_EMI_MITIGATION)
-    emi_shutoff_pins();
-  #endif
-  #if defined(LULZBOT_ENERGIZE_Z_AT_STARTUP)
-    enable_Z();
-  #endif
-  #if defined(LULZBOT_HOME_Z_AT_STARTUP)
-    queue.inject_P(PSTR("G28 Z"));
-  #endif
-}
-
 /******************************** EMI MITIGATION *******************************/
 
 #if ENABLED(LULZBOT_EMI_MITIGATION)

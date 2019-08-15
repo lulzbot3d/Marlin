@@ -22,23 +22,22 @@
 #pragma once
 #include <stdbool.h>
 
+/******************************** EXTRA FEATURES *******************************/
+
 #ifdef __cplusplus
   extern "C" void on_reflash();
-  extern "C" void on_startup();
 #else
   void on_reflash(void);
-  void on_startup(void);
 #endif
 
 #if ENABLED(EXTENSIBLE_UI)
   #define LULZBOT_ON_REFLASH on_reflash();
 #endif
 
-#define LULZBOT_ON_STARTUP on_startup();
-
 /******************************** EMI MITIGATION *******************************/
 
 #if ENABLED(LULZBOT_EMI_MITIGATION)
+  void emi_shutoff_pins();
   void enable_emi_pins(const bool);
 #endif
 

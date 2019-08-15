@@ -172,7 +172,7 @@
 #define SOFT_PWM_SCALE 4
 #define SPI_SPEED SPI_SIXTEENTH_SPEED
 #define STARTUP_COMMANDS "G28 Z"
-//#define STEALTHCHOP_E
+#define STEALTHCHOP_E
 //#define STEALTHCHOP_XY
 #define STEALTHCHOP_Z
 #define STRING_CONFIG_H_AUTHOR "(Aleph Objects Inc., LulzBot Git Repository)"

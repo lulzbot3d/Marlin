@@ -252,7 +252,7 @@ def make_config(PRINTER, TOOLHEAD):
         MARLIN["SENSORLESS_HOMING"]                      = True
         MARLIN["STEALTHCHOP_XY"]                         = False
         MARLIN["STEALTHCHOP_Z"]                          = True
-        MARLIN["STEALTHCHOP_E"]                          = False
+        MARLIN["STEALTHCHOP_E"]                          = True
         MARLIN["HYBRID_THRESHOLD"]                       = True
         MARLIN["BAUDRATE"]                               = 250000
         MARLIN["PRINTCOUNTER"]                           = True
@@ -277,7 +277,7 @@ def make_config(PRINTER, TOOLHEAD):
         MARLIN["SENSORLESS_HOMING"]                      = True
         MARLIN["STEALTHCHOP_XY"]                         = False
         MARLIN["STEALTHCHOP_Z"]                          = True
-        MARLIN["STEALTHCHOP_E"]                          = False
+        MARLIN["STEALTHCHOP_E"]                          = True
         MARLIN["HYBRID_THRESHOLD"]                       = True
         MARLIN["BAUDRATE"]                               = 250000
         MARLIN["PRINTCOUNTER"]                           = True
@@ -330,7 +330,7 @@ def make_config(PRINTER, TOOLHEAD):
         MARLIN["LULZBOT_LCD_MACHINE_NAME"]               = C_STRING("TAZ 5")
         MARLIN["STEALTHCHOP_XY"]                         = False
         MARLIN["STEALTHCHOP_Z"]                          = True
-        MARLIN["STEALTHCHOP_E"]                          = False
+        MARLIN["STEALTHCHOP_E"]                          = True
         MARLIN["BACKLASH_COMPENSATION"]                  = True
         MARLIN["BAUDRATE"]                               = 250000
         MARLIN["MACHINE_UUID"]                           = C_STRING("c3255c96-4097-4884-8ed0-ded2ff9bae61")
@@ -376,7 +376,7 @@ def make_config(PRINTER, TOOLHEAD):
         MARLIN["SENSORLESS_HOMING"]                      = True
         MARLIN["STEALTHCHOP_XY"]                         = False
         MARLIN["STEALTHCHOP_Z"]                          = True
-        MARLIN["STEALTHCHOP_E"]                          = False
+        MARLIN["STEALTHCHOP_E"]                          = True
         MARLIN["HYBRID_THRESHOLD"]                       = True
         MARLIN["BAUDRATE"]                               = 250000
         MARLIN["PRINTCOUNTER"]                           = True
@@ -405,7 +405,7 @@ def make_config(PRINTER, TOOLHEAD):
         MARLIN["SENSORLESS_HOMING"]                      = True
         MARLIN["STEALTHCHOP_XY"]                         = False
         MARLIN["STEALTHCHOP_Z"]                          = True
-        MARLIN["STEALTHCHOP_E"]                          = False
+        MARLIN["STEALTHCHOP_E"]                          = True
         MARLIN["HYBRID_THRESHOLD"]                       = True
         MARLIN["BAUDRATE"]                               = 250000
         MARLIN["PRINTCOUNTER"]                           = True
@@ -438,7 +438,7 @@ def make_config(PRINTER, TOOLHEAD):
         MARLIN["BACKLASH_COMPENSATION"]                  = True
         MARLIN["STEALTHCHOP_XY"]                         = False
         MARLIN["STEALTHCHOP_Z"]                          = True
-        MARLIN["STEALTHCHOP_E"]                          = False
+        MARLIN["STEALTHCHOP_E"]                          = True
         MARLIN["HYBRID_THRESHOLD"]                       = True
         MARLIN["BAUDRATE"]                               = 250000
         MARLIN["PRINTCOUNTER"]                           = True
@@ -495,7 +495,7 @@ def make_config(PRINTER, TOOLHEAD):
         MARLIN["BACKLASH_COMPENSATION"]                  = True
         MARLIN["STEALTHCHOP_XY"]                         = False
         MARLIN["STEALTHCHOP_Z"]                          = True
-        MARLIN["STEALTHCHOP_E"]                          = False
+        MARLIN["STEALTHCHOP_E"]                          = True
         MARLIN["HYBRID_THRESHOLD"]                       = True
         MARLIN["BAUDRATE"]                               = 250000
         MARLIN["PRINTCOUNTER"]                           = True
@@ -520,7 +520,7 @@ def make_config(PRINTER, TOOLHEAD):
         MARLIN["BACKLASH_COMPENSATION"]                  = True
         MARLIN["STEALTHCHOP_XY"]                         = False
         MARLIN["STEALTHCHOP_Z"]                          = True
-        MARLIN["STEALTHCHOP_E"]                          = False
+        MARLIN["STEALTHCHOP_E"]                          = True
         MARLIN["HYBRID_THRESHOLD"]                       = True
         MARLIN["BAUDRATE"]                               = 250000
         MARLIN["PRINTCOUNTER"]                           = True
@@ -562,7 +562,7 @@ def make_config(PRINTER, TOOLHEAD):
         MARLIN["ENDSTOPS_ALWAYS_ON_DEFAULT"]             = True
         MARLIN["STEALTHCHOP_XY"]                         = False
         MARLIN["STEALTHCHOP_Z"]                          = True
-        MARLIN["STEALTHCHOP_E"]                          = False
+        MARLIN["STEALTHCHOP_E"]                          = True
         MARLIN["HYBRID_THRESHOLD"]                       = True
         MARLIN["BAUDRATE"]                               = 250000
         MARLIN["PRINTCOUNTER"]                           = True

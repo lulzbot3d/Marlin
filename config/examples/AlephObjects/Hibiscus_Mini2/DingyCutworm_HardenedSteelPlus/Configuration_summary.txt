@@ -179,7 +179,7 @@
 #define STARTUP_COMMANDS "M17 Z"
 #define STATUS_EXPIRE_SECONDS 0
 #define STATUS_MESSAGE_SCROLLING
-//#define STEALTHCHOP_E
+#define STEALTHCHOP_E
 //#define STEALTHCHOP_XY
 #define STEALTHCHOP_Z
 #define STRING_CONFIG_H_AUTHOR "(Aleph Objects Inc., LulzBot Git Repository)"

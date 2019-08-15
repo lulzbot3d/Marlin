@@ -1790,7 +1790,7 @@
    */
   //#define STEALTHCHOP_XY  // <-- changed
   #define STEALTHCHOP_Z
-  //#define STEALTHCHOP_E  // <-- changed
+  #define STEALTHCHOP_E
 
   /**
    * Optimize spreadCycle chopper parameters by using predefined parameter sets

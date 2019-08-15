@@ -37,7 +37,7 @@
 /******************************** EMI MITIGATION *******************************/
 
 #if ENABLED(LULZBOT_EMI_MITIGATION)
-  void emi_shutoff_pins();
+  void emi_shutoff_pins(void);
   void enable_emi_pins(const bool);
 #endif
 

@@ -517,7 +517,7 @@
 #define X_HOME_BUMP_MM 5
 #define Y_HOME_BUMP_MM 5
 #define Z_HOME_BUMP_MM 2
-#define HOMING_BUMP_DIVISOR { 2, 2, 4 }  // Re-Bump Speed Divisor (Divides the Homing Feedrate)
+#define HOMING_BUMP_DIVISOR { 4, 4, 4 }  // Re-Bump Speed Divisor (Divides the Homing Feedrate)
 //#define QUICK_HOME                     // If homing includes X and Y, do a diagonal move initially
 //#define HOMING_BACKOFF_MM { 2, 2, 2 }  // (mm) Move away from the endstops after homing
 
@@ -650,6 +650,7 @@
 
 #if EITHER(ULTIPANEL, EXTENSIBLE_UI)
   #define MANUAL_FEEDRATE { 50*60, 50*60, 4*60, 60 } // Feedrates for manual moves along X, Y, Z, E from panel
+  #define SHORT_MANUAL_Z_MOVE 0.025 // (mm) Smallest manual Z move (< 0.1mm)
   #if ENABLED(ULTIPANEL)
     #define MANUAL_E_MOVES_RELATIVE // Display extruder move distance rather than "position"
     #define ULTIPANEL_FEEDMULTIPLY  // Encoder sets the feedrate multiplier on the Status Screen
@@ -2245,6 +2246,13 @@
 #define EXTENDED_CAPABILITIES_REPORT
 
 /**
+ * Expected Printer Check
+ * Add the M16 G-code to compare a string to the MACHINE_NAME.
+ * M16 with a non-matching string causes the printer to halt.
+ */
+//#define EXPECTED_PRINTER_CHECK
+
+/**
  * Disable all Volumetric extrusion options
  */
 //#define NO_VOLUMETRICS
@@ -2297,6 +2305,13 @@
 #ifdef G0_FEEDRATE
   //#define VARIABLE_G0_FEEDRATE // The G0 feedrate is set by F in G0 motion mode
 #endif
+
+/**
+ * Startup commands
+ *
+ * Execute certain G-code commands immediately after power-on.
+ */
+//#define STARTUP_COMMANDS "M17 Z"
 
 /**
  * G-code Macros

@@ -234,8 +234,6 @@ void menu_info() {
 
   #if ENABLED(PRINTCOUNTER)
     MENU_ITEM(submenu, MSG_INFO_STATS_MENU, menu_info_stats);          // Printer Stats >
-  #else
-    MENU_ITEM_DUMMY();
   #endif
 
   #if HAS_GAMES

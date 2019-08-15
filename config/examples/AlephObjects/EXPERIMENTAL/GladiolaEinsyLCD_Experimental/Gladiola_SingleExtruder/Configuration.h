@@ -606,9 +606,9 @@
 #define USE_XMIN_PLUG
 #define USE_YMIN_PLUG
 #define USE_ZMIN_PLUG
-#define USE_XMAX_PLUG // <-- changed
-#define USE_YMAX_PLUG // <-- changed
-#define USE_ZMAX_PLUG // <-- changed
+//#define USE_XMAX_PLUG  // <-- changed
+//#define USE_YMAX_PLUG  // <-- changed
+//#define USE_ZMAX_PLUG  // <-- changed
 
 // Enable pullup for all endstops to prevent a floating state
 #define ENDSTOPPULLUPS
@@ -1023,7 +1023,7 @@
 
 // @section homing
 
-//#define NO_MOTION_BEFORE_HOMING  // Inhibit movement until all axes have been homed
+#define NO_MOTION_BEFORE_HOMING // <-- changed:  Inhibit movement until all axes have been homed
 
 //#define UNKNOWN_Z_NO_RAISE // Don't raise Z (lower the bed) if Z is "unknown." For beds that fall when Z is powered off.
 

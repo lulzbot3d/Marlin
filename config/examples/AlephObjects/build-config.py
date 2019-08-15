@@ -485,7 +485,7 @@ def make_config(PRINTER, TOOLHEAD):
         USE_AUTOLEVELING                                 = True
         USE_NORMALLY_OPEN_ENDSTOPS                       = True
         USE_MIN_ENDSTOPS                                 = True
-        USE_MAX_ENDSTOPS                                 = True
+        USE_MAX_ENDSTOPS                                 = False
         USE_REPRAP_LCD_DISPLAY                           = True
         USE_EINSY_RETRO                                  = True
         USE_EXPERIMENTAL_FEATURES                        = True
@@ -510,7 +510,7 @@ def make_config(PRINTER, TOOLHEAD):
         USE_AUTOLEVELING                                 = True
         USE_NORMALLY_OPEN_ENDSTOPS                       = True
         USE_MIN_ENDSTOPS                                 = True
-        USE_MAX_ENDSTOPS                                 = True
+        USE_MAX_ENDSTOPS                                 = False
         USE_TOUCH_UI                                     = True
         USE_EINSY_RETRO                                  = True
         USE_LESS_MEMORY                                  = True

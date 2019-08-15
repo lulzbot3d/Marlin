@@ -169,22 +169,16 @@
 /**************************** LANGUAGE CHANGES ***************************/
 
 #if EITHER(ULTIPANEL, EXTENSIBLE_UI)
-  #define MSG_ERR_PROBING_FAILED              _UxGT("Autolevel failed")
   #if defined(LULZBOT_LIGHTWEIGHT_UI)
     #define WELCOME_MSG _UxGT(LULZBOT_LCD_MACHINE_NAME " ready.")
   #else
     #define WELCOME_MSG _UxGT("LulzBot " LULZBOT_LCD_MACHINE_NAME " ready.")
   #endif
 
-  #if defined(USB_FLASH_DRIVE_SUPPORT)
-    #define MSG_SD_INSERTED "Media inserted"
-    #define MSG_SD_REMOVED  "Media removed"
-  #endif
-
   // Change wording on a couple menu items
-  #define MSG_MOVE_E _UxGT("Extruder ") // Add space to extruder string
-  #define MSG_MOTION _UxGT("Movement") // Motion -> Movement
-  #define MSG_INFO_PRINTER_MENU _UxGT("Firmware Version") // About Printer -> Firmware Version
+  #define MSG_ERR_PROBING_FAILED            _UxGT("Autolevel failed")
+  #define MSG_MOVE_E                        _UxGT("Extruder ") // Add space to extruder string
+  #define MSG_INFO_PRINTER_MENU             _UxGT("Firmware Version") // About Printer -> Firmware Version
 
   #define MSG_FILAMENT_CHANGE_HEADER_PAUSE  _UxGT("Changing Filament")
   #define MSG_FILAMENT_CHANGE_RESUME_1      _UxGT("")

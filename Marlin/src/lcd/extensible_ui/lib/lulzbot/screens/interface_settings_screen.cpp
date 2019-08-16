@@ -29,10 +29,10 @@
 
 #include "../io/flash_storage.h"
 
-#include "../../../../module/configuration_store.h"
+#include "../../../../../module/configuration_store.h"
 
 #if ENABLED(LULZBOT_PRINTCOUNTER)
-  #include "../../../../module/printcounter.h"
+  #include "../../../../../module/printcounter.h"
 #endif
 
 bool restoreEEPROM();
@@ -252,7 +252,7 @@ void InterfaceSettingsScreen::loadSettings(const char *buff) {
 }
 
 #ifdef LULZBOT_EEPROM_BACKUP_SIZE
-  #include "../../../../HAL/shared/persistent_store_api.h"
+  #include "../../../../../HAL/shared/persistent_store_api.h"
 
   bool restoreEEPROM() {
     uint8_t data[LULZBOT_EEPROM_BACKUP_SIZE];

@@ -86,7 +86,7 @@
 /******************************** EXTRA FEATURES *******************************/
 
 #if ENABLED(EXTENSIBLE_UI)
-  #include "lcd/extensible_ui/lib/ftdi_eve_lib/basic/ftdi_basic.h"
+  #include "lcd/extensible_ui/lib/lulzbot/ftdi_eve_lib/basic/ftdi_basic.h"
 
   void on_reflash() {
     /* Turn off LCD prior to initiating flash on TAZ Pro */

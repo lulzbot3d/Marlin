@@ -2274,9 +2274,9 @@
 #define LCD_ALEPHOBJECTS_CLCD_UI // <-- changed
 //#define LCD_HAOYU_FT800CB
 #define USE_PORTRAIT_ORIENTATION // <-- changed
-//#define AO_EXP1_PINOUT_REV_C
-#define AO_EXP2_PINOUT_REV_C // <-- changed
-//#define AO_EXP1_PINOUT_REV_B
+//#define AO_EXP1_DEPRECATED_PINMAP
+//#define AO_EXP1_PINMAP
+#define AO_EXP2_PINMAP // <-- changed
 #define MAX_MANUAL_FEEDRATE {18000, 18000, 18000, 42.0} // <-- changed
 //#define LCD_320x240
 //#define LCD_480x272

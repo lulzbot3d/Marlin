@@ -41,10 +41,10 @@
 
 // Define the printer interface or pins used (see "ui_pin_mappings.h" for definitions):
 
-//#define CR10_TFT
-//#define AO_EXP1_PINOUT_REV_B  // UltraLCD EXP1 connector, old AlephObject's wiring
-//#define AO_EXP1_PINOUT_REV_C  // UltraLCD EXP1 connector, new AlephObject's wiring
-//#define AO_EXP2_PINOUT_REV_C  // UltraLCD EXP2 connector, new AlephObject's wiring
+//#define CR10_TFT_PINMAP
+//#define AO_EXP1_DEPRECATED_PINMAP  // UltraLCD EXP1 connector, old AlephObject's wiring
+//#define AO_EXP1_PINMAP  // UltraLCD EXP1 connector, new AlephObject's wiring
+//#define AO_EXP2_PINMAP  // UltraLCD EXP2 connector, new AlephObject's wiring
 //#define OTHER_PIN_LAYOUT
 
 // Otherwise. Define all the pins manually:

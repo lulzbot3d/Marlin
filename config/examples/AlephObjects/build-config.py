@@ -291,7 +291,7 @@ def make_config(PRINTER, TOOLHEAD):
         MARLIN["LCD_ALEPHOBJECTS_CLCD_UI"]               = True
         MARLIN["USE_PORTRAIT_ORIENTATION"]               = True
         MARLIN["LCD_800x480"]                            = True
-        MARLIN["AO_EXP2_PINOUT_REV_C"]                   = True
+        MARLIN["AO_EXP2_PINMAP"]                         = True
 
     # Unsupported or unreleased experimental configurations. Use at your own risk.
 
@@ -383,7 +383,7 @@ def make_config(PRINTER, TOOLHEAD):
         MARLIN["MACHINE_UUID"]                           = C_STRING("e5502411-d46d-421d-ba3a-a20126d7930f")
         MARLIN["LCD_ALEPHOBJECTS_CLCD_UI"]               = True
         MARLIN["USE_PORTRAIT_ORIENTATION"]               = True
-        MARLIN["AO_EXP1_PINOUT_REV_C"]                   = True
+        MARLIN["AO_EXP1_PINMAP"]                         = True
         MARLIN["LCD_480x272"]                            = True
         MARLIN["SDSUPPORT"]                              = True
 
@@ -412,7 +412,7 @@ def make_config(PRINTER, TOOLHEAD):
         MARLIN["MACHINE_UUID"]                           = C_STRING("e5502411-d46d-421d-ba3a-a20126d7930f")
         MARLIN["LCD_ALEPHOBJECTS_CLCD_UI"]               = True
         MARLIN["USE_PORTRAIT_ORIENTATION"]               = True
-        MARLIN["AO_EXP1_PINOUT_REV_C"]                   = True
+        MARLIN["AO_EXP1_PINMAP"]                         = True
         MARLIN["LCD_480x272"]                            = True
         MARLIN["SDSUPPORT"]                              = True
         MARLIN["USB_FLASH_DRIVE_SUPPORT"]                = True
@@ -445,7 +445,7 @@ def make_config(PRINTER, TOOLHEAD):
         MARLIN["MACHINE_UUID"]                           = C_STRING("9a1d8eee-7118-40a7-942d-9541f35667dd")
         MARLIN["LCD_ALEPHOBJECTS_CLCD_UI"]               = True
         MARLIN["USE_PORTRAIT_ORIENTATION"]               = True
-        MARLIN["AO_EXP1_PINOUT_REV_C"]                   = True
+        MARLIN["AO_EXP1_PINMAP"]                         = True
         MARLIN["LCD_480x272"]                            = True
         MARLIN["SDSUPPORT"]                              = True
 
@@ -471,7 +471,7 @@ def make_config(PRINTER, TOOLHEAD):
         # Enable the touchscreen and USB on EXP2
         MARLIN["LCD_ALEPHOBJECTS_CLCD_UI"]               = True
         MARLIN["USE_PORTRAIT_ORIENTATION"]               = True
-        MARLIN["AO_EXP2_PINOUT_REV_C"]                   = True
+        MARLIN["AO_EXP2_PINMAP"]                         = True
         MARLIN["LCD_480x272"]                            = True
         MARLIN["SDSUPPORT"]                              = True
         MARLIN["USB_FLASH_DRIVE_SUPPORT"]                = True
@@ -528,7 +528,7 @@ def make_config(PRINTER, TOOLHEAD):
         # On EinsyRetro 1.1a, the touch LCD cannot use hardware
         # SPI because there is a level shifter on MISO controlled
         # by SD_SS. Use software SPI on EXP1 instead.
-        MARLIN["AO_EXP1_PINOUT_REV_C"]                   = True
+        MARLIN["AO_EXP1_PINMAP"]                         = True
         MARLIN["LCD_ALEPHOBJECTS_CLCD_UI"]               = True
         MARLIN["USE_PORTRAIT_ORIENTATION"]               = True
         MARLIN["LCD_480x272"]                            = True
@@ -591,7 +591,7 @@ def make_config(PRINTER, TOOLHEAD):
         # Since we are using EinsyRetro 1.1a, use EXP1 for touch panel
         MARLIN["LCD_ALEPHOBJECTS_CLCD_UI"]               = False
         MARLIN["LCD_HAOYU_FT800CB"]                      = True
-        MARLIN["AO_EXP1_PINOUT_REV_B"]                   = True
+        MARLIN["AO_EXP1_DEPRECATED_PINMAP"]              = True
         MARLIN["LCD_480x272"]                            = True
         # SD or USB will only work on EXP2, but a 5
         # pigtail to an endstop connector is needed

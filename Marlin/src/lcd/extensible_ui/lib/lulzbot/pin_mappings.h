@@ -27,7 +27,7 @@
  * without adding new pin definitions to the board.
  */
 
-#if defined(CR10_TFT)
+#if defined(CR10_TFT_PINMAP)
     #ifndef __MARLIN_FIRMWARE__
         #error This pin mapping requires Marlin.
     #endif
@@ -47,7 +47,7 @@
  * connector EXP1 for software SPI (rev B, obsolete)
  */
 
-#if defined(AO_EXP1_PINOUT_REV_B)
+#if defined(AO_EXP1_DEPRECATED_PINMAP)
     #ifndef __MARLIN_FIRMWARE__
         #error This pin mapping requires Marlin.
     #endif
@@ -66,7 +66,7 @@
 #endif
 
 /**
- * AO_EXP1_PINOUT_REV_C
+ * AO_EXP1_PINMAP
  *
  * The AlephObjects mapping for re-purposing the UltraLCD
  * connector EXP1 for software SPI for display (rev C):
@@ -87,7 +87,7 @@
  *         functionality over software SPI.
  */
 
-#if defined(AO_EXP1_PINOUT_REV_C)
+#if defined(AO_EXP1_PINMAP)
     #ifndef __MARLIN_FIRMWARE__
         #error This pin mapping requires Marlin.
     #endif
@@ -102,7 +102,7 @@
 #endif
 
 /**
- * AO_EXP2_PINOUT_REV_C
+ * AO_EXP2_PINMAP
  *
  * The AlephObjects mapping for re-purposing the UltraLCD
  * connector EXP2 for hardware SPI for display and SD card
@@ -132,7 +132,7 @@
  *     connect it to 5V at an endstop.
  */
 
-#if defined(AO_EXP2_PINOUT_REV_C)
+#if defined(AO_EXP2_PINMAP)
     #ifndef __MARLIN_FIRMWARE__
         #error This pin mapping requires Marlin.
     #endif

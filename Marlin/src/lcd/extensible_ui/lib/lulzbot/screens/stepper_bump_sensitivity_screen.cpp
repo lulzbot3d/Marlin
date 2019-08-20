@@ -22,7 +22,7 @@
 
 #include "../config.h"
 
-#if ENABLED(EXTENSIBLE_UI) && HAS_TRINAMIC
+#if ENABLED(LULZBOT_TOUCH_UI) && HAS_TRINAMIC
 
 #include "screens.h"
 
@@ -60,7 +60,7 @@ void StepperBumpSensitivityScreen::onRedraw(draw_mode_t what) {
 
 bool StepperBumpSensitivityScreen::onTouchHeld(uint8_t tag) {
   const float increment = getIncrement();
-  switch(tag) {
+  switch (tag) {
     case  2: UI_DECREMENT(TMCBumpSensitivity, X ); break;
     case  3: UI_INCREMENT(TMCBumpSensitivity, X ); break;
     case  4: UI_DECREMENT(TMCBumpSensitivity, Y ); break;
@@ -74,4 +74,4 @@ bool StepperBumpSensitivityScreen::onTouchHeld(uint8_t tag) {
   return true;
 }
 
-#endif // EXTENSIBLE_UI  && HAS_TRINAMIC
+#endif // LULZBOT_TOUCH_UI && HAS_TRINAMIC

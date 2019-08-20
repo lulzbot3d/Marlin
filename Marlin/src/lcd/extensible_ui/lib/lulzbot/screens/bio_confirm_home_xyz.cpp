@@ -22,7 +22,7 @@
 
 #include "../config.h"
 
-#if ENABLED(EXTENSIBLE_UI) && defined(LULZBOT_USE_BIOPRINTER_UI)
+#if ENABLED(LULZBOT_TOUCH_UI) && defined(LULZBOT_USE_BIOPRINTER_UI)
 
 #include "screens.h"
 
@@ -34,7 +34,7 @@ void BioConfirmHomeXYZ::onRedraw(draw_mode_t) {
 }
 
 bool BioConfirmHomeXYZ::onTouchEnd(uint8_t tag) {
-  switch(tag) {
+  switch (tag) {
     case 1:
       SpinnerDialogBox::enqueueAndWait_P(F(
         "G28 X Y Z\n"             /* Home all axis */
@@ -50,4 +50,4 @@ bool BioConfirmHomeXYZ::onTouchEnd(uint8_t tag) {
   }
   return true;
 }
-#endif // EXTENSIBLE_UI
+#endif // LULZBOT_TOUCH_UI

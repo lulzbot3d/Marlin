@@ -22,7 +22,7 @@
 
 #include "../config.h"
 
-#if ENABLED(EXTENSIBLE_UI) && defined(LULZBOT_USE_BIOPRINTER_UI)
+#if ENABLED(LULZBOT_TOUCH_UI) && defined(LULZBOT_USE_BIOPRINTER_UI)
 
 #include "screens.h"
 
@@ -33,13 +33,13 @@ void MainMenu::onRedraw(draw_mode_t what) {
   #define GRID_ROWS 8
   #define GRID_COLS 2
 
-  if(what & BACKGROUND) {
+  if (what & BACKGROUND) {
     CommandProcessor cmd;
     cmd.cmd(CLEAR_COLOR_RGB(Theme::bg_color))
        .cmd(CLEAR(true,true,true));
   }
 
-  if(what & FOREGROUND) {
+  if (what & FOREGROUND) {
     CommandProcessor cmd;
     cmd.cmd(COLOR_RGB(bg_text_enabled))
        .font(font_large).text( BTN_POS(1,1), BTN_SIZE(2,1), F("Main Menu"))
@@ -62,7 +62,7 @@ void MainMenu::onRedraw(draw_mode_t what) {
 bool MainMenu::onTouchEnd(uint8_t tag) {
   using namespace ExtUI;
 
-  switch(tag) {
+  switch (tag) {
     case 1: SaveSettingsDialogBox::promptToSaveSettings();                               break;
     case 2: GOTO_SCREEN(BioConfirmHomeXYZ);                                              break;
     case 3: StatusScreen::unlockMotors();                                                break;
@@ -76,4 +76,4 @@ bool MainMenu::onTouchEnd(uint8_t tag) {
   return true;
 }
 
-#endif // EXTENSIBLE_UI
+#endif // LULZBOT_TOUCH_UI

@@ -22,7 +22,7 @@
 
 #include "../config.h"
 
-#if ENABLED(EXTENSIBLE_UI) && defined(LULZBOT_USE_BIOPRINTER_UI)
+#if ENABLED(LULZBOT_TOUCH_UI) && defined(LULZBOT_USE_BIOPRINTER_UI)
 
 #include "screens.h"
 
@@ -30,13 +30,13 @@ using namespace FTDI;
 using namespace Theme;
 
 void AdvancedSettingsMenu::onRedraw(draw_mode_t what) {
-  if(what & BACKGROUND) {
+  if (what & BACKGROUND) {
     CommandProcessor cmd;
     cmd.cmd(CLEAR_COLOR_RGB(Theme::bg_color))
        .cmd(CLEAR(true,true,true));
   }
 
-  if(what & FOREGROUND) {
+  if (what & FOREGROUND) {
     CommandProcessor cmd;
     cmd.colors(normal_btn)
        .font(Theme::font_medium)
@@ -97,7 +97,7 @@ void AdvancedSettingsMenu::onRedraw(draw_mode_t what) {
 bool AdvancedSettingsMenu::onTouchEnd(uint8_t tag) {
   using namespace ExtUI;
 
-  switch(tag) {
+  switch (tag) {
     case 1: SaveSettingsDialogBox::promptToSaveSettings(); break;
     case 2: GOTO_SCREEN(DisplayTuningScreen);              break;
     #if HAS_TRINAMIC
@@ -134,4 +134,4 @@ bool AdvancedSettingsMenu::onTouchEnd(uint8_t tag) {
   return true;
 }
 
-#endif // EXTENSIBLE_UI
+#endif // LULZBOT_TOUCH_UI

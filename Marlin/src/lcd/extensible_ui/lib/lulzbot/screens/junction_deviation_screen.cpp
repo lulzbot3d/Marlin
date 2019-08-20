@@ -22,7 +22,7 @@
 
 #include "../config.h"
 
-#if ENABLED(EXTENSIBLE_UI) && ENABLED(JUNCTION_DEVIATION)
+#if ENABLED(LULZBOT_TOUCH_UI) && ENABLED(JUNCTION_DEVIATION)
 
 #include "screens.h"
 
@@ -41,7 +41,7 @@ void JunctionDeviationScreen::onRedraw(draw_mode_t what) {
 
 bool JunctionDeviationScreen::onTouchHeld(uint8_t tag) {
   const float increment = getIncrement();
-  switch(tag) {
+  switch (tag) {
     case  2: UI_DECREMENT(JunctionDeviation_mm); break;
     case  3: UI_INCREMENT(JunctionDeviation_mm); break;
     default:
@@ -51,4 +51,4 @@ bool JunctionDeviationScreen::onTouchHeld(uint8_t tag) {
   return true;
 }
 
-#endif // EXTENSIBLE_UI
+#endif // LULZBOT_TOUCH_UI

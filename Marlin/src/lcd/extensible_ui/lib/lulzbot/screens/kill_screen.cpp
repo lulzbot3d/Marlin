@@ -22,7 +22,7 @@
 
 #include "../config.h"
 
-#if ENABLED(EXTENSIBLE_UI)
+#if ENABLED(LULZBOT_TOUCH_UI)
 
 #include "screens.h"
 
@@ -59,4 +59,4 @@ void KillScreen::show(progmem_str message) {
   InterfaceSoundsScreen::playEventSound(InterfaceSoundsScreen::PRINTING_FAILED, PLAY_SYNCHRONOUS);
 }
 
-#endif // EXTENSIBLE_UI
+#endif // LULZBOT_TOUCH_UI

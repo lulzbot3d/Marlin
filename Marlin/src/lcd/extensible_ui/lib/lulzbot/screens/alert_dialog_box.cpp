@@ -22,7 +22,7 @@
 
 #include "../config.h"
 
-#if ENABLED(EXTENSIBLE_UI)
+#if ENABLED(LULZBOT_TOUCH_UI)
 
 #include "screens.h"
 #include "screen_data.h"
@@ -36,7 +36,7 @@ void AlertDialogBox::onEntry() {
 }
 
 void AlertDialogBox::onRedraw(draw_mode_t what) {
-  if(what & FOREGROUND) {
+  if (what & FOREGROUND) {
     drawOkayButton();
   }
 }
@@ -58,7 +58,7 @@ void AlertDialogBox::showError(const T message) {
 }
 
 void AlertDialogBox::hide() {
-  if(AT_SCREEN(AlertDialogBox))
+  if (AT_SCREEN(AlertDialogBox))
     GOTO_PREVIOUS();
 }
 
@@ -67,4 +67,4 @@ template void AlertDialogBox::show(const progmem_str);
 template void AlertDialogBox::showError(const char *);
 template void AlertDialogBox::showError(const progmem_str);
 
-#endif // EXTENSIBLE_UI
+#endif // LULZBOT_TOUCH_UI

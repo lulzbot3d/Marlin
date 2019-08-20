@@ -22,14 +22,14 @@
 
 #include "../config.h"
 
-#if ENABLED(EXTENSIBLE_UI)
+#if ENABLED(LULZBOT_TOUCH_UI)
 
 #include "screens.h"
 
 #include "../ftdi_eve_lib/extras/poly_ui.h"
-#include "../io/flash_storage.h"
+#include "../archim2-flash/flash_storage.h"
 
-#ifdef USE_PORTRAIT_ORIENTATION
+#ifdef TOUCH_UI_PORTRAIT
   #include "../theme/bootscreen_logo_portrait.h"
 #else
   #include "../theme/bootscreen_logo_landscape.h"
@@ -47,7 +47,7 @@ void BootScreen::onRedraw(draw_mode_t) {
 }
 
 void BootScreen::onIdle() {
-  if(CLCD::is_touching()) {
+  if (CLCD::is_touching()) {
     // If the user is touching the screen at startup, then
     // assume the user wants to re-calibrate the screen.
     // This gives the user the ability to recover a
@@ -61,19 +61,19 @@ void BootScreen::onIdle() {
     current_screen.forget();
     PUSH_SCREEN(StatusScreen);
   } else {
-    if(!UIFlashStorage::is_valid()) {
+    if (!UIFlashStorage::is_valid()) {
       SpinnerDialogBox::show(F("Please wait..."));
       UIFlashStorage::format_flash();
       SpinnerDialogBox::hide();
     }
 
-    if(UIData::animations_enabled()) {
+    if (UIData::animations_enabled()) {
       // If there is a startup video in the flash SPI, play
       // that, otherwise show a static splash screen.
-      if(!MediaPlayerScreen::playBootMedia())
+      if (!MediaPlayerScreen::playBootMedia())
         showSplashScreen();
     }
-    #if defined(LULZBOT_USE_BIOPRINTER_UI)
+    #ifdef LULZBOT_USE_BIOPRINTER_UI
       GOTO_SCREEN(BioConfirmHomeXYZ);
       current_screen.forget();
       PUSH_SCREEN(StatusScreen);
@@ -110,4 +110,4 @@ void BootScreen::showSplashScreen() {
   ExtUI::delay_ms(2500);
 }
 
-#endif // EXTENSIBLE_UI
+#endif // LULZBOT_TOUCH_UI

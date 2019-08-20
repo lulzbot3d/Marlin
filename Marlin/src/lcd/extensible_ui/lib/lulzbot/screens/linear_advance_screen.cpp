@@ -22,7 +22,7 @@
 
 #include "../config.h"
 
-#if ENABLED(EXTENSIBLE_UI) && ENABLED(LIN_ADVANCE)
+#if ENABLED(LULZBOT_TOUCH_UI) && ENABLED(LIN_ADVANCE)
 
 #include "screens.h"
 
@@ -52,7 +52,7 @@ void LinearAdvanceScreen::onRedraw(draw_mode_t what) {
 bool LinearAdvanceScreen::onTouchHeld(uint8_t tag) {
   using namespace ExtUI;
   const float increment = getIncrement();
-  switch(tag) {
+  switch (tag) {
     case  2: UI_DECREMENT(LinearAdvance_mm_mm_s, E0); break;
     case  3: UI_INCREMENT(LinearAdvance_mm_mm_s, E0); break;
     #if EXTRUDERS > 1
@@ -74,4 +74,4 @@ bool LinearAdvanceScreen::onTouchHeld(uint8_t tag) {
   return true;
 }
 
-#endif // EXTENSIBLE_UI
+#endif // LULZBOT_TOUCH_UI

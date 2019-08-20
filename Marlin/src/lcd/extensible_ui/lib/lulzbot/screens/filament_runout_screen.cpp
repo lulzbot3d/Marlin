@@ -22,7 +22,7 @@
 
 #include "../config.h"
 
-#if ENABLED(EXTENSIBLE_UI) && ENABLED(FILAMENT_RUNOUT_SENSOR)
+#if ENABLED(LULZBOT_TOUCH_UI) && ENABLED(FILAMENT_RUNOUT_SENSOR)
 
 #include "screens.h"
 
@@ -35,7 +35,7 @@ void FilamentRunoutScreen::onRedraw(draw_mode_t what) {
   w.heading(   PSTR("Runout Detection:"));
   w.toggle( 2, PSTR("Filament Sensor:"), PSTR("off\xFFon"), getFilamentRunoutEnabled());
 
-  #if defined(FILAMENT_RUNOUT_DISTANCE_MM)
+  #ifdef FILAMENT_RUNOUT_DISTANCE_MM
     w.heading(PSTR("Detection Threshold:"));
     w.units(PSTR("mm"));
     w.precision(0);
@@ -48,9 +48,9 @@ void FilamentRunoutScreen::onRedraw(draw_mode_t what) {
 bool FilamentRunoutScreen::onTouchHeld(uint8_t tag) {
   using namespace ExtUI;
   const float increment = getIncrement();
-  switch(tag) {
+  switch (tag) {
     case 2: setFilamentRunoutEnabled(!getFilamentRunoutEnabled()); break;
-    #if defined(FILAMENT_RUNOUT_DISTANCE_MM)
+    #ifdef FILAMENT_RUNOUT_DISTANCE_MM
       case  10: UI_DECREMENT(FilamentRunoutDistance_mm); break;
       case  11: UI_INCREMENT(FilamentRunoutDistance_mm); break;
     #endif
@@ -62,4 +62,4 @@ bool FilamentRunoutScreen::onTouchHeld(uint8_t tag) {
   return true;
 }
 
-#endif // EXTENSIBLE_UI
+#endif // LULZBOT_TOUCH_UI

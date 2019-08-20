@@ -22,7 +22,7 @@
 
 #include "../config.h"
 
-#if ENABLED(EXTENSIBLE_UI)
+#if ENABLED(LULZBOT_TOUCH_UI)
 
 #include "screens.h"
 #include "screen_data.h"
@@ -34,7 +34,7 @@ void ConfirmUserRequestAlertBox::onRedraw(draw_mode_t mode) {
 }
 
 bool ConfirmUserRequestAlertBox::onTouchEnd(uint8_t tag) {
-  switch(tag) {
+  switch (tag) {
     case 1:
       ExtUI::setUserConfirmed();
       GOTO_PREVIOUS();
@@ -52,7 +52,7 @@ void ConfirmUserRequestAlertBox::show(const char* msg) {
 }
 
 void ConfirmUserRequestAlertBox::hide() {
-  if(AT_SCREEN(ConfirmUserRequestAlertBox))
+  if (AT_SCREEN(ConfirmUserRequestAlertBox))
     GOTO_PREVIOUS();
 }
-#endif // EXTENSIBLE_UI
+#endif // LULZBOT_TOUCH_UI

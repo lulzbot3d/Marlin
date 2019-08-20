@@ -22,7 +22,7 @@
 
 #include "../config.h"
 
-#if ENABLED(EXTENSIBLE_UI)
+#if ENABLED(LULZBOT_TOUCH_UI)
 
 #include "screens.h"
 
@@ -37,7 +37,7 @@ void TouchCalibrationScreen::onEntry() {
 
   BaseScreen::onEntry();
 
-  if(CLCD::is_touching()) {
+  if (CLCD::is_touching()) {
     // Ask the user to release the touch before starting,
     // as otherwise the first calibration point could
     // be misinterpreted.
@@ -45,13 +45,13 @@ void TouchCalibrationScreen::onEntry() {
        .cmd(CLEAR_COLOR_RGB(bg_color))
        .cmd(CLEAR(true,true,true))
        .cmd(COLOR_RGB(bg_text_enabled))
-    #if defined(USE_PORTRAIT_ORIENTATION)
+    #ifdef TOUCH_UI_PORTRAIT
        .font(font_large)
        .text  ( BTN_POS(1,8), BTN_SIZE(4,1), F("Release to begin"))
        .text  ( BTN_POS(1,9), BTN_SIZE(4,1), F("screen calibration"))
     #else
        .font(
-        #if defined(LCD_800x480)
+        #ifdef TOUCH_UI_800x480
           font_large
         #else
           font_medium
@@ -63,8 +63,8 @@ void TouchCalibrationScreen::onEntry() {
        .cmd(CMD_SWAP)
        .execute();
 
-    while(CLCD::is_touching()) {
-      #if defined(UI_FRAMEWORK_DEBUG)
+    while (CLCD::is_touching()) {
+      #ifdef UI_FRAMEWORK_DEBUG
         SERIAL_ECHO_START();
         SERIAL_ECHOLNPGM("Waiting for touch release");
       #endif
@@ -90,13 +90,13 @@ void TouchCalibrationScreen::onRedraw(draw_mode_t) {
      .cmd(CLEAR(true,true,true))
      .cmd(COLOR_RGB(bg_text_enabled))
 
-  #if defined(USE_PORTRAIT_ORIENTATION)
+  #ifdef TOUCH_UI_PORTRAIT
      .font(font_large)
      .text  ( BTN_POS(1,8), BTN_SIZE(4,1), F("Touch the dots"))
      .text  ( BTN_POS(1,9), BTN_SIZE(4,1), F("to calibrate"))
   #else
      .font(
-       #if defined(LCD_800x480)
+       #ifdef TOUCH_UI_800x480
          font_large
        #else
          font_medium
@@ -108,9 +108,9 @@ void TouchCalibrationScreen::onRedraw(draw_mode_t) {
 }
 
 void TouchCalibrationScreen::onIdle() {
-  if(!CLCD::is_touching() && !CommandProcessor::is_processing()) {
+  if (!CLCD::is_touching() && !CommandProcessor::is_processing()) {
     GOTO_PREVIOUS();
   }
 }
 
-#endif // EXTENSIBLE_UI
+#endif // LULZBOT_TOUCH_UI

@@ -22,7 +22,7 @@
 
 #include "../config.h"
 
-#if ENABLED(EXTENSIBLE_UI)
+#if ENABLED(LULZBOT_TOUCH_UI)
 
 #include "screens.h"
 
@@ -34,7 +34,7 @@ void ConfirmAbortPrintDialogBox::onRedraw(draw_mode_t) {
 }
 
 bool ConfirmAbortPrintDialogBox::onTouchEnd(uint8_t tag) {
-  switch(tag) {
+  switch (tag) {
     case 1:
       GOTO_PREVIOUS();
       stopPrint();
@@ -44,4 +44,4 @@ bool ConfirmAbortPrintDialogBox::onTouchEnd(uint8_t tag) {
   }
 }
 
-#endif // EXTENSIBLE_UI
+#endif // LULZBOT_TOUCH_UI

@@ -22,7 +22,7 @@
 
 #include "../config.h"
 
-#if ENABLED(EXTENSIBLE_UI)
+#if ENABLED(LULZBOT_TOUCH_UI)
 #include "screens.h"
 #include "screen_data.h"
 
@@ -92,7 +92,7 @@ SCREEN_TABLE {
   DECL_SCREEN(LockScreen),
   DECL_SCREEN(FilesScreen),
   DECL_SCREEN(EndstopStatesScreen),
-#if ENABLED(EXTENSIBLE_UI) && defined(LULZBOT_USE_BIOPRINTER_UI)
+#ifdef LULZBOT_USE_BIOPRINTER_UI
   DECL_SCREEN(BioPrintingDialogBox),
   DECL_SCREEN(BioConfirmHomeXYZ),
   DECL_SCREEN(BioConfirmHomeE),
@@ -110,4 +110,4 @@ SCREEN_TABLE {
 
 SCREEN_TABLE_POST
 
-#endif // EXTENSIBLE_UI
+#endif // LULZBOT_TOUCH_UI

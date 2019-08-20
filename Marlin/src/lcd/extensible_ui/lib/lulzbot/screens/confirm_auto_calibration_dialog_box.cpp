@@ -22,7 +22,7 @@
 
 #include "../config.h"
 
-#if ENABLED(EXTENSIBLE_UI) && ENABLED(CALIBRATION_GCODE)
+#if ENABLED(LULZBOT_TOUCH_UI) && ENABLED(CALIBRATION_GCODE)
 
 #include "screens.h"
 
@@ -35,7 +35,7 @@ void ConfirmAutoCalibrationDialogBox::onRedraw(draw_mode_t) {
 }
 
 bool ConfirmAutoCalibrationDialogBox::onTouchEnd(uint8_t tag) {
-  switch(tag) {
+  switch (tag) {
     case 1:
       GOTO_SCREEN(StatusScreen);
       injectCommands_P(PSTR(LULZBOT_CALIBRATION_COMMANDS));
@@ -45,4 +45,4 @@ bool ConfirmAutoCalibrationDialogBox::onTouchEnd(uint8_t tag) {
   }
 }
 
-#endif // EXTENSIBLE_UI
+#endif // LULZBOT_TOUCH_UI

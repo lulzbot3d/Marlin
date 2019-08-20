@@ -22,7 +22,7 @@
 
 #include "../config.h"
 
-#if ENABLED(EXTENSIBLE_UI)
+#if ENABLED(LULZBOT_TOUCH_UI)
 
 #include "screens.h"
 
@@ -55,7 +55,7 @@ void StepsScreen::onRedraw(draw_mode_t what) {
 
 bool StepsScreen::onTouchHeld(uint8_t tag) {
   const float increment = getIncrement();
-  switch(tag) {
+  switch (tag) {
     case  2: UI_DECREMENT(AxisSteps_per_mm, X);  break;
     case  3: UI_INCREMENT(AxisSteps_per_mm, X);  break;
     case  4: UI_DECREMENT(AxisSteps_per_mm, Y);  break;
@@ -83,4 +83,4 @@ bool StepsScreen::onTouchHeld(uint8_t tag) {
   return true;
 }
 
-#endif // EXTENSIBLE_UI
+#endif // LULZBOT_TOUCH_UI

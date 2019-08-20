@@ -22,7 +22,7 @@
 
 #include "../config.h"
 
-#if ENABLED(EXTENSIBLE_UI)
+#if ENABLED(LULZBOT_TOUCH_UI)
 
 #include "screens.h"
 
@@ -61,7 +61,7 @@ void TemperatureScreen::onRedraw(draw_mode_t what) {
 
 bool TemperatureScreen::onTouchHeld(uint8_t tag) {
   const float increment = getIncrement();
-  switch(tag) {
+  switch (tag) {
     case 20: UI_DECREMENT(TargetTemp_celsius, BED); break;
     case 21: UI_INCREMENT(TargetTemp_celsius, BED); break;
     #ifndef LULZBOT_DISABLE_TOOLHEAD_HEATER
@@ -108,4 +108,4 @@ bool TemperatureScreen::onTouchHeld(uint8_t tag) {
   return true;
 }
 
-#endif // EXTENSIBLE_UI
+#endif // LULZBOT_TOUCH_UI

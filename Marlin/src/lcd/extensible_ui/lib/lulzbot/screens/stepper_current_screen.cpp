@@ -22,7 +22,7 @@
 
 #include "../config.h"
 
-#if ENABLED(EXTENSIBLE_UI) && HAS_TRINAMIC
+#if ENABLED(LULZBOT_TOUCH_UI) && HAS_TRINAMIC
 
 #include "screens.h"
 
@@ -55,7 +55,7 @@ void StepperCurrentScreen::onRedraw(draw_mode_t what) {
 
 bool StepperCurrentScreen::onTouchHeld(uint8_t tag) {
   const float increment = getIncrement();
-  switch(tag) {
+  switch (tag) {
     case  2: UI_DECREMENT(AxisCurrent_mA, X ); break;
     case  3: UI_INCREMENT(AxisCurrent_mA, X ); break;
     case  4: UI_DECREMENT(AxisCurrent_mA, Y ); break;
@@ -83,4 +83,4 @@ bool StepperCurrentScreen::onTouchHeld(uint8_t tag) {
   return true;
 }
 
-#endif // EXTENSIBLE_UI
+#endif // LULZBOT_TOUCH_UI

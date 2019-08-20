@@ -22,7 +22,7 @@
 
 #include "../config.h"
 
-#if ENABLED(EXTENSIBLE_UI) && ENABLED(DEVELOPER_SCREENS)
+#if ENABLED(LULZBOT_TOUCH_UI) && ENABLED(DEVELOPER_SCREENS)
 
 #include "screens.h"
 
@@ -75,7 +75,7 @@ void TouchRegistersScreen::onRedraw(draw_mode_t) {
  }
 
  bool TouchRegistersScreen::onTouchEnd(uint8_t tag) {
-   switch(tag) {
+   switch (tag) {
      case 1:        GOTO_PREVIOUS();                 break;
      default:
        return false;
@@ -83,4 +83,4 @@ void TouchRegistersScreen::onRedraw(draw_mode_t) {
    return true;
  }
 
-#endif // EXTENSIBLE_UI
+#endif // LULZBOT_TOUCH_UI

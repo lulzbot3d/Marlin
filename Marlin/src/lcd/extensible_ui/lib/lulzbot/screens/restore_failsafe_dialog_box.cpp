@@ -22,7 +22,7 @@
 
 #include "../config.h"
 
-#if ENABLED(EXTENSIBLE_UI)
+#if ENABLED(LULZBOT_TOUCH_UI)
 
 #include "screens.h"
 
@@ -34,7 +34,7 @@ void RestoreFailsafeDialogBox::onRedraw(draw_mode_t) {
 }
 
 bool RestoreFailsafeDialogBox::onTouchEnd(uint8_t tag) {
-  switch(tag) {
+  switch (tag) {
     case 1:
       ExtUI::injectCommands_P(PSTR("M502\nM117 Factory settings restored."));
       AlertDialogBox::show(F("Factory settings restored."));
@@ -48,4 +48,4 @@ bool RestoreFailsafeDialogBox::onTouchEnd(uint8_t tag) {
   }
 }
 
-#endif // EXTENSIBLE_UI
+#endif // LULZBOT_TOUCH_UI

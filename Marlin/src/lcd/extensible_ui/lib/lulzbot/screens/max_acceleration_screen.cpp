@@ -22,7 +22,7 @@
 
 #include "../config.h"
 
-#if ENABLED(EXTENSIBLE_UI)
+#if ENABLED(LULZBOT_TOUCH_UI)
 
 #include "screens.h"
 
@@ -55,7 +55,7 @@ void MaxAccelerationScreen::onRedraw(draw_mode_t what) {
 
 bool MaxAccelerationScreen::onTouchHeld(uint8_t tag) {
   const float increment = getIncrement();
-  switch(tag) {
+  switch (tag) {
     case  2: UI_DECREMENT(AxisMaxAcceleration_mm_s2, X ); break;
     case  3: UI_INCREMENT(AxisMaxAcceleration_mm_s2, X ); break;
     case  4: UI_DECREMENT(AxisMaxAcceleration_mm_s2, Y ); break;
@@ -82,4 +82,4 @@ bool MaxAccelerationScreen::onTouchHeld(uint8_t tag) {
   return true;
 }
 
-#endif // EXTENSIBLE_UI
+#endif // LULZBOT_TOUCH_UI

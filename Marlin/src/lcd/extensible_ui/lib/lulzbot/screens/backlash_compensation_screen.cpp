@@ -22,7 +22,7 @@
 
 #include "../config.h"
 
-#if ENABLED(EXTENSIBLE_UI) && ENABLED(BACKLASH_GCODE)
+#if ENABLED(LULZBOT_TOUCH_UI) && ENABLED(BACKLASH_GCODE)
 
 #include "screens.h"
 
@@ -48,7 +48,7 @@ void BacklashCompensationScreen::onRedraw(draw_mode_t what) {
 
 bool BacklashCompensationScreen::onTouchHeld(uint8_t tag) {
   const float increment = getIncrement();
-  switch(tag) {
+  switch (tag) {
     case  2:  UI_DECREMENT(AxisBacklash_mm, X); break;
     case  3:  UI_INCREMENT(AxisBacklash_mm, X); break;
     case  4:  UI_DECREMENT(AxisBacklash_mm, Y); break;
@@ -69,4 +69,4 @@ bool BacklashCompensationScreen::onTouchHeld(uint8_t tag) {
   return true;
 }
 
-#endif // EXTENSIBLE_UI
+#endif // LULZBOT_TOUCH_UI

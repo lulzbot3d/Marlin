@@ -22,7 +22,7 @@
 
 #include "../config.h"
 
-#if ENABLED(EXTENSIBLE_UI)
+#if ENABLED(LULZBOT_TOUCH_UI)
 
 #include "screens.h"
 
@@ -73,11 +73,11 @@ void DialogBoxBaseClass::drawSpinner() {
 }
 
 bool DialogBoxBaseClass::onTouchEnd(uint8_t tag) {
-  switch(tag) {
+  switch (tag) {
     case 1: GOTO_PREVIOUS(); return true;
     case 2: GOTO_PREVIOUS(); return true;
     default:                 return false;
   }
 }
 
-#endif // EXTENSIBLE_UI
+#endif // LULZBOT_TOUCH_UI

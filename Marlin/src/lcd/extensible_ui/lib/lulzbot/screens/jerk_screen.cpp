@@ -22,7 +22,7 @@
 
 #include "../config.h"
 
-#if ENABLED(EXTENSIBLE_UI) && DISABLED(JUNCTION_DEVIATION)
+#if ENABLED(LULZBOT_TOUCH_UI) && DISABLED(JUNCTION_DEVIATION)
 
 #include "screens.h"
 
@@ -46,7 +46,7 @@ void JerkScreen::onRedraw(draw_mode_t what) {
 bool JerkScreen::onTouchHeld(uint8_t tag) {
   using namespace ExtUI;
   const float increment = getIncrement();
-  switch(tag) {
+  switch (tag) {
     case  2: UI_DECREMENT(AxisMaxJerk_mm_s, X); break;
     case  3: UI_INCREMENT(AxisMaxJerk_mm_s, X); break;
     case  4: UI_DECREMENT(AxisMaxJerk_mm_s, Y); break;
@@ -62,4 +62,4 @@ bool JerkScreen::onTouchHeld(uint8_t tag) {
   return true;
 }
 
-#endif // EXTENSIBLE_UI
+#endif // LULZBOT_TOUCH_UI

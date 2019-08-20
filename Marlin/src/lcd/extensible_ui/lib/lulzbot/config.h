@@ -35,9 +35,9 @@
 // If you have changed the LCD panel, you may override the resolution
 // below (see "ftdi_eve_resolutions.h" for definitions):
 
-//#define LCD_320x240
-//#define LCD_480x272
-//#define LCD_800x480
+//#define TOUCH_UI_320x240
+//#define TOUCH_UI_480x272
+//#define TOUCH_UI_800x480
 
 // Define the printer interface or pins used (see "ui_pin_mappings.h" for definitions):
 
@@ -49,7 +49,7 @@
 
 // Otherwise. Define all the pins manually:
 
-#if defined(OTHER_PIN_LAYOUT)
+#ifdef OTHER_PIN_LAYOUT
     // Select interfacing pins, the following pin specifiers are supported:
     //
     //     ARDUINO_DIGITAL_1  - Arduino pin via digitalWrite/digitalRead
@@ -62,7 +62,7 @@
 
     // If using software SPI, specify pins for SCLK, MOSI, MISO
     //#define CLCD_USE_SOFT_SPI
-    #if defined(CLCD_USE_SOFT_SPI)
+    #ifdef CLCD_USE_SOFT_SPI
         #define CLCD_SOFT_SPI_MOSI             11
         #define CLCD_SOFT_SPI_MISO             12
         #define CLCD_SOFT_SPI_SCLK             13
@@ -72,23 +72,23 @@
 // Defines how to orient the display. An inverted (i.e. upside-down) display
 // is supported on the FT800. The FT810 or better also support a portrait
 // and mirrored orientation.
-//#define USE_INVERTED_ORIENTATION
-//#define USE_PORTRAIT_ORIENTATION
-//#define USE_MIRRORED_ORIENTATION
+//#define TOUCH_UI_INVERTED
+//#define TOUCH_UI_PORTRAIT
+//#define TOUCH_UI_MIRRORED
 
 // Use a numeric passcode for "Parental lock".
 // This is a recommended for smaller displays.
-//#define USE_NUMERIC_PASSCODE
+//#define TOUCH_UI_PASSCODE
 
 // Define number of seconds after which the menu screens
 // timeout and returns the user to the status screen
-#define MENU_TIMEOUT 120
+//#define LCD_TIMEOUT_TO_STATUS 120
 
 // Enable this to debug the event framework
 //#define UI_FRAMEWORK_DEBUG
 
 // Enable the developer's menu and screens
-#define DEVELOPER_SCREENS
+//#define DEVELOPER_SCREENS
 
 // Maximum feed rate for manual extrusion (mm/s)
 //#define MAX_MANUAL_FEEDRATE 240

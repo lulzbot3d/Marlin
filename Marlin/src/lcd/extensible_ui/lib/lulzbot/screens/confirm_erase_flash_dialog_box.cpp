@@ -22,11 +22,11 @@
 
 #include "../config.h"
 
-#if ENABLED(EXTENSIBLE_UI) && ENABLED(DEVELOPER_SCREENS)
+#if ENABLED(LULZBOT_TOUCH_UI) && ENABLED(DEVELOPER_SCREENS)
 
 #include "screens.h"
 
-#include "../io/flash_storage.h"
+#include "../archim2-flash/flash_storage.h"
 
 using namespace FTDI;
 
@@ -36,7 +36,7 @@ void ConfirmEraseFlashDialogBox::onRedraw(draw_mode_t) {
 }
 
 bool ConfirmEraseFlashDialogBox::onTouchEnd(uint8_t tag) {
-  switch(tag) {
+  switch (tag) {
     case 1:
       SpinnerDialogBox::show(F("Erasing..."));
       UIFlashStorage::format_flash();
@@ -51,4 +51,4 @@ bool ConfirmEraseFlashDialogBox::onTouchEnd(uint8_t tag) {
   }
 }
 
-#endif // EXTENSIBLE_UI
+#endif // LULZBOT_TOUCH_UI

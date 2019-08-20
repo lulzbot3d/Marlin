@@ -22,7 +22,7 @@
 
 #include "../config.h"
 
-#if ENABLED(EXTENSIBLE_UI)
+#if ENABLED(LULZBOT_TOUCH_UI)
 
 #include "screens.h"
 #include "screen_data.h"
@@ -57,11 +57,11 @@ void SpinnerDialogBox::enqueueAndWait_P(const progmem_str message, const progmem
 }
 
 void SpinnerDialogBox::onIdle() {
-  if(screen_data.SpinnerDialogBox.auto_hide && !commandsInQueue()) {
+  if (screen_data.SpinnerDialogBox.auto_hide && !commandsInQueue()) {
     screen_data.SpinnerDialogBox.auto_hide = false;
     hide();
     GOTO_PREVIOUS();
   }
 }
 
-#endif // EXTENSIBLE_UI
+#endif // LULZBOT_TOUCH_UI

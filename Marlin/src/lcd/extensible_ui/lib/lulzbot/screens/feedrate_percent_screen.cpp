@@ -22,7 +22,7 @@
 
 #include "../config.h"
 
-#if ENABLED(EXTENSIBLE_UI)
+#if ENABLED(LULZBOT_TOUCH_UI)
 
 #include "screens.h"
 
@@ -40,7 +40,7 @@ void FeedratePercentScreen::onRedraw(draw_mode_t what) {
 
 bool FeedratePercentScreen::onTouchHeld(uint8_t tag) {
   const float increment = getIncrement();
-  switch(tag) {
+  switch (tag) {
     case 4: UI_DECREMENT(Feedrate_percent); break;
     case 5: UI_INCREMENT(Feedrate_percent); break;
     default:
@@ -49,4 +49,4 @@ bool FeedratePercentScreen::onTouchHeld(uint8_t tag) {
   return true;
 }
 
-#endif // EXTENSIBLE_UI
+#endif // LULZBOT_TOUCH_UI

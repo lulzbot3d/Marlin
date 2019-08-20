@@ -22,7 +22,7 @@
 
 #include "../config.h"
 
-#if ENABLED(EXTENSIBLE_UI)
+#if ENABLED(LULZBOT_TOUCH_UI)
 
 #include "screens.h"
 
@@ -37,7 +37,7 @@ void SaveSettingsDialogBox::onRedraw(draw_mode_t) {
 
 bool SaveSettingsDialogBox::onTouchEnd(uint8_t tag) {
   needs_save = false;
-  switch(tag) {
+  switch (tag) {
     case 1:
       injectCommands_P(PSTR("M500"));
       AlertDialogBox::show(F("Settings saved!"));
@@ -51,7 +51,7 @@ bool SaveSettingsDialogBox::onTouchEnd(uint8_t tag) {
 }
 
 void SaveSettingsDialogBox::promptToSaveSettings() {
-   if(needs_save) {
+   if (needs_save) {
      // Remove current screen from the stack
      // so SaveSettingsDialogBox doesn't return here.
      GOTO_SCREEN(SaveSettingsDialogBox);
@@ -62,4 +62,4 @@ void SaveSettingsDialogBox::promptToSaveSettings() {
    }
 }
 
-#endif // EXTENSIBLE_UI
+#endif // LULZBOT_TOUCH_UI

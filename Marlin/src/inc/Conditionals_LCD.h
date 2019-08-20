@@ -368,7 +368,7 @@
 #endif
 
 // Extensible UI serial touch screens. (See src/lcd/extensible_ui)
-#if EITHER(MALYAN_LCD, DGUS_LCD)
+#if ANY(MALYAN_LCD, DGUS_LCD, LULZBOT_TOUCH_UI)
   #define IS_EXTUI
   #define EXTENSIBLE_UI
 #endif
@@ -384,7 +384,14 @@
 /**
  * Default LCD contrast for Graphical LCD displays
  */
-#define HAS_LCD_CONTRAST (HAS_GRAPHICAL_LCD && defined(DEFAULT_LCD_CONTRAST))
+#define HAS_LCD_CONTRAST (                \
+     ENABLED(MAKRPANEL)                   \
+  || ENABLED(CARTESIO_UI)                 \
+  || ENABLED(VIKI2)                       \
+  || ENABLED(AZSMZ_12864)                 \
+  || ENABLED(miniVIKI)                    \
+  || ENABLED(ELB_FULL_GRAPHIC_CONTROLLER) \
+)
 #if HAS_LCD_CONTRAST
   #ifndef LCD_CONTRAST_MIN
     #define LCD_CONTRAST_MIN 0

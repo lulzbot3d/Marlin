@@ -49,7 +49,11 @@
    * Verbose version identifier which should contain a reference to the location
    * from where the binary was downloaded or the source code was compiled.
    */
+  #ifdef LULZBOT_TOOLHEAD_M115_TYPE
   #define DETAILED_BUILD_VERSION " FIRMWARE_VERSION:" SHORT_BUILD_VERSION " EXTRUDER_TYPE:" LULZBOT_TOOLHEAD_M115_TYPE
+  #else
+  #define DETAILED_BUILD_VERSION SHORT_BUILD_VERSION " (Github)"
+  #endif
 
   /**
    * The STRING_DISTRIBUTION_DATE represents when the binary file was built,

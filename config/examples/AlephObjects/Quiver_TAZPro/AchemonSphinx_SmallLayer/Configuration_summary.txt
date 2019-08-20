@@ -52,7 +52,6 @@
 #define EEPROM_SETTINGS
 #define EMERGENCY_PARSER
 #define EVENT_GCODE_SD_STOP "G91\nG0 Z15 F600\nG90\nG0 X170 Y290 F3000\nM117 Print aborted."
-#define EXTENSIBLE_UI
 #define EXTRUDERS 1
 #define EXTRUDE_MINTEMP 120
 #define FAN_KICKSTART_TIME 100
@@ -94,7 +93,6 @@
 #define INVERT_X_DIR false
 #define INVERT_Y_DIR true
 #define INVERT_Z_DIR false
-#define LCD_800x480
 #define LCD_ALEPHOBJECTS_CLCD_UI
 #define LCD_SET_PROGRESS_MANUALLY
 #define LEFT_PROBE_BED_POSITION -6
@@ -117,6 +115,7 @@
 #define LULZBOT_NO_PAUSE_FOR_REHEAT_WORKAROUND
 #define LULZBOT_RUNOUT_HANDLING_WORKAROUND
 #define LULZBOT_TOOLHEAD_M115_TYPE "SmallLayer"
+#define LULZBOT_TOUCH_UI
 #define LULZBOT_USB_DEVICE_PRODUCT_ID 0x0001
 #define LULZBOT_USB_DEVICE_VENDOR_ID 0x27b1
 //#define LULZBOT_USE_UHS3_USB
@@ -191,11 +190,12 @@
 #define TMC_ADV {stepperX.shaft(0);stepperX.semin(1);stepperX.semax(3);stepperY.shaft(0);stepperY.semin(1);stepperY.semax(3);stepperZ.shaft(0);stepperZ.semin(1);stepperZ.semax(3);stepperE0.shaft(0);stepperE0.semin(1);stepperE0.semax(3);}
 #define TMC_DEBUG
 #define TMC_USE_SW_SPI
+#define TOUCH_UI_800x480
+#define TOUCH_UI_PORTRAIT
 #define TX_BUFFER_SIZE 32
 #define USB_FLASH_DRIVE_SUPPORT
 #define USB_INTR_PIN SD_DETECT_PIN
 #define USE_CONTROLLER_FAN
-#define USE_PORTRAIT_ORIENTATION
 //#define USE_XMAX_PLUG
 #define USE_XMIN_PLUG
 #define USE_YMAX_PLUG

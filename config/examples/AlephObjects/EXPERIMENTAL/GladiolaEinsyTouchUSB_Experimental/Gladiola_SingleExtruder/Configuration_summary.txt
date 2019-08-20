@@ -51,7 +51,6 @@
 #define EMERGENCY_PARSER
 #define ENDSTOP_NOISE_THRESHOLD 2
 #define EVENT_GCODE_SD_STOP "G28 Z\nG0 X80 Y190 F3000\nM117 Print aborted."
-#define EXTENSIBLE_UI
 #define EXTRUDERS 1
 #define EXTRUDE_MINTEMP 120
 #define FAN_KICKSTART_TIME 100
@@ -88,7 +87,6 @@
 #define INVERT_X_DIR false
 #define INVERT_Y_DIR true
 #define INVERT_Z_DIR false
-#define LCD_480x272
 #define LCD_ALEPHOBJECTS_CLCD_UI
 #define LCD_SET_PROGRESS_MANUALLY
 #define LEFT_PROBE_BED_POSITION 0
@@ -105,6 +103,7 @@
 #define LULZBOT_M226_PIN_PROTECTION_WORKAROUND
 #define LULZBOT_NO_PAUSE_FOR_REHEAT_WORKAROUND
 #define LULZBOT_TOOLHEAD_M115_TYPE "SingleExtruder"
+#define LULZBOT_TOUCH_UI
 #define LULZBOT_USE_UHS3_USB
 #define LULZBOT_WIPE_SEQUENCE_COMMANDS "M117 Hot end heating...\nM104 S170\nG28 O1\nM117 Wiping nozzle\nT0\nG1 X115 Y174 Z10 F4000\nM109 R170\nG1 Z1\nM114\nG1 X115 Y174\nG1 X45 Y174\nG1 X115 Y174\nG1 X45 Y174\nG1 X115 Y174\nG1 X45 Y174\nG1 X115 Y174\nG1 X45 Y174\nG1 X115 Y174\nG1 X45 Y174\nG1 X115 Y174\nG1 X45 Y174\nG1 Z15\nM400\nM106 S255\nG0 X0 Y168M109 R160\nM107"
 #define MACHINE_UUID "23421dc0-df9f-430b-8f91-0e3bcb55b4e4"
@@ -175,16 +174,17 @@
 #define THERMAL_PROTECTION_PERIOD 15
 #define TMC_ADV {stepperX.toff(1);stepperX.hstrt(4);stepperX.hend(0);stepperX.tbl(1);stepperY.toff(1);stepperY.hstrt(4);stepperY.hend(0);stepperY.tbl(1);stepperZ.toff(1);stepperZ.hstrt(0);stepperZ.hend(0);stepperZ.tbl(1);stepperE0.toff(1);stepperE0.hstrt(0);stepperE0.hend(0);stepperE0.tbl(1);stepperX.shaft(1);stepperX.semin(1);stepperX.semax(3);stepperY.shaft(1);stepperY.semin(1);stepperY.semax(3);stepperZ.shaft(1);stepperZ.semin(1);stepperZ.semax(3);stepperE0.shaft(1);stepperE0.semin(1);stepperE0.semax(3);}
 #define TMC_DEBUG
+#define TOUCH_UI_480x272
+#define TOUCH_UI_PORTRAIT
 #define TX_BUFFER_SIZE 32
 #define USB_FLASH_DRIVE_SUPPORT
 #define USB_INTR_PIN SD_DETECT_PIN
 #define USE_CONTROLLER_FAN
-#define USE_PORTRAIT_ORIENTATION
 //#define USE_XMAX_PLUG
 #define USE_XMIN_PLUG
-//#define USE_YMAX_PLUG
+#define USE_YMAX_PLUG
 #define USE_YMIN_PLUG
-//#define USE_ZMAX_PLUG
+#define USE_ZMAX_PLUG
 #define USE_ZMIN_PLUG
 #define VALIDATE_HOMING_ENDSTOPS
 #define WATCH_TEMP_INCREASE 2

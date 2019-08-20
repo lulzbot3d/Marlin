@@ -44,9 +44,9 @@ void MainScreen::onRedraw(draw_mode_t what) {
      .cmd(COLOR_RGB(0x9999FF)).rectangle(BTN_POS(1,5), BTN_SIZE(4,2));
 
   cmd.cmd(COLOR_RGB(0x000000));
-  draw_text_box_P(cmd, BTN_POS(1,1), BTN_SIZE(4,2), F("This is a test\n\nwith a newline!"));
-  draw_text_box_P(cmd, BTN_POS(1,3), BTN_SIZE(4,2), F("This is a test of the word wrapping function"), OPT_CENTER);
-  draw_text_box_P(cmd, BTN_POS(1,5), BTN_SIZE(4,2), F("This is a test of the word wrapping function with more words"), OPT_CENTERY | OPT_RIGHTX);
+  draw_text_box(cmd, BTN_POS(1,1), BTN_SIZE(4,2), F("This is a test\n\nwith a newline!"));
+  draw_text_box(cmd, BTN_POS(1,3), BTN_SIZE(4,2), F("This is a test of the word wrapping function"), OPT_CENTER);
+  draw_text_box(cmd, BTN_POS(1,5), BTN_SIZE(4,2), F("This is a test of the word wrapping function with more words"), OPT_CENTERY | OPT_RIGHTX);
   
   cmd.font(29).tag(1).button(BTN_POS(2,7), BTN_SIZE(2,1), F("Okay"));
 }

@@ -33,15 +33,15 @@
 // If you have changed the LCD panel, you may override the resolution
 // below (see "ftdi_eve_resolutions.h" for definitions):
 
-//#define LCD_320x240
-#define LCD_480x272
-//#define LCD_800x480
+//#define TOUCH_UI_320x240
+#define TOUCH_UI_480x272
+//#define TOUCH_UI_800x480
 
 // Select interfacing pins, the following pin specifiers are supported:
 //
 //     ARDUINO_DIGITAL_1  - Arduino pin via digitalWrite/digitalRead
 //     AVR_A1             - Fast AVR port access via PORTA/PINA/DDRA
-//     1                  - Only when compiling Marlin, use Marlin pin IDs.
+//     1                  - When compiling Marlin, use Marlin pin IDs.
 
 // The pins for CS and MOD_RESET (PD) must be chosen.
 #define CLCD_MOD_RESET          AVR_D3 // LCD_PINS_ENABLE, Marlin Logical Pin 18
@@ -50,17 +50,21 @@
 // If using software SPI, specify pins for SCLK, MOSI, MISO
 #define CLCD_USE_SOFT_SPI
 #if defined(CLCD_USE_SOFT_SPI)
-    #define CLCD_SOFT_SPI_SCLK  AVR_H6 // BTN_ENC, Marlin Logical Pin 9
-    #define CLCD_SOFT_SPI_MOSI  AVR_G4 // LCD_PINS_D5, Marlin Logical Pin 70
-    #define CLCD_SOFT_SPI_MISO  AVR_H2 // BEEPER_PIN, Marlin Logical Pin 84
+    #define CLCD_SOFT_SPI_SCLK  AVR_H6 // BTN_ENC, Marlin Logical Pin 9, H6
+    #define CLCD_SOFT_SPI_MOSI  AVR_G4 // LCD_PINS_D5, Marlin Logical Pin 70, G4
+    #define CLCD_SOFT_SPI_MISO  AVR_H2 // BEEPER_PIN, Marlin Logical Pin 84, H2
 #endif
 
 // Defines how to orient the display. An inverted (i.e. upside-down) display
 // is supported on the FT800. The FT810 or better also support a portrait
 // and mirrored orientation.
-//#define USE_INVERTED_ORIENTATION
-#define USE_PORTRAIT_ORIENTATION
-//#define USE_MIRRORED_ORIENTATION
+//#define TOUCH_UI_INVERTED
+#define TOUCH_UI_PORTRAIT
+//#define TOUCH_UI_MIRRORED
 
 // Enable this to debug the event framework
 #define UI_FRAMEWORK_DEBUG
+
+// Sets the SPI speed in Hz
+
+#define SPI_FREQUENCY 8000000 >> SPI_SPEED

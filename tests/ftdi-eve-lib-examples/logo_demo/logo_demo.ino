@@ -21,7 +21,7 @@
 
 #include "src/ftdi_eve_lib/ftdi_eve_lib.h"
 #include "src/ftdi_eve_lib/extras/poly_ui.h"
-#include "src/LulzBot_Logo.h"
+#include "src/LulzBot_Logo_Portrait.h"
 
 using namespace FTDI;
 

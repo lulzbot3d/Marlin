@@ -37,7 +37,6 @@
 #define EEPROM_SETTINGS
 #define EMERGENCY_PARSER
 #define EVENT_GCODE_SD_STOP "G28 Z\nM117 Print aborted."
-#define EXTENSIBLE_UI
 #define EXTRUDERS 1
 #define EXTRUDE_MINTEMP 0
 #define E_MIN_PIN X_MAX_PIN
@@ -69,7 +68,6 @@
 #define INVERT_X_DIR false
 #define INVERT_Y_DIR true
 #define INVERT_Z_DIR false
-#define LCD_480x272
 #define LCD_ALEPHOBJECTS_CLCD_UI
 #define LCD_SET_PROGRESS_MANUALLY
 #define LIN_ADVANCE
@@ -89,6 +87,7 @@
 #define LULZBOT_M226_PIN_PROTECTION_WORKAROUND
 #define LULZBOT_NO_PAUSE_FOR_REHEAT_WORKAROUND
 #define LULZBOT_TOOLHEAD_M115_TYPE "SingleExtruder"
+#define LULZBOT_TOUCH_UI
 #define LULZBOT_USE_BIOPRINTER_GCODE
 #define LULZBOT_USE_BIOPRINTER_UI
 #define MACHINE_UUID "9a1d8eee-7118-40a7-942d-9541f35667dd"
@@ -142,9 +141,10 @@
 #define THERMAL_PROTECTION_PERIOD 15
 #define TMC_ADV {stepperX.toff(1);stepperX.hstrt(4);stepperX.hend(0);stepperX.tbl(1);stepperY.toff(1);stepperY.hstrt(4);stepperY.hend(0);stepperY.tbl(1);stepperZ.toff(1);stepperZ.hstrt(0);stepperZ.hend(0);stepperZ.tbl(1);stepperE0.toff(1);stepperE0.hstrt(0);stepperE0.hend(0);stepperE0.tbl(1);stepperX.shaft(1);stepperX.semin(1);stepperX.semax(3);stepperY.shaft(1);stepperY.semin(1);stepperY.semax(3);stepperZ.shaft(1);stepperZ.semin(1);stepperZ.semax(3);stepperE0.shaft(1);stepperE0.semin(1);stepperE0.semax(3);}
 #define TMC_DEBUG
+#define TOUCH_UI_480x272
+#define TOUCH_UI_PORTRAIT
 #define TX_BUFFER_SIZE 32
 #define USE_CONTROLLER_FAN
-#define USE_PORTRAIT_ORIENTATION
 #define USE_XMAX_PLUG
 #define USE_XMIN_PLUG
 #define USE_YMAX_PLUG

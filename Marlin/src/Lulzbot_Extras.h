@@ -30,7 +30,7 @@
   void on_reflash(void);
 #endif
 
-#if ENABLED(EXTENSIBLE_UI)
+#if ENABLED(LULZBOT_TOUCH_UI)
   #define LULZBOT_ON_REFLASH on_reflash();
 #endif
 
@@ -169,10 +169,12 @@
 /**************************** LANGUAGE CHANGES ***************************/
 
 #if EITHER(ULTIPANEL, EXTENSIBLE_UI)
-  #if defined(LULZBOT_LIGHTWEIGHT_UI)
-    #define WELCOME_MSG _UxGT(LULZBOT_LCD_MACHINE_NAME " ready.")
-  #else
-    #define WELCOME_MSG _UxGT("LulzBot " LULZBOT_LCD_MACHINE_NAME " ready.")
+  #if defined(LULZBOT_LCD_MACHINE_NAME)
+    #if defined(LULZBOT_LIGHTWEIGHT_UI)
+      #define WELCOME_MSG _UxGT(LULZBOT_LCD_MACHINE_NAME " ready.")
+    #else
+      #define WELCOME_MSG _UxGT("LulzBot " LULZBOT_LCD_MACHINE_NAME " ready.")
+    #endif
   #endif
 
   // Change wording on a couple menu items

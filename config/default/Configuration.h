@@ -2278,16 +2278,8 @@
 /**
  * Extra options for AlephObjects Color LCD display
  */
-//#define LCD_ALEPHOBJECTS_CLCD_UI
-//#define LCD_HAOYU_FT800CB
-//#define USE_PORTRAIT_ORIENTATION
 //#define AO_EXP1_DEPRECATED_PINMAP
-//#define AO_EXP1_PINMAP
-//#define AO_EXP2_PINMAP
 //#define MAX_MANUAL_FEEDRATE
-//#define LCD_320x240
-//#define LCD_480x272
-//#define LCD_800x480
 //#define UI_FRAMEWORK_DEBUG
 
 /**

@@ -85,7 +85,7 @@
 
 /******************************** EXTRA FEATURES *******************************/
 
-#if ENABLED(EXTENSIBLE_UI)
+#if ENABLED(LULZBOT_TOUCH_UI)
   #include "lcd/extensible_ui/lib/lulzbot/ftdi_eve_lib/basic/ftdi_basic.h"
 
   void on_reflash() {

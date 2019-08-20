@@ -27,11 +27,11 @@
  * M119: Output endstop states to serial output
  */
 void GcodeSuite::M119() {
-   #if ENABLED(LULZBOT_EMI_MITIGATION)
-     enable_emi_pins(true);
-   #endif
+  #if ENABLED(LULZBOT_EMI_MITIGATION)
+    enable_emi_pins(true);
+  #endif
   endstops.M119();
-   #if ENABLED(LULZBOT_EMI_MITIGATION)
-     enable_emi_pins(false);
-   #endif
+  #if ENABLED(LULZBOT_EMI_MITIGATION)
+    enable_emi_pins(false);
+  #endif
 }

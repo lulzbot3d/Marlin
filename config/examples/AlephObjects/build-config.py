@@ -288,9 +288,9 @@ def make_config(PRINTER, TOOLHEAD):
         MARLIN["LULZBOT_USE_UHS3_USB"]                   = False
         MARLIN["LULZBOT_EEPROM_BACKUP_SIZE"]             = 1000
         # Touch LCD configuration
+        MARLIN["TOUCH_UI_PORTRAIT"]                      = True
+        MARLIN["TOUCH_UI_800x480"]                       = True
         MARLIN["LCD_ALEPHOBJECTS_CLCD_UI"]               = True
-        MARLIN["USE_PORTRAIT_ORIENTATION"]               = True
-        MARLIN["LCD_800x480"]                            = True
         MARLIN["AO_EXP2_PINMAP"]                         = True
 
     # Unsupported or unreleased experimental configurations. Use at your own risk.
@@ -381,10 +381,10 @@ def make_config(PRINTER, TOOLHEAD):
         MARLIN["BAUDRATE"]                               = 250000
         MARLIN["PRINTCOUNTER"]                           = True
         MARLIN["MACHINE_UUID"]                           = C_STRING("e5502411-d46d-421d-ba3a-a20126d7930f")
+        MARLIN["TOUCH_UI_PORTRAIT"]                      = True
+        MARLIN["TOUCH_UI_480x272"]                       = True
         MARLIN["LCD_ALEPHOBJECTS_CLCD_UI"]               = True
-        MARLIN["USE_PORTRAIT_ORIENTATION"]               = True
         MARLIN["AO_EXP1_PINMAP"]                         = True
-        MARLIN["LCD_480x272"]                            = True
         MARLIN["SDSUPPORT"]                              = True
 
     if PRINTER == "HibiscusTouchUSB_Experimental":
@@ -410,10 +410,10 @@ def make_config(PRINTER, TOOLHEAD):
         MARLIN["BAUDRATE"]                               = 250000
         MARLIN["PRINTCOUNTER"]                           = True
         MARLIN["MACHINE_UUID"]                           = C_STRING("e5502411-d46d-421d-ba3a-a20126d7930f")
+        MARLIN["TOUCH_UI_PORTRAIT"]                      = True
+        MARLIN["TOUCH_UI_480x272"]                       = True
         MARLIN["LCD_ALEPHOBJECTS_CLCD_UI"]               = True
-        MARLIN["USE_PORTRAIT_ORIENTATION"]               = True
         MARLIN["AO_EXP1_PINMAP"]                         = True
-        MARLIN["LCD_480x272"]                            = True
         MARLIN["SDSUPPORT"]                              = True
         MARLIN["USB_FLASH_DRIVE_SUPPORT"]                = True
         MARLIN["LULZBOT_USE_UHS3_USB"]                   = True
@@ -443,10 +443,10 @@ def make_config(PRINTER, TOOLHEAD):
         MARLIN["BAUDRATE"]                               = 250000
         MARLIN["PRINTCOUNTER"]                           = True
         MARLIN["MACHINE_UUID"]                           = C_STRING("9a1d8eee-7118-40a7-942d-9541f35667dd")
+        MARLIN["TOUCH_UI_PORTRAIT"]                      = True
+        MARLIN["TOUCH_UI_480x272"]                       = True
         MARLIN["LCD_ALEPHOBJECTS_CLCD_UI"]               = True
-        MARLIN["USE_PORTRAIT_ORIENTATION"]               = True
         MARLIN["AO_EXP1_PINMAP"]                         = True
-        MARLIN["LCD_480x272"]                            = True
         MARLIN["SDSUPPORT"]                              = True
 
     if PRINTER == "GladiolaTouchUSB_Experimental":
@@ -469,10 +469,10 @@ def make_config(PRINTER, TOOLHEAD):
         MARLIN["BAUDRATE"]                               = 250000
         MARLIN["MACHINE_UUID"]                           = C_STRING("083f68f1-028e-494c-98e1-f2e0dfaee9a5")
         # Enable the touchscreen and USB on EXP2
+        MARLIN["TOUCH_UI_PORTRAIT"]                      = True
+        MARLIN["TOUCH_UI_480x272"]                       = True
         MARLIN["LCD_ALEPHOBJECTS_CLCD_UI"]               = True
-        MARLIN["USE_PORTRAIT_ORIENTATION"]               = True
         MARLIN["AO_EXP2_PINMAP"]                         = True
-        MARLIN["LCD_480x272"]                            = True
         MARLIN["SDSUPPORT"]                              = True
         MARLIN["USB_FLASH_DRIVE_SUPPORT"]                = True
         MARLIN["LULZBOT_USE_UHS3_USB"]                   = True
@@ -528,10 +528,10 @@ def make_config(PRINTER, TOOLHEAD):
         # On EinsyRetro 1.1a, the touch LCD cannot use hardware
         # SPI because there is a level shifter on MISO controlled
         # by SD_SS. Use software SPI on EXP1 instead.
+        MARLIN["TOUCH_UI_PORTRAIT"]                      = True
+        MARLIN["TOUCH_UI_480x272"]                       = True
         MARLIN["AO_EXP1_PINMAP"]                         = True
         MARLIN["LCD_ALEPHOBJECTS_CLCD_UI"]               = True
-        MARLIN["USE_PORTRAIT_ORIENTATION"]               = True
-        MARLIN["LCD_480x272"]                            = True
         # SD or USB will only work on EXP2, but a 5V
         # pigtail to an endstop connector is needed
         # since EXP2 does not have 5V on pin 10
@@ -592,7 +592,7 @@ def make_config(PRINTER, TOOLHEAD):
         MARLIN["LCD_ALEPHOBJECTS_CLCD_UI"]               = False
         MARLIN["LCD_HAOYU_FT800CB"]                      = True
         MARLIN["AO_EXP1_DEPRECATED_PINMAP"]              = True
-        MARLIN["LCD_480x272"]                            = True
+        MARLIN["TOUCH_UI_480x272"]                       = True
         # SD or USB will only work on EXP2, but a 5
         # pigtail to an endstop connector is needed
         # since EXP2 does not have 5V on pin 1
@@ -700,8 +700,8 @@ def make_config(PRINTER, TOOLHEAD):
     MARLIN["USE_ZMIN_PLUG"]                              = USE_MIN_ENDSTOPS or MARLIN["Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN"]
 
     MARLIN["USE_XMAX_PLUG"]                              = USE_MAX_ENDSTOPS
-    MARLIN["USE_YMAX_PLUG"]                              = USE_MAX_ENDSTOPS
-    MARLIN["USE_ZMAX_PLUG"]                              = USE_MAX_ENDSTOPS or (IS_TAZ and not USE_HOME_BUTTON)
+    MARLIN["USE_YMAX_PLUG"]                              = USE_MAX_ENDSTOPS or IS_MINI
+    MARLIN["USE_ZMAX_PLUG"]                              = USE_MAX_ENDSTOPS or IS_MINI or (IS_TAZ and not USE_HOME_BUTTON)
 
     if PRINTER in ["KangarooPaw_Experimental"]:
         MARLIN["USE_XMAX_PLUG"]                          = True
@@ -2182,7 +2182,7 @@ def make_config(PRINTER, TOOLHEAD):
         MARLIN["STATUS_EXPIRE_SECONDS"]                  = 0
 
     if USE_TOUCH_UI:
-        MARLIN["EXTENSIBLE_UI"]                          = True
+        MARLIN["LULZBOT_TOUCH_UI"]                       = True
         MARLIN["SD_DETECT_INVERTED"]                     = False
         MARLIN["LCD_SET_PROGRESS_MANUALLY"]              = True
         MARLIN["SCROLL_LONG_FILENAMES"]                  = False if USE_LESS_MEMORY else True

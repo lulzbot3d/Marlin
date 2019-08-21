@@ -114,7 +114,6 @@
 #define LULZBOT_HIDE_INIT_EEPROM_IN_MENU
 #define LULZBOT_HIDE_PREHEAT_IN_MENU
 #define LULZBOT_HIDE_UNUSED_FANS_IN_MENU
-#define LULZBOT_JUMP_TO_TOP_ON_MENU_BACK
 #define LULZBOT_LCD_MACHINE_NAME "Mini 2"
 #define LULZBOT_LCD_TOOLHEAD_NAME "SE 0.5mm AeroV2"
 #define LULZBOT_LCD_ZOFFSET_FORMAT ftostr52
@@ -197,6 +196,7 @@
 #define THERMAL_PROTECTION_PERIOD 15
 #define TMC_ADV {stepperX.toff(1);stepperX.hstrt(4);stepperX.hend(0);stepperX.tbl(1);stepperY.toff(1);stepperY.hstrt(4);stepperY.hend(0);stepperY.tbl(1);stepperZ.toff(1);stepperZ.hstrt(0);stepperZ.hend(0);stepperZ.tbl(1);stepperE0.toff(1);stepperE0.hstrt(0);stepperE0.hend(0);stepperE0.tbl(1);stepperX.shaft(1);stepperX.semin(1);stepperX.semax(3);stepperY.shaft(1);stepperY.semin(1);stepperY.semax(3);stepperZ.shaft(1);stepperZ.semin(1);stepperZ.semax(3);stepperE0.shaft(1);stepperE0.semin(1);stepperE0.semax(3);}
 #define TMC_DEBUG
+#define TURBO_BACK_MENU_ITEM
 #define TX_BUFFER_SIZE 32
 #define USE_CONTROLLER_FAN
 #define USE_SMALL_INFOFONT

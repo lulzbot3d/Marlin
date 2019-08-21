@@ -88,16 +88,21 @@ void MarlinUI::save_previous_screen() {
     screen_history[screen_history_depth++] = { currentScreen, encoderPosition, encoderTopLine, screen_items };
 }
 
-void MarlinUI::goto_previous_screen() {
+void MarlinUI::goto_previous_screen(
+  #if ENABLED(TURBO_BACK_MENU_ITEM)
+    const bool is_back/*=false*/
+  #endif
+) {
+  #if DISABLED(TURBO_BACK_MENU_ITEM)
+    constexpr bool is_back = false;
+  #endif
   if (screen_history_depth > 0) {
     menuPosition &sh = screen_history[--screen_history_depth];
     goto_screen(sh.menu_function,
-    #if !defined(LULZBOT_JUMP_TO_TOP_ON_MENU_BACK)
-    sh.encoder_position,
-    #else
-    0ul,
-    #endif
-    sh.top_line, sh.items);
+      is_back ? 0 : sh.encoder_position,
+      is_back ? 0 : sh.top_line,
+      sh.items
+    );
   }
   else
     return_to_status();

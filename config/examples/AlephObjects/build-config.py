@@ -2139,7 +2139,7 @@ def make_config(PRINTER, TOOLHEAD):
 
     if USE_REPRAP_LCD_DISPLAY:
         MARLIN["REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER"] = True
-        MARLIN["LULZBOT_JUMP_TO_TOP_ON_MENU_BACK"] = True
+        MARLIN["TURBO_BACK_MENU_ITEM"]                   = True
         # Marlin shows three extruders on a dual:
         #   Extruder    - The active nozzle (varies)
         #   Extruder 1  - The primary extruder

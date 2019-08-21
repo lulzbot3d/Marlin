@@ -105,7 +105,6 @@
 #define LULZBOT_HIDE_INIT_EEPROM_IN_MENU
 #define LULZBOT_HIDE_PREHEAT_IN_MENU
 #define LULZBOT_HIDE_UNUSED_FANS_IN_MENU
-#define LULZBOT_JUMP_TO_TOP_ON_MENU_BACK
 #define LULZBOT_LCD_MACHINE_NAME "TAZ 6"
 #define LULZBOT_LCD_TOOLHEAD_NAME "Single Extruder"
 #define LULZBOT_LCD_ZOFFSET_FORMAT ftostr52
@@ -188,6 +187,7 @@
 #define TMC_ADV {stepperX.shaft(0);stepperX.semin(1);stepperX.semax(3);stepperY.shaft(0);stepperY.semin(1);stepperY.semax(3);stepperZ.shaft(0);stepperZ.semin(1);stepperZ.semax(3);stepperE0.shaft(0);stepperE0.semin(1);stepperE0.semax(3);}
 #define TMC_DEBUG
 #define TMC_USE_SW_SPI
+#define TURBO_BACK_MENU_ITEM
 #define TX_BUFFER_SIZE 32
 #define USE_CONTROLLER_FAN
 #define USE_SMALL_INFOFONT

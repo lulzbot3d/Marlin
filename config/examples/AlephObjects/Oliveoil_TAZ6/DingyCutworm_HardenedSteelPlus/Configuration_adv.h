@@ -859,6 +859,9 @@
     #define LCD_PRINTER_INFO_IS_BOOTSCREEN // <-- changed:  Show bootscreen(s) instead of Printer Info pages
   #endif
 
+  // BACK menu items keep the highlight at the top
+  #define TURBO_BACK_MENU_ITEM // <-- changed
+
   /**
    * LED Control Menu
    * Add LED Control to the LCD menu

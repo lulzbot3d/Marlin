@@ -1260,7 +1260,7 @@ def make_config(PRINTER, TOOLHEAD):
     if USE_EINSY_RETRO:
         # The TMC drivers need a bit more cooling
         MARLIN["CONTROLLERFAN_SPEED"]                    = 255
-        MARLIN["LULZBOT_CONTROLLERFAN_SPEED_WHEN_ONLY_Z_ACTIVE"] = 120
+        MARLIN["CONTROLLERFAN_SPEED_Z_ONLY"]             = 120
     elif IS_MINI:
         # The Mini fan runs rather loud at full speed
         MARLIN["CONTROLLERFAN_SPEED"]                    = 120

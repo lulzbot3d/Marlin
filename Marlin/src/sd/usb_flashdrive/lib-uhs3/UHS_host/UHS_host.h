@@ -33,7 +33,7 @@ e-mail   :  support@circuitsathome.com
 #include <stdio.h>
 #include <stdint.h>
 
-#if !defined(LULZBOT_USE_UHS3_USB)
+#if DISABLED(USE_UHS3_USB)
 #include <ISR_safe_memory.h>
 #include <Wire.h>
 #include <SPI.h>

@@ -65,10 +65,10 @@ void UHS_NI MAX3421E_HOST::resume_host(void) {
 /* write single byte into MAX3421e register */
 void UHS_NI MAX3421E_HOST::regWr(uint8_t reg, uint8_t data) {
         SPIclass.beginTransaction(MAX3421E_SPI_Settings);
-        LULZBOT_UHS_WRITE_SS(LOW);
+        MARLIN_UHS_WRITE_SS(LOW);
         SPIclass.transfer(reg | 0x02);
         SPIclass.transfer(data);
-        LULZBOT_UHS_WRITE_SS(HIGH);
+        MARLIN_UHS_WRITE_SS(HIGH);
         SPIclass.endTransaction();
 }
 
@@ -78,7 +78,7 @@ void UHS_NI MAX3421E_HOST::regWr(uint8_t reg, uint8_t data) {
 /* returns a pointer to memory position after last written */
 uint8_t* UHS_NI MAX3421E_HOST::bytesWr(uint8_t reg, uint8_t nbytes, uint8_t* data_p) {
         SPIclass.beginTransaction(MAX3421E_SPI_Settings);
-        LULZBOT_UHS_WRITE_SS(LOW);
+        MARLIN_UHS_WRITE_SS(LOW);
         SPIclass.transfer(reg | 0x02);
         //printf("%2.2x :", reg);
 
@@ -88,7 +88,7 @@ uint8_t* UHS_NI MAX3421E_HOST::bytesWr(uint8_t reg, uint8_t nbytes, uint8_t* dat
                 nbytes--;
                 data_p++; // advance data pointer
         }
-        LULZBOT_UHS_WRITE_SS(HIGH);
+        MARLIN_UHS_WRITE_SS(HIGH);
         SPIclass.endTransaction();
         //printf("\r\n");
         return (data_p);
@@ -107,10 +107,10 @@ void UHS_NI MAX3421E_HOST::gpioWr(uint8_t data) {
 /* single host register read    */
 uint8_t UHS_NI MAX3421E_HOST::regRd(uint8_t reg) {
         SPIclass.beginTransaction(MAX3421E_SPI_Settings);
-        LULZBOT_UHS_WRITE_SS(LOW);
+        MARLIN_UHS_WRITE_SS(LOW);
         SPIclass.transfer(reg);
         uint8_t rv = SPIclass.transfer(0);
-        LULZBOT_UHS_WRITE_SS(HIGH);
+        MARLIN_UHS_WRITE_SS(HIGH);
         SPIclass.endTransaction();
         return (rv);
 }
@@ -119,13 +119,13 @@ uint8_t UHS_NI MAX3421E_HOST::regRd(uint8_t reg) {
 /* returns a pointer to a memory position after last read   */
 uint8_t* UHS_NI MAX3421E_HOST::bytesRd(uint8_t reg, uint8_t nbytes, uint8_t* data_p) {
         SPIclass.beginTransaction(MAX3421E_SPI_Settings);
-        LULZBOT_UHS_WRITE_SS(LOW);
+        MARLIN_UHS_WRITE_SS(LOW);
         SPIclass.transfer(reg);
         while(nbytes) {
                 *data_p++ = SPIclass.transfer(0);
                 nbytes--;
         }
-        LULZBOT_UHS_WRITE_SS(HIGH);
+        MARLIN_UHS_WRITE_SS(HIGH);
         SPIclass.endTransaction();
         return ( data_p);
 }
@@ -229,7 +229,9 @@ void UHS_NI MAX3421E_HOST::busprobe(void) {
                                 regWr(rMODE, MODE_LS_HOST); // start low-speed host
                                 vbusState = LSHOST;
                         }
-                        LULZBOT_ENABLE_FRAME_IRQ(true);
+                        #ifdef USB_HOST_MANUAL_POLL
+                                enable_frame_irq(true);
+                        #endif
                         tmpdata = regRd(rMODE) | bmSOFKAENAB; // start SOF generation
                         regWr(rHIRQ, bmFRAMEIRQ); // see data sheet.
                         regWr(rMODE, tmpdata);
@@ -243,7 +245,9 @@ void UHS_NI MAX3421E_HOST::busprobe(void) {
                                 regWr(rMODE, MODE_FS_HOST); // start full-speed host
                                 vbusState = FSHOST;
                         }
-                        LULZBOT_ENABLE_FRAME_IRQ(true);
+                        #ifdef USB_HOST_MANUAL_POLL
+                                enable_frame_irq(true);
+                        #endif
                         tmpdata = regRd(rMODE) | bmSOFKAENAB; // start SOF generation
                         regWr(rHIRQ, bmFRAMEIRQ); // see data sheet.
                         regWr(rMODE, tmpdata);
@@ -297,7 +301,7 @@ int16_t UHS_NI MAX3421E_HOST::Init(int16_t mseconds) {
                 pinMode(irq_pin, INPUT_PULLUP);
         //UHS_PIN_WRITE(irq_pin, HIGH);
         pinMode(ss_pin, OUTPUT);
-        LULZBOT_UHS_WRITE_SS(HIGH);
+        MARLIN_UHS_WRITE_SS(HIGH);
 
 #ifdef USB_HOST_SHIELD_TIMING_PIN
         pinMode(USB_HOST_SHIELD_TIMING_PIN, OUTPUT);
@@ -831,12 +835,12 @@ void UHS_NI MAX3421E_HOST::ISRbottom(void) {
                 case UHS_USB_HOST_STATE_CONFIGURING_DONE:
                         usb_task_state = UHS_USB_HOST_STATE_RUNNING;
                         break;
-                #if defined(LULZBOT_USB_HOST_MANUAL_POLL)
+                #ifdef USB_HOST_MANUAL_POLL
                 case UHS_USB_HOST_STATE_RUNNING:
                 case UHS_USB_HOST_STATE_ERROR:
                 case UHS_USB_HOST_STATE_IDLE:
                 case UHS_USB_HOST_STATE_ILLEGAL:
-                        LULZBOT_ENABLE_FRAME_IRQ(false);
+                        enable_frame_irq(false);
                         break;
                 #else
                 case UHS_USB_HOST_STATE_RUNNING:
@@ -881,7 +885,15 @@ void UHS_NI MAX3421E_HOST::Task(void)
 #else
 
 void UHS_NI MAX3421E_HOST::Task(void) {
-        LULZBOT_USB_IDLE_TASK
+#ifdef USB_HOST_MANUAL_POLL
+        if(usb_task_state == UHS_USB_HOST_STATE_RUNNING) {
+                noInterrupts();
+                for(uint8_t x = 0; x < UHS_HOST_MAX_INTERFACE_DRIVERS; x++)
+                        if(devConfig[x] && devConfig[x]->bPollEnable)
+                                devConfig[x]->Poll();
+                interrupts();
+        }
+#endif
 }
 
 void UHS_NI MAX3421E_HOST::ISRTask(void)
@@ -898,7 +910,7 @@ void UHS_NI MAX3421E_HOST::ISRTask(void)
 #endif
 
         counted = false;
-        if(!LULZBOT_UHS_READ_IRQ()) {
+        if(!MARLIN_UHS_READ_IRQ()) {
                 uint8_t HIRQALL = regRd(rHIRQ); //determine interrupt source
                 uint8_t HIRQ = HIRQALL & IRQ_CHECK_MASK;
                 uint8_t HIRQ_sendback = 0x00;

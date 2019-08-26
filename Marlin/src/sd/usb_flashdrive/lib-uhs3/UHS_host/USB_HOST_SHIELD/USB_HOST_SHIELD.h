@@ -308,7 +308,21 @@ public UHS_USB_HOST_BASE
         volatile bool condet;
         volatile bool doingreset;
 
-        LULZBOT_ENABLE_FRAME_IRQ_DEFN
+        #ifdef USB_HOST_MANUAL_POLL
+                volatile bool frame_irq_enabled = false;
+
+                bool enable_frame_irq(bool enable) {
+                        const bool prev_state = frame_irq_enabled;
+                        if(prev_state != enable) {
+                                if(enable)
+                                        regWr(rHIEN, regRd(rHIEN) |  bmFRAMEIE);
+                                else
+                                        regWr(rHIEN, regRd(rHIEN) & ~bmFRAMEIE);
+                                frame_irq_enabled = enable;
+                        }
+                        return prev_state;
+                }
+        #endif
 
 public:
         SPISettings MAX3421E_SPI_Settings;
@@ -357,7 +371,9 @@ public:
         };
 
         virtual bool UHS_NI sof_delay(uint16_t x) {
-                LULZBOT_FRAME_IRQ_SAVE(true);
+#ifdef USB_HOST_MANUAL_POLL
+                const bool saved_irq_state = enable_frame_irq(true);
+#endif
                 sof_countdown = x;
                 while((sof_countdown != 0) && !condet) {
                         SYSTEM_OR_SPECIAL_YIELD();
@@ -365,7 +381,9 @@ public:
                         Task();
 #endif
                 }
-                LULZBOT_FRAME_IRQ_RESTORE();
+#ifdef USB_HOST_MANUAL_POLL
+                enable_frame_irq(saved_irq_state);
+#endif
                 //                Serial.println("...Wake");
                 return (!condet);
         };
@@ -425,7 +443,9 @@ public:
                 // Enable interrupts
                 noInterrupts();
 #endif
-                LULZBOT_ENABLE_FRAME_IRQ(true);
+                #ifdef USB_HOST_MANUAL_POLL
+                        enable_frame_irq(true);
+                #endif
                 sofevent = true;
 #if USB_HOST_SHIELD_USE_ISR
                 DDSB();

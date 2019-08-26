@@ -454,7 +454,7 @@ uint8_t UHS_NI UHS_Bulk_Storage::Start(void) {
 
         for(uint8_t lun = 0; lun <= bMaxLUN; lun++) {
                 if(!UHS_SLEEP_MS(3)) goto FailUnPlug;
-                #ifndef LULZBOT_USB_NO_TEST_UNIT_READY
+                #ifndef USB_NO_TEST_UNIT_READY
                 uint8_t tries = 0xf0;
                 while((rcode = TestUnitReady(lun))) {
                         BS_HOST_DEBUG("\r\nTry %2.2x TestUnitReady %2.2x\r\n", tries - 0xf0, rcode);
@@ -589,7 +589,7 @@ bool UHS_NI UHS_Bulk_Storage::CheckLUN(uint8_t lun) {
                 return false;
         }
         if(!UHS_SLEEP_MS(20)) return false;
-        #ifndef LULZBOT_SKIP_PAGE3F
+        #ifndef SKIP_PAGE3F
         Page3F(lun);
         #endif
         if(!TestUnitReady(lun)) return true;

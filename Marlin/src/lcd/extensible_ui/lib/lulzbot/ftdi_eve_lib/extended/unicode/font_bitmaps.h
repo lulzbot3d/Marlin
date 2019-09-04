@@ -1,10 +1,9 @@
-/*******************
- * ftdi_extended.h *
- *******************/
+/******************
+ * font_bitmaps.h *
+ ******************/
 
 /****************************************************************************
- *   Written By Mark Pelletier  2019 - Aleph Objects, Inc.                  *
- *   Written By Marcio Teixeira 201( - Aleph Objects, Inc.                  *
+ *   Written By Marcio Teixeira 2019 - Aleph Objects, Inc.                  *
  *                                                                          *
  *   This program is free software: you can redistribute it and/or modify   *
  *   it under the terms of the GNU General Public License as published by   *
@@ -22,28 +21,9 @@
 
 #pragma once
 
-#include "../compat.h"
-#include "../basic/ftdi_basic.h"
+class CommandProcessor;
 
-#if !defined(__MARLIN_FIRMWARE__)
-  #define FTDI_EXTENDED
-#endif
-
-#ifdef FTDI_EXTENDED
-  #include "unicode/font_size_t.h"
-  #include "unicode/unicode.h"
-  #include "unicode/western_european.h"
-  #include "unicode/font_bitmaps.h"
-  #include "rgb_t.h"
-  #include "bitmap_info.h"
-  #include "tiny_timer.h"
-  #include "grid_layout.h"
-  #include "dl_cache.h"
-  #include "event_loop.h"
-  #include "command_processor.h"
-  #include "screen_types.h"
-  #include "sound_player.h"
-  #include "sound_list.h"
-  #include "polygon.h"
-  #include "text_box.h"
-#endif
+namespace FTDI {
+  void write_rle_data(uint16_t addr, uint8_t *data, size_t n);
+  void set_font_bitmap(CommandProcessor& cmd, CLCD::FontMetrics &fm, uint8_t handle);
+}

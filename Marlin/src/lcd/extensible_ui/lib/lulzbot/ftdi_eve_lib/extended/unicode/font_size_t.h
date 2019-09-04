@@ -1,10 +1,9 @@
-/*******************
- * ftdi_extended.h *
- *******************/
+/*****************
+ * font_size_t.h *
+ *****************/
 
 /****************************************************************************
- *   Written By Mark Pelletier  2019 - Aleph Objects, Inc.                  *
- *   Written By Marcio Teixeira 201( - Aleph Objects, Inc.                  *
+ *   Written By Marcio Teixeira 2019 - Aleph Objects, Inc.                  *
  *                                                                          *
  *   This program is free software: you can redistribute it and/or modify   *
  *   it under the terms of the GNU General Public License as published by   *
@@ -22,28 +21,35 @@
 
 #pragma once
 
-#include "../compat.h"
-#include "../basic/ftdi_basic.h"
+class CommandProcessor;
 
-#if !defined(__MARLIN_FIRMWARE__)
-  #define FTDI_EXTENDED
-#endif
+namespace FTDI {
 
-#ifdef FTDI_EXTENDED
-  #include "unicode/font_size_t.h"
-  #include "unicode/unicode.h"
-  #include "unicode/western_european.h"
-  #include "unicode/font_bitmaps.h"
-  #include "rgb_t.h"
-  #include "bitmap_info.h"
-  #include "tiny_timer.h"
-  #include "grid_layout.h"
-  #include "dl_cache.h"
-  #include "event_loop.h"
-  #include "command_processor.h"
-  #include "screen_types.h"
-  #include "sound_player.h"
-  #include "sound_list.h"
-  #include "polygon.h"
-  #include "text_box.h"
-#endif
+  /* The unicode rendering of different font sizes happens by scaling a
+   * large-sized font bitmap using the FTDI bitmap transformation matrix.
+   * This keeps us from having to have load bitmaps for all font sizes.
+   *
+   * The font_size_t class helps manage this scaling factor.
+   */
+  class font_size_t {
+    private:
+      // Standard height for font bitmaps
+      static constexpr uint8_t std_height = 63;
+
+      // 8.8 fixed point scaling coefficient
+      uint16_t coefficient;
+
+      font_size_t(uint16_t v) : coefficient(v) {}
+    public:
+      font_size_t() : coefficient(256) {}
+
+      static uint8_t get_romfont_height(uint8_t font);
+
+      static font_size_t from_romfont(uint8_t size);
+
+      template<typename T> T scale(T val) const {return (int32_t(val) * 256 / coefficient);}
+
+      uint8_t get_height() const;
+      uint16_t get_coefficient() const {return coefficient;}
+  };
+}

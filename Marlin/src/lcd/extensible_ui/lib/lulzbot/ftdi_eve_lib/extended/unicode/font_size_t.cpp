@@ -38,7 +38,7 @@ namespace FTDI {
   }
 
   // Returns the height of the font
-  uint8_t font_size_t::get_height() {
+  uint8_t font_size_t::get_height() const {
     return scale(std_height);
   }
 }

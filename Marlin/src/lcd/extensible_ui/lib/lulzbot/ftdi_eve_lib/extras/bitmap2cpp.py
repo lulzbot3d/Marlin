@@ -45,6 +45,8 @@ class WriteSource:
     self.values.append(value)
 
   def convert_to_4bpp(self, data):
+    # Invert the image
+    data = map(lambda i: 255 - i, data)
     # Quanitize 8-bit values into 4-bits
     data = map(lambda i: i >> 4, data)
     # Make sure there is an even number of elements
@@ -73,7 +75,7 @@ class WriteSource:
     print("};")
 
 if __name__ == "__main__":
-  parser = argparse.ArgumentParser(description='Converts a grayscale bitmap into a 16-level RLE packed C array')
+  parser = argparse.ArgumentParser(description='Converts a grayscale bitmap into a 16-level RLE packed C array for use as font data')
   parser.add_argument("input")
   args = parser.parse_args()
 

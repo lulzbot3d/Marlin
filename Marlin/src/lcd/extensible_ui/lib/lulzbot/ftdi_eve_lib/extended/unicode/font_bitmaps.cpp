@@ -29,7 +29,7 @@ namespace FTDI {
     for (; n > 2; n -= 2) {
       uint8_t count = pgm_read_byte(data++);
       uint8_t value = pgm_read_byte(data++);
-      while (count--) CLCD::mem_write_8(addr++, 255 - value);
+      while (count--) CLCD::mem_write_8(addr++, value);
     }
   }
 

@@ -34,7 +34,7 @@ namespace FTDI {
   class font_size_t {
     private:
       // Standard height for font bitmaps
-      static constexpr uint8_t std_height = 63;
+      static constexpr uint8_t std_height = 49;
 
       // 8.8 fixed point scaling coefficient
       uint16_t coefficient;

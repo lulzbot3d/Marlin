@@ -25,10 +25,16 @@
 
   using namespace FTDI;
 
-  typedef WesternEuropean Language;
-
-  /* Returns the next character in a UTF8 string and increments the
-   * pointer to the next character */
+  /**
+   * Returns a character in a UTF8 string and increments the
+   * pointer to the next character
+   *
+   * Parameters:
+   *
+   *   c  - Pointer to a UTF8 encoded string.
+   *
+   * Returns: A single UTF8 character
+   */
 
   utf8_char_t FTDI::get_utf8_char_and_inc(const char *&c) {
     if (*c <= 0b01111111)
@@ -42,36 +48,97 @@
       return 0;
   }
 
-  /* Loads the bitmap data for unicode rendering into RAMG at the specified address */
-
-  void FTDI::load_utf8_data(uint16_t addr) {
-    Language::load_data(addr);
-  }
-
-  /* Sets up the bitmap handles for drawing the fonts */
-
-  void FTDI::load_utf8_bitmaps(CommandProcessor &cmd) {
-    Language::load_bitmaps(cmd);
-  }
-
-  /* Helper function for drawing and/or measuring UTF8 text */
+  /**
+   * Helper function for drawing and/or measuring an UTF8 string
+   *
+   * Parameters:
+   *
+   *   cmd  - If non-NULL the symbol is drawn to the screen.
+   *          If NULL, only increment position for text measurement.
+   *
+   *   x, y - The location at which to draw the string.
+   *
+   *   str  - The UTF8 string to draw or measure.
+   *
+   *   fs   - A scaling object used to specify the font size.
+   */
 
   static uint16_t render_utf8_text(CommandProcessor* cmd, int x, int y, const char *str, font_size_t fs) {
     const int start_x = x;
     while (*str) {
       const utf8_char_t c = get_utf8_char_and_inc(str);
-      Language::render_glyph(cmd, x, y, fs, c);
+      #ifdef TOUCH_UI_UTF8_WESTERN_CHARSET
+        WesternEuropean::render_glyph(cmd, x, y, fs, c) ||
+      #endif
+      StandardCharSet::render_glyph(cmd, x, y, fs, c);
     }
     return x - start_x;
   }
 
-  /* Measures an utf8 text string */
+  /**
+   * Load the font bitmap data into RAMG. This function is called once at
+   * the start of the program.
+   *
+   * Parameters:
+   *
+   *   addr  - Address in RAMG where the font data is written
+   */
+
+  void FTDI::load_utf8_data(uint16_t addr) {
+    #ifdef TOUCH_UI_UTF8_WESTERN_CHARSET
+      WesternEuropean::load_data(addr);
+    #endif
+    StandardCharSet::load_data(addr);
+  }
+
+  /**
+   * Populates the bitmap handles for the custom fonts into the display list.
+   * This function is called once at the start of each display list.
+   *
+   * Parameters:
+   *
+   *   cmd  - Object used for writing to the FTDI chip command queue.
+   */
+
+  void FTDI::load_utf8_bitmaps(CommandProcessor &cmd) {
+    #ifdef TOUCH_UI_UTF8_WESTERN_CHARSET
+      WesternEuropean::load_bitmaps(cmd);
+    #endif
+    StandardCharSet::load_bitmaps(cmd);
+  }
+
+   /**
+    * Measures an utf8 text character
+    *
+    * Parameters:
+    *
+    *   c    - The unicode code point to measure.
+    *
+    *   fs   - A scaling object used to specify the font size.
+    *
+    * Returns: A width in pixels
+    */
 
   uint16_t FTDI::get_utf8_char_width(utf8_char_t c, font_size_t fs) {
     int x = 0, y = 0;
-    Language::render_glyph(NULL, x, y, fs, c);
+    #ifdef TOUCH_UI_UTF8_WESTERN_CHARSET
+      WesternEuropean::render_glyph(NULL, x, y, fs, c) ||
+    #endif
+      StandardCharSet::render_glyph(NULL, x, y, fs, c);
     return x;
   }
+
+   /**
+    * Measures an utf8 text string
+    *
+    * Parameters:
+    *
+    *   str  - The UTF8 string to measure.
+    *
+    *   fs   - A scaling object used to specify the font size.
+    *
+    * Returns: A width in pixels
+    */
 
   uint16_t FTDI::get_utf8_text_width(const char *str, font_size_t fs) {
     return render_utf8_text(NULL, 0, 0, str, fs);
@@ -83,19 +150,38 @@
     return get_utf8_text_width((const char*) pstr, fs);
   }
 
-  /* Draws an utf8 text string */
+   /**
+    * Draws an utf8 text string
+    *
+    * Parameters:
+    *
+    *   cmd  - Object used for writing to the FTDI chip command queue.
+    *
+    *   x, y - The location at which to draw the string.
+    *
+    *   str  - The UTF8 string to draw.
+    *
+    *   fs   - A scaling object used to specify the font size.
+    *
+    *   options - Text alignment options (i.e. OPT_CENTERX, OPT_CENTERY, OPT_CENTER or OPT_RIGHTX)
+    *
+    */
 
   void FTDI::draw_utf8_text(CommandProcessor& cmd, int x, int y, const char *str, font_size_t fs, uint16_t options = 0) {
     cmd.cmd(SAVE_CONTEXT());
     cmd.cmd(BITMAP_TRANSFORM_A(fs.get_coefficient()));
     cmd.cmd(BITMAP_TRANSFORM_E(fs.get_coefficient()));
     cmd.cmd(BEGIN(BITMAPS));
+
+    // Apply alignment options
     if (options & OPT_CENTERX)
       x -= get_utf8_text_width(str, fs) / 2;
     else if (options & OPT_RIGHTX)
       x -= get_utf8_text_width(str, fs);
     if(options & OPT_CENTERY)
       y -= fs.get_height()/2;
+
+    // Render the text
     render_utf8_text(&cmd, x, y, str, fs);
     cmd.cmd(RESTORE_CONTEXT());
   }

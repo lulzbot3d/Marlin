@@ -1,5 +1,5 @@
 /************************
- * western_european.cpp *
+ * western_char_set.cpp *
  ************************/
 
 /****************************************************************************
@@ -22,15 +22,18 @@
 #include "../ftdi_extended.h"
 
 #if defined(FTDI_EXTENDED) && defined(TOUCH_UI_USE_UTF8) && defined(TOUCH_UI_UTF8_WESTERN_CHARSET)
-
-  #include "western_european_bitmap_31.h"
+  #include "western_char_set_bitmap_31.h"
 
   #define NUM_ELEMENTS(a) (sizeof(a)/sizeof(a[0]))
+
+  using namespace FTDI;
 
   constexpr static uint8_t std_font = 31;
   constexpr static uint8_t alt_font = 1;
 
-  /* Glyphs in the Western European bitmap */
+  static uint32_t bitmap_addr;
+
+  /* Glyphs in the WesternCharSet bitmap */
 
   enum {
     GRAVE,
@@ -84,94 +87,106 @@
   constexpr int8_t mid_accent = 16;
 
   /* When reusing the DOT_ABOVE accent glyph for the degree sign, we need to trim the leading space */
-  constexpr uint8_t deg_sign_leading = 8;
+  constexpr uint8_t deg_sign_leading = 9;
 
   /* Look-up table for constructing characters (must be ordered by unicode)
    *
-   * Characters are either complete symbols from the Western European bitmap,
+   * Characters are either complete symbols from the Western Char Set bitmap,
    * or they are constructed using a standard letter from the romfont and
-   * drawing an accent from the Western European bitmap over it.
+   * drawing an accent from the Western Char Set bitmap over it.
    */
 
-  PROGMEM const struct {
+  #define UTF8(A) uint16_t(utf8(U##A))
+
+  PROGMEM constexpr struct {
     uint16_t unicode;
     uint8_t  std_char; // Glyph from standard ROMFONT (zero if none)
-    uint8_t  alt_char; // Glyph from Western European bitmap
+    uint8_t  alt_char; // Glyph from Western Char Set bitmap
     uint8_t  alt_data; // For accented characters, the centerline; else char width
   } char_recipe[] = {
-    { 0,   0,  NO_DOT_I,           10   },
-    {'°',  0 , INV_EXCLAMATION,    13   },
-    {'¢',  0 , CENT_SIGN,          23   },
-    {'£',  0 , POUND_SIGN,         24   },
-    {'§',  0 , CURRENCY_SIGN,      26   },
-    {'•',  0 , YEN_SIGN,           26   },
-    {'´',  0 , LEFT_DBL_QUOTE,     23   },
-    {'∞',  0 , DOT_ABOVE,          24   },
-    {'ª',  0 , RIGHT_DBL_QUOTE,    24   },
-    {'ø',  0 , INV_QUESTION,       21   },
-    {'¿', 'A', GRAVE,              mid_A},
-    {'¡', 'A', ACUTE,              mid_A},
-    {'¬', 'A', CIRCUMFLEX,         mid_A},
-    {'√', 'A', TILDE,              mid_A},
-    {'ƒ', 'A', DIAERESIS,          mid_A},
-    {'≈', 'A', DOT_ABOVE,          mid_A},
-    {'∆',  0 , LRG_AE,             mid_E},
-    {'«', 'C', CEDILLA,            mid_C},
-    {'»', 'E', GRAVE,              mid_E},
-    {'…', 'E', ACUTE,              mid_E},
-    {' ', 'E', CIRCUMFLEX,         mid_E},
-    {'À', 'E', DIAERESIS,          mid_E},
-    {'Ã', 'I', GRAVE,              mid_I},
-    {'Õ', 'I', ACUTE,              mid_I},
-    {'Œ', 'I', CIRCUMFLEX,         mid_I},
-    {'œ', 'I', DIAERESIS,          mid_I},
-    {'–',  0,  LRG_ETH,            31   },
-    {'—', 'N', TILDE,              mid_N},
-    {'“', 'O', GRAVE,              mid_O},
-    {'”', 'O', ACUTE,              mid_O},
-    {'‘', 'O', CIRCUMFLEX,         mid_O},
-    {'’', 'O', TILDE,              mid_O},
-    {'÷', 'O', DIAERESIS,          mid_O},
-    {'ÿ',  0 , LRG_O_STROKE,       32   },
-    {'Ÿ', 'U', GRAVE,              mid_U},
-    {'⁄', 'U', ACUTE,              mid_U},
-    {'€', 'U', CIRCUMFLEX,         mid_U},
-    {'‹', 'U', DIAERESIS,          mid_U},
-    {'›', 'Y', ACUTE,              mid_Y},
-    {'ﬁ',  0 , LRG_THORN,          25   },
-    {'ﬂ',  0 , SHARP_S,            26   },
-    {'‡', 'a', GRAVE,              mid_a},
-    {'·', 'a', ACUTE,              mid_a},
-    {'‚', 'a', CIRCUMFLEX,         mid_a},
-    {'„', 'a', TILDE,              mid_a},
-    {'‰', 'a', DIAERESIS,          mid_a},
-    {'Â', 'a', DOT_ABOVE,          mid_a},
-    {'Ê',  0 , SML_AE,             40   },
-    {'Á', 'c', CEDILLA,            mid_c},
-    {'Ë', 'e', GRAVE,              mid_e},
-    {'È', 'e', ACUTE,              mid_e},
-    {'Í', 'e', CIRCUMFLEX,         mid_e},
-    {'Î', 'e', DIAERESIS,          mid_e},
-    {'Ï', 'i', GRAVE,              mid_i},
-    {'Ì', 'i', ACUTE,              mid_i},
-    {'Ó', 'i', CIRCUMFLEX,         mid_i},
-    {'Ô', 'i', DIAERESIS,          mid_i},
-    {'',  0,  SML_ETH,            24   },
-    {'Ò', 'n', TILDE,              mid_n},
-    {'Ú', 'o', GRAVE,              mid_o},
-    {'Û', 'o', ACUTE,              mid_o},
-    {'Ù', 'o', CIRCUMFLEX,         mid_o},
-    {'ı', 'o', TILDE,              mid_o},
-    {'ˆ', 'o', DIAERESIS,          mid_o},
-    {'¯',  0 , SML_O_STROKE,       25   },
-    {'˘', 'u', GRAVE,              mid_u},
-    {'˙', 'u', ACUTE,              mid_u},
-    {'˚', 'u', CIRCUMFLEX,         mid_u},
-    {'¸', 'u', DIAERESIS,          mid_u},
-    {'˝', 'y', ACUTE,              mid_y},
-    {'˛',  0 , SML_THORN,          25   },
-    {'ˇ', 'y', DIAERESIS,          mid_y}
+    {0,          0,  NO_DOT_I,           10   },
+    {UTF8('¬°'),  0 , INV_EXCLAMATION,    13   },
+    {UTF8('¬¢'),  0 , CENT_SIGN,          23   },
+    {UTF8('¬£'),  0 , POUND_SIGN,         24   },
+    {UTF8('¬§'),  0 , CURRENCY_SIGN,      26   },
+    {UTF8('¬•'),  0 , YEN_SIGN,           26   },
+    {UTF8('¬´'),  0 , LEFT_DBL_QUOTE,     23   },
+    {UTF8('¬∞'),  0 , DOT_ABOVE,          24   },
+    {UTF8('¬ª'),  0 , RIGHT_DBL_QUOTE,    24   },
+    {UTF8('¬ø'),  0 , INV_QUESTION,       21   },
+    {UTF8('√Ä'), 'A', GRAVE,              mid_A},
+    {UTF8('√Å'), 'A', ACUTE,              mid_A},
+    {UTF8('√Ç'), 'A', CIRCUMFLEX,         mid_A},
+    {UTF8('√É'), 'A', TILDE,              mid_A},
+    {UTF8('√Ñ'), 'A', DIAERESIS,          mid_A},
+    {UTF8('√Ö'), 'A', DOT_ABOVE,          mid_A},
+    {UTF8('√Ü'),  0 , LRG_AE,             mid_E},
+    {UTF8('√á'), 'C', CEDILLA,            mid_C},
+    {UTF8('√à'), 'E', GRAVE,              mid_E},
+    {UTF8('√â'), 'E', ACUTE,              mid_E},
+    {UTF8('√ä'), 'E', CIRCUMFLEX,         mid_E},
+    {UTF8('√ã'), 'E', DIAERESIS,          mid_E},
+    {UTF8('√å'), 'I', GRAVE,              mid_I},
+    {UTF8('√ç'), 'I', ACUTE,              mid_I},
+    {UTF8('√é'), 'I', CIRCUMFLEX,         mid_I},
+    {UTF8('√è'), 'I', DIAERESIS,          mid_I},
+    {UTF8('√ê'),  0,  LRG_ETH,            31   },
+    {UTF8('√ë'), 'N', TILDE,              mid_N},
+    {UTF8('√í'), 'O', GRAVE,              mid_O},
+    {UTF8('√ì'), 'O', ACUTE,              mid_O},
+    {UTF8('√î'), 'O', CIRCUMFLEX,         mid_O},
+    {UTF8('√ï'), 'O', TILDE,              mid_O},
+    {UTF8('√ñ'), 'O', DIAERESIS,          mid_O},
+    {UTF8('√ò'),  0 , LRG_O_STROKE,       32   },
+    {UTF8('√ô'), 'U', GRAVE,              mid_U},
+    {UTF8('√ö'), 'U', ACUTE,              mid_U},
+    {UTF8('√õ'), 'U', CIRCUMFLEX,         mid_U},
+    {UTF8('√ú'), 'U', DIAERESIS,          mid_U},
+    {UTF8('√ù'), 'Y', ACUTE,              mid_Y},
+    {UTF8('√û'),  0 , LRG_THORN,          25   },
+    {UTF8('√ü'),  0 , SHARP_S,            26   },
+    {UTF8('√†'), 'a', GRAVE,              mid_a},
+    {UTF8('√°'), 'a', ACUTE,              mid_a},
+    {UTF8('√¢'), 'a', CIRCUMFLEX,         mid_a},
+    {UTF8('√£'), 'a', TILDE,              mid_a},
+    {UTF8('√§'), 'a', DIAERESIS,          mid_a},
+    {UTF8('√•'), 'a', DOT_ABOVE,          mid_a},
+    {UTF8('√¶'),  0 , SML_AE,             40   },
+    {UTF8('√ß'), 'c', CEDILLA,            mid_c},
+    {UTF8('√®'), 'e', GRAVE,              mid_e},
+    {UTF8('√©'), 'e', ACUTE,              mid_e},
+    {UTF8('√™'), 'e', CIRCUMFLEX,         mid_e},
+    {UTF8('√´'), 'e', DIAERESIS,          mid_e},
+    {UTF8('√¨'), 'i', GRAVE,              mid_i},
+    {UTF8('√≠'), 'i', ACUTE,              mid_i},
+    {UTF8('√Æ'), 'i', CIRCUMFLEX,         mid_i},
+    {UTF8('√Ø'), 'i', DIAERESIS,          mid_i},
+    {UTF8('√∞'),  0,  SML_ETH,            24   },
+    {UTF8('√±'), 'n', TILDE,              mid_n},
+    {UTF8('√≤'), 'o', GRAVE,              mid_o},
+    {UTF8('√≥'), 'o', ACUTE,              mid_o},
+    {UTF8('√¥'), 'o', CIRCUMFLEX,         mid_o},
+    {UTF8('√µ'), 'o', TILDE,              mid_o},
+    {UTF8('√∂'), 'o', DIAERESIS,          mid_o},
+    {UTF8('√∏'),  0 , SML_O_STROKE,       25   },
+    {UTF8('√π'), 'u', GRAVE,              mid_u},
+    {UTF8('√∫'), 'u', ACUTE,              mid_u},
+    {UTF8('√ª'), 'u', CIRCUMFLEX,         mid_u},
+    {UTF8('√º'), 'u', DIAERESIS,          mid_u},
+    {UTF8('√Ω'), 'y', ACUTE,              mid_y},
+    {UTF8('√æ'),  0 , SML_THORN,          25   },
+    {UTF8('√ø'), 'y', DIAERESIS,          mid_y}
   };
+
+  static_assert(UTF8('¬°') == 0xC2A1, "Incorrect encoding for character");
+
+  /* Compile-time check that the table is in sorted order */
+
+  constexpr bool is_sorted(size_t n) {
+    return n < 2 ? true : char_recipe[n-2].unicode < char_recipe[n-1].unicode && is_sorted(n-1);
+  }
+
+  static_assert(is_sorted(NUM_ELEMENTS(char_recipe)), "The table must be sorted by unicode value");
 
   /* Performs a binary search to find a unicode character in the table */
 
@@ -205,7 +220,7 @@
    *   addr  - Address in RAMG where the font data is written
    */
 
-  void FTDI::WesternEuropean::load_data(uint16_t addr) {
+  void FTDI::WesternCharSet::load_data(uint32_t addr) {
     // Load the alternative font metrics
     CLCD::FontMetrics alt_fm;
     alt_fm.ptr    = addr + 148;
@@ -227,6 +242,8 @@
 
     // Decode the RLE data and load it into RAMG as a bitmap
     write_rle_data(addr + 148, font, sizeof(font));
+
+    bitmap_addr = addr;
   }
 
   /**
@@ -238,9 +255,9 @@
    *   cmd  - Object used for writing to the FTDI chip command queue.
    */
 
-  void FTDI::WesternEuropean::load_bitmaps(CommandProcessor& cmd) {
+  void FTDI::WesternCharSet::load_bitmaps(CommandProcessor& cmd) {
     CLCD::FontMetrics alt_fm;
-    alt_fm.ptr    = 148;
+    alt_fm.ptr    = bitmap_addr + 148;
     alt_fm.format = L4;
     alt_fm.stride = 19;
     alt_fm.width  = 38;
@@ -270,10 +287,12 @@
    * Returns: Whether the character was supported.
    */
 
-  bool FTDI::WesternEuropean::render_glyph(CommandProcessor* cmd, int &x, int &y, font_size_t fs, utf8_char_t c) {
+  bool FTDI::WesternCharSet::render_glyph(CommandProcessor* cmd, int &x, int &y, font_size_t fs, utf8_char_t c) {
 
     // Check to see whether this is a character we support
-    if (c < '°' || c > 'ˇ') return false;
+    if (c < UTF8('¬°') || c > UTF8('√ø')) {
+      return false;
+    }
 
     int8_t index = find_char_data(c);
     if (index == -1) return false;
@@ -294,7 +313,8 @@
       base_special = true;
       base_char    = alt_char;
       accent_char  = 0;
-      if (c == '∞') x -= fs.scale(deg_sign_leading);
+      if (c == UTF8('¬∞'))
+        x -= fs.scale(deg_sign_leading);
     } else {
       // Regular character with accent:
       accent_dx   = alt_data - mid_accent;
@@ -313,11 +333,11 @@
     // If cmd != NULL, draw the glyph to the screen
     if(cmd) {
       if (base_special)
-        cmd->cmd(VERTEX2II(x, y, alt_font, base_char));
+        ext_vertex2ii(*cmd, x, y, alt_font, base_char);
       else
-        cmd->cmd(VERTEX2II(x, y, std_font, base_char));
+        ext_vertex2ii(*cmd, x, y, std_font, base_char);
       if (accent_char)
-        cmd->cmd(VERTEX2II(x + fs.scale(accent_dx), y + fs.scale(accent_dy), alt_font, accent_char));
+        ext_vertex2ii(*cmd, x + fs.scale(accent_dx), y + fs.scale(accent_dy), alt_font, accent_char);
     }
 
     // Increment X to the next character position

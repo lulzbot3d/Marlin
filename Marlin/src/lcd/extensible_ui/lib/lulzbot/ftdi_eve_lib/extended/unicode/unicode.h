@@ -27,6 +27,17 @@ namespace FTDI {
   #ifdef TOUCH_UI_USE_UTF8
     typedef uint16_t utf8_char_t;
 
+    /**
+     * Converts a 32-bit codepoint into UTF-8. This compile-time function
+     * will be useful until the u8'a' character literal becomes more common.
+     */
+    constexpr uint32_t utf8(const uint32_t c) {
+      return (c < 0x7F )  ? c :
+             (c < 0x7FF)  ? (0x0000C080 | ((c & 0b011111000000)             << 2) |  (c & 0b111111)) :
+             (c < 0xFFFF) ? (0x00E08080 | ((c & 0b001111000000000000)       << 4) | ((c & 0b111111000000)       << 2) | (c & 0b111111)) :
+                            (0xF0808080 | ((c & 0b000111000000000000000000) << 6) | ((c & 0b111111000000000000) << 4) | ((c & 0b111111000000) << 2) | (c & 0b111111));
+    }
+
     /* Returns the next character in a UTF8 string and increments the
      * pointer to the next character */
 

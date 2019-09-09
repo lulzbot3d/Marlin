@@ -4,7 +4,7 @@ FTDI EVE Unicode Rendering
 
 The FTDI EVE chips have several fonts in ROM, but these fonts only contain a
 subset of ASCII characters. Notably, this excludes diacritics and accents
-used in most European languages.
+used in most Western languages.
 
 While the FTDI EVE has the capability for user-defined fonts, such fonts only
 support 127 character positions, making them as limiting as the built-in fonts.
@@ -28,11 +28,11 @@ the following characteristics:
   3) The custom bitmap is RLE compressed into PROGMEM. For accents, which have
      a fairly small number of non-white pixels, the savings are significant.
 
-These characteristics enable an alphabet for Western European languages to be
-syntesized from only a few dozen custom symbols and modest PROGMEM use (~10k)
+These characteristics enable an alphabet for Western languages to be
+synthesized from only a few dozen custom symbols and modest PROGMEM use (~10k)
 
 The text layout is done by the code in "unicode.cpp" with the help of one of
-more character renderers (e.g. "western_european.cpp"). Each character render
+more character renderers (e.g. "western_char_set.cpp"). Each character render
 is responsible for loading the necessary bitmap data into RAMG and drawing
 characters as requested.
 

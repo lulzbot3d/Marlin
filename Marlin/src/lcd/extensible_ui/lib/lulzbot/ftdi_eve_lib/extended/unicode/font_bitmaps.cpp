@@ -25,7 +25,7 @@
 
 namespace FTDI {
 
-  void write_rle_data(uint16_t addr, uint8_t *data, size_t n) {
+  void write_rle_data(uint16_t addr, const uint8_t *data, size_t n) {
     for (; n > 2; n -= 2) {
       uint8_t count = pgm_read_byte(data++);
       uint8_t value = pgm_read_byte(data++);
@@ -40,6 +40,15 @@ namespace FTDI {
     cmd.bitmap_size(BILINEAR, BORDER, BORDER, fm.width, fm.height);
   }
 
+  void ext_vertex2ii(CommandProcessor &cmd, int x, int y, uint8_t handle, uint8_t cell) {
+    if(x < 0 || y < 0 || x > 511 || y > 511) {
+      cmd.cmd(BITMAP_HANDLE(handle));
+      cmd.cmd(CELL(cell));
+      cmd.cmd(VERTEX2F(x * 16, y * 16));
+    } else {
+      cmd.cmd(VERTEX2II(x, y, handle, cell));
+    }
+  }
 } // namespace FTDI
 
 #endif // FTDI_EXTENDED

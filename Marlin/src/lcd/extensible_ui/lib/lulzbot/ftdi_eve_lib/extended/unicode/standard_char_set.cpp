@@ -1,6 +1,6 @@
-/************************
- * western_european.cpp *
- ************************/
+/*************************
+ * standard_char_set.cpp *
+ *************************/
 
 /****************************************************************************
  *   Written By Marcio Teixeira 2019 - Aleph Objects, Inc.                  *
@@ -27,7 +27,7 @@
 
   /* Lookup table of the char widths for standard ROMFONT 31 */
 
-  static uint8_t FTDI::StandardCharSet::std_char_width(char c) {
+  uint8_t FTDI::StandardCharSet::std_char_width(char c) {
     static const uint8_t tbl[] PROGMEM = {
       10, 11, 15, 26, 25, 31, 26, 10, 15, 14, 18, 24,  9, 18, 11, 17, 24, 24,
       24, 24, 24, 24, 24, 24, 24, 24, 10, 10, 21, 23, 22, 20, 37, 27, 27, 26,
@@ -48,7 +48,7 @@
    *   addr  - Address in RAMG where the font data is written
    */
 
-  void FTDI::StandardCharSet::load_data(uint16_t addr) {
+  void FTDI::StandardCharSet::load_data(uint32_t) {
   }
 
   /**
@@ -87,10 +87,10 @@
 
   bool FTDI::StandardCharSet::render_glyph(CommandProcessor* cmd, int &x, int &y, font_size_t fs, utf8_char_t c) {
     uint8_t which = (c >= ' ' && c < 128) ? c : '?';
-    uint8_t width = std_char_width(c);
+    uint8_t width = std_char_width(which);
 
     // Draw the character
-    if(cmd) cmd->cmd(VERTEX2II(x, y, std_font, which));
+    if(cmd) ext_vertex2ii(*cmd, x, y, std_font, which);
 
     // Increment X to the next character position
     x += fs.scale(width);

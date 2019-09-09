@@ -2279,6 +2279,7 @@
 //#define AO_EXP1_DEPRECATED_PINMAP
 //#define MAX_MANUAL_FEEDRATE
 //#define UI_FRAMEWORK_DEBUG
+//#define TOUCH_UI_USE_UTF8
 
 /**
  * Extra option for KangarooPaw

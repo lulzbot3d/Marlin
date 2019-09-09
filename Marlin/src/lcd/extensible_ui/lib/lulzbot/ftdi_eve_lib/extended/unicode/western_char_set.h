@@ -1,5 +1,5 @@
 /**********************
- * western_european.h *
+ * western_char_set.h *
  **********************/
 
 /****************************************************************************
@@ -20,9 +20,9 @@
  ****************************************************************************/
 
 namespace FTDI {
-  class WesternEuropean {
+  class WesternCharSet {
     public:
-      static void load_data(uint16_t addr);
+      static void load_data(uint32_t addr);
       static void load_bitmaps(CommandProcessor&);
       static bool render_glyph(CommandProcessor*, int &x, int &y, font_size_t, utf8_char_t);
   };

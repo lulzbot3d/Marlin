@@ -33,19 +33,15 @@
    *
    *   c  - Pointer to a UTF8 encoded string.
    *
-   * Returns: A single UTF8 character
+   * Returns: The packed bytes of a UTF8 encoding of a single
+   *          character (this is not the unicode codepoint)
    */
 
   utf8_char_t FTDI::get_utf8_char_and_inc(const char *&c) {
-    if (*c <= 0b01111111)
-      // U+0000 through U+007F; single byte
-      return *c++;
-    else if (*c <= 0b1101111)
-      // U+0080 through U+07FF; two bytes
-      return ((*c++) & 0b00011111) << 6 | (*c++) & 0b00111111;
-    else
-      // Additional three and four byte characters not currently supported.
-      return 0;
+    utf8_char_t val = *(uint8_t*)c++;
+    while ((*c & 0xC0) == 0x80)
+      val = (val << 8) | *(uint8_t*)c++;
+    return val;
   }
 
   /**
@@ -68,7 +64,7 @@
     while (*str) {
       const utf8_char_t c = get_utf8_char_and_inc(str);
       #ifdef TOUCH_UI_UTF8_WESTERN_CHARSET
-        WesternEuropean::render_glyph(cmd, x, y, fs, c) ||
+        WesternCharSet::render_glyph(cmd, x, y, fs, c) ||
       #endif
       StandardCharSet::render_glyph(cmd, x, y, fs, c);
     }
@@ -86,7 +82,7 @@
 
   void FTDI::load_utf8_data(uint16_t addr) {
     #ifdef TOUCH_UI_UTF8_WESTERN_CHARSET
-      WesternEuropean::load_data(addr);
+      WesternCharSet::load_data(addr);
     #endif
     StandardCharSet::load_data(addr);
   }
@@ -102,7 +98,7 @@
 
   void FTDI::load_utf8_bitmaps(CommandProcessor &cmd) {
     #ifdef TOUCH_UI_UTF8_WESTERN_CHARSET
-      WesternEuropean::load_bitmaps(cmd);
+      WesternCharSet::load_bitmaps(cmd);
     #endif
     StandardCharSet::load_bitmaps(cmd);
   }
@@ -122,7 +118,7 @@
   uint16_t FTDI::get_utf8_char_width(utf8_char_t c, font_size_t fs) {
     int x = 0, y = 0;
     #ifdef TOUCH_UI_UTF8_WESTERN_CHARSET
-      WesternEuropean::render_glyph(NULL, x, y, fs, c) ||
+      WesternCharSet::render_glyph(NULL, x, y, fs, c) ||
     #endif
       StandardCharSet::render_glyph(NULL, x, y, fs, c);
     return x;
@@ -167,7 +163,7 @@
     *
     */
 
-  void FTDI::draw_utf8_text(CommandProcessor& cmd, int x, int y, const char *str, font_size_t fs, uint16_t options = 0) {
+  void FTDI::draw_utf8_text(CommandProcessor& cmd, int x, int y, const char *str, font_size_t fs, uint16_t options) {
     cmd.cmd(SAVE_CONTEXT());
     cmd.cmd(BITMAP_TRANSFORM_A(fs.get_coefficient()));
     cmd.cmd(BITMAP_TRANSFORM_E(fs.get_coefficient()));
@@ -186,7 +182,7 @@
     cmd.cmd(RESTORE_CONTEXT());
   }
 
-  void FTDI::draw_utf8_text(CommandProcessor& cmd, int x, int y, progmem_str pstr, font_size_t fs, uint16_t options = 0) {
+  void FTDI::draw_utf8_text(CommandProcessor& cmd, int x, int y, progmem_str pstr, font_size_t fs, uint16_t options) {
     char str[strlen_P((const char*)pstr) + 1];
     strcpy_P(str, (const char*)pstr);
     draw_utf8_text(cmd, x, y, (const char*) str, fs, options);

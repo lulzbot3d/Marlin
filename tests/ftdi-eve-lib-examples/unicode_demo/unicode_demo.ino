@@ -39,16 +39,16 @@ class FontScreen : public UIScreen, public UncachedScreen {
       cmd.cmd(COLOR_RGB(0x000000));
 
       cmd.font(31)
-         .text(BTN_POS(1,1), BTN_SIZE(4,1), F("HÈllÙ Wˆrld"))
+         .text(BTN_POS(1,1), BTN_SIZE(4,1), F(u8"H√©ll√≤ W√∂rld"))
          .font(30)
-         .text(BTN_POS(1,2), BTN_SIZE(4,1), F("—ÙaÊeÔiﬂ˙ 80∞F"))
+         .text(BTN_POS(1,2), BTN_SIZE(4,1), F(u8"√ü√•√ßa√ùe√∏i√±√∞ 80¬∞F"))
          .tag(1)
-         .button(BTN_POS(2,6), BTN_SIZE(2,1), F("÷kÂ˝"));
+         .button(BTN_POS(2,6), BTN_SIZE(2,1), F(u8"√ñk√¶"));
 
       cmd.cmd(COLOR_RGB(0xFF9999))
          .rectangle(BTN_POS(1,3), BTN_SIZE(4,2))
          .cmd(COLOR_RGB(0x000000));
-      draw_text_box(cmd, BTN_POS(1,3), BTN_SIZE(4,2), F("´ La guerre, on le sait, fut pendant longtemps le plus s˚r et le plus rapide vÈhicule de la civilisation. ª\n\n- Jules Verne"), OPT_CENTERY);
+      draw_text_box(cmd, BTN_POS(1,3), BTN_SIZE(4,2), F(u8"¬´ La guerre, on le sait, fut pendant longtemps le plus s√ªr et le plus rapide v√©hicule de la civilisation. ¬ª\n\n- Jules Verne"), OPT_CENTERY);
     }
 
     static bool onTouchEnd(uint8_t tag) {

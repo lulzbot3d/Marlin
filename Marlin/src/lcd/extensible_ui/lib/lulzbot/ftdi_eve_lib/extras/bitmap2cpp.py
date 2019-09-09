@@ -70,7 +70,7 @@ class WriteSource:
     data = ', '.join(data)
     data = textwrap.fill(data, 75, initial_indent = '  ', subsequent_indent = '  ')
 
-    print("const char font[] PROGMEM = {")
+    print("const unsigned char font[] PROGMEM = {")
     print(data);
     print("};")
 

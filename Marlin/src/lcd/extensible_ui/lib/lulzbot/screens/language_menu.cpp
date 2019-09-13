@@ -1,6 +1,6 @@
-/****************************
- * bio_confirm_home_xyz.cpp *
- ****************************/
+/*********************
+ * language_menu.cpp *
+ *********************/
 
 /****************************************************************************
  *   Written By Mark Pelletier  2017 - Aleph Objects, Inc.                  *
@@ -22,32 +22,35 @@
 
 #include "../config.h"
 
-#if ENABLED(LULZBOT_TOUCH_UI) && defined(LULZBOT_USE_BIOPRINTER_UI)
+#if ENABLED(LULZBOT_TOUCH_UI) && defined(TOUCH_UI_LANGUAGE_MENU)
 
 #include "screens.h"
 
 using namespace FTDI;
+using namespace Theme;
 
-void BioConfirmHomeXYZ::onRedraw(draw_mode_t) {
-  drawMessage(GET_TEXTF(LOADING_WARNING));
-  drawYesNoButtons(1);
+void LanguageMenu::onRedraw(draw_mode_t) {
+  CommandProcessor cmd;
+  cmd.cmd(CLEAR_COLOR_RGB(Theme::bg_color))
+     .cmd(CLEAR(true,true,true))
+     .colors(normal_btn)
+     .font(Theme::font_medium);
+
+  #define GRID_ROWS 8
+  #define GRID_COLS 1
+
+  for (uint8_t i = 0; i < get_language_count(); i++)
+    cmd.tag(1 + i).button(BTN_POS(1,i + 1), BTN_SIZE(1,1), get_text(i, String_Indices::LANGUAGE));
 }
 
-bool BioConfirmHomeXYZ::onTouchEnd(uint8_t tag) {
-  switch (tag) {
-    case 1:
-      SpinnerDialogBox::enqueueAndWait_P(F(
-        "G28 X Y Z\n"             /* Home all axis */
-        "G0 X115 Z50 F6000"       /* Move to park position */
-      ));
-      current_screen.forget();
-      break;
-    case 2:
-      GOTO_SCREEN(StatusScreen);
-      break;
-    default:
-      return DialogBoxBaseClass::onTouchEnd(tag);
+bool LanguageMenu::onTouchEnd(uint8_t tag) {
+  const uint8_t lang = tag - 1;
+  if (tag != 0) {
+    set_language(lang);
+    GOTO_SCREEN(StatusScreen);
+    return true;
   }
-  return true;
+  return false;
 }
+
 #endif // LULZBOT_TOUCH_UI

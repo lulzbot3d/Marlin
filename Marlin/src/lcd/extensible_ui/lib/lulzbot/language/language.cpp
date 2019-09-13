@@ -1,6 +1,6 @@
-/****************************
- * bio_confirm_home_xyz.cpp *
- ****************************/
+/*****************
+ * language.cpp *
+ *****************/
 
 /****************************************************************************
  *   Written By Mark Pelletier  2017 - Aleph Objects, Inc.                  *
@@ -20,34 +20,36 @@
  *   location: <http://www.gnu.org/licenses/>.                              *
  ****************************************************************************/
 
-#include "../config.h"
+#include "../compat.h"
 
-#if ENABLED(LULZBOT_TOUCH_UI) && defined(LULZBOT_USE_BIOPRINTER_UI)
+#if ENABLED(LULZBOT_TOUCH_UI) && defined(TOUCH_UI_LANGUAGE_MENU)
 
-#include "screens.h"
+  #include "language_de.h"
+  #include "language_en.h"
+  #include "language_fr.h"
 
-using namespace FTDI;
+  PROGMEM Language_List languages = {
+    &Language_de::strings,
+    &Language_en::strings,
+    &Language_fr::strings
+  };
 
-void BioConfirmHomeXYZ::onRedraw(draw_mode_t) {
-  drawMessage(GET_TEXTF(LOADING_WARNING));
-  drawYesNoButtons(1);
-}
-
-bool BioConfirmHomeXYZ::onTouchEnd(uint8_t tag) {
-  switch (tag) {
-    case 1:
-      SpinnerDialogBox::enqueueAndWait_P(F(
-        "G28 X Y Z\n"             /* Home all axis */
-        "G0 X115 Z50 F6000"       /* Move to park position */
-      ));
-      current_screen.forget();
-      break;
-    case 2:
-      GOTO_SCREEN(StatusScreen);
-      break;
-    default:
-      return DialogBoxBaseClass::onTouchEnd(tag);
+  uint8_t get_language_count() {
+    return sizeof(languages)/sizeof(languages[0]);
   }
-  return true;
-}
-#endif // LULZBOT_TOUCH_UI
+
+  static uint8_t lang = 0;
+
+  void set_language(uint8_t l) {
+    lang = l;
+  };
+
+  const char *get_text(uint8_t lang, String_Indices index) {
+    const Language_Strings* strings = (const Language_Strings*) pgm_read_ptr(&languages[lang]);
+    return (const char *)pgm_read_ptr(&(*strings)[int(index)]);
+  };
+
+  const char *get_text(String_Indices index) {
+    return get_text(lang, index);
+  };
+#endif

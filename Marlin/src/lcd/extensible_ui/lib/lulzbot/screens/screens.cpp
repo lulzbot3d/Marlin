@@ -31,6 +31,9 @@ screen_data_t screen_data;
 
 SCREEN_TABLE {
   DECL_SCREEN(BootScreen),
+  #if defined(TOUCH_UI_LANGUAGE_MENU)
+    DECL_SCREEN(LanguageMenu),
+  #endif
   DECL_SCREEN(TouchCalibrationScreen),
   DECL_SCREEN(StatusScreen),
   DECL_SCREEN(MainMenu),
@@ -105,7 +108,7 @@ SCREEN_TABLE {
   DECL_SCREEN(StressTestScreen),
 #endif
   DECL_SCREEN(MediaPlayerScreen),
-  DECL_SCREEN(DisplayTuningScreen)
+  DECL_SCREEN(DisplayTuningScreen),
 };
 
 SCREEN_TABLE_POST

@@ -67,14 +67,14 @@ class CommandProcessor : public CLCD::CommandFifo {
     }
 
     FORCEDINLINE void linear_widget_box(int16_t &x, int16_t &y, int16_t &w, int16_t &h, bool tracker = false) {
-      const uint16_t th = widget_thickness()/2;
+      const uint16_t th = widget_thickness() / 2;
       if (w > h) {
         x += tracker ? th * 2.5 : th;
-        y += h/2  - th/2;
+        y += (h - th) / 2;
         w -= tracker ? th * 5.0 : th * 2;
         h  = th;
       } else {
-        x += w/2  - th/2;
+        x += (w - th) / 2;
         y += tracker ? th * 2.5 : th;
         w  = th;
         h -= tracker ? th * 5.0 : th * 2;

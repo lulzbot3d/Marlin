@@ -31,7 +31,7 @@
 using namespace FTDI;
 
 void ConfirmEraseFlashDialogBox::onRedraw(draw_mode_t) {
-  drawMessage(progmem_str(GET_TEXTF(ERASE_FLASH_WARNING)));
+  drawMessage(GET_TEXTF(ERASE_FLASH_WARNING));
   drawYesNoButtons();
 }
 

@@ -169,6 +169,7 @@
 #define TMC_DEBUG
 #define TOUCH_UI_480x272
 #define TOUCH_UI_PORTRAIT
+#define TOUCH_UI_USE_UTF8
 #define TX_BUFFER_SIZE 32
 #define USE_CONTROLLER_FAN
 //#define USE_XMAX_PLUG

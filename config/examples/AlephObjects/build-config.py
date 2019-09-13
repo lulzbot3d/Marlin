@@ -2183,6 +2183,7 @@ def make_config(PRINTER, TOOLHEAD):
 
     if USE_TOUCH_UI:
         MARLIN["LULZBOT_TOUCH_UI"]                       = True
+        MARLIN["TOUCH_UI_USE_UTF8"]                      = True
         MARLIN["SD_DETECT_INVERTED"]                     = False
         MARLIN["LCD_SET_PROGRESS_MANUALLY"]              = True
         MARLIN["SCROLL_LONG_FILENAMES"]                  = False if USE_LESS_MEMORY else True

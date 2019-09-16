@@ -22,14 +22,14 @@
 
 #include "../config.h"
 
-#if ENABLED(LULZBOT_TOUCH_UI) && !defined(LULZBOT_USE_BIOPRINTER_UI)
+#if ENABLED(LULZBOT_TOUCH_UI) && DISABLED(LULZBOT_USE_BIOPRINTER_UI)
 
 #include "screens.h"
 #include "screen_data.h"
 
 #include "../archim2-flash/flash_storage.h"
 
-#if ENABLED(SDSUPPORT) && defined(LULZBOT_MANUAL_USB_STARTUP)
+#if BOTH(SDSUPPORT, LULZBOT_MANUAL_USB_STARTUP)
   #include "../../../../../sd/cardreader.h"
 #endif
 
@@ -206,11 +206,6 @@ void StatusScreen::draw_temperature(draw_mode_t what) {
     else
       sprintf_P(e0_str, PSTR("%3d / %3d%S"), ROUND(getActualTemp_celsius(H0)), ROUND(getTargetTemp_celsius(H0)), GET_TEXT(UNITS_C));
 
-    if (isHeaterIdle(H1))
-      sprintf_P(e1_str, PSTR("%3d%S / %S"), ROUND(getActualTemp_celsius(H1)), GET_TEXT(UNITS_C), GET_TEXT(TEMP_IDLE));
-    else
-      sprintf_P(e1_str, PSTR("%3d / %3d%S"), ROUND(getActualTemp_celsius(H1)), ROUND(getTargetTemp_celsius(H1)), GET_TEXT(UNITS_C));
-
     #if EXTRUDERS == 2
       if (isHeaterIdle(H1))
         sprintf_P(e1_str, PSTR("%3d%S / %S"), ROUND(getActualTemp_celsius(H1)), PSTR(GET_TEXT(UNITS_C)), GET_TEXT(TEMP_IDLE));
@@ -284,7 +279,7 @@ void StatusScreen::draw_interaction_buttons(draw_mode_t what) {
     CommandProcessor cmd;
     cmd.colors(normal_btn)
        .font(Theme::font_medium)
-    #if ENABLED(USB_FLASH_DRIVE_SUPPORT) && defined(LULZBOT_MANUAL_USB_STARTUP)
+    #if BOTH(SDSUPPORT, LULZBOT_MANUAL_USB_STARTUP)
       .enabled(!Sd2Card::ready() || has_media)
     #else
       .enabled(has_media)
@@ -296,7 +291,7 @@ void StatusScreen::draw_interaction_buttons(draw_mode_t what) {
          .tag(3).button( BTN_POS(1,7), BTN_SIZE(2,2),
       #endif
       isPrintingFromMedia() ? GET_TEXTF(PRINTING) :
-      #if ENABLED(USB_FLASH_DRIVE_SUPPORT) && defined(LULZBOT_MANUAL_USB_STARTUP)
+      #if BOTH(SDSUPPORT, LULZBOT_MANUAL_USB_STARTUP)
       (!Sd2Card::ready() ? GET_TEXTF(ENABLE_MEDIA) :
       #else
       GET_TEXTF(MEDIA))
@@ -412,7 +407,7 @@ bool StatusScreen::onTouchEnd(uint8_t tag) {
 
   switch (tag) {
     case 3:
-      #if ENABLED(USB_FLASH_DRIVE_SUPPORT) && defined(LULZBOT_MANUAL_USB_STARTUP)
+      #if BOTH(SDSUPPORT, LULZBOT_MANUAL_USB_STARTUP)
       if (!Sd2Card::ready()) {
         StatusScreen::setStatusMessage(GET_TEXTF(INSERT_MEDIA));
         Sd2Card::usbStartup();

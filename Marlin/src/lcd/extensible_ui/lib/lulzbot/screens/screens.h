@@ -61,7 +61,7 @@ enum {
 #else
   JERK_SCREEN_CACHE,
 #endif
-#if ENABLED(LIN_ADVANCE) || ENABLED(FILAMENT_RUNOUT_SENSOR)
+#if EITHER(LIN_ADVANCE, FILAMENT_RUNOUT_SENSOR)
   FILAMENT_MENU_CACHE,
 #endif
 #if ENABLED(LIN_ADVANCE)
@@ -210,7 +210,7 @@ class SpinnerDialogBox : public DialogBoxBaseClass, public CachedScreen<SPINNER_
     static void enqueueAndWait_P(const progmem_str message, const progmem_str commands);
 };
 
-#if !defined(LULZBOT_USE_BIOPRINTER_UI)
+#ifndef LULZBOT_USE_BIOPRINTER_UI
 class StatusScreen : public BaseScreen, public CachedScreen<STATUS_SCREEN_CACHE,STATUS_SCREEN_DL_SIZE> {
   private:
     static void draw_axis_position(draw_mode_t);
@@ -492,7 +492,7 @@ class DefaultAccelerationScreen : public BaseNumericAdjustmentScreen, public Cac
   };
 #endif
 
-#if ENABLED(LIN_ADVANCE) || ENABLED(FILAMENT_RUNOUT_SENSOR)
+#if EITHER(LIN_ADVANCE, FILAMENT_RUNOUT_SENSOR)
   class FilamentMenu : public BaseNumericAdjustmentScreen, public CachedScreen<FILAMENT_MENU_CACHE> {
     public:
       static void onRedraw(draw_mode_t);
@@ -713,8 +713,10 @@ class MediaPlayerScreen : public BaseScreen, public UncachedScreen {
     static void playStream(void *obj, media_streamer_func_t*);
 };
 
-class LanguageMenu : public BaseScreen, public UncachedScreen {
-  public:
-    static void onRedraw(draw_mode_t);
-    static bool onTouchEnd(uint8_t tag);
-};
+#if ENABLED(TOUCH_UI_LANGUAGE_MENU)
+  class LanguageMenu : public BaseScreen, public UncachedScreen {
+    public:
+      static void onRedraw(draw_mode_t);
+      static bool onTouchEnd(uint8_t tag);
+  };
+#endif

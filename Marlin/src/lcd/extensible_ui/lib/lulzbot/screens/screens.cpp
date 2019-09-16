@@ -31,7 +31,7 @@ screen_data_t screen_data;
 
 SCREEN_TABLE {
   DECL_SCREEN(BootScreen),
-  #if defined(TOUCH_UI_LANGUAGE_MENU)
+  #if ENABLED(TOUCH_UI_LANGUAGE_MENU)
     DECL_SCREEN(LanguageMenu),
   #endif
   DECL_SCREEN(TouchCalibrationScreen),
@@ -79,7 +79,7 @@ SCREEN_TABLE {
 #else
   DECL_SCREEN(JerkScreen),
 #endif
-#if ENABLED(LIN_ADVANCE) || ENABLED(FILAMENT_RUNOUT_SENSOR)
+#if EITHER(LIN_ADVANCE, FILAMENT_RUNOUT_SENSOR)
   DECL_SCREEN(FilamentMenu),
 #endif
 #if ENABLED(FILAMENT_RUNOUT_SENSOR)

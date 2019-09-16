@@ -82,9 +82,9 @@ class CommandProcessor : public CLCD::CommandFifo {
     }
 
     FORCEDINLINE uint16_t circular_widget_box(int16_t &x, int16_t &y, int16_t &w, int16_t &h) {
-      const uint16_t r = min(w,h)/2;
-      x += w/2;
-      y += h/2;
+      const uint16_t r = min(w,h) / 2;
+      x += w / 2;
+      y += h / 2;
       w  = 1;
       h  = 1;
       return r;
@@ -200,22 +200,22 @@ class CommandProcessor : public CLCD::CommandFifo {
     inline CommandProcessor& rectangle(int16_t x, int16_t y, int16_t w, int16_t h) {
       using namespace FTDI;
       CLCD::CommandFifo::cmd(BEGIN(RECTS));
-      CLCD::CommandFifo::cmd(VERTEX2F(x*16,y*16));
-      CLCD::CommandFifo::cmd(VERTEX2F((x+w)*16,(y+h)*16));
+      CLCD::CommandFifo::cmd(VERTEX2F(x * 16, y * 16));
+      CLCD::CommandFifo::cmd(VERTEX2F((x + w) * 16, (y + h) * 16));
       return *this;
     }
 
     template<typename T>
     FORCEDINLINE CommandProcessor& toggle(int16_t x, int16_t y, int16_t w, int16_t h, T text, bool state, uint16_t options = FTDI::OPT_3D) {
       CLCD::FontMetrics fm(_font);
-      const int16_t widget_h = fm.height * 20.0/16;
+      const int16_t widget_h = fm.height * 20.0 / 16;
       //const int16_t outer_bar_r = widget_h / 2;
       //const int16_t knob_r      = outer_bar_r - 1.5;
       // The y coordinate of the toggle is the baseline of the text,
       // so we must introduce a fudge factor based on the line height to
       // actually center the control.
-      const int16_t fudge_y = fm.height*5/16;
-      CLCD::CommandFifo::toggle(x + h/2, y + h/2 - widget_h/2 + fudge_y, w - h, _font, options, state);
+      const int16_t fudge_y = fm.height * 5 / 16;
+      CLCD::CommandFifo::toggle(x + h / 2, y + (h - widget_h) / 2 + fudge_y, w - h, _font, options, state);
       CLCD::CommandFifo::str(text);
       return *this;
     }

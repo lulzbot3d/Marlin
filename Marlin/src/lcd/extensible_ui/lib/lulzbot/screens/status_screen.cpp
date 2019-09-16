@@ -207,7 +207,7 @@ void StatusScreen::draw_temperature(draw_mode_t what) {
       sprintf_P(e0_str, PSTR("%3d / %3d%S"), ROUND(getActualTemp_celsius(H0)), ROUND(getTargetTemp_celsius(H0)), GET_TEXT(UNITS_C));
 
     if (isHeaterIdle(H1))
-      sprintf_P(e1_str, PSTR("%3d%S / %S"), ROUND(getActualTemp_celsius(H1)), PSTR(GET_TEXT(UNITS_C)), GET_TEXT(TEMP_IDLE));
+      sprintf_P(e1_str, PSTR("%3d%S / %S"), ROUND(getActualTemp_celsius(H1)), GET_TEXT(UNITS_C), GET_TEXT(TEMP_IDLE));
     else
       sprintf_P(e1_str, PSTR("%3d / %3d%S"), ROUND(getActualTemp_celsius(H1)), ROUND(getTargetTemp_celsius(H1)), GET_TEXT(UNITS_C));
 

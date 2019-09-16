@@ -61,7 +61,7 @@ void NudgeNozzleScreen::onRedraw(draw_mode_t what) {
     w.toggle  (9,  GET_TEXTF(SHOW_OFFSETS), screen_data.NudgeNozzleScreen.show_offsets);
 
     if (screen_data.NudgeNozzleScreen.show_offsets) {
-      char str[19], num1[7];
+      char str[19];
 
       w.draw_mode(BOTH);
       w.color(other);
@@ -74,7 +74,7 @@ void NudgeNozzleScreen::onRedraw(draw_mode_t what) {
       #endif
 
       #if EXTRUDERS > 1
-        char num2[7], num3[7];
+        char num1[7], num2[7], num3[7];
         dtostrf(getNozzleOffset_mm(X, E1), 4, 2, num1);
         dtostrf(getNozzleOffset_mm(Y, E1), 4, 2, num2);
         dtostrf(getNozzleOffset_mm(Z, E1), 4, 2, num3);

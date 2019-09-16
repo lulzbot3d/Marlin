@@ -307,12 +307,12 @@ class CommandProcessor : public CLCD::CommandFifo {
       int8_t font = _font;
       for (;;) {
         #ifdef TOUCH_UI_USE_UTF8
-          const uint16_t width  = get_utf8_text_width(text, font_size_t::from_romfont(font));
-          const uint16_t height = font_size_t::from_romfont(font).get_height();
+          const int16_t width  = get_utf8_text_width(text, font_size_t::from_romfont(font));
+          const int16_t height = font_size_t::from_romfont(font).get_height();
         #else
           CLCD::FontMetrics fm(font);
-          const uint16_t width  = fm.get_text_width(text);
-          const uint16_t height = fm.height;
+          const int16_t width  = fm.get_text_width(text);
+          const int16_t height = fm.height;
         #endif
         if ((width < w && height < h) || font == 26) break;
         font--;

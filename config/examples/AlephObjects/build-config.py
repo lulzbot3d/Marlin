@@ -605,7 +605,6 @@ def make_config(PRINTER, TOOLHEAD):
     MARLIN["EEPROM_SETTINGS"]                            = True
     MARLIN["EEPROM_AUTO_INIT"]                           = True
     MARLIN["EMERGENCY_PARSER"]                           = True
-    MARLIN["NOZZLE_PARK_FEATURE"]                        = True
     MARLIN["PAUSE_PARK_NOZZLE_TIMEOUT"]                  = 300
     MARLIN["ADVANCED_OK"]                                = True
     MARLIN["TX_BUFFER_SIZE"]                             = 32
@@ -1718,7 +1717,6 @@ def make_config(PRINTER, TOOLHEAD):
 ###################### ADVANCED PAUSE / FILAMENT CHANGE #######################
 
     if USE_REPRAP_LCD_DISPLAY or USE_TOUCH_UI:
-        MARLIN["ADVANCED_PAUSE_FEATURE"]                 = True
         MARLIN["FILAMENT_CHANGE_FAST_LOAD_FEEDRATE"]     = MANUAL_FEEDRATE_E
         MARLIN["FILAMENT_CHANGE_FAST_LOAD_LENGTH"]       = 40
         MARLIN["ADVANCED_PAUSE_PURGE_LENGTH"]            = 20
@@ -1740,12 +1738,16 @@ def make_config(PRINTER, TOOLHEAD):
         MARLIN["LULZBOT_ADVANCED_PAUSE_PURGE_WORKAROUND"] = True
 
     if PRINTER in ["KangarooPaw_Bio"]:
-        MARLIN["NOZZLE_PARK_POINT"]                      = False
-    elif IS_MINI:
-        MARLIN["NOZZLE_PARK_POINT"]                      = [  10, MARLIN["Y_MAX_POS"] - 10, 20 ]
+        MARLIN["ADVANCED_PAUSE_FEATURE"]                  = False
+        MARLIN["NOZZLE_PARK_FEATURE"]                     = False
     else:
-        # Match the purge location of the v3 dual so a single tray can be used.
-        MARLIN["NOZZLE_PARK_POINT"]                      = [ 100, MARLIN["Y_MAX_POS"] -  1, 20 ]
+        MARLIN["NOZZLE_PARK_FEATURE"]                     = True
+        MARLIN["ADVANCED_PAUSE_FEATURE"]                  = True
+        if IS_MINI:
+            MARLIN["NOZZLE_PARK_POINT"]                       = [  10, MARLIN["Y_MAX_POS"] - 10, 20 ]
+        else:
+            # Match the purge location of the v3 dual so a single tray can be used.
+            MARLIN["NOZZLE_PARK_POINT"]                       = [ 100, MARLIN["Y_MAX_POS"] -  1, 20 ]
 
     if MARLIN["SDSUPPORT"]:
         if PRINTER in ["KangarooPaw_Bio"]:

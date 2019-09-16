@@ -1206,13 +1206,13 @@
   //#define TOUCH_UI_MIRRORED
 
   // Enable UTF8 rendering capabilities.
-  //#define TOUCH_UI_USE_UTF8 // <-- changed
+  #define TOUCH_UI_USE_UTF8 // <-- changed
   #if ENABLED(TOUCH_UI_USE_UTF8)
     #define TOUCH_UI_UTF8_WESTERN_CHARSET
   #endif
 
   // When labels do not fit buttons, use smaller font
-  //#define TOUCH_UI_FIT_TEXT
+  #define TOUCH_UI_FIT_TEXT
 
   // Runtime language selection (otherwise LCD_LANGUAGE)
   //#define TOUCH_UI_LANGUAGE_MENU
@@ -1577,7 +1577,7 @@
  * Requires NOZZLE_PARK_FEATURE.
  * This feature is required for the default FILAMENT_RUNOUT_SCRIPT.
  */
-#define ADVANCED_PAUSE_FEATURE // <-- changed
+//#define ADVANCED_PAUSE_FEATURE  // <-- changed
 #if ENABLED(ADVANCED_PAUSE_FEATURE)
   #define PAUSE_PARK_RETRACT_FEEDRATE         10 // <-- changed:  (mm/s) Initial retract feedrate.
   #define PAUSE_PARK_RETRACT_LENGTH            2  // (mm) Initial retract.

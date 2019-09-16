@@ -121,7 +121,7 @@
   #define USB_INTR_PIN                  SD_DETECT_PIN
 #endif
 
-#if defined(LULZBOT_USE_UHS3_USB)
+#if defined(USE_UHS3_USB)
   #define LULZBOT_USB_NO_TEST_UNIT_READY // Required for removable media adapter
   #define LULZBOT_SKIP_PAGE3F // Required for IOGEAR media adapter
   #define LULZBOT_USB_HOST_MANUAL_POLL // Optimization to shut off IRQ automatically

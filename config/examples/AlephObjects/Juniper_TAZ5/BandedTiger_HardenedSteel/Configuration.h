@@ -2237,12 +2237,6 @@
 #define LULZBOT_EMI_MITIGATION // <-- changed
 
 /**
- * Extra options for USB support
- */
-//#define LULZBOT_MANUAL_USB_STARTUP
-//#define LULZBOT_USE_UHS3_USB
-
-/**
  * Extra options for Archim
  */
 //#define LULZBOT_USB_DEVICE_VENDOR_ID

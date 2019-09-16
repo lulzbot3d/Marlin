@@ -1038,7 +1038,7 @@
      *   is less tested and is known to interfere with Servos.
      *   [1] This requires USB_INTR_PIN to be interrupt-capable.
      */
-    //#define USE_UHS3_USB
+    //#define USE_UHS3_USB  // <-- changed
   #endif
 
   /**

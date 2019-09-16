@@ -285,7 +285,7 @@ def make_config(PRINTER, TOOLHEAD):
         MARLIN["USB_FLASH_DRIVE_SUPPORT"]                = True
         MARLIN["SDSUPPORT"]                              = True
         MARLIN["FILAMENT_RUNOUT_SENSOR"]                 = True
-        MARLIN["LULZBOT_USE_UHS3_USB"]                   = False
+        MARLIN["USE_UHS3_USB"]                           = False
         MARLIN["LULZBOT_EEPROM_BACKUP_SIZE"]             = 1000
         # Touch LCD configuration
         MARLIN["TOUCH_UI_PORTRAIT"]                      = True
@@ -416,8 +416,7 @@ def make_config(PRINTER, TOOLHEAD):
         MARLIN["AO_EXP1_PINMAP"]                         = True
         MARLIN["SDSUPPORT"]                              = True
         MARLIN["USB_FLASH_DRIVE_SUPPORT"]                = True
-        MARLIN["LULZBOT_USE_UHS3_USB"]                   = True
-        MARLIN["LULZBOT_MANUAL_USB_STARTUP"]             = True
+        MARLIN["USE_UHS3_USB"]                           = True
 
     if PRINTER == "KangarooPaw_Bio":
         # Kangaroo Paw uses a 480x272 display and SD card
@@ -475,7 +474,7 @@ def make_config(PRINTER, TOOLHEAD):
         MARLIN["AO_EXP2_PINMAP"]                         = True
         MARLIN["SDSUPPORT"]                              = True
         MARLIN["USB_FLASH_DRIVE_SUPPORT"]                = True
-        MARLIN["LULZBOT_USE_UHS3_USB"]                   = True
+        MARLIN["USE_UHS3_USB"]                           = True
 
     if PRINTER == "GladiolaEinsyLCD_Experimental":
         # Unsupported Mini with Einsy Retro.
@@ -537,7 +536,7 @@ def make_config(PRINTER, TOOLHEAD):
         # since EXP2 does not have 5V on pin 10
         MARLIN["SDSUPPORT"]                              = True
         MARLIN["USB_FLASH_DRIVE_SUPPORT"]                = True
-        MARLIN["LULZBOT_USE_UHS3_USB"]                   = True
+        MARLIN["USE_UHS3_USB"]                           = True
 
     if PRINTER == "OliveoilArchim_Experimental":
         # Unsupported TAZ 6 with Archim 2.

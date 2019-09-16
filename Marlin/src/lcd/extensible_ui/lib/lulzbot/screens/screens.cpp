@@ -108,7 +108,7 @@ SCREEN_TABLE {
   DECL_SCREEN(StressTestScreen),
 #endif
   DECL_SCREEN(MediaPlayerScreen),
-  DECL_SCREEN(DisplayTuningScreen),
+  DECL_SCREEN(DisplayTuningScreen)
 };
 
 SCREEN_TABLE_POST

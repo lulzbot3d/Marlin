@@ -53,15 +53,6 @@
 // Nanoseconds per cycle
 #define NANOSECONDS_PER_CYCLE (1000000000.0 / F_CPU)
 
-// Remove compiler warning on an unused variable
-#ifndef UNUSED
-  #if defined(ARDUINO_ARCH_STM32) && !defined(STM32GENERIC)
-    #define UNUSED(X) (void)X
-  #else
-    #define UNUSED(x) ((void)(x))
-  #endif
-#endif
-
 // Macros to make a string from a macro
 #define STRINGIFY_(M) #M
 #define STRINGIFY(M) STRINGIFY_(M)
@@ -88,6 +79,7 @@
 #define SBI32(n,b) (n |= _BV32(b))
 #define CBI32(n,b) (n &= ~_BV32(b))
 
+#define cu(x)      ((x)*(x)*(x))
 #define RADIANS(d) ((d)*float(M_PI)/180.0f)
 #define DEGREES(r) ((r)*180.0f/float(M_PI))
 #define HYPOT2(x,y) (sq(x)+sq(y))

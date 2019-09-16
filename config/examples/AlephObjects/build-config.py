@@ -711,9 +711,9 @@ def make_config(PRINTER, TOOLHEAD):
     if ENABLED("SDSUPPORT"):
         MARLIN["SD_ABORT_ON_ENDSTOP_HIT"]                = True
 
-    if not PRINTER in ["KangarooPaw_Experimental"]:
-        MARLIN["MIN_SOFTWARE_ENDSTOPS"]                  = True
-        MARLIN["MAX_SOFTWARE_ENDSTOPS"]                  = True
+    if PRINTER in ["KangarooPaw_Experimental"]:
+        MARLIN["MIN_SOFTWARE_ENDSTOPS"]                  = False
+        MARLIN["MAX_SOFTWARE_ENDSTOPS"]                  = False
 
     # Endstop settings are determined by printer model, except for the
     # X_MAX which varies by toolhead.

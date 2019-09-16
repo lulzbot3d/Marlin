@@ -93,7 +93,8 @@ build_config Redgum_TAZWorkhorse                DingyCutworm_HardenedSteelPlus
 build_config Redgum_TAZWorkhorse                Goldenrod_HardenedExtruder
 build_config Redgum_TAZWorkhorse                Yellowfin_DualExtruderV3
 
-build_config KangarooPaw_Experimental           KangarooPaw_SingleExtruder
+build_config KangarooPaw_Bio                    KangarooPaw_SingleExtruder
+
 build_config HibiscusTouchSD_Experimental       CecropiaSilk_SingleExtruderAeroV2
 build_config HibiscusTouchUSB_Experimental      CecropiaSilk_SingleExtruderAeroV2
 build_config RedgumArchim_Experimental          CecropiaSilk_SingleExtruderAeroV2

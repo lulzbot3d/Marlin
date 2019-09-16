@@ -133,7 +133,7 @@
 #endif
 
 // Name displayed in the LCD "Ready" message and Info menu
-#define CUSTOM_MACHINE_NAME "KangarooPaw" // <-- changed
+#define CUSTOM_MACHINE_NAME "LulzBot Bio" // <-- changed
 
 // Printer's unique ID, used by some programs to differentiate between machines.
 // Choose your own or use a service like http://www.uuidgenerator.net/version4
@@ -2254,7 +2254,7 @@
  * Extra options for either display
  */
 #define LULZBOT_LCD_KEEPS_STATUS_AFTER_PRINT // <-- changed
-#define LULZBOT_LCD_MACHINE_NAME "KangarooPaw" // <-- changed
+#define LULZBOT_LCD_MACHINE_NAME "LulzBot Bio" // <-- changed
 #define LULZBOT_LCD_TOOLHEAD_NAME "Goostruder" // <-- changed
 
 /**

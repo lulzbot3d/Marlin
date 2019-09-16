@@ -1739,7 +1739,9 @@ def make_config(PRINTER, TOOLHEAD):
         # In Marlin 1.1.9, an unnecessary purge is happening after a resume from a pause.
         MARLIN["LULZBOT_ADVANCED_PAUSE_PURGE_WORKAROUND"] = True
 
-    if IS_MINI:
+    if PRINTER in ["KangarooPaw_Bio"]:
+        MARLIN["NOZZLE_PARK_POINT"]                      = False
+    elif IS_MINI:
         MARLIN["NOZZLE_PARK_POINT"]                      = [  10, MARLIN["Y_MAX_POS"] - 10, 20 ]
     else:
         # Match the purge location of the v3 dual so a single tray can be used.

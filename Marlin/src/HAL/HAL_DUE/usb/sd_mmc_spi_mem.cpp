@@ -15,10 +15,10 @@ extern "C" {
 
 #define SD_MMC_BLOCK_SIZE 512
 
-void sd_mmc_spi_mem_init(void) {
+void sd_mmc_spi_mem_init() {
 }
 
-Ctrl_status sd_mmc_spi_test_unit_ready(void) {
+Ctrl_status sd_mmc_spi_test_unit_ready() {
   #if defined(LULZBOT_DISABLE_DUE_SD_MMC)
     return CTRL_NO_PRESENT;
   #endif
@@ -41,11 +41,11 @@ bool sd_mmc_spi_unload(bool unload) {
   return true;
 }
 
-bool sd_mmc_spi_wr_protect(void) {
+bool sd_mmc_spi_wr_protect() {
   return false;
 }
 
-bool sd_mmc_spi_removal(void) {
+bool sd_mmc_spi_removal() {
   if (!IS_SD_INSERTED() || IS_SD_PRINTING() || IS_SD_FILE_OPEN() || !card.isMounted())
     return true;
   return false;

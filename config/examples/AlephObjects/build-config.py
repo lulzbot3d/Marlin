@@ -1630,6 +1630,8 @@ def make_config(PRINTER, TOOLHEAD):
         MARLIN["Y_HYBRID_THRESHOLD"]                     = 72
         MARLIN["X_HYBRID_THRESHOLD"]                     = 72
 
+        MARLIN["CHOPPER_TIMING"]                         = [ 3, -2, 6 ]
+
         def TMC_INIT(st):
             return (
                 "st.shaft({});".format(SHAFT_DIR) +

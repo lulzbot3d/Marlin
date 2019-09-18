@@ -21,7 +21,7 @@
 
 #include "../ftdi_extended.h"
 
-#if defined(FTDI_EXTENDED) && defined(TOUCH_UI_USE_UTF8)
+#if defined(FTDI_EXTENDED) && ENABLED(TOUCH_UI_USE_UTF8)
 
   constexpr static uint8_t std_font = 31;
 
@@ -103,4 +103,4 @@
     return true;
   }
 
-#endif // FTDI_EXTENDED
+#endif // FTDI_EXTENDED && TOUCH_UI_USE_UTF8

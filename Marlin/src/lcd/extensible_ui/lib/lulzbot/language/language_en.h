@@ -302,7 +302,11 @@ namespace Language_en {
   PROGMEM Language_Str PLEASE_RESET             = u8"Please reset";
 
   PROGMEM Language_Str COLOR_TOUCH_PANEL        = u8"Color Touch Panel";
-  PROGMEM Language_Str ABOUT_ALEPH_OBJECTS      = u8"(C) 2019 Aleph Objects, Inc.\n\nwww.lulzbot.com";
+  #if ENABLED(TOUCH_UI_UTF8_COPYRIGHT)
+    PROGMEM Language_Str ABOUT_ALEPH_OBJECTS      = u8"© 2019 Aleph Objects, Inc.\n\nwww.lulzbot.com";
+  #else
+    PROGMEM Language_Str ABOUT_ALEPH_OBJECTS      = u8"(C) 2019 Aleph Objects, Inc.\n\nwww.lulzbot.com";
+  #endif
 
   PROGMEM Language_Str FIRMWARE_FOR_TOOLHEAD    = u8"Firmware for toolhead:\n%s\n\n";
 
@@ -327,10 +331,14 @@ namespace Language_en {
   PROGMEM Language_Str UNITS_MILLIAMP           = u8"mA";
   PROGMEM Language_Str UNITS_MM                 = u8"mm";
   PROGMEM Language_Str UNITS_MM_S               = u8"mm/s";
-  PROGMEM Language_Str UNITS_MM_S2              = u8"mm/s^2";
+  #if ENABLED(TOUCH_UI_UTF8_WESTERN_CHARSET)
+    PROGMEM Language_Str UNITS_MM_S2            = u8"mm/s²";
+  #else
+    PROGMEM Language_Str UNITS_MM_S2            = u8"mm/s^2";
+  #endif
   PROGMEM Language_Str UNITS_STEP_MM            = u8"st/mm";
   PROGMEM Language_Str UNITS_PERCENT            = u8"%";
-  #if defined(TOUCH_UI_USE_UTF8) && defined(TOUCH_UI_UTF8_WESTERN_CHARSET)
+  #if ENABLED(TOUCH_UI_UTF8_WESTERN_CHARSET)
     PROGMEM Language_Str UNITS_C                = u8"°C";
   #else
     PROGMEM Language_Str UNITS_C                = u8" C";

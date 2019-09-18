@@ -410,7 +410,7 @@ namespace Language_en {
     PROGMEM Language_Str UNLOCK_XY_AXIS         = u8"Unlock XY Axis";
     PROGMEM Language_Str LOAD_SYRINGE           = u8"Load Syringe";
     PROGMEM Language_Str BED_TEMPERATURE        = u8"Bed Temperature";
-    PROGMEM Language_Str LOADING_WARNING        = u8"About to home to loading position.\nEnsure the top and the bed of the printer are clear.\n\nContinue?";
+    PROGMEM Language_Str LOADING_WARNING        = u8"About to home to loading position. Ensure the top and the bed of the printer are clear.\n\nContinue?";
     PROGMEM Language_Str HOMING_WARNING         = u8"About to re-home plunger and auto-level. Remove syringe prior to proceeding.\n\nContinue?";
   #endif
 

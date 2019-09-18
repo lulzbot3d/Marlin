@@ -90,18 +90,19 @@ LulzBot printers.'''
 #  18. AXIS TRAVEL LIMITS
 #  19. AUTOLEVELING / BED PROBE
 #  20. X AXIS LEVELING
-#  21. AUTO-CALIBRATION (BACKLASH AND NOZZLE OFFSET)
-#  22. FILAMENT CONFIGURATION (LIN_ADVANCE/RUNOUT)
-#  23. MOTOR DRIVER TYPE
-#  24. TRINAMIC DRIVER CONFIGURATION
-#  25. TRINAMIC SENSORLESS HOMING
-#  26. ADVANCED PAUSE / FILAMENT CHANGE
-#  27. WIPER PAD
-#  28. REWIPE FUNCTIONALITY
-#  29. BACKLASH COMPENSATION
-#  30. MOTOR CURRENTS
-#  31. ACCELERATION, FEEDRATES AND XYZ MOTOR STEPS
-#  32. LCD OPTIONS
+#  21. BIO-PRINTER STARTUP COMMANDS
+#  22. AUTO-CALIBRATION (BACKLASH AND NOZZLE OFFSET)
+#  23. FILAMENT CONFIGURATION (LIN_ADVANCE/RUNOUT)
+#  24. MOTOR DRIVER TYPE
+#  25. TRINAMIC DRIVER CONFIGURATION
+#  26. TRINAMIC SENSORLESS HOMING
+#  27. ADVANCED PAUSE / FILAMENT CHANGE
+#  28. WIPER PAD
+#  29. REWIPE FUNCTIONALITY
+#  30. BACKLASH COMPENSATION
+#  31. MOTOR CURRENTS
+#  32. ACCELERATION, FEEDRATES AND XYZ MOTOR STEPS
+#  33. LCD OPTIONS
 
 def C_STRING(str):
     return '"' + str.strip().replace('\n','\\n') + '"'
@@ -1487,6 +1488,21 @@ def make_config(PRINTER, TOOLHEAD):
         # This restores the sampling of endstops as it existed in previous
         # version of Marlin.
         MARLIN["ENDSTOP_NOISE_THRESHOLD"]                =  2
+
+######################### BIO-PRINTER STARTUP COMMANDS ########################
+
+    if PRINTER in ['KangarooPaw_Bio']:
+        MARLIN["LULZBOT_HOME_XYZ_COMMANDS"]              = C_STRING(
+            "G28 X Y Z\n"                                # Home all axis
+            "G0 X115 Z50 F6000"                          # Move to park position
+        )
+        MARLIN["LULZBOT_HOME_E_COMMANDS"]                = C_STRING(
+            "G112\n"                                     # Home extruder
+            + AXIS_LEVELING_COMMANDS +                   # Level X axis
+            "G0 X115 Z50 F6000\n"                        # Goto loading position
+            "M400\n"                                     # Wait for moves to finish
+            "M18 X Y"                                    # Unlock motors
+        )
 
 ################ AUTO-CALIBRATION (BACKLASH AND NOZZLE OFFSET) ################
 

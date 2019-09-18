@@ -2271,11 +2271,13 @@
 //#define AO_EXP1_DEPRECATED_PINMAP
 
 /**
- * Extra option for KangarooPaw
+ * Extra option for LulzBot Bio
  */
 //#define LULZBOT_USE_BIOPRINTER_GCODE
 //#define LULZBOT_USE_BIOPRINTER_UI
 //#define LULZBOT_DISABLE_TOOLHEAD_HEATER
+//#define LULZBOT_HOME_XYZ_COMMANDS
+//#define LULZBOT_HOME_E_COMMANDS
 //#define E_MIN_PIN
 //#define E_MIN_PIN_INVERTING
 

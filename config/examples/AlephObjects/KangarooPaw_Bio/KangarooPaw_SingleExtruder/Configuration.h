@@ -2271,11 +2271,13 @@
 //#define AO_EXP1_DEPRECATED_PINMAP
 
 /**
- * Extra option for KangarooPaw
+ * Extra option for LulzBot Bio
  */
 #define LULZBOT_USE_BIOPRINTER_GCODE // <-- changed
 #define LULZBOT_USE_BIOPRINTER_UI // <-- changed
 #define LULZBOT_DISABLE_TOOLHEAD_HEATER // <-- changed
+#define LULZBOT_HOME_XYZ_COMMANDS "G28 X Y Z\nG0 X115 Z50 F6000" // <-- changed
+#define LULZBOT_HOME_E_COMMANDS "G112\nM117 Leveling X Axis\nG28\nG0 X170 Y75 F9999\nG0 Z5 F6000\nG91\nM211 S0\nM400\nM906 Z600\nG0 Z-15 F500\nG0 Z5 F500\nM400\nG90\nM906 Z960\nM211 S1\nG28\nM117 Leveling done.\nG0 X115 Z50 F6000\nM400\nM18 X Y" // <-- changed
 #define E_MIN_PIN X_MAX_PIN // <-- changed
 #define E_MIN_PIN_INVERTING 0 // <-- changed
 

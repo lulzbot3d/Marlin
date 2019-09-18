@@ -70,6 +70,14 @@
 #define INVERT_X_DIR false
 #define INVERT_Y_DIR true
 #define INVERT_Z_DIR false
+#define JOYSTICK
+#define JOY_EN_PIN -1
+//#define JOY_X_LIMITS
+#define JOY_X_PIN -1
+//#define JOY_Y_LIMITS
+#define JOY_Y_PIN -1
+//#define JOY_Z_LIMITS
+#define JOY_Z_PIN -1
 #define LCD_ALEPHOBJECTS_CLCD_UI
 #define LCD_SET_PROGRESS_MANUALLY
 #define LIN_ADVANCE

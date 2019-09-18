@@ -2215,6 +2215,16 @@ def make_config(PRINTER, TOOLHEAD):
     if ENABLED("LULZBOT_USE_BIOPRINTER_UI"):
         MARLIN["LULZBOT_LCD_KEEPS_STATUS_AFTER_PRINT"]   = True
 
+        # Virtual joystick functionality
+        MARLIN["JOYSTICK"]                               = True
+        MARLIN["JOY_X_PIN"]                              = -1
+        MARLIN["JOY_Y_PIN"]                              = -1
+        MARLIN["JOY_Z_PIN"]                              = -1
+        MARLIN["JOY_EN_PIN"]                             = -1
+        MARLIN["JOY_X_LIMITS"]                           = False
+        MARLIN["JOY_Y_LIMITS"]                           = False
+        MARLIN["JOY_Z_LIMITS"]                           = False
+
     if ENABLED("USB_FLASH_DRIVE_SUPPORT"):
         MARLIN["SDSUPPORT"]                              = True
 

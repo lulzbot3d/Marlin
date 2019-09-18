@@ -69,7 +69,7 @@
 #endif
 
 // Enable this to debug the event framework
-#define UI_FRAMEWORK_DEBUG
+#define TOUCH_UI_DEBUG
 
 // Sets the SPI speed in Hz
 

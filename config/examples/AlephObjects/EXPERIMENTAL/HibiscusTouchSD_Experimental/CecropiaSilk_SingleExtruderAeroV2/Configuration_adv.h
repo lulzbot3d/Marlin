@@ -825,7 +825,7 @@
 // @section lcd
 
 #if EITHER(ULTIPANEL, EXTENSIBLE_UI)
-  #define MANUAL_FEEDRATE { 50*60, 50*60, 4*60, 60 } // Feedrates for manual moves along X, Y, Z, E from panel
+  #define MANUAL_FEEDRATE {18000, 18000, 18000, 60.0} // <-- changed:  Feedrates for manual moves along X, Y, Z, E from panel
   #define SHORT_MANUAL_Z_MOVE 0.025 // (mm) Smallest manual Z move (< 0.1mm)
   #if ENABLED(ULTIPANEL)
     #define MANUAL_E_MOVES_RELATIVE // Display extruder move distance rather than "position"
@@ -1205,10 +1205,35 @@
   #define TOUCH_UI_PORTRAIT // <-- changed
   //#define TOUCH_UI_MIRRORED
 
-  // Enable UTF8 rendering capabilities.
+  // Enable UTF8 processing and rendering. Unsupported characters
+  // will be shown as '?'.
   #define TOUCH_UI_USE_UTF8 // <-- changed
   #if ENABLED(TOUCH_UI_USE_UTF8)
+
+    // Enable TOUCH_UI_UTF8_WESTERN_CHARSET to add support for
+    // these characters:
+    //
+    //  ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝàáâãäåçèéêëìíîïñòóôõöùúûüýÿ°
+    //
+    // These are made from a few combining bitmaps (`´¸¨°~ı)
+    // and require a comparatively small amount of storage.
+    //
     #define TOUCH_UI_UTF8_WESTERN_CHARSET
+    #if ENABLED(TOUCH_UI_UTF8_WESTERN_CHARSET)
+      // Enable additional character groups. These characters
+      // require full bitmaps and take up considerable storage:
+
+      #define TOUCH_UI_UTF8_SUPERSCRIPTS // <-- changed:  ¹ ² ³
+      #define TOUCH_UI_UTF8_COPYRIGHT // <-- changed:  © ®
+      //#define TOUCH_UI_UTF8_GERMANIC        // ß
+      //#define TOUCH_UI_UTF8_SCANDINAVIAN    // Æ Ð Ø Þ æ ð ø þ
+      //#define TOUCH_UI_UTF8_PUNCTUATION     // « » ¿ ¡
+      //#define TOUCH_UI_UTF8_CURRENCY        // ¢ £ ¤ ¥
+      //#define TOUCH_UI_UTF8_ORDINALS        // º ª
+      //#define TOUCH_UI_UTF8_MATHEMATICS     // ± × ÷
+      //#define TOUCH_UI_UTF8_FRACTIONS       // ¼ ½ ¾
+      //#define TOUCH_UI_UTF8_SYMBOLS         // µ ¶ ¦ § ¬
+    #endif
   #endif
 
   // When labels do not fit buttons, use smaller font
@@ -1220,6 +1245,9 @@
   // Use a numeric passcode for "Screen lock" keypad.
   // (recommended for smaller displays)
   //#define TOUCH_UI_PASSCODE
+
+  // Enable this for additional debugging information
+  //#define TOUCH_UI_DEBUG
 #endif
 
 //

@@ -2269,9 +2269,6 @@
  * Extra options for AlephObjects Color LCD display
  */
 #define AO_EXP1_DEPRECATED_PINMAP // <-- changed
-#define MAX_MANUAL_FEEDRATE {18000, 18000, 18000, 60.0} // <-- changed
-//#define UI_FRAMEWORK_DEBUG
-#define TOUCH_UI_USE_UTF8 // <-- changed
 
 /**
  * Extra option for KangarooPaw

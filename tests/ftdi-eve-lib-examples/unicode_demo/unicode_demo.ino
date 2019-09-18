@@ -40,8 +40,11 @@ class FontScreen : public UIScreen, public UncachedScreen {
 
       cmd.font(31)
          .text(BTN_POS(1,1), BTN_SIZE(4,1), F(u8"Héllò Wörld"))
+         .font(29)
+         .text(BTN_POS(1,2), BTN_SIZE(4,1), F(u8"ßåçaÝeøiñð 80°F X²"))
+         .font(26)
+         .text(BTN_POS(1,5), BTN_SIZE(4,1), F(u8"ÆÐØÞæðøþ¢£¤¥ºª±×÷¼½¾µ¶¦§¬¹²³"))
          .font(30)
-         .text(BTN_POS(1,2), BTN_SIZE(4,1), F(u8"ßåçaÝeøiñð 80°F"))
          .tag(1)
          .button(BTN_POS(2,6), BTN_SIZE(2,1), F(u8"Ökæ"));
 

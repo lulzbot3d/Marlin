@@ -2005,17 +2005,23 @@ def make_config(PRINTER, TOOLHEAD):
             MOTOR_CURRENT_Z                              = 1630 # mA
 
     elif IS_TAZ:
-        if USE_Z_BELT or USE_ARCHIM2:
+        if USE_ARCHIM2:
             # These values specify the maximum current, but actual
             # currents may be lower when used with COOLCONF
             MOTOR_CURRENT_X                              = 975 # mA
             MOTOR_CURRENT_Y                              = 975 # mA
             MOTOR_CURRENT_Z                              = 975 # mA
-
-        elif USE_Z_SCREW:
+        else:
+            # The RAMBO boards run a bit hot and should have their
+            # currents no higher than 950mA on X and Y.
             MOTOR_CURRENT_X                              = 950 # mA
             MOTOR_CURRENT_Y                              = 950 # mA
-            MOTOR_CURRENT_Z                              = 1275 if PRINTER == "Juniper_TAZ5" else 1075 # mA
+            if USE_Z_BELT:
+                MOTOR_CURRENT_Z                          = 975 # mA
+            elif PRINTER == "Juniper_TAZ5":
+                MOTOR_CURRENT_Z                          = 1275 # mA
+            elif USE_Z_SCREW:
+                MOTOR_CURRENT_Z                          = 1075 # mA
 
     if USE_EINSY_RETRO or USE_ARCHIM2:
         # Neither define LULZBOT_PWM_MOTOR_CURRENT nor LULZBOT_DIGIPOT_MOTOR_CURRENT,

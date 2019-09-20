@@ -36,6 +36,10 @@ void BaseScreen::onEntry() {
   UIScreen::onEntry();
 }
 
+bool BaseScreen::buttonIsPressed(uint8_t tag) {
+  return tag != 0 && EventLoop::get_pressed_tag() == tag;
+}
+
 bool BaseScreen::buttonStyleCallback(CommandProcessor &cmd, uint8_t tag, uint8_t &style, uint16_t &options, bool post) {
   if (post) {
     cmd.colors(normal_btn);
@@ -48,7 +52,7 @@ bool BaseScreen::buttonStyleCallback(CommandProcessor &cmd, uint8_t tag, uint8_t
     }
   #endif
 
-  if (tag != 0 && EventLoop::get_pressed_tag() == tag) {
+  if (buttonIsPressed(tag)) {
     options = OPT_FLAT;
   }
 

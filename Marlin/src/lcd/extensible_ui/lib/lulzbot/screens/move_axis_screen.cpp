@@ -93,10 +93,10 @@ bool MoveAxisScreen::onTouchHeld(uint8_t tag) {
     case 14: UI_DECREMENT_AXIS(E3); screen_data.MoveAxisScreen.e_rel[3] -= increment; break;
     case 15: UI_INCREMENT_AXIS(E3); screen_data.MoveAxisScreen.e_rel[3] += increment; break;
     #endif
-    case 20: injectCommands_P(PSTR("G28 X")); break;
-    case 21: injectCommands_P(PSTR("G28 Y")); break;
-    case 22: injectCommands_P(PSTR("G28 Z")); break;
-    case 23: injectCommands_P(PSTR("G28"));   break;
+    case 20: SpinnerDialogBox::enqueueAndWait_P(F("G28 X")); break;
+    case 21: SpinnerDialogBox::enqueueAndWait_P(F("G28 Y")); break;
+    case 22: SpinnerDialogBox::enqueueAndWait_P(F("G28 Z")); break;
+    case 23: SpinnerDialogBox::enqueueAndWait_P(F("G28"));   break;
     default:
       return false;
   }

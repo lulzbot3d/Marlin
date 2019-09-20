@@ -359,12 +359,13 @@ class BaseNumericAdjustmentScreen : public BaseScreen {
           BTN_NORMAL,
           BTN_ACTION,
           BTN_TOGGLE,
+          BTN_DISABLED,
           TEXT_AREA
         } _style;
 
       protected:
         void _draw_increment_btn(CommandProcessor &, uint8_t line, const uint8_t tag);
-        void _button(CommandProcessor &, uint8_t tag, int16_t x, int16_t y, int16_t w, int16_t h, progmem_str, bool highlight = false);
+        void _button(CommandProcessor &, uint8_t tag, int16_t x, int16_t y, int16_t w, int16_t h, progmem_str, bool enabled = true, bool highlight = false);
         void _button_style(CommandProcessor &cmd, style_t style);
       public:
         widgets_t(draw_mode_t);

@@ -55,7 +55,7 @@ BaseNumericAdjustmentScreen::widgets_t::widgets_t(draw_mode_t what) : _what(what
     #else
        BTN_POS(15,7), BTN_SIZE(4,1),
     #endif
-   GET_TEXTF(BACK), true
+   GET_TEXTF(BACK), true, true
   );
 
   _line = 1;
@@ -71,22 +71,24 @@ void BaseNumericAdjustmentScreen::widgets_t::_button_style(CommandProcessor &cmd
     const btn_colors *new_colors = &normal_btn;
 
     switch(_style) {
-      case BTN_ACTION: old_colors = &action_btn; break;
-      case BTN_TOGGLE: old_colors = &ui_toggle; break;
+      case BTN_ACTION:   old_colors = &action_btn;   break;
+      case BTN_TOGGLE:   old_colors = &ui_toggle;    break;
+      case BTN_DISABLED: old_colors = &disabled_btn; break;
       default: break;
     }
     switch(style) {
-      case BTN_ACTION: new_colors = &action_btn; break;
-      case BTN_TOGGLE: new_colors = &ui_toggle; break;
+      case BTN_ACTION:   new_colors = &action_btn;   break;
+      case BTN_TOGGLE:   new_colors = &ui_toggle;    break;
+      case BTN_DISABLED: new_colors = &disabled_btn; break;
       default: break;
     }
 
-    const bool rgb_changed  = old_colors->rgb  != new_colors->rgb;
-    const bool grad_changed = old_colors->grad != new_colors->grad;
-    const bool fg_changed   = old_colors->fg   != new_colors->fg || _style == TEXT_AREA;
-    const bool bg_changed   = old_colors->bg   != new_colors->bg;
+    const bool rgb_changed  =  old_colors->rgb  != new_colors->rgb;
+    const bool grad_changed =  old_colors->grad != new_colors->grad;
+    const bool fg_changed   = (old_colors->fg   != new_colors->fg) || (_style == TEXT_AREA);
+    const bool bg_changed   =  old_colors->bg   != new_colors->bg;
 
-    if (rgb_changed)  cmd.cmd(FTDI::COLOR_RGB(new_colors->rgb));
+    if (rgb_changed)  cmd.cmd(COLOR_RGB(new_colors->rgb));
     if (grad_changed) cmd.gradcolor(new_colors->grad);
     if (fg_changed)   cmd.fgcolor(new_colors->fg);
     if (bg_changed)   cmd.bgcolor(new_colors->bg);
@@ -99,11 +101,11 @@ void BaseNumericAdjustmentScreen::widgets_t::_button_style(CommandProcessor &cmd
  * Speed optimization for drawing buttons. Draw all unpressed buttons in the
  * background layer and draw only the pressed button in the foreground layer.
  */
-void BaseNumericAdjustmentScreen::widgets_t::_button(CommandProcessor &cmd, uint8_t tag, int16_t x, int16_t y, int16_t w, int16_t h, progmem_str text, bool highlight) {
-  highlight = highlight && (_what & FOREGROUND);
-  if ((_what & BACKGROUND) || buttonIsPressed(tag) || highlight) {
-    _button_style(cmd, highlight ? BTN_ACTION : BTN_NORMAL);
-    cmd.tag(tag).button(x, y, w, h, text);
+void BaseNumericAdjustmentScreen::widgets_t::_button(CommandProcessor &cmd, uint8_t tag, int16_t x, int16_t y, int16_t w, int16_t h, progmem_str text, bool enabled, bool highlight) {
+  enabled   = enabled   || (_what & BACKGROUND);
+  if ((_what & BACKGROUND) || buttonIsPressed(tag) || highlight || !enabled) {
+    _button_style(cmd, (!enabled) ? BTN_DISABLED : (highlight ? BTN_ACTION : BTN_NORMAL));
+    cmd.tag(enabled ? tag : 0).button(x, y, w, h, text);
   }
 }
 
@@ -160,24 +162,24 @@ void BaseNumericAdjustmentScreen::widgets_t::_draw_increment_btn(CommandProcesso
     default:  label = PSTR("100"    ); pos = _decimals + 2; break;
   }
 
-  const bool highlight = increment == tag;
+  const bool highlight = (_what & FOREGROUND) && (increment == tag);
 
   switch (pos) {
     #ifdef TOUCH_UI_PORTRAIT
-      case 0: _button(cmd, tag, BTN_POS(5,_line), BTN_SIZE(2,1), progmem_str(label), highlight); break;
-      case 1: _button(cmd, tag, BTN_POS(7,_line), BTN_SIZE(2,1), progmem_str(label), highlight); break;
-      case 2: _button(cmd, tag, BTN_POS(9,_line), BTN_SIZE(2,1), progmem_str(label), highlight); break;
+      case 0: _button(cmd, tag, BTN_POS(5,_line), BTN_SIZE(2,1), progmem_str(label), true, highlight); break;
+      case 1: _button(cmd, tag, BTN_POS(7,_line), BTN_SIZE(2,1), progmem_str(label), true, highlight); break;
+      case 2: _button(cmd, tag, BTN_POS(9,_line), BTN_SIZE(2,1), progmem_str(label), true, highlight); break;
     #else
-      case 0: _button(cmd, tag, BTN_POS(15,2),    BTN_SIZE(4,1), progmem_str(label), highlight); break;
-      case 1: _button(cmd, tag, BTN_POS(15,3),    BTN_SIZE(4,1), progmem_str(label), highlight); break;
-      case 2: _button(cmd, tag, BTN_POS(15,4),    BTN_SIZE(4,1), progmem_str(label), highlight); break;
+      case 0: _button(cmd, tag, BTN_POS(15,2),    BTN_SIZE(4,1), progmem_str(label), true, highlight); break;
+      case 1: _button(cmd, tag, BTN_POS(15,3),    BTN_SIZE(4,1), progmem_str(label), true, highlight); break;
+      case 2: _button(cmd, tag, BTN_POS(15,4),    BTN_SIZE(4,1), progmem_str(label), true, highlight); break;
     #endif
   }
 }
 
 
 void BaseNumericAdjustmentScreen::widgets_t::increments() {
-  CommandProcessor  cmd;
+  CommandProcessor cmd;
 
   cmd.font(
     #ifdef TOUCH_UI_PORTRAIT
@@ -212,23 +214,21 @@ void BaseNumericAdjustmentScreen::widgets_t::adjuster_sram_val(uint8_t tag, prog
 
   if (_what & BACKGROUND) {
     _button_style(cmd, TEXT_AREA);
-    cmd.enabled(1)
-       .tag(0)
+    cmd.tag(0)
        .font(font_small)
        .text( BTN_POS(1,_line), BTN_SIZE(4,1), label)
        .fgcolor(_color).button( BTN_POS(5,_line), BTN_SIZE(5,1), F(""), OPT_FLAT);
   }
 
-  cmd.font(font_medium).enabled(is_enabled);
-  _button(cmd, tag,     BTN_POS(10,_line), BTN_SIZE(2,1),  F("-"));
+  cmd.font(font_medium);
+  _button(cmd, tag,     BTN_POS(10,_line), BTN_SIZE(2,1),  F("-"), is_enabled);
+  _button(cmd, tag + 1, BTN_POS(12,_line), BTN_SIZE(2,1),  F("+"), is_enabled);
 
-  cmd.enabled(is_enabled);
-  _button(cmd, tag + 1, BTN_POS(12,_line), BTN_SIZE(2,1),  F("+"));
-
-  if (_what & FOREGROUND) {
+  if ((_what & FOREGROUND) && is_enabled) {
+    _button_style(cmd, BTN_NORMAL);
     cmd.tag(0)
        .font(font_small)
-       .text(BTN_POS(5,_line), BTN_SIZE(5,1),  is_enabled ? value : "-");
+       .text(BTN_POS(5,_line), BTN_SIZE(5,1), value);
   }
 
   _line++;
@@ -268,9 +268,8 @@ void BaseNumericAdjustmentScreen::widgets_t::button(uint8_t tag, progmem_str lab
       #else
         font_medium
       #endif
-     )
-     .enabled(is_enabled);
-  _button(cmd, tag, BTN_POS(5,_line), BTN_SIZE(9,1), label);
+     );
+  _button(cmd, tag, BTN_POS(5,_line), BTN_SIZE(9,1), label, is_enabled);
 
   _line++;
 }
@@ -304,10 +303,9 @@ void BaseNumericAdjustmentScreen::widgets_t::two_buttons(uint8_t tag1, progmem_s
       #else
          font_medium
       #endif
-    )
-  .enabled(is_enabled);
-  _button(cmd, tag1, BTN_POS(5,_line),   BTN_SIZE(4.5,1), label1);
-  _button(cmd, tag2, BTN_POS(9.5,_line), BTN_SIZE(4.5,1), label2);
+    );
+  _button(cmd, tag1, BTN_POS(5,_line),   BTN_SIZE(4.5,1), label1, is_enabled);
+  _button(cmd, tag2, BTN_POS(9.5,_line), BTN_SIZE(4.5,1), label2, is_enabled);
 
   _line++;
 }
@@ -371,6 +369,8 @@ void BaseNumericAdjustmentScreen::widgets_t::home_buttons(uint8_t tag) {
 void BaseNumericAdjustmentScreen::onEntry() {
   screen_data.BaseNumericAdjustmentScreen.increment = 0; // This will force the increment to be picked while drawing.
   BaseScreen::onEntry();
+  CommandProcessor cmd;
+  cmd.set_button_style_callback(nullptr);
 }
 
 bool BaseNumericAdjustmentScreen::onTouchEnd(uint8_t tag) {

@@ -197,7 +197,7 @@
 #else
   #define LULZBOT_BIOPRINTER_STRINGS ,\
     MAIN_MENU, \
-    UNLOCK_XY_AXIS, \
+    RELEASE_XY_AXIS, \
     LOAD_SYRINGE, \
     BED_TEMPERATURE, \
     LOADING_WARNING, \
@@ -407,7 +407,7 @@ namespace Language_en {
 
   #ifdef LULZBOT_USE_BIOPRINTER_UI
     PROGMEM Language_Str MAIN_MENU              = u8"Main Menu";
-    PROGMEM Language_Str UNLOCK_XY_AXIS         = u8"Unlock XY Axis";
+    PROGMEM Language_Str RELEASE_XY_AXIS        = u8"Release XY Axis";
     PROGMEM Language_Str LOAD_SYRINGE           = u8"Load Syringe";
     PROGMEM Language_Str BED_TEMPERATURE        = u8"Bed Temperature";
     PROGMEM Language_Str LOADING_WARNING        = u8"About to home to loading position. Ensure the top and the bed of the printer are clear.\n\nContinue?";

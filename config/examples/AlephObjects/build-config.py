@@ -2147,7 +2147,7 @@ def make_config(PRINTER, TOOLHEAD):
 
     if USE_TOUCH_UI:
         MANUAL_FEEDRATE_Z                                = 300
-        MARLIN["MANUAL_FEEDRATE"]                        = [300*60, 300*60, MANUAL_FEEDRATE_Z*60, MANUAL_FEEDRATE_E*60] # (mm/min)
+        MARLIN["MANUAL_FEEDRATE"]                        = [35*60, 35*60, 35*60, MANUAL_FEEDRATE_E*60] # (mm/min)
 
     if MARLIN["EXTRUDERS"] == 2 and ENABLED("DISTINCT_E_FACTORS") and not ENABLED("SWITCHING_EXTRUDER"):
         MARLIN["DEFAULT_AXIS_STEPS_PER_UNIT"]            = [XY_STEPS, XY_STEPS, Z_STEPS, E_STEPS, E_STEPS]
@@ -2218,9 +2218,6 @@ def make_config(PRINTER, TOOLHEAD):
         MARLIN["SCROLL_LONG_FILENAMES"]                  = False if USE_LESS_MEMORY else True
         MARLIN["LULZBOT_NO_PAUSE_FOR_REHEAT_WORKAROUND"] = True
 
-    if ENABLED("LULZBOT_USE_BIOPRINTER_UI"):
-        MARLIN["LULZBOT_LCD_KEEPS_STATUS_AFTER_PRINT"]   = True
-
         # Virtual joystick functionality
         MARLIN["JOYSTICK"]                               = True
         MARLIN["JOY_X_PIN"]                              = -1
@@ -2230,6 +2227,9 @@ def make_config(PRINTER, TOOLHEAD):
         MARLIN["JOY_X_LIMITS"]                           = False
         MARLIN["JOY_Y_LIMITS"]                           = False
         MARLIN["JOY_Z_LIMITS"]                           = False
+
+    if ENABLED("LULZBOT_USE_BIOPRINTER_UI"):
+        MARLIN["LULZBOT_LCD_KEEPS_STATUS_AFTER_PRINT"]   = True
 
     if ENABLED("USB_FLASH_DRIVE_SUPPORT"):
         MARLIN["SDSUPPORT"]                              = True

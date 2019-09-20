@@ -2147,7 +2147,7 @@ def make_config(PRINTER, TOOLHEAD):
 
     if USE_TOUCH_UI:
         MANUAL_FEEDRATE_Z                                = 300
-        MARLIN["MANUAL_FEEDRATE"]                        = [35*60, 35*60, 35*60, MANUAL_FEEDRATE_E*60] # (mm/min)
+        MARLIN["MANUAL_FEEDRATE"]                        = [39*60, 39*60, 39*60, MANUAL_FEEDRATE_E*60] # (mm/min)
 
     if MARLIN["EXTRUDERS"] == 2 and ENABLED("DISTINCT_E_FACTORS") and not ENABLED("SWITCHING_EXTRUDER"):
         MARLIN["DEFAULT_AXIS_STEPS_PER_UNIT"]            = [XY_STEPS, XY_STEPS, Z_STEPS, E_STEPS, E_STEPS]

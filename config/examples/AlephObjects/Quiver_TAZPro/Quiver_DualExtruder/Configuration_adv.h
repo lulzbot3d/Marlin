@@ -825,7 +825,7 @@
 // @section lcd
 
 #if EITHER(ULTIPANEL, EXTENSIBLE_UI)
-  #define MANUAL_FEEDRATE {2100, 2100, 2100, 60.0} // <-- changed:  Feedrates for manual moves along X, Y, Z, E from panel
+  #define MANUAL_FEEDRATE {2340, 2340, 2340, 60.0} // <-- changed:  Feedrates for manual moves along X, Y, Z, E from panel
   #define SHORT_MANUAL_Z_MOVE 0.025 // (mm) Smallest manual Z move (< 0.1mm)
   #if ENABLED(ULTIPANEL)
     #define MANUAL_E_MOVES_RELATIVE // Display extruder move distance rather than "position"
@@ -1207,7 +1207,7 @@
 
   // Enable UTF8 processing and rendering. Unsupported characters
   // will be shown as '?'.
-  //#define TOUCH_UI_USE_UTF8 // <-- changed
+  #define TOUCH_UI_USE_UTF8 // <-- changed
   #if ENABLED(TOUCH_UI_USE_UTF8)
 
     // Enable TOUCH_UI_UTF8_WESTERN_CHARSET to add support for
@@ -1247,7 +1247,7 @@
   //#define TOUCH_UI_PASSCODE
 
   // Enable this for additional debugging information
-  #define TOUCH_UI_DEBUG
+  //#define TOUCH_UI_DEBUG
 #endif
 
 //

@@ -1239,8 +1239,12 @@
   // When labels do not fit buttons, use smaller font
   #define TOUCH_UI_FIT_TEXT
 
-  // Runtime language selection (otherwise LCD_LANGUAGE)
-  //#define TOUCH_UI_LANGUAGE_MENU
+  // Allow language selection from menu at run-time (otherwise use LCD_LANGUAGE)
+  //#define LCD_LANGUAGE_1 en
+  //#define LCD_LANGUAGE_2 fr
+  //#define LCD_LANGUAGE_3 de
+  //#define LCD_LANGUAGE_4 es
+  //#define LCD_LANGUAGE_5 it
 
   // Use a numeric passcode for "Screen lock" keypad.
   // (recommended for smaller displays)
@@ -1401,7 +1405,7 @@
 #define MIN_STEPS_PER_SEGMENT 6
 
 /**
- * Minimum delay after setting the stepper DIR (in ns)
+ * Minimum delay before and after setting the stepper DIR (in ns)
  *     0 : No delay (Expect at least 10µS since one Stepper ISR must transpire)
  *    20 : Minimum for TMC2xxx drivers
  *   200 : Minimum for A4988 drivers
@@ -1413,7 +1417,8 @@
  *
  * Override the default value based on the driver type set in Configuration.h.
  */
-//#define MINIMUM_STEPPER_DIR_DELAY 650
+//#define MINIMUM_STEPPER_POST_DIR_DELAY 650
+//#define MINIMUM_STEPPER_PRE_DIR_DELAY 650
 
 /**
  * Minimum stepper driver pulse width (in µs)

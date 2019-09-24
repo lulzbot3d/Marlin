@@ -39,8 +39,8 @@
 const uint8_t shadow_depth = 5;
 const float   max_speed  = 1.00;
 const float   min_speed  = 0.02;
-const float   emax_speed = 10.00;
-const float   emin_speed = 0.25;
+const float   emax_speed = 2.00;
+const float   emin_speed = 0.70;
 
 using namespace FTDI;
 using namespace Theme;
@@ -290,7 +290,6 @@ bool StatusScreen::onTouchEnd(uint8_t tag) {
 bool StatusScreen::onTouchHeld(uint8_t tag) {
   if (tag >= 1 && tag <= 4 && !jog_xy) return false;
   const float s  = min_speed  + (fine_motion ? 0 : (max_speed  - min_speed)  * sq(increment));
-  const float es = emin_speed + (fine_motion ? 0 : (emax_speed - emin_speed) * sq(increment));
   switch (tag) {
     case 1: jog(-s,  0,  0); break;
     case 2: jog( s,  0,  0); break;
@@ -299,15 +298,16 @@ bool StatusScreen::onTouchHeld(uint8_t tag) {
     case 5: jog( 0,  0, -s); break;
     case 6: jog( 0,  0,  s); break;
     case 7:
-      if (ExtUI::isMoving()) return false;
-      MoveAxisScreen::setManualFeedrate(E0, es);
-      UI_INCREMENT(AxisPosition_mm, E0);
-      return true;
     case 8:
+    {
       if (ExtUI::isMoving()) return false;
-      MoveAxisScreen::setManualFeedrate(E0, es);
-      UI_DECREMENT(AxisPosition_mm, E0);
-      return true;
+      const float feedrate  =  emin_speed + (fine_motion ? 0 : (emax_speed - emin_speed) * sq(increment));
+      const float increment = 0.25 * feedrate * (tag == 7 ? -1 : 1);
+      MoveAxisScreen::setManualFeedrate(E0, feedrate);
+      UI_INCREMENT(AxisPosition_mm, E0);
+      current_screen.onRefresh();
+      break;
+    }
     default:
       return false;
   }
@@ -325,10 +325,10 @@ void StatusScreen::setStatusMessage(const char * const str) {
 
 void StatusScreen::onIdle() {
   if (refresh_timer.elapsed(STATUS_UPDATE_INTERVAL)) {
-    if (isPrintingFromMedia())
-      BioPrintingDialogBox::show();
     if(!EventLoop::is_touch_held())
       onRefresh();
+    if (isPrintingFromMedia())
+      BioPrintingDialogBox::show();
     refresh_timer.start();
   }
 }

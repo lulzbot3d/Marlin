@@ -83,15 +83,17 @@ void BaseNumericAdjustmentScreen::widgets_t::_button_style(CommandProcessor &cmd
       default: break;
     }
 
-    const bool rgb_changed  =  old_colors->rgb  != new_colors->rgb;
+    const bool rgb_changed  =  (old_colors->rgb  != new_colors->rgb) ||
+                               (_style == TEXT_LABEL && style != TEXT_LABEL) ||
+                               (_style != TEXT_LABEL && style == TEXT_LABEL);
     const bool grad_changed =  old_colors->grad != new_colors->grad;
     const bool fg_changed   = (old_colors->fg   != new_colors->fg) || (_style == TEXT_AREA);
     const bool bg_changed   =  old_colors->bg   != new_colors->bg;
 
-    if (rgb_changed)  cmd.cmd(COLOR_RGB(new_colors->rgb));
-    if (grad_changed) cmd.gradcolor(new_colors->grad);
-    if (fg_changed)   cmd.fgcolor(new_colors->fg);
-    if (bg_changed)   cmd.bgcolor(new_colors->bg);
+    if (rgb_changed)         cmd.cmd(COLOR_RGB(style == TEXT_LABEL ? bg_text_enabled : new_colors->rgb));
+    if (grad_changed)        cmd.gradcolor(new_colors->grad);
+    if (fg_changed)          cmd.fgcolor(new_colors->fg);
+    if (bg_changed)          cmd.bgcolor(new_colors->bg);
 
     _style = style;
   }
@@ -120,6 +122,7 @@ BaseNumericAdjustmentScreen::widgets_t &BaseNumericAdjustmentScreen::widgets_t::
 void BaseNumericAdjustmentScreen::widgets_t::heading(progmem_str label) {
   if (_what & BACKGROUND) {
     CommandProcessor cmd;
+    _button_style(cmd, TEXT_LABEL);
     cmd.font(font_medium)
        .text(
         #ifdef TOUCH_UI_PORTRAIT
@@ -190,6 +193,7 @@ void BaseNumericAdjustmentScreen::widgets_t::increments() {
   );
 
   if (_what & BACKGROUND) {
+    _button_style(cmd, TEXT_LABEL);
     cmd.text(
         #ifdef TOUCH_UI_PORTRAIT
           BTN_POS(1, _line), BTN_SIZE(4,1),
@@ -213,11 +217,12 @@ void BaseNumericAdjustmentScreen::widgets_t::adjuster_sram_val(uint8_t tag, prog
   CommandProcessor cmd;
 
   if (_what & BACKGROUND) {
-    _button_style(cmd, TEXT_AREA);
+    _button_style(cmd, TEXT_LABEL);
     cmd.tag(0)
        .font(font_small)
-       .text( BTN_POS(1,_line), BTN_SIZE(4,1), label)
-       .fgcolor(_color).button( BTN_POS(5,_line), BTN_SIZE(5,1), F(""), OPT_FLAT);
+       .text( BTN_POS(1,_line), BTN_SIZE(4,1), label);
+    _button_style(cmd, TEXT_AREA);
+    cmd.fgcolor(_color).button( BTN_POS(5,_line), BTN_SIZE(5,1), F(""), OPT_FLAT);
   }
 
   cmd.font(font_medium);
@@ -278,12 +283,13 @@ void BaseNumericAdjustmentScreen::widgets_t::text_field(uint8_t tag, progmem_str
   CommandProcessor cmd;
 
   if (_what & BACKGROUND) {
-    _button_style(cmd, TEXT_AREA);
+    _button_style(cmd, TEXT_LABEL);
     cmd.enabled(1)
        .tag(0)
        .font(font_small)
-       .text(   BTN_POS(1,_line), BTN_SIZE(4,1), label)
-       .fgcolor(_color)
+       .text(   BTN_POS(1,_line), BTN_SIZE(4,1), label);
+    _button_style(cmd, TEXT_AREA);
+    cmd.fgcolor(_color)
        .tag(tag)
        .button( BTN_POS(5,_line), BTN_SIZE(9,1), F(""), OPT_FLAT);
   }
@@ -314,6 +320,7 @@ void BaseNumericAdjustmentScreen::widgets_t::toggle(uint8_t tag, progmem_str lab
   CommandProcessor cmd;
 
   if (_what & BACKGROUND) {
+    _button_style(cmd, TEXT_LABEL);
     cmd.font(font_small)
        .text(
         #ifdef TOUCH_UI_PORTRAIT
@@ -347,6 +354,7 @@ void BaseNumericAdjustmentScreen::widgets_t::home_buttons(uint8_t tag) {
   CommandProcessor cmd;
 
   if (_what & BACKGROUND) {
+    _button_style(cmd, TEXT_LABEL);
     cmd.font(font_small)
        .text(BTN_POS(1, _line), BTN_SIZE(4,1), GET_TEXTF(HOME));
   }

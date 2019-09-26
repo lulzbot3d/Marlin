@@ -360,7 +360,8 @@ class BaseNumericAdjustmentScreen : public BaseScreen {
           BTN_ACTION,
           BTN_TOGGLE,
           BTN_DISABLED,
-          TEXT_AREA
+          TEXT_AREA,
+          TEXT_LABEL,
         } _style;
 
       protected:

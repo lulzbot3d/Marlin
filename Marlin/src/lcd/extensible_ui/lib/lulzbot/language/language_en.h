@@ -223,9 +223,10 @@ namespace Language_en {
   #ifdef LULZBOT_USE_BIOPRINTER_UI
     PROGMEM Language_Str MAIN_MENU              = u8"Main Menu";
     PROGMEM Language_Str RELEASE_XY_AXIS        = u8"Release XY Axis";
-    PROGMEM Language_Str LOAD_SYRINGE           = u8"Load Syringe";
+    PROGMEM Language_Str MOVE_TO_HOME           = u8"Move To Home";
+    PROGMEM Language_Str RAISE_PLUNGER          = u8"Raise Plunger";
     PROGMEM Language_Str BED_TEMPERATURE        = u8"Bed Temperature";
-    PROGMEM Language_Str LOADING_WARNING        = u8"About to home to loading position. Ensure the top and the bed of the printer are clear.\n\nContinue?";
-    PROGMEM Language_Str HOMING_WARNING         = u8"About to re-home plunger and auto-level. Remove syringe prior to proceeding.\n\nContinue?";
+    PROGMEM Language_Str HOME_XYZ_WARNING       = u8"About to move to home position. Ensure the top and the bed of the printer are clear.\n\nContinue?";
+    PROGMEM Language_Str HOME_E_WARNING         = u8"About to auto-level and re-home plunger. Remove syringe prior to proceeding.\n\nContinue?";
   #endif
 }; // namespace Language_en

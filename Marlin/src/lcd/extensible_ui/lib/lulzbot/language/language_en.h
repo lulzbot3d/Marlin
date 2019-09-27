@@ -184,6 +184,7 @@ namespace Language_en {
   PROGMEM Language_Str ERASING                  = u8"Erasing...";
   PROGMEM Language_Str ERASED                   = u8"SPI flash erased";
   PROGMEM Language_Str CALIBRATION_WARNING      = u8"For best results, unload the filament and clean the hotend prior to starting calibration. Continue?";
+  PROGMEM Language_Str START_PRINT_CONFIRMATION = u8"Start printing %s?";
   PROGMEM Language_Str ABORT_WARNING            = u8"Are you sure you want to cancel the print?";
   PROGMEM Language_Str EXTRUDER_SELECTION       = u8"Extruder Selection";
   PROGMEM Language_Str CURRENT_TEMPERATURE      = u8"Current Temp";

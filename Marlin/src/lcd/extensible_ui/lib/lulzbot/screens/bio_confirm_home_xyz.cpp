@@ -36,7 +36,10 @@ void BioConfirmHomeXYZ::onRedraw(draw_mode_t) {
 bool BioConfirmHomeXYZ::onTouchEnd(uint8_t tag) {
   switch (tag) {
     case 1:
-      SpinnerDialogBox::enqueueAndWait_P(F(LULZBOT_HOME_XYZ_COMMANDS));
+      SpinnerDialogBox::enqueueAndWait_P(F(
+       "G28\n"
+       LULZBOT_PARK_AND_RELEASE_COMMANDS
+      ));
       current_screen.forget();
       break;
     case 2:

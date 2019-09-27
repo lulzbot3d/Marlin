@@ -1297,7 +1297,7 @@ def make_config(PRINTER, TOOLHEAD):
         STANDARD_Y_MAX_POS                               = 276
         STANDARD_Y_MIN_POS                               = 0
 
-        STANDARD_X_BED_SIZE                              =  288
+        STANDARD_X_BED_SIZE                              = 288
         STANDARD_Y_BED_SIZE                              = 275
 
     elif PRINTER in ["Redgum_TAZWorkhorse", "RedgumArchim_Experimental"]:
@@ -1492,13 +1492,11 @@ def make_config(PRINTER, TOOLHEAD):
 ######################### BIO-PRINTER STARTUP COMMANDS ########################
 
     if PRINTER in ['KangarooPaw_Bio']:
-        MARLIN["LULZBOT_HOME_XYZ_COMMANDS"]              = C_STRING(
-            "G28 X Y Z\n"                                # Home all axis
-            "G0 X115 Z50 F6000"                          # Move to park position
+        MARLIN["LULZBOT_AXIS_LEVELING_COMMANDS"]         = C_STRING(
+            AXIS_LEVELING_COMMANDS
         )
-        MARLIN["LULZBOT_HOME_E_COMMANDS"]                = C_STRING(
-            "G112\n"                                     # Home extruder
-            + AXIS_LEVELING_COMMANDS +                   # Level X axis
+
+        MARLIN["LULZBOT_PARK_AND_RELEASE_COMMANDS"]      = C_STRING(
             "G0 X115 Z50 F6000\n"                        # Goto loading position
             "M400\n"                                     # Wait for moves to finish
             "M18 X Y"                                    # Unlock motors

@@ -72,7 +72,9 @@
    */
   void enable_emi_pins(const bool enable) {
     #if HAS_BED_PROBE
-      LULZBOT_SET_PIN_STATE(Z_MIN_PIN, enable);
+      #if DISABLED(ENDSTOPS_ALWAYS_ON_DEFAULT)
+        LULZBOT_SET_PIN_STATE(Z_MIN_PIN, enable);
+      #endif
       #if PIN_EXISTS(Z_MIN_PROBE)
         LULZBOT_SET_PIN_STATE(Z_MIN_PROBE_PIN, enable)
       #endif

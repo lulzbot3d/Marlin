@@ -2252,7 +2252,7 @@
  */
 #define LULZBOT_LCD_KEEPS_STATUS_AFTER_PRINT // <-- changed
 #define LULZBOT_LCD_MACHINE_NAME "LulzBot Bio" // <-- changed
-#define LULZBOT_LCD_TOOLHEAD_NAME "Goostruder" // <-- changed
+#define LULZBOT_LCD_TOOLHEAD_NAME "Syringe Pump" // <-- changed
 
 /**
  * Extra options for RepRapDiscount Full Graphics Smart Controller

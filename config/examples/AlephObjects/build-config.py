@@ -1123,7 +1123,7 @@ def make_config(PRINTER, TOOLHEAD):
         E_STEPS                                          = 9448.8
         MOTOR_CURRENT_E                                  = 350 # mA
         MANUAL_FEEDRATE_E                                = 1.7 # mm/sec
-        MARLIN["LULZBOT_LCD_TOOLHEAD_NAME"]              = C_STRING("Goostruder")
+        MARLIN["LULZBOT_LCD_TOOLHEAD_NAME"]              = C_STRING("Syringe Pump")
         #         16 chars max                                       ^^^^^^^^^^^^^^^
         MARLIN["EXTRUDERS"]                              = 1
         MARLIN["Z_CLEARANCE_DEPLOY_PROBE"]               = 30

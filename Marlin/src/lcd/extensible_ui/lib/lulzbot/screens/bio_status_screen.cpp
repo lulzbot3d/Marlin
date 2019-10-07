@@ -29,8 +29,6 @@
 #include "../ftdi_eve_lib/extras/poly_ui.h"
 #include "bio_printer_ui.h"
 
-#define E_TRAVEL_LIMIT 60
-
 #define GRID_COLS 2
 #define GRID_ROWS 9
 
@@ -108,7 +106,11 @@ void StatusScreen::draw_temperature(draw_mode_t what) {
 
 void StatusScreen::draw_syringe(draw_mode_t what) {
   int16_t x, y, h, v;
-  const float fill_level = 1.0 - min(1.0, max(0.0, getAxisPosition_mm(E0) / E_TRAVEL_LIMIT));
+  #ifdef LULZBOT_E_TRAVEL_LIMIT
+    const float fill_level = 1.0 - min(1.0, max(0.0, getAxisPosition_mm(E0) / LULZBOT_E_TRAVEL_LIMIT));
+  #else
+    const float fill_level = 0.75;
+  #endif
   const bool  e_homed = isAxisPositionKnown(E0);
 
   CommandProcessor cmd;

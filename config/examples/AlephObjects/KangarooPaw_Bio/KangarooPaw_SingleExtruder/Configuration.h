@@ -2278,6 +2278,7 @@
 #define LULZBOT_DISABLE_TOOLHEAD_HEATER // <-- changed
 #define LULZBOT_AXIS_LEVELING_COMMANDS "M117 Leveling X Axis\nG28\nG0 X170 Y75 F9999\nG0 Z5 F6000\nG91\nM211 S0\nM400\nM906 Z600\nG0 Z-15 F500\nG0 Z5 F500\nM400\nG90\nM906 Z960\nM211 S1\nG28 Z0\nM117 Leveling done." // <-- changed
 #define LULZBOT_PARK_AND_RELEASE_COMMANDS "G0 X115 Z50 F6000\nM400\nM18 X Y" // <-- changed
+#define LULZBOT_E_TRAVEL_LIMIT 60 // <-- changed
 #define E_MIN_PIN X_MAX_PIN // <-- changed
 #define E_MIN_PIN_INVERTING 0 // <-- changed
 

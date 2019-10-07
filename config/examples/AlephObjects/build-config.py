@@ -432,6 +432,7 @@ def make_config(PRINTER, TOOLHEAD):
         MARLIN["CUSTOM_MACHINE_NAME"]                    = C_STRING("LulzBot Bio")
         MARLIN["LULZBOT_LCD_MACHINE_NAME"]               = C_STRING("LulzBot Bio")
         MARLIN["LULZBOT_DISABLE_TOOLHEAD_HEATER"]        = True
+        MARLIN["LULZBOT_E_TRAVEL_LIMIT"]                 = 60
         MARLIN["LULZBOT_USE_BIOPRINTER_GCODE"]           = True
         MARLIN["LULZBOT_USE_BIOPRINTER_UI"]              = True
         MARLIN["SENSORLESS_HOMING"]                      = True

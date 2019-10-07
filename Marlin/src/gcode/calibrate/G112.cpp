@@ -43,14 +43,12 @@ static void home_e() {
   // Back off the extruder until the pin is triggered
   set_destination_from_current();
   while(!read_pin()) {
-    destination[E_AXIS] -= 0.5;
+    current_position[E_AXIS] = 0.5;
+    sync_plan_position();
+    destination[E_AXIS] = 0;
     prepare_move_to_destination();
     planner.synchronize();
   };
-
-  // Set E position to zero
-  current_position[E_AXIS] = 0;
-  sync_plan_position();
 
   SBI(axis_known_position, E_AXIS);
   SBI(axis_homed, E_AXIS);

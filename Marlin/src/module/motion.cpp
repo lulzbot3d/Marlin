@@ -971,6 +971,10 @@ void clean_up_after_endstop_or_probe_move() {
  */
 void prepare_move_to_destination() {
   apply_motion_limits(destination);
+  #ifdef LULZBOT_E_TRAVEL_LIMIT
+    NOLESS(destination[E_AXIS], 0);
+    NOMORE(destination[E_AXIS], LULZBOT_E_TRAVEL_LIMIT);
+  #endif
 
   #if EITHER(PREVENT_COLD_EXTRUSION, PREVENT_LENGTHY_EXTRUDE)
 

@@ -192,8 +192,8 @@ namespace Language_en {
   PROGMEM Language_Str HEATING                  = u8"Heating";
   PROGMEM Language_Str CAUTION                  = u8"Caution:";
   PROGMEM Language_Str HOT                      = u8"Hot!";
-  PROGMEM Language_Str UNLOAD_FILAMENT          = u8"Unload";
-  PROGMEM Language_Str LOAD_FILAMENT            = u8"Load/Extruder";
+  PROGMEM Language_Str UNLOAD_FILAMENT          = u8"Unload/Retract";
+  PROGMEM Language_Str LOAD_FILAMENT            = u8"Load/Extrude";
   PROGMEM Language_Str MOMENTARY                = u8"Momentary";
   PROGMEM Language_Str CONTINUOUS               = u8"Continuous";
   PROGMEM Language_Str PLEASE_WAIT              = u8"Please wait...";

@@ -2269,6 +2269,7 @@
  * Extra options for AlephObjects Color LCD display
  */
 #define AO_EXP1_DEPRECATED_PINMAP // <-- changed
+#define DEVELOPER_SCREENS // <-- changed
 
 /**
  * Extra option for LulzBot Bio

@@ -44,6 +44,7 @@
 #define DEFAULT_bedKd 382
 #define DEFAULT_bedKi 65
 #define DEFAULT_bedKp 294
+#define DEVELOPER_SCREENS
 #define DISABLE_INACTIVE_Z true
 #define E0_CURRENT 960
 #define E0_DRIVER_TYPE TMC2130

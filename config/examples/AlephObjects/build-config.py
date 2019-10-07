@@ -2216,6 +2216,7 @@ def make_config(PRINTER, TOOLHEAD):
         MARLIN["LCD_SET_PROGRESS_MANUALLY"]              = True
         MARLIN["SCROLL_LONG_FILENAMES"]                  = False if USE_LESS_MEMORY else True
         MARLIN["LULZBOT_NO_PAUSE_FOR_REHEAT_WORKAROUND"] = True
+        MARLIN["DEVELOPER_SCREENS"]                      = True
 
         # Virtual joystick functionality
         MARLIN["JOYSTICK"]                               = True

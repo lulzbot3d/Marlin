@@ -92,11 +92,13 @@ void StatusScreen::draw_temperature(draw_mode_t what) {
     cmd.font(font_xlarge)
        .cmd(COLOR_RGB(bg_text_enabled));
 
-    if (!isHeaterIdle(BED) && getTargetTemp_celsius(BED) > 0) {
+    if (!isHeaterIdle(BED) && getTargetTemp_celsius(BED) > 0)
       format_temp(bed_str, getTargetTemp_celsius(BED));
-      ui.bounds(POLY(target_temp), x, y, h, v);
-      cmd.text(x, y, h, v, bed_str);
-    }
+    else
+      strcpy_P(bed_str, PSTR(MSG_BED));
+
+    ui.bounds(POLY(target_temp), x, y, h, v);
+    cmd.text(x, y, h, v, bed_str);
 
     format_temp(bed_str, getActualTemp_celsius(BED));
     ui.bounds(POLY(actual_temp), x, y, h, v);

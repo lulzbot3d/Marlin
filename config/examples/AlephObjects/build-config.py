@@ -1466,7 +1466,7 @@ def make_config(PRINTER, TOOLHEAD):
             "G90\n"                                      # Return to absolute mode
             "M906 Z960\n"                                # Restore default current
             "M211 S1\n"                                  # Turn soft endstops back on
-            "G28\n"                                      # Rehome
+            "G28 Z0\n"                                   # Home Axis
             "M117 Leveling done.\n"                      # Set LCD status
         )
 

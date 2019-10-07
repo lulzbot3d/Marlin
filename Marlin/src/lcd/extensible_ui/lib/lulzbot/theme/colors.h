@@ -23,25 +23,28 @@
 #pragma once
 
 namespace Theme {
+  #ifdef LULZBOT_USE_BIOPRINTER_UI
+    // Use a blue accent color
+    constexpr uint32_t accent_color_1   = 0x223f58;  // HSL 208°, 44%, 24%  - Darkest
+    constexpr uint32_t accent_color_2   = 0x1560a2;  // HSL 208°, 77%, 36%
+    constexpr uint32_t accent_color_3   = 0x318ad8;  // HSL 208°, 68%, 52%
+    constexpr uint32_t accent_color_4   = 0x5da8ea;  // HSL 208°, 77%, 64%
+    constexpr uint32_t accent_color_5   = 0xc1ddf6;  // HSL 208°, 75%, 86%  - Lightest
+  #else
+    // Use a green accent color
+    constexpr uint32_t accent_color_1   = 0x545923;  // HSL  66°, 44%, 24%  - Darkest
+    constexpr uint32_t accent_color_2   = 0x90a215;  // HSL  68°, 77%, 36%
+    constexpr uint32_t accent_color_3   = 0xC1D82F;  // HSL  68°, 68%, 52%
+    constexpr uint32_t accent_color_4   = 0xDEEA5C;  // HSL  65°, 77%, 64%
+    constexpr uint32_t accent_color_5   = 0xF1F6C0;  // HSL  66°, 75%, 86%  - Lightest
+  #endif
 
-  #define COLOR_CORRECTION(rgb)  ( \
-    (uint32_t((((rgb) & 0xFF0000) >> 16) * 1.00) << 16) | \
-    (uint32_t((((rgb) & 0x00FF00) >>  8) * 1.00) <<  8) | \
-    (uint32_t((((rgb) & 0x0000FF) >>  0) *  .75) <<  0))
-
-  #define COLOR_BLEND(a,b,f) COLOR_CORRECTION( \
-    (uint32_t((((a) & 0xFF0000) >> 16) *    f + (((b) & 0xFF0000) >> 16) * (1-f))  << 16) | \
-    (uint32_t((((a) & 0x00FF00) >>  8) *    f + (((b) & 0x00FF00) >>  8) * (1-f))  <<  8) | \
-    (uint32_t((((a) & 0x0000FF) >>  0) *    f + (((b) & 0x0000FF) >>  0) * (1-f))  <<  0))
-
-  constexpr uint32_t lulzbot_bg          = 0xDEEA5C;
-  constexpr uint32_t lulzbot_fg          = 0xC1D82F;
-
-  constexpr uint32_t lulzbot_green       = COLOR_BLEND(0xC1DB2F,0x788814,0.33);
+  constexpr uint32_t logo_bg            = accent_color_4;
+  constexpr uint32_t logo_fg            = accent_color_3;
 
   #ifndef LULZBOT_USE_BIOPRINTER_UI
-    constexpr uint32_t theme_darkest    = COLOR_CORRECTION(0x444444);
-    constexpr uint32_t theme_dark       = COLOR_CORRECTION(0x777777);
+    constexpr uint32_t theme_darkest    = 0x444433;
+    constexpr uint32_t theme_dark       = 0x777759;
 
     constexpr uint32_t bg_color         = theme_darkest;
     constexpr uint32_t bg_text_disabled = theme_dark;
@@ -49,34 +52,34 @@ namespace Theme {
     constexpr uint32_t bg_normal        = theme_darkest;
 
     constexpr uint32_t fg_normal        = theme_dark;
-    constexpr uint32_t fg_action        = lulzbot_green;
-    constexpr uint32_t fg_disabled      = bg_color;
+    constexpr uint32_t fg_action        = accent_color_2;
+    constexpr uint32_t fg_disabled      = theme_darkest;
   #else
-    constexpr uint32_t theme_darkest    = 0x545923;
-    constexpr uint32_t theme_dark       = lulzbot_bg;
+    constexpr uint32_t theme_darkest    = accent_color_1;
+    constexpr uint32_t theme_dark       = accent_color_4;
 
     constexpr uint32_t bg_color         = 0xFFFFFF;
     constexpr uint32_t bg_text_disabled = 0x333333;
-    constexpr uint32_t bg_text_enabled  = theme_darkest;
-    constexpr uint32_t bg_normal        = theme_dark;
+    constexpr uint32_t bg_text_enabled  = accent_color_1;
+    constexpr uint32_t bg_normal        = accent_color_4;
 
-    constexpr uint32_t fg_normal        = theme_darkest;
-    constexpr uint32_t fg_action        = theme_dark;
+    constexpr uint32_t fg_normal        = accent_color_1;
+    constexpr uint32_t fg_action        = accent_color_4;
     constexpr uint32_t fg_disabled      = 0xEFEFEF;
 
     constexpr uint32_t shadow_rgb       = 0xE0E0E0;
-    constexpr uint32_t fill_rgb         = lulzbot_fg;
-    constexpr uint32_t stroke_rgb       = theme_darkest;
-    constexpr uint32_t syringe_rgb      = 0xF1F6C0;
+    constexpr uint32_t stroke_rgb       = accent_color_1;
+    constexpr uint32_t fill_rgb         = accent_color_3;
+    constexpr uint32_t syringe_rgb      = accent_color_5;
   #endif
 
-  constexpr uint32_t x_axis        = COLOR_CORRECTION(0xFF0000);
-  constexpr uint32_t y_axis        = COLOR_CORRECTION(0x00BB00);
-  constexpr uint32_t z_axis        = COLOR_CORRECTION(0x0000FF);
+  constexpr uint32_t x_axis        = 0xFF0000;
+  constexpr uint32_t y_axis        = 0x00BB00;
+  constexpr uint32_t z_axis        = 0x0000BF;
   #ifndef LULZBOT_USE_BIOPRINTER_UI
-  constexpr uint32_t e_axis        = COLOR_CORRECTION(0x777777);
-  constexpr uint32_t feedrate      = COLOR_CORRECTION(0x777777);
-  constexpr uint32_t other         = COLOR_CORRECTION(0x777777);
+  constexpr uint32_t e_axis        = 0x777759;
+  constexpr uint32_t feedrate      = 0x777759;
+  constexpr uint32_t other         = 0x777759;
   #else
   constexpr uint32_t e_axis        = 0x000000;
   constexpr uint32_t feedrate      = 0x000000;
@@ -86,8 +89,8 @@ namespace Theme {
   // Status screen
   constexpr uint32_t progress      = theme_dark;
   constexpr uint32_t status_msg    = theme_dark;
-  constexpr uint32_t fan_speed     = COLOR_CORRECTION(0x3771CB);
-  constexpr uint32_t temp          = COLOR_CORRECTION(0x892ca0);
+  constexpr uint32_t fan_speed     = 0x377198;
+  constexpr uint32_t temp          = 0x892c78;
   constexpr uint32_t axis_label    = theme_dark;
 
   constexpr uint32_t disabled_icon = 0x101010;
@@ -105,7 +108,7 @@ namespace Theme {
   constexpr btn_colors normal_btn   = {.bg = fg_action,     .grad = 0xFFFFFF,    .fg = fg_normal,    .rgb = 0xFFFFFF };
   constexpr btn_colors action_btn   = {.bg = bg_color,      .grad = 0xFFFFFF,    .fg = fg_action,    .rgb = 0xFFFFFF };
   constexpr btn_colors red_btn      = {.bg = 0xFF5555,      .grad = 0xFFFFFF,    .fg = 0xFF0000,     .rgb = 0xFFFFFF };
-  constexpr btn_colors ui_slider    = {.bg = theme_darkest, .grad = 0xFFFFFF,    .fg = theme_dark,   .rgb = lulzbot_green };
+  constexpr btn_colors ui_slider    = {.bg = theme_darkest, .grad = 0xFFFFFF,    .fg = theme_dark,   .rgb = accent_color_3 };
   constexpr btn_colors ui_toggle    = {.bg = theme_darkest, .grad = 0xFFFFFF,    .fg = theme_dark,   .rgb = 0xFFFFFF };
 
   // Temperature color scale

@@ -106,7 +106,7 @@ void BootScreen::showSplashScreen() {
 
   cmd.cmd(COLOR_RGB(logo_fg));
   ui.fill(POLY(logo_green));
-  cmd.cmd(COLOR_RGB(0x000000));
+  cmd.cmd(COLOR_RGB(logo_stroke));
   ui.fill(POLY(logo_black));
   ui.fill(POLY(logo_type));
   ui.fill(POLY(logo_mark));

@@ -25,22 +25,27 @@
 namespace Theme {
   #ifdef LULZBOT_USE_BIOPRINTER_UI
     // Use a blue accent color
-    constexpr uint32_t accent_color_1   = 0x223f58;  // HSL 208°, 44%, 24%  - Darkest
-    constexpr uint32_t accent_color_2   = 0x1560a2;  // HSL 208°, 77%, 36%
-    constexpr uint32_t accent_color_3   = 0x318ad8;  // HSL 208°, 68%, 52%
-    constexpr uint32_t accent_color_4   = 0x5da8ea;  // HSL 208°, 77%, 64%
-    constexpr uint32_t accent_color_5   = 0xc1ddf6;  // HSL 208°, 75%, 86%  - Lightest
+    constexpr uint32_t accent_color_1   = 0x004480;  // HSL 208°, 100%, 25% - Darkest
+    constexpr uint32_t accent_color_2   = 0x006ac6;  // HSL 208°, 100%, 39% - (color of logo on case)
+    constexpr uint32_t accent_color_3   = 0x1a94ff;  // HSL 208°, 100%, 55%
+    constexpr uint32_t accent_color_4   = 0x66b8ff;  // HSL 208°, 100%, 70%
+    constexpr uint32_t accent_color_5   = 0xb3dbff;  // HSL 208°, 100%, 85% - Lightest
+
+    constexpr uint32_t logo_bg          = 0xffffff;
+    constexpr uint32_t logo_fg          = 0xffffff;
+    constexpr uint32_t logo_stroke      = accent_color_2;  // HSL 208°, 100%, 39%
   #else
     // Use a green accent color
     constexpr uint32_t accent_color_1   = 0x545923;  // HSL  66°, 44%, 24%  - Darkest
     constexpr uint32_t accent_color_2   = 0x90a215;  // HSL  68°, 77%, 36%
-    constexpr uint32_t accent_color_3   = 0xC1D82F;  // HSL  68°, 68%, 52%
-    constexpr uint32_t accent_color_4   = 0xDEEA5C;  // HSL  65°, 77%, 64%
-    constexpr uint32_t accent_color_5   = 0xF1F6C0;  // HSL  66°, 75%, 86%  - Lightest
-  #endif
+    constexpr uint32_t accent_color_3   = 0xc1d82f;  // HSL  68°, 68%, 52%
+    constexpr uint32_t accent_color_4   = 0xdeea5c;  // HSL  65°, 77%, 64%
+    constexpr uint32_t accent_color_5   = 0xf1f6c0;  // HSL  66°, 75%, 86%  - Lightest
 
-  constexpr uint32_t logo_bg            = accent_color_4;
-  constexpr uint32_t logo_fg            = accent_color_3;
+    constexpr uint32_t logo_bg          = accent_color_4;
+    constexpr uint32_t logo_fg          = accent_color_3;
+    constexpr uint32_t logo_stroke      = 0x000000;
+  #endif
 
   #ifndef LULZBOT_USE_BIOPRINTER_UI
     constexpr uint32_t theme_darkest    = 0x444433;

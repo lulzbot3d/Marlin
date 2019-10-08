@@ -125,6 +125,7 @@ void BaseNumericAdjustmentScreen::widgets_t::heading(progmem_str label) {
     CommandProcessor cmd;
     _button_style(cmd, TEXT_LABEL);
     cmd.font(font_medium)
+       .tag(0)
        .text(
         #ifdef TOUCH_UI_PORTRAIT
           BTN_POS(1, _line), BTN_SIZE(12,1),
@@ -195,7 +196,7 @@ void BaseNumericAdjustmentScreen::widgets_t::increments() {
 
   if (_what & BACKGROUND) {
     _button_style(cmd, TEXT_LABEL);
-    cmd.text(
+    cmd.tag(0).text(
         #ifdef TOUCH_UI_PORTRAIT
           BTN_POS(1, _line), BTN_SIZE(4,1),
         #else

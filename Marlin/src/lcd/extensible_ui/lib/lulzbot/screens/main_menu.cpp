@@ -43,7 +43,7 @@ void MainMenu::onRedraw(draw_mode_t what) {
     #ifdef TOUCH_UI_PORTRAIT
       #define GRID_ROWS 8
       #define GRID_COLS 2
-        .tag(2).button( BTN_POS(1,1), BTN_SIZE(1,1), GET_TEXTF(AUTO_HOME))
+         .tag(2).button( BTN_POS(1,1), BTN_SIZE(1,1), GET_TEXTF(AUTO_HOME))
         #ifdef NOZZLE_CLEAN_FEATURE
          .enabled(1)
         #else
@@ -69,7 +69,7 @@ void MainMenu::onRedraw(draw_mode_t what) {
     #else
       #define GRID_ROWS 5
       #define GRID_COLS 2
-        .tag(2).button( BTN_POS(1,1), BTN_SIZE(1,1), GET_TEXTF(AUTO_HOME))
+         .tag(2).button( BTN_POS(1,1), BTN_SIZE(1,1), GET_TEXTF(AUTO_HOME))
         #if ENABLED(NOZZLE_CLEAN_FEATURE)
          .enabled(1)
         #else

@@ -243,8 +243,9 @@ void StatusScreen::loadBitmaps() {
 void StatusScreen::onRedraw(draw_mode_t what) {
   if (what & BACKGROUND) {
     CommandProcessor cmd;
-    cmd.cmd(CLEAR_COLOR_RGB(bg_color));
-    cmd.cmd(CLEAR(true,true,true));
+    cmd.cmd(CLEAR_COLOR_RGB(bg_color))
+       .cmd(CLEAR(true,true,true))
+       .tag(0);
   }
 
   draw_syringe(what);

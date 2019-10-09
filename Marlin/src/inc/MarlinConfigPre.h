@@ -35,8 +35,8 @@
 #include "../core/boards.h"
 #include "../core/macros.h"
 #include "../core/millis_t.h"
-#include "Version.h"
 #include "../../Configuration.h"
+#include "Version.h"
 
 #include "Conditionals_LCD.h"
 #include HAL_PATH(../HAL, inc/Conditionals_LCD.h)

@@ -408,7 +408,7 @@ void GcodeSuite::process_parsed_command(const bool no_ok/*=false*/) {
         case 100: M100(); break;                                  // M100: Free Memory Report
       #endif
 
-      #if EXTRUDERS & !defined(LULZBOT_DISABLE_TOOLHEAD_HEATER)
+      #if EXTRUDERS && !defined(LULZBOT_DISABLE_TOOLHEAD_HEATER)
         case 104: M104(); break;                                  // M104: Set hot end temperature
         case 109: M109(); break;                                  // M109: Wait for hotend temperature to reach target
       #endif

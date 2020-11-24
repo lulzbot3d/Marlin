@@ -5,12 +5,12 @@
     #undef  digitalPinToPCICR
     #define digitalPinToPCICR(p)    ( ((p) >= 10 && (p) <= 15) || \
                                       ((p) >= 50 && (p) <= 53) || \
-                                      ((p) >= 62 && (p) <= 69) ? &PCICR : (uint8_t *)0)
+                                      ((p) >= 62 && (p) <= 69) ? &PCICR : nullptr)
 #endif
 
 void setup() {
   Serial.begin(9600);
-  Serial.println("PINs causing interrups are:");
+  Serial.println("PINs causing interrupts are:");
   for (int i = 2; i < NUM_DIGITAL_PINS; i++) {
     if (digitalPinToPCICR(i) || (int)digitalPinToInterrupt(i) != -1) {
       for (int j = 0; j < NUM_ANALOG_INPUTS; j++) {

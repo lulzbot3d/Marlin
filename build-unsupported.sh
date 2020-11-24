@@ -1,0 +1,6 @@
+./build-lulzbot-firmware.sh RedgumArchim_Experimental CecropiaSilk_SingleExtruderAeroV2
+./build-lulzbot-firmware.sh OliveoilArchim_Experimental Tilapia_SingleExtruder
+./build-lulzbot-firmware.sh GladiolaTouchLCD_Experimental Gladiola_SingleExtruder
+./build-lulzbot-firmware.sh GladiolaEinsyLCD_Experimental Gladiola_SingleExtruder
+./build-lulzbot-firmware.sh GladiolaEinsyTouchLCD_Experimental Gladiola_SingleExtruder
+./build-lulzbot-firmware.sh CLCDTestStand_Experimental Gladiola_SingleExtruder

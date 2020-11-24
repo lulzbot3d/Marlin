@@ -4,6 +4,7 @@
 # Arduino 0011 Makefile
 # Arduino adaptation by mellis, eighthave, oli.keller
 # Marlin adaption by Daid
+# Marlin 2.0 support and RELOC_WORKAROUND by @marcio-ao
 #
 # This has been tested with Arduino 0022.
 #
@@ -61,7 +62,10 @@ HARDWARE_MOTHERBOARD ?= 301
 # Arduino source install directory, and version number
 # On most linuxes this will be /usr/share/arduino
 ARDUINO_INSTALL_DIR  ?= ../ArduinoAddons/arduino-1.8.5
-ARDUINO_VERSION      ?= 183
+ARDUINO_VERSION      ?= 10805
+
+# The installed Libraries are in the User folder
+ARDUINO_USER_DIR ?= ${HOME}/Arduino
 
 # You can optionally set a path to the avr-gcc tools. Requires a trailing slash. (ex: /usr/local/avr-gcc/bin)
 AVR_TOOLS_PATH ?=
@@ -85,12 +89,8 @@ WIRE               ?= 0
 # this defines if U8GLIB is needed (may require RELOC_WORKAROUND)
 U8GLIB             ?= 1
 
-# this defines whether to add a workaround for the avr-gcc relocation bug
-#	  https://www.stix.id.au/wiki/AVR_relocation_truncations_workaround
-RELOC_WORKAROUND   ?= 0
-
-# this defines whether to include the Trinamic TMC2630Stepper
-TMC2630            ?= 1
+# this defines whether to include the Trinamic TMCStepper library
+TMC                ?= 1
 
 ############
 # Try to automatically determine whether RELOC_WORKAROUND is needed based
@@ -102,17 +102,18 @@ CC_MIN:=$(shell $(CC) -dM -E - < /dev/null | grep __GNUC_MINOR__ | cut -f3 -d\ )
 CC_PATCHLEVEL:=$(shell $(CC) -dM -E - < /dev/null | grep __GNUC_PATCHLEVEL__ | cut -f3 -d\ )
 CC_VER:=$(shell echo $$(( $(CC_MAJ) * 10000 + $(CC_MIN) * 100 + $(CC_PATCHLEVEL) )))
 ifeq ($(shell test $(CC_VER) -lt 40901 && echo 1),1)
-	RELOC_WORKAROUND = 1
+  @echo This version of GCC is likely broken. Enabling relocation workaround.
+  RELOC_WORKAROUND = 1
 endif
 
 ############
 # The following added by AlephObjects for adjusting the name of the output
 # hex file
-VERSION=$(shell grep "define SHORT_BUILD_VERSION" Version.h | cut -d \" -f 2)
+VERSION=$(shell grep "define SHORT_BUILD_VERSION" src/inc/Version.h | cut -d \" -f 2)
 REVISION=$(shell grep -m 1 "define LULZBOT_FW" Conditionals_LulzBot.h | cut -d \" -f 2)
 HASH = $(shell git rev-parse --verify HEAD --short)
 HEX_FILENAME=Marlin_$(MODEL)_$(TOOLHEAD)_$(VERSION)$(REVISION)_$(HASH)
-LULZBOT_EXTRAS=-DLULZBOT_$(MODEL) -DTOOLHEAD_$(TOOLHEAD) -Wfatal-errors
+LULZBOT_EXTRAS=-DLULZBOT_$(MODEL) -DTOOLHEAD_$(TOOLHEAD) -DCONFIGURATION_LULZBOT -Wfatal-errors
 
 ############################################################################
 # Below here nothing should be changed...
@@ -130,288 +131,343 @@ ifeq ($(HARDWARE_MOTHERBOARD),0)
 #
 
 # MEGA/RAMPS up to 1.2
-else ifeq ($(HARDWARE_MOTHERBOARD),3)
+else ifeq ($(HARDWARE_MOTHERBOARD),1000)
 
 # RAMPS 1.3 (Power outputs: Hotend, Fan, Bed)
-else ifeq ($(HARDWARE_MOTHERBOARD),33)
+else ifeq ($(HARDWARE_MOTHERBOARD),1010)
 # RAMPS 1.3 (Power outputs: Hotend0, Hotend1, Bed)
-else ifeq ($(HARDWARE_MOTHERBOARD),34)
+else ifeq ($(HARDWARE_MOTHERBOARD),1011)
 # RAMPS 1.3 (Power outputs: Hotend, Fan0, Fan1)
-else ifeq ($(HARDWARE_MOTHERBOARD),35)
+else ifeq ($(HARDWARE_MOTHERBOARD),1012)
 # RAMPS 1.3 (Power outputs: Hotend0, Hotend1, Fan)
-else ifeq ($(HARDWARE_MOTHERBOARD),36)
+else ifeq ($(HARDWARE_MOTHERBOARD),1013)
 # RAMPS 1.3 (Power outputs: Spindle, Controller Fan)
-else ifeq ($(HARDWARE_MOTHERBOARD),38)
+else ifeq ($(HARDWARE_MOTHERBOARD),1014)
 
 # RAMPS 1.4 (Power outputs: Hotend, Fan, Bed)
-else ifeq ($(HARDWARE_MOTHERBOARD),43)
+else ifeq ($(HARDWARE_MOTHERBOARD),1020)
 # RAMPS 1.4 (Power outputs: Hotend0, Hotend1, Bed)
-else ifeq ($(HARDWARE_MOTHERBOARD),44)
+else ifeq ($(HARDWARE_MOTHERBOARD),1021)
 # RAMPS 1.4 (Power outputs: Hotend, Fan0, Fan1)
-else ifeq ($(HARDWARE_MOTHERBOARD),45)
+else ifeq ($(HARDWARE_MOTHERBOARD),1022)
 # RAMPS 1.4 (Power outputs: Hotend0, Hotend1, Fan)
-else ifeq ($(HARDWARE_MOTHERBOARD),46)
+else ifeq ($(HARDWARE_MOTHERBOARD),1023)
 # RAMPS 1.4 (Power outputs: Spindle, Controller Fan)
-else ifeq ($(HARDWARE_MOTHERBOARD),48)
+else ifeq ($(HARDWARE_MOTHERBOARD),1024)
 
 # RAMPS Plus 3DYMY (Power outputs: Hotend, Fan, Bed)
-else ifeq ($(HARDWARE_MOTHERBOARD),143)
+else ifeq ($(HARDWARE_MOTHERBOARD),1030)
 # RAMPS Plus 3DYMY (Power outputs: Hotend0, Hotend1, Bed)
-else ifeq ($(HARDWARE_MOTHERBOARD),144)
+else ifeq ($(HARDWARE_MOTHERBOARD),1031)
 # RAMPS Plus 3DYMY (Power outputs: Hotend, Fan0, Fan1)
-else ifeq ($(HARDWARE_MOTHERBOARD),145)
+else ifeq ($(HARDWARE_MOTHERBOARD),1032)
 # RAMPS Plus 3DYMY (Power outputs: Hotend0, Hotend1, Fan)
-else ifeq ($(HARDWARE_MOTHERBOARD),146)
+else ifeq ($(HARDWARE_MOTHERBOARD),1033)
 # RAMPS Plus 3DYMY (Power outputs: Spindle, Controller Fan)
-else ifeq ($(HARDWARE_MOTHERBOARD),148)
+else ifeq ($(HARDWARE_MOTHERBOARD),1034)
 
 #
 # RAMPS Derivatives - ATmega1280, ATmega2560
 #
 
 # 3Drag Controller
-else ifeq ($(HARDWARE_MOTHERBOARD),77)
+else ifeq ($(HARDWARE_MOTHERBOARD),1100)
 # Velleman K8200 Controller (derived from 3Drag Controller)
-else ifeq ($(HARDWARE_MOTHERBOARD),78)
+else ifeq ($(HARDWARE_MOTHERBOARD),1101)
 # Velleman K8400 Controller (derived from 3Drag Controller)
-else ifeq ($(HARDWARE_MOTHERBOARD),79)
+else ifeq ($(HARDWARE_MOTHERBOARD),1102)
 # 2PrintBeta BAM&DICE with STK drivers
-else ifeq ($(HARDWARE_MOTHERBOARD),401)
+else ifeq ($(HARDWARE_MOTHERBOARD),1103)
 # 2PrintBeta BAM&DICE Due with STK drivers
-else ifeq ($(HARDWARE_MOTHERBOARD),402)
+else ifeq ($(HARDWARE_MOTHERBOARD),1104)
 # MKS BASE v1.0
-else ifeq ($(HARDWARE_MOTHERBOARD),40)
+else ifeq ($(HARDWARE_MOTHERBOARD),1105)
+# MKS v1.4 with A4982 stepper drivers
+else ifeq ($(HARDWARE_MOTHERBOARD),1106)
 # MKS v1.5 with Allegro A4982 stepper drivers
-else ifeq ($(HARDWARE_MOTHERBOARD),405)
+else ifeq ($(HARDWARE_MOTHERBOARD),1107)
 # MKS BASE 1.0 with Heroic HR4982 stepper drivers
-else ifeq ($(HARDWARE_MOTHERBOARD),41)
+else ifeq ($(HARDWARE_MOTHERBOARD),1108)
 # MKS GEN v1.3 or 1.4
-else ifeq ($(HARDWARE_MOTHERBOARD),47)
+else ifeq ($(HARDWARE_MOTHERBOARD),1109)
 # MKS GEN L
-else ifeq ($(HARDWARE_MOTHERBOARD),53)
+else ifeq ($(HARDWARE_MOTHERBOARD),1110)
 # zrib V2.0 control board (Chinese knock off RAMPS replica)
-else ifeq ($(HARDWARE_MOTHERBOARD),504)
+else ifeq ($(HARDWARE_MOTHERBOARD),1111)
+# Bigtreetech or BIQU KFB2.0
+else ifeq ($(HARDWARE_MOTHERBOARD),1112)
 # Felix 2.0+ Electronics Board (RAMPS like)
-else ifeq ($(HARDWARE_MOTHERBOARD),37)
+else ifeq ($(HARDWARE_MOTHERBOARD),1113)
 # Invent-A-Part RigidBoard
-else ifeq ($(HARDWARE_MOTHERBOARD),42)
+else ifeq ($(HARDWARE_MOTHERBOARD),1114)
 # Invent-A-Part RigidBoard V2
-else ifeq ($(HARDWARE_MOTHERBOARD),52)
+else ifeq ($(HARDWARE_MOTHERBOARD),1115)
 # Sainsmart 2-in-1 board
-else ifeq ($(HARDWARE_MOTHERBOARD),49)
+else ifeq ($(HARDWARE_MOTHERBOARD),1116)
 # Ultimaker
-else ifeq ($(HARDWARE_MOTHERBOARD),7)
+else ifeq ($(HARDWARE_MOTHERBOARD),1117)
 # Ultimaker (Older electronics. Pre 1.5.4. This is rare)
-else ifeq ($(HARDWARE_MOTHERBOARD),71)
-MCU ?= atmega1280
+else ifeq ($(HARDWARE_MOTHERBOARD),1118)
+  MCU ?= atmega1280
+
 # Azteeg X3
-else ifeq ($(HARDWARE_MOTHERBOARD),67)
+else ifeq ($(HARDWARE_MOTHERBOARD),1119)
 # Azteeg X3 Pro
-else ifeq ($(HARDWARE_MOTHERBOARD),68)
+else ifeq ($(HARDWARE_MOTHERBOARD),1120)
 # Ultimainboard 2.x (Uses TEMP_SENSOR 20)
-else ifeq ($(HARDWARE_MOTHERBOARD),72)
+else ifeq ($(HARDWARE_MOTHERBOARD),1121)
 # Rumba
-else ifeq ($(HARDWARE_MOTHERBOARD),80)
+else ifeq ($(HARDWARE_MOTHERBOARD),1122)
+# Raise3D Rumba
+else ifeq ($(HARDWARE_MOTHERBOARD),1123)
+# Rapide Lite RL200 Rumba
+else ifeq ($(HARDWARE_MOTHERBOARD),1124)
+# Formbot T-Rex 2 Plus
+else ifeq ($(HARDWARE_MOTHERBOARD),1125)
+# Formbot T-Rex 3
+else ifeq ($(HARDWARE_MOTHERBOARD),1126)
+# Formbot Raptor
+else ifeq ($(HARDWARE_MOTHERBOARD),1127)
+# Formbot Raptor 2
+else ifeq ($(HARDWARE_MOTHERBOARD),1128)
 # bq ZUM Mega 3D
-else ifeq ($(HARDWARE_MOTHERBOARD),503)
+else ifeq ($(HARDWARE_MOTHERBOARD),1129)
 # MakeBoard Mini v2.1.2 is a control board sold by MicroMake
-else ifeq ($(HARDWARE_MOTHERBOARD),431)
+else ifeq ($(HARDWARE_MOTHERBOARD),1130)
 # TriGorilla Anycubic version 1.3 based on RAMPS EFB
-else ifeq ($(HARDWARE_MOTHERBOARD),343)
+else ifeq ($(HARDWARE_MOTHERBOARD),1131)
 # TriGorilla Anycubic version 1.4 based on RAMPS EFB
-else ifeq ($(HARDWARE_MOTHERBOARD),443)
+else ifeq ($(HARDWARE_MOTHERBOARD),1132)
+# TriGorilla Anycubic version 1.4 Rev 1.1
+else ifeq ($(HARDWARE_MOTHERBOARD),1133)
 # Creality: Ender-4, CR-8
-else ifeq ($(HARDWARE_MOTHERBOARD),243)
+else ifeq ($(HARDWARE_MOTHERBOARD),1134)
+# Creality: CR10S, CR20, CR-X
+else ifeq ($(HARDWARE_MOTHERBOARD),1135)
+# Dagoma F5
+else ifeq ($(HARDWARE_MOTHERBOARD),1136)
+# Fysetc F6
+else ifeq ($(HARDWARE_MOTHERBOARD),1137)
+# Duplicator i3 Plus
+else ifeq ($(HARDWARE_MOTHERBOARD),1138)
+# VORON
+else ifeq ($(HARDWARE_MOTHERBOARD),1139)
+# TRONXY V3 1.0
+else ifeq ($(HARDWARE_MOTHERBOARD),1140)
+# Z-Bolt X Series
+else ifeq ($(HARDWARE_MOTHERBOARD),1141)
 
 #
 # Other ATmega1280, ATmega2560
 #
 
 # Cartesio CN Controls V11
-else ifeq ($(HARDWARE_MOTHERBOARD),111)
+else ifeq ($(HARDWARE_MOTHERBOARD),1200)
 # Cartesio CN Controls V12
-else ifeq ($(HARDWARE_MOTHERBOARD),112)
+else ifeq ($(HARDWARE_MOTHERBOARD),1201)
 # Cheaptronic v1.0
-else ifeq ($(HARDWARE_MOTHERBOARD),2)
+else ifeq ($(HARDWARE_MOTHERBOARD),1202)
 # Cheaptronic v2.0
-else ifeq ($(HARDWARE_MOTHERBOARD),21)
+else ifeq ($(HARDWARE_MOTHERBOARD),1203)
 # Makerbot Mightyboard Revision E
-else ifeq ($(HARDWARE_MOTHERBOARD),200)
+else ifeq ($(HARDWARE_MOTHERBOARD),1204)
 # Megatronics
-else ifeq ($(HARDWARE_MOTHERBOARD),70)
+else ifeq ($(HARDWARE_MOTHERBOARD),1205)
 # Megatronics v2.0
-else ifeq ($(HARDWARE_MOTHERBOARD),701)
+else ifeq ($(HARDWARE_MOTHERBOARD),1206)
 # Megatronics v3.0
-else ifeq ($(HARDWARE_MOTHERBOARD),703)
+else ifeq ($(HARDWARE_MOTHERBOARD),1207)
 # Megatronics v3.1
-else ifeq ($(HARDWARE_MOTHERBOARD),704)
+else ifeq ($(HARDWARE_MOTHERBOARD),1208)
+# Megatronics v3.2
+else ifeq ($(HARDWARE_MOTHERBOARD),1209)
 # Rambo
-else ifeq ($(HARDWARE_MOTHERBOARD),301)
+else ifeq ($(HARDWARE_MOTHERBOARD),1210)
 # Mini-Rambo
-else ifeq ($(HARDWARE_MOTHERBOARD),302)
+else ifeq ($(HARDWARE_MOTHERBOARD),1211)
 # Mini-Rambo 1.0a
-else ifeq ($(HARDWARE_MOTHERBOARD),303)
+else ifeq ($(HARDWARE_MOTHERBOARD),1212)
 # Einsy Rambo
-else ifeq ($(HARDWARE_MOTHERBOARD),304)
+else ifeq ($(HARDWARE_MOTHERBOARD),1213)
 # Einsy Retro
-else ifeq ($(HARDWARE_MOTHERBOARD),305)
+else ifeq ($(HARDWARE_MOTHERBOARD),1214)
 # Elefu Ra Board (v3)
-else ifeq ($(HARDWARE_MOTHERBOARD),21)
+else ifeq ($(HARDWARE_MOTHERBOARD),1215)
 # Leapfrog
-else ifeq ($(HARDWARE_MOTHERBOARD),999)
+else ifeq ($(HARDWARE_MOTHERBOARD),1216)
 # Mega controller
-else ifeq ($(HARDWARE_MOTHERBOARD),310)
+else ifeq ($(HARDWARE_MOTHERBOARD),1217)
 # abee Scoovo X9H
-else ifeq ($(HARDWARE_MOTHERBOARD),321)
+else ifeq ($(HARDWARE_MOTHERBOARD),1218)
+# Geeetech GT2560 Rev B for Mecreator2
+else ifeq ($(HARDWARE_MOTHERBOARD),1219)
 # Geeetech GT2560 Rev. A
-else ifeq ($(HARDWARE_MOTHERBOARD),74)
+else ifeq ($(HARDWARE_MOTHERBOARD),1220)
 # Geeetech GT2560 Rev. A+ (with auto level probe)
-else ifeq ($(HARDWARE_MOTHERBOARD),75)
+else ifeq ($(HARDWARE_MOTHERBOARD),1221)
+# Geeetech GT2560 Rev B for A10(M/D)
+else ifeq ($(HARDWARE_MOTHERBOARD),1222)
+# Geeetech GT2560 Rev B for A20(M/D)
+else ifeq ($(HARDWARE_MOTHERBOARD),1223)
+# Einstart retrofit
+else ifeq ($(HARDWARE_MOTHERBOARD),1224)
 
 #
 # ATmega1281, ATmega2561
 #
 
-else ifeq ($(HARDWARE_MOTHERBOARD),702)
-MCU              ?= atmega1281
-else ifeq ($(HARDWARE_MOTHERBOARD),25)
-MCU              ?= atmega1281
+else ifeq ($(HARDWARE_MOTHERBOARD),1300)
+  MCU              ?= atmega1281
+else ifeq ($(HARDWARE_MOTHERBOARD),1310)
+  MCU              ?= atmega1281
 
 #
 # Sanguinololu and Derivatives - ATmega644P, ATmega1284P
 #
 
 # Sanguinololu < 1.2
-else ifeq ($(HARDWARE_MOTHERBOARD),6)
-HARDWARE_VARIANT ?= Sanguino
-MCU              ?= atmega644p
+else ifeq ($(HARDWARE_MOTHERBOARD),1400)
+  HARDWARE_VARIANT ?= Sanguino
+  MCU              ?= atmega644p
 # Sanguinololu 1.2 and above
-else ifeq ($(HARDWARE_MOTHERBOARD),62)
-HARDWARE_VARIANT ?= Sanguino
-MCU              ?= atmega644p
+else ifeq ($(HARDWARE_MOTHERBOARD),1401)
+  HARDWARE_VARIANT ?= Sanguino
+  MCU              ?= atmega644p
 # Melzi
-else ifeq ($(HARDWARE_MOTHERBOARD),63)
-HARDWARE_VARIANT ?= Sanguino
-MCU              ?= atmega644p
+else ifeq ($(HARDWARE_MOTHERBOARD),1402)
+  HARDWARE_VARIANT ?= Sanguino
+  MCU              ?= atmega644p
 # Melzi with ATmega1284 (MaKr3d version)
-else ifeq ($(HARDWARE_MOTHERBOARD),66)
-HARDWARE_VARIANT ?= Sanguino
-MCU              ?= atmega1284p
+else ifeq ($(HARDWARE_MOTHERBOARD),1403)
+  HARDWARE_VARIANT ?= Sanguino
+  MCU              ?= atmega1284p
 # Melzi Creality3D board (for CR-10 etc)
-else ifeq ($(HARDWARE_MOTHERBOARD),89)
-HARDWARE_VARIANT ?= Sanguino
-MCU              ?= atmega1284p
+else ifeq ($(HARDWARE_MOTHERBOARD),1404)
+  HARDWARE_VARIANT ?= Sanguino
+  MCU              ?= atmega1284p
 # Melzi Malyan M150 board
-else ifeq ($(HARDWARE_MOTHERBOARD),92)
-HARDWARE_VARIANT ?= Sanguino
-MCU              ?= atmega1284p
+else ifeq ($(HARDWARE_MOTHERBOARD),1405)
+  HARDWARE_VARIANT ?= Sanguino
+  MCU              ?= atmega1284p
 # Tronxy X5S
-else ifeq ($(HARDWARE_MOTHERBOARD),505)
-HARDWARE_VARIANT ?= Sanguino
-MCU              ?= atmega1284p
+else ifeq ($(HARDWARE_MOTHERBOARD),1406)
+  HARDWARE_VARIANT ?= Sanguino
+  MCU              ?= atmega1284p
 # STB V1.1
-else ifeq ($(HARDWARE_MOTHERBOARD),64)
-HARDWARE_VARIANT ?= Sanguino
-MCU              ?= atmega1284p
+else ifeq ($(HARDWARE_MOTHERBOARD),1407)
+  HARDWARE_VARIANT ?= Sanguino
+  MCU              ?= atmega1284p
 # Azteeg X1
-else ifeq ($(HARDWARE_MOTHERBOARD),65)
-HARDWARE_VARIANT ?= Sanguino
-MCU              ?= atmega1284p
+else ifeq ($(HARDWARE_MOTHERBOARD),1408)
+  HARDWARE_VARIANT ?= Sanguino
+  MCU              ?= atmega1284p
 # Anet 1.0 (Melzi clone)
-else ifeq ($(HARDWARE_MOTHERBOARD),69)
-HARDWARE_VARIANT ?= Sanguino
-MCU              ?= atmega1284p
+else ifeq ($(HARDWARE_MOTHERBOARD),1409)
+  HARDWARE_VARIANT ?= Sanguino
+  MCU              ?= atmega1284p
 
 #
 # Other ATmega644P, ATmega644, ATmega1284P
 #
 
 # Gen3 Monolithic Electronics
-else ifeq ($(HARDWARE_MOTHERBOARD),22)
-HARDWARE_VARIANT ?= Sanguino
-MCU              ?= atmega644p
+else ifeq ($(HARDWARE_MOTHERBOARD),1500)
+  HARDWARE_VARIANT ?= Sanguino
+  MCU              ?= atmega644p
 # Gen3+
-else ifeq ($(HARDWARE_MOTHERBOARD),9)
-HARDWARE_VARIANT ?= Sanguino
-MCU              ?= atmega644p
+else ifeq ($(HARDWARE_MOTHERBOARD),1501)
+  HARDWARE_VARIANT ?= Sanguino
+  MCU              ?= atmega644p
 # Gen6
-else ifeq ($(HARDWARE_MOTHERBOARD),5)
-HARDWARE_VARIANT ?= Gen6
-MCU              ?= atmega644p
+else ifeq ($(HARDWARE_MOTHERBOARD),1502)
+  HARDWARE_VARIANT ?= Gen6
+  MCU              ?= atmega644p
 # Gen6 deluxe
-else ifeq ($(HARDWARE_MOTHERBOARD),51)
-HARDWARE_VARIANT ?= Gen6
-MCU              ?= atmega644p
+else ifeq ($(HARDWARE_MOTHERBOARD),1503)
+  HARDWARE_VARIANT ?= Gen6
+  MCU              ?= atmega644p
 # Gen7 custom (Alfons3 Version)
-else ifeq ($(HARDWARE_MOTHERBOARD),10)
-HARDWARE_VARIANT ?= Gen7
-MCU              ?= atmega644
-F_CPU            ?= 20000000
+else ifeq ($(HARDWARE_MOTHERBOARD),1504)
+  HARDWARE_VARIANT ?= Gen7
+  MCU              ?= atmega644
+  F_CPU            ?= 20000000
 # Gen7 v1.1, v1.2
-else ifeq ($(HARDWARE_MOTHERBOARD),11)
-HARDWARE_VARIANT ?= Gen7
-MCU              ?= atmega644p
-F_CPU            ?= 20000000
+else ifeq ($(HARDWARE_MOTHERBOARD),1505)
+  HARDWARE_VARIANT ?= Gen7
+  MCU              ?= atmega644p
+  F_CPU            ?= 20000000
 # Gen7 v1.3
-else ifeq ($(HARDWARE_MOTHERBOARD),12)
-HARDWARE_VARIANT ?= Gen7
-MCU              ?= atmega644p
-F_CPU            ?= 20000000
+else ifeq ($(HARDWARE_MOTHERBOARD),1506)
+  HARDWARE_VARIANT ?= Gen7
+  MCU              ?= atmega644p
+  F_CPU            ?= 20000000
 # Gen7 v1.4
-else ifeq ($(HARDWARE_MOTHERBOARD),13)
-HARDWARE_VARIANT ?= Gen7
-MCU              ?= atmega1284p
-F_CPU            ?= 20000000
+else ifeq ($(HARDWARE_MOTHERBOARD),1507)
+  HARDWARE_VARIANT ?= Gen7
+  MCU              ?= atmega1284p
+  F_CPU            ?= 20000000
 # Alpha OMCA board
-else ifeq ($(HARDWARE_MOTHERBOARD),90)
-HARDWARE_VARIANT ?= SanguinoA
-MCU              ?= atmega644
+else ifeq ($(HARDWARE_MOTHERBOARD),1508)
+  HARDWARE_VARIANT ?= SanguinoA
+  MCU              ?= atmega644
 # Final OMCA board
-else ifeq ($(HARDWARE_MOTHERBOARD),91)
-HARDWARE_VARIANT ?= Sanguino
-MCU              ?= atmega644p
+else ifeq ($(HARDWARE_MOTHERBOARD),1509)
+  HARDWARE_VARIANT ?= Sanguino
+  MCU              ?= atmega644p
 # Sethi 3D_1
-else ifeq ($(HARDWARE_MOTHERBOARD),20)
-HARDWARE_VARIANT ?= Sanguino
-MCU              ?= atmega644p
+else ifeq ($(HARDWARE_MOTHERBOARD),1510)
+  HARDWARE_VARIANT ?= Sanguino
+  MCU              ?= atmega644p
 
 #
 # Teensyduino - AT90USB1286, AT90USB1286P
 #
 
 # Teensylu
-else ifeq ($(HARDWARE_MOTHERBOARD),8)
-HARDWARE_VARIANT ?= Teensy
-MCU              ?= at90usb1286
+else ifeq ($(HARDWARE_MOTHERBOARD),1600)
+  HARDWARE_VARIANT ?= Teensy
+  MCU              ?= at90usb1286
 # Printrboard (AT90USB1286)
-else ifeq ($(HARDWARE_MOTHERBOARD),81)
-HARDWARE_VARIANT ?= Teensy
-MCU              ?= at90usb1286
+else ifeq ($(HARDWARE_MOTHERBOARD),1601)
+  HARDWARE_VARIANT ?= Teensy
+  MCU              ?= at90usb1286
 # Printrboard Revision F (AT90USB1286)
-else ifeq ($(HARDWARE_MOTHERBOARD),811)
-HARDWARE_VARIANT ?= Teensy
-MCU              ?= at90usb1286
+else ifeq ($(HARDWARE_MOTHERBOARD),1602)
+  HARDWARE_VARIANT ?= Teensy
+  MCU              ?= at90usb1286
 # Brainwave (AT90USB646)
-else ifeq ($(HARDWARE_MOTHERBOARD),82)
-HARDWARE_VARIANT ?= Teensy
-MCU              ?= at90usb646
+else ifeq ($(HARDWARE_MOTHERBOARD),1603)
+  HARDWARE_VARIANT ?= Teensy
+  MCU              ?= at90usb646
 # Brainwave Pro (AT90USB1286)
-else ifeq ($(HARDWARE_MOTHERBOARD),83)
-HARDWARE_VARIANT ?= Teensy
-MCU              ?= at90usb1286
+else ifeq ($(HARDWARE_MOTHERBOARD),1604)
+  HARDWARE_VARIANT ?= Teensy
+  MCU              ?= at90usb1286
 # SAV Mk-I (AT90USB1286)
-else ifeq ($(HARDWARE_MOTHERBOARD),84)
-HARDWARE_VARIANT ?= Teensy
-MCU              ?= at90usb1286
-# Teensy++2.0 (AT90USB1286) - CLI compile: HARDWARE_MOTHERBOARD=84  make
-else ifeq ($(HARDWARE_MOTHERBOARD),85)
-HARDWARE_VARIANT ?= Teensy
-MCU              ?= at90usb1286
+else ifeq ($(HARDWARE_MOTHERBOARD),1605)
+  HARDWARE_VARIANT ?= Teensy
+  MCU              ?= at90usb1286
+# Teensy++2.0 (AT90USB1286)
+else ifeq ($(HARDWARE_MOTHERBOARD),1606)
+  HARDWARE_VARIANT ?= Teensy
+  MCU              ?= at90usb1286
 # 5DPrint D8 Driver Board
-else ifeq ($(HARDWARE_MOTHERBOARD),88)
-HARDWARE_VARIANT ?= Teensy
-MCU              ?= at90usb1286
+else ifeq ($(HARDWARE_MOTHERBOARD),1607)
+  HARDWARE_VARIANT ?= Teensy
+  MCU              ?= at90usb1286
 
+# UltiMachine Archim1 (with DRV8825 drivers)
+else ifeq ($(HARDWARE_MOTHERBOARD),3023)
+  HARDWARE_VARIANT ?= archim
+  MCPU              = cortex-m3
+  F_CPU             = 84000000L
+  IS_MCU            = 0
+# UltiMachine Archim2 (with TMC2130 drivers)
+else ifeq ($(HARDWARE_MOTHERBOARD),3024)
+  HARDWARE_VARIANT ?= archim
+  MCPU              = cortex-m3
+  F_CPU             = 84000000L
+  IS_MCU            = 0
 endif
 
 # Be sure to regenerate speed_lookuptable.h with create_speed_lookuptable.py
@@ -419,9 +475,22 @@ endif
 # Set to 16Mhz if not yet set.
 F_CPU ?= 16000000
 
-# Set to arduino, ATmega2560 if not yet set.
-HARDWARE_VARIANT ?= arduino
-MCU ?= atmega2560
+# Set to microcontroller if IS_MCU not yet set
+IS_MCU ?= 1
+
+ifeq ($(IS_MCU),1)
+  # Set to arduino, ATmega2560 if not yet set.
+  HARDWARE_VARIANT ?= arduino
+  MCU ?= atmega2560
+
+  TOOL_PREFIX = avr
+  MCU_FLAGS   = -mmcu=$(MCU)
+  SIZE_FLAGS  = --mcu=$(MCU) -C
+else
+  TOOL_PREFIX = arm-none-eabi
+  CPU_FLAGS   = -mthumb -mcpu=$(MCPU)
+  SIZE_FLAGS  = -A
+endif
 
 # Arduino contained the main source code for the Arduino
 # Libraries, the "hardware variant" are for boards
@@ -434,12 +503,27 @@ TARGET = $(notdir $(CURDIR))
 # there is no need to specify explicit pathnames as long as the
 # directory is added here
 
+# The Makefile for previous versions of Marlin used VPATH for all
+# source files, but for Marlin 2.0, we use VPATH only for arduino
+# library files.
+
 VPATH = .
 VPATH += $(BUILD_DIR)
-VPATH += $(ARDUINO_INSTALL_DIR)/hardware/arduino/avr/cores/arduino
+VPATH += $(HARDWARE_SRC)
 
-VPATH += $(ARDUINO_INSTALL_DIR)/hardware/arduino/avr/libraries/SPI
-VPATH += $(ARDUINO_INSTALL_DIR)/hardware/arduino/avr/libraries/SPI/src
+ifeq ($(HARDWARE_VARIANT), $(filter $(HARDWARE_VARIANT),arduino Teensy Sanguino))
+VPATH += $(ARDUINO_INSTALL_DIR)/hardware/marlin/avr/libraries/LiquidCrystal/src
+VPATH += $(ARDUINO_INSTALL_DIR)/hardware/marlin/avr/libraries/SPI
+endif
+
+ifeq ($(IS_MCU),1)
+  VPATH += $(ARDUINO_INSTALL_DIR)/hardware/arduino/avr/cores/arduino
+
+  VPATH += $(ARDUINO_INSTALL_DIR)/hardware/arduino/avr/libraries/SPI
+  VPATH += $(ARDUINO_INSTALL_DIR)/hardware/arduino/avr/libraries/SPI/src
+  VPATH += $(ARDUINO_INSTALL_DIR)/hardware/arduino/avr/libraries/SoftwareSerial/src
+endif
+
 VPATH += $(ARDUINO_INSTALL_DIR)/libraries/LiquidCrystal/src
 ifeq ($(LIQUID_TWI2), 1)
 VPATH += $(ARDUINO_INSTALL_DIR)/libraries/Wire
@@ -459,66 +543,86 @@ VPATH += $(ARDUINO_INSTALL_DIR)/libraries/U8glib/csrc
 VPATH += $(ARDUINO_INSTALL_DIR)/libraries/U8glib/cppsrc
 VPATH += $(ARDUINO_INSTALL_DIR)/libraries/U8glib/fntsrc
 endif
-ifeq ($(TMC2630), 1)
-VPATH += $(ARDUINO_INSTALL_DIR)/libraries/TMC2130Stepper/src
-VPATH += $(ARDUINO_INSTALL_DIR)/libraries/TMC2130Stepper/src/source
+ifeq ($(TMC), 1)
+VPATH += $(ARDUINO_INSTALL_DIR)/libraries/TMCStepper/src
+VPATH += $(ARDUINO_INSTALL_DIR)/libraries/TMCStepper/src/source
 endif
 
 ifeq ($(HARDWARE_VARIANT), arduino)
-HARDWARE_SUB_VARIANT ?= mega
-VPATH += $(ARDUINO_INSTALL_DIR)/hardware/arduino/avr/variants/$(HARDWARE_SUB_VARIANT)
+  HARDWARE_SUB_VARIANT ?= mega
+  VPATH += $(ARDUINO_INSTALL_DIR)/hardware/arduino/avr/variants/$(HARDWARE_SUB_VARIANT)
+else ifeq ($(HARDWARE_VARIANT), Sanguino)
+  VPATH += $(ARDUINO_INSTALL_DIR)/hardware/marlin/avr/variants/sanguino
+else ifeq ($(HARDWARE_VARIANT), archim)
+  VPATH   += $(ARDUINO_INSTALL_DIR)/packages/ultimachine/hardware/sam/1.6.9-b/system/libsam
+  VPATH   += $(ARDUINO_INSTALL_DIR)/packages/ultimachine/hardware/sam/1.6.9-b/system/CMSIS/CMSIS/Include/
+  VPATH   += $(ARDUINO_INSTALL_DIR)/packages/ultimachine/hardware/sam/1.6.9-b/system/CMSIS/Device/ATMEL/
+  VPATH   += $(ARDUINO_INSTALL_DIR)/packages/ultimachine/hardware/sam/1.6.9-b/cores/arduino
+  VPATH   += $(ARDUINO_INSTALL_DIR)/packages/ultimachine/hardware/sam/1.6.9-b/cores/arduino/avr
+  VPATH   += $(ARDUINO_INSTALL_DIR)/packages/ultimachine/hardware/sam/1.6.9-b/cores/arduino/USB
+  VPATH   += $(ARDUINO_INSTALL_DIR)/packages/ultimachine/hardware/sam/1.6.9-b/libraries/Wire/src
+  VPATH   += $(ARDUINO_INSTALL_DIR)/packages/ultimachine/hardware/sam/1.6.9-b/libraries/SPI/src
+  VPATH   += $(ARDUINO_INSTALL_DIR)/packages/ultimachine/hardware/sam/1.6.9-b/libraries/U8glib/src/clib
+  VPATH   += $(ARDUINO_INSTALL_DIR)/packages/ultimachine/hardware/sam/1.6.9-b/variants/archim
+  LDSCRIPT = $(ARDUINO_INSTALL_DIR)/packages/ultimachine/hardware/sam/1.6.9-b/variants/archim/linker_scripts/gcc/flash.ld
+  LDLIBS   = $(ARDUINO_INSTALL_DIR)/packages/ultimachine/hardware/sam/1.6.9-b/variants/archim/libsam_sam3x8e_gcc_rel.a
 else
-ifeq ($(HARDWARE_VARIANT), Sanguino)
-VPATH += $(HARDWARE_DIR)/marlin/avr/variants/sanguino
+  HARDWARE_SUB_VARIANT ?= standard
+  VPATH += $(ARDUINO_INSTALL_DIR)/hardware/$(HARDWARE_VARIANT)/variants/$(HARDWARE_SUB_VARIANT)
+endif
+
+LIB_SRC = wiring.c \
+  wiring_analog.c wiring_digital.c \
+  wiring_shift.c WInterrupts.c hooks.c
+
+ifeq ($(HARDWARE_VARIANT), archim)
+  LIB_ASRC += wiring_pulse_asm.S
 else
-HARDWARE_SUB_VARIANT ?= standard
-VPATH += $(HARDWARE_DIR)/$(HARDWARE_VARIANT)/variants/$(HARDWARE_SUB_VARIANT)
+  LIB_SRC += wiring_pulse.c
 endif
-endif
-SRC = wiring.c \
-	wiring_analog.c wiring_digital.c \
-	wiring_pulse.c \
-	wiring_shift.c WInterrupts.c hooks.c
+
 ifeq ($(HARDWARE_VARIANT), Teensy)
-SRC = wiring.c
-VPATH += $(ARDUINO_INSTALL_DIR)/hardware/teensy/cores/teensy
+  LIB_SRC = wiring.c
+  VPATH += $(ARDUINO_INSTALL_DIR)/hardware/teensy/cores/teensy
 endif
-CXXSRC = WMath.cpp WString.cpp Print.cpp SPI.cpp Tone.cpp
-CXXSRC += $(wildcard *.cpp)
+
+LIB_CXXSRC = WMath.cpp WString.cpp Print.cpp SPI.cpp
+
 ifeq ($(NEOPIXEL), 1)
-CXXSRC += Adafruit_NeoPixel.cpp
+  LIB_CXXSRC += Adafruit_NeoPixel.cpp
 endif
+
 ifeq ($(LIQUID_TWI2), 0)
-CXXSRC += LiquidCrystal.cpp
+  LIB_CXXSRC += LiquidCrystal.cpp
 else
-SRC += twi.c
-CXXSRC += Wire.cpp LiquidTWI2.cpp
+  LIB_SRC += twi.c
+  LIB_CXXSRC += Wire.cpp LiquidTWI2.cpp
 endif
 
 ifeq ($(WIRE), 1)
-SRC += twi.c
-CXXSRC += Wire.cpp
+  LIB_SRC += twi.c
+  LIB_CXXSRC += Wire.cpp
 endif
 
 ifeq ($(U8GLIB), 1)
-CXXSRC += U8glib.cpp
-SRC += u8g_ll_api.c u8g_bitmap.c u8g_clip.c u8g_com_null.c u8g_delay.c u8g_page.c u8g_pb.c u8g_pb16h1.c u8g_rect.c u8g_state.c u8g_font.c u8g_font_6x13.c u8g_font_04b_03.c u8g_font_5x8.c
+  LIB_CXXSRC += U8glib.cpp
+  LIB_SRC += u8g_ll_api.c u8g_bitmap.c u8g_clip.c u8g_com_null.c u8g_delay.c u8g_page.c u8g_pb.c u8g_pb16h1.c u8g_rect.c u8g_state.c u8g_font.c u8g_font_6x13.c u8g_font_04b_03.c u8g_font_5x8.c
+endif
+
+ifeq ($(TMC), 1)
+  LIB_CXXSRC += TMCStepper.cpp COOLCONF.cpp DRV_STATUS.cpp IHOLD_IRUN.cpp CHOPCONF.cpp GCONF.cpp PWMCONF.cpp DRV_CONF.cpp DRVCONF.cpp DRVCTRL.cpp DRVSTATUS.cpp ENCMODE.cpp RAMP_STAT.cpp SGCSCONF.cpp SHORT_CONF.cpp SMARTEN.cpp SW_MODE.cpp SW_SPI.cpp TMC2130Stepper.cpp TMC2208Stepper.cpp TMC2209Stepper.cpp TMC2660Stepper.cpp TMC5130Stepper.cpp TMC5160Stepper.cpp
 endif
 
 ifeq ($(RELOC_WORKAROUND), 1)
-LD_PREFIX=-nodefaultlibs
-LD_SUFFIX=-lm -lgcc -lc -lgcc -L$(ARDUINO_INSTALL_DIR)/hardware/tools/avr/avr/lib/avr6 -l$(MCU)
-endif
-
-ifeq ($(TMC2630), 1)
-CXXSRC += TMC2130Stepper.cpp TMC2130Stepper_COOLCONF.cpp TMC2130Stepper_DRV_STATUS.cpp TMC2130Stepper_IHOLD_IRUN.cpp TMC2130Stepper_CHOPCONF.cpp  TMC2130Stepper_GCONF.cpp TMC2130Stepper_PWMCONF.cpp SW_SPI.cpp
+  LD_PREFIX=-nodefaultlibs
+  LD_SUFFIX=-lm -lgcc -lc -lgcc
 endif
 
 #Check for Arduino 1.0.0 or higher and use the correct source files for that version
 ifeq ($(shell [ $(ARDUINO_VERSION) -ge 100 ] && echo true), true)
-CXXSRC += main.cpp
+  LIB_CXXSRC += main.cpp
 else
-SRC += pins_arduino.c main.c
+  LIB_SRC += pins_arduino.c main.c
 endif
 
 FORMAT = ihex
@@ -536,19 +640,19 @@ OPT = s
 DEFINES ?=
 
 # Program settings
-CC = $(AVR_TOOLS_PATH)avr-gcc
-CXX = $(AVR_TOOLS_PATH)avr-g++
-OBJCOPY = $(AVR_TOOLS_PATH)avr-objcopy
-OBJDUMP = $(AVR_TOOLS_PATH)avr-objdump
-AR  = $(AVR_TOOLS_PATH)avr-ar
-SIZE = $(AVR_TOOLS_PATH)avr-size
-NM = $(AVR_TOOLS_PATH)avr-nm
+CC = $(AVR_TOOLS_PATH)$(TOOL_PREFIX)-gcc
+CXX = $(AVR_TOOLS_PATH)$(TOOL_PREFIX)-g++
+OBJCOPY = $(AVR_TOOLS_PATH)$(TOOL_PREFIX)-objcopy
+OBJDUMP = $(AVR_TOOLS_PATH)$(TOOL_PREFIX)-objdump
+AR  = $(AVR_TOOLS_PATH)$(TOOL_PREFIX)-ar
+SIZE = $(AVR_TOOLS_PATH)$(TOOL_PREFIX)-size
+NM = $(AVR_TOOLS_PATH)$(TOOL_PREFIX)-nm
 AVRDUDE = avrdude
 REMOVE = rm -f
 MV = mv -f
 
 # Place -D or -U options here
-CDEFS    = -DF_CPU=$(F_CPU) ${addprefix -D , $(DEFINES)}
+CDEFS    = -DF_CPU=$(F_CPU) ${addprefix -D , $(DEFINES)} -DARDUINO=$(ARDUINO_VERSION)
 CXXDEFS  = $(CDEFS)
 
 # Disabling the timestamp and/or timestamp in the .hex file is useful for
@@ -557,6 +661,7 @@ CXXDEFS  = $(CDEFS)
 ifeq ($(NO_TIMESTAMP), 1)
 CDEFS +='-D__DATE__="??? ?? ????"'
 CDEFS +='-D__TIME__="??:??:??"'
+LULZBOT_EXTRAS += -Wno-builtin-macro-redefined
 endif
 
 #Disabling the versions is useful for diffing binaries between different
@@ -566,107 +671,139 @@ CDEFS +='-DLULZBOT_MASK_VERSION'
 endif
 
 ifeq ($(HARDWARE_VARIANT), Teensy)
-CDEFS  += -DUSB_SERIAL
-SRC    += usb.c pins_teensy.c
-CXXSRC += usb_api.cpp
+  CDEFS  += -DUSB_SERIAL
+  LIB_SRC    += usb.c pins_teensy.c
+  LIB_CXXSRC += usb_api.cpp
+
+else ifeq ($(HARDWARE_VARIANT), archim)
+  CDEFS      += -DARDUINO_SAM_ARCHIM -DARDUINO_ARCH_SAM -D__SAM3X8E__ -DUSB_VID=0x27b1 -DUSB_PID=0x0001 -DUSBCON '-DUSB_MANUFACTURER="UltiMachine"' '-DUSB_PRODUCT="Archim"'
+  LIB_CXXSRC += variant.cpp IPAddress.cpp Reset.cpp RingBuffer.cpp Stream.cpp UARTClass.cpp  USARTClass.cpp abi.cpp new.cpp watchdog.cpp CDC.cpp PluggableUSB.cpp  USBCore.cpp
+  LIB_SRC    += cortex_handlers.c iar_calls_sam3.c syscalls_sam3.c dtostrf.c itoa.c
+
+  ifeq ($(U8GLIB), 1)
+    LIB_SRC += u8g_com_api.c u8g_pb32h1.c
+  endif
 endif
 
 # Add all the source directories as include directories too
 CINCS = ${addprefix -I ,${VPATH}}
 CXXINCS = ${addprefix -I ,${VPATH}}
 
+# Silence warnings for library code (won't work for .h files, unfortunately)
+LIBWARN = -w -Wno-packed-bitfield-compat
+
 # Compiler flag to set the C/CPP Standard level.
 CSTANDARD = -std=gnu99
 CXXSTANDARD = -std=gnu++11
 CDEBUG = -g$(DEBUG)
-CWARN = -Wall -Wstrict-prototypes
-CTUNING = -funsigned-char -funsigned-bitfields -fpack-struct \
-	-fshort-enums -w -ffunction-sections -fdata-sections \
-	-flto \
-	-DARDUINO=$(ARDUINO_VERSION)
+CWARN   = -Wall -Wstrict-prototypes -Wno-packed-bitfield-compat -Wno-pragmas -Wunused-parameter
+CXXWARN = -Wall                     -Wno-packed-bitfield-compat -Wno-pragmas -Wunused-parameter
+CTUNING = -fsigned-char -funsigned-bitfields -fno-exceptions \
+          -fshort-enums -ffunction-sections -fdata-sections
 ifneq ($(HARDWARE_MOTHERBOARD),)
-# LulzBot: Commented out this line since this is set by Conditionals_LulzBot.h
-#CTUNING += -DMOTHERBOARD=${HARDWARE_MOTHERBOARD}
+  # LulzBot: Commented out this line since this is set by Conditionals_LulzBot.h
+  #CTUNING += -DMOTHERBOARD=${HARDWARE_MOTHERBOARD}
 endif
 #CEXTRA = -Wa,-adhlns=$(<:.c=.lst)
-CEXTRA = -fno-use-cxa-atexit -fno-threadsafe-statics $(LULZBOT_EXTRAS)
-
-CFLAGS := $(CDEBUG) $(CDEFS) $(CINCS) -O$(OPT) $(CWARN) $(CEXTRA) $(CTUNING) $(CSTANDARD)
-CXXFLAGS :=         $(CDEFS) $(CINCS) -O$(OPT) -Wall    $(CEXTRA) $(CTUNING) $(CXXSTANDARD)
+CXXEXTRA = -fno-use-cxa-atexit -fno-threadsafe-statics -fno-rtti
+CFLAGS := $(CDEBUG) $(CDEFS) $(CINCS) -O$(OPT) $(CEXTRA)   $(CTUNING) $(CSTANDARD)   $(LULZBOT_EXTRAS)
+CXXFLAGS :=         $(CDEFS) $(CINCS) -O$(OPT) $(CXXEXTRA) $(CTUNING) $(CXXSTANDARD) $(LULZBOT_EXTRAS)
+ASFLAGS :=          $(CDEFS)
 #ASFLAGS = -Wa,-adhlns=$(<:.S=.lst),-gstabs
-LDFLAGS = -lm
-
+ifeq ($(HARDWARE_VARIANT), archim)
+  LD_PREFIX = -Wl,--gc-sections,-Map,Marlin.ino.map,--cref,--check-sections,--entry=Reset_Handler,--unresolved-symbols=report-all,--warn-common,--warn-section-align
+  LD_SUFFIX = $(LDLIBS)
+  LDFLAGS   = -lm -T$(LDSCRIPT) -u _sbrk -u link -u _close -u _fstat -u _isatty -u _lseek -u _read -u _write -u _exit -u kill -u _getpid
+else
+  LD_PREFIX = -Wl,--gc-sections,--relax
+  LDFLAGS   = -lm
+  CTUNING   += -flto
+endif
 
 # Programming support using avrdude. Settings and variables.
 AVRDUDE_PORT = $(UPLOAD_PORT)
 AVRDUDE_WRITE_FLASH = -Uflash:w:$(BUILD_DIR)/$(TARGET).hex:i
 ifeq ($(shell uname -s), Linux)
-AVRDUDE_CONF = /etc/avrdude/avrdude.conf
+  AVRDUDE_CONF = /etc/avrdude/avrdude.conf
 else
-AVRDUDE_CONF = $(ARDUINO_INSTALL_DIR)/hardware/tools/avr/etc/avrdude.conf
+  AVRDUDE_CONF = $(ARDUINO_INSTALL_DIR)/hardware/tools/avr/etc/avrdude.conf
 endif
 AVRDUDE_FLAGS = -D -C$(AVRDUDE_CONF) \
-	-p$(MCU) -P$(AVRDUDE_PORT) -c$(AVRDUDE_PROGRAMMER) \
-	-b$(UPLOAD_RATE)
+  -p$(MCU) -P$(AVRDUDE_PORT) -c$(AVRDUDE_PROGRAMMER) \
+  -b$(UPLOAD_RATE)
+
+# Since Marlin 2.0, the source files may be distributed into several
+# different directories, so it is necessary to find them recursively
+
+SRC    = $(shell find src -name '*.c'   -type f)
+CXXSRC = $(shell find src -name '*.cpp' -type f)
 
 # Define all object files.
-OBJ = ${patsubst %.c, $(BUILD_DIR)/%.o, ${SRC}}
+OBJ  = ${patsubst %.c,   $(BUILD_DIR)/arduino/%.o, ${LIB_SRC}}
+OBJ += ${patsubst %.cpp, $(BUILD_DIR)/arduino/%.o, ${LIB_CXXSRC}}
+OBJ += ${patsubst %.S,   $(BUILD_DIR)/arduino/%.o, ${LIB_ASRC}}
+OBJ += ${patsubst %.c,   $(BUILD_DIR)/%.o, ${SRC}}
 OBJ += ${patsubst %.cpp, $(BUILD_DIR)/%.o, ${CXXSRC}}
-OBJ += ${patsubst %.S, $(BUILD_DIR)/%.o, ${ASRC}}
 
 # Define all listing files.
-LST = $(ASRC:.S=.lst) $(CXXSRC:.cpp=.lst) $(SRC:.c=.lst)
+LST = $(LIB_ASRC:.S=.lst) $(LIB_CXXSRC:.cpp=.lst) $(LIB_SRC:.c=.lst)
 
 # Combine all necessary flags and optional flags.
 # Add target processor to flags.
-ALL_CFLAGS = -mmcu=$(MCU) -I. $(CFLAGS)
-ALL_CXXFLAGS = -mmcu=$(MCU) $(CXXFLAGS)
-ALL_ASFLAGS = -mmcu=$(MCU) -x assembler-with-cpp $(ASFLAGS)
+ALL_CFLAGS   = $(MCU_FLAGS) $(CPU_FLAGS) $(CFLAGS) -I.
+ALL_CXXFLAGS = $(MCU_FLAGS) $(CPU_FLAGS) $(CXXFLAGS)
+ALL_ASFLAGS  = $(MCU_FLAGS) $(CPU_FLAGS) $(ASFLAGS) -x assembler-with-cpp
 
 # set V=1 (eg, "make V=1") to print the full commands etc.
 ifneq ($V,1)
- Pecho=@echo
- P=@
+  Pecho=@echo
+  P=@
 else
- Pecho=@:
- P=
+  Pecho=@:
+  P=
 endif
+
+# Create required build hierarchy if it does not exist
+
+$(shell mkdir -p $(dir $(OBJ)))
 
 # Default target.
 all: sizeafter
 
-config: $(BUILD_DIR)
-	# This build target uses the C preprocessor to output a snapshot of the
-	# "Configuration.h" and "Configuration_adv.h" for the current printer
-	# and toolhead. This is useful for when Marlin developers ask for a copy
-	# of your config files when you submit an issue.
+build: elf hex bin $(BUILD_DIR)/$(HEX_FILENAME).hex  $(BUILD_DIR)/$(HEX_FILENAME).bin
 
-	# Dump the values defined in "Configuration.h"
-	echo '#include "Marlin.h"' > /tmp/macros.cpp
-	cat Configuration.h >> /tmp/macros.cpp
-	sed -i 's/#define *\(\w*\)/pound_defined_\1/g; s/#ifndef CONFIGURATION_H/#ifndef FOO/g' /tmp/macros.cpp
-	$(CXX) $(ALL_CXXFLAGS) -E /tmp/macros.cpp -o /tmp/preprocessed.h
-	echo "/* Configuration.h */" > $(BUILD_DIR)/$(HEX_FILENAME).config
-	grep pound_defined /tmp/preprocessed.h | sed 's/ *pound_defined_\(\w*\)/#define \1/g' >>  $(BUILD_DIR)/$(HEX_FILENAME).config
-
-	# Dump the values defined in "Configuration_adv.h"
-	echo '#include "Marlin.h"' > /tmp/macros.cpp
-	cat Configuration_adv.h >> /tmp/macros.cpp
-	sed -i 's/#define *\(\w*\)/pound_defined_\1/g; s/#ifndef CONFIGURATION_ADV_H/#ifndef FOO/g' /tmp/macros.cpp
-	$(CXX) $(ALL_CXXFLAGS) -E /tmp/macros.cpp -o /tmp/preprocessed.h
-	echo "/* Configuration_adv.h */" >>  $(BUILD_DIR)/$(HEX_FILENAME).config
-	grep pound_defined /tmp/preprocessed.h | sed 's/ *pound_defined_\(\w*\)/#define \1/g' >>  $(BUILD_DIR)/$(HEX_FILENAME).config
-
-build: $(BUILD_DIR) elf hex $(BUILD_DIR)/$(HEX_FILENAME).hex
+# The following target renames the .hex/.bin file according to LulzBot conventions.
 
 $(BUILD_DIR)/$(HEX_FILENAME).hex: $(BUILD_DIR)/$(TARGET).hex
 	mv $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(HEX_FILENAME).hex
 
-# Creates the object directory
-$(BUILD_DIR):
-	$P mkdir -p $(BUILD_DIR)
+$(BUILD_DIR)/$(HEX_FILENAME).bin: $(BUILD_DIR)/$(TARGET).bin
+	mv $(BUILD_DIR)/$(TARGET).bin $(BUILD_DIR)/$(HEX_FILENAME).bin
+
+# This "config" target uses the C preprocessor to output a snapshot of the
+# "Configuration.h" and "Configuration_adv.h" for the current printer
+# and toolhead. This is useful for when Marlin developers ask for a copy
+# of your config files when you submit an issue.
+
+config: $(BUILD_DIR)
+	$P # Dump the values defined in "Configuration.h"
+	$P echo '#include "src/Marlin.h"' > /tmp/macros.cpp
+	$P cat Configuration.h >> /tmp/macros.cpp
+	$P sed -i 's/#define *\(\w*\)/pound_defined_\1/g; s/#ifndef CONFIGURATION_H/#ifndef FOO/g' /tmp/macros.cpp
+	$P $(CXX) $(ALL_CXXFLAGS) -E /tmp/macros.cpp -o /tmp/preprocessed.h
+	$P echo "/* Configuration.h */" > $(BUILD_DIR)/$(HEX_FILENAME).config
+	$P grep pound_defined /tmp/preprocessed.h | sed 's/ *pound_defined_\(\w*\)/#define \1/g' >>  $(BUILD_DIR)/$(HEX_FILENAME).config
+
+	$P # Dump the values defined in "Configuration_adv.h"
+	$P echo '#include "src/Marlin.h"' > /tmp/macros.cpp
+	$P cat Configuration_adv.h >> /tmp/macros.cpp
+	$P sed -i 's/#define *\(\w*\)/pound_defined_\1/g; s/#ifndef CONFIGURATION_ADV_H/#ifndef FOO/g' /tmp/macros.cpp
+	$P $(CXX) $(ALL_CXXFLAGS) -E /tmp/macros.cpp -o /tmp/preprocessed.h
+	$P echo "/* Configuration_adv.h */" >>  $(BUILD_DIR)/$(HEX_FILENAME).config
+	$P grep pound_defined /tmp/preprocessed.h | sed 's/ *pound_defined_\(\w*\)/#define \1/g' >>  $(BUILD_DIR)/$(HEX_FILENAME).config
 
 elf: $(BUILD_DIR)/$(TARGET).elf
+bin: $(BUILD_DIR)/$(TARGET).bin
 hex: $(BUILD_DIR)/$(TARGET).hex
 eep: $(BUILD_DIR)/$(TARGET).eep
 lss: $(BUILD_DIR)/$(TARGET).lss
@@ -683,9 +820,9 @@ ifeq (${AVRDUDE_PROGRAMMER}, arduino)
 	stty -hup < $(UPLOAD_PORT); true
 endif
 
-	# Display size of file.
+# Display size of file.
 HEXSIZE = $(SIZE) --target=$(FORMAT) $(BUILD_DIR)/$(TARGET).hex
-ELFSIZE = $(SIZE) --mcu=$(MCU) -C $(BUILD_DIR)/$(TARGET).elf; \
+ELFSIZE = $(SIZE)  $(SIZE_FLAGS) $(BUILD_DIR)/$(TARGET).elf; \
           $(SIZE)  $(BUILD_DIR)/$(TARGET).elf
 sizebefore:
 	$P if [ -f $(BUILD_DIR)/$(TARGET).elf ]; then echo; echo $(MSG_SIZE_BEFORE); $(HEXSIZE); echo; fi
@@ -696,10 +833,10 @@ sizeafter: build
 
 # Convert ELF to COFF for use in debugging / simulating in AVR Studio or VMLAB.
 COFFCONVERT=$(OBJCOPY) --debugging \
-	--change-section-address .data-0x800000 \
-	--change-section-address .bss-0x800000 \
-	--change-section-address .noinit-0x800000 \
-	--change-section-address .eeprom-0x810000
+  --change-section-address .data-0x800000 \
+  --change-section-address .bss-0x800000 \
+  --change-section-address .noinit-0x800000 \
+  --change-section-address .eeprom-0x810000
 
 
 coff: $(BUILD_DIR)/$(TARGET).elf
@@ -710,16 +847,20 @@ extcoff: $(TARGET).elf
 	$(COFFCONVERT) -O coff-ext-avr $(BUILD_DIR)/$(TARGET).elf $(TARGET).cof
 
 
-.SUFFIXES: .elf .hex .eep .lss .sym
+.SUFFIXES: .elf .hex .eep .lss .sym .bin
 .PRECIOUS: .o
 
 .elf.hex:
 	$(Pecho) "  COPY  $@"
 	$P $(OBJCOPY) -O $(FORMAT) -R .eeprom $< $@
 
+.elf.bin:
+	$(Pecho) "  COPY  $@"
+	$P $(OBJCOPY) -O binary -R .eeprom $< $@
+
 .elf.eep:
 	-$(OBJCOPY) -j .eeprom --set-section-flags=.eeprom="alloc,load" \
-		--change-section-lma .eeprom=0 -O $(FORMAT) $< $@
+    --change-section-lma .eeprom=0 -O $(FORMAT) $< $@
 
 # Create extended listing file from ELF output file.
 .elf.lss:
@@ -729,35 +870,44 @@ extcoff: $(TARGET).elf
 .elf.sym:
 	$(NM) -n $< > $@
 
-	# Link: create ELF output file from library.
+# Link: create ELF output file from library.
+
 $(BUILD_DIR)/$(TARGET).elf: $(OBJ) Configuration.h
 	$(Pecho) "  CXX   $@"
-	$P $(CC) $(LD_PREFIX) $(ALL_CXXFLAGS) -Wl,--gc-sections,--relax -o $@ -L. $(OBJ) $(LDFLAGS) $(LD_SUFFIX)
+	$P $(CC) $(LD_PREFIX) $(ALL_CXXFLAGS) -o $@ -L. $(OBJ) $(LDFLAGS) $(LD_SUFFIX)
+
+# Object files that were found in "src" will be stored in $(BUILD_DIR)
+# in directories that mirror the structure of "src"
 
 $(BUILD_DIR)/%.o: %.c Configuration.h Configuration_adv.h $(MAKEFILE)
 	$(Pecho) "  CC    $<"
-	$P $(CC) -MMD -c $(ALL_CFLAGS) $< -o $@
-
-$(BUILD_DIR)/%.o: $(BUILD_DIR)/%.cpp Configuration.h Configuration_adv.h $(MAKEFILE)
-	$(Pecho) "  CXX   $<"
-	$P $(CXX) -MMD -c $(ALL_CXXFLAGS) $< -o $@
+	$P $(CC) -MMD -c $(ALL_CFLAGS) $(CWARN) $< -o $@
 
 $(BUILD_DIR)/%.o: %.cpp Configuration.h Configuration_adv.h $(MAKEFILE)
 	$(Pecho) "  CXX   $<"
-	$P $(CXX) -MMD -c $(ALL_CXXFLAGS) $< -o $@
+	$P $(CXX) -MMD -c $(ALL_CXXFLAGS) $(CXXWARN) $< -o $@
 
+# Object files for Arduino libs will be created in $(BUILD_DIR)/arduino
+
+$(BUILD_DIR)/arduino/%.o: %.c Configuration.h Configuration_adv.h $(MAKEFILE)
+	$(Pecho) "  CC    $<"
+	$P $(CC) -MMD -c $(ALL_CFLAGS) $(LIBWARN) $< -o $@
+
+$(BUILD_DIR)/arduino/%.o: %.cpp Configuration.h Configuration_adv.h $(MAKEFILE)
+	$(Pecho) "  CXX   $<"
+	$P $(CXX) -MMD -c $(ALL_CXXFLAGS)  $(LIBWARN) $< -o $@
+
+$(BUILD_DIR)/arduino/%.o: %.S $(MAKEFILE)
+	$(Pecho) "  CXX   $<"
+	$P $(CXX) -MMD -c $(ALL_ASFLAGS) $< -o $@
 
 # Target: clean project.
 clean:
-	$(Pecho) "  RM    $(BUILD_DIR)/*"
-	$P $(REMOVE) $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET).eep $(BUILD_DIR)/$(TARGET).cof $(BUILD_DIR)/$(TARGET).elf \
-		$(BUILD_DIR)/$(TARGET).map $(BUILD_DIR)/$(TARGET).sym $(BUILD_DIR)/$(TARGET).lss $(BUILD_DIR)/$(TARGET).cpp \
-		$(OBJ) $(LST) $(SRC:.c=.s) $(SRC:.c=.d) $(CXXSRC:.cpp=.s) $(CXXSRC:.cpp=.d)
 	$(Pecho) "  RMDIR $(BUILD_DIR)/"
 	$P rm -rf $(BUILD_DIR)
 
 
-.PHONY:	all build elf hex eep lss sym program coff extcoff clean depend sizebefore sizeafter
+.PHONY: all build elf hex eep lss sym program coff extcoff clean depend sizebefore sizeafter
 
 # Automaticaly include the dependency files created by gcc
--include ${wildcard $(BUILD_DIR)/*.d}
+-include ${patsubst %.o, %.d, ${OBJ}}

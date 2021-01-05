@@ -16,6 +16,7 @@
       Juniper_TAZ5                      // Lulzbot TAZ 5 (Juniper, Juniperberry, Juniperbush)
       Oliveoil_TAZ6                     // Lulzbot TAZ 6 (Oliveoil)
       Quiver_TAZPro                     // Lulzbot TAZ Pro (Quiver)
+      Gladiator_TAZProXT                // Lulzbot TAZ ProXT (Gladiator)
       Redgum_TAZWorkhorse               // Lulzbot TAZ WorkHorse (Redgum)
 
    Mini Toolhead Choices:
@@ -50,8 +51,8 @@
 // If compiling using the Arduino IDE, remove the "//" from the following lines and
 // set printer model and toolhead after the "LULZBOT_" and "TOOLHEAD_" respectively:
 
-#define LULZBOT_Oliveoil_TAZ6  
+#define LULZBOT_Hibiscus_Mini2
 //#define TOOLHEAD_CecropiaSilk_AerostruderV2
-#define TOOLHEAD_Lutefisk_M175 
+#define TOOLHEAD_CecropiaSilk_SingleExtruderAeroV2 
 
 #endif /* CONFIGURATION_LULZBOT */

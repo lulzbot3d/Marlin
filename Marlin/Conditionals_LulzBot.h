@@ -82,7 +82,7 @@
     !defined(LULZBOT_Juniper_TAZ5) && \
     !defined(LULZBOT_Oliveoil_TAZ6) && \
     !defined(LULZBOT_Quiver_TAZPro) && \
-    !defined(LULZBOT_Quiver_TAZProXT) && \
+    !defined(LULZBOT_Gladiator_TAZProXT) && \
     !defined(LULZBOT_Redgum_TAZWorkhorse) && \
     !defined(LULZBOT_RedgumArchim_Experimental) && \
     !defined(LULZBOT_HibiscusTouchLCD_Experimental) && \
@@ -250,7 +250,7 @@
     #define AO_EXP2_PINOUT_REV_C
 #endif
 
-#if defined(LULZBOT_Quiver_TAZProXT)
+#if defined(LULZBOT_Gladiator_TAZProXT)
     #define LULZBOT_CUSTOM_MACHINE_NAME "LulzBot TAZ ProXT"
     #define LULZBOT_LCD_MACHINE_NAME "TAZ ProXT"
     #define LULZBOT_IS_TAZ
@@ -1223,6 +1223,16 @@
     #define LULZBOT_TOOLHEAD_Z_MIN_ADJ         0  
     #define LULZBOT_MOTOR_CURRENT_E          960 // mA
    #endif
+      #if defined(LULZBOT_Gladiator_TAZProXT)
+    #define LULZBOT_EXTRUDERS                  1
+    #define LULZBOT_TOOLHEAD_X_MAX_ADJ         0    
+    #define LULZBOT_TOOLHEAD_X_MIN_ADJ         -4//-9
+    #define LULZBOT_TOOLHEAD_Y_MAX_ADJ         -10 
+    #define LULZBOT_TOOLHEAD_Y_MIN_ADJ         0 
+    #define LULZBOT_TOOLHEAD_Z_MAX_ADJ         0 
+    #define LULZBOT_TOOLHEAD_Z_MIN_ADJ         0  
+    #define LULZBOT_MOTOR_CURRENT_E          960 // mA
+   #endif
    #if defined(LULZBOT_Juniper_TAZ5)
     #define LULZBOT_EXTRUDERS                  1
     #define LULZBOT_TOOLHEAD_X_MAX_ADJ         0    
@@ -2071,7 +2081,8 @@
     #endif
     #define LULZBOT_LEFT_WIPE_Z                        0
 
-    #if defined(LULZBOT_Quiver_TAZPro)
+    #if defined(LULZBOT_Quiver_TAZPro) || \
+    defined(LULZBOT_Gladiator_TAZProXT) 
         // The Quiver has an wipe pad on the right side of the bed.
         #define LULZBOT_RIGHT_WIPE_X1                   297
         #define LULZBOT_RIGHT_WIPE_X2                   297
@@ -2119,7 +2130,9 @@
                                                      LULZBOT_ ## side ## _WIPE_Y2, \
                                                      LULZBOT_ ## side ## _WIPE_Z )
 
-#if defined(LULZBOT_Quiver_TAZPro) && LULZBOT_EXTRUDERS == 1
+#if defined(LULZBOT_Quiver_TAZPro) && LULZBOT_EXTRUDERS == 1 || \
+defined(LULZBOT_Gladiator_TAZProXT) && LULZBOT_EXTRUDERS == 1
+
     #define LULZBOT_NOZZLE_CLEAN_START_POINT _LULZBOT_NOZZLE_CLEAN_START_POINT(RIGHT)
     #define LULZBOT_NOZZLE_CLEAN_END_POINT   _LULZBOT_NOZZLE_CLEAN_END_POINT(RIGHT)
 #else
@@ -2157,14 +2170,16 @@
         #define LULZBOT_WIPE_DONE_TEMP  "M109 R160 T0\nM109 R160 T1\n" /* Wait for probe temp */
     #endif
 
-    #if defined(LULZBOT_Quiver_TAZPro) && LULZBOT_EXTRUDERS == 1
+    #if defined(LULZBOT_Quiver_TAZPro) && LULZBOT_EXTRUDERS == 1 || \
+defined(LULZBOT_Gladiator_TAZProXT) && LULZBOT_EXTRUDERS == 1
         // When using a single toolhead on Quiver, wipe on the right pad.
         #define LULZBOT_REWIPE_E0 LULZBOT_WIPE_GCODE(RIGHT)            /* Wipe nozzle */
     #else
         #define LULZBOT_REWIPE_E0 "T0\n" LULZBOT_WIPE_GCODE(LEFT)      /* Wipe nozzle */
     #endif
 
-    #if defined(LULZBOT_Quiver_TAZPro) && defined(TOOLHEAD_Quiver_DualExtruder)
+    #if defined(LULZBOT_Quiver_TAZPro) && defined(TOOLHEAD_Quiver_DualExtruder) || \
+defined(LULZBOT_Gladiator_TAZProXT) && defined(TOOLHEAD_Quiver_DualExtruder)
         #define LULZBOT_REWIPE_E1 \
             "G0 X150 F5000\n"                     /* Move over to switch extruders */ \
             "T1\n"                                /* Switch to second extruder */ \

@@ -56,7 +56,7 @@
 #if DISABLED(SENSORLESS_HOMING)
 
   #define X_MIN_PIN        12
-  //#define Y_MIN_PIN        11
+  #define Y_MIN_PIN        11
   #define Z_MIN_PIN        10
   #define X_MAX_PIN        81
   #define Y_MAX_PIN        57
@@ -75,7 +75,7 @@
     #define Y_MIN_PIN      Y_DIAG_PIN
     #define Y_MAX_PIN      57
   #else
-    //#define Y_MIN_PIN      11
+    #define Y_MIN_PIN      11
     #define Y_MAX_PIN      Y_DIAG_PIN
   #endif
 
@@ -83,7 +83,7 @@
     #define Z_MIN_PIN      11   // Y-MIN
     #define SERVO0_PIN     10   // Z-MIN
   #else
-  //  #define Z_MIN_PIN      10
+    #define Z_MIN_PIN      10
   #endif
 
 #endif

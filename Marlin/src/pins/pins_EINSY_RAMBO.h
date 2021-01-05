@@ -1,9 +1,9 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (C) 2016 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (c) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
- * Copyright (C) 2011 Camiel Gubbels / Erik van der Zalm
+ * Copyright (c) 2011 Camiel Gubbels / Erik van der Zalm
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,66 +19,59 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 
 /**
  * Einsy-Rambo pin assignments
  */
 
 #ifndef __AVR_ATmega2560__
-  #error "Oops!  Make sure you have 'Arduino Mega 2560 or Rambo' selected from the 'Tools -> Boards' menu."
+  #error "Oops! Select 'Arduino Mega 2560 or Rambo' in 'Tools > Board.'"
 #endif
 
-#define BOARD_NAME          "Einsy Rambo"
-#define LARGE_FLASH         true
-
-#define SERVO0_PIN 10
+#define BOARD_NAME "Einsy Rambo"
 
 //
 // TMC2130 Configuration_adv defaults for EinsyRambo
 //
-#ifndef HAVE_TMC2130
-  #error Must enable TMC2130 support in Configuration_adv.h for EinsyRambo
+#if !AXIS_DRIVER_TYPE_X(TMC2130) || !AXIS_DRIVER_TYPE_Y(TMC2130) || !AXIS_DRIVER_TYPE_Z(TMC2130) || !AXIS_DRIVER_TYPE_E0(TMC2130)
+  #error "You must set ([XYZ]|E0)_DRIVER_TYPE to TMC2130 in Configuration.h for EinsyRambo."
 #endif
 
-#define X_IS_TMC2130
-#define Y_IS_TMC2130
-#define Z_IS_TMC2130
-#define E0_IS_TMC2130
-
-#define R_SENSE           0.22
-
-#ifndef E0_CURRENT
-  #define E0_CURRENT        1000
-#endif
-
-#ifndef E0_MICROSTEPS
-  #define E0_MICROSTEPS       16
-#endif
-
-//
-// TMC2130 Diag pins reference
-//
-// X_DIAG_PIN      64
-// Y_DIAG_PIN      69
-// Z_DIAG_PIN      68
-// E0_DIAG_PIN     65
-
-//
-// Einsy-Rambo connectors reference
-// X-MIN          12
-// Y-MIN          11
-// Z-PROBE        10
-//
+// TMC2130 Diag Pins (currently just for reference)
+#define X_DIAG_PIN         64
+#define Y_DIAG_PIN         69
+#define Z_DIAG_PIN         68
+#define E0_DIAG_PIN        65
 
 //
 // Limit Switches
 //
-#define X_MIN_PIN          64 //Diag pin for sensorless homing
-#define X_MAX_PIN          64 //Diag pin for sensorless homing
-#define Y_MIN_PIN          69 //Diag pin for sensorless homing
-#define Y_MAX_PIN          69 //Diag pin for sensorless homing
-#define Z_MIN_PIN          11 //Y-MIN on board.
-#define Z_MAX_PIN          -1
+// Only use Diag Pins when SENSORLESS_HOMING is enabled for the TMC2130 drivers.
+// Otherwise use a physical endstop based configuration.
+//
+// SERVO0_PIN and Z_MIN_PIN configuration for BLTOUCH sensor when combined with SENSORLESS_HOMING.
+//
+
+#if DISABLED(SENSORLESS_HOMING)
+
+  #define X_STOP_PIN       12
+  #define Y_STOP_PIN       11
+  #define Z_STOP_PIN       10
+
+#else
+
+  #define X_STOP_PIN       X_DIAG_PIN
+  #define Y_STOP_PIN       Y_DIAG_PIN
+
+  #if ENABLED(BLTOUCH)
+    #define Z_STOP_PIN     11   // Y-MIN
+    #define SERVO0_PIN     10   // Z-MIN
+  #else
+    #define Z_STOP_PIN     10
+  #endif
+
+#endif
 
 //
 // Z Probe (when not Z_MIN_PIN)
@@ -110,29 +103,6 @@
 #define E0_ENABLE_PIN      26
 #define E0_CS_PIN          66
 
-#define E1_STEP_PIN        -1
-#define E1_DIR_PIN         -1
-#define E1_ENABLE_PIN      -1
-
-// Microstepping pins - uses SPI instead
-#define X_MS1_PIN          -1
-#define X_MS2_PIN          -1
-#define Y_MS1_PIN          -1
-#define Y_MS2_PIN          -1
-#define Z_MS1_PIN          -1
-#define Z_MS2_PIN          -1
-#define E0_MS1_PIN         -1
-#define E0_MS2_PIN         -1
-
-#define MOTOR_CURRENT_PWM_XY_PIN 46
-#define MOTOR_CURRENT_PWM_Z_PIN  45
-#define MOTOR_CURRENT_PWM_E_PIN  44
-// Motor current PWM conversion, PWM value = MotorCurrentSetting * 255 / range
-#ifndef MOTOR_CURRENT_PWM_RANGE
-  #define MOTOR_CURRENT_PWM_RANGE 2000
-#endif
-#define DEFAULT_PWM_MOTOR_CURRENT  {1300, 1300, 1250}
-
 //
 // Temperature Sensors
 //
@@ -144,12 +114,15 @@
 // Heaters / Fans
 //
 #define HEATER_0_PIN        3
-#define HEATER_1_PIN       -1
-#define HEATER_2_PIN       -1
 #define HEATER_BED_PIN      4
 
-#define FAN_PIN             8
-#define FAN1_PIN            6
+#ifndef FAN_PIN
+  #define FAN_PIN           8
+#endif
+
+#ifndef FAN1_PIN
+  #define FAN1_PIN          6
+#endif
 
 //
 // Misc. Functions
@@ -162,8 +135,8 @@
 // M3/M4/M5 - Spindle/Laser Control
 //
 // use P1 connector for spindle pins
-#define SPINDLE_LASER_PWM_PIN     9  // MUST BE HARDWARE PWM
-#define SPINDLE_LASER_ENABLE_PIN 18  // Pin should have a pullup!
+#define SPINDLE_LASER_PWM_PIN     9   // MUST BE HARDWARE PWM
+#define SPINDLE_LASER_ENA_PIN    18   // Pin should have a pullup!
 #define SPINDLE_DIR_PIN          19
 
 //
@@ -171,33 +144,37 @@
 //
 #define E_MUX0_PIN         17
 #define E_MUX1_PIN         16
-#define E_MUX2_PIN         78 // 84 in MK2 Firmware, with BEEPER as 78
+#define E_MUX2_PIN         78   // 84 in MK2 Firmware, with BEEPER as 78
 
 //
 // LCD / Controller
 //
-#if ENABLED(ULTRA_LCD)
+#if HAS_SPI_LCD || ENABLED(EXTENSIBLE_UI)
 
   #define KILL_PIN         32
 
-  #if ENABLED(NEWPANEL)
+  #if ENABLED(NEWPANEL) || ENABLED(EXTENSIBLE_UI)
 
-    // Beeper on AUX-4
-    #define BEEPER_PIN     84
+    #if ENABLED(CR10_STOCKDISPLAY)
+      #define LCD_PINS_RS     85
+      #define LCD_PINS_ENABLE 71
+      #define LCD_PINS_D4     70
+      #define BTN_EN1         61
+      #define BTN_EN2         59
+    #else
+      #define LCD_PINS_RS     82
+      #define LCD_PINS_ENABLE 61
+      #define LCD_PINS_D4     59
+      #define LCD_PINS_D5     70
+      #define LCD_PINS_D6     85
+      #define LCD_PINS_D7     71
+      #define BTN_EN1         14
+      #define BTN_EN2         72
+    #endif
 
-    #define LCD_PINS_RS    82
-    #define LCD_PINS_ENABLE 61
-    #define LCD_PINS_D4    59
-    #define LCD_PINS_D5    70
-    #define LCD_PINS_D6    85
-    #define LCD_PINS_D7    71
-
-    // buttons are directly attached using AUX-2
-    #define BTN_EN1        14
-    #define BTN_EN2        72
-    #define BTN_ENC         9  // the click
-
-    #define SD_DETECT_PIN  15
+    #define BTN_ENC            9   // AUX-2
+    #define BEEPER_PIN        84   // AUX-4
+    #define SD_DETECT_PIN     15
 
   #endif // NEWPANEL
-#endif // ULTRA_LCD
+#endif // HAS_SPI_LCD

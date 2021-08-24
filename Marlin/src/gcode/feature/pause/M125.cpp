@@ -58,7 +58,11 @@ void GcodeSuite::M125() {
   // Initial retract before move to filament change position
   const float retract = -ABS(parser.axisunitsval('L', E_AXIS, PAUSE_PARK_RETRACT_LENGTH));
 
-  xyz_pos_t park_point = NOZZLE_PARK_POINT;
+  #if ANY(Sidekick_289, Sidekick_747, MiniV2)
+    xyz_pos_t park_point = { X_CENTER, (Y_MAX_POS - 5), (Z_MAX_POS - 3) };
+  #else
+    xyz_pos_t park_point = NOZZLE_PARK_POINT;
+  #endif
 
   // Move XY axes to filament change position or given position
   if (parser.seenval('X')) park_point.x = RAW_X_POSITION(parser.linearval('X'));

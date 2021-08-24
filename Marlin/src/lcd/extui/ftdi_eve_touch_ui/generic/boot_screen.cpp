@@ -32,7 +32,7 @@
   #if ENABLED(TOUCH_UI_PORTRAIT)
     #include "../theme/bootscreen_logo_portrait.h"
   #else
-    #include "../theme/_bootscreen_landscape.h"
+    #include "../theme/marlin_bootscreen_landscape.h"
   #endif
 #else
   #if ENABLED(TOUCH_UI_PORTRAIT)

@@ -68,6 +68,10 @@ void menu_motion();
 void menu_temperature();
 void menu_configuration();
 
+#if ENABLED(CUSTOM_USER_MENUS)
+  void menu_user();
+#endif
+
 #if HAS_POWER_MONITOR
   void menu_power_monitor();
 #endif

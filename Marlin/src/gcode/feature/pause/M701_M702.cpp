@@ -56,6 +56,11 @@
 void GcodeSuite::M701() {
   xyz_pos_t park_point = NOZZLE_PARK_POINT;
 
+  #if ENABLED(HOME_BEFORE_FILAMENT_CHANGE)
+    // If needed, home before parking for filament change
+    home_if_needed(true);
+  #endif
+
   // Don't raise Z if the machine isn't homed
   if (TERN0(NO_MOTION_BEFORE_HOMING, axes_should_home())) park_point.z = 0;
 
@@ -121,7 +126,9 @@ void GcodeSuite::M701() {
   #endif
 
   // Restore Z axis
-  move_z_by(-park_raise);
+  #if defined(RESTORE_Z_POSITION_AFTER_FILAMENT_CHANGE)
+    move_z_by(-park_raise);
+  #endif
 
   #if HAS_MULTI_EXTRUDER && (HAS_PRUSA_MMU1 || !HAS_MMU)
     // Restore toolhead if it was changed
@@ -148,6 +155,11 @@ void GcodeSuite::M701() {
  */
 void GcodeSuite::M702() {
   xyz_pos_t park_point = NOZZLE_PARK_POINT;
+
+  #if ENABLED(HOME_BEFORE_FILAMENT_CHANGE)
+    // If needed, home before parking for filament change
+    home_if_needed(true);
+  #endif
 
   // Don't raise Z if the machine isn't homed
   if (TERN0(NO_MOTION_BEFORE_HOMING, axes_should_home())) park_point.z = 0;

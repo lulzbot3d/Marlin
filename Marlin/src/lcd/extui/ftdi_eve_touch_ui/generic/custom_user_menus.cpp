@@ -42,16 +42,16 @@ void CustomUserMenus::onRedraw(draw_mode_t what) {
        .cmd(CLEAR(true, true, true));
   }
 
-  #if HAS_USER_ITEM(16, 17, 18, 19, 20)
-    #define _MORE_THAN_FIFTEEN 1
-  #else
+  // #if HAS_USER_ITEM(16, 17, 18, 19, 20)
+  //   #define _MORE_THAN_FIFTEEN 1
+  // #else
     #define _MORE_THAN_FIFTEEN 0
-  #endif
-  #if _MORE_THAN_FIFTEEN || HAS_USER_ITEM(11, 12, 13, 14, 15)
-    #define _MORE_THAN_TEN 1
-  #else
+  // #endif
+  // #if _MORE_THAN_FIFTEEN || HAS_USER_ITEM(11, 12, 13, 14, 15)
+  //   #define _MORE_THAN_TEN 1
+  // #else
     #define _MORE_THAN_TEN 0
-  #endif
+  // #endif
 
   #if ENABLED(TOUCH_UI_PORTRAIT)
     #define GRID_ROWS 11
@@ -59,11 +59,11 @@ void CustomUserMenus::onRedraw(draw_mode_t what) {
     #define USER_ITEM_POS(N) BTN_POS((1+((N-1)/10)), ((N-1) % 10 + 1)), BTN_SIZE(1,1)
     #define BACK_POS         BTN_POS(1,11), BTN_SIZE(1,1)
   #else
-    #if _MORE_THAN_TEN || HAS_USER_ITEM(6, 7, 8, 9, 10)
-      #define _MORE_THAN_FIVE 1
-    #else
+    // #if _MORE_THAN_TEN || HAS_USER_ITEM(6, 7, 8, 9, 10)
+    //   #define _MORE_THAN_FIVE 1
+    // #else
       #define _MORE_THAN_FIVE 0
-    #endif
+    // #endif
     #define GRID_ROWS 6
     #define GRID_COLS (1 + _MORE_THAN_FIVE + _MORE_THAN_TEN + _MORE_THAN_FIFTEEN)
     #define USER_ITEM_POS(N) BTN_POS((1+((N-1)/5)), ((N-1) % 5 + 1)), BTN_SIZE(1,1)

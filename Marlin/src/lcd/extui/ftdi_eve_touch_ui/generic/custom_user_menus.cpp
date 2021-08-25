@@ -42,16 +42,16 @@ void CustomUserMenus::onRedraw(draw_mode_t what) {
        .cmd(CLEAR(true, true, true));
   }
 
-  // #if HAS_USER_ITEM(16, 17, 18, 19, 20)
-  //   #define _MORE_THAN_FIFTEEN 1
-  // #else
+   //#if HAS_USER_ITEM(16, 17, 18, 19, 20)
+   //  #define _MORE_THAN_FIFTEEN 1
+   //#else
     #define _MORE_THAN_FIFTEEN 0
-  // #endif
-  // #if _MORE_THAN_FIFTEEN || HAS_USER_ITEM(11, 12, 13, 14, 15)
-  //   #define _MORE_THAN_TEN 1
-  // #else
+   //#endif
+   //#if _MORE_THAN_FIFTEEN || HAS_USER_ITEM(11, 12, 13, 14, 15)
+   //  #define _MORE_THAN_TEN 1
+   //#else
     #define _MORE_THAN_TEN 0
-  // #endif
+   //#endif
 
   #if ENABLED(TOUCH_UI_PORTRAIT)
     #define GRID_ROWS 11
@@ -60,10 +60,10 @@ void CustomUserMenus::onRedraw(draw_mode_t what) {
     #define BACK_POS         BTN_POS(1,11), BTN_SIZE(1,1)
   #else
     // #if _MORE_THAN_TEN || HAS_USER_ITEM(6, 7, 8, 9, 10)
-    //   #define _MORE_THAN_FIVE 1
+       #define _MORE_THAN_FIVE 1
     // #else
-      #define _MORE_THAN_FIVE 0
-    // #endif
+    //  #define _MORE_THAN_FIVE 0
+    //#endif
     #define GRID_ROWS 6
     #define GRID_COLS (1 + _MORE_THAN_FIVE + _MORE_THAN_TEN + _MORE_THAN_FIFTEEN)
     #define USER_ITEM_POS(N) BTN_POS((1+((N-1)/5)), ((N-1) % 5 + 1)), BTN_SIZE(1,1)
@@ -74,26 +74,33 @@ void CustomUserMenus::onRedraw(draw_mode_t what) {
     CommandProcessor cmd;
     cmd.colors(normal_btn)
        .font(Theme::font_medium)
-       #if HAS_USER_ITEM(1)
-        _USER_ITEM(1)
+       #if defined(MAIN_MENU_ITEM_3_DESC)
+        //_USER_ITEM(1)
+        .tag(_ITEM_TAG(11)).button(USER_ITEM_POS(1), MAIN_MENU_ITEM_3_DESC) 
        #endif
-       #if HAS_USER_ITEM(2)
-        _USER_ITEM(2)
+       #if defined(MAIN_MENU_ITEM_4_DESC)
+        //_USER_ITEM(2)
+        .tag(_ITEM_TAG(12)).button(USER_ITEM_POS(2), MAIN_MENU_ITEM_4_DESC) 
        #endif
-       #if HAS_USER_ITEM(3)
-        _USER_ITEM(3)
+       #if defined(MAIN_MENU_ITEM_5_DESC)
+        //_USER_ITEM(3)
+        .tag(_ITEM_TAG(13)).button(USER_ITEM_POS(3), MAIN_MENU_ITEM_5_DESC) 
        #endif
-       #if HAS_USER_ITEM(4)
-        _USER_ITEM(4)
+       #if defined(MAIN_MENU_ITEM_6_DESC)
+        //_USER_ITEM(4)
+        .tag(_ITEM_TAG(14)).button(USER_ITEM_POS(4), MAIN_MENU_ITEM_6_DESC) 
        #endif
-       #if HAS_USER_ITEM(5)
-        _USER_ITEM(5)
+       #if defined(MAIN_MENU_ITEM_7_DESC)
+        //_USER_ITEM(5)
+        .tag(_ITEM_TAG(15)).button(USER_ITEM_POS(5), MAIN_MENU_ITEM_7_DESC) 
        #endif
-       #if HAS_USER_ITEM(6)
-        _USER_ITEM(6)
+       #if defined(MAIN_MENU_ITEM_8_DESC)
+        //_USER_ITEM(6)
+        .tag(_ITEM_TAG(16)).button(USER_ITEM_POS(6), MAIN_MENU_ITEM_8_DESC) 
        #endif
-       #if HAS_USER_ITEM(7)
-        _USER_ITEM(7)
+       #if defined(MAIN_MENU_ITEM_9_DESC)
+        //_USER_ITEM(7)
+        .tag(_ITEM_TAG(17)).button(USER_ITEM_POS(7), MAIN_MENU_ITEM_9_DESC) 
        #endif
        #if HAS_USER_ITEM(8)
         _USER_ITEM(8)
@@ -141,26 +148,33 @@ void CustomUserMenus::onRedraw(draw_mode_t what) {
 
 bool CustomUserMenus::onTouchEnd(uint8_t tag) {
   switch (tag) {
-    #if HAS_USER_ITEM(1)
-      _USER_ACTION(1)
+    #if defined(MAIN_MENU_ITEM_3_DESC)
+      //_USER_ACTION(1)
+      case _ITEM_TAG(11): injectCommands_P(PSTR(MAIN_MENU_ITEM_3_GCODE)); TERN_(USER_SCRIPT_RETURN, GOTO_SCREEN(StatusScreen)); break;
     #endif
-    #if HAS_USER_ITEM(2)
-      _USER_ACTION(2)
+    #if defined(MAIN_MENU_ITEM_4_DESC)
+      //_USER_ACTION(2)
+      case _ITEM_TAG(12): injectCommands_P(PSTR(MAIN_MENU_ITEM_4_GCODE)); TERN_(USER_SCRIPT_RETURN, GOTO_SCREEN(StatusScreen)); break;
     #endif
-    #if HAS_USER_ITEM(3)
-      _USER_ACTION(3)
+    #if defined(MAIN_MENU_ITEM_5_DESC)
+      //_USER_ACTION(3)
+      case _ITEM_TAG(13): injectCommands_P(PSTR(MAIN_MENU_ITEM_5_GCODE)); TERN_(USER_SCRIPT_RETURN, GOTO_SCREEN(StatusScreen)); break;
     #endif
-    #if HAS_USER_ITEM(4)
-      _USER_ACTION(4)
+    #if defined(MAIN_MENU_ITEM_6_DESC)
+      //_USER_ACTION(4)
+      case _ITEM_TAG(14): injectCommands_P(PSTR(MAIN_MENU_ITEM_6_GCODE)); TERN_(USER_SCRIPT_RETURN, GOTO_SCREEN(StatusScreen)); break;
     #endif
-    #if HAS_USER_ITEM(5)
-      _USER_ACTION(5)
+    #if defined(MAIN_MENU_ITEM_7_DESC)
+      //_USER_ACTION(5)
+      case _ITEM_TAG(15): injectCommands_P(PSTR(MAIN_MENU_ITEM_7_GCODE)); TERN_(USER_SCRIPT_RETURN, GOTO_SCREEN(StatusScreen)); break;
     #endif
-    #if HAS_USER_ITEM(6)
-      _USER_ACTION(6)
+    #if defined(MAIN_MENU_ITEM_8_DESC)
+      //_USER_ACTION(6)
+      case _ITEM_TAG(16): injectCommands_P(PSTR(MAIN_MENU_ITEM_8_GCODE)); TERN_(USER_SCRIPT_RETURN, GOTO_SCREEN(StatusScreen)); break;
     #endif
-    #if HAS_USER_ITEM(7)
-      _USER_ACTION(7)
+    #if defined(MAIN_MENU_ITEM_9_DESC)
+      //_USER_ACTION(7)
+      case _ITEM_TAG(17): injectCommands_P(PSTR(MAIN_MENU_ITEM_9_GCODE)); TERN_(USER_SCRIPT_RETURN, GOTO_SCREEN(StatusScreen)); break;
     #endif
     #if HAS_USER_ITEM(8)
       _USER_ACTION(8)

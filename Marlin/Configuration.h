@@ -1702,10 +1702,10 @@
 #else
   #define INVERT_X_DIR true
 #endif
-#if ANY(Sidekick_289, Sidekick_747, MiniV2, Workhorse, TAZ6)
-  #define INVERT_Y_DIR true
-#else
+#if ENABLED(MiniV2)
   #define INVERT_Y_DIR false
+#else
+  #define INVERT_Y_DIR true
 #endif
 
 #if ANY(TAZ6,Workhorse, TAZPro, TAZProXT)
@@ -1720,7 +1720,7 @@
 // @section extruder
 
 // For direct drive extruder v9 set to true, for geared extruder set to false.
-#if ANY(Workhorse,TAZ6)
+#if ANY(Workhorse,TAZ6, TAZPro, TAZProXT)
   #define INVERT_E0_DIR true
 #else
   #define INVERT_E0_DIR false

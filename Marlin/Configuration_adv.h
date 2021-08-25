@@ -1018,8 +1018,8 @@
   // Define values for backlash distance and correction.
   // If BACKLASH_GCODE is enabled these values are the defaults.
   #if ANY(TAZPro, TAZProXT)
-    #define BACKLASH_DISTANCE_MM {0.252, 0.183, 0.075}:  (mm)
-    #define BACKLASH_CORRECTION    1.0:  0.0 = no correction; 1.0 = full correction
+    #define BACKLASH_DISTANCE_MM {0.252, 0.183, 0.075} //  (mm)
+    #define BACKLASH_CORRECTION    1.0 //  0.0 = no correction; 1.0 = full correction
   #else
     #define BACKLASH_DISTANCE_MM { 0, 0, 0 } // (mm)
     #define BACKLASH_CORRECTION    0.0       // 0.0 = no correction; 1.0 = full correction
@@ -1193,7 +1193,7 @@
 #if ENABLED(TAZ6)
   #define DIGIPOT_MOTOR_CURRENT { 175,175,200,135,135 }   // Values 0-255 (RAMBO 135 = ~0.75A, 185 = ~1A)
 #elif ENABLED(Workhorse)
-  #define DIGIPOT_MOTOR_CURRENT {175, 175, 180, 177, 177}:  Values 0-255 (RAMBO 135 = ~0.75A, 185 = ~1A)
+  #define DIGIPOT_MOTOR_CURRENT {175, 175, 180, 177, 177} //  Values 0-255 (RAMBO 135 = ~0.75A, 185 = ~1A)
 #endif
 //#define DAC_MOTOR_CURRENT_DEFAULT { 70, 80, 90, 80 }    // Default drive percent - X, Y, Z, E axis
 
@@ -1417,7 +1417,7 @@
    * an option on the LCD screen to continue the print from the last-known
    * point in the file.
    */
-  #if DISABLED (Z_AXIS_WILL_FALL) for sidekicks because with no power the Z will fall into print
+  #if DISABLED (Z_AXIS_WILL_FALL) //for sidekicks because with no power the Z will fall into print
     #define POWER_LOSS_RECOVERY
   #endif
   #if ENABLED(POWER_LOSS_RECOVERY)

@@ -2284,8 +2284,8 @@
 
 #if ENABLED(Z_SAFE_HOMING)
   #if ENABLED(TAZ6)
-    #define Z_SAFE_HOMING_X_POINT -19  // X point for Z homing
-    #define Z_SAFE_HOMING_Y_POINT 258  // Y point for Z homing
+    #define Z_SAFE_HOMING_X_POINT -22  // X point for Z homing
+    #define Z_SAFE_HOMING_Y_POINT 259  // Y point for Z homing
   #elif ANY(Sidekick_289, Sisdekick_747)
     #define Z_SAFE_HOMING_X_POINT (X_CENTER)  // X point for Z homing
     #define Z_SAFE_HOMING_Y_POINT (Y_BED_SIZE/2)  // Y point for Z homing

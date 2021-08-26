@@ -84,6 +84,12 @@
     #define Z_MIN_PIN                         10
   #endif
 
+  //
+  // Filament runnout sensor
+  //
+  #if ENABLED(FILAMENT_RUNOUT_SENSOR)
+    #define FIL_RUNOUT_PIN                      12 //X-
+  #endif
 #endif
 
 #define Z_MAX_PIN                              7

@@ -1555,7 +1555,15 @@
 #if defined (LULZBOT_BLTouch)
   #define PROBING_MARGIN 10 
 #else
-  #define PROBING_MARGIN -3
+  #if ENABLED(MiniV2)
+    #define PROBING_MARGIN -10
+  #elif ENABLED(TAZ6)
+    #define PROBING_MARGIN -10
+  #elif ENABLED(Workhorse)
+    #define PROBING_MARGIN -10
+  #else
+    #define PROBING_MARGIN -3
+  #endif
 #endif
 // X and Y axis travel speed (mm/min) between probes
 #define XY_PROBE_FEEDRATE (200*60)
@@ -1774,97 +1782,54 @@
   #define X_BED_SIZE 154
   #define Y_BED_SIZE 154
   // Travel limits (mm) after homing, corresponding to endstop positions.
-  #if defined (TOOLHEAD_M175)
-    #define LULZBOT_X_MIN_POS -12
-    #define LULZBOT_Y_MIN_POS -15
-    #define LULZBOT_Z_MIN_POS 0
-    #define LULZBOT_X_MAX_POS 166
-    #define LULZBOT_Y_MAX_POS 182
-    #define LULZBOT_Z_MAX_POS 184
-  #else
-    #define LULZBOT_X_MIN_POS -7
-    #define LULZBOT_Y_MIN_POS -5
-    #define LULZBOT_Z_MIN_POS 0
-    #define LULZBOT_X_MAX_POS 168
-    #define LULZBOT_Y_MAX_POS 192
-    #define LULZBOT_Z_MAX_POS 183
-  #endif
+  #define LULZBOT_X_MIN_POS -7
+  #define LULZBOT_Y_MIN_POS -5
+  #define LULZBOT_Z_MIN_POS 0
+  #define LULZBOT_X_MAX_POS 168
+  #define LULZBOT_Y_MAX_POS 192
+  #define LULZBOT_Z_MAX_POS 183
 
 #elif ENABLED(TAZ6)
-  #define X_BED_SIZE 280.4
-  #define Y_BED_SIZE 281.4
+  #define X_BED_SIZE 280
+  #define Y_BED_SIZE 280
   // Travel limits (mm) after homing, corresponding to endstop positions.
-  #if defined (TOOLHEAD_M175)
-    #define LULZBOT_X_MIN_POS -28.1
-    #define LULZBOT_Y_MIN_POS -32.1
-    #define LULZBOT_Z_MIN_POS 0
-    #define LULZBOT_X_MAX_POS 293.5
-    #define LULZBOT_Y_MAX_POS 292.5
-    #define LULZBOT_Z_MAX_POS 271
-  #else
-    #define LULZBOT_X_MIN_POS -22.1
-    #define LULZBOT_Y_MIN_POS -22.1
-    #define LULZBOT_Z_MIN_POS 0
-    #define LULZBOT_X_MAX_POS 299.5
-    #define LULZBOT_Y_MAX_POS 302.5
-    #define LULZBOT_Z_MAX_POS 270
-  #endif
+  #define LULZBOT_X_MIN_POS -21.6
+  #define LULZBOT_Y_MIN_POS -15.6
+  #define LULZBOT_Z_MIN_POS 0
+  #define LULZBOT_X_MAX_POS 299.5
+  #define LULZBOT_Y_MAX_POS 302.5
+  #define LULZBOT_Z_MAX_POS 270
 
 #elif ENABLED(Workhorse)
   #define X_BED_SIZE 280
   #define Y_BED_SIZE 280
   // Travel limits (mm) after homing, corresponding to endstop positions.
-  #if defined (TOOLHEAD_M175)
-    #define LULZBOT_X_MIN_POS -57
-    #define LULZBOT_Y_MIN_POS -29
-    #define LULZBOT_Z_MIN_POS -2
-    #define LULZBOT_X_MAX_POS 290
-    #define LULZBOT_Y_MAX_POS 298
-    #define LULZBOT_Z_MAX_POS 298
-  #else
-    #define LULZBOT_X_MIN_POS -50
-    #define LULZBOT_Y_MIN_POS -17
-    #define LULZBOT_Z_MIN_POS -2
-    #define LULZBOT_X_MAX_POS 295
-    #define LULZBOT_Y_MAX_POS 308
-    #define LULZBOT_Z_MAX_POS 299
-  #endif
+  #define LULZBOT_X_MIN_POS -50
+  #define LULZBOT_Y_MIN_POS -17
+  #define LULZBOT_Z_MIN_POS -2
+  #define LULZBOT_X_MAX_POS 295
+  #define LULZBOT_Y_MAX_POS 308
+  #define LULZBOT_Z_MAX_POS 299
 
 #elif ENABLED(TAZPro) 
   #define X_BED_SIZE 281
   #define Y_BED_SIZE 283
   // Travel limits (mm) after homing, corresponding to endstop positions.
-  #if defined (TOOLHEAD_M175)
-    #define LULZBOT_X_MIN_POS -9-13
-    #define LULZBOT_Y_MIN_POS -23
-    #define LULZBOT_X_MAX_POS 308
-    #define LULZBOT_Y_MAX_POS 303 307
-    #define LULZBOT_Z_MIN_POS -9
-    #define LULZBOT_Z_MAX_POS 298 
-  #else
-    #define LULZBOT_X_MIN_POS -1
-    #define LULZBOT_Y_MIN_POS -13
-    #define LULZBOT_X_MAX_POS 313
-    #define LULZBOT_Y_MAX_POS 315
-    #define LULZBOT_Z_MIN_POS -9
-    #define LULZBOT_Z_MAX_POS 299 
-  #endif
+  #define LULZBOT_X_MIN_POS -1
+  #define LULZBOT_Y_MIN_POS -13
+  #define LULZBOT_X_MAX_POS 313
+  #define LULZBOT_Y_MAX_POS 315
+  #define LULZBOT_Z_MIN_POS -9
+  #define LULZBOT_Z_MAX_POS 299 
 
 #elif ENABLED(TAZProXT)
   #define X_BED_SIZE 281
   #define Y_BED_SIZE 283
   // Travel limits (mm) after homing, corresponding to endstop positions.
-  #if defined (TOOLHEAD_M175)
-    #define LULZBOT_X_MIN_POS -9
-    #define LULZBOT_Y_MIN_POS -18
-    #define LULZBOT_X_MAX_POS 308
-    #define LULZBOT_Y_MAX_POS 298
-  #else
-    #define LULZBOT_X_MIN_POS -1
-    #define LULZBOT_Y_MIN_POS -13
-    #define LULZBOT_X_MAX_POS 313
-    #define LULZBOT_Y_MAX_POS 315 
-  #endif
+  #define LULZBOT_X_MIN_POS -1
+  #define LULZBOT_Y_MIN_POS -13
+  #define LULZBOT_X_MAX_POS 313
+  #define LULZBOT_Y_MAX_POS 315 
   #define LULZBOT_Z_MIN_POS -1
   #define LULZBOT_Z_MAX_POS 600
 
@@ -2284,8 +2249,8 @@
 
 #if ENABLED(Z_SAFE_HOMING)
   #if ENABLED(TAZ6)
-    #define Z_SAFE_HOMING_X_POINT -22  // X point for Z homing
-    #define Z_SAFE_HOMING_Y_POINT 259  // Y point for Z homing
+    #define Z_SAFE_HOMING_X_POINT -21.6  // X point for Z homing
+    #define Z_SAFE_HOMING_Y_POINT 263.5  // Y point for Z homing
   #elif ANY(Sidekick_289, Sisdekick_747)
     #define Z_SAFE_HOMING_X_POINT (X_CENTER)  // X point for Z homing
     #define Z_SAFE_HOMING_Y_POINT (Y_BED_SIZE/2)  // Y point for Z homing

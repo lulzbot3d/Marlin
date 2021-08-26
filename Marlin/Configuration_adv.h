@@ -1988,22 +1988,10 @@
  * the probe to be unable to reach any points.
  */
 #if PROBE_SELECTED && !IS_KINEMATIC
-  #if ENABLED(MiniV2)
-    #define PROBING_MARGIN_LEFT  -5.0
-    #define PROBING_MARGIN_RIGHT -10.0
-    #define PROBING_MARGIN_FRONT -5.0
-    #define PROBING_MARGIN_BACK  -10.0
-  #elif ENABLED(TAZ6)
-    #define PROBING_MARGIN_LEFT  -10.0
-    #define PROBING_MARGIN_RIGHT -8.0
-    #define PROBING_MARGIN_FRONT -9.0
-    #define PROBING_MARGIN_BACK  -11.1
-  #elif ANY(Workhorse, TAZPro, TAZProXT)
-    #define PROBING_MARGIN_LEFT  -8
-    #define PROBING_MARGIN_RIGHT -9
-    #define PROBING_MARGIN_FRONT -10
-    #define PROBING_MARGIN_BACK  -9
-  #endif
+  //#define PROBING_MARGIN_LEFT  -5.0
+  //#define PROBING_MARGIN_RIGHT -10.0
+  //#define PROBING_MARGIN_FRONT -5.0
+  //#define PROBING_MARGIN_BACK  -10.0
 #endif
 
 #if EITHER(MESH_BED_LEVELING, AUTO_BED_LEVELING_UBL)
@@ -3889,7 +3877,7 @@
 #endif
 
 // Custom Menu: Configuration Menu
-#define CUSTOM_MENU_CONFIG
+//#define CUSTOM_MENU_CONFIG
 #if ENABLED(CUSTOM_MENU_CONFIG)
   //#define CUSTOM_MENU_CONFIG_TITLE "Custom Commands"
   #define CUSTOM_MENU_CONFIG_SCRIPT_DONE "M117 Wireless Script Done"

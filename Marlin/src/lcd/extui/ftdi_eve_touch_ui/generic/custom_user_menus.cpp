@@ -33,7 +33,7 @@ using namespace Theme;
 #define _USER_DESC(N) MAIN_MENU_ITEM_##N##_DESC
 #define _USER_GCODE(N) MAIN_MENU_ITEM_##N##_GCODE
 #define _USER_ITEM(N) .tag(_ITEM_TAG(N)).button(USER_ITEM_POS(N), _USER_DESC(N))
-#define _USER_ACTION(N) case _ITEM_TAG(N): injectCommands_P(PSTR(_USER_GCODE(N))); TERN_(USER_SCRIPT_RETURN, GOTO_SCREEN(StatusScreen)); break;
+#define _USER_ACTION(N) case _ITEM_TAG(N): injectCommands_P(PSTR(_USER_GCODE(N))); TERN_(CUSTOM_MENU_MAIN_SCRIPT_RETURN, GOTO_SCREEN(StatusScreen)); break;
 
 void CustomUserMenus::onRedraw(draw_mode_t what) {
   if (what & BACKGROUND) {
@@ -150,31 +150,31 @@ bool CustomUserMenus::onTouchEnd(uint8_t tag) {
   switch (tag) {
     #if defined(MAIN_MENU_ITEM_3_DESC)
       //_USER_ACTION(1)
-      case _ITEM_TAG(11): injectCommands_P(PSTR(MAIN_MENU_ITEM_3_GCODE)); TERN_(USER_SCRIPT_RETURN, GOTO_SCREEN(StatusScreen)); break;
+      case _ITEM_TAG(11): injectCommands_P(PSTR(MAIN_MENU_ITEM_3_GCODE)); TERN_(CUSTOM_MENU_MAIN_SCRIPT_RETURN, GOTO_SCREEN(StatusScreen));sound.play(chimes, PLAY_ASYNCHRONOUS); break;
     #endif
     #if defined(MAIN_MENU_ITEM_4_DESC)
       //_USER_ACTION(2)
-      case _ITEM_TAG(12): injectCommands_P(PSTR(MAIN_MENU_ITEM_4_GCODE)); TERN_(USER_SCRIPT_RETURN, GOTO_SCREEN(StatusScreen)); break;
+      case _ITEM_TAG(12): injectCommands_P(PSTR(MAIN_MENU_ITEM_4_GCODE)); TERN_(CUSTOM_MENU_MAIN_SCRIPT_RETURN, GOTO_SCREEN(StatusScreen));sound.play(chimes, PLAY_ASYNCHRONOUS); break;
     #endif
     #if defined(MAIN_MENU_ITEM_5_DESC)
       //_USER_ACTION(3)
-      case _ITEM_TAG(13): injectCommands_P(PSTR(MAIN_MENU_ITEM_5_GCODE)); TERN_(USER_SCRIPT_RETURN, GOTO_SCREEN(StatusScreen)); break;
+      case _ITEM_TAG(13): injectCommands_P(PSTR(MAIN_MENU_ITEM_5_GCODE)); TERN_(CUSTOM_MENU_MAIN_SCRIPT_RETURN, GOTO_SCREEN(StatusScreen));sound.play(chimes, PLAY_ASYNCHRONOUS); break;
     #endif
     #if defined(MAIN_MENU_ITEM_6_DESC)
       //_USER_ACTION(4)
-      case _ITEM_TAG(14): injectCommands_P(PSTR(MAIN_MENU_ITEM_6_GCODE)); TERN_(USER_SCRIPT_RETURN, GOTO_SCREEN(StatusScreen)); break;
+      case _ITEM_TAG(14): injectCommands_P(PSTR(MAIN_MENU_ITEM_6_GCODE)); TERN_(CUSTOM_MENU_MAIN_SCRIPT_RETURN, GOTO_SCREEN(StatusScreen));sound.play(chimes, PLAY_ASYNCHRONOUS); break;
     #endif
     #if defined(MAIN_MENU_ITEM_7_DESC)
       //_USER_ACTION(5)
-      case _ITEM_TAG(15): injectCommands_P(PSTR(MAIN_MENU_ITEM_7_GCODE)); TERN_(USER_SCRIPT_RETURN, GOTO_SCREEN(StatusScreen)); break;
+      case _ITEM_TAG(15): injectCommands_P(PSTR(MAIN_MENU_ITEM_7_GCODE)); TERN_(CUSTOM_MENU_MAIN_SCRIPT_RETURN, GOTO_SCREEN(StatusScreen));sound.play(chimes, PLAY_ASYNCHRONOUS); break;
     #endif
     #if defined(MAIN_MENU_ITEM_8_DESC)
       //_USER_ACTION(6)
-      case _ITEM_TAG(16): injectCommands_P(PSTR(MAIN_MENU_ITEM_8_GCODE)); TERN_(USER_SCRIPT_RETURN, GOTO_SCREEN(StatusScreen)); break;
+      case _ITEM_TAG(16): injectCommands_P(PSTR(MAIN_MENU_ITEM_8_GCODE)); TERN_(CUSTOM_MENU_MAIN_SCRIPT_RETURN, GOTO_SCREEN(StatusScreen));sound.play(chimes, PLAY_ASYNCHRONOUS); break;
     #endif
     #if defined(MAIN_MENU_ITEM_9_DESC)
       //_USER_ACTION(7)
-      case _ITEM_TAG(17): injectCommands_P(PSTR(MAIN_MENU_ITEM_9_GCODE)); TERN_(USER_SCRIPT_RETURN, GOTO_SCREEN(StatusScreen)); break;
+      case _ITEM_TAG(17): injectCommands_P(PSTR(MAIN_MENU_ITEM_9_GCODE)); TERN_(CUSTOM_MENU_MAIN_SCRIPT_RETURN, GOTO_SCREEN(StatusScreen));sound.play(chimes, PLAY_ASYNCHRONOUS); break;
     #endif
     #if HAS_USER_ITEM(8)
       _USER_ACTION(8)

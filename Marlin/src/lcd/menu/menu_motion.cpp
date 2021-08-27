@@ -365,6 +365,13 @@ void menu_motion() {
   #endif
 
   //
+  // Park Nozzle
+  //
+  #if ENABLED(PARK_NOZZLE_MENU_OPTION)
+    GCODES_ITEM(MSG_IDEX_MODE_AUTOPARK, PSTR("G28 O\nG27"));
+  #endif
+
+  //
   // Auto-calibration
   //
   #if ENABLED(CALIBRATION_GCODE)
@@ -400,7 +407,7 @@ void menu_motion() {
   #elif HAS_LEVELING && DISABLED(SLIM_LCD_MENUS)
 
     #if DISABLED(PROBE_MANUALLY)
-      GCODES_ITEM(MSG_LEVEL_BED, PSTR("G29N"));
+      GCODES_ITEM(MSG_LEVEL_BED, PSTR("G28O\nG29"));
     #endif
 
     if (all_axes_homed() && leveling_is_valid()) {

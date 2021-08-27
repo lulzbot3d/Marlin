@@ -159,7 +159,7 @@ namespace Language_en {
   PROGMEM Language_Str MSG_M48_DEVIATION                   = _UxGT("Deviation");
   PROGMEM Language_Str MSG_IDEX_MENU                       = _UxGT("IDEX Mode");
   PROGMEM Language_Str MSG_OFFSETS_MENU                    = _UxGT("Tool Offsets");
-  PROGMEM Language_Str MSG_IDEX_MODE_AUTOPARK              = _UxGT("Auto-Park");
+  PROGMEM Language_Str MSG_IDEX_MODE_AUTOPARK              = _UxGT("Park Nozzle");
   PROGMEM Language_Str MSG_IDEX_MODE_DUPLICATE             = _UxGT("Duplication");
   PROGMEM Language_Str MSG_IDEX_MODE_MIRRORED_COPY         = _UxGT("Mirrored Copy");
   PROGMEM Language_Str MSG_IDEX_MODE_FULL_CTRL             = _UxGT("Full Control");

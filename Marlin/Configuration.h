@@ -838,9 +838,9 @@
       #define LULZBOT_DEFAULT_Kd 75.56
     #else
       // E3D Titan Aero with LulzBot V6 block
-      #define LULZBOT_DEFAULT_Kp 41.68
-      #define LULZBOT_DEFAULT_Ki  6.87
-      #define LULZBOT_DEFAULT_Kd 63.16
+      #define LULZBOT_DEFAULT_Kp  21.0
+      #define LULZBOT_DEFAULT_Ki  1.78
+      #define LULZBOT_DEFAULT_Kd 61.93
     #endif
   #endif
   #if ANY(TOOLHEAD_SL_SE_HE, LULZBOT_E3D_Titan_Aero_V6)
@@ -1547,7 +1547,7 @@
 #elif ANY(TAZPro, TAZProXT)
   #define NOZZLE_TO_PROBE_OFFSET { 0, 0, -1.102 }
 #elif ANY(Sidekick_289, Sidekick_747)
-  #define NOZZLE_TO_PROBE_OFFSET { -1, 50, -2.5 }
+  #define NOZZLE_TO_PROBE_OFFSET { -1, 50, -2.1 }
 #endif
 
 // Most probes should stay away from the edges of the bed, but
@@ -1556,7 +1556,7 @@
   #define PROBING_MARGIN 10 
 #else
   #if ENABLED(MiniV2)
-    #define PROBING_MARGIN -10
+    #define PROBING_MARGIN -4
   #elif ENABLED(TAZ6)
     #define PROBING_MARGIN -8
   #elif ENABLED(Workhorse)
@@ -1779,14 +1779,14 @@
 
 // The size of the printable area
 #if ENABLED(MiniV2)
-  #define X_BED_SIZE 154
-  #define Y_BED_SIZE 154
+  #define X_BED_SIZE 160
+  #define Y_BED_SIZE 162
   // Travel limits (mm) after homing, corresponding to endstop positions.
-  #define LULZBOT_X_MIN_POS -7
+  #define LULZBOT_X_MIN_POS -4.25
   #define LULZBOT_Y_MIN_POS -5
   #define LULZBOT_Z_MIN_POS 0
   #define LULZBOT_X_MAX_POS 168
-  #define LULZBOT_Y_MAX_POS 192
+  #define LULZBOT_Y_MAX_POS 193
   #define LULZBOT_Z_MAX_POS 183
 
 #elif ENABLED(TAZ6)

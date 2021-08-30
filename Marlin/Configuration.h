@@ -1780,12 +1780,12 @@
 // The size of the printable area
 #if ENABLED(MiniV2)
   #define X_BED_SIZE 160
-  #define Y_BED_SIZE 162
+  #define Y_BED_SIZE 165
   // Travel limits (mm) after homing, corresponding to endstop positions.
   #define LULZBOT_X_MIN_POS -4.25
   #define LULZBOT_Y_MIN_POS -5
   #define LULZBOT_Z_MIN_POS 0
-  #define LULZBOT_X_MAX_POS 168
+  #define LULZBOT_X_MAX_POS 161.5
   #define LULZBOT_Y_MAX_POS 193
   #define LULZBOT_Z_MAX_POS 183
 
@@ -2470,8 +2470,8 @@
   // Specify positions for each tool as { { X, Y, Z }, { X, Y, Z } }
   // Dual hotend system may use { {  -20, (Y_BED_SIZE / 2), (Z_MIN_POS + 1) },  {  420, (Y_BED_SIZE / 2), (Z_MIN_POS + 1) }}
   #if ENABLED(MiniV2)
-    #define NOZZLE_CLEAN_START_POINT {  45, 175, 0 }
-    #define NOZZLE_CLEAN_END_POINT   { 115, 175, 0 }
+    #define NOZZLE_CLEAN_START_POINT {  45, 177, 0 }
+    #define NOZZLE_CLEAN_END_POINT   { 115, 177, 0 }
   #elif ANY(TAZPro, TAZProXT) && ENABLED(LULZBOT_UNIVERSAL_TOOLHEAD)
     #define NOZZLE_CLEAN_START_POINT { 300, 95, 1 }
     #define NOZZLE_CLEAN_END_POINT   { 300, 25, 1 }
@@ -2505,7 +2505,7 @@
 
   // Explicit wipe G-code script applies to a G12 with no arguments.
   #if ENABLED(MiniV2)
-    #define WIPE_SEQUENCE_COMMANDS "G28O\n M117 Hot end heating...\nM104 S170\nM117 Wiping nozzle\nT0\nG1 X115 Y175 Z10 F4000\nM109 R170\nG1 Z1\nM114\nG1 X115 Y175\nG1 X45 Y175\nG1 X115 Y175\nG1 X45 Y175\nG1 X115 Y175\nG1 X45 Y175\nG1 X115 Y175\nG1 X45 Y175\nG1 X115 Y175\nG1 X45 Y175\nG1 X115 Y175\nG1 X45 Y175\nG1 Z15\nM400\nM106 S255\nM109 R160\nM107\nM117 Wipe Complete"
+    #define WIPE_SEQUENCE_COMMANDS "G28O\n M117 Hot end heating...\nM104 S170\nM117 Wiping nozzle\nT0\nG1 X115 Y177 Z10 F4000\nM109 R170\nG1 Z1\nM114\nG1 X115 \nG1 X45 \nG1 X115 \nG1 X45 \nG1 X115 \nG1 X45 \nG1 X115 \nG1 X45 \nG1 X115 \nG1 X45 \nG1 X115 \nG1 X45 \nG1 Z15\nM400\nM106 S255\nM109 R160\nM107\nM117 Wipe Complete"
   #elif ENABLED(TAZ6)
     #define WIPE_SEQUENCE_COMMANDS "G28O\n M117 Hot end heating...\nM104 S170\nM117 Wiping nozzle\nT0\nG1 X-17 Y25 Z10 F4000\nM109 R170\nG1 Z1\nM114\nG1 Y25\nG1 Y95\nG1 Y25\nG1 Y95\nG1 Y25\nG1 Y95\nG1 Y25\nG1 Y95\nG1 Y25\nG1 Y95\nG1 Y25\nG1 Y95\nG1 Z15\nM400\nM106 S255\nM109 R160\nM107\nM117 Wipe Complete"
   #elif ENABLED(Workhorse)

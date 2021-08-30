@@ -1325,8 +1325,8 @@
 #define CLASSIC_JERK
 #if ENABLED(CLASSIC_JERK)
   #if ANY(MiniV2, Sidekick_289, Sidekick_747)
-    #define DEFAULT_XJERK 12.0
-    #define DEFAULT_YJERK 12.0
+    #define DEFAULT_XJERK 10.0
+    #define DEFAULT_YJERK 10.0
   #else
     #define DEFAULT_XJERK 8.0
     #define DEFAULT_YJERK 8.0

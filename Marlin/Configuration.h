@@ -1918,7 +1918,7 @@
  * RAMPS-based boards use SERVO3_PIN for the first runout sensor.
  * For other boards you may need to define FIL_RUNOUT_PIN, FIL_RUNOUT2_PIN, etc.
  */
-#if ANY(TAZPro, TAZProXT)
+#if ANY(TAZPro, TAZProXT, Sidekick_289, Sidekick_747)
   #define FILAMENT_RUNOUT_SENSOR
 #endif
 #if ENABLED(FILAMENT_RUNOUT_SENSOR)

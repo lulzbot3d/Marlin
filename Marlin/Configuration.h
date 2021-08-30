@@ -1842,7 +1842,7 @@
   #define LULZBOT_Y_MAX_POS  173   
   #define LULZBOT_Y_MIN_POS  -29   
   #define LULZBOT_Z_MIN_POS  0     
-  #define LULZBOT_Z_MAX_POS  184.5 
+  #define LULZBOT_Z_MAX_POS  181.5 
 
 #elif defined(Sidekick_747)
   #define X_BED_SIZE 231            
@@ -1853,7 +1853,7 @@
   #define LULZBOT_Y_MAX_POS  240    
   #define LULZBOT_Y_MIN_POS  -16    
   #define LULZBOT_Z_MIN_POS  0      
-  #define LULZBOT_Z_MAX_POS  246.5    
+  #define LULZBOT_Z_MAX_POS  244.5    
 #endif
 
 // Travel limits (mm) after homing, corresponding to endstop positions.

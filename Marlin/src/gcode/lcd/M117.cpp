@@ -27,6 +27,8 @@
 #include "../gcode.h"
 #include "../../lcd/marlinui.h"
 
+//#define SHOW_HEATING_MESSAGE 1
+
 /**
  * M117: Set LCD Status Message
  */

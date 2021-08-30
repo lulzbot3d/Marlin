@@ -3505,7 +3505,7 @@ void Temperature::isr() {
     void Temperature::AutoReportTemp::report() { print_heater_states(active_extruder); SERIAL_EOL(); }
   #endif
 
-  #if HAS_HOTEND && HAS_STATUS_MESSAGE
+  #if HAS_HOTEND && HAS_STATUS_MESSAGE && SHOW_HEATING_MESSAGE
     void Temperature::set_heating_message(const uint8_t e) {
       const bool heating = isHeatingHotend(e);
       ui.status_printf_P(0,

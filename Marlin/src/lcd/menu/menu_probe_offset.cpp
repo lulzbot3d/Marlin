@@ -80,7 +80,7 @@ void probe_offset_wizard_menu() {
   STATIC_ITEM_P(PSTR("Z="), SS_CENTER, ftostr42_52(current_position.z));
   STATIC_ITEM(MSG_ZPROBE_ZOFFSET, SS_LEFT, ftostr42_52(calculated_z_offset));
 
-  SUBMENU(MSG_MOVE_1MM,  []{ _goto_manual_move_z( 1);    });
+  //SUBMENU(MSG_MOVE_1MM,  []{ _goto_manual_move_z( 1);    });
   SUBMENU(MSG_MOVE_01MM, []{ _goto_manual_move_z( 0.1f); });
 
   if ((FINE_MANUAL_MOVE) > 0.0f && (FINE_MANUAL_MOVE) < 0.1f) {
@@ -131,6 +131,7 @@ void prepare_for_probe_offset_wizard() {
     #endif
     // Get X and Y from configuration, or use center
     constexpr xy_pos_t wizard_pos = PROBE_OFFSET_WIZARD_XY_POS;
+    constexpr xy_pos_t wizard_pos_center = XY_CENTER;
 
     // Probe for Z reference
     ui.wait_for_move = true;
@@ -146,7 +147,8 @@ void prepare_for_probe_offset_wizard() {
 
   // Move Nozzle to Probing/Homing Position
   ui.wait_for_move = true;
-  current_position += probe.offset_xy;
+  do_blocking_move_to_xy(wizard_pos_center); // move to center of bed
+  //current_position += probe.offset_xy;
   line_to_current_position(MMM_TO_MMS(XY_PROBE_FEEDRATE));
   ui.synchronize(GET_TEXT(MSG_PROBE_WIZARD_MOVING));
   ui.wait_for_move = false;

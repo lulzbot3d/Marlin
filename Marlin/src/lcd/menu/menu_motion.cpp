@@ -386,6 +386,20 @@ void menu_motion() {
   #endif
 
   //
+  // Clean Nozzle
+  //
+  #if defined(NOZZLE_CLEAN_FEATURE)
+    GCODES_ITEM(MSG_NOZZLE_CLEAN, PSTR("G28O\nM117 cleaning Nozzle\nG12\nM77\nM117 Nozzle Clean"));
+  #endif
+
+  //
+  // Z Probe Wizard
+  //
+  #if ENABLED(PROBE_OFFSET_WIZARD)
+    SUBMENU(MSG_PROBE_WIZARD, goto_probe_offset_wizard);
+  #endif
+
+  //
   // Assisted Bed Tramming
   //
   #if ENABLED(ASSISTED_TRAMMING_WIZARD)

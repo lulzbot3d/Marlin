@@ -97,7 +97,7 @@
 // Author info of this build printed to the host during boot and M115
 #define STRING_CONFIG_H_AUTHOR "Lulzbot" // Who made the changes.
 #define CUSTOM_VERSION_FILE Version.h // Path from the root directory (no quotes)
-#define LULZBOT_FW_VERSION "2.0.9.0.3" 
+#define LULZBOT_FW_VERSION "2.0.9.0.4" 
 
 /**
  * *** VENDORS PLEASE READ ***
@@ -1822,15 +1822,15 @@
   #define LULZBOT_Z_MAX_POS 299 
 
 #elif ENABLED(TAZProXT)
-  #define X_BED_SIZE 280
-  #define Y_BED_SIZE 280
+  #define X_BED_SIZE 284
+  #define Y_BED_SIZE 286
   // Travel limits (mm) after homing, corresponding to endstop positions.
   #define LULZBOT_X_MIN_POS -1
-  #define LULZBOT_Y_MIN_POS -13
+  #define LULZBOT_Y_MIN_POS -9
   #define LULZBOT_X_MAX_POS 313
-  #define LULZBOT_Y_MAX_POS 315 
-  #define LULZBOT_Z_MIN_POS -1
-  #define LULZBOT_Z_MAX_POS 600
+  #define LULZBOT_Y_MAX_POS 318
+  #define LULZBOT_Z_MIN_POS -9
+  #define LULZBOT_Z_MAX_POS 599 
 
 #elif defined(Sidekick_289)
   #define X_BED_SIZE 161           

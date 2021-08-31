@@ -1063,7 +1063,7 @@
  * Note: HOTEND_OFFSET and CALIBRATION_OBJECT_CENTER must be set to within
  *       ±5mm of true values for G425 to succeed.
  */
-#if DISABLED(Sidekick_289, Sidekick_747, MiniV2,LULZBOT_UNIVERSAL_TOOLHEAD)
+#if ANY(TAZPro,TAZProXT,Workhorse)
   #define CALIBRATION_GCODE
 #endif
 #if ENABLED(CALIBRATION_GCODE)
@@ -1086,8 +1086,8 @@
 
   // The true location and dimension the cube/bolt/washer on the bed.
   #if ENABLED(MiniV2)
-    #define CALIBRATION_OBJECT_CENTER     {169.5, 171.3, 0}:  mm
-    #define CALIBRATION_OBJECT_DIMENSIONS {22.0, 22.0, 1.5}:  mm
+    #define CALIBRATION_OBJECT_CENTER     {169.5, 171.3, 0} //  mm
+    #define CALIBRATION_OBJECT_DIMENSIONS {22.0, 22.0, 1.5} //  mm
 
     // Comment out any sides which are unreachable by the probe. For best
     // auto-calibration results, all sides must be reachable.
@@ -1116,8 +1116,8 @@
     #define CALIBRATION_MEASURE_LEFT
     #define CALIBRATION_MEASURE_BACK
   #elif ANY(TAZPro, TAZProXT)
-    #define CALIBRATION_OBJECT_CENTER     {267.5, -20.0, -2.0}:  mm
-    #define CALIBRATION_OBJECT_DIMENSIONS {10.0, 10.0, 10.0}:  mm
+    #define CALIBRATION_OBJECT_CENTER     {267.5, -20.0, -2.0} //  mm
+    #define CALIBRATION_OBJECT_DIMENSIONS {10.0, 10.0, 10.0} //  mm
 
     // Comment out any sides which are unreachable by the probe. For best
     // auto-calibration results, all sides must be reachable.

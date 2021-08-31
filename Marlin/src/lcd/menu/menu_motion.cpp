@@ -375,7 +375,7 @@ void menu_motion() {
   // Auto-calibration
   //
   #if ENABLED(CALIBRATION_GCODE)
-    GCODES_ITEM(MSG_AUTO_CALIBRATE, PSTR("G425"));
+    GCODES_ITEM(MSG_AUTO_CALIBRATE, PSTR("M425 X0Y0Z0\nM117 Auto-Calibrate in Progress...\nG28\nG425\nM500\nM117 Backlash Saved"));
   #endif
 
   //

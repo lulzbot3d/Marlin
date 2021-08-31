@@ -133,7 +133,6 @@
   #define LULZBOT_CUSTOM_MACHINE_NAME "LulzBot Mini 2"
   #define LULZBOT_LCD_MACHINE_NAME "Mini 2"
   #define LULZBOT_MACHINE_UUID "e5502411-d46d-421d-ba3a-a20126d7930f"
-
 #endif
 
 #if defined(LULZBOT_Quiver_TAZPro)
@@ -1834,13 +1833,13 @@
   #define LULZBOT_Z_MAX_POS 600
 
 #elif defined(Sidekick_289)
-  #define X_BED_SIZE 164           
-  #define Y_BED_SIZE 164            
+  #define X_BED_SIZE 161           
+  #define Y_BED_SIZE 161            
   // Travel limits (mm) after homing, corresponding to endstop positions.  
-  #define LULZBOT_X_MAX_POS  168   
-  #define LULZBOT_X_MIN_POS  -3.5  
-  #define LULZBOT_Y_MAX_POS  173   
-  #define LULZBOT_Y_MIN_POS  -29   
+  #define LULZBOT_X_MAX_POS  166   
+  #define LULZBOT_X_MIN_POS  -5.5  
+  #define LULZBOT_Y_MAX_POS  175   
+  #define LULZBOT_Y_MIN_POS  -27   
   #define LULZBOT_Z_MIN_POS  0     
   #define LULZBOT_Z_MAX_POS  181.5 
 

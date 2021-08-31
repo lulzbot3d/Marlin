@@ -51,8 +51,8 @@
 // If compiling using the Arduino IDE, remove the "//" from the following lines and
 // set printer model and toolhead after the "LULZBOT_" and "TOOLHEAD_" respectively:
 
-#define LULZBOT_Hibiscus_Mini2 
+#define LULZBOT_Quiver_TAZPro
 //#define TOOLHEAD_CecropiaSilk_AerostruderV2
-#define TOOLHEAD_CecropiaSilk_SingleExtruderAeroV2 
+#define TOOLHEAD_Quiver_DualExtruder
 
 #endif /* CONFIGURATION_LULZBOT */

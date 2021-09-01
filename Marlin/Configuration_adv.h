@@ -1257,7 +1257,7 @@
 #if HAS_LCD_MENU
 
   // Add Probe Z Offset calibration to the Z Probe Offsets menu
-  #if HAS_BED_PROBE && NONE(TAZPro, TAZProXT)
+  #if HAS_BED_PROBE && ANY(Sidekick_289, Sidekick_747)
       #define PROBE_OFFSET_WIZARD
     #if ENABLED(PROBE_OFFSET_WIZARD)
       //

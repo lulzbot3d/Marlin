@@ -10,13 +10,13 @@
 //#define TazDualZ
 
 /************** Uncomment a Tool Head Option From Below *********************/
-//#define LULZBOT_UNIVERSAL_TOOLHEAD
+#define LULZBOT_UNIVERSAL_TOOLHEAD
 //#define TOOLHEAD_SL_SE_HE
 //#define TOOLHEAD_HS_HSPLUS
 //#define TOOLHEAD_H175
 //#define TOOLHEAD_M175
 //#define TOOLHEAD_SK175
-#define TOOLHEAD_SK285
+//#define TOOLHEAD_SK285
 //#define TOOLHEAD_Quiver_DualExtruder            // TAZ Pro Dual Extruder
 //#define TOOLHEAD_Albatross_Flexystruder         // TAZ Legacy Flexystruder
 //#define TOOLHEAD_Finch_Aerostruder              // TAZ Legacy Titan Aerostruder v1 0.50 mm
@@ -97,7 +97,7 @@
 // Author info of this build printed to the host during boot and M115
 #define STRING_CONFIG_H_AUTHOR "Lulzbot" // Who made the changes.
 #define CUSTOM_VERSION_FILE Version.h // Path from the root directory (no quotes)
-#define LULZBOT_FW_VERSION "2.0.9.0.4" 
+#define LULZBOT_FW_VERSION "2.0.9.0.5" 
 
 /**
  * *** VENDORS PLEASE READ ***
@@ -1279,7 +1279,7 @@
 #elif ENABLED(TAZ6)
   #define Z_FEEDRATE   5
 #elif ANY(Workhorse, TAZPro, TAZProXT)
-  #define Z_FEEDRATE   30
+  #define Z_FEEDRATE   29
 #endif
 
 #define DEFAULT_MAX_FEEDRATE          { 300, 300, Z_FEEDRATE, 40 }

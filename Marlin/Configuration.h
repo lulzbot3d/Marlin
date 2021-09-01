@@ -1826,7 +1826,7 @@
   #define Y_BED_SIZE 286
   // Travel limits (mm) after homing, corresponding to endstop positions.
   #define LULZBOT_X_MIN_POS -1
-  #define LULZBOT_Y_MIN_POS -9
+  #define LULZBOT_Y_MIN_POS -10
   #define LULZBOT_X_MAX_POS 313
   #define LULZBOT_Y_MAX_POS 318
   #define LULZBOT_Z_MIN_POS -9

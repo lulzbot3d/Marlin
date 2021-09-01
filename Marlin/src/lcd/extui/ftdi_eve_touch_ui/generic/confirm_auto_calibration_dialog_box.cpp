@@ -37,7 +37,7 @@ bool ConfirmAutoCalibrationDialogBox::onTouchEnd(uint8_t tag) {
   switch (tag) {
     case 1:
       GOTO_SCREEN(StatusScreen);
-      injectCommands_P(PSTR("G425"));
+      injectCommands_P(PSTR("M425 X0Y0Z0\nM117 Auto-Calibrate in Progress...\nG28\nG425\nM500\nM117 Backlash Saved"));
       return true;
     default:
       return DialogBoxBaseClass::onTouchEnd(tag);

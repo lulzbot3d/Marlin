@@ -10,13 +10,13 @@
 //#define TazDualZ
 
 /************** Uncomment a Tool Head Option From Below *********************/
-#define LULZBOT_UNIVERSAL_TOOLHEAD
+//#define LULZBOT_UNIVERSAL_TOOLHEAD
 //#define TOOLHEAD_SL_SE_HE
 //#define TOOLHEAD_HS_HSPLUS
 //#define TOOLHEAD_H175
 //#define TOOLHEAD_M175
 //#define TOOLHEAD_SK175
-//#define TOOLHEAD_SK285
+#define TOOLHEAD_SK285
 //#define TOOLHEAD_Quiver_DualExtruder            // TAZ Pro Dual Extruder
 //#define TOOLHEAD_Albatross_Flexystruder         // TAZ Legacy Flexystruder
 //#define TOOLHEAD_Finch_Aerostruder              // TAZ Legacy Titan Aerostruder v1 0.50 mm
@@ -387,16 +387,22 @@
   #define LULZBOT_TOOLHEAD_Z_MIN_ADJ             0
 #endif
 #if defined(TOOLHEAD_SE_SL_HE)
+  #undef LULZBOT_M115_EXTRUDER_TYPE
   #define LULZBOT_M115_EXTRUDER_TYPE       "Titan Areo"
 #elif defined(TOOLHEAD_HS_HSPLUS)
+  #undef LULZBOT_M115_EXTRUDER_TYPE
   #define LULZBOT_M115_EXTRUDER_TYPE       "Titan Areo Vulcano"
 #elif defined(TOOLHEAD_H175)
+  #undef LULZBOT_M115_EXTRUDER_TYPE
   #define LULZBOT_M115_EXTRUDER_TYPE       "H175"
 #elif defined(TOOLHEAD_M175)
+  #undef LULZBOT_M115_EXTRUDER_TYPE
   #define LULZBOT_M115_EXTRUDER_TYPE       "M175"
 #elif defined(TOOLHEAD_SK175)
+  #undef LULZBOT_M115_EXTRUDER_TYPE
   #define LULZBOT_M115_EXTRUDER_TYPE       "SK175"
 #elif defined(TOOLHEAD_SK285)
+  #undef LULZBOT_M115_EXTRUDER_TYPE
   #define LULZBOT_M115_EXTRUDER_TYPE       "SK285"
 #endif
 

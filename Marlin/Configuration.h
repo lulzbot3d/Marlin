@@ -1279,7 +1279,7 @@
 #elif ENABLED(TAZ6)
   #define Z_FEEDRATE   5
 #elif ANY(Workhorse, TAZPro, TAZProXT)
-  #define Z_FEEDRATE   29
+  #define Z_FEEDRATE   25
 #endif
 
 #define DEFAULT_MAX_FEEDRATE          { 300, 300, Z_FEEDRATE, 40 }
@@ -1832,7 +1832,7 @@
   #define Y_BED_SIZE 286
   // Travel limits (mm) after homing, corresponding to endstop positions.
   #define LULZBOT_X_MIN_POS -1
-  #define LULZBOT_Y_MIN_POS -10
+  #define LULZBOT_Y_MIN_POS -9
   #define LULZBOT_X_MAX_POS 313
   #define LULZBOT_Y_MAX_POS 318
   #define LULZBOT_Z_MIN_POS -9

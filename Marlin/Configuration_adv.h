@@ -1116,8 +1116,8 @@
     #define CALIBRATION_MEASURE_LEFT
     #define CALIBRATION_MEASURE_BACK
   #elif ANY(TAZPro, TAZProXT)
-    #define CALIBRATION_OBJECT_CENTER     {267.5,-9.5,-2.0} //  mm
-    #define CALIBRATION_OBJECT_DIMENSIONS {10.0,  1.0, 10.0} //  mm
+    #define CALIBRATION_OBJECT_CENTER     {267.5,-10,-2.0} //  mm
+    #define CALIBRATION_OBJECT_DIMENSIONS {10.0,  4.0, 10.0} //  mm
 
     // Comment out any sides which are unreachable by the probe. For best
     // auto-calibration results, all sides must be reachable.

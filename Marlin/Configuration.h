@@ -1817,27 +1817,49 @@
   #define LULZBOT_Z_MAX_POS 299
 
 #elif ENABLED(TAZPro) 
-  #define X_BED_SIZE 284
-  #define Y_BED_SIZE 286
-  // Travel limits (mm) after homing, corresponding to endstop positions.
-  #define LULZBOT_X_MIN_POS -1
-  #define LULZBOT_Y_MIN_POS -9
-  #define LULZBOT_X_MAX_POS 313
-  #define LULZBOT_Y_MAX_POS 318
-  #define LULZBOT_Z_MIN_POS -9
-  #define LULZBOT_Z_MAX_POS 299 
-
+   #if defined(TOOLHEAD_Quiver_DualExtruder)
+    #define X_BED_SIZE 281
+    #define Y_BED_SIZE 283
+    // Travel limits (mm) after homing, corresponding to endstop positions.
+    #define LULZBOT_X_MIN_POS -6// <-- changed
+    #define LULZBOT_Y_MIN_POS -13 // <-- changed
+    #define LULZBOT_X_MAX_POS 308 // <-- changed
+    #define LULZBOT_Y_MAX_POS 315 // <-- changed
+    #define LULZBOT_Z_MIN_POS -9 // <-- changed
+    #define LULZBOT_Z_MAX_POS 299 // <-- changed 
+  #else
+    #define X_BED_SIZE 284
+    #define Y_BED_SIZE 286
+    // Travel limits (mm) after homing, corresponding to endstop positions.
+    #define LULZBOT_X_MIN_POS -1
+    #define LULZBOT_Y_MIN_POS -9
+    #define LULZBOT_X_MAX_POS 313
+    #define LULZBOT_Y_MAX_POS 318
+    #define LULZBOT_Z_MIN_POS -9
+    #define LULZBOT_Z_MAX_POS 299 
+  #endif
 #elif ENABLED(TAZProXT)
-  #define X_BED_SIZE 284
-  #define Y_BED_SIZE 286
-  // Travel limits (mm) after homing, corresponding to endstop positions.
-  #define LULZBOT_X_MIN_POS -1
-  #define LULZBOT_Y_MIN_POS -9
-  #define LULZBOT_X_MAX_POS 313
-  #define LULZBOT_Y_MAX_POS 318
-  #define LULZBOT_Z_MIN_POS -9
-  #define LULZBOT_Z_MAX_POS 599 
-
+    #if defined(TOOLHEAD_Quiver_DualExtruder)
+    #define X_BED_SIZE 281
+    #define Y_BED_SIZE 283
+    // Travel limits (mm) after homing, corresponding to endstop positions.
+    #define LULZBOT_X_MIN_POS -6// <-- changed
+    #define LULZBOT_Y_MIN_POS -13 // <-- changed
+    #define LULZBOT_X_MAX_POS 308 // <-- changed
+    #define LULZBOT_Y_MAX_POS 315 // <-- changed
+    #define LULZBOT_Z_MIN_POS -9 // <-- changed
+    #define LULZBOT_Z_MAX_POS 599 // <-- changed 
+  #else
+    #define X_BED_SIZE 284
+    #define Y_BED_SIZE 286
+    // Travel limits (mm) after homing, corresponding to endstop positions.
+    #define LULZBOT_X_MIN_POS -1
+    #define LULZBOT_Y_MIN_POS -9
+    #define LULZBOT_X_MAX_POS 313
+    #define LULZBOT_Y_MAX_POS 318
+    #define LULZBOT_Z_MIN_POS -9
+    #define LULZBOT_Z_MAX_POS 599 
+  #endif
 #elif defined(Sidekick_289)
   #define X_BED_SIZE 161           
   #define Y_BED_SIZE 161            
@@ -2518,7 +2540,7 @@
   #elif ANY(TAZPro, TAZProXT) && ENABLED(LULZBOT_UNIVERSAL_TOOLHEAD)
     #define WIPE_SEQUENCE_COMMANDS "G28O\n M117 Hot end heating...\nM104 S170\nM117 Wiping nozzle\nT0\nG1 X300 Y25 Z10 F4000\nM109 R170 \nG1 Z-1 F4000\nM114\nG1 Y25 F4000\nG1 Y95 F4000\nG1 Y25 F4000\nG1 Y95 F4000\nG1 Y25 F4000\nG1 Y95 F4000\nG1 Y25 F4000\nG1 Y95 F4000\nG1 Y25 F4000\nG1 Y95 F4000\nG1 Y25 F4000\nG1 Y95 F4000\nG1 Z15 F4000\nM400\nM106 S255\nG0 Y-9.0 F4000\nM109 R160\nM107\nM117 Wipe Complete"
   #elif ANY(TAZPro, TAZProXT) && ENABLED(TOOLHEAD_Quiver_DualExtruder) 
-    #define WIPE_SEQUENCE_COMMANDS "G28O\n M117 Hot end heating...\nM104 S170\nM117 Wiping nozzle\nT0\nG1 X50 Y25 Z10 F4000\nM109 R170\nG1 Z-1\nM114\nG1 X-10.5 Y25\nG1 X-10.5 Y95\nG1 X-10.5 Y25\nG1 X-10.5 Y95\nG1 X-10.5 Y25\nG1 X-10.5 Y95\nG1 X-10.5 Y25\nG1 X-10.5 Y95\nG1 X-10.5 Y25\nG1 X-10.5 Y95\nG1 X-10.5 Y25\nG1 X-10.5 Y95\nG1 Z15\nM400\nM106 S255 \nT0\nM106 S255\nM109 R160 T0\nM107\nM117 Wipe Complete"
+    #define WIPE_SEQUENCE_COMMANDS "G1 X-17 Y25 Z10 F4000\nM109 R170 T0\nG1 Z-1\nM114\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 Z15\nM400\nM106 S255 \nT0\nM106 S255\nM109 R160 T0\nM107"
   #endif
 #endif
 
@@ -3457,12 +3479,12 @@
  * Set this manually if there are extra servos needing manual control.
  * Set to 0 to turn off servo support.
  */
-//#define NUM_SERVOS 3 // Servo index starts with 0 for M280 command
+#define NUM_SERVOS LULZBOT_NUM_SERVOS  // Servo index starts with 0 for M280 command
 
 // (ms) Delay  before the next move will start, to give the servo time to reach its target angle.
 // 300ms is a good value but you can try less delay.
 // If the servo can't reach the requested position, increase it.
-#define SERVO_DELAY { 300 }
+#define SERVO_DELAY LULZBOT_SERVO_DELAY
 
 // Only power servos during movement, otherwise leave off to prevent jitter
 //#define DEACTIVATE_SERVOS_AFTER_MOVE

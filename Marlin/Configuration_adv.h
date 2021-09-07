@@ -1063,7 +1063,7 @@
  * Note: HOTEND_OFFSET and CALIBRATION_OBJECT_CENTER must be set to within
  *       ±5mm of true values for G425 to succeed.
  */
-#if DISABLED(Sidekick_289, Sidekick_747, MiniV2,LULZBOT_UNIVERSAL_TOOLHEAD)
+#if ANY(TAZPro,TAZProXT,Workhorse)
   #define CALIBRATION_GCODE
 #endif
 #if ENABLED(CALIBRATION_GCODE)
@@ -1086,8 +1086,8 @@
 
   // The true location and dimension the cube/bolt/washer on the bed.
   #if ENABLED(MiniV2)
-    #define CALIBRATION_OBJECT_CENTER     {169.5, 171.3, 0}:  mm
-    #define CALIBRATION_OBJECT_DIMENSIONS {22.0, 22.0, 1.5}:  mm
+    #define CALIBRATION_OBJECT_CENTER     {169.5, 171.3, 0} //  mm
+    #define CALIBRATION_OBJECT_DIMENSIONS {22.0, 22.0, 1.5} //  mm
 
     // Comment out any sides which are unreachable by the probe. For best
     // auto-calibration results, all sides must be reachable.
@@ -1106,8 +1106,8 @@
     #define CALIBRATION_MEASURE_LEFT
     #define CALIBRATION_MEASURE_BACK
   #elif ENABLED(Workhorse)
-    #define CALIBRATION_OBJECT_CENTER     { 266, -17.0,  -2.0 } // mm True location is -22 in y but object size is accounting for location change
-    #define CALIBRATION_OBJECT_DIMENSIONS {  10.0,  4.0,  10.0 } // mm 
+    #define CALIBRATION_OBJECT_CENTER     { 266, -17.0,-2.0 } // mm True location is -22 in y but object size is accounting for location change
+    #define CALIBRATION_OBJECT_DIMENSIONS { 10.0, 4.0,  10.0 } // mm 
 
     // Comment out any sides which are unreachable by the probe. For best
     // auto-calibration results, all sides must be reachable.
@@ -1116,13 +1116,17 @@
     #define CALIBRATION_MEASURE_LEFT
     #define CALIBRATION_MEASURE_BACK
   #elif ANY(TAZPro, TAZProXT)
-    #define CALIBRATION_OBJECT_CENTER     {267.5, -20.0, -2.0}:  mm
-    #define CALIBRATION_OBJECT_DIMENSIONS {10.0, 10.0, 10.0}:  mm
-
+    #if defined(TOOLHEAD_Quiver_DualExtruder)
+      #define CALIBRATION_OBJECT_CENTER     {261.5, -18, -2.0} //  mm
+      #define CALIBRATION_OBJECT_DIMENSIONS {10.0, .1, 10.0} //  mm
+    #else
+      #define CALIBRATION_OBJECT_CENTER     {267.5,-9.5,-2.0} //  mm
+      #define CALIBRATION_OBJECT_DIMENSIONS {10.0,  1.0, 10.0} //  mm
+    #endif
     // Comment out any sides which are unreachable by the probe. For best
     // auto-calibration results, all sides must be reachable.
     #define CALIBRATION_MEASURE_RIGHT
-    #define CALIBRATION_MEASURE_FRONT
+    //#define CALIBRATION_MEASURE_FRONT
     #define CALIBRATION_MEASURE_LEFT
     #define CALIBRATION_MEASURE_BACK
   #endif
@@ -1257,18 +1261,26 @@
 #if HAS_LCD_MENU
 
   // Add Probe Z Offset calibration to the Z Probe Offsets menu
-  #if HAS_BED_PROBE
-    //#define PROBE_OFFSET_WIZARD
+  #if HAS_BED_PROBE && ANY(Sidekick_289, Sidekick_747)
+      #define PROBE_OFFSET_WIZARD
     #if ENABLED(PROBE_OFFSET_WIZARD)
       //
       // Enable to init the Probe Z-Offset when starting the Wizard.
       // Use a height slightly above the estimated nozzle-to-probe Z offset.
       // For example, with an offset of -5, consider a starting height of -4.
       //
-      //#define PROBE_OFFSET_WIZARD_START_Z -4.0
+      #define PROBE_OFFSET_WIZARD_START_Z 1.0
 
       // Set a convenient position to do the calibration (probing point and nozzle/bed-distance)
-      //#define PROBE_OFFSET_WIZARD_XY_POS { X_CENTER, Y_CENTER }
+      #if ANY(Sidekick_289, Sidekick_747)
+        #define PROBE_OFFSET_WIZARD_XY_POS { X_CENTER, Y_CENTER }
+      #elif ENABLED(MiniV2)
+        #define PROBE_OFFSET_WIZARD_XY_POS { -4, -4 }
+      #elif ENABLED(TAZ6)
+        #define PROBE_OFFSET_WIZARD_XY_POS { -8, -8 }
+      #elif ENABLED(Workhorse)
+        #define PROBE_OFFSET_WIZARD_XY_POS { -10, -10 }
+      #endif
     #endif
   #endif
 
@@ -1988,22 +2000,10 @@
  * the probe to be unable to reach any points.
  */
 #if PROBE_SELECTED && !IS_KINEMATIC
-  #if ENABLED(MiniV2)
-    #define PROBING_MARGIN_LEFT  -5.0
-    #define PROBING_MARGIN_RIGHT -10.0
-    #define PROBING_MARGIN_FRONT -5.0
-    #define PROBING_MARGIN_BACK  -10.0
-  #elif ENABLED(TAZ6)
-    #define PROBING_MARGIN_LEFT  -10.0
-    #define PROBING_MARGIN_RIGHT -8.0
-    #define PROBING_MARGIN_FRONT -9.0
-    #define PROBING_MARGIN_BACK  -11.1
-  #elif ANY(Workhorse, TAZPro, TAZProXT)
-    #define PROBING_MARGIN_LEFT  -8
-    #define PROBING_MARGIN_RIGHT -9
-    #define PROBING_MARGIN_FRONT -10
-    #define PROBING_MARGIN_BACK  -9
-  #endif
+  //#define PROBING_MARGIN_LEFT  -5.0
+  //#define PROBING_MARGIN_RIGHT -10.0
+  //#define PROBING_MARGIN_FRONT -5.0
+  //#define PROBING_MARGIN_BACK  -10.0
 #endif
 
 #if EITHER(MESH_BED_LEVELING, AUTO_BED_LEVELING_UBL)
@@ -2644,7 +2644,7 @@
   #define INTERPOLATE      true
 
   #if AXIS_IS_TMC(X)
-    #define X_CURRENT       950        // (mA) RMS current. Multiply by 1.414 for peak current.
+    #define X_CURRENT       975        // (mA) RMS current. Multiply by 1.414 for peak current.
     #define X_CURRENT_HOME  X_CURRENT  // (mA) RMS current for sensorless homing
     #define X_MICROSTEPS     16        // 0..256
     #define X_RSENSE          0.12
@@ -2662,7 +2662,7 @@
   #endif
 
   #if AXIS_IS_TMC(Y)
-    #define Y_CURRENT       950
+    #define Y_CURRENT       975
     #define Y_CURRENT_HOME  Y_CURRENT
     #define Y_MICROSTEPS     16
     #define Y_RSENSE          0.12
@@ -2891,11 +2891,11 @@
    * Use Trinamic's ultra quiet stepping mode.
    * When disabled, Marlin will use spreadCycle stepping mode.
    */
-  #define STEALTHCHOP_XY
+  //#define STEALTHCHOP_XY
   #define STEALTHCHOP_Z
-  #define STEALTHCHOP_I
-  #define STEALTHCHOP_J
-  #define STEALTHCHOP_K
+  //#define STEALTHCHOP_I
+  //#define STEALTHCHOP_J
+  //#define STEALTHCHOP_K
   #define STEALTHCHOP_E
 
   /**
@@ -3009,8 +3009,13 @@
   #if EITHER(SENSORLESS_HOMING, SENSORLESS_PROBING)
     // TMC2209: 0...255. TMC2130: -64...63
     #if ANY(TAZPro, TAZProXT)
-      #define X_STALL_SENSITIVITY  4
-      #define Y_STALL_SENSITIVITY  4
+      #if ANY(LULZBOT_UNIVERSAL_TOOLHEAD, TOOLHEAD_M175)
+        #define X_STALL_SENSITIVITY  3
+        #define Y_STALL_SENSITIVITY  5
+      #else      
+        #define X_STALL_SENSITIVITY  6
+        #define Y_STALL_SENSITIVITY  5 
+      #endif
     #elif ENABLED(MiniV2)
       #define X_STALL_SENSITIVITY  3
       #define Y_STALL_SENSITIVITY  3
@@ -3053,7 +3058,7 @@
    * Enable M122 debugging command for TMC stepper drivers.
    * M122 S0/1 will enable continuous reporting.
    */
-  //#define TMC_DEBUG
+  #define TMC_DEBUG
 
   /**
    * You can set your own advanced settings by filling in predefined functions.
@@ -3859,37 +3864,37 @@
       #define MAIN_MENU_ITEM_9_GCODE "M92E409\nM301" DEFAULT_PID "\nM906E" E_CURRENT_Aero "\nM500\nM117 H175|0.50mm|NKL-PL CU"
     #else
       #define MAIN_MENU_ITEM_3_DESC "M175v2|0.50mm|CRB CU"
-      #define MAIN_MENU_ITEM_3_GCODE "M92E415\nM301P24.54I2.52D61.75\nM907E" E_CURRENT_BMG "\nM500\nM117 M175v2|0.50mm|CRB CU"
+      #define MAIN_MENU_ITEM_3_GCODE "M92E415\nM206Y0\nM301P24.54I2.52D61.75\nM907E" E_CURRENT_BMG "\nM500\nM117 M175v2|0.50mm|CRB CU"
 
       #define MAIN_MENU_ITEM_4_DESC "SL|0.25mm|NKL-PL CU"
-      #define MAIN_MENU_ITEM_4_GCODE "M92E420\nM301" DEFAULT_PID "\nM907E" E_CURRENT_Aero "\nM500\nM117 SL|0.25mm|NKL-PL CU"
+      #define MAIN_MENU_ITEM_4_GCODE "M92E420\nM206Y0\nM301" DEFAULT_PID "\nM907E" E_CURRENT_Aero "\nM500\nM117 SL|0.25mm|NKL-PL CU"
       
       #define MAIN_MENU_ITEM_5_DESC "SE|0.50mm|NKL-PL CU"
-      #define MAIN_MENU_ITEM_5_GCODE "M92E420\nM301" DEFAULT_PID "\nM907E" E_CURRENT_Aero "\nM500\nM117 SE|0.50mm|NKL-PL CU"
+      #define MAIN_MENU_ITEM_5_GCODE "M92E420\nM206Y0\nM301" DEFAULT_PID "\nM907E" E_CURRENT_Aero "\nM500\nM117 SE|0.50mm|NKL-PL CU"
 
       #define MAIN_MENU_ITEM_6_DESC "HE|0.50mm|HRD STEEL"
-      #define MAIN_MENU_ITEM_6_GCODE "M92E420\nM301" DEFAULT_PID "\nM907E" E_CURRENT_Aero "\nM500\nM117 HE|0.50mm|HRD STEEL"
+      #define MAIN_MENU_ITEM_6_GCODE "M92E420\nM206Y0\nM301" DEFAULT_PID "\nM907E" E_CURRENT_Aero "\nM500\nM117 HE|0.50mm|HRD STEEL"
 
       #define MAIN_MENU_ITEM_7_DESC "HS|0.80mm|HRD STEEL"
-      #define MAIN_MENU_ITEM_7_GCODE "M92E420\nM301" DEFAULT_PID "\nM907E" E_CURRENT_Aero "\nM500\nM117 HS|0.80mm|HRD STEEL"
+      #define MAIN_MENU_ITEM_7_GCODE "M92E420\nM206Y0\nM301" DEFAULT_PID "\nM907E" E_CURRENT_Aero "\nM500\nM117 HS|0.80mm|HRD STEEL"
 
       #define MAIN_MENU_ITEM_8_DESC "HS+|1.20mm|HRD STEEL"
-      #define MAIN_MENU_ITEM_8_GCODE "M92E420\nM301" DEFAULT_PID "\nM907E" E_CURRENT_Aero "\nM500\nM117 HS+|1.20mm|HRD STEEL"
+      #define MAIN_MENU_ITEM_8_GCODE "M92E420\nM206Y0\nM301" DEFAULT_PID "\nM907E" E_CURRENT_Aero "\nM500\nM117 HS+|1.20mm|HRD STEEL"
 
       #define MAIN_MENU_ITEM_9_DESC "H175|0.50mm|NKL-PL CU"
-      #define MAIN_MENU_ITEM_9_GCODE "M92E409\nM301" DEFAULT_PID "\nM906E" E_CURRENT_Aero "\nM500\nM117 H175|0.50mm|NKL-PL CU"
+      #define MAIN_MENU_ITEM_9_GCODE "M92E409\nM206Y0\nM301" DEFAULT_PID "\nM906E" E_CURRENT_Aero "\nM500\nM117 H175|0.50mm|NKL-PL CU"
     #endif
 
     #if defined(TAZ6)
       #define MAIN_MENU_ITEM_1_DESC "Standard|0.5mm"
-      #define MAIN_MENU_ITEM_1_GCODE "M92E814\nM206X0Y5\nM301" DEFAULT_PID "\nM907E" E_CURRENT_Std "\nM500\nM117 Standard|0.5mm"
+      #define MAIN_MENU_ITEM_1_GCODE "M92E814\nM206Y5\nM301" DEFAULT_PID "\nM907E" E_CURRENT_Std "\nM500\nM117 Standard|0.5mm"
     #endif
 
   #endif
 #endif
 
 // Custom Menu: Configuration Menu
-#define CUSTOM_MENU_CONFIG
+//#define CUSTOM_MENU_CONFIG
 #if ENABLED(CUSTOM_MENU_CONFIG)
   //#define CUSTOM_MENU_CONFIG_TITLE "Custom Commands"
   #define CUSTOM_MENU_CONFIG_SCRIPT_DONE "M117 Wireless Script Done"

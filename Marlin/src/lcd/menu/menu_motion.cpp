@@ -365,10 +365,17 @@ void menu_motion() {
   #endif
 
   //
+  // Park Nozzle
+  //
+  #if ENABLED(PARK_NOZZLE_MENU_OPTION)
+    GCODES_ITEM(MSG_IDEX_MODE_AUTOPARK, PSTR("G28 O\nG27"));
+  #endif
+
+  //
   // Auto-calibration
   //
   #if ENABLED(CALIBRATION_GCODE)
-    GCODES_ITEM(MSG_AUTO_CALIBRATE, PSTR("G425"));
+    GCODES_ITEM(MSG_AUTO_CALIBRATE, PSTR("M425 X0Y0Z0\nM117 Auto-Calibrate in Progress...\nG28\nG425\nM500\nM117 Backlash Saved"));
   #endif
 
   //
@@ -376,6 +383,20 @@ void menu_motion() {
   //
   #if EITHER(Z_STEPPER_AUTO_ALIGN, MECHANICAL_GANTRY_CALIBRATION)
     GCODES_ITEM(MSG_AUTO_Z_ALIGN, PSTR("G34"));
+  #endif
+
+  //
+  // Clean Nozzle
+  //
+  #if defined(NOZZLE_CLEAN_FEATURE)
+    GCODES_ITEM(MSG_NOZZLE_CLEAN, PSTR("G28O\nM117 cleaning Nozzle\nG12\nM77\nM117 Nozzle Clean"));
+  #endif
+
+  //
+  // Z Probe Wizard
+  //
+  #if ENABLED(PROBE_OFFSET_WIZARD)
+    SUBMENU(MSG_PROBE_WIZARD, goto_probe_offset_wizard);
   #endif
 
   //
@@ -400,7 +421,7 @@ void menu_motion() {
   #elif HAS_LEVELING && DISABLED(SLIM_LCD_MENUS)
 
     #if DISABLED(PROBE_MANUALLY)
-      GCODES_ITEM(MSG_LEVEL_BED, PSTR("G29N"));
+      GCODES_ITEM(MSG_LEVEL_BED, PSTR("G28O\nG29"));
     #endif
 
     if (all_axes_homed() && leveling_is_valid()) {

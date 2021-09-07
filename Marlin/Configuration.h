@@ -97,7 +97,7 @@
 // Author info of this build printed to the host during boot and M115
 #define STRING_CONFIG_H_AUTHOR "Lulzbot" // Who made the changes.
 #define CUSTOM_VERSION_FILE Version.h // Path from the root directory (no quotes)
-#define LULZBOT_FW_VERSION "2.0.9.0" 
+#define LULZBOT_FW_VERSION "2.0.9.0.5" 
 
 /**
  * *** VENDORS PLEASE READ ***
@@ -133,7 +133,6 @@
   #define LULZBOT_CUSTOM_MACHINE_NAME "LulzBot Mini 2"
   #define LULZBOT_LCD_MACHINE_NAME "Mini 2"
   #define LULZBOT_MACHINE_UUID "e5502411-d46d-421d-ba3a-a20126d7930f"
-
 #endif
 
 #if defined(LULZBOT_Quiver_TAZPro)
@@ -388,16 +387,22 @@
   #define LULZBOT_TOOLHEAD_Z_MIN_ADJ             0
 #endif
 #if defined(TOOLHEAD_SE_SL_HE)
+  #undef LULZBOT_M115_EXTRUDER_TYPE
   #define LULZBOT_M115_EXTRUDER_TYPE       "Titan Areo"
 #elif defined(TOOLHEAD_HS_HSPLUS)
+  #undef LULZBOT_M115_EXTRUDER_TYPE
   #define LULZBOT_M115_EXTRUDER_TYPE       "Titan Areo Vulcano"
 #elif defined(TOOLHEAD_H175)
+  #undef LULZBOT_M115_EXTRUDER_TYPE
   #define LULZBOT_M115_EXTRUDER_TYPE       "H175"
 #elif defined(TOOLHEAD_M175)
+  #undef LULZBOT_M115_EXTRUDER_TYPE
   #define LULZBOT_M115_EXTRUDER_TYPE       "M175"
 #elif defined(TOOLHEAD_SK175)
+  #undef LULZBOT_M115_EXTRUDER_TYPE
   #define LULZBOT_M115_EXTRUDER_TYPE       "SK175"
 #elif defined(TOOLHEAD_SK285)
+  #undef LULZBOT_M115_EXTRUDER_TYPE
   #define LULZBOT_M115_EXTRUDER_TYPE       "SK285"
 #endif
 
@@ -838,9 +843,9 @@
       #define LULZBOT_DEFAULT_Kd 75.56
     #else
       // E3D Titan Aero with LulzBot V6 block
-      #define LULZBOT_DEFAULT_Kp 41.68
-      #define LULZBOT_DEFAULT_Ki  6.87
-      #define LULZBOT_DEFAULT_Kd 63.16
+      #define LULZBOT_DEFAULT_Kp  21.0
+      #define LULZBOT_DEFAULT_Ki  1.78
+      #define LULZBOT_DEFAULT_Kd 61.93
     #endif
   #endif
   #if ANY(TOOLHEAD_SL_SE_HE, LULZBOT_E3D_Titan_Aero_V6)
@@ -1274,7 +1279,7 @@
 #elif ENABLED(TAZ6)
   #define Z_FEEDRATE   5
 #elif ANY(Workhorse, TAZPro, TAZProXT)
-  #define Z_FEEDRATE   30
+  #define Z_FEEDRATE   25
 #endif
 
 #define DEFAULT_MAX_FEEDRATE          { 300, 300, Z_FEEDRATE, 40 }
@@ -1325,8 +1330,8 @@
 #define CLASSIC_JERK
 #if ENABLED(CLASSIC_JERK)
   #if ANY(MiniV2, Sidekick_289, Sidekick_747)
-    #define DEFAULT_XJERK 12.0
-    #define DEFAULT_YJERK 12.0
+    #define DEFAULT_XJERK 10.0
+    #define DEFAULT_YJERK 10.0
   #else
     #define DEFAULT_XJERK 8.0
     #define DEFAULT_YJERK 8.0
@@ -1547,7 +1552,7 @@
 #elif ANY(TAZPro, TAZProXT)
   #define NOZZLE_TO_PROBE_OFFSET { 0, 0, -1.102 }
 #elif ANY(Sidekick_289, Sidekick_747)
-  #define NOZZLE_TO_PROBE_OFFSET { -6.25, 50, -1.10 }
+  #define NOZZLE_TO_PROBE_OFFSET { -1, 50, -2.1 }
 #endif
 
 // Most probes should stay away from the edges of the bed, but
@@ -1555,7 +1560,15 @@
 #if defined (LULZBOT_BLTouch)
   #define PROBING_MARGIN 10 
 #else
-  #define PROBING_MARGIN -3
+  #if ENABLED(MiniV2)
+    #define PROBING_MARGIN -4
+  #elif ENABLED(TAZ6)
+    #define PROBING_MARGIN -8
+  #elif ENABLED(Workhorse)
+    #define PROBING_MARGIN -10
+  #elif ANY(TAZPro, TAZProXT)
+    #define PROBING_MARGIN -9
+  #endif
 #endif
 // X and Y axis travel speed (mm/min) between probes
 #define XY_PROBE_FEEDRATE (200*60)
@@ -1630,7 +1643,7 @@
 #define Z_PROBE_LOW_POINT          -4 // Farthest distance below the trigger-point to go before stopping
 
 // For M851 give a range for adjusting the Z probe offset
-#define Z_PROBE_OFFSET_RANGE_MIN -3
+#define Z_PROBE_OFFSET_RANGE_MIN -5
 #define Z_PROBE_OFFSET_RANGE_MAX 5
 
 // Enable the M48 repeatability test to test probe accuracy
@@ -1771,124 +1784,103 @@
 
 // The size of the printable area
 #if ENABLED(MiniV2)
-  #define X_BED_SIZE 154
-  #define Y_BED_SIZE 154
+  #define X_BED_SIZE 160
+  #define Y_BED_SIZE 165
   // Travel limits (mm) after homing, corresponding to endstop positions.
-  #if defined (TOOLHEAD_M175)
-    #define LULZBOT_X_MIN_POS -12
-    #define LULZBOT_Y_MIN_POS -15
-    #define LULZBOT_Z_MIN_POS 0
-    #define LULZBOT_X_MAX_POS 166
-    #define LULZBOT_Y_MAX_POS 182
-    #define LULZBOT_Z_MAX_POS 184
-  #else
-    #define LULZBOT_X_MIN_POS -7
-    #define LULZBOT_Y_MIN_POS -5
-    #define LULZBOT_Z_MIN_POS 0
-    #define LULZBOT_X_MAX_POS 168
-    #define LULZBOT_Y_MAX_POS 192
-    #define LULZBOT_Z_MAX_POS 183
-  #endif
+  #define LULZBOT_X_MIN_POS -4.25
+  #define LULZBOT_Y_MIN_POS -5
+  #define LULZBOT_Z_MIN_POS 0
+  #define LULZBOT_X_MAX_POS 161.5
+  #define LULZBOT_Y_MAX_POS 193
+  #define LULZBOT_Z_MAX_POS 183
 
 #elif ENABLED(TAZ6)
-  #define X_BED_SIZE 280.4
-  #define Y_BED_SIZE 281.4
+  #define X_BED_SIZE 280
+  #define Y_BED_SIZE 285
   // Travel limits (mm) after homing, corresponding to endstop positions.
-  #if defined (TOOLHEAD_M175)
-    #define LULZBOT_X_MIN_POS -28.1
-    #define LULZBOT_Y_MIN_POS -32.1
-    #define LULZBOT_Z_MIN_POS 0
-    #define LULZBOT_X_MAX_POS 293.5
-    #define LULZBOT_Y_MAX_POS 292.5
-    #define LULZBOT_Z_MAX_POS 271
-  #else
-    #define LULZBOT_X_MIN_POS -22.1
-    #define LULZBOT_Y_MIN_POS -22.1
-    #define LULZBOT_Z_MIN_POS 0
-    #define LULZBOT_X_MAX_POS 299.5
-    #define LULZBOT_Y_MAX_POS 302.5
-    #define LULZBOT_Z_MAX_POS 270
-  #endif
+  #define LULZBOT_X_MIN_POS -20.1
+  #define LULZBOT_Y_MIN_POS -21.6
+  #define LULZBOT_Z_MIN_POS 0
+  #define LULZBOT_X_MAX_POS 292
+  #define LULZBOT_Y_MAX_POS 303.5
+  #define LULZBOT_Z_MAX_POS 257.7
 
 #elif ENABLED(Workhorse)
   #define X_BED_SIZE 280
   #define Y_BED_SIZE 280
   // Travel limits (mm) after homing, corresponding to endstop positions.
-  #if defined (TOOLHEAD_M175)
-    #define LULZBOT_X_MIN_POS -57
-    #define LULZBOT_Y_MIN_POS -29
-    #define LULZBOT_Z_MIN_POS -2
-    #define LULZBOT_X_MAX_POS 290
-    #define LULZBOT_Y_MAX_POS 298
-    #define LULZBOT_Z_MAX_POS 298
-  #else
-    #define LULZBOT_X_MIN_POS -50
-    #define LULZBOT_Y_MIN_POS -17
-    #define LULZBOT_Z_MIN_POS -2
-    #define LULZBOT_X_MAX_POS 295
-    #define LULZBOT_Y_MAX_POS 308
-    #define LULZBOT_Z_MAX_POS 299
-  #endif
+  #define LULZBOT_X_MIN_POS -50
+  #define LULZBOT_Y_MIN_POS -17
+  #define LULZBOT_Z_MIN_POS -2
+  #define LULZBOT_X_MAX_POS 295
+  #define LULZBOT_Y_MAX_POS 308
+  #define LULZBOT_Z_MAX_POS 299
 
 #elif ENABLED(TAZPro) 
-  #define X_BED_SIZE 281
-  #define Y_BED_SIZE 283
-  // Travel limits (mm) after homing, corresponding to endstop positions.
-  #if defined (TOOLHEAD_M175)
-    #define LULZBOT_X_MIN_POS -9-13
-    #define LULZBOT_Y_MIN_POS -23
-    #define LULZBOT_X_MAX_POS 308
-    #define LULZBOT_Y_MAX_POS 303 307
-    #define LULZBOT_Z_MIN_POS -9
-    #define LULZBOT_Z_MAX_POS 298 
+   #if defined(TOOLHEAD_Quiver_DualExtruder)
+    #define X_BED_SIZE 281
+    #define Y_BED_SIZE 283
+    // Travel limits (mm) after homing, corresponding to endstop positions.
+    #define LULZBOT_X_MIN_POS -6// <-- changed
+    #define LULZBOT_Y_MIN_POS -13 // <-- changed
+    #define LULZBOT_X_MAX_POS 308 // <-- changed
+    #define LULZBOT_Y_MAX_POS 315 // <-- changed
+    #define LULZBOT_Z_MIN_POS -9 // <-- changed
+    #define LULZBOT_Z_MAX_POS 299 // <-- changed 
   #else
+    #define X_BED_SIZE 284
+    #define Y_BED_SIZE 286
+    // Travel limits (mm) after homing, corresponding to endstop positions.
     #define LULZBOT_X_MIN_POS -1
-    #define LULZBOT_Y_MIN_POS -13
+    #define LULZBOT_Y_MIN_POS -9
     #define LULZBOT_X_MAX_POS 313
-    #define LULZBOT_Y_MAX_POS 315
+    #define LULZBOT_Y_MAX_POS 318
     #define LULZBOT_Z_MIN_POS -9
     #define LULZBOT_Z_MAX_POS 299 
   #endif
-
 #elif ENABLED(TAZProXT)
-  #define X_BED_SIZE 281
-  #define Y_BED_SIZE 283
-  // Travel limits (mm) after homing, corresponding to endstop positions.
-  #if defined (TOOLHEAD_M175)
-    #define LULZBOT_X_MIN_POS -9
-    #define LULZBOT_Y_MIN_POS -18
-    #define LULZBOT_X_MAX_POS 308
-    #define LULZBOT_Y_MAX_POS 298
+    #if defined(TOOLHEAD_Quiver_DualExtruder)
+    #define X_BED_SIZE 281
+    #define Y_BED_SIZE 283
+    // Travel limits (mm) after homing, corresponding to endstop positions.
+    #define LULZBOT_X_MIN_POS -6// <-- changed
+    #define LULZBOT_Y_MIN_POS -13 // <-- changed
+    #define LULZBOT_X_MAX_POS 308 // <-- changed
+    #define LULZBOT_Y_MAX_POS 315 // <-- changed
+    #define LULZBOT_Z_MIN_POS -9 // <-- changed
+    #define LULZBOT_Z_MAX_POS 599 // <-- changed 
   #else
+    #define X_BED_SIZE 284
+    #define Y_BED_SIZE 286
+    // Travel limits (mm) after homing, corresponding to endstop positions.
     #define LULZBOT_X_MIN_POS -1
-    #define LULZBOT_Y_MIN_POS -13
+    #define LULZBOT_Y_MIN_POS -9
     #define LULZBOT_X_MAX_POS 313
-    #define LULZBOT_Y_MAX_POS 315 
+    #define LULZBOT_Y_MAX_POS 318
+    #define LULZBOT_Z_MIN_POS -9
+    #define LULZBOT_Z_MAX_POS 599 
   #endif
-  #define LULZBOT_Z_MIN_POS -1
-  #define LULZBOT_Z_MAX_POS 600
-
 #elif defined(Sidekick_289)
-  #define X_BED_SIZE 162           
-  #define Y_BED_SIZE 164            
+  #define X_BED_SIZE 161           
+  #define Y_BED_SIZE 161            
   // Travel limits (mm) after homing, corresponding to endstop positions.  
-  #define LULZBOT_X_MAX_POS  168   
-  #define LULZBOT_X_MIN_POS  -3.5  
-  #define LULZBOT_Y_MAX_POS  173   
-  #define LULZBOT_Y_MIN_POS  -36   
+  #define LULZBOT_X_MAX_POS  166   
+  #define LULZBOT_X_MIN_POS  -5.5  
+  #define LULZBOT_Y_MAX_POS  175   
+  #define LULZBOT_Y_MIN_POS  -27   
   #define LULZBOT_Z_MIN_POS  0     
-  #define LULZBOT_Z_MAX_POS  184.5 
+  #define LULZBOT_Z_MAX_POS  181.5 
 
 #elif defined(Sidekick_747)
   #define X_BED_SIZE 231            
   #define Y_BED_SIZE 231            
   // Travel limits (mm) after homing, corresponding to endstop positions.
   #define LULZBOT_X_MAX_POS  232    
-  #define LULZBOT_X_MIN_POS  -1     
+  #define LULZBOT_X_MIN_POS  -1.5     
   #define LULZBOT_Y_MAX_POS  240    
-  #define LULZBOT_Y_MIN_POS  -23    
+  #define LULZBOT_Y_MIN_POS  -16    
   #define LULZBOT_Z_MIN_POS  0      
-  #define LULZBOT_Z_MAX_POS  246.5    
+  #define LULZBOT_Z_MAX_POS  244.5    
 #endif
 
 // Travel limits (mm) after homing, corresponding to endstop positions.
@@ -1953,7 +1945,7 @@
  * RAMPS-based boards use SERVO3_PIN for the first runout sensor.
  * For other boards you may need to define FIL_RUNOUT_PIN, FIL_RUNOUT2_PIN, etc.
  */
-#if ANY(TAZPro, TAZProXT)
+#if ANY(TAZPro, TAZProXT, Sidekick_289, Sidekick_747)
   #define FILAMENT_RUNOUT_SENSOR
 #endif
 #if ENABLED(FILAMENT_RUNOUT_SENSOR)
@@ -2284,8 +2276,8 @@
 
 #if ENABLED(Z_SAFE_HOMING)
   #if ENABLED(TAZ6)
-    #define Z_SAFE_HOMING_X_POINT -22  // X point for Z homing
-    #define Z_SAFE_HOMING_Y_POINT 259  // Y point for Z homing
+    #define Z_SAFE_HOMING_X_POINT -20.1  // X point for Z homing
+    #define Z_SAFE_HOMING_Y_POINT 259.5  // Y point for Z homing
   #elif ANY(Sidekick_289, Sisdekick_747)
     #define Z_SAFE_HOMING_X_POINT (X_CENTER)  // X point for Z homing
     #define Z_SAFE_HOMING_Y_POINT (Y_BED_SIZE/2)  // Y point for Z homing
@@ -2494,7 +2486,7 @@
 #endif
 
 #if ENABLED(NOZZLE_CLEAN_FEATURE)
-  #define CLEAN_SCRIPT "M117 Hot end heating...\nM104 S170\nG28 O1\nM117 Wiping nozzle\nT0\nG1 X-17 Y25 Z10 F4000\nM109 R170\nG1 Z1\nM114\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 Z15\nM400\nM106 S255\nG0 X-10.0 Y-9.0M109 R160\nM107"
+  #define CLEAN_SCRIPT "M117 Hot end heating...\nM104 S170\nG28 O\nG12"
 
   // Default number of pattern repetitions
   #define NOZZLE_CLEAN_STROKES  12
@@ -2505,10 +2497,13 @@
   // Specify positions for each tool as { { X, Y, Z }, { X, Y, Z } }
   // Dual hotend system may use { {  -20, (Y_BED_SIZE / 2), (Z_MIN_POS + 1) },  {  420, (Y_BED_SIZE / 2), (Z_MIN_POS + 1) }}
   #if ENABLED(MiniV2)
-    #define NOZZLE_CLEAN_START_POINT {  45, 175, 0 }
-    #define NOZZLE_CLEAN_END_POINT   { 115, 175, 0 }
-  #elif ENABLED(TAZPro, TAZProXT)
-    #define NOZZLE_CLEAN_START_POINT {{  -17, 95, 1 }, { 297, 95, 1 }}
+    #define NOZZLE_CLEAN_START_POINT {  45, 177, 0 }
+    #define NOZZLE_CLEAN_END_POINT   { 115, 177, 0 }
+  #elif ANY(TAZPro, TAZProXT) && ENABLED(LULZBOT_UNIVERSAL_TOOLHEAD)
+    #define NOZZLE_CLEAN_START_POINT { 300, 95, 1 }
+    #define NOZZLE_CLEAN_END_POINT   { 300, 25, 1 }
+  #elif ANY(TAZPro, TAZProXT) && ENABLED(TOOLHEAD_Quiver_DualExtruder) 
+    #define NOZZLE_CLEAN_START_POINT {{ -17, 95, 1 }, { 297, 95, 1 }}
     #define NOZZLE_CLEAN_END_POINT   {{ -17, 25, 1 }, { 297, 25, 1 }}
   #else
     #define NOZZLE_CLEAN_START_POINT {  -17, 95, 1 }
@@ -2537,17 +2532,16 @@
 
   // Explicit wipe G-code script applies to a G12 with no arguments.
   #if ENABLED(MiniV2)
-    #define WIPE_SEQUENCE_COMMANDS "M117 Hot end heating...\nM104 S170\nG28 O1\nM117 Wiping nozzle\nT0\nG1 X115 Y175 Z10 F4000\nM109 R170\nG1 Z1\nM114\nG1 X115 Y175\nG1 X45 Y175\nG1 X115 Y175\nG1 X45 Y175\nG1 X115 Y175\nG1 X45 Y175\nG1 X115 Y175\nG1 X45 Y175\nG1 X115 Y175\nG1 X45 Y175\nG1 X115 Y175\nG1 X45 Y175\nG1 Z15\nM400\nM106 S255\nM107"
+    #define WIPE_SEQUENCE_COMMANDS "G28O\n M117 Hot end heating...\nM104 S170\nM117 Wiping nozzle\nT0\nG1 X115 Y177 Z10 F4000\nM109 R170\nG1 Z1\nM114\nG1 X115 \nG1 X45 \nG1 X115 \nG1 X45 \nG1 X115 \nG1 X45 \nG1 X115 \nG1 X45 \nG1 X115 \nG1 X45 \nG1 X115 \nG1 X45 \nG1 Z15\nM400\nM106 S255\nM109 R160\nM107\nM117 Wipe Complete"
   #elif ENABLED(TAZ6)
-    #define WIPE_SEQUENCE_COMMANDS "M117 Hot end heating...\nM104 S170\nG28 O1\nM117 Wiping nozzle\nT0\nG1 X-19 Y25 Z10 F4000\nM109 R170\nG1 Z1\nM114\nG1 X-19 Y25\nG1 X-19 Y95\nG1 X-19 Y25\nG1 X-19 Y95\nG1 X-19 Y25\nG1 X-19 Y95\nG1 X-19 Y25\nG1 X-19 Y95\nG1 X-19 Y25\nG1 X-19 Y95\nG1 X-19 Y25\nG1 X-19 Y95\nG1 Z15\nM400\nM106 S255\nM107"
+    #define WIPE_SEQUENCE_COMMANDS "G28O\n M117 Hot end heating...\nM104 S170\nM117 Wiping nozzle\nT0\nG1 X-17 Y25 Z10 F4000\nM109 R170\nG1 Z1\nM114\nG1 Y25\nG1 Y95\nG1 Y25\nG1 Y95\nG1 Y25\nG1 Y95\nG1 Y25\nG1 Y95\nG1 Y25\nG1 Y95\nG1 Y25\nG1 Y95\nG1 Z15\nM400\nM106 S255\nM109 R160\nM107\nM117 Wipe Complete"
   #elif ENABLED(Workhorse)
-    #define WIPE_SEQUENCE_COMMANDS "M117 Hot end heating...\nM104 S170\nG28 O1\nM117 Wiping nozzle\nT0\nG1 X-17 Y25 Z10 F4000\nM109 R170\nG1 Z1\nM114\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 Z15\nM400\nM106 S255\nM107"
-  #elif ENABLED(TAZPro) && ENABLED(LULZBOT_UNIVERSAL_TOOLHEAD)
-    #define WIPE_SEQUENCE_COMMANDS "G1 X301 Y25 Z10 F4000\nM109 R170 \nG1 Z-1\nM114\nG1 X301 Y25\nG1 X301 Y95\nG1 X301 Y25\nG1 X301 Y95\nG1 X301 Y25\nG1 X301 Y95\nG1 X301 Y25\nG1 X301 Y95\nG1 X301 Y25\nG1 X301 Y95\nG1 X301 Y25\nG1 X301 Y95\nG1 Z15\nM400\nM106 S255 \nM106 S255\nG0 Y-9.0\nM109 R160\nM107"
-  #elif ENABLED(TAZPro) && ENABLED(TOOLHEAD_Quiver_DualExtruder) 
-    #define WIPE_SEQUENCE_COMMANDS "G1 X-10.5 Y25 Z10 F4000\nM109 R170 T0\nG1 Z-1\nM114\nG1 X-10.5 Y25\nG1 X-10.5 Y95\nG1 X-10.5 Y25\nG1 X-10.5 Y95\nG1 X-10.5 Y25\nG1 X-10.5 Y95\nG1 X-10.5 Y25\nG1 X-10.5 Y95\nG1 X-10.5 Y25\nG1 X-10.5 Y95\nG1 X-10.5 Y25\nG1 X-10.5 Y95\nG1 Z15\nM400\nM106 S255 \nT0\nM106 S255\nM109 R160 T0\nM107"
+    #define WIPE_SEQUENCE_COMMANDS "G28O\n M117 Hot end heating...\nM104 S170\nM117 Wiping nozzle\nT0\nG1 X-17 Y25 Z10 F4000\nM109 R170\nG1 Z1\nM114\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 Z15\nM400\nM106 S255\nM109 R160\nM107\nM117 Wipe Complete"
+  #elif ANY(TAZPro, TAZProXT) && ENABLED(LULZBOT_UNIVERSAL_TOOLHEAD)
+    #define WIPE_SEQUENCE_COMMANDS "G28O\n M117 Hot end heating...\nM104 S170\nM117 Wiping nozzle\nT0\nG1 X300 Y25 Z10 F4000\nM109 R170 \nG1 Z-1 F4000\nM114\nG1 Y25 F4000\nG1 Y95 F4000\nG1 Y25 F4000\nG1 Y95 F4000\nG1 Y25 F4000\nG1 Y95 F4000\nG1 Y25 F4000\nG1 Y95 F4000\nG1 Y25 F4000\nG1 Y95 F4000\nG1 Y25 F4000\nG1 Y95 F4000\nG1 Z15 F4000\nM400\nM106 S255\nG0 Y-9.0 F4000\nM109 R160\nM107\nM117 Wipe Complete"
+  #elif ANY(TAZPro, TAZProXT) && ENABLED(TOOLHEAD_Quiver_DualExtruder) 
+    #define WIPE_SEQUENCE_COMMANDS "G1 X-17 Y25 Z10 F4000\nM109 R170 T0\nG1 Z-1\nM114\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 Z15\nM400\nM106 S255 \nT0\nM106 S255\nM109 R160 T0\nM107"
   #endif
-
 #endif
 
 /**
@@ -3485,12 +3479,12 @@
  * Set this manually if there are extra servos needing manual control.
  * Set to 0 to turn off servo support.
  */
-//#define NUM_SERVOS 3 // Servo index starts with 0 for M280 command
+#define NUM_SERVOS LULZBOT_NUM_SERVOS  // Servo index starts with 0 for M280 command
 
 // (ms) Delay  before the next move will start, to give the servo time to reach its target angle.
 // 300ms is a good value but you can try less delay.
 // If the servo can't reach the requested position, increase it.
-#define SERVO_DELAY { 300 }
+#define SERVO_DELAY LULZBOT_SERVO_DELAY
 
 // Only power servos during movement, otherwise leave off to prevent jitter
 //#define DEACTIVATE_SERVOS_AFTER_MOVE

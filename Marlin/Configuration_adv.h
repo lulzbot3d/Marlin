@@ -3009,11 +3009,11 @@
   #if EITHER(SENSORLESS_HOMING, SENSORLESS_PROBING)
     // TMC2209: 0...255. TMC2130: -64...63
     #if ANY(TAZPro, TAZProXT)
-      #if ANY(LULZBOT_UNIVERSAL_TOOLHEAD, TOOLHEAD_M175)
+      #if defined(LULZBOT_UNIVERSAL_TOOLHEAD)
         #define X_STALL_SENSITIVITY  3
         #define Y_STALL_SENSITIVITY  5
       #else      
-        #define X_STALL_SENSITIVITY  6
+        #define X_STALL_SENSITIVITY  5
         #define Y_STALL_SENSITIVITY  5 
       #endif
     #elif ENABLED(MiniV2)

@@ -744,7 +744,12 @@
 //#define MAX31865_SENSOR_OHMS_1      100
 //#define MAX31865_CALIBRATION_OHMS_1 430
 
-#define TEMP_RESIDENCY_TIME         10  // (seconds) Time to wait for hotend to "settle" in M109
+#if defined(TOOLHEAD_Quiver_DualExtruder) // Dual Extruder is having trouble reaching bounds for 
+  #define TEMP_RESIDENCY_TIME 5         // (seconds) Time to wait for hotend to "settle" in M109
+#else
+  #define TEMP_RESIDENCY_TIME 10
+#endif
+//#define TEMP_RESIDENCY_TIME         10  // (seconds) Time to wait for hotend to "settle" in M109
 #define TEMP_WINDOW                  1  // (°C) Temperature proximity for the "temperature reached" timer
 #define TEMP_HYSTERESIS              3  // (°C) Temperature proximity considered "close enough" to the target
 

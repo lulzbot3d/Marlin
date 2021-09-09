@@ -72,9 +72,9 @@ void GcodeSuite::M48() {
 
   const ProbePtRaise raise_after = parser.boolval('E') ? PROBE_PT_STOW : PROBE_PT_RAISE;
 
-  //seting location of above the front left washer of it uses nozzle as probe
+  //setting tool head location to be above the front left washer if the printer uses nozzle as probe
   #if ANY(Sidekick_289, Sidekick_747)
-    #define PROBE_OFFSET_XY_POS { X_CENTER, Y_CENTER } //centering the nozzle to make sure the BLTouch is not on the edge of the build plate
+    #define PROBE_OFFSET_XY_POS { X_CENTER, Y_CENTER } //place center to keep nozzle away from the edge of the bed
   #elif ENABLED(MiniV2)
     #define PROBE_OFFSET_XY_POS { -4, -4 }
   #elif ENABLED(TAZ6)

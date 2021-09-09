@@ -10,14 +10,14 @@
 //#define TazDualZ
 
 /************** Uncomment a Tool Head Option From Below *********************/
-//#define LULZBOT_UNIVERSAL_TOOLHEAD
+#define LULZBOT_UNIVERSAL_TOOLHEAD
 //#define TOOLHEAD_SL_SE_HE
 //#define TOOLHEAD_HS_HSPLUS
 //#define TOOLHEAD_H175
 //#define TOOLHEAD_M175
 //#define TOOLHEAD_SK175
 //#define TOOLHEAD_SK285
-#define TOOLHEAD_Quiver_DualExtruder            // TAZ Pro Dual Extruder
+//#define TOOLHEAD_Quiver_DualExtruder            // TAZ Pro Dual Extruder
 //#define TOOLHEAD_Albatross_Flexystruder         // TAZ Legacy Flexystruder
 //#define TOOLHEAD_Finch_Aerostruder              // TAZ Legacy Titan Aerostruder v1 0.50 mm
 //#define TOOLHEAD_Tilapia_SingleExtruder         // TAZ Legacy Standard Single Extruder 
@@ -3485,15 +3485,25 @@
  * Set this manually if there are extra servos needing manual control.
  * Set to 0 to turn off servo support.
  */
-#define NUM_SERVOS LULZBOT_NUM_SERVOS  // Servo index starts with 0 for M280 command
+//#define NUM_SERVOS LULZBOT_NUM_SERVOS  // Servo index starts with 0 for M280 command
 
 // (ms) Delay  before the next move will start, to give the servo time to reach its target angle.
 // 300ms is a good value but you can try less delay.
 // If the servo can't reach the requested position, increase it.
-#define SERVO_DELAY LULZBOT_SERVO_DELAY
+//#define SERVO_DELAY LULZBOT_SERVO_DELAY
 
 // Only power servos during movement, otherwise leave off to prevent jitter
 //#define DEACTIVATE_SERVOS_AFTER_MOVE
 
 // Edit servo angles with M281 and save to EEPROM with M500
 //#define EDITABLE_SERVO_ANGLES
+
+#if defined(TOOLHEAD_Quiver_DualExtruder)
+  #define SERVO_DELAY LULZBOT_SERVO_DELAY
+  #define NUM_SERVOS LULZBOT_NUM_SERVOS
+#elif ANY(LULZBOT_Sidekick_289, LULZBOT_Sidekick_747)
+    #define NUM_SERVOS 1
+#else
+  #define SERVO_DELAY 0
+  #define NUM_SERVOS 0
+#endif

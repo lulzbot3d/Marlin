@@ -72,8 +72,9 @@ void GcodeSuite::M48() {
 
   const ProbePtRaise raise_after = parser.boolval('E') ? PROBE_PT_STOW : PROBE_PT_RAISE;
 
+  //seting location of above the front left washer of it uses nozzle as probe
   #if ANY(Sidekick_289, Sidekick_747)
-    #define PROBE_OFFSET_XY_POS { X_CENTER, Y_CENTER }
+    #define PROBE_OFFSET_XY_POS { X_CENTER, Y_CENTER } //centering the nozzle to make sure the BLTouch is not on the edge of the build plate
   #elif ENABLED(MiniV2)
     #define PROBE_OFFSET_XY_POS { -4, -4 }
   #elif ENABLED(TAZ6)
@@ -81,9 +82,9 @@ void GcodeSuite::M48() {
   #elif ENABLED(Workhorse)
     #define PROBE_OFFSET_XY_POS { -10, -10 }
   #endif
-  
+
   constexpr xy_pos_t probe_point = PROBE_OFFSET_XY_POS;
-  do_blocking_move_to_xy(probe_point);
+  do_blocking_move_to_xy(probe_point); //moving toolhead to probe point
 
   // Test at the current position by default, overridden by X and Y
   const xy_pos_t test_position = {

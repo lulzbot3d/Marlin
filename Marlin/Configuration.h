@@ -1647,7 +1647,7 @@
 #define Z_PROBE_OFFSET_RANGE_MAX 5
 
 // Enable the M48 repeatability test to test probe accuracy
-#if ENABLED(LULZBOT_BLTouch)
+#if DISABLED(TAZPro, TAZProXT)
   #define Z_MIN_PROBE_REPEATABILITY_TEST
 #endif
 

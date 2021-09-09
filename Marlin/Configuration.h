@@ -10,14 +10,14 @@
 //#define TazDualZ
 
 /************** Uncomment a Tool Head Option From Below *********************/
-#define LULZBOT_UNIVERSAL_TOOLHEAD
+//#define LULZBOT_UNIVERSAL_TOOLHEAD
 //#define TOOLHEAD_SL_SE_HE
 //#define TOOLHEAD_HS_HSPLUS
 //#define TOOLHEAD_H175
 //#define TOOLHEAD_M175
 //#define TOOLHEAD_SK175
 //#define TOOLHEAD_SK285
-//#define TOOLHEAD_Quiver_DualExtruder            // TAZ Pro Dual Extruder
+#define TOOLHEAD_Quiver_DualExtruder            // TAZ Pro Dual Extruder
 //#define TOOLHEAD_Albatross_Flexystruder         // TAZ Legacy Flexystruder
 //#define TOOLHEAD_Finch_Aerostruder              // TAZ Legacy Titan Aerostruder v1 0.50 mm
 //#define TOOLHEAD_Tilapia_SingleExtruder         // TAZ Legacy Standard Single Extruder 
@@ -1735,10 +1735,11 @@
 // For direct drive extruder v9 set to true, for geared extruder set to false.
 #if ANY(Workhorse,TAZ6, TAZPro, TAZProXT)
   #define INVERT_E0_DIR true
+  #define INVERT_E1_DIR true
 #else
   #define INVERT_E0_DIR false
+  #define INVERT_E1_DIR false
 #endif
-#define INVERT_E1_DIR false
 #define INVERT_E2_DIR false
 #define INVERT_E3_DIR false
 #define INVERT_E4_DIR false

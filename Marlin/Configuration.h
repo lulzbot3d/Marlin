@@ -2486,7 +2486,7 @@
  *   Caveats: The ending Z should be the same as starting Z.
  * Attention: EXPERIMENTAL. G-code arguments may change.
  */
-#if DISABLED(Sidekick_289, Sisdekick_747)
+#if DISABLED(Sidekick_289, Sidekick_747)
   #define NOZZLE_CLEAN_FEATURE
 #endif
 

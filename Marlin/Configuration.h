@@ -10,7 +10,7 @@
 //#define TazDualZ
 
 /************** Uncomment a Tool Head Option From Below *********************/
-#define LULZBOT_UNIVERSAL_TOOLHEAD
+//#define LULZBOT_UNIVERSAL_TOOLHEAD
 //#define TOOLHEAD_SL_SE_HE
 //#define TOOLHEAD_HS_HSPLUS
 //#define TOOLHEAD_H175
@@ -744,7 +744,11 @@
 //#define MAX31865_SENSOR_OHMS_1      100
 //#define MAX31865_CALIBRATION_OHMS_1 430
 
-#define TEMP_RESIDENCY_TIME         10  // (seconds) Time to wait for hotend to "settle" in M109
+#if defined(TOOLHEAD_Quiver_DualExtruder) // Shorten time that Dual Extruder has to wait for M109
+  #define TEMP_RESIDENCY_TIME 5         // (seconds) Time to wait for hotend to "settle" in M109
+#else
+  #define TEMP_RESIDENCY_TIME 10        // (seconds) Time to wait for hotend to "settle" in M109
+#endif
 #define TEMP_WINDOW                  1  // (°C) Temperature proximity for the "temperature reached" timer
 #define TEMP_HYSTERESIS              3  // (°C) Temperature proximity considered "close enough" to the target
 
@@ -1735,10 +1739,11 @@
 // For direct drive extruder v9 set to true, for geared extruder set to false.
 #if ANY(Workhorse,TAZ6, TAZPro, TAZProXT)
   #define INVERT_E0_DIR true
+  #define INVERT_E1_DIR true
 #else
   #define INVERT_E0_DIR false
+  #define INVERT_E1_DIR false
 #endif
-#define INVERT_E1_DIR false
 #define INVERT_E2_DIR false
 #define INVERT_E3_DIR false
 #define INVERT_E4_DIR false
@@ -3479,13 +3484,15 @@
  * Set this manually if there are extra servos needing manual control.
  * Set to 0 to turn off servo support.
  */
-#define NUM_SERVOS LULZBOT_NUM_SERVOS  // Servo index starts with 0 for M280 command
-
+#if defined(LULZBOT_NUM_SERVOS)
+  #define NUM_SERVOS LULZBOT_NUM_SERVOS  // Servo index starts with 0 for M280 command
+#endif
 // (ms) Delay  before the next move will start, to give the servo time to reach its target angle.
 // 300ms is a good value but you can try less delay.
 // If the servo can't reach the requested position, increase it.
-#define SERVO_DELAY LULZBOT_SERVO_DELAY
-
+#if defined(LULZBOT_SERVO_DELAY)
+  #define SERVO_DELAY LULZBOT_SERVO_DELAY
+#endif
 // Only power servos during movement, otherwise leave off to prevent jitter
 //#define DEACTIVATE_SERVOS_AFTER_MOVE
 

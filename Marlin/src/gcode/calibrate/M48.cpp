@@ -28,6 +28,7 @@
 #include "../../module/motion.h"
 #include "../../module/probe.h"
 #include "../../lcd/marlinui.h"
+#include "../../../Configuration_adv.h"
 
 #include "../../feature/bedlevel/bedlevel.h"
 
@@ -72,19 +73,8 @@ void GcodeSuite::M48() {
 
   const ProbePtRaise raise_after = parser.boolval('E') ? PROBE_PT_STOW : PROBE_PT_RAISE;
 
-  //setting tool head location to be above the front left washer if the printer uses nozzle as probe
-  #if ANY(Sidekick_289, Sidekick_747)
-    #define PROBE_OFFSET_XY_POS { X_CENTER, Y_CENTER } //place center to keep nozzle away from the edge of the bed
-  #elif ENABLED(MiniV2)
-    #define PROBE_OFFSET_XY_POS { -4, -4 }
-  #elif ENABLED(TAZ6)
-    #define PROBE_OFFSET_XY_POS { -8, -8 }
-  #elif ENABLED(Workhorse)
-    #define PROBE_OFFSET_XY_POS { -10, -10 }
-  #endif
-
-  constexpr xy_pos_t probe_point = PROBE_OFFSET_XY_POS;
-  do_blocking_move_to_xy(probe_point); //moving toolhead to probe point
+  constexpr xy_pos_t probe_point = PROBE_SAFE_POINT;
+  do_blocking_move_to_xy(probe_point); //moving toolhead to a safe probing point
 
   // Test at the current position by default, overridden by X and Y
   const xy_pos_t test_position = {

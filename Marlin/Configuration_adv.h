@@ -1272,15 +1272,7 @@
       #define PROBE_OFFSET_WIZARD_START_Z 1.0
 
       // Set a convenient position to do the calibration (probing point and nozzle/bed-distance)
-      #if ANY(Sidekick_289, Sidekick_747)
-        #define PROBE_OFFSET_WIZARD_XY_POS { X_CENTER, Y_CENTER }
-      #elif ENABLED(MiniV2)
-        #define PROBE_OFFSET_WIZARD_XY_POS { -4, -4 }
-      #elif ENABLED(TAZ6)
-        #define PROBE_OFFSET_WIZARD_XY_POS { -8, -8 }
-      #elif ENABLED(Workhorse)
-        #define PROBE_OFFSET_WIZARD_XY_POS { -10, -10 }
-      #endif
+      #define PROBE_OFFSET_WIZARD_XY_POS PROBE_SAFE_POINT
     #endif
   #endif
 

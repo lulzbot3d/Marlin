@@ -1570,6 +1570,20 @@
     #define PROBING_MARGIN -9
   #endif
 #endif
+
+//Defining a safe position to probe for M48 and PROBE_OFFSET_WIZARD
+#if ANY(Sidekick_289, Sidekick_747)
+  #define PROBE_SAFE_POINT { X_CENTER, Y_CENTER }
+#elif ENABLED(MiniV2)
+  #define PROBE_SAFE_POINT { -4, -4 }
+#elif ENABLED(TAZ6)
+  #define PROBE_SAFE_POINT { -8, -8 }
+#elif ENABLED(Workhorse)
+  #define PROBE_SAFE_POINT { -10, -10 }
+#elif ANY(TAZPro, TAZProXT)
+  #define PROBE_SAFE_POINT { -9, -9 }
+#endif
+
 // X and Y axis travel speed (mm/min) between probes
 #define XY_PROBE_FEEDRATE (200*60)
 

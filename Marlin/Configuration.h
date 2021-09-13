@@ -10,7 +10,7 @@
 //#define TazDualZ
 
 /************** Uncomment a Tool Head Option From Below *********************/
-//#define LULZBOT_UNIVERSAL_TOOLHEAD
+#define LULZBOT_UNIVERSAL_TOOLHEAD
 //#define TOOLHEAD_SL_SE_HE
 //#define TOOLHEAD_HS_HSPLUS
 //#define TOOLHEAD_H175
@@ -1880,7 +1880,7 @@
   #define X_BED_SIZE 231            
   #define Y_BED_SIZE 231            
   // Travel limits (mm) after homing, corresponding to endstop positions.
-  #define LULZBOT_X_MAX_POS  232    
+  #define LULZBOT_X_MAX_POS  230   
   #define LULZBOT_X_MIN_POS  -1.5     
   #define LULZBOT_Y_MAX_POS  240    
   #define LULZBOT_Y_MIN_POS  -16    

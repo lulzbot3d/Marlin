@@ -747,9 +747,8 @@
 #if defined(TOOLHEAD_Quiver_DualExtruder) // Shorten time that Dual Dxtruder has to wait for M109
   #define TEMP_RESIDENCY_TIME 5         // (seconds) Time to wait for hotend to "settle" in M109
 #else
-  #define TEMP_RESIDENCY_TIME 10
+  #define TEMP_RESIDENCY_TIME 10        // (seconds) Time to wait for hotend to "settle" in M109
 #endif
-//#define TEMP_RESIDENCY_TIME         10  // (seconds) Time to wait for hotend to "settle" in M109
 #define TEMP_WINDOW                  1  // (°C) Temperature proximity for the "temperature reached" timer
 #define TEMP_HYSTERESIS              3  // (°C) Temperature proximity considered "close enough" to the target
 

@@ -1880,7 +1880,7 @@
   #define X_BED_SIZE 231            
   #define Y_BED_SIZE 231            
   // Travel limits (mm) after homing, corresponding to endstop positions.
-  #define LULZBOT_X_MAX_POS  232    
+  #define LULZBOT_X_MAX_POS  230   
   #define LULZBOT_X_MIN_POS  -1.5     
   #define LULZBOT_Y_MAX_POS  240    
   #define LULZBOT_Y_MIN_POS  -16    
@@ -2486,7 +2486,7 @@
  *   Caveats: The ending Z should be the same as starting Z.
  * Attention: EXPERIMENTAL. G-code arguments may change.
  */
-#if DISABLED(Sidekick_289, Sisdekick_747)
+#if DISABLED(Sidekick_289, Sidekick_747)
   #define NOZZLE_CLEAN_FEATURE
 #endif
 

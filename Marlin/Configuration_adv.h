@@ -4103,6 +4103,14 @@
   #define GANTRY_CALIBRATION_COMMANDS_POST  "G28"
 #endif
 
+#if ANY(TAZPro,TAZProXT,Workhorse)
+  #define X_LEVEL_SEQUENCE
+#endif
+#if defined (X_LEVEL_SEQUENCE)
+  #if ANY(TAZPro,TAZProXT,Workhorse)
+    #define LEVELING_COMMANDS "G28 Z\nM18 Z\nG4 P300\nG28 Z" //Homing to the top, disabling the Z motors for 300ms and then rehoming Z
+  #endif
+#endif
 /**
  * Instant freeze / unfreeze functionality
  * Specified pin has pullup and connecting to ground will instantly pause motion.

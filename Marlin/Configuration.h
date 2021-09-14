@@ -1580,10 +1580,11 @@
   #define PROBE_SAFE_POINT { -8, -8 }
 #elif ENABLED(Workhorse)
   #define PROBE_SAFE_POINT { -10, -10 }
-#elif ANY(TAZPro, TAZProXT) && defined (LULZBOT_UNIVERSAL_TOOLHEAD)
-  #define PROBE_SAFE_POINT { -1, -9 }
-#elif ANY(TAZPro, TAZProXT) && defined (TOOLHEAD_Quiver_DualExtruder) 
-  #define PROBE_SAFE_POINT { -6, -9 }
+#elif ANY(TAZPro, TAZProXT)
+    #if DEFINED(TOOLHEAD_Quiver_DualExtruder)
+        #define PROBE_SAFE_POINT { -6, -9 } //safe probe point for dual extruder on Pro/XT
+    #else
+        #define PROBE_SAFE_POINT { -1, -9 } //safe probe point for single extruder toolheads on Pro/XT
 #endif
 
 // X and Y axis travel speed (mm/min) between probes

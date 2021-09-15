@@ -386,7 +386,7 @@
   #define LULZBOT_TOOLHEAD_Z_MAX_ADJ             0
   #define LULZBOT_TOOLHEAD_Z_MIN_ADJ             0
 #endif
-#if defined(TOOLHEAD_SE_SL_HE)
+#if defined(TOOLHEAD_SL_SE_HE)
   #undef LULZBOT_M115_EXTRUDER_TYPE
   #define LULZBOT_M115_EXTRUDER_TYPE       "Titan Areo"
 #elif defined(TOOLHEAD_HS_HSPLUS)

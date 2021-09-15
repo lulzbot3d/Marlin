@@ -764,8 +764,13 @@
 #if ANY(MiniV2, TAZPro, TAZProXT, Sidekick_289, Sidekick_747)
   #define SENSORLESS_BACKOFF_MM  { 4, 4 , 0}     // (mm) Backoff from endstops before sensorless homing
 #else
-  #define HOMING_BACKOFF_POST_MM { 2, 2, 16 }  // (mm) Backoff from endstops after homing
-  #define QUICK_HOME                          // If G28 contains XY do a diagonal move first
+  #if defined(Workhorse)
+    #define HOMING_BACKOFF_POST_MM { 2, 2, 0 }  // (mm) Backoff from endstops after homing
+    #define QUICK_HOME                          // If G28 contains XY do a diagonal move first
+  #elif defined(TAZ6)
+    #define HOMING_BACKOFF_POST_MM { 2, 2, 16 }  // (mm) Backoff from endstops after homing
+    #define QUICK_HOME                          // If G28 contains XY do a diagonal move first
+  #endif
 #endif
 
 #define HOMING_BUMP_MM      { 5, 5, 2 }       // (mm) Backoff from endstops after first bump

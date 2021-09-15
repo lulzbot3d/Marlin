@@ -40,7 +40,7 @@ using namespace Theme;
   #define LEVEL_AXIS_POS     BTN_POS(1,2), BTN_SIZE(2,1)
   #define BED_MESH_TITLE_POS BTN_POS(1,3), BTN_SIZE(2,1)
   #define PROBE_BED_POS      BTN_POS(1,4), BTN_SIZE(1,1)
-  #define TEST_MESH_POS      BTN_POS(2,4), BTN_SIZE(1,1)
+  #define M48_TEST_POS       BTN_POS(2,4), BTN_SIZE(1,1)
   #define SHOW_MESH_POS      BTN_POS(1,5), BTN_SIZE(1,1)
   #define EDIT_MESH_POS      BTN_POS(2,5), BTN_SIZE(1,1)
   #define BLTOUCH_TITLE_POS  BTN_POS(1,6), BTN_SIZE(2,1)
@@ -54,7 +54,7 @@ using namespace Theme;
   #define LEVEL_AXIS_POS     BTN_POS(1,2), BTN_SIZE(3,1)
   #define BED_MESH_TITLE_POS BTN_POS(1,3), BTN_SIZE(2,1)
   #define PROBE_BED_POS      BTN_POS(1,4), BTN_SIZE(1,1)
-  #define TEST_MESH_POS      BTN_POS(2,4), BTN_SIZE(1,1)
+  #define M48_TEST_POS       BTN_POS(2,4), BTN_SIZE(1,1)
   #define SHOW_MESH_POS      BTN_POS(1,5), BTN_SIZE(1,1)
   #define EDIT_MESH_POS      BTN_POS(2,5), BTN_SIZE(1,1)
   #define BLTOUCH_TITLE_POS  BTN_POS(3,3), BTN_SIZE(1,1)
@@ -81,12 +81,12 @@ void LevelingMenu::onRedraw(draw_mode_t what) {
        .text(BLTOUCH_TITLE_POS, GET_TEXT_F(MSG_BLTOUCH))
     #endif
        .font(font_medium).colors(normal_btn)
-       .enabled(EITHER(Z_STEPPER_AUTO_ALIGN,MECHANICAL_GANTRY_CALIBRATION))
+       .enabled(ANY(Z_STEPPER_AUTO_ALIGN,MECHANICAL_GANTRY_CALIBRATION,X_LEVEL_SEQUENCE))
        .tag(2).button(LEVEL_AXIS_POS, GET_TEXT_F(MSG_LEVEL_X_AXIS))
        .tag(3).button(PROBE_BED_POS, GET_TEXT_F(MSG_PROBE_BED))
+       .enabled(ENABLED(Z_MIN_PROBE_REPEATABILITY_TEST))        //Taking over mesh view option due to using Bilinear leveling and not being able to edit the mesh
+       .tag(4).button(M48_TEST_POS, GET_TEXT_F(MSG_M48_TEST))
     #if DISABLED (AUTO_BED_LEVELING_BILINEAR)
-       .enabled(ENABLED(HAS_MESH))
-       .tag(4).button(SHOW_MESH_POS, GET_TEXT_F(MSG_SHOW_MESH))
        .enabled(ENABLED(HAS_MESH))
        .tag(5).button(EDIT_MESH_POS, GET_TEXT_F(MSG_EDIT_MESH))
        .enabled(ENABLED(G26_MESH_VALIDATION))
@@ -105,7 +105,9 @@ bool LevelingMenu::onTouchEnd(uint8_t tag) {
   switch (tag) {
     case 1: GOTO_PREVIOUS();                   break;
     #if EITHER(Z_STEPPER_AUTO_ALIGN,MECHANICAL_GANTRY_CALIBRATION)
-    case 2: SpinnerDialogBox::enqueueAndWait_P(F("G34")); break;
+      case 2: SpinnerDialogBox::enqueueAndWait_P(F("G34")); break;
+    #else
+      case 2: SpinnerDialogBox::enqueueAndWait_P(F(LEVELING_COMMANDS)); break;
     #endif
     case 3:
     #ifndef BED_LEVELING_COMMANDS
@@ -117,16 +119,16 @@ bool LevelingMenu::onTouchEnd(uint8_t tag) {
       SpinnerDialogBox::enqueueAndWait_P(F(BED_LEVELING_COMMANDS));
     #endif
     break;
+    case 4: SpinnerDialogBox::enqueueAndWait_P(F("G28O\nM48")); break;
     #if ENABLED(AUTO_BED_LEVELING_UBL)
-    case 4: BedMeshViewScreen::show(); break;
-    case 5: BedMeshEditScreen::show(); break;
+      case 5: BedMeshEditScreen::show(); break;
     #endif
     #if ENABLED(G26_MESH_VALIDATION)
-    case 6: BedMeshViewScreen::doMeshValidation(); break;
+      case 6: BedMeshViewScreen::doMeshValidation(); break;
     #endif
     #if ENABLED(BLTOUCH)
-    case 7: injectCommands_P(PSTR("M280 P0 S60")); break;
-    case 8: SpinnerDialogBox::enqueueAndWait_P(F("M280 P0 S90\nG4 P100\nM280 P0 S120")); break;
+      case 7: injectCommands_P(PSTR("M280 P0 S60")); break;
+      case 8: SpinnerDialogBox::enqueueAndWait_P(F("M280 P0 S90\nG4 P100\nM280 P0 S120")); break;
     #endif
     default: return false;
   }

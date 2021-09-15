@@ -97,7 +97,7 @@
 // Author info of this build printed to the host during boot and M115
 #define STRING_CONFIG_H_AUTHOR "Lulzbot" // Who made the changes.
 #define CUSTOM_VERSION_FILE Version.h // Path from the root directory (no quotes)
-#define LULZBOT_FW_VERSION "2.0.9.0.5" 
+#define LULZBOT_FW_VERSION "2.0.9.0.6" 
 
 /**
  * *** VENDORS PLEASE READ ***
@@ -1574,6 +1574,24 @@
     #define PROBING_MARGIN -9
   #endif
 #endif
+
+//Defining a safe position to probe for M48 and PROBE_OFFSET_WIZARD
+#if ANY(Sidekick_289, Sidekick_747)
+  #define PROBE_SAFE_POINT { X_CENTER, Y_CENTER }
+#elif ENABLED(MiniV2)
+  #define PROBE_SAFE_POINT { -4, -4 }
+#elif ENABLED(TAZ6)
+  #define PROBE_SAFE_POINT { -8, -8 }
+#elif ENABLED(Workhorse)
+  #define PROBE_SAFE_POINT { -10, -10 }
+#elif ANY(TAZPro, TAZProXT)
+  #if DEFINED(TOOLHEAD_Quiver_DualExtruder)
+    #define PROBE_SAFE_POINT { -6, -9 } //safe probe point for dual extruder on Pro/XT
+  #else
+    #define PROBE_SAFE_POINT { -1, -9 } //safe probe point for single extruder toolheads on Pro/XT
+  #endif
+#endif
+
 // X and Y axis travel speed (mm/min) between probes
 #define XY_PROBE_FEEDRATE (200*60)
 
@@ -1651,9 +1669,7 @@
 #define Z_PROBE_OFFSET_RANGE_MAX 5
 
 // Enable the M48 repeatability test to test probe accuracy
-#if ENABLED(LULZBOT_BLTouch)
-  #define Z_MIN_PROBE_REPEATABILITY_TEST
-#endif
+#define Z_MIN_PROBE_REPEATABILITY_TEST
 
 // Before deploy/stow pause for user confirmation
 //#define PAUSE_BEFORE_DEPLOY_STOW

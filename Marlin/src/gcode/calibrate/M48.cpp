@@ -28,6 +28,7 @@
 #include "../../module/motion.h"
 #include "../../module/probe.h"
 #include "../../lcd/marlinui.h"
+#include "../../../Configuration_adv.h"
 
 #include "../../feature/bedlevel/bedlevel.h"
 
@@ -71,6 +72,9 @@ void GcodeSuite::M48() {
   }
 
   const ProbePtRaise raise_after = parser.boolval('E') ? PROBE_PT_STOW : PROBE_PT_RAISE;
+
+  constexpr xy_pos_t probe_point = PROBE_SAFE_POINT;
+  do_blocking_move_to_xy(probe_point); //moving toolhead to a safe probing point
 
   // Test at the current position by default, overridden by X and Y
   const xy_pos_t test_position = {

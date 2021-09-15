@@ -1199,10 +1199,14 @@
  *    M909, M910 & LCD - only PRINTRBOARD_REVF & RIGIDBOARD_V2
  */
 //#define PWM_MOTOR_CURRENT { 1300, 1300, 1250 }          // Values in milliamps
+#if !defined(LULZBOT_MOTOR_CURRENT_E1)
+  #define LULZBOT_MOTOR_CURRENT_E1 0
+#endif
+
 #if ENABLED(TAZ6)
-  #define DIGIPOT_MOTOR_CURRENT { 175,175,200,135,135 }   // Values 0-255 (RAMBO 135 = ~0.75A, 185 = ~1A)
+  #define DIGIPOT_MOTOR_CURRENT { 175,175,200,LULZBOT_MOTOR_CURRENT_E0, LULZBOT_MOTOR_CURRENT_E1 }   // Values 0-255 (RAMBO 135 = ~0.75A, 185 = ~1A)
 #elif ENABLED(Workhorse)
-  #define DIGIPOT_MOTOR_CURRENT {175, 175, 180, 177, 177} //  Values 0-255 (RAMBO 135 = ~0.75A, 185 = ~1A)
+  #define DIGIPOT_MOTOR_CURRENT {175, 175, 180, LULZBOT_MOTOR_CURRENT_E0, LULZBOT_MOTOR_CURRENT_E1} //  Values 0-255 (RAMBO 135 = ~0.75A, 185 = ~1A)
 #endif
 //#define DAC_MOTOR_CURRENT_DEFAULT { 70, 80, 90, 80 }    // Default drive percent - X, Y, Z, E axis
 
@@ -2744,7 +2748,7 @@
   #endif
 
   #if AXIS_IS_TMC(E0)
-    #define E0_CURRENT      800
+    #define E0_CURRENT      LULZBOT_MOTOR_CURRENT_E0
     #define E0_MICROSTEPS    16
     #define E0_RSENSE         0.11
     #define E0_CHAIN_POS     -1
@@ -2752,7 +2756,7 @@
   #endif
 
   #if AXIS_IS_TMC(E1)
-    #define E1_CURRENT      800
+    #define E1_CURRENT      LULZBOT_MOTOR_CURRENT_E1
     #define E1_MICROSTEPS   E0_MICROSTEPS
     #define E1_RSENSE         0.11
     #define E1_CHAIN_POS     -1

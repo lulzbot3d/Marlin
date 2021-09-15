@@ -324,8 +324,8 @@
     #define LULZBOT_LCD_TOOLHEAD_NAME              "Dual Extruder 3"
 //          16 chars max                            ^^^^^^^^^^^^^^^
     #define LULZBOT_M115_EXTRUDER_TYPE         "DualExtruder v3"
-    #define LULZBOT_MOTOR_CURRENT_E0           875 // mA
-    #define LULZBOT_MOTOR_CURRENT_E1           875 // mA
+    #define LULZBOT_MOTOR_CURRENT_E0           177 // Values 0-255 (RAMBO 135 = ~0.75A, 185 = ~1A)
+    #define LULZBOT_MOTOR_CURRENT_E1           177 // Values 0-255 (RAMBO 135 = ~0.75A, 185 = ~1A)
     #define LULZBOT_EXTRUDERS                  2
     #define LULZBOT_TEMP_SENSOR_1              5
     #define LULZBOT_DISTINCT_E_FACTORS
@@ -377,7 +377,6 @@
 #if defined(LULZBOT_UNIVERSAL_TOOLHEAD) || ANY(TOOLHEAD_SK285,TOOLHEAD_SK175,TOOLHEAD_M175,TOOLHEAD_H175,TOOLHEAD_SL_SE_HE, TOOLHEAD_HS_HSPLUS)
   #define LULZBOT_UNIVERSAL_MOUNT
   #define LULZBOT_EXTRUDERS                  1
-  #define LULZBOT_MOTOR_CURRENT_E          960 // mA
   #define LULZBOT_M115_EXTRUDER_TYPE       "Universal"
   #define LULZBOT_TOOLHEAD_X_MAX_ADJ             0
   #define LULZBOT_TOOLHEAD_X_MIN_ADJ             0
@@ -385,6 +384,11 @@
   #define LULZBOT_TOOLHEAD_Y_MIN_ADJ             0
   #define LULZBOT_TOOLHEAD_Z_MAX_ADJ             0
   #define LULZBOT_TOOLHEAD_Z_MIN_ADJ             0
+  #if ANY(TAZ6, Workhorse)
+    #define LULZBOT_MOTOR_CURRENT_E0          177 // Values 0-255 (RAMBO 135 = ~0.75A, 185 = ~1A)
+  #else
+    #define LULZBOT_MOTOR_CURRENT_E0          960 // mA
+  #endif
 #endif
 #if defined(TOOLHEAD_SL_SE_HE)
   #undef LULZBOT_M115_EXTRUDER_TYPE

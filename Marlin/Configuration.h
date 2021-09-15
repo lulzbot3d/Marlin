@@ -1585,6 +1585,7 @@
     #define PROBE_SAFE_POINT { -6, -9 } //safe probe point for dual extruder on Pro/XT
   #else
     #define PROBE_SAFE_POINT { -1, -9 } //safe probe point for single extruder toolheads on Pro/XT
+  #endif
 #endif
 
 // X and Y axis travel speed (mm/min) between probes

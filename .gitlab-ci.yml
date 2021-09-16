@@ -1,0 +1,35 @@
+image: python:3.9
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.pip-cache"
+  PLATFORMIO_CACHE_DIR: "$CI_PROJECT_DIR/.platformio-cache"
+
+cache:
+  paths:
+    - .pip-cache/
+    - .platformio-cache/
+
+stages:
+  - build
+
+before_script:
+  - "pip install -U platformio"
+
+build_all:
+  stage: build
+  script:
+    - pio run -e $PIO_ENV
+    # Workaround for artifacts:expose_as not being compatible with the use of variables in artifacts:paths
+    # Instead we can move the firmware from env folder to a common location
+    - mv .pio/build/$PIO_ENV/firmware.hex . || true
+    - mv .pio/build/$PIO_ENV/firmware.bin . || true
+  parallel:
+    matrix:
+      - PIO_ENV: [MiniV2, TAZ6, Workhorse, TAZPro, TAZProXT, Sidekick_289, Sidekick_747]
+  artifacts:
+    expose_as: firmware
+    name: $PIO_ENV-$CI_PIPELINE_IID-$CI_COMMIT_SHA
+    paths:
+      - firmware.hex
+      - firmware.bin
+    expire_in: 14 days

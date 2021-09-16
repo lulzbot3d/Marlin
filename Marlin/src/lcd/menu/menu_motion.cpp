@@ -391,7 +391,7 @@ void menu_motion() {
   // Clean Nozzle
   //
   #if defined(NOZZLE_CLEAN_FEATURE)
-    GCODES_ITEM(MSG_NOZZLE_CLEAN, PSTR("G28O\nM117 cleaning Nozzle\nG12\nM77\nM117 Nozzle Clean"));
+    GCODES_ITEM(MSG_NOZZLE_CLEAN, PSTR(CLEAN_SCRIPT));
   #endif
 
   //

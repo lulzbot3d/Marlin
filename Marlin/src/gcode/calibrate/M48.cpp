@@ -73,14 +73,29 @@ void GcodeSuite::M48() {
 
   const ProbePtRaise raise_after = parser.boolval('E') ? PROBE_PT_STOW : PROBE_PT_RAISE;
 
-  constexpr xy_pos_t probe_point = PROBE_SAFE_POINT;
-  do_blocking_move_to_xy(probe_point); //moving toolhead to a safe probing point
+  constexpr xy_pos_t safe_point = PROBE_SAFE_POINT;
 
-  // Test at the current position by default, overridden by X and Y
-  const xy_pos_t test_position = {
-    parser.linearval('X', current_position.x + probe.offset_xy.x),  // If no X use the probe's current X position
-    parser.linearval('Y', current_position.y + probe.offset_xy.y)   // If no Y, ditto
+  // Test at PROBE_SAFE_POINT by default, overridden by X and Y
+  // If either X or Y is specified, the current position will be used for the
+  // other coordinate.
+  xy_pos_t test_position = {
+    parser.linearval('X', safe_point.x),  // If no X use PROBE_SAFE_POINT
+    parser.linearval('Y', safe_point.y)   // If no Y, ditto
   };
+
+  if (test_position == safe_point) {
+    SERIAL_ECHOLNPGM("Moving to safe position for probe.");
+  } else {
+    // If a coordinate is equal to the safe point coordinate, it was not set by an argument.
+    // In the case of one coordinate being set, use the current position as the default for the unset coordinate instead of the safe point's coordinate.
+    if(test_position.x == safe_point.x) {
+      test_position.x = current_position.x + probe.offset_xy.x;
+    }
+    if(test_position.y == safe_point.y) {
+      test_position.y = current_position.y + probe.offset_xy.y;
+    }
+  }
+
 
   if (!probe.can_reach(test_position)) {
     ui.set_status_P(GET_TEXT(MSG_M48_OUT_OF_BOUNDS), 99);

@@ -1123,7 +1123,8 @@
   #elif ANY(TAZPro, TAZProXT)
     #if defined(TOOLHEAD_Quiver_DualExtruder)
       #define CALIBRATION_OBJECT_CENTER     {261.5, -18, -2.0} //  mm
-      #define CALIBRATION_OBJECT_DIMENSIONS {10.0, .1, 10.0} //  mm
+      #define CALIBRATION_OBJECT_DIMENSIONS {10.0, 10.0, 10.0} //  mm
+      #define CALIBRATION_MEASURE_FRONT
     #else
       #define CALIBRATION_OBJECT_CENTER     {267.5,-9.5,-2.0} //  mm
       #define CALIBRATION_OBJECT_DIMENSIONS {10.0,  1.0, 10.0} //  mm

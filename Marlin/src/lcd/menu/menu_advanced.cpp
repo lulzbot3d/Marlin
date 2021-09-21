@@ -505,7 +505,7 @@ void menu_backlash();
       #if ENABLED(PROBE_OFFSET_WIZARD)
         SUBMENU(MSG_PROBE_WIZARD, goto_probe_offset_wizard);
       #endif
-
+      queue.inject_P(PSTR("M500\nM117 Z Offset Saved"));
       END_MENU();
     }
   #endif

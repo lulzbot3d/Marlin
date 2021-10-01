@@ -2306,28 +2306,97 @@
 /**
  * User-defined menu items that execute custom GCode
  */
-//#define CUSTOM_USER_MENUS
-#if ENABLED(CUSTOM_USER_MENUS)
-  //#define CUSTOM_USER_MENU_TITLE "Custom Commands"
-  #define USER_SCRIPT_DONE "M117 User Script Done"
-  #define USER_SCRIPT_AUDIBLE_FEEDBACK
-  //#define USER_SCRIPT_RETURN  // Return to status screen after a script
+#if defined(TOOLHEAD_UNIVERSAL_TOOLHEAD)
+  
+    #define CUSTOM_USER_MENUS
 
-  #define USER_DESC_1 "Home & UBL Info"
-  #define USER_GCODE_1 "G28\nG29 W"
+    #if ENABLED(CUSTOM_USER_MENUS)
+      #define CUSTOM_USER_MENU_TITLE "Tool Heads"
+      //#define USER_SCRIPT_DONE "M117 Tool Changed"
+      #define USER_SCRIPT_AUDIBLE_FEEDBACK
+      #define USER_SCRIPT_RETURN  // Return to status screen after a script
 
-  #define USER_DESC_2 "Preheat for " PREHEAT_1_LABEL
-  #define USER_GCODE_2 "M140 S" STRINGIFY(PREHEAT_1_TEMP_BED) "\nM104 S" STRINGIFY(PREHEAT_1_TEMP_HOTEND)
-
-  #define USER_DESC_3 "Preheat for " PREHEAT_2_LABEL
-  #define USER_GCODE_3 "M140 S" STRINGIFY(PREHEAT_2_TEMP_BED) "\nM104 S" STRINGIFY(PREHEAT_2_TEMP_HOTEND)
-
-  #define USER_DESC_4 "Heat Bed/Home/Level"
-  #define USER_GCODE_4 "M140 S" STRINGIFY(PREHEAT_2_TEMP_BED) "\nG28\nG29"
-
-  #define USER_DESC_5 "Home & Info"
-  #define USER_GCODE_5 "G28\nM503"
+#if ANY(TAZ6)
+  #define DEFAULT_PID "P28.79I1.91D108.51"
+#else
+  #define DEFAULT_PID "P21.0I1.78D61.93"
 #endif
+
+#if ANY(TAZ6, Workhorse)
+  #define E_CURRENT_Aero "875"
+  #define E_CURRENT_Std  "750"
+  #define E_CURRENT_Moar "750"
+  #define E_CURRENT_BMG  "875"
+  #define E_CURRENT_ARST "875"
+#else
+  #define E_CURRENT_Aero "960"
+  #define E_CURRENT_BMG  "960"
+#endif
+
+      #if ANY(Sidekick_289, Sidekick_747)
+        #define USER_DESC_1 "SK175|0.50mm|BRASS"
+        #define USER_GCODE_1 "M92E420\nM206X0Y0\nM301P26.29I2.57D72.59\nM906E" E_CURRENT_Aero "\nM500\nM117 SK175|0.50mm|BRASS"
+
+        #define USER_DESC_2 "SK285|0.50mm|BRASS"
+        #define USER_GCODE_2 "M92E420\nM206X0Y0\nM301P26.90I2.41D75.19\nM906E" E_CURRENT_Aero "\nM500\nM117 SK285|0.50mm|BRASS"
+      #endif
+      #if DISABLED(TAZ6, Workhorse)
+        #define USER_DESC_3 "M175|0.50mm|CRB CU"
+        #define USER_GCODE_3 "M92E415\nM206X-2Y-13\nM301P24.54I2.52D61.75\nM906E" E_CURRENT_BMG "\nM500\nM117 M175|0.50mm|CRB CU"
+
+        #define USER_DESC_4 "SL|0.25mm|NKL-PL CU"
+        #define USER_GCODE_4 "M92E420\nM206X0Y0\nM301" DEFAULT_PID "\nM906E" E_CURRENT_Aero "\nM500\nM117 SL|0.25mm|NKL-PL CU"
+        
+        #define USER_DESC_5 "SE|0.50mm|NKL-PL CU"
+        #define USER_GCODE_5 "M92E420\nM206X0Y0\nM301" DEFAULT_PID "\nM906E" E_CURRENT_Aero "\nM500\nM117 SE|0.50mm|NKL-PL CU"
+
+        #define USER_DESC_6 "HE|0.50mm|HRD STEEL"
+        #define USER_GCODE_6 "M92E420\nM206X0Y0\nM301" DEFAULT_PID "\nM906E" E_CURRENT_Aero "\nM500\nM117 HE|0.50mm|HRD STEEL"
+
+        #define USER_DESC_7 "HS|0.80mm|HRD STEEL"
+        #define USER_GCODE_7 "M92E420\nM206X0Y0\nM301" DEFAULT_PID "\nM906E" E_CURRENT_Aero "\nM500\nM117 HS|0.80mm|HRD STEEL"
+
+        #define USER_DESC_8 "HS+|1.20mm|HRD STEEL"
+        #define USER_GCODE_8 "M92E420\nM206X0Y0\nM301" DEFAULT_PID "\nM906E" E_CURRENT_Aero "\nM500\nM117 HS+|1.20mm|HRD STEEL"
+
+        #define USER_DESC_9 "H175|0.50mm|NKL-PL CU"
+        #define USER_GCODE_9 "M92E409\nM206X0Y0\nM301" DEFAULT_PID "\nM906E" E_CURRENT_Aero "\nM500\nM117 HM|0.50mm|NKL-PL CU"
+      #else
+        #define USER_DESC_3 "M175|0.50mm|CRB CU"
+        #define USER_GCODE_3 "M92E415\nM206X-6Y-12\nM301P24.54I2.52D61.75\nM907E" E_CURRENT_BMG "\nM500\nM117 M175|0.50mm|CRB CU"
+
+        #define USER_DESC_4 "SL|0.25mm|NKL-PL CU"
+        #define USER_GCODE_4 "M92E420\nM206X0Y0\nM301" DEFAULT_PID "\nM907E" E_CURRENT_Aero "\nM500\nM117 SL|0.25mm|NKL-PL CU"
+        
+        #define USER_DESC_5 "SE|0.50mm|NKL-PL CU"
+        #define USER_GCODE_5 "M92E420\nM206X0Y0\nM301" DEFAULT_PID "\nM907E" E_CURRENT_Aero "\nM500\nM117 SE|0.50mm|NKL-PL CU"
+
+        #define USER_DESC_6 "HE|0.50mm|HRD STEEL"
+        #define USER_GCODE_6 "M92E420\nM206X0Y0\nM301" DEFAULT_PID "\nM907E" E_CURRENT_Aero "\nM500\nM117 HE|0.50mm|HRD STEEL"
+
+        #define USER_DESC_7 "HS|0.80mm|HRD STEEL"
+        #define USER_GCODE_7 "M92E420\nM206X0Y0\nM301" DEFAULT_PID "\nM907E" E_CURRENT_Aero "\nM500\nM117 HS|0.80mm|HRD STEEL"
+
+        #define USER_DESC_8 "HS+|1.20mm|HRD STEEL"
+        #define USER_GCODE_8 "M92E420\nM206X0Y0\nM301" DEFAULT_PID "\nM907E" E_CURRENT_Aero "\nM500\nM117 HS+|1.20mm|HRD STEEL"
+
+        #define USER_DESC_9 "H175|0.50mm|NKL-PL CU"
+        #define USER_GCODE_9 "M92E409\nM206X0Y0\nM301" DEFAULT_PID "\nM906E" E_CURRENT_Aero "\nM500\nM117 HM|0.50mm|NKL-PL CU"
+      #endif
+
+      #if defined(TAZ6)
+        #define USER_DESC_10 "Moarstruder|1.2mm"
+        #define USER_GCODE_10 "M92E819\nM206X0Y0\nM301" DEFAULT_PID "\nM907E" E_CURRENT_Moar "\nM500\nM117 Moarstruder|1.2mm"
+
+        #define USER_DESC_11 "Aerostruder|0.5mm"
+        #define USER_GCODE_11 "M92E819\nM206X0Y0\nM301P41.68I6.87D63.16\nM907E" E_CURRENT_ARST "\nM500\nM117 Aerostruder|0.5mm"
+
+        #define USER_DESC_1 "Standard|0.5mm"
+        #define USER_GCODE_1 "M92E814\nM206X0Y5\nM301" DEFAULT_PID "\nM907E" E_CURRENT_Std "\nM500\nM117 Standard|0.5mm"
+      #endif
+
+    #endif
+  #endif
 
 /**
  * Host Action Commands

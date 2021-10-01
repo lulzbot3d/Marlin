@@ -116,6 +116,7 @@
     !defined(TOOLHEAD_KangarooPaw_SingleExtruder) &&\
     !defined(TOOLHEAD_Lutefisk_M175) &&\
     !defined(TOOLHEAD_Lutefisk_M175v2)&&\
+    !defined(TOOLHEAD_H175)&&\
     !defined(TOOLHEAD_UNIVERSAL_TOOLHEAD)\
 )
     #error Must specify toolhead. Please see "Configuration_LulzBot.h" for directions.
@@ -1181,6 +1182,7 @@
     defined(TOOLHEAD_DingyCutworm_HardenedSteelPlus) || \
     defined(TOOLHEAD_Goldenrod_HardenedExtruder) || \
     defined(TOOLHEAD_Lutefisk_M175) || \
+    defined(TOOLHEAD_H175) || \
     defined(TOOLHEAD_Lutefisk_M175v2) || \
     defined(TOOLHEAD_UNIVERSAL_TOOLHEAD) \
    
@@ -1324,7 +1326,7 @@
 #endif /* TOOLHEAD_DingyCutworm_HardenedSteelPlus */
 
 #if defined(TOOLHEAD_Lutefisk_M175)
-    #define LULZBOT_LCD_TOOLHEAD_NAME              "M175"
+    #define LULZBOT_LCD_TOOLHEAD_NAME              "M175 0.5mm"
 //          16 chars max                            ^^^^^^^^^^^^^^^
     #define LULZBOT_M115_EXTRUDER_TYPE              "lutefisk"
     #define LULZBOT_X_MAX_ENDSTOP_INVERTING        LULZBOT_NORMALLY_CLOSED_ENDSTOP
@@ -1334,12 +1336,22 @@
 #endif
 
 #if defined(TOOLHEAD_Lutefisk_M175v2)
-    #define LULZBOT_LCD_TOOLHEAD_NAME              "M175v2"
+    #define LULZBOT_LCD_TOOLHEAD_NAME              "M175v2 0.5mm"
 //          16 chars max                            ^^^^^^^^^^^^^^^
     #define LULZBOT_M115_EXTRUDER_TYPE              "M175v2"
     #define LULZBOT_X_MAX_ENDSTOP_INVERTING        LULZBOT_NORMALLY_CLOSED_ENDSTOP
     #define LULZBOT_SliceEngineering
     #define LULZBOT_E_STEPS                        415
+    #define LULZBOT_UNIVERSAL_MOUNT
+#endif
+
+#if defined(TOOLHEAD_H175)
+    #define LULZBOT_LCD_TOOLHEAD_NAME              "H175 0.5mm"
+//          16 chars max                            ^^^^^^^^^^^^^^^
+    #define LULZBOT_M115_EXTRUDER_TYPE              "H175"
+    #define LULZBOT_X_MAX_ENDSTOP_INVERTING        LULZBOT_NORMALLY_CLOSED_ENDSTOP
+    #define LULZBOT_SliceEngineering
+    #define LULZBOT_E_STEPS                        409
     #define LULZBOT_UNIVERSAL_MOUNT
 #endif
 

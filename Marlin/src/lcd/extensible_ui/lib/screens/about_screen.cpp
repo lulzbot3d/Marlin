@@ -58,7 +58,7 @@ void AboutScreen::onRedraw(draw_mode_t) {
       #if defined(LULZBOT_LCD_TOOLHEAD_NAME)
         "Firmware for toolhead:\n" LULZBOT_LCD_TOOLHEAD_NAME "\n\n"
       #endif
-      "(C) 2019 Aleph Objects, Inc.\n\nwww.lulzbot.com"
+      "Fame 3D\n\nwww.lulzbot.com"
   ), OPT_CENTER, font_medium);
 
   cmd.tag(0);

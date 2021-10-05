@@ -73,7 +73,7 @@
  *
  */
 
-#define LULZBOT_FW_VERSION ".144.1" // Change this with each update
+#define LULZBOT_FW_VERSION ".144.4" // Change this with each update
 
 #if ( \
     !defined(LULZBOT_Gladiola_Mini) && \
@@ -114,7 +114,10 @@
     !defined(TOOLHEAD_Angelfish_Aerostruder) && \
     !defined(TOOLHEAD_Quiver_DualExtruder) && \
     !defined(TOOLHEAD_KangarooPaw_SingleExtruder) &&\
-    !defined(TOOLHEAD_Lutefisk_M175) \
+    !defined(TOOLHEAD_Lutefisk_M175) &&\
+    !defined(TOOLHEAD_Lutefisk_M175v2)&&\
+    !defined(TOOLHEAD_H175)&&\
+    !defined(TOOLHEAD_UNIVERSAL_TOOLHEAD)\
 )
     #error Must specify toolhead. Please see "Configuration_LulzBot.h" for directions.
 #endif
@@ -704,7 +707,7 @@
 
 #elif defined(LULZBOT_TAZ_BED) && defined(LULZBOT_USE_Z_BELT)
     #define LULZBOT_HOMING_FEEDRATE_XY             (50*60) // mm/m
-    #define LULZBOT_HOMING_FEEDRATE_Z              (30*60) // mm/m
+    #define LULZBOT_HOMING_FEEDRATE_Z              (25*60) // mm/m
 
 #elif defined(LULZBOT_TAZ_BED) && defined(LULZBOT_USE_Z_SCREW)
     #define LULZBOT_HOMING_FEEDRATE_XY             (50*60) // mm/m
@@ -828,10 +831,10 @@
 #if defined(LULZBOT_USE_AUTOLEVELING)
     #define LULZBOT_RESTORE_LEVELING_AFTER_G28
     #define LULZBOT_NOZZLE_CLEAN_FEATURE
-    #define LULZBOT_AUTO_BED_LEVELING_LINEAR
+    #define LULZBOT_AUTO_BED_LEVELING_BILINEAR
 #endif
 
-#if defined(LULZBOT_AUTO_BED_LEVELING_LINEAR)
+#if defined(LULZBOT_AUTO_BED_LEVELING_BILINEAR)
   // Traditionally LulzBot printers have employed a four-point leveling
   // using a degenerate 2x2 grid. This is the traditional behavior.
   #define LULZBOT_GRID_MAX_POINTS_X            2
@@ -1179,7 +1182,10 @@
     defined(TOOLHEAD_BandedTiger_HardenedSteel) || \
     defined(TOOLHEAD_DingyCutworm_HardenedSteelPlus) || \
     defined(TOOLHEAD_Goldenrod_HardenedExtruder) || \
-    defined(TOOLHEAD_Lutefisk_M175) 
+    defined(TOOLHEAD_Lutefisk_M175) || \
+    defined(TOOLHEAD_H175) || \
+    defined(TOOLHEAD_Lutefisk_M175v2) || \
+    defined(TOOLHEAD_UNIVERSAL_TOOLHEAD) \
    
    #if defined(TOOLHEAD_Lutefisk_M175) 
    
@@ -1321,12 +1327,42 @@
 #endif /* TOOLHEAD_DingyCutworm_HardenedSteelPlus */
 
 #if defined(TOOLHEAD_Lutefisk_M175)
-    #define LULZBOT_LCD_TOOLHEAD_NAME              "M175"
+    #define LULZBOT_LCD_TOOLHEAD_NAME              "M175 0.5mm"
 //          16 chars max                            ^^^^^^^^^^^^^^^
     #define LULZBOT_M115_EXTRUDER_TYPE              "lutefisk"
     #define LULZBOT_X_MAX_ENDSTOP_INVERTING        LULZBOT_NORMALLY_CLOSED_ENDSTOP
     #define LULZBOT_SliceEngineering
     #define LULZBOT_E_STEPS                        415
+    #define LULZBOT_UNIVERSAL_MOUNT
+#endif
+
+#if defined(TOOLHEAD_Lutefisk_M175v2)
+    #define LULZBOT_LCD_TOOLHEAD_NAME              "M175v2 0.5mm"
+//          16 chars max                            ^^^^^^^^^^^^^^^
+    #define LULZBOT_M115_EXTRUDER_TYPE              "M175v2"
+    #define LULZBOT_X_MAX_ENDSTOP_INVERTING        LULZBOT_NORMALLY_CLOSED_ENDSTOP
+    #define LULZBOT_SliceEngineering
+    #define LULZBOT_E_STEPS                        415
+    #define LULZBOT_UNIVERSAL_MOUNT
+#endif
+
+#if defined(TOOLHEAD_H175)
+    #define LULZBOT_LCD_TOOLHEAD_NAME              "H175 0.5mm"
+//          16 chars max                            ^^^^^^^^^^^^^^^
+    #define LULZBOT_M115_EXTRUDER_TYPE              "H175"
+    #define LULZBOT_X_MAX_ENDSTOP_INVERTING        LULZBOT_NORMALLY_CLOSED_ENDSTOP
+    #define LULZBOT_SliceEngineering
+    #define LULZBOT_E_STEPS                        409
+    #define LULZBOT_UNIVERSAL_MOUNT
+#endif
+
+#if defined(TOOLHEAD_UNIVERSAL_TOOLHEAD)
+    #define LULZBOT_LCD_TOOLHEAD_NAME              "Universal"
+//          16 chars max                            ^^^^^^^^^^^^^^^
+    #define LULZBOT_M115_EXTRUDER_TYPE              "Universal"
+    #define LULZBOT_X_MAX_ENDSTOP_INVERTING        LULZBOT_NORMALLY_CLOSED_ENDSTOP
+    #define LULZBOT_E3D_Titan_Aero_V6
+    #define LULZBOT_E_STEPS                        420
     #define LULZBOT_UNIVERSAL_MOUNT
 #endif
 
@@ -2445,7 +2481,7 @@ defined(LULZBOT_Gladiator_TAZProXT) && defined(TOOLHEAD_Quiver_DualExtruder)
     #define LULZBOT_Z_MICROSTEPS                  16
 
 #elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT)
-    #define LULZBOT_DEFAULT_MAX_FEEDRATE          {300, 300, 30, 25}     // (mm/sec)
+    #define LULZBOT_DEFAULT_MAX_FEEDRATE          {300, 300, 25, 25}     // (mm/sec)
     #define LULZBOT_DEFAULT_MAX_ACCELERATION      {9000,9000,200,9000}
     #define LULZBOT_Z_STEPS                       500
     #define LULZBOT_Z_MICROSTEPS                  16

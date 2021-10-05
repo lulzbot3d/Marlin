@@ -248,6 +248,7 @@
     #define USE_PORTRAIT_ORIENTATION
     #define LCD_800x480
     #define AO_EXP2_PINOUT_REV_C
+    #define LULZBOT_CUSTOM_USER_MENUS
 #endif
 
 #if defined(LULZBOT_Gladiator_TAZProXT)

@@ -44,6 +44,7 @@ enum {
   SPINNER_CACHE,
   ADVANCED_SETTINGS_SCREEN_CACHE,
   MOVE_AXIS_SCREEN_CACHE,
+  CUSTOM_USER_MENUS_SCREEN_CACHE,
   TEMPERATURE_SCREEN_CACHE,
   STEPS_SCREEN_CACHE,
   STEPPER_CURRENT_SCREEN_CACHE,
@@ -502,6 +503,11 @@ class DefaultAccelerationScreen : public BaseNumericAdjustmentScreen, public Cac
   };
 #endif
 
+class CustomUserMenus : public BaseScreen, public CachedScreen<CUSTOM_USER_MENUS_SCREEN_CACHE> {
+  public:
+    static void onRedraw(draw_mode_t);
+    static bool onTouchEnd(uint8_t tag);
+};
 class TemperatureScreen : public BaseNumericAdjustmentScreen, public CachedScreen<TEMPERATURE_SCREEN_CACHE> {
   public:
     static void onRedraw(draw_mode_t);

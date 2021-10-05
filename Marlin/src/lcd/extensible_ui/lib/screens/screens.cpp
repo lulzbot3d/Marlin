@@ -85,6 +85,7 @@ SCREEN_TABLE {
 #if ENABLED(LIN_ADVANCE)
   DECL_SCREEN(LinearAdvanceScreen),
 #endif
+  DECL_SCREEN(CustomUserMenus),
   DECL_SCREEN(TemperatureScreen),
   DECL_SCREEN(ChangeFilamentScreen),
   DECL_SCREEN(InterfaceSettingsScreen),

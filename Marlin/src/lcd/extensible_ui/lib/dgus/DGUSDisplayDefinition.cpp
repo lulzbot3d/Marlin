@@ -31,7 +31,7 @@
 
 #include "../../../../module/temperature.h"
 #include "../../../../module/motion.h"
-
+#include "../screens/custom_user_menus.h"
 #include "../../../ultralcd.h"
 
 const uint16_t VPList_Boot[] PROGMEM = {

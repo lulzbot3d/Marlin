@@ -52,15 +52,20 @@ void MainMenu::onRedraw(draw_mode_t what) {
         .tag(3).button( BTN_POS(2,1), BTN_SIZE(1,1), F("Clean Nozzle"))
         .tag(4).button( BTN_POS(1,2), BTN_SIZE(1,1), F("Move Axis"))
         .tag(5).button( BTN_POS(2,2), BTN_SIZE(1,1), F("Motors Off"))
-        .tag(6).button( BTN_POS(1,3), BTN_SIZE(1,1), F("Temperature"))
+        
         .tag(7).button( BTN_POS(1,4), BTN_SIZE(2,1), F("Change Filament"))
         .tag(8).button( BTN_POS(1,5), BTN_SIZE(2,1), F("Advanced Settings"))
+    #if defined(CUSTOM_USER_MENUS)
+        .tag(6).button( BTN_POS(1,3), BTN_SIZE(1,1), F("Temperature"))
         .tag(11).button( BTN_POS(2,3), BTN_SIZE(1,1), F("Tool Heads"))
-        #if defined(PRINTCOUNTER)
+    #else
+        .tag(6).button( BTN_POS(1,3), BTN_SIZE(2,1), F("Temperature"))
+    #endif
+    #if defined(PRINTCOUNTER)
          .enabled(1)
-        #else
+    #else
          .enabled(0)
-        #endif
+    #endif
         .tag(9).button( BTN_POS(1,7), BTN_SIZE(2,1), F("Printer Statistics"))
         .tag(10).button( BTN_POS(1,6), BTN_SIZE(2,1), F("About Printer"))
         .colors(action_btn)
@@ -115,7 +120,9 @@ bool MainMenu::onTouchEnd(uint8_t tag) {
     case 9:  GOTO_SCREEN(StatisticsScreen);                           break;
 #endif
     case 10: GOTO_SCREEN(AboutScreen);                                break;
+#if defined(CUSTOM_USER_MENUS)
     case 11: GOTO_SCREEN(CustomUserMenus);                          break;
+#endif
     default:
       return false;
   }

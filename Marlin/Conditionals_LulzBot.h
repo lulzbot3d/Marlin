@@ -73,7 +73,7 @@
  *
  */
 
-#define LULZBOT_FW_VERSION ".144.4" // Change this with each update
+#define LULZBOT_FW_VERSION ".144.5" // Change this with each update
 
 #if ( \
     !defined(LULZBOT_Gladiola_Mini) && \
@@ -117,7 +117,7 @@
     !defined(TOOLHEAD_Lutefisk_M175) &&\
     !defined(TOOLHEAD_Lutefisk_M175v2)&&\
     !defined(TOOLHEAD_H175)&&\
-    !defined(TOOLHEAD_UNIVERSAL_TOOLHEAD)\
+    !defined(TOOLHEAD_Universal_ToolHead)\
 )
     #error Must specify toolhead. Please see "Configuration_LulzBot.h" for directions.
 #endif
@@ -221,7 +221,7 @@
 
 #if defined(LULZBOT_Quiver_TAZPro)
     #define LULZBOT_CUSTOM_MACHINE_NAME "LulzBot TAZ Pro"
-    #define LULZBOT_LCD_MACHINE_NAME "TAZ Pro"
+    #define LULZBOT_LCD_MACHINE_NAME "LulzBot TAZ Pro"
     #define LULZBOT_IS_TAZ
     #define LULZBOT_TAZ_BED
     #define LULZBOT_TWO_PIECE_BED
@@ -256,7 +256,7 @@
 
 #if defined(LULZBOT_Gladiator_TAZProXT)
     #define LULZBOT_CUSTOM_MACHINE_NAME "LulzBot TAZ ProXT"
-    #define LULZBOT_LCD_MACHINE_NAME "TAZ ProXT"
+    #define LULZBOT_LCD_MACHINE_NAME "LulzBot TAZ ProXT"
     #define LULZBOT_IS_TAZ
     #define LULZBOT_IS_XT
     #define LULZBOT_TAZ_BED
@@ -823,9 +823,9 @@
 
 #elif defined(LULZBOT_USE_AUTOLEVELING) && defined(LULZBOT_TAZ_BED)
     #define LULZBOT_STANDARD_LEFT_PROBE_BED_POSITION      -10
-    #define LULZBOT_STANDARD_RIGHT_PROBE_BED_POSITION     288
-    #define LULZBOT_STANDARD_BACK_PROBE_BED_POSITION      291
-    #define LULZBOT_STANDARD_FRONT_PROBE_BED_POSITION      -9
+    #define LULZBOT_STANDARD_RIGHT_PROBE_BED_POSITION     286//185
+    #define LULZBOT_STANDARD_BACK_PROBE_BED_POSITION      293//291
+    #define LULZBOT_STANDARD_FRONT_PROBE_BED_POSITION     -15//-9
 #endif
 
 #if defined(LULZBOT_USE_AUTOLEVELING)
@@ -1185,7 +1185,7 @@
     defined(TOOLHEAD_Lutefisk_M175) || \
     defined(TOOLHEAD_H175) || \
     defined(TOOLHEAD_Lutefisk_M175v2) || \
-    defined(TOOLHEAD_UNIVERSAL_TOOLHEAD) \
+    defined(TOOLHEAD_Universal_ToolHead) \
    
    #if defined(TOOLHEAD_Lutefisk_M175) 
    
@@ -1222,8 +1222,8 @@
    #endif
    #if defined(LULZBOT_Quiver_TAZPro)
     #define LULZBOT_EXTRUDERS                  1
-    #define LULZBOT_TOOLHEAD_X_MAX_ADJ         0    
-    #define LULZBOT_TOOLHEAD_X_MIN_ADJ         -4//-9
+    #define LULZBOT_TOOLHEAD_X_MAX_ADJ         -3 
+    #define LULZBOT_TOOLHEAD_X_MIN_ADJ         -7
     #define LULZBOT_TOOLHEAD_Y_MAX_ADJ         -10 
     #define LULZBOT_TOOLHEAD_Y_MIN_ADJ         0 
     #define LULZBOT_TOOLHEAD_Z_MAX_ADJ         0 
@@ -1232,8 +1232,8 @@
    #endif
       #if defined(LULZBOT_Gladiator_TAZProXT)
     #define LULZBOT_EXTRUDERS                  1
-    #define LULZBOT_TOOLHEAD_X_MAX_ADJ         0    
-    #define LULZBOT_TOOLHEAD_X_MIN_ADJ         -4//-9
+    #define LULZBOT_TOOLHEAD_X_MAX_ADJ         -3 
+    #define LULZBOT_TOOLHEAD_X_MIN_ADJ         -7
     #define LULZBOT_TOOLHEAD_Y_MAX_ADJ         -10 
     #define LULZBOT_TOOLHEAD_Y_MIN_ADJ         0 
     #define LULZBOT_TOOLHEAD_Z_MAX_ADJ         0 
@@ -1327,7 +1327,7 @@
 #endif /* TOOLHEAD_DingyCutworm_HardenedSteelPlus */
 
 #if defined(TOOLHEAD_Lutefisk_M175)
-    #define LULZBOT_LCD_TOOLHEAD_NAME              "M175 0.5mm"
+    #define LULZBOT_LCD_TOOLHEAD_NAME              "M175v1 0.5mm"
 //          16 chars max                            ^^^^^^^^^^^^^^^
     #define LULZBOT_M115_EXTRUDER_TYPE              "lutefisk"
     #define LULZBOT_X_MAX_ENDSTOP_INVERTING        LULZBOT_NORMALLY_CLOSED_ENDSTOP
@@ -1356,7 +1356,7 @@
     #define LULZBOT_UNIVERSAL_MOUNT
 #endif
 
-#if defined(TOOLHEAD_UNIVERSAL_TOOLHEAD)
+#if defined(TOOLHEAD_Universal_ToolHead)
     #define LULZBOT_LCD_TOOLHEAD_NAME              "Universal"
 //          16 chars max                            ^^^^^^^^^^^^^^^
     #define LULZBOT_M115_EXTRUDER_TYPE              "Universal"
@@ -1394,7 +1394,7 @@
 /*********************************** TAZ PRO TOOLHEADS ************************/
 
 #if defined(TOOLHEAD_Quiver_DualExtruder)
-    #define LULZBOT_LCD_TOOLHEAD_NAME              "Quivering Aeros"
+    #define LULZBOT_LCD_TOOLHEAD_NAME              "Pro Dual"
 //          16 chars max                            ^^^^^^^^^^^^^^^
     #define LULZBOT_M115_EXTRUDER_TYPE             "DualExtruder"
     #define LULZBOT_TOOLHEAD_X_MAX_ADJ             -21
@@ -1712,7 +1712,7 @@
     #define LULZBOT_STANDARD_X_MAX_POS         320
     #define LULZBOT_STANDARD_X_MIN_POS          -6
     #define LULZBOT_STANDARD_Y_MAX_POS         313
-    #define LULZBOT_STANDARD_Y_MIN_POS         -15
+    #define LULZBOT_STANDARD_Y_MIN_POS       -18.2//-15
 
     #define LULZBOT_STANDARD_X_BED_SIZE        280
     #define LULZBOT_STANDARD_Y_BED_SIZE        280
@@ -2107,8 +2107,8 @@
 
 #elif defined(LULZBOT_USE_AUTOLEVELING) && defined(LULZBOT_TAZ_BED)
     // TAZ has a vertical wiping pad on the left side of the bed
-    #define LULZBOT_LEFT_WIPE_X1                      -17
-    #define LULZBOT_LEFT_WIPE_X2                      -17
+    #define LULZBOT_LEFT_WIPE_X1                      -18
+    #define LULZBOT_LEFT_WIPE_X2                      -18
     #define LULZBOT_LEFT_WIPE_Y1                       95
     #if defined(TOOLHEAD_Javelin_DualExtruderV2) || defined(TOOLHEAD_Longfin_FlexyDually)
         // These dual toolheads have nozzles front and back, so the wiping location is shortened in Y
@@ -2121,11 +2121,11 @@
     #if defined(LULZBOT_Quiver_TAZPro) || \
     defined(LULZBOT_Gladiator_TAZProXT) 
         // The Quiver has an wipe pad on the right side of the bed.
-        #define LULZBOT_RIGHT_WIPE_X1                   297
-        #define LULZBOT_RIGHT_WIPE_X2                   297
+        #define LULZBOT_RIGHT_WIPE_X1                   296
+        #define LULZBOT_RIGHT_WIPE_X2                   296
         #define LULZBOT_RIGHT_WIPE_Y1                    95
         #define LULZBOT_RIGHT_WIPE_Y2                    25
-        #define LULZBOT_RIGHT_WIPE_Z                      0
+        #define LULZBOT_RIGHT_WIPE_Z                      -1.5
     #endif
 #endif
 
@@ -2144,7 +2144,7 @@
 #define __LULZBOT_WIPE_GCODE(x1,x2,y1,y2,z) \
     "G1 X" #x2 " Y" #y2 " F5000\n"                /* Move above wiper pad */ \
     LULZBOT_WIPE_WAIT_TEMP \
-    "G1 Z1\n"                                     /* Push nozzle into wiper */ \
+    "G1 Z2\n"                                     /* Push nozzle into wiper */ \
     "G1 X" #x2 " Y" #y2 " F4000\n"                /* Slow wipe */ \
     "G1 X" #x1 " Y" #y1 " F4000\n"                /* Slow wipe */ \
     "G1 X" #x2 " Y" #y2 " F4000\n"                /* Slow wipe */ \

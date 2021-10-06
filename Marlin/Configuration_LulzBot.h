@@ -43,7 +43,8 @@
       Lutefisk_M175v2                   // M175v2| 0.5 mm
       Uffda_MHF                         // MHF | 0.5 mm
       Magnus_LGX                        // LGX | 0.5 mm
-      H175
+      H175                              // H175| 0.5 mm
+      Universal_ToolHead                // Universal
       
    Quiver Toolhead Choices:
       Quiver_DualExtruder               // Standard Dual Aerostruder (Quiver)
@@ -53,8 +54,8 @@
 // If compiling using the Arduino IDE, remove the "//" from the following lines and
 // set printer model and toolhead after the "LULZBOT_" and "TOOLHEAD_" respectively:
 
-#define LULZBOT_Quiver_TAZPro
+#define LULZBOT_Gladiator_TAZProXT
 //#define TOOLHEAD_CecropiaSilk_AerostruderV2
-#define TOOLHEAD_Lutefisk_M175v2
+#define TOOLHEAD_Quiver_DualExtruder
 
 #endif /* CONFIGURATION_LULZBOT */

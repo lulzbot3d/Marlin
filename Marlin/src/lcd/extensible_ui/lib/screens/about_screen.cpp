@@ -56,9 +56,9 @@ void AboutScreen::onRedraw(draw_mode_t) {
   cmd.tag(2);
   draw_text_box(cmd, BTN_POS(1,3), BTN_SIZE(4,3), F(
       #if defined(LULZBOT_LCD_TOOLHEAD_NAME)
-        "Firmware for toolhead:\n" LULZBOT_LCD_TOOLHEAD_NAME "\n\n"
+        "Firmware for Tool Head:\n" LULZBOT_LCD_TOOLHEAD_NAME "\n\n"
       #endif
-      "Fame 3D\n\nwww.lulzbot.com"
+      "FAME 3D\n\nwww.lulzbot.com"
   ), OPT_CENTER, font_medium);
 
   cmd.tag(0);

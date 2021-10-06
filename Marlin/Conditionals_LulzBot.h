@@ -73,7 +73,7 @@
  *
  */
 
-#define LULZBOT_FW_VERSION ".144.4" // Change this with each update
+#define LULZBOT_FW_VERSION ".144.5" // Change this with each update
 
 #if ( \
     !defined(LULZBOT_Gladiola_Mini) && \
@@ -2144,7 +2144,7 @@
 #define __LULZBOT_WIPE_GCODE(x1,x2,y1,y2,z) \
     "G1 X" #x2 " Y" #y2 " F5000\n"                /* Move above wiper pad */ \
     LULZBOT_WIPE_WAIT_TEMP \
-    "G1 Z1\n"                                     /* Push nozzle into wiper */ \
+    "G1 Z2\n"                                     /* Push nozzle into wiper */ \
     "G1 X" #x2 " Y" #y2 " F4000\n"                /* Slow wipe */ \
     "G1 X" #x1 " Y" #y1 " F4000\n"                /* Slow wipe */ \
     "G1 X" #x2 " Y" #y2 " F4000\n"                /* Slow wipe */ \

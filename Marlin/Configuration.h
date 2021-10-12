@@ -1272,7 +1272,7 @@
 #if ANY(MiniV2, Sidekick_289, Sidekick_747)
   #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 100, 200, 420 }
 #elif ENABLED(TAZ6)
-  #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 100, 1600, 830 }
+  #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 100, 1600, 833 }
 #elif ANY(Workhorse, TAZPro, TAZProXT)
     #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 100, 500, 420 }
 #endif

@@ -1839,7 +1839,7 @@
   #define LULZBOT_Z_MIN_POS -2
   #define LULZBOT_X_MAX_POS 295
   #define LULZBOT_Y_MAX_POS 308
-  #define LULZBOT_Z_MAX_POS 299
+  #define LULZBOT_Z_MAX_POS 297
 
 #elif ENABLED(TAZPro) 
    #if defined(TOOLHEAD_Quiver_DualExtruder)

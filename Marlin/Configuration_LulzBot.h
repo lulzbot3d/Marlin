@@ -56,6 +56,6 @@
 
 #define LULZBOT_Gladiator_TAZProXT
 //#define TOOLHEAD_CecropiaSilk_AerostruderV2
-#define TOOLHEAD_Quiver_DualExtruder
+#define TOOLHEAD_Universal_ToolHead
 
 #endif /* CONFIGURATION_LULZBOT */

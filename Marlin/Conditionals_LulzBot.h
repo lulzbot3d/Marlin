@@ -571,7 +571,7 @@
 // it less useful for adjusting the position after hitting an
 // endstop. It is useful for custom printers and is required for
 // Yellowfin. NO_WORKSPACE_OFFSETS restores the old behavior
-#define LULZBOT_NO_WORKSPACE_OFFSETS
+//#define LULZBOT_NO_WORKSPACE_OFFSETS
 
 // Q&A wants to be able to use M226 on endstops switches
 #define LULZBOT_M226_PIN_PROTECTION_WORKAROUND
@@ -2125,7 +2125,7 @@
         #define LULZBOT_RIGHT_WIPE_X2                   296
         #define LULZBOT_RIGHT_WIPE_Y1                    95
         #define LULZBOT_RIGHT_WIPE_Y2                    25
-        #define LULZBOT_RIGHT_WIPE_Z                      -1.5
+        #define LULZBOT_RIGHT_WIPE_Z                      -2.5
     #endif
 #endif
 

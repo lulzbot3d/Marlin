@@ -1891,8 +1891,8 @@
   // Travel limits (mm) after homing, corresponding to endstop positions.  
   #define LULZBOT_X_MAX_POS  164   
   #define LULZBOT_X_MIN_POS  -5.5  
-  #define LULZBOT_Y_MAX_POS  175   
-  #define LULZBOT_Y_MIN_POS  -27   
+  #define LULZBOT_Y_MAX_POS  168   
+  #define LULZBOT_Y_MIN_POS  -34   
   #define LULZBOT_Z_MIN_POS  0     
   #define LULZBOT_Z_MAX_POS  181.5 
 
@@ -1902,8 +1902,8 @@
   // Travel limits (mm) after homing, corresponding to endstop positions.
   #define LULZBOT_X_MAX_POS  230   
   #define LULZBOT_X_MIN_POS  -1.5     
-  #define LULZBOT_Y_MAX_POS  240    
-  #define LULZBOT_Y_MIN_POS  -16    
+  #define LULZBOT_Y_MAX_POS  233    
+  #define LULZBOT_Y_MIN_POS  -23    
   #define LULZBOT_Z_MIN_POS  0      
   #define LULZBOT_Z_MAX_POS  244.5    
 #endif

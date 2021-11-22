@@ -395,7 +395,7 @@
   #define LULZBOT_M115_EXTRUDER_TYPE       "Titan Areo"
 #elif defined(TOOLHEAD_HS_HSPLUS)
   #undef LULZBOT_M115_EXTRUDER_TYPE
-  #define LULZBOT_M115_EXTRUDER_TYPE       "Titan Areo Vulcano"
+  #define LULZBOT_M115_EXTRUDER_TYPE       "Titan Areo Volcano"
 #elif defined(TOOLHEAD_H175)
   #undef LULZBOT_M115_EXTRUDER_TYPE
   #define LULZBOT_M115_EXTRUDER_TYPE       "H175"

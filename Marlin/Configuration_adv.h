@@ -3889,7 +3889,7 @@
 
     #if defined(TAZ6)
       #define MAIN_MENU_ITEM_1_DESC "Standard|0.5mm"
-      #define MAIN_MENU_ITEM_1_GCODE "M92E833\nM206Y5\nM301" DEFAULT_PID "\nM907E" E_CURRENT_Std "\nM500\nM117 Standard|0.5mm"
+      #define MAIN_MENU_ITEM_1_GCODE "M92E833\nM206Y7\nM301" DEFAULT_PID "\nM907E" E_CURRENT_Std "\nM500\nM117 Standard|0.5mm"
     #endif
 
   #endif

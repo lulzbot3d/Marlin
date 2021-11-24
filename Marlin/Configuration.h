@@ -856,7 +856,7 @@
       #define LULZBOT_DEFAULT_Kd 61.93
     #endif
   #endif
-  #if ANY(TOOLHEAD_SL_SE_HE, LULZBOT_E3D_Titan_Aero_V6)
+  #if ANY(TOOLHEAD_SL_SE_HE, LULZBOT_E3D_Titan_Aero_V6)  // Used when LCD is not installed
     #define LULZBOT_DEFAULT_Kp 21.0
     #define LULZBOT_DEFAULT_Ki 1.78
     #define LULZBOT_DEFAULT_Kd 61.93

@@ -3825,12 +3825,10 @@
       #define DEFAULT_PID "P21.0I1.78D61.93"
     #endif
 
-    #if ANY(TAZ6, Workhorse)
-      #define E_CURRENT_Aero "875"
-      #define E_CURRENT_Std  "750"
-      #define E_CURRENT_Moar "750"
-      #define E_CURRENT_BMG  "875"
-      #define E_CURRENT_ARST "875"
+    #if ANY(TAZ6, Workhorse) //conversion to digipot units = ((mA-750)/5+135)
+      #define E_CURRENT_Aero "160" //((875-750)/5+135) = 160
+      #define E_CURRENT_Std  "135" //((750-750)/5+135) = 135
+      #define E_CURRENT_BMG  "160" //((875-750)/5+135) = 160
     #else
       #define E_CURRENT_Aero "960"
       #define E_CURRENT_BMG  "960"

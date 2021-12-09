@@ -8,7 +8,7 @@
 //#define LULZBOT_KangarooPaw_Experimental
 
 //#define TazDualZ
-
+//#define LULZBOT_FILAMENT_RUNOUT
 /************** Uncomment a Tool Head Option From Below *********************/
 #define LULZBOT_UNIVERSAL_TOOLHEAD
 //#define TOOLHEAD_SL_SE_HE
@@ -1970,7 +1970,7 @@
  * RAMPS-based boards use SERVO3_PIN for the first runout sensor.
  * For other boards you may need to define FIL_RUNOUT_PIN, FIL_RUNOUT2_PIN, etc.
  */
-#if ANY(TAZPro, TAZProXT, Sidekick_289, Sidekick_747)
+#if ANY(TAZPro, TAZProXT, Sidekick_289, Sidekick_747,LULZBOT_FILAMENT_RUNOUT)
   #define FILAMENT_RUNOUT_SENSOR
 #endif
 #if ENABLED(FILAMENT_RUNOUT_SENSOR)

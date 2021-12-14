@@ -344,7 +344,7 @@ bool unload_filament(const_float_t unload_length, const bool show_lcd/*=false*/,
 
   unscaled_e_move(unload_length * mix_multiplier, (FILAMENT_CHANGE_UNLOAD_FEEDRATE) * mix_multiplier);
 
-  safe_delay(FILAMENT_UNLOAD_DELAY); // pausing to allow filament to stiffen up
+  safe_delay(LULZBOT_FILAMENT_UNLOAD_DELAY); // pausing to allow filament to stiffen up
 
   unscaled_e_move((-FILAMENT_UNLOAD_FAST_LENGTH) * mix_multiplier,  // Doing a fast unload to keep filament from deforming by hobbed gear
                   (FILAMENT_UNLOAD_FAST_FEEDRATE) * mix_multiplier);

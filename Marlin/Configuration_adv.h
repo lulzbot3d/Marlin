@@ -3822,11 +3822,9 @@
     #define CUSTOM_MENU_MAIN_SCRIPT_RETURN  // Return to status screen after a script
     #define CUSTOM_MENU_MAIN_ONLY_IDLE         // Only show custom menu when the machine is idle
 
-    #if ANY(TAZ6)
-      #define DEFAULT_PID "P28.79I1.91D108.51"
-    #else
-      #define DEFAULT_PID "P21.0I1.78D61.93"
-    #endif
+    #define SK_DEFAULT_PID "26.90I2.41D75.19"
+    #define TAZ6_DEFAULT_PID "P28.79I1.91D108.51"
+    #define DEFAULT_PID "P21.0I1.78D61.93"
 
     #if ANY(TAZ6, Workhorse) //conversion to digipot units = ((mA-750)/5+135)
       #define E_CURRENT_Aero "160" //((875-750)/5+135) = 160
@@ -3842,7 +3840,7 @@
       #define MAIN_MENU_ITEM_1_GCODE "M92E420\nM301P26.29I2.57D72.59\nM906E" E_CURRENT_Aero "\nM500\nM117 SK175|0.50mm|BRASS"
 
       #define MAIN_MENU_ITEM_2_DESC "SK285|0.50mm|BRASS"
-      #define MAIN_MENU_ITEM_2_GCODE "M92E420\nM301P26.90I2.41D75.19\nM906E" E_CURRENT_Aero "\nM500\nM117 SK285|0.50mm|BRASS"
+      #define MAIN_MENU_ITEM_2_GCODE "M92E420\nM301" SK_DEFAULT_PID "\nM906E" E_CURRENT_Aero "\nM500\nM117 SK285|0.50mm|BRASS"
     #endif
     #if DISABLED(TAZ6, Workhorse)
       #define MAIN_MENU_ITEM_3_DESC "M175v2|0.50mm|CRB CU"
@@ -3890,7 +3888,7 @@
 
     #if defined(TAZ6)
       #define MAIN_MENU_ITEM_1_DESC "Standard|0.5mm"
-      #define MAIN_MENU_ITEM_1_GCODE "M92E833\nM206Y4\nM301" DEFAULT_PID "\nM907E" E_CURRENT_Std "\nM500\nM117 Standard|0.5mm"
+      #define MAIN_MENU_ITEM_1_GCODE "M92E833\nM206Y4\nM301" TAZ6_DEFAULT_PID "\nM907E" E_CURRENT_Std "\nM500\nM117 Standard|0.5mm"
     #endif
 
   #endif

@@ -846,9 +846,14 @@
   #if ENABLED(LULZBOT_UNIVERSAL_TOOLHEAD)
     #if ANY(Sidekick_289, Sidekick_747)
       // SK Tool heads (30W)
-      #define LULZBOT_DEFAULT_Kp 26.47
-      #define LULZBOT_DEFAULT_Ki 2.32
-      #define LULZBOT_DEFAULT_Kd 75.56
+      #define LULZBOT_DEFAULT_Kp 26.90
+      #define LULZBOT_DEFAULT_Ki 2.41
+      #define LULZBOT_DEFAULT_Kd 75.19
+    #elif ENABLED(TAZ6)
+      //TAZ 6 Single Extruder
+      #define LULZBOT_DEFAULT_Kp 28.79
+      #define LULZBOT_DEFAULT_Ki 1.91
+      #define LULZBOT_DEFAULT_Kd 108.51
     #else
       // E3D Titan Aero with LulzBot V6 block
       #define LULZBOT_DEFAULT_Kp  21.0
@@ -865,9 +870,9 @@
     #define LULZBOT_DEFAULT_Ki 2.32
     #define LULZBOT_DEFAULT_Kd 75.56
   #elif ENABLED(TOOLHEAD_SK285)
-    #define LULZBOT_DEFAULT_Kp 26.47
-    #define LULZBOT_DEFAULT_Ki 2.32
-    #define LULZBOT_DEFAULT_Kd 75.56
+    #define LULZBOT_DEFAULT_Kp 26.90
+    #define LULZBOT_DEFAULT_Ki 2.41
+    #define LULZBOT_DEFAULT_Kd 75.19
   #elif ENABLED(TOOLHEAD_H175)
     #define LULZBOT_DEFAULT_Kp 27.58
     #define LULZBOT_DEFAULT_Ki 3.22

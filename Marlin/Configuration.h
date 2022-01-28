@@ -401,7 +401,7 @@
   #define LULZBOT_M115_EXTRUDER_TYPE       "H175"
 #elif defined(TOOLHEAD_M175)
   #undef LULZBOT_M115_EXTRUDER_TYPE
-  #define LULZBOT_M115_EXTRUDER_TYPE       "M175"
+  #define LULZBOT_M115_EXTRUDER_TYPE       "M175v2"
 #elif defined(TOOLHEAD_SK175)
   #undef LULZBOT_M115_EXTRUDER_TYPE
   #define LULZBOT_M115_EXTRUDER_TYPE       "SK175"
@@ -885,12 +885,12 @@
     #define charH175_DEFAULT_Kd "65.66"
 
   // M175 Tool head (50W)
-    #define M175_DEFAULT_Kp 24.54
-    #define M175_DEFAULT_Ki 2.52
-    #define M175_DEFAULT_Kd 61.75
-    #define charM175_DEFAULT_Kp "24.54"
-    #define charM175_DEFAULT_Ki "2.52"
-    #define charM175_DEFAULT_Kd "61.75"
+    #define M175_DEFAULT_Kp 22.12
+    #define M175_DEFAULT_Ki 1.94
+    #define M175_DEFAULT_Kd 63.59
+    #define charM175_DEFAULT_Kp "22.12"
+    #define charM175_DEFAULT_Ki "1.94"
+    #define charM175_DEFAULT_Kd "63.59"
 
   // HS & HSPLUS Tool heads  
     #define HSHSPLUS_DEFAULT_Kp 37.55

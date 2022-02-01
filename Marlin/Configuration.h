@@ -8,7 +8,7 @@
 //#define LULZBOT_KangarooPaw_Experimental
 
 //#define TazDualZ
-//#define LULZBOT_FILAMENT_RUNOUT
+#define LULZBOT_FILAMENT_RUNOUT
 /************** Uncomment a Tool Head Option From Below *********************/
 #define LULZBOT_UNIVERSAL_TOOLHEAD
 //#define TOOLHEAD_SL_SE_HE

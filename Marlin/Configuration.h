@@ -845,15 +845,15 @@
   // If you are using a pre-configured hotend then you can use one of the value sets by uncommenting it
 
   //TAZ 6 Single Extruder (W)
-    #define TAZ6_STD_DEFAULT_Kp 28.79
-    #define TAZ6_STD_DEFAULT_Ki 1.91
+    #define TAZ6_STD_DEFAULT_Kp 28.79        //used to define stock PID. NOTE: if values are changed, both sets need to be changed.
+    #define TAZ6_STD_DEFAULT_Ki 1.91         //NOTE: if values are changed, both sets need to be changed.
     #define TAZ6_STD_DEFAULT_Kd 108.51
-    #define charTAZ6_STD_DEFAULT_Kp "28.79"
+    #define charTAZ6_STD_DEFAULT_Kp "28.79"  //used in the tool head menu gcode.
     #define charTAZ6_STD_DEFAULT_Ki "1.91"
     #define charTAZ6_STD_DEFAULT_Kd "108.51"
 
   // E3D Titan Aero with LulzBot V6 block (40W)
-    #define SLSEHE_DEFAULT_Kp 21.0
+    #define SLSEHE_DEFAULT_Kp 21.0           //NOTE: if values are changed, both sets need to be changed.
     #define SLSEHE_DEFAULT_Ki 1.78
     #define SLSEHE_DEFAULT_Kd 61.93
     #define charSLSEHE_DEFAULT_Kp "21.0"
@@ -861,7 +861,7 @@
     #define charSLSEHE_DEFAULT_Kd "61.93"
 
   // SK175 Tool head (30W)
-    #define SK175_DEFAULT_Kp 26.47
+    #define SK175_DEFAULT_Kp 26.47           //NOTE: if values are changed, both sets need to be changed.
     #define SK175_DEFAULT_Ki 2.32
     #define SK175_DEFAULT_Kd 75.56
     #define charSK175_DEFAULT_Kp "26.47"
@@ -869,7 +869,7 @@
     #define charSK175_DEFAULT_Kd "75.56"
    
   // SK285 Tool head (30W)
-    #define SK285_DEFAULT_Kp 26.90
+    #define SK285_DEFAULT_Kp 26.90           //NOTE: if values are changed, both sets need to be changed.
     #define SK285_DEFAULT_Ki 2.41
     #define SK285_DEFAULT_Kd 75.19
     #define charSK285_DEFAULT_Kp "26.90"
@@ -877,7 +877,7 @@
     #define charSK285_DEFAULT_Kd "75.19"
 
   // H175 Tool head (40W)
-    #define H175_DEFAULT_Kp 27.58
+    #define H175_DEFAULT_Kp 27.58            //NOTE: if values are changed, both sets need to be changed.
     #define H175_DEFAULT_Ki 3.22
     #define H175_DEFAULT_Kd 65.66
     #define charH175_DEFAULT_Kp "27.58" 
@@ -885,7 +885,7 @@
     #define charH175_DEFAULT_Kd "65.66"
 
   // M175 Tool head (50W)
-    #define M175_DEFAULT_Kp 22.12
+    #define M175_DEFAULT_Kp 22.12            //NOTE: if values are changed, both sets need to be changed.
     #define M175_DEFAULT_Ki 1.94
     #define M175_DEFAULT_Kd 63.59
     #define charM175_DEFAULT_Kp "22.12"
@@ -893,7 +893,7 @@
     #define charM175_DEFAULT_Kd "63.59"
 
   // HS & HSPLUS Tool heads  
-    #define HSHSPLUS_DEFAULT_Kp 37.55
+    #define HSHSPLUS_DEFAULT_Kp 37.55        //NOTE: if values are changed, both sets need to be changed.
     #define HSHSPLUS_DEFAULT_Ki 5.39
     #define HSHSPLUS_DEFAULT_Kd 65.36
     #define charHSHSPLUS_DEFAULT_Kp "37.55"

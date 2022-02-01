@@ -401,7 +401,7 @@
   #define LULZBOT_M115_EXTRUDER_TYPE       "H175"
 #elif defined(TOOLHEAD_M175)
   #undef LULZBOT_M115_EXTRUDER_TYPE
-  #define LULZBOT_M115_EXTRUDER_TYPE       "M175"
+  #define LULZBOT_M115_EXTRUDER_TYPE       "M175v2"
 #elif defined(TOOLHEAD_SK175)
   #undef LULZBOT_M115_EXTRUDER_TYPE
   #define LULZBOT_M115_EXTRUDER_TYPE       "SK175"
@@ -843,55 +843,107 @@
                                   // Set/get with gcode: M301 E[extruder number, 0-2]
   
   // If you are using a pre-configured hotend then you can use one of the value sets by uncommenting it
-  #if ENABLED(LULZBOT_UNIVERSAL_TOOLHEAD)
-    #if ANY(Sidekick_289, Sidekick_747)
-      // SK Tool heads (30W)
-      #define LULZBOT_DEFAULT_Kp 26.47
-      #define LULZBOT_DEFAULT_Ki 2.32
-      #define LULZBOT_DEFAULT_Kd 75.56
-    #else
-      // E3D Titan Aero with LulzBot V6 block
-      #define LULZBOT_DEFAULT_Kp  21.0
-      #define LULZBOT_DEFAULT_Ki  1.78
-      #define LULZBOT_DEFAULT_Kd 61.93
-    #endif
-  #endif
-  #if ANY(TOOLHEAD_SL_SE_HE, LULZBOT_E3D_Titan_Aero_V6)  // Used when LCD is not installed
-    #define LULZBOT_DEFAULT_Kp 21.0
-    #define LULZBOT_DEFAULT_Ki 1.78
-    #define LULZBOT_DEFAULT_Kd 61.93
-  #elif ENABLED(TOOLHEAD_SK175)
-    #define LULZBOT_DEFAULT_Kp 26.47
-    #define LULZBOT_DEFAULT_Ki 2.32
-    #define LULZBOT_DEFAULT_Kd 75.56
-  #elif ENABLED(TOOLHEAD_SK285)
-    #define LULZBOT_DEFAULT_Kp 26.47
-    #define LULZBOT_DEFAULT_Ki 2.32
-    #define LULZBOT_DEFAULT_Kd 75.56
-  #elif ENABLED(TOOLHEAD_H175)
-    #define LULZBOT_DEFAULT_Kp 27.58
-    #define LULZBOT_DEFAULT_Ki 3.22
-    #define LULZBOT_DEFAULT_Kd 65.66
-  #elif ENABLED(TOOLHEAD_M175)
-    #define LULZBOT_DEFAULT_Kp 24.54
-    #define LULZBOT_DEFAULT_Ki 2.52
-    #define LULZBOT_DEFAULT_Kd 61.75
-  #elif ANY(TOOLHEAD_HS_HSPLUS)
-    #define LULZBOT_DEFAULT_Kp 37.55
-    #define LULZBOT_DEFAULT_Ki 5.39
-    #define LULZBOT_DEFAULT_Kd 65.36
-  #endif
 
+  //TAZ 6 Single Extruder (W)
+    #define TAZ6_STD_DEFAULT_Kp 28.79        //used to define stock PID. NOTE: if values are changed, both sets need to be changed.
+    #define TAZ6_STD_DEFAULT_Ki 1.91         //NOTE: if values are changed, both sets need to be changed.
+    #define TAZ6_STD_DEFAULT_Kd 108.51
+    #define charTAZ6_STD_DEFAULT_Kp "28.79"  //used in the tool head menu gcode.
+    #define charTAZ6_STD_DEFAULT_Ki "1.91"
+    #define charTAZ6_STD_DEFAULT_Kd "108.51"
+
+  // E3D Titan Aero with LulzBot V6 block (40W)
+    #define SLSEHE_DEFAULT_Kp 21.0           //NOTE: if values are changed, both sets need to be changed.
+    #define SLSEHE_DEFAULT_Ki 1.78
+    #define SLSEHE_DEFAULT_Kd 61.93
+    #define charSLSEHE_DEFAULT_Kp "21.0"
+    #define charSLSEHE_DEFAULT_Ki "1.78"
+    #define charSLSEHE_DEFAULT_Kd "61.93"
+
+  // SK175 Tool head (30W)
+    #define SK175_DEFAULT_Kp 26.47           //NOTE: if values are changed, both sets need to be changed.
+    #define SK175_DEFAULT_Ki 2.32
+    #define SK175_DEFAULT_Kd 75.56
+    #define charSK175_DEFAULT_Kp "26.47"
+    #define charSK175_DEFAULT_Ki "2.32"
+    #define charSK175_DEFAULT_Kd "75.56"
+   
+  // SK285 Tool head (30W)
+    #define SK285_DEFAULT_Kp 26.90           //NOTE: if values are changed, both sets need to be changed.
+    #define SK285_DEFAULT_Ki 2.41
+    #define SK285_DEFAULT_Kd 75.19
+    #define charSK285_DEFAULT_Kp "26.90"
+    #define charSK285_DEFAULT_Ki "2.41"
+    #define charSK285_DEFAULT_Kd "75.19"
+
+  // H175 Tool head (40W)
+    #define H175_DEFAULT_Kp 27.58            //NOTE: if values are changed, both sets need to be changed.
+    #define H175_DEFAULT_Ki 3.22
+    #define H175_DEFAULT_Kd 65.66
+    #define charH175_DEFAULT_Kp "27.58" 
+    #define charH175_DEFAULT_Ki "3.22"
+    #define charH175_DEFAULT_Kd "65.66"
+
+  // M175 Tool head (50W)
+    #define M175_DEFAULT_Kp 22.12            //NOTE: if values are changed, both sets need to be changed.
+    #define M175_DEFAULT_Ki 1.94
+    #define M175_DEFAULT_Kd 63.59
+    #define charM175_DEFAULT_Kp "22.12"
+    #define charM175_DEFAULT_Ki "1.94"
+    #define charM175_DEFAULT_Kd "63.59"
+
+  // HS & HSPLUS Tool heads  
+    #define HSHSPLUS_DEFAULT_Kp 37.55        //NOTE: if values are changed, both sets need to be changed.
+    #define HSHSPLUS_DEFAULT_Ki 5.39
+    #define HSHSPLUS_DEFAULT_Kd 65.36
+    #define charHSHSPLUS_DEFAULT_Kp "37.55"
+    #define charHSHSPLUS_DEFAULT_Ki "5.39"
+    #define charHSHSPLUS_DEFAULT_Kd "65.36"
+  
   #if ENABLED(PID_PARAMS_PER_HOTEND)
     // Specify between 1 and HOTENDS values per array.
     // If fewer than EXTRUDER values are provided, the last element will be repeated.
     #define DEFAULT_Kp_LIST {  22.20,  22.20 }
     #define DEFAULT_Ki_LIST {   1.08,   1.08 }
     #define DEFAULT_Kd_LIST { 114.00, 114.00 }
+  
   #else
-    #define DEFAULT_Kp  LULZBOT_DEFAULT_Kp
-    #define DEFAULT_Ki  LULZBOT_DEFAULT_Ki
-    #define DEFAULT_Kd  LULZBOT_DEFAULT_Kd
+    // Sets default PID based on which printer/toolhead is selected
+    #if ENABLED(TAZ6) // Taz 6 Standard toolhead 
+      #define DEFAULT_Kp  TAZ6_STD_DEFAULT_Kp
+      #define DEFAULT_Ki  TAZ6_STD_DEFAULT_Ki
+      #define DEFAULT_Kd  TAZ6_STD_DEFAULT_Kd
+    
+    #elif ANY(TOOLHEAD_SL_SE_HE, LULZBOT_E3D_Titan_Aero_V6, LULZBOT_UNIVERSAL_TOOLHEAD)
+      #define DEFAULT_Kp  SLSEHE_DEFAULT_Kp
+      #define DEFAULT_Ki  SLSEHE_DEFAULT_Ki
+      #define DEFAULT_Kd  SLSEHE_DEFAULT_Kd    
+    
+    #elif ENABLED(TOOLHEAD_SK175)
+      #define DEFAULT_Kp SK175_DEFAULT_Kp
+      #define DEFAULT_Ki SK175_DEFAULT_Ki
+      #define DEFAULT_Kd SK175_DEFAULT_Kd
+      
+    #elif ENABLED(TOOLHEAD_SK285)
+      #define DEFAULT_Kp SK285_DEFAULT_Kp
+      #define DEFAULT_Ki SK285_DEFAULT_Ki
+      #define DEFAULT_Kd SK285_DEFAULT_Kd
+    
+    #elif ENABLED(TOOLHEAD_H175)
+      #define DEFAULT_Kp H175_DEFAULT_Kp
+      #define DEFAULT_Ki H175_DEFAULT_Ki
+      #define DEFAULT_Kd H175_DEFAULT_Kd
+    
+    #elif ENABLED(TOOLHEAD_M175)
+      #define DEFAULT_Kp M175_DEFAULT_Kp
+      #define DEFAULT_Ki M175_DEFAULT_Ki
+      #define DEFAULT_Kd M175_DEFAULT_Kd
+
+    #elif ANY(TOOLHEAD_HS_HSPLUS)
+      #define DEFAULT_Kp HSHSPLUS_DEFAULT_Kp 
+      #define DEFAULT_Ki HSHSPLUS_DEFAULT_Ki 
+      #define DEFAULT_Kd HSHSPLUS_DEFAULT_Kd 
+    #endif
   #endif
 #endif // PIDTEMP
 

@@ -8,7 +8,7 @@
 //#define LULZBOT_KangarooPaw_Experimental
 
 //#define TazDualZ
-//#define LULZBOT_FILAMENT_RUNOUT
+#define LULZBOT_FILAMENT_RUNOUT
 /************** Uncomment a Tool Head Option From Below *********************/
 #define LULZBOT_UNIVERSAL_TOOLHEAD
 //#define TOOLHEAD_SL_SE_HE
@@ -401,7 +401,7 @@
   #define LULZBOT_M115_EXTRUDER_TYPE       "H175"
 #elif defined(TOOLHEAD_M175)
   #undef LULZBOT_M115_EXTRUDER_TYPE
-  #define LULZBOT_M115_EXTRUDER_TYPE       "M175"
+  #define LULZBOT_M115_EXTRUDER_TYPE       "M175v2"
 #elif defined(TOOLHEAD_SK175)
   #undef LULZBOT_M115_EXTRUDER_TYPE
   #define LULZBOT_M115_EXTRUDER_TYPE       "SK175"

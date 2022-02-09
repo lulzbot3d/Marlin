@@ -97,7 +97,7 @@
 // Author info of this build printed to the host during boot and M115
 #define STRING_CONFIG_H_AUTHOR "Lulzbot" // Who made the changes.
 #define CUSTOM_VERSION_FILE Version.h // Path from the root directory (no quotes)
-#define LULZBOT_FW_VERSION "2.0.9.0.11"
+#define LULZBOT_FW_VERSION "2.0.9.0.11x"
 
 /**
  * *** VENDORS PLEASE READ ***
@@ -2563,7 +2563,7 @@
 #endif
 
 #if ENABLED(NOZZLE_CLEAN_FEATURE)
-  #define CLEAN_SCRIPT "M117 Cleaning nozzle...\nG28 O\nG12\nM77\nM117 Nozzle clean"
+  #define CLEAN_SCRIPT "M117 Cleaning nozzle...\nG28 O\nM109 S170\nG12\nM77\nM117 Nozzle clean"
 
   // Default number of pattern repetitions
   #define NOZZLE_CLEAN_STROKES  12

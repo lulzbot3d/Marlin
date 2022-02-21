@@ -226,7 +226,7 @@
     #define LULZBOT_TAZ_BED
     #define LULZBOT_TWO_PIECE_BED
     #define LULZBOT_USE_ARCHIM2
-    #define LULZBOT_USE_AUTOLEVELING
+    //#define LULZBOT_USE_AUTOLEVELING
     #define LULZBOT_BACKLASH_COMPENSATION
     #define LULZBOT_HAS_CALIBRATION_CUBE
     #define LULZBOT_CALIBRATION_GCODE
@@ -826,6 +826,12 @@
     #define LULZBOT_STANDARD_RIGHT_PROBE_BED_POSITION     286//185
     #define LULZBOT_STANDARD_BACK_PROBE_BED_POSITION      293//291
     #define LULZBOT_STANDARD_FRONT_PROBE_BED_POSITION     -15//-9
+
+#elif defined(LULZBOT_BLTouch) && defined(LULZBOT_TAZ_BED)
+    #define LULZBOT_STANDARD_LEFT_PROBE_BED_POSITION      0
+    #define LULZBOT_STANDARD_RIGHT_PROBE_BED_POSITION     280//185
+    #define LULZBOT_STANDARD_BACK_PROBE_BED_POSITION      280//291
+    #define LULZBOT_STANDARD_FRONT_PROBE_BED_POSITION     0//-9
 #endif
 
 #if defined(LULZBOT_USE_AUTOLEVELING)
@@ -848,6 +854,11 @@
     // probing on the washer underneath the wiper pad.
     #define LULZBOT_LAST_PROBE_POINT_ON_BACK_LEFT_CORNER
   #endif
+#endif
+
+#if defined (LULZBOT_BLTouch)
+  #define LULZBOT_GRID_MAX_POINTS_X            2
+  #define LULZBOT_GRID_MAX_POINTS_Y            4
 #endif
 
 /* Make sure Marlin allows probe points outside of the bed area */

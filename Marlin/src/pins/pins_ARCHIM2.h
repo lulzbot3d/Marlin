@@ -52,8 +52,8 @@
 //
 // Servos
 //
-#define SERVO0_PIN         20   // D20 PB12 (Header J20 20)
-#define SERVO1_PIN         21   // D21 PB13 (Header J20 19)
+#define SERVO0_PIN         21   // D20 PB12 (Header J20 20) Swapping what side the BLTouch gets plugged into (plugs into Right side)
+#define SERVO1_PIN         20   // D21 PB13 (Header J20 19)
 
 //
 // Limit Switches

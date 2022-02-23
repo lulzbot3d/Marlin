@@ -1719,7 +1719,7 @@
     #define LULZBOT_STANDARD_X_BED_SIZE        280
     #define LULZBOT_STANDARD_Y_BED_SIZE        280
 
-#elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT)
+#elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT) !&& defined(LULZBOT_LONG_BED)
     #define LULZBOT_STANDARD_X_MAX_POS         318
     #define LULZBOT_STANDARD_X_MIN_POS          -6
     #define LULZBOT_STANDARD_Y_MAX_POS         313
@@ -2018,8 +2018,13 @@
 
 #if defined(LULZBOT_SENSORLESS_HOMING)
     #if defined(LULZBOT_IS_TAZ)
-        #define LULZBOT_X_STALL_SENSITIVITY 6
-        #define LULZBOT_Y_STALL_SENSITIVITY 5
+        #if defined (LULZBOT_LONG_BED)
+            #define LULZBOT_X_STALL_SENSITIVITY 6
+            #define LULZBOT_Y_STALL_SENSITIVITY 6
+        #else
+            #define LULZBOT_X_STALL_SENSITIVITY 6
+            #define LULZBOT_Y_STALL_SENSITIVITY 5
+        #endif
 
     #elif defined(LULZBOT_IS_MINI)
         #define LULZBOT_X_STALL_SENSITIVITY 4

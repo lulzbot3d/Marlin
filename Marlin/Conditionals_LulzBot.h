@@ -857,8 +857,8 @@
 #endif
 
 #if defined (LULZBOT_BLTouch)
-  #define LULZBOT_GRID_MAX_POINTS_X            2
-  #define LULZBOT_GRID_MAX_POINTS_Y            4
+  #define LULZBOT_GRID_MAX_POINTS_X            4
+  #define LULZBOT_GRID_MAX_POINTS_Y            8
 #endif
 
 /* Make sure Marlin allows probe points outside of the bed area */
@@ -1728,6 +1728,15 @@
     #define LULZBOT_STANDARD_X_BED_SIZE        280
     #define LULZBOT_STANDARD_Y_BED_SIZE        280
 
+#elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT) && defined(LULZBOT_LONG_BED)
+    #define LULZBOT_STANDARD_X_MAX_POS         318
+    #define LULZBOT_STANDARD_X_MIN_POS          -6
+    #define LULZBOT_STANDARD_Y_MAX_POS         613
+    #define LULZBOT_STANDARD_Y_MIN_POS       -18.2//-15
+
+    #define LULZBOT_STANDARD_X_BED_SIZE        280
+    #define LULZBOT_STANDARD_Y_BED_SIZE        580
+
 #elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_SCREW)
     #define LULZBOT_STANDARD_X_MAX_POS         300
     #define LULZBOT_STANDARD_X_MIN_POS         -20
@@ -1762,6 +1771,9 @@
     #define LULZBOT_STANDARD_Z_MIN_POS          -2
     #define LULZBOT_STANDARD_Z_MAX_POS         299
 
+#elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT) && defined(LULZBOT_LONG_BED)
+    #define LULZBOT_STANDARD_Z_MIN_POS          -2
+    #define LULZBOT_STANDARD_Z_MAX_POS         297.88
 
 #endif
 

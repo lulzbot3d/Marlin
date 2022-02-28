@@ -1719,7 +1719,7 @@
     #define LULZBOT_STANDARD_X_BED_SIZE        280
     #define LULZBOT_STANDARD_Y_BED_SIZE        280
 
-#elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT) !&& defined(LULZBOT_LONG_BED)
+#elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT) && !defined(LULZBOT_LONG_BED)
     #define LULZBOT_STANDARD_X_MAX_POS         318
     #define LULZBOT_STANDARD_X_MIN_POS          -6
     #define LULZBOT_STANDARD_Y_MAX_POS         313

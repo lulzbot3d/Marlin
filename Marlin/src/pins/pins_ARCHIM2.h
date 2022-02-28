@@ -96,7 +96,7 @@
 
 #endif
 
-#define Z_MIN_PIN          31   // PA7 MIN ES3
+#define Z_MIN_PIN          63   // PA7 MIN ES3
 #define Z_MAX_PIN          30   // PD9 MAX ES3
 
 //
@@ -164,7 +164,7 @@
 // Temperature Sensors
 //
 #define TEMP_0_PIN         10   // D10 PB19 THERM AN1 *
-#define TEMP_1_PIN          9   // D9 PB18 THERM AN2 *
+//#define TEMP_1_PIN          9   // D9 PB18 THERM AN2 *
 #define TEMP_2_PIN          8   // D8 PB17 THERM AN4 *
 #define TEMP_BED_PIN       11   // D11 PB20 THERM AN3 *
 

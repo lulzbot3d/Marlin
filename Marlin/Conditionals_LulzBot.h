@@ -73,7 +73,7 @@
  *
  */
 
-#define LULZBOT_FW_VERSION ".144.6" // Change this with each update
+#define LULZBOT_FW_VERSION ".144.7" // Change this with each update
 
 #if ( \
     !defined(LULZBOT_Gladiola_Mini) && \
@@ -1562,47 +1562,108 @@
 
 // Hotend variants
 
-#if defined(LULZBOT_Moarstruder)
-    // LulzBot MOARstruder (40w)
-    #define LULZBOT_DEFAULT_Kp 55.64
-    #define LULZBOT_DEFAULT_Ki 6.79
-    #define LULZBOT_DEFAULT_Kd 113.94
-#endif /* LULZBOT_Moarstruder */
+ //TAZ 6 Single Extruder (W)
+    #define TAZ6_STD_DEFAULT_Kp 28.79        //used to define stock PID. NOTE: if values are changed, both sets need to be changed.
+    #define TAZ6_STD_DEFAULT_Ki 1.91         //NOTE: if values are changed, both sets need to be changed.
+    #define TAZ6_STD_DEFAULT_Kd 108.51
+    #define charTAZ6_STD_DEFAULT_Kp "28.79"  //used in the tool head menu gcode.
+    #define charTAZ6_STD_DEFAULT_Ki "1.91"
+    #define charTAZ6_STD_DEFAULT_Kd "108.51"
 
-#if defined(LULZBOT_E3D_SOMEstruder_x2)
-    // Side-by-side LulzBot E3D SOMEstruder on Yellowfin Dual
-    #define LULZBOT_DEFAULT_Kp 47.45
-    #define LULZBOT_DEFAULT_Ki 4.83
-    #define LULZBOT_DEFAULT_Kd 116.63
-#endif /* LULZBOT_E3D_SOMEstruder_x2 */
+  // E3D Titan Aero with LulzBot V6 block (40W)
+    #define SLSEHE_DEFAULT_Kp 21.0           //NOTE: if values are changed, both sets need to be changed.
+    #define SLSEHE_DEFAULT_Ki 1.78
+    #define SLSEHE_DEFAULT_Kd 61.93
+    #define charSLSEHE_DEFAULT_Kp "21.0"
+    #define charSLSEHE_DEFAULT_Ki "1.78"
+    #define charSLSEHE_DEFAULT_Kd "61.93"
 
-#if defined(LULZBOT_AO_Hexagon)
-    // LulzBot AO-Hexagon (30w)
-    #define LULZBOT_DEFAULT_Kp 28.79
-    #define LULZBOT_DEFAULT_Ki 1.91
-    #define LULZBOT_DEFAULT_Kd 108.51
-#endif /* LULZBOT_AO_Hexagon */
+  // SK175 Tool head (30W)
+    #define SK175_DEFAULT_Kp 26.47           //NOTE: if values are changed, both sets need to be changed.
+    #define SK175_DEFAULT_Ki 2.32
+    #define SK175_DEFAULT_Kd 75.56
+    #define charSK175_DEFAULT_Kp "26.47"
+    #define charSK175_DEFAULT_Ki "2.32"
+    #define charSK175_DEFAULT_Kd "75.56"
+   
+  // SK285 Tool head (30W)
+    #define SK285_DEFAULT_Kp 26.90           //NOTE: if values are changed, both sets need to be changed.
+    #define SK285_DEFAULT_Ki 2.41
+    #define SK285_DEFAULT_Kd 75.19
+    #define charSK285_DEFAULT_Kp "26.90"
+    #define charSK285_DEFAULT_Ki "2.41"
+    #define charSK285_DEFAULT_Kd "75.19"
 
-#if defined(LULZBOT_E3D_Titan_Aero_V6)
-    // E3D Titan Aero with LulzBot V6 block
-    #define LULZBOT_DEFAULT_Kp 41.68
-    #define LULZBOT_DEFAULT_Ki  6.87
-    #define LULZBOT_DEFAULT_Kd 63.16
-#endif /* LULZBOT_E3D_Titan_Aero */
+  // H175 Tool head (40W)
+    #define H175_DEFAULT_Kp 27.58            //NOTE: if values are changed, both sets need to be changed.
+    #define H175_DEFAULT_Ki 3.22
+    #define H175_DEFAULT_Kd 65.66
+    #define charH175_DEFAULT_Kp "27.58" 
+    #define charH175_DEFAULT_Ki "3.22"
+    #define charH175_DEFAULT_Kd "65.66"
 
-#if defined(LULZBOT_E3D_Titan_Aero_Volcano)
-    // E3D Titan Aero with Volcano block
-    #define LULZBOT_DEFAULT_Kp 37.55
-    #define LULZBOT_DEFAULT_Ki  5.39
-    #define LULZBOT_DEFAULT_Kd 65.36
-#endif
+  // M175 Tool head (50W)
+    #define M175_DEFAULT_Kp 22.12            //NOTE: if values are changed, both sets need to be changed.
+    #define M175_DEFAULT_Ki 1.94
+    #define M175_DEFAULT_Kd 63.59
+    #define charM175_DEFAULT_Kp "22.12"
+    #define charM175_DEFAULT_Ki "1.94"
+    #define charM175_DEFAULT_Kd "63.59"
 
-#if defined(LULZBOT_SliceEngineering)
-    // Slice Engineering Mosquito
-    #define LULZBOT_DEFAULT_Kp  24.54
-    #define LULZBOT_DEFAULT_Ki   2.52
-    #define LULZBOT_DEFAULT_Kd  61.75
-#endif
+  // HS & HSPLUS Tool heads  
+    #define HSHSPLUS_DEFAULT_Kp 37.55        //NOTE: if values are changed, both sets need to be changed.
+    #define HSHSPLUS_DEFAULT_Ki 5.39
+    #define HSHSPLUS_DEFAULT_Kd 65.36
+    #define charHSHSPLUS_DEFAULT_Kp "37.55"
+    #define charHSHSPLUS_DEFAULT_Ki "5.39"
+    #define charHSHSPLUS_DEFAULT_Kd "65.36"
+  
+  #if ENABLED(PID_PARAMS_PER_HOTEND)
+    // Specify between 1 and HOTENDS values per array.
+    // If fewer than EXTRUDER values are provided, the last element will be repeated.
+    #define LULZBOT_DEFAULT_Kp_LIST {  22.20,  22.20 }
+    #define LULZBOT_DEFAULT_Ki_LIST {   1.08,   1.08 }
+    #define LULZBOT_DEFAULT_Kd_LIST { 114.00, 114.00 }
+  
+  #else
+    // Sets default PID based on which printer/toolhead is selected
+    #if ENABLED(TAZ6) // Taz 6 Standard toolhead 
+      #define LULZBOT_DEFAULT_Kp  TAZ6_STD_DEFAULT_Kp
+      #define LULZBOT_DEFAULT_Ki  TAZ6_STD_DEFAULT_Ki
+      #define LULZBOT_DEFAULT_Kd  TAZ6_STD_DEFAULT_Kd
+    
+    #elif ANY(TOOLHEAD_SL_SE_HE, LULZBOT_E3D_Titan_Aero_V6, LULZBOT_UNIVERSAL_TOOLHEAD)
+      #define LULZBOT_DEFAULT_Kp  SLSEHE_DEFAULT_Kp
+      #define LULZBOT_DEFAULT_Ki  SLSEHE_DEFAULT_Ki
+      #define LULZBOT_DEFAULT_Kd  SLSEHE_DEFAULT_Kd    
+    
+    #elif ENABLED(TOOLHEAD_SK175)
+      #define LULZBOT_DEFAULT_Kp  SK175_DEFAULT_Kp
+      #define LULZBOT_DEFAULT_Ki  SK175_DEFAULT_Ki
+      #define LULZBOT_DEFAULT_Kd  SK175_DEFAULT_Kd
+      
+    #elif ENABLED(TOOLHEAD_SK285)
+      #define LULZBOT_DEFAULT_Kp  SK285_DEFAULT_Kp
+      #define LULZBOT_DEFAULT_Ki  SK285_DEFAULT_Ki
+      #define LULZBOT_DEFAULT_Kd  SK285_DEFAULT_Kd
+    
+    #elif ENABLED(TOOLHEAD_H175)
+      #define LULZBOT_DEFAULT_Kp  H175_DEFAULT_Kp
+      #define LULZBOT_DEFAULT_Ki  H175_DEFAULT_Ki
+      #define LULZBOT_DEFAULT_Kd  H175_DEFAULT_Kd
+    
+    #elif ENABLED(TOOLHEAD_M175)
+      #define LULZBOT_DEFAULT_Kp  M175_DEFAULT_Kp
+      #define LULZBOT_DEFAULT_Ki  M175_DEFAULT_Ki
+      #define LULZBOT_DEFAULT_Kd  M175_DEFAULT_Kd
+
+    #elif ANY(TOOLHEAD_HS_HSPLUS)
+      #define LULZBOT_DEFAULT_Kp  HSHSPLUS_DEFAULT_Kp 
+      #define LULZBOT_DEFAULT_Ki  HSHSPLUS_DEFAULT_Ki 
+      #define LULZBOT_DEFAULT_Kd  HSHSPLUS_DEFAULT_Kd 
+    #endif
+  #endif
+
 
 
 // Heated bed variants

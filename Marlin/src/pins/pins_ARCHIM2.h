@@ -96,7 +96,7 @@
 
 #endif
 
-#define Z_MIN_PIN          63   //  PB18/RD/PWML2/AD11 THERM AN2 
+#define Z_MIN_PIN          63   // PB18/RD/PWML2/AD11 THERM AN2
 #define Z_MAX_PIN          30   // PD9 MAX ES3
 
 //

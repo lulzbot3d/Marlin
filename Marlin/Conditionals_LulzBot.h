@@ -886,7 +886,11 @@
 
 #define LULZBOT_MULTIPLE_PROBING              2
 #define LULZBOT_X_PROBE_OFFSET_FROM_EXTRUDER  0
-#define LULZBOT_Y_PROBE_OFFSET_FROM_EXTRUDER  0
+#if defined (LULZBOT_LONG_BED)
+    #define LULZBOT_Y_PROBE_OFFSET_FROM_EXTRUDER  30
+#else
+    #define LULZBOT_Y_PROBE_OFFSET_FROM_EXTRUDER  0
+#endif
 #define LULZBOT_Z_PROBE_OFFSET_RANGE_MIN      -2
 #define LULZBOT_Z_PROBE_OFFSET_RANGE_MAX      5
 #define LULZBOT_XY_PROBE_SPEED                6000
@@ -2458,6 +2462,8 @@ defined(LULZBOT_Gladiator_TAZProXT) && defined(TOOLHEAD_Quiver_DualExtruder)
     #if ! defined(LULZBOT_Z_PROBE_OFFSET_FROM_EXTRUDER)
         #if defined(LULZBOT_USE_Z_BELT)
             #define LULZBOT_Z_PROBE_OFFSET_FROM_EXTRUDER  -1.1
+        #elif defined (LULZBOT_LONG_BED)
+            #define LULZBOT_Z_PROBE_OFFSET_FROM_EXTRUDER  -4
         #else
             #define LULZBOT_Z_PROBE_OFFSET_FROM_EXTRUDER  -1.375
         #endif

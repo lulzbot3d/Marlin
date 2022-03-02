@@ -96,7 +96,13 @@
 
 #endif
 
-#define Z_MIN_PIN          63   // PB18/RD/PWML2/AD11 THERM AN2
+#if defined (LULZBOT_BLTouch)
+  #define Z_MIN_PIN        63   // PB18/RD/PWML2/AD11 THERM AN2
+#else
+  #define Z_MIN_PIN        31   // PA7 MIN ES3
+#endif
+
+
 #define Z_MAX_PIN          30   // PD9 MAX ES3
 
 //
@@ -164,7 +170,11 @@
 // Temperature Sensors
 //
 #define TEMP_0_PIN         10   // D10 PB19 THERM AN1 *
-//#define TEMP_1_PIN          9   // D9 PB18 THERM AN2 *
+
+#if DISABLED(LULZBOT_BLTouch)
+  #define TEMP_1_PIN        9   // D9 PB18 THERM AN2 *
+#endif
+
 #define TEMP_2_PIN          8   // D8 PB17 THERM AN4 *
 #define TEMP_BED_PIN       11   // D11 PB20 THERM AN3 *
 

@@ -821,20 +821,25 @@
     #define LULZBOT_STANDARD_BACK_PROBE_BED_POSITION      161
     #define LULZBOT_USE_PRE_GLADIOLA_G29_WORKAROUND
 
-#elif defined(LULZBOT_USE_AUTOLEVELING) && defined(LULZBOT_TAZ_BED)
+#elif defined(LULZBOT_USE_AUTOLEVELING) && defined(LULZBOT_TAZ_BED) && NONE(LULZBOT_LONG_BED, LULZBOT_BLTouch)
     #define LULZBOT_STANDARD_LEFT_PROBE_BED_POSITION      -10
     #define LULZBOT_STANDARD_RIGHT_PROBE_BED_POSITION     286//185
     #define LULZBOT_STANDARD_BACK_PROBE_BED_POSITION      293//291
     #define LULZBOT_STANDARD_FRONT_PROBE_BED_POSITION     -15//-9
 
-#elif defined(LULZBOT_BLTouch) && defined(LULZBOT_TAZ_BED)
-    #define LULZBOT_STANDARD_LEFT_PROBE_BED_POSITION      0
-    #define LULZBOT_STANDARD_RIGHT_PROBE_BED_POSITION     280//185
-    #define LULZBOT_STANDARD_BACK_PROBE_BED_POSITION      280//291
-    #define LULZBOT_STANDARD_FRONT_PROBE_BED_POSITION     0//-9
+#elif defined(LULZBOT_BLTouch) && defined(LULZBOT_TAZ_BED) && !defined(LULZBOT_LONG_BED) && defined(LULZBOT_BLTouch)
+    #define LULZBOT_STANDARD_LEFT_PROBE_BED_POSITION      10
+    #define LULZBOT_STANDARD_RIGHT_PROBE_BED_POSITION     270//185
+    #define LULZBOT_STANDARD_BACK_PROBE_BED_POSITION      270//291
+    #define LULZBOT_STANDARD_FRONT_PROBE_BED_POSITION     30//-9
+#elif defined(LULZBOT_BLTouch) && defined(LULZBOT_TAZ_BED) && BOTH(LULZBOT_LONG_BED, LULZBOT_BLTouch)
+    #define LULZBOT_STANDARD_LEFT_PROBE_BED_POSITION      10
+    #define LULZBOT_STANDARD_RIGHT_PROBE_BED_POSITION     270//185
+    #define LULZBOT_STANDARD_BACK_PROBE_BED_POSITION      570//291
+    #define LULZBOT_STANDARD_FRONT_PROBE_BED_POSITION     30//-9
 #endif
 
-#if defined(LULZBOT_USE_AUTOLEVELING)
+#if ANY(LULZBOT_BLTouch, LULZBOT_USE_AUTOLEVELING)
     #define LULZBOT_RESTORE_LEVELING_AFTER_G28
     #define LULZBOT_NOZZLE_CLEAN_FEATURE
     #define LULZBOT_AUTO_BED_LEVELING_BILINEAR
@@ -856,9 +861,12 @@
   #endif
 #endif
 
-#if defined (LULZBOT_BLTouch)
+#if BOTH(LULZBOT_LONG_BED, LULZBOT_BLTouch)
   #define LULZBOT_GRID_MAX_POINTS_X            4
   #define LULZBOT_GRID_MAX_POINTS_Y            8
+#else
+  #define LULZBOT_GRID_MAX_POINTS_X            3
+  #define LULZBOT_GRID_MAX_POINTS_Y            3
 #endif
 
 /* Make sure Marlin allows probe points outside of the bed area */
@@ -886,22 +894,27 @@
 
 #define LULZBOT_MULTIPLE_PROBING              2
 #define LULZBOT_X_PROBE_OFFSET_FROM_EXTRUDER  0
-#if defined (LULZBOT_LONG_BED)
+#if BOTH(LULZBOT_BLTouch, LULZBOT_LONG_BED)
     #define LULZBOT_Y_PROBE_OFFSET_FROM_EXTRUDER  30
 #else
     #define LULZBOT_Y_PROBE_OFFSET_FROM_EXTRUDER  0
 #endif
-#define LULZBOT_Z_PROBE_OFFSET_RANGE_MIN      -2
+#define LULZBOT_Z_PROBE_OFFSET_RANGE_MIN      -5
 #define LULZBOT_Z_PROBE_OFFSET_RANGE_MAX      5
 #define LULZBOT_XY_PROBE_SPEED                6000
-#define LULZBOT_Z_PROBE_SPEED_SLOW           (1*60)
+#if defined (LULZBOT_BLTouch) 
+  #define LULZBOT_Z_PROBE_SPEED_SLOW           (5*60)
+  #define LULZBOT_Z_CLEARANCE_BETWEEN_PROBES    3
+#else
+  #define LULZBOT_Z_PROBE_SPEED_SLOW           (1*60)
+  #define LULZBOT_Z_CLEARANCE_BETWEEN_PROBES    5
+#endif
 #if defined(LULZBOT_USE_Z_BELT)
     #define LULZBOT_Z_PROBE_SPEED_FAST       (20*60)
 #else
     #define LULZBOT_Z_PROBE_SPEED_FAST       (8*60)
 #endif
 #define LULZBOT_Z_CLEARANCE_DEPLOY_PROBE      5
-#define LULZBOT_Z_CLEARANCE_BETWEEN_PROBES    5
 #define LULZBOT_MIN_PROBE_EDGE_DISABLED
 
 /* We need to disable the extruder motor during probing as
@@ -1739,7 +1752,7 @@
     #define LULZBOT_STANDARD_Y_MIN_POS       -18.2//-15
 
     #define LULZBOT_STANDARD_X_BED_SIZE        280
-    #define LULZBOT_STANDARD_Y_BED_SIZE        580
+    #define LULZBOT_STANDARD_Y_BED_SIZE        570
 
 #elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_SCREW)
     #define LULZBOT_STANDARD_X_MAX_POS         300
@@ -1771,13 +1784,13 @@
     #define LULZBOT_STANDARD_Z_MIN_POS          -2
     #define LULZBOT_STANDARD_Z_MAX_POS         599
     
-#elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT)
+#elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT) && !defined(LULZBOT_LONG_BED)
     #define LULZBOT_STANDARD_Z_MIN_POS          -2
     #define LULZBOT_STANDARD_Z_MAX_POS         299
 
 #elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT) && defined(LULZBOT_LONG_BED)
-    #define LULZBOT_STANDARD_Z_MIN_POS          -2
-    #define LULZBOT_STANDARD_Z_MAX_POS         297.88
+    #define LULZBOT_STANDARD_Z_MIN_POS          -5
+    #define LULZBOT_STANDARD_Z_MAX_POS         280.14
 
 #endif
 
@@ -2137,7 +2150,7 @@
     #define LULZBOT_LEFT_WIPE_Y2                       25
     #define LULZBOT_LEFT_WIPE_Z                        1
 
-#elif defined(LULZBOT_USE_AUTOLEVELING) && defined(LULZBOT_TAZ_BED)
+#elif ANY(LULZBOT_BLTouch, LULZBOT_USE_AUTOLEVELING) && defined(LULZBOT_TAZ_BED)
     // TAZ has a vertical wiping pad on the left side of the bed
     #define LULZBOT_LEFT_WIPE_X1                      -18
     #define LULZBOT_LEFT_WIPE_X2                      -18
@@ -2211,7 +2224,7 @@ defined(LULZBOT_Gladiator_TAZProXT) && LULZBOT_EXTRUDERS == 1
 
 /*************************** REWIPE FUNCTIONALITY *******************************/
 
-#if defined(LULZBOT_USE_AUTOLEVELING)
+#if ANY(LULZBOT_BLTouch, LULZBOT_USE_AUTOLEVELING)
     //#define LULZBOT_DEBUG_MACROS // Uncomment to debug macro expansions
 
     #define LULZBOT_G29_RETRY_AND_RECOVER
@@ -2462,8 +2475,8 @@ defined(LULZBOT_Gladiator_TAZProXT) && defined(TOOLHEAD_Quiver_DualExtruder)
     #if ! defined(LULZBOT_Z_PROBE_OFFSET_FROM_EXTRUDER)
         #if defined(LULZBOT_USE_Z_BELT)
             #define LULZBOT_Z_PROBE_OFFSET_FROM_EXTRUDER  -1.1
-        #elif defined (LULZBOT_LONG_BED)
-            #define LULZBOT_Z_PROBE_OFFSET_FROM_EXTRUDER  -4
+        #elif defined(LULZBOT_BLTouch)
+            #define LULZBOT_Z_PROBE_OFFSET_FROM_EXTRUDER  4
         #else
             #define LULZBOT_Z_PROBE_OFFSET_FROM_EXTRUDER  -1.375
         #endif
@@ -2642,7 +2655,7 @@ defined(LULZBOT_Gladiator_TAZProXT) && defined(TOOLHEAD_Quiver_DualExtruder)
     #define MSG_SD_REMOVED  "Media removed"
 #endif
 
-#if defined(LULZBOT_USE_AUTOLEVELING) && (defined(LULZBOT_USE_REPRAP_LCD_DISPLAY) || defined(LULZBOT_USE_TOUCH_UI))
+#if ANY(LULZBOT_BLTouch, LULZBOT_USE_AUTOLEVELING) && (defined(LULZBOT_USE_REPRAP_LCD_DISPLAY) || defined(LULZBOT_USE_TOUCH_UI))
     #define LULZBOT_BABYSTEPPING
     #define LULZBOT_BABYSTEP_ZPROBE_OFFSET
     #define LULZBOT_BABYSTEP_XY

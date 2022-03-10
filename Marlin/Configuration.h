@@ -1889,7 +1889,7 @@
   #define LULZBOT_X_MIN_POS -50
   #define LULZBOT_Y_MIN_POS -17
   #define LULZBOT_Z_MIN_POS -2
-  #define LULZBOT_X_MAX_POS 295
+  #define LULZBOT_X_MAX_POS 293
   #define LULZBOT_Y_MAX_POS 308
   #define LULZBOT_Z_MAX_POS 297
 

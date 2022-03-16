@@ -892,18 +892,18 @@
     #define LULZBOT_FIX_MOUNTED_PROBE
 #endif // LULZBOT_USE_AUTOLEVELING
 
-#define LULZBOT_MULTIPLE_PROBING              2
+//#define LULZBOT_MULTIPLE_PROBING              1
 #define LULZBOT_Y_PROBE_OFFSET_FROM_EXTRUDER  0
 #if BOTH(LULZBOT_BLTouch, LULZBOT_LONG_BED)
-    #define LULZBOT_X_PROBE_OFFSET_FROM_EXTRUDER  -39
+    #define LULZBOT_X_PROBE_OFFSET_FROM_EXTRUDER  -38
 #else
     #define LULZBOT_X_PROBE_OFFSET_FROM_EXTRUDER  0
 #endif
-#define LULZBOT_Z_PROBE_OFFSET_RANGE_MIN      -5
+#define LULZBOT_Z_PROBE_OFFSET_RANGE_MIN      -7
 #define LULZBOT_Z_PROBE_OFFSET_RANGE_MAX      5
-#define LULZBOT_XY_PROBE_SPEED                6000
+#define LULZBOT_XY_PROBE_SPEED                8000
 #if defined (LULZBOT_BLTouch) 
-  #define LULZBOT_Z_PROBE_SPEED_SLOW           (5*60)
+  #define LULZBOT_Z_PROBE_SPEED_SLOW           (10*60)
   #define LULZBOT_Z_CLEARANCE_BETWEEN_PROBES    3
 #else
   #define LULZBOT_Z_PROBE_SPEED_SLOW           (1*60)
@@ -1790,7 +1790,7 @@
 
 #elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT) && defined(LULZBOT_LONG_BED)
     #define LULZBOT_STANDARD_Z_MIN_POS          -5
-    #define LULZBOT_STANDARD_Z_MAX_POS         280.14
+    #define LULZBOT_STANDARD_Z_MAX_POS         283.5
 
 #endif
 
@@ -2479,8 +2479,6 @@ defined(LULZBOT_Gladiator_TAZProXT) && defined(TOOLHEAD_Quiver_DualExtruder)
     #if ! defined(LULZBOT_Z_PROBE_OFFSET_FROM_EXTRUDER)
         #if defined(LULZBOT_USE_Z_BELT)
             #define LULZBOT_Z_PROBE_OFFSET_FROM_EXTRUDER  -1.1
-        #elif defined(LULZBOT_BLTouch)
-            #define LULZBOT_Z_PROBE_OFFSET_FROM_EXTRUDER  4
         #else
             #define LULZBOT_Z_PROBE_OFFSET_FROM_EXTRUDER  -1.375
         #endif
@@ -2497,9 +2495,12 @@ defined(LULZBOT_Gladiator_TAZProXT) && defined(TOOLHEAD_Quiver_DualExtruder)
         #define LULZBOT_DEFAULT_TRAVEL_ACCELERATION 500
     #endif
 
-    #if !defined(LULZBOT_Z_PROBE_OFFSET_FROM_EXTRUDER)
-        #define LULZBOT_Z_PROBE_OFFSET_FROM_EXTRUDER -1.200
-    #endif
+        #if defined(LULZBOT_USE_Z_BELT) && !defined(LULZBOT_BLTouch)
+            #define LULZBOT_Z_PROBE_OFFSET_FROM_EXTRUDER  -1.2
+        #elif defined(LULZBOT_BLTouch)
+            #define LULZBOT_Z_PROBE_OFFSET_FROM_EXTRUDER  -3.3
+        #endif
+         
 #endif
 
 #if defined(LULZBOT_IS_MINI) && defined(LULZBOT_USE_Z_SCREW)

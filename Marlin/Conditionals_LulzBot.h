@@ -892,9 +892,12 @@
     #define LULZBOT_FIX_MOUNTED_PROBE
 #endif // LULZBOT_USE_AUTOLEVELING
 
-//#define LULZBOT_MULTIPLE_PROBING              1
+#if DISABLED(LULZBOT_LONG_BED)
+  #define LULZBOT_MULTIPLE_PROBING              2
+#endif
+
 #define LULZBOT_Y_PROBE_OFFSET_FROM_EXTRUDER  0
-#if BOTH(LULZBOT_BLTouch, LULZBOT_LONG_BED)
+#if defined(LULZBOT_BLTouch)
     #define LULZBOT_X_PROBE_OFFSET_FROM_EXTRUDER  -38
 #else
     #define LULZBOT_X_PROBE_OFFSET_FROM_EXTRUDER  0
@@ -2498,7 +2501,7 @@ defined(LULZBOT_Gladiator_TAZProXT) && defined(TOOLHEAD_Quiver_DualExtruder)
         #if defined(LULZBOT_USE_Z_BELT) && !defined(LULZBOT_BLTouch)
             #define LULZBOT_Z_PROBE_OFFSET_FROM_EXTRUDER  -1.2
         #elif defined(LULZBOT_BLTouch)
-            #define LULZBOT_Z_PROBE_OFFSET_FROM_EXTRUDER  -3.3
+            #define LULZBOT_Z_PROBE_OFFSET_FROM_EXTRUDER  -2.5
         #endif
          
 #endif

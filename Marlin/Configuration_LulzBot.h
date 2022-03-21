@@ -55,7 +55,7 @@
 // set printer model and toolhead after the "LULZBOT_" and "TOOLHEAD_" respectively:
 
 #define LULZBOT_BLTouch
-#define LULZBOT_LONG_BED
+//#define LULZBOT_LONG_BED
 
 #define LULZBOT_Quiver_TAZPro
 //#define TOOLHEAD_CecropiaSilk_AerostruderV2

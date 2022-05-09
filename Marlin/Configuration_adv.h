@@ -765,8 +765,8 @@
 
   // Define pin which is read during calibration
   #ifndef CALIBRATION_PIN
-    #define CALIBRATION_PIN -1 // Override in pins.h or set to -1 to use your Z endstop
-    #define CALIBRATION_PIN_INVERTING false // Set to true to invert the pin
+    #define CALIBRATION_PIN 31 //-1 // Override in pins.h or set to -1 to use your Z endstop
+    #define CALIBRATION_PIN_INVERTING true // Set to true to invert the pin
     //#define CALIBRATION_PIN_PULLDOWN
     #define CALIBRATION_PIN_PULLUP
   #endif
@@ -1794,7 +1794,7 @@
    * When disabled, Marlin will use spreadCycle stepping mode.
    */
   #define STEALTHCHOP_XY LULZBOT_STEALTHCHOP_XY
-  #define STEALTHCHOP_Z  LULZBOT_STEALTHCHOP_Z
+  //#define STEALTHCHOP_Z  LULZBOT_STEALTHCHOP_Z
   #define STEALTHCHOP_E
 
   /**

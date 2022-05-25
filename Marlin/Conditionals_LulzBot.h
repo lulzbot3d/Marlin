@@ -553,6 +553,11 @@
     //#define LULZBOT_USB_FLASH_DRIVE_SUPPORT
 #endif
 
+#if defined (LULZBOT_BLTouch)
+  #undef LULZBOT_USE_AUTOLEVELING
+#endif
+
+
 /**************************** GENERAL CONFIGURATION *****************************/
 
 #define LULZBOT_STRING_CONFIG_H_AUTHOR "(Fame 3D Inc., LulzBot Git Repository)"
@@ -892,12 +897,17 @@
     #define LULZBOT_FIX_MOUNTED_PROBE
 #endif // LULZBOT_USE_AUTOLEVELING
 
-//#define LULZBOT_MULTIPLE_PROBING              1
+#if DISABLED(LULZBOT_LONG_BED)
+  #define LULZBOT_MULTIPLE_PROBING              2
+#endif
+
 #define LULZBOT_Y_PROBE_OFFSET_FROM_EXTRUDER  0
-#if BOTH(LULZBOT_BLTouch, LULZBOT_LONG_BED)
+#if defined(LULZBOT_BLTouch)
     #define LULZBOT_X_PROBE_OFFSET_FROM_EXTRUDER  -38
+    #define LULZBOT_Y_PROBE_OFFSET_FROM_EXTRUDER  -20
 #else
     #define LULZBOT_X_PROBE_OFFSET_FROM_EXTRUDER  0
+    #define LULZBOT_Y_PROBE_OFFSET_FROM_EXTRUDER  0
 #endif
 #define LULZBOT_Z_PROBE_OFFSET_RANGE_MIN      -7
 #define LULZBOT_Z_PROBE_OFFSET_RANGE_MAX      5
@@ -1790,7 +1800,7 @@
 
 #elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT) && defined(LULZBOT_LONG_BED)
     #define LULZBOT_STANDARD_Z_MIN_POS          -5
-    #define LULZBOT_STANDARD_Z_MAX_POS         283.5
+    #define LULZBOT_STANDARD_Z_MAX_POS         286
 
 #endif
 
@@ -2456,8 +2466,12 @@ defined(LULZBOT_Gladiator_TAZProXT) && defined(TOOLHEAD_Quiver_DualExtruder)
 #if defined(LULZBOT_USE_LEGACY_XY_STEPS)
     // Older printers had a fudge factor for ABS shrinkage.
     #define LULZBOT_XY_STEPS                      100.5
+#elif defined (LULZBOT_LONG_BED)
+  #define LULZBOT_X_STEPS                      100
+  #define LULZBOT_Y_STEPS                      66
 #else
     // In the Mini 2 and TAZ Pro going forward, use true XY steps.
+    
     #define LULZBOT_XY_STEPS                      100
 #endif
 
@@ -2498,7 +2512,11 @@ defined(LULZBOT_Gladiator_TAZProXT) && defined(TOOLHEAD_Quiver_DualExtruder)
         #if defined(LULZBOT_USE_Z_BELT) && !defined(LULZBOT_BLTouch)
             #define LULZBOT_Z_PROBE_OFFSET_FROM_EXTRUDER  -1.2
         #elif defined(LULZBOT_BLTouch)
+<<<<<<< HEAD
             #define LULZBOT_Z_PROBE_OFFSET_FROM_EXTRUDER  -3.2
+=======
+            #define LULZBOT_Z_PROBE_OFFSET_FROM_EXTRUDER  -2.5
+>>>>>>> 2238eac44fed570b6b0477cb69efeeb00a9b2aab
         #endif
          
 #endif
@@ -2552,10 +2570,18 @@ defined(LULZBOT_Gladiator_TAZProXT) && defined(TOOLHEAD_Quiver_DualExtruder)
     #define LULZBOT_MAX_MANUAL_FEEDRATE {300*60, 300*60, 300*60, LULZBOT_MANUAL_FEEDRATE_E*60} // (mm/min)
 #endif
 
-#if defined(LULZBOT_DISTINCT_E_FACTORS) && LULZBOT_EXTRUDERS == 2 && !defined(LULZBOT_SWITCHING_EXTRUDER)
-    #define LULZBOT_DEFAULT_AXIS_STEPS_PER_UNIT   {LULZBOT_XY_STEPS,LULZBOT_XY_STEPS,LULZBOT_Z_STEPS,LULZBOT_E_STEPS,LULZBOT_E_STEPS}
+#if defined(LULZBOT_XY_STEPS)
+  #if defined(LULZBOT_DISTINCT_E_FACTORS) && LULZBOT_EXTRUDERS == 2 && !defined(LULZBOT_SWITCHING_EXTRUDER)
+      #define LULZBOT_DEFAULT_AXIS_STEPS_PER_UNIT   {LULZBOT_XY_STEPS,LULZBOT_XY_STEPS,LULZBOT_Z_STEPS,LULZBOT_E_STEPS,LULZBOT_E_STEPS}
+  #else
+      #define LULZBOT_DEFAULT_AXIS_STEPS_PER_UNIT   {LULZBOT_XY_STEPS,LULZBOT_XY_STEPS,LULZBOT_Z_STEPS,LULZBOT_E_STEPS}
+  #endif
 #else
-    #define LULZBOT_DEFAULT_AXIS_STEPS_PER_UNIT   {LULZBOT_XY_STEPS,LULZBOT_XY_STEPS,LULZBOT_Z_STEPS,LULZBOT_E_STEPS}
+  #if defined(LULZBOT_DISTINCT_E_FACTORS) && LULZBOT_EXTRUDERS == 2 && !defined(LULZBOT_SWITCHING_EXTRUDER)
+      #define LULZBOT_DEFAULT_AXIS_STEPS_PER_UNIT   {LULZBOT_X_STEPS,LULZBOT_Y_STEPS,LULZBOT_Z_STEPS,LULZBOT_E_STEPS,LULZBOT_E_STEPS}
+  #else
+      #define LULZBOT_DEFAULT_AXIS_STEPS_PER_UNIT   {LULZBOT_X_STEPS,LULZBOT_Y_STEPS,LULZBOT_Z_STEPS,LULZBOT_E_STEPS}
+  #endif
 #endif
 
 #if defined(LULZBOT_USE_ARCHIM2)

@@ -2512,11 +2512,7 @@ defined(LULZBOT_Gladiator_TAZProXT) && defined(TOOLHEAD_Quiver_DualExtruder)
         #if defined(LULZBOT_USE_Z_BELT) && !defined(LULZBOT_BLTouch)
             #define LULZBOT_Z_PROBE_OFFSET_FROM_EXTRUDER  -1.2
         #elif defined(LULZBOT_BLTouch)
-<<<<<<< HEAD
-            #define LULZBOT_Z_PROBE_OFFSET_FROM_EXTRUDER  -3.2
-=======
             #define LULZBOT_Z_PROBE_OFFSET_FROM_EXTRUDER  -2.5
->>>>>>> 2238eac44fed570b6b0477cb69efeeb00a9b2aab
         #endif
          
 #endif

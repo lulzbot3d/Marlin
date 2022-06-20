@@ -1800,7 +1800,7 @@
 
 #elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT) && defined(LULZBOT_LONG_BED)
     #define LULZBOT_STANDARD_Z_MIN_POS          -5
-    #define LULZBOT_STANDARD_Z_MAX_POS         280
+    #define LULZBOT_STANDARD_Z_MAX_POS         292
 
 #endif
 

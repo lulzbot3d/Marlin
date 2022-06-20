@@ -73,7 +73,7 @@
  *
  */
 
-#define LULZBOT_FW_VERSION ".144.6" // Change this with each update
+#define LULZBOT_FW_VERSION ".144.5" // Change this with each update
 
 #if ( \
     !defined(LULZBOT_Gladiola_Mini) && \
@@ -2468,7 +2468,7 @@ defined(LULZBOT_Gladiator_TAZProXT) && defined(TOOLHEAD_Quiver_DualExtruder)
     #define LULZBOT_XY_STEPS                      100.5
 #elif defined (LULZBOT_LONG_BED)
   #define LULZBOT_X_STEPS                      100
-  #define LULZBOT_Y_STEPS                      66
+  #define LULZBOT_Y_STEPS                      160
 #else
     // In the Mini 2 and TAZ Pro going forward, use true XY steps.
     
@@ -2512,7 +2512,7 @@ defined(LULZBOT_Gladiator_TAZProXT) && defined(TOOLHEAD_Quiver_DualExtruder)
         #if defined(LULZBOT_USE_Z_BELT) && !defined(LULZBOT_BLTouch)
             #define LULZBOT_Z_PROBE_OFFSET_FROM_EXTRUDER  -1.2
         #elif defined(LULZBOT_BLTouch)
-            #define LULZBOT_Z_PROBE_OFFSET_FROM_EXTRUDER  -2.5
+            #define LULZBOT_Z_PROBE_OFFSET_FROM_EXTRUDER  -3.2
         #endif
          
 #endif

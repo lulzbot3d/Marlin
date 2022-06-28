@@ -2047,7 +2047,7 @@
     #if defined(LULZBOT_IS_TAZ)
         #if defined (LULZBOT_LONG_BED)
             #define LULZBOT_X_STALL_SENSITIVITY 6
-            #define LULZBOT_Y_STALL_SENSITIVITY 6
+            #define LULZBOT_Y_STALL_SENSITIVITY 3
         #else
             #define LULZBOT_X_STALL_SENSITIVITY 6
             #define LULZBOT_Y_STALL_SENSITIVITY 5
@@ -2512,7 +2512,7 @@ defined(LULZBOT_Gladiator_TAZProXT) && defined(TOOLHEAD_Quiver_DualExtruder)
         #if defined(LULZBOT_USE_Z_BELT) && !defined(LULZBOT_BLTouch)
             #define LULZBOT_Z_PROBE_OFFSET_FROM_EXTRUDER  -1.2
         #elif defined(LULZBOT_BLTouch)
-            #define LULZBOT_Z_PROBE_OFFSET_FROM_EXTRUDER  -3.2
+            #define LULZBOT_Z_PROBE_OFFSET_FROM_EXTRUDER  1.2
         #endif
          
 #endif

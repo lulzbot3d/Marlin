@@ -48,6 +48,7 @@
       
    Quiver Toolhead Choices:
       Quiver_DualExtruder               // Standard Dual Aerostruder (Quiver)
+      Twin_Nebula_175
 
 */
 
@@ -56,6 +57,6 @@
 
 #define LULZBOT_Gladiator_TAZProXT
 //#define TOOLHEAD_CecropiaSilk_AerostruderV2
-#define TOOLHEAD_Universal_ToolHead
+#define TOOLHEAD_Twin_Nebula_175
 
 #endif /* CONFIGURATION_LULZBOT */

@@ -113,6 +113,7 @@
     !defined(TOOLHEAD_Yellowfin_DualExtruderV3) && \
     !defined(TOOLHEAD_Angelfish_Aerostruder) && \
     !defined(TOOLHEAD_Quiver_DualExtruder) && \
+    !defined(TOOLHEAD_Twin_Nebula_175) && \
     !defined(TOOLHEAD_KangarooPaw_SingleExtruder) &&\
     !defined(TOOLHEAD_Lutefisk_M175) &&\
     !defined(TOOLHEAD_Lutefisk_M175v2)&&\
@@ -1421,6 +1422,35 @@
     #define LULZBOT_MOTOR_CURRENT_E1               960 // mA
 #endif /* TOOLHEAD_Quiver_DualExtruder */
 
+#if defined(TOOLHEAD_Twin_Nebula_175)
+    #define LULZBOT_LCD_TOOLHEAD_NAME              "Twin Nebula"
+//          16 chars max                            ^^^^^^^^^^^^^^^
+    #define LULZBOT_M115_EXTRUDER_TYPE             "DualExtruder"
+    #define LULZBOT_TOOLHEAD_X_MAX_ADJ             -21
+    #define LULZBOT_TOOLHEAD_X_MIN_ADJ             -21
+    #define LULZBOT_TOOLHEAD_Y_MAX_ADJ             -21
+    #define LULZBOT_TOOLHEAD_Y_MIN_ADJ             -21
+    #define LULZBOT_TOOLHEAD_Z_MAX_ADJ             -23.7
+    #define LULZBOT_TOOLHEAD_Z_MIN_ADJ             -23.7
+    #define LULZBOT_EXTRUDERS                       2
+    #define LULZBOT_TOOLCHANGE_ZRAISE               0
+    #define LULZBOT_NUM_SERVOS                      2
+    #define LULZBOT_SERVO_DELAY                    {500, 500}
+    #define LULZBOT_SWITCHING_NOZZLE
+    #define LULZBOT_SWITCHING_NOZZLE_E1_SERVO_NR   1
+    #define LULZBOT_SWITCHING_NOZZLE_SERVO_ANGLES  { 75,   125}
+    #define LULZBOT_SWITCHING_NOZZLE_OPPOSING_SERVOS
+    #define LULZBOT_HOTEND_OFFSET_X                {0.0, 44}
+    #define LULZBOT_HOTEND_OFFSET_Y                {0.0,  0}//M301 E1 P16.68 I1.07 D64.7
+    #define LULZBOT_E_STEPS                        410
+    #define LULZBOT_X_MAX_ENDSTOP_INVERTING        LULZBOT_NO_ENDSTOP
+    #define LULZBOT_SLICE_MOS_PID
+    #define LULZBOT_TEMP_SENSOR_1                  5
+    #define LULZBOT_MOTOR_CURRENT_E0               750 // mA
+    #define LULZBOT_MOTOR_CURRENT_E1               750 // mA
+    #define SWITCHING_NOZZLE
+#endif /* TOOLHEAD_Twin_Nebula_175 */
+
 /********************************* OTHER TOOLHEADS ***************************/
 
 #if defined(TOOLHEAD_KangarooPaw_SingleExtruder)
@@ -1487,7 +1517,7 @@
 
         #define LULZBOT_CALIBRATION_OBJECT_TOP_CENTER_MEASUREMENT
         #define LULZBOT_CALIBRATION_MEASURE_RIGHT
-        #if defined(TOOLHEAD_Quiver_DualExtruder)
+        #if ANY(TOOLHEAD_Quiver_DualExtruder, TOOLHEAD_Twin_Nebula_175)
             #define LULZBOT_CALIBRATION_MEASURE_FRONT
         #endif
         #define LULZBOT_CALIBRATION_MEASURE_LEFT
@@ -1652,7 +1682,7 @@
       #define LULZBOT_DEFAULT_Ki  H175_DEFAULT_Ki
       #define LULZBOT_DEFAULT_Kd  H175_DEFAULT_Kd
     
-    #elif ENABLED(TOOLHEAD_M175)
+    #elif ANY(TOOLHEAD_M175, LULZBOT_SLICE_MOS_PID)
       #define LULZBOT_DEFAULT_Kp  M175_DEFAULT_Kp
       #define LULZBOT_DEFAULT_Ki  M175_DEFAULT_Ki
       #define LULZBOT_DEFAULT_Kd  M175_DEFAULT_Kd
@@ -2276,8 +2306,8 @@ defined(LULZBOT_Gladiator_TAZProXT) && LULZBOT_EXTRUDERS == 1
         #define LULZBOT_REWIPE_E0 "T0\n" LULZBOT_WIPE_GCODE(LEFT)      /* Wipe nozzle */
     #endif
 
-    #if defined(LULZBOT_Quiver_TAZPro) && defined(TOOLHEAD_Quiver_DualExtruder) || \
-defined(LULZBOT_Gladiator_TAZProXT) && defined(TOOLHEAD_Quiver_DualExtruder)
+    #if defined(LULZBOT_Quiver_TAZPro) && ANY(TOOLHEAD_Quiver_DualExtruder, TOOLHEAD_Twin_Nebula_175) || \
+defined(LULZBOT_Gladiator_TAZProXT) ANY(TOOLHEAD_Quiver_DualExtruder, TOOLHEAD_Twin_Nebula_175)
         #define LULZBOT_REWIPE_E1 \
             "G0 X150 F5000\n"                     /* Move over to switch extruders */ \
             "T1\n"                                /* Switch to second extruder */ \

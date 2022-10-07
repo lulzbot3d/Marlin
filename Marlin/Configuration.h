@@ -2578,16 +2578,16 @@
   // Specify positions for each tool as { { X, Y, Z }, { X, Y, Z } }
   // Dual hotend system may use { {  -20, (Y_BED_SIZE / 2), (Z_MIN_POS + 1) },  {  420, (Y_BED_SIZE / 2), (Z_MIN_POS + 1) }}
   #if ENABLED(MiniV2)
-    #define NOZZLE_CLEAN_START_POINT {  45, 177, 0 }
+    #define NOZZLE_CLEAN_START_POINT {  45, 175, 0 }
     #define NOZZLE_CLEAN_END_POINT   { 115, 177, 0 }
   #elif ANY(TAZPro, TAZProXT) && ENABLED(LULZBOT_UNIVERSAL_TOOLHEAD)
-    #define NOZZLE_CLEAN_START_POINT { 300, 95, 1 }
+    #define NOZZLE_CLEAN_START_POINT { 298, 95, 1 }
     #define NOZZLE_CLEAN_END_POINT   { 300, 25, 1 }
   #elif ANY(TAZPro, TAZProXT) && ENABLED(TOOLHEAD_Quiver_DualExtruder) 
-    #define NOZZLE_CLEAN_START_POINT {{ -17, 95, 1 }, { 297, 95, 1 }}
+    #define NOZZLE_CLEAN_START_POINT {{ -15, 95, 1 }, { 295, 95, 1 }}
     #define NOZZLE_CLEAN_END_POINT   {{ -17, 25, 1 }, { 297, 25, 1 }}
   #else
-    #define NOZZLE_CLEAN_START_POINT {  -17, 95, 1 }
+    #define NOZZLE_CLEAN_START_POINT { -15, 95, 1 }
     #define NOZZLE_CLEAN_END_POINT   { -17, 25, 1 }
   #endif
 

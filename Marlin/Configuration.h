@@ -1612,7 +1612,7 @@
 #elif ANY(TAZPro, TAZProXT)
   #define NOZZLE_TO_PROBE_OFFSET { 0, 0, -1.102 }
 #elif ANY(Sidekick_289, Sidekick_747)
-  #define NOZZLE_TO_PROBE_OFFSET { -1, 50, -2.1 }
+  #define NOZZLE_TO_PROBE_OFFSET { -1, 50, -1.23 }
 #endif
 
 // Most probes should stay away from the edges of the bed, but

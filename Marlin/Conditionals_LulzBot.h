@@ -73,7 +73,7 @@
  *
  */
 
-#define LULZBOT_FW_VERSION ".144.7" // Change this with each update
+#define LULZBOT_FW_VERSION ".144.8" // Change this with each update
 
 #if ( \
     !defined(LULZBOT_Gladiola_Mini) && \
@@ -1803,7 +1803,7 @@
     #define LULZBOT_STANDARD_X_MAX_POS         318
     #define LULZBOT_STANDARD_X_MIN_POS          -6
     #define LULZBOT_STANDARD_Y_MAX_POS         313
-    #define LULZBOT_STANDARD_Y_MIN_POS       -18.2//-15
+    #define LULZBOT_STANDARD_Y_MIN_POS       -17//-15
 
     #define LULZBOT_STANDARD_X_BED_SIZE        280
     #define LULZBOT_STANDARD_Y_BED_SIZE        280
@@ -2307,7 +2307,7 @@ defined(LULZBOT_Gladiator_TAZProXT) && LULZBOT_EXTRUDERS == 1
     #endif
 
     #if defined(LULZBOT_Quiver_TAZPro) && ANY(TOOLHEAD_Quiver_DualExtruder, TOOLHEAD_Twin_Nebula_175) || \
-defined(LULZBOT_Gladiator_TAZProXT) ANY(TOOLHEAD_Quiver_DualExtruder, TOOLHEAD_Twin_Nebula_175)
+defined(LULZBOT_Gladiator_TAZProXT) && ANY(TOOLHEAD_Quiver_DualExtruder, TOOLHEAD_Twin_Nebula_175)
         #define LULZBOT_REWIPE_E1 \
             "G0 X150 F5000\n"                     /* Move over to switch extruders */ \
             "T1\n"                                /* Switch to second extruder */ \

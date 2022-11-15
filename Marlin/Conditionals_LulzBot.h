@@ -117,7 +117,8 @@
     !defined(TOOLHEAD_Lutefisk_M175) &&\
     !defined(TOOLHEAD_Lutefisk_M175v2)&&\
     !defined(TOOLHEAD_H175)&&\
-    !defined(TOOLHEAD_Universal_ToolHead)\
+    !defined(TOOLHEAD_Universal_ToolHead)&&\
+    !defined(TOOLHEAD_MUSKELLUNGE)\
 )
     #error Must specify toolhead. Please see "Configuration_LulzBot.h" for directions.
 #endif
@@ -1455,6 +1456,23 @@
     #define LULZBOT_MOTOR_CURRENT_E0               960 // mA
     #define LULZBOT_MOTOR_CURRENT_E1               960 // mA
 #endif /* TOOLHEAD_Quiver_DualExtruder */
+
+#if defined(TOOLHEAD_MUSKELLUNGE)
+    #define LULZBOT_LCD_TOOLHEAD_NAME              "MUSK 0.5mm"
+//          16 chars max                            ^^^^^^^^^^^^^^^
+    #define LULZBOT_M115_EXTRUDER_TYPE              "MUSKY"
+    #define LULZBOT_X_MAX_ENDSTOP_INVERTING        LULZBOT_NORMALLY_CLOSED_ENDSTOP
+    #define LULZBOT_E3D_Titan_Aero_V6
+    #define LULZBOT_E_STEPS                        492.45
+    #define LULZBOT_EXTRUDERS                  1
+    #define LULZBOT_TOOLHEAD_X_MAX_ADJ        -30    
+    #define LULZBOT_TOOLHEAD_X_MIN_ADJ         0
+    #define LULZBOT_TOOLHEAD_Y_MAX_ADJ         0
+    #define LULZBOT_TOOLHEAD_Y_MIN_ADJ         0
+    #define LULZBOT_TOOLHEAD_Z_MAX_ADJ         0 
+    #define LULZBOT_TOOLHEAD_Z_MIN_ADJ         0  
+    #define LULZBOT_MOTOR_CURRENT_E          960 // mA
+#endif
 
 /********************************* OTHER TOOLHEADS ***************************/
 

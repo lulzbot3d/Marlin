@@ -59,8 +59,8 @@
 #define LULZBOT_BLTouch
 //#define LULZBOT_LONG_BED
 
-#define LULZBOT_Quiver_TAZPro
+#define LULZBOT_Gladiator_TAZProXT 
 //#define TOOLHEAD_CecropiaSilk_AerostruderV2
-#define TOOLHEAD_MUSKELLUNGE
+#define TOOLHEAD_Universal_ToolHead 
 
 #endif /* CONFIGURATION_LULZBOT */

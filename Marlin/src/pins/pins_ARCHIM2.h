@@ -52,8 +52,8 @@
 //
 // Servos
 //
-#define SERVO0_PIN         20   // D20 PB12 (Header J20 20)
-#define SERVO1_PIN         21   // D21 PB13 (Header J20 19)
+#define SERVO0_PIN         21   // D20 PB12 (Header J20 20) Swapping what side the BLTouch gets plugged into (plugs into Right side)
+#define SERVO1_PIN         20   // D21 PB13 (Header J20 19)
 
 //
 // Limit Switches
@@ -96,7 +96,13 @@
 
 #endif
 
-#define Z_MIN_PIN          31   // PA7 MIN ES3
+#if defined (LULZBOT_BLTouch)
+  #define Z_MIN_PIN        63   // PB18/RD/PWML2/AD11 THERM AN2
+#else
+  #define Z_MIN_PIN        31   // PA7 MIN ES3
+#endif
+
+
 #define Z_MAX_PIN          30   // PD9 MAX ES3
 
 //
@@ -164,7 +170,11 @@
 // Temperature Sensors
 //
 #define TEMP_0_PIN         10   // D10 PB19 THERM AN1 *
-#define TEMP_1_PIN          9   // D9 PB18 THERM AN2 *
+
+#if DISABLED(LULZBOT_BLTouch)
+  #define TEMP_1_PIN        9   // D9 PB18 THERM AN2 *
+#endif
+
 #define TEMP_2_PIN          8   // D8 PB17 THERM AN4 *
 #define TEMP_BED_PIN       11   // D11 PB20 THERM AN3 *
 

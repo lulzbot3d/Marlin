@@ -181,9 +181,9 @@ void GcodeSuite::M420() {
             for (uint8_t x = GRID_MAX_POINTS_X; x--;)
               for (uint8_t y = GRID_MAX_POINTS_Y; y--;) {
                 Z_VALUES(x, y) -= zmean;
-                // #if ENABLED(EXTENSIBLE_UI)
-                //   ExtUI::onMeshUpdate(x, y, Z_VALUES(x, y));
-                // #endif
+                #if ENABLED(EXTENSIBLE_UI)
+                  ExtUI::onMeshUpdate(x, y, Z_VALUES(x, y));
+                #endif
               }
             #if ENABLED(ABL_BILINEAR_SUBDIVISION)
               bed_level_virt_interpolate();

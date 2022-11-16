@@ -872,8 +872,9 @@
 /**
  * The BLTouch probe uses a Hall effect sensor and emulates a servo.
  */
-//#define BLTOUCH
-
+#if defined (LULZBOT_BLTouch)
+  #define BLTOUCH
+#endif
 /**
  * Touch-MI Probe by hotends.fr
  *
@@ -1176,8 +1177,8 @@
  *   With an LCD controller the process is guided step-by-step.
  */
 //#define AUTO_BED_LEVELING_3POINT
-// #define AUTO_BED_LEVELING_LINEAR 
-#define AUTO_BED_LEVELING_BILINEAR
+#define AUTO_BED_LEVELING_LINEAR 
+//#define AUTO_BED_LEVELING_BILINEAR 
 //#define AUTO_BED_LEVELING_UBL
 //#define MESH_BED_LEVELING
 
@@ -1220,7 +1221,7 @@
 
 #endif
 
-#if EITHER(AUTO_BED_LEVELING_LINEAR, AUTO_BED_LEVELING_BILINEAR)
+#if ANY(LULZBOT_BLTouch, AUTO_BED_LEVELING_LINEAR, AUTO_BED_LEVELING_BILINEAR)
 
   // Set the number of grid points per dimension.
   #define GRID_MAX_POINTS_X LULZBOT_GRID_MAX_POINTS_X
@@ -2203,12 +2204,16 @@
  * Set this manually if there are extra servos needing manual control.
  * Leave undefined or set to 0 to entirely disable the servo subsystem.
  */
-#define NUM_SERVOS LULZBOT_NUM_SERVOS // Servo index starts with 0 for M280 command
+#if defined(LULZBOT_NUM_SERVOS)
+  #define NUM_SERVOS LULZBOT_NUM_SERVOS  // Servo index starts with 0 for M280 command
+#endif
 
 // Delay (in milliseconds) before the next move will start, to give the servo time to reach its target angle.
 // 300ms is a good value but you can try less delay.
 // If the servo can't reach the requested position, increase it.
-#define SERVO_DELAY LULZBOT_SERVO_DELAY
+#if defined(LULZBOT_SERVO_DELAY)
+  #define SERVO_DELAY LULZBOT_SERVO_DELAY
+#endif
 
 // Only power servos during movement, otherwise leave off to prevent jitter
 //#define DEACTIVATE_SERVOS_AFTER_MOVE

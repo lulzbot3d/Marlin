@@ -687,7 +687,7 @@
   // Define values for backlash distance and correction.
   // If BACKLASH_GCODE is enabled these values are the defaults.
   #define BACKLASH_DISTANCE_MM { 0, 0, 0 } // (mm)
-  #define BACKLASH_CORRECTION    0.0       // 0.0 = no correction; 1.0 = full correction
+  #define BACKLASH_CORRECTION    1.0       // 0.0 = no correction; 1.0 = full correction
 
   // Set BACKLASH_SMOOTHING_MM to spread backlash correction over multiple segments
   // to reduce print artifacts. (Enabling this is costly in memory and computation!)
@@ -765,8 +765,13 @@
 
   // Define pin which is read during calibration
   #ifndef CALIBRATION_PIN
-    #define CALIBRATION_PIN -1 // Override in pins.h or set to -1 to use your Z endstop
-    #define CALIBRATION_PIN_INVERTING false // Set to true to invert the pin
+    #if defined(LULZBOT_BLTouch)
+      #define CALIBRATION_PIN 31 // Override in pins.h or set to -1 to use your Z endstop
+      #define CALIBRATION_PIN_INVERTING true // Set to true to invert the pin
+    #else
+      #define CALIBRATION_PIN -1 // Override in pins.h or set to -1 to use your Z endstop
+      #define CALIBRATION_PIN_INVERTING false // Set to true to invert the pin
+    #endif
     //#define CALIBRATION_PIN_PULLDOWN
     #define CALIBRATION_PIN_PULLUP
   #endif
@@ -1794,7 +1799,7 @@
    * When disabled, Marlin will use spreadCycle stepping mode.
    */
   #define STEALTHCHOP_XY LULZBOT_STEALTHCHOP_XY
-  #define STEALTHCHOP_Z  LULZBOT_STEALTHCHOP_Z
+  //#define STEALTHCHOP_Z  LULZBOT_STEALTHCHOP_Z
   #define STEALTHCHOP_E
 
   /**

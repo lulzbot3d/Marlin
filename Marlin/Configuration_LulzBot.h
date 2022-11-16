@@ -49,6 +49,7 @@
       
    Quiver Toolhead Choices:
       Quiver_DualExtruder               // Standard Dual Aerostruder (Quiver)
+      Twin_Nebula_175
 
 */
 

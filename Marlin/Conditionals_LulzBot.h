@@ -73,7 +73,7 @@
  *
  */
 
-#define LULZBOT_FW_VERSION ".144.5" // Change this with each update
+#define LULZBOT_FW_VERSION ".144.8" // Change this with each update
 
 #if ( \
     !defined(LULZBOT_Gladiola_Mini) && \
@@ -113,6 +113,7 @@
     !defined(TOOLHEAD_Yellowfin_DualExtruderV3) && \
     !defined(TOOLHEAD_Angelfish_Aerostruder) && \
     !defined(TOOLHEAD_Quiver_DualExtruder) && \
+    !defined(TOOLHEAD_Twin_Nebula_175) && \
     !defined(TOOLHEAD_KangarooPaw_SingleExtruder) &&\
     !defined(TOOLHEAD_Lutefisk_M175) &&\
     !defined(TOOLHEAD_Lutefisk_M175v2)&&\
@@ -1457,22 +1458,34 @@
     #define LULZBOT_MOTOR_CURRENT_E1               960 // mA
 #endif /* TOOLHEAD_Quiver_DualExtruder */
 
-#if defined(TOOLHEAD_MUSKELLUNGE)
-    #define LULZBOT_LCD_TOOLHEAD_NAME              "MUSK 0.5mm"
+#if defined(TOOLHEAD_Twin_Nebula_175)
+    #define LULZBOT_LCD_TOOLHEAD_NAME              "Twin Nebula"
 //          16 chars max                            ^^^^^^^^^^^^^^^
-    #define LULZBOT_M115_EXTRUDER_TYPE              "MUSKY"
-    #define LULZBOT_X_MAX_ENDSTOP_INVERTING        LULZBOT_NORMALLY_CLOSED_ENDSTOP
-    #define LULZBOT_E3D_Titan_Aero_V6
-    #define LULZBOT_E_STEPS                        492.45
-    #define LULZBOT_EXTRUDERS                  1
-    #define LULZBOT_TOOLHEAD_X_MAX_ADJ        -30    
-    #define LULZBOT_TOOLHEAD_X_MIN_ADJ         0
-    #define LULZBOT_TOOLHEAD_Y_MAX_ADJ         0
-    #define LULZBOT_TOOLHEAD_Y_MIN_ADJ         0
-    #define LULZBOT_TOOLHEAD_Z_MAX_ADJ         0 
-    #define LULZBOT_TOOLHEAD_Z_MIN_ADJ         0  
-    #define LULZBOT_MOTOR_CURRENT_E          960 // mA
-#endif
+    #define LULZBOT_M115_EXTRUDER_TYPE             "DualExtruder"
+    #define LULZBOT_TOOLHEAD_X_MAX_ADJ             -21
+    #define LULZBOT_TOOLHEAD_X_MIN_ADJ             -21
+    #define LULZBOT_TOOLHEAD_Y_MAX_ADJ             -21
+    #define LULZBOT_TOOLHEAD_Y_MIN_ADJ             -21
+    #define LULZBOT_TOOLHEAD_Z_MAX_ADJ             -23.7
+    #define LULZBOT_TOOLHEAD_Z_MIN_ADJ             -23.7
+    #define LULZBOT_EXTRUDERS                       2
+    #define LULZBOT_TOOLCHANGE_ZRAISE               0
+    #define LULZBOT_NUM_SERVOS                      2
+    #define LULZBOT_SERVO_DELAY                    {500, 500}
+    #define LULZBOT_SWITCHING_NOZZLE
+    #define LULZBOT_SWITCHING_NOZZLE_E1_SERVO_NR   1
+    #define LULZBOT_SWITCHING_NOZZLE_SERVO_ANGLES  { 75,   125}
+    #define LULZBOT_SWITCHING_NOZZLE_OPPOSING_SERVOS
+    #define LULZBOT_HOTEND_OFFSET_X                {0.0, 44}
+    #define LULZBOT_HOTEND_OFFSET_Y                {0.0,  0}//M301 E1 P16.68 I1.07 D64.7
+    #define LULZBOT_E_STEPS                        410
+    #define LULZBOT_X_MAX_ENDSTOP_INVERTING        LULZBOT_NO_ENDSTOP
+    #define LULZBOT_SLICE_MOS_PID
+    #define LULZBOT_TEMP_SENSOR_1                  5
+    #define LULZBOT_MOTOR_CURRENT_E0               750 // mA
+    #define LULZBOT_MOTOR_CURRENT_E1               750 // mA
+    #define SWITCHING_NOZZLE
+#endif /* TOOLHEAD_Twin_Nebula_175 */
 
 /********************************* OTHER TOOLHEADS ***************************/
 
@@ -1540,7 +1553,7 @@
 
         #define LULZBOT_CALIBRATION_OBJECT_TOP_CENTER_MEASUREMENT
         #define LULZBOT_CALIBRATION_MEASURE_RIGHT
-        #if defined(TOOLHEAD_Quiver_DualExtruder)
+        #if ANY(TOOLHEAD_Quiver_DualExtruder, TOOLHEAD_Twin_Nebula_175)
             #define LULZBOT_CALIBRATION_MEASURE_FRONT
         #endif
         #define LULZBOT_CALIBRATION_MEASURE_LEFT
@@ -1615,47 +1628,108 @@
 
 // Hotend variants
 
-#if defined(LULZBOT_Moarstruder)
-    // LulzBot MOARstruder (40w)
-    #define LULZBOT_DEFAULT_Kp 55.64
-    #define LULZBOT_DEFAULT_Ki 6.79
-    #define LULZBOT_DEFAULT_Kd 113.94
-#endif /* LULZBOT_Moarstruder */
+ //TAZ 6 Single Extruder (W)
+    #define TAZ6_STD_DEFAULT_Kp 28.79        //used to define stock PID. NOTE: if values are changed, both sets need to be changed.
+    #define TAZ6_STD_DEFAULT_Ki 1.91         //NOTE: if values are changed, both sets need to be changed.
+    #define TAZ6_STD_DEFAULT_Kd 108.51
+    #define charTAZ6_STD_DEFAULT_Kp "28.79"  //used in the tool head menu gcode.
+    #define charTAZ6_STD_DEFAULT_Ki "1.91"
+    #define charTAZ6_STD_DEFAULT_Kd "108.51"
 
-#if defined(LULZBOT_E3D_SOMEstruder_x2)
-    // Side-by-side LulzBot E3D SOMEstruder on Yellowfin Dual
-    #define LULZBOT_DEFAULT_Kp 47.45
-    #define LULZBOT_DEFAULT_Ki 4.83
-    #define LULZBOT_DEFAULT_Kd 116.63
-#endif /* LULZBOT_E3D_SOMEstruder_x2 */
+  // E3D Titan Aero with LulzBot V6 block (40W)
+    #define SLSEHE_DEFAULT_Kp 21.0           //NOTE: if values are changed, both sets need to be changed.
+    #define SLSEHE_DEFAULT_Ki 1.78
+    #define SLSEHE_DEFAULT_Kd 61.93
+    #define charSLSEHE_DEFAULT_Kp "21.0"
+    #define charSLSEHE_DEFAULT_Ki "1.78"
+    #define charSLSEHE_DEFAULT_Kd "61.93"
 
-#if defined(LULZBOT_AO_Hexagon)
-    // LulzBot AO-Hexagon (30w)
-    #define LULZBOT_DEFAULT_Kp 28.79
-    #define LULZBOT_DEFAULT_Ki 1.91
-    #define LULZBOT_DEFAULT_Kd 108.51
-#endif /* LULZBOT_AO_Hexagon */
+  // SK175 Tool head (30W)
+    #define SK175_DEFAULT_Kp 26.47           //NOTE: if values are changed, both sets need to be changed.
+    #define SK175_DEFAULT_Ki 2.32
+    #define SK175_DEFAULT_Kd 75.56
+    #define charSK175_DEFAULT_Kp "26.47"
+    #define charSK175_DEFAULT_Ki "2.32"
+    #define charSK175_DEFAULT_Kd "75.56"
+   
+  // SK285 Tool head (30W)
+    #define SK285_DEFAULT_Kp 26.90           //NOTE: if values are changed, both sets need to be changed.
+    #define SK285_DEFAULT_Ki 2.41
+    #define SK285_DEFAULT_Kd 75.19
+    #define charSK285_DEFAULT_Kp "26.90"
+    #define charSK285_DEFAULT_Ki "2.41"
+    #define charSK285_DEFAULT_Kd "75.19"
 
-#if defined(LULZBOT_E3D_Titan_Aero_V6)
-    // E3D Titan Aero with LulzBot V6 block
-    #define LULZBOT_DEFAULT_Kp 41.68
-    #define LULZBOT_DEFAULT_Ki  6.87
-    #define LULZBOT_DEFAULT_Kd 63.16
-#endif /* LULZBOT_E3D_Titan_Aero */
+  // H175 Tool head (40W)
+    #define H175_DEFAULT_Kp 27.58            //NOTE: if values are changed, both sets need to be changed.
+    #define H175_DEFAULT_Ki 3.22
+    #define H175_DEFAULT_Kd 65.66
+    #define charH175_DEFAULT_Kp "27.58" 
+    #define charH175_DEFAULT_Ki "3.22"
+    #define charH175_DEFAULT_Kd "65.66"
 
-#if defined(LULZBOT_E3D_Titan_Aero_Volcano)
-    // E3D Titan Aero with Volcano block
-    #define LULZBOT_DEFAULT_Kp 37.55
-    #define LULZBOT_DEFAULT_Ki  5.39
-    #define LULZBOT_DEFAULT_Kd 65.36
-#endif
+  // M175 Tool head (50W)
+    #define M175_DEFAULT_Kp 22.12            //NOTE: if values are changed, both sets need to be changed.
+    #define M175_DEFAULT_Ki 1.94
+    #define M175_DEFAULT_Kd 63.59
+    #define charM175_DEFAULT_Kp "22.12"
+    #define charM175_DEFAULT_Ki "1.94"
+    #define charM175_DEFAULT_Kd "63.59"
 
-#if defined(LULZBOT_SliceEngineering)
-    // Slice Engineering Mosquito
-    #define LULZBOT_DEFAULT_Kp  24.54
-    #define LULZBOT_DEFAULT_Ki   2.52
-    #define LULZBOT_DEFAULT_Kd  61.75
-#endif
+  // HS & HSPLUS Tool heads  
+    #define HSHSPLUS_DEFAULT_Kp 37.55        //NOTE: if values are changed, both sets need to be changed.
+    #define HSHSPLUS_DEFAULT_Ki 5.39
+    #define HSHSPLUS_DEFAULT_Kd 65.36
+    #define charHSHSPLUS_DEFAULT_Kp "37.55"
+    #define charHSHSPLUS_DEFAULT_Ki "5.39"
+    #define charHSHSPLUS_DEFAULT_Kd "65.36"
+  
+  #if ENABLED(PID_PARAMS_PER_HOTEND)
+    // Specify between 1 and HOTENDS values per array.
+    // If fewer than EXTRUDER values are provided, the last element will be repeated.
+    #define LULZBOT_DEFAULT_Kp_LIST {  22.20,  22.20 }
+    #define LULZBOT_DEFAULT_Ki_LIST {   1.08,   1.08 }
+    #define LULZBOT_DEFAULT_Kd_LIST { 114.00, 114.00 }
+  
+  #else
+    // Sets default PID based on which printer/toolhead is selected
+    #if ENABLED(TAZ6) // Taz 6 Standard toolhead 
+      #define LULZBOT_DEFAULT_Kp  TAZ6_STD_DEFAULT_Kp
+      #define LULZBOT_DEFAULT_Ki  TAZ6_STD_DEFAULT_Ki
+      #define LULZBOT_DEFAULT_Kd  TAZ6_STD_DEFAULT_Kd
+    
+    #elif ANY(TOOLHEAD_SL_SE_HE, LULZBOT_E3D_Titan_Aero_V6, LULZBOT_UNIVERSAL_TOOLHEAD)
+      #define LULZBOT_DEFAULT_Kp  SLSEHE_DEFAULT_Kp
+      #define LULZBOT_DEFAULT_Ki  SLSEHE_DEFAULT_Ki
+      #define LULZBOT_DEFAULT_Kd  SLSEHE_DEFAULT_Kd    
+    
+    #elif ENABLED(TOOLHEAD_SK175)
+      #define LULZBOT_DEFAULT_Kp  SK175_DEFAULT_Kp
+      #define LULZBOT_DEFAULT_Ki  SK175_DEFAULT_Ki
+      #define LULZBOT_DEFAULT_Kd  SK175_DEFAULT_Kd
+      
+    #elif ENABLED(TOOLHEAD_SK285)
+      #define LULZBOT_DEFAULT_Kp  SK285_DEFAULT_Kp
+      #define LULZBOT_DEFAULT_Ki  SK285_DEFAULT_Ki
+      #define LULZBOT_DEFAULT_Kd  SK285_DEFAULT_Kd
+    
+    #elif ENABLED(TOOLHEAD_H175)
+      #define LULZBOT_DEFAULT_Kp  H175_DEFAULT_Kp
+      #define LULZBOT_DEFAULT_Ki  H175_DEFAULT_Ki
+      #define LULZBOT_DEFAULT_Kd  H175_DEFAULT_Kd
+    
+    #elif ANY(TOOLHEAD_M175, LULZBOT_SLICE_MOS_PID)
+      #define LULZBOT_DEFAULT_Kp  M175_DEFAULT_Kp
+      #define LULZBOT_DEFAULT_Ki  M175_DEFAULT_Ki
+      #define LULZBOT_DEFAULT_Kd  M175_DEFAULT_Kd
+
+    #elif ANY(TOOLHEAD_HS_HSPLUS)
+      #define LULZBOT_DEFAULT_Kp  HSHSPLUS_DEFAULT_Kp 
+      #define LULZBOT_DEFAULT_Ki  HSHSPLUS_DEFAULT_Ki 
+      #define LULZBOT_DEFAULT_Kd  HSHSPLUS_DEFAULT_Kd 
+    #endif
+  #endif
+
 
 
 // Heated bed variants
@@ -1765,7 +1839,7 @@
     #define LULZBOT_STANDARD_X_MAX_POS         318
     #define LULZBOT_STANDARD_X_MIN_POS          -6
     #define LULZBOT_STANDARD_Y_MAX_POS         313
-    #define LULZBOT_STANDARD_Y_MIN_POS       -18.2//-15
+    #define LULZBOT_STANDARD_Y_MIN_POS       -17//-15
 
     #define LULZBOT_STANDARD_X_BED_SIZE        280
     #define LULZBOT_STANDARD_Y_BED_SIZE        280
@@ -2289,8 +2363,8 @@ defined(LULZBOT_Gladiator_TAZProXT) && LULZBOT_EXTRUDERS == 1
         #define LULZBOT_REWIPE_E0 "T0\n" LULZBOT_WIPE_GCODE(LEFT)      /* Wipe nozzle */
     #endif
 
-    #if defined(LULZBOT_Quiver_TAZPro) && defined(TOOLHEAD_Quiver_DualExtruder) || \
-defined(LULZBOT_Gladiator_TAZProXT) && defined(TOOLHEAD_Quiver_DualExtruder)
+    #if defined(LULZBOT_Quiver_TAZPro) && ANY(TOOLHEAD_Quiver_DualExtruder, TOOLHEAD_Twin_Nebula_175) || \
+defined(LULZBOT_Gladiator_TAZProXT) && ANY(TOOLHEAD_Quiver_DualExtruder, TOOLHEAD_Twin_Nebula_175)
         #define LULZBOT_REWIPE_E1 \
             "G0 X150 F5000\n"                     /* Move over to switch extruders */ \
             "T1\n"                                /* Switch to second extruder */ \

@@ -967,7 +967,7 @@
  * Set DISABLE_INACTIVE_? 'true' to shut down axis steppers after an idle period.
  * The Deactive Time can be overridden with M18 and M84. Set to 0 for No Timeout.
  */
-#define DEFAULT_STEPPER_DEACTIVE_TIME 600
+#define DEFAULT_STEPPER_DEACTIVE_TIME (20*60) // After 20 mins the steppers will time out 
 #define DISABLE_INACTIVE_X true
 #if ANY(Sidekick_289, Sidekick_747)
   #define DISABLE_INACTIVE_Y false

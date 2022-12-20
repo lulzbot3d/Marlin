@@ -16,6 +16,8 @@ before_script:
   - "pip install -U platformio"
 
 build_all:
+  rules:
+    - if: $CI_COMMIT_TITLE =~ /^BUILD.*/
   stage: build
   script:
     - pio run -e $PIO_ENV

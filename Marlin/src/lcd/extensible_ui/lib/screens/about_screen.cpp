@@ -56,6 +56,8 @@ void AboutScreen::onRedraw(draw_mode_t) {
   draw_text_box(cmd, BTN_POS(1,2), BTN_SIZE(4,1), F(
     #if defined(LULZBOT_LONG_BED)
     "Long bed"
+    #elif defined(LULZBOT_BLTouch) && !defined(LULZBOT_LONG_BED)
+    "BLTouch Probe"
     #endif
   ), OPT_CENTER, font_large);
 

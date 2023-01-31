@@ -2654,9 +2654,9 @@ defined(LULZBOT_Gladiator_TAZProXT) && ANY(TOOLHEAD_Quiver_DualExtruder, TOOLHEA
 #elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT)
     #define LULZBOT_DEFAULT_MAX_FEEDRATE          {300, 300, 25, 25}     // (mm/sec)
     #if defined LULZBOT_LONG_BED
-      #define LULZBOT_DEFAULT_MAX_ACCELERATION      {9000,9000,200,9000}
-    #else
       #define LULZBOT_DEFAULT_MAX_ACCELERATION      {9000,500,200,9000}
+    #else
+      #define LULZBOT_DEFAULT_MAX_ACCELERATION      {9000,9000,200,9000}
     #endif
     #define LULZBOT_Z_STEPS                       500
     #define LULZBOT_Z_MICROSTEPS                  16

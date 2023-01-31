@@ -45,13 +45,19 @@ void AboutScreen::onRedraw(draw_mode_t) {
      .cmd(COLOR_RGB(bg_text_enabled))
      .tag(0);
 
-  draw_text_box(cmd, BTN_POS(1,2), BTN_SIZE(4,1), F(
+  draw_text_box(cmd, BTN_POS(1,1), BTN_SIZE(4,1), F(
       #if defined(LULZBOT_LCD_MACHINE_NAME)
       LULZBOT_LCD_MACHINE_NAME
       #else
       "Color Touch Panel"
       #endif
     ), OPT_CENTER, font_xlarge);
+
+  draw_text_box(cmd, BTN_POS(1,2), BTN_SIZE(4,1), F(
+    #if defined(LULZBOT_LONG_BED)
+    "Long bed"
+    #endif
+  ), OPT_CENTER, font_large);
 
   cmd.tag(2);
   draw_text_box(cmd, BTN_POS(1,3), BTN_SIZE(4,3), F(

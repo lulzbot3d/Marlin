@@ -73,7 +73,7 @@
  *
  */
 
-#define LULZBOT_FW_VERSION ".144.8" // Change this with each update
+#define LULZBOT_FW_VERSION ".144.9" // Change this with each update
 
 #if ( \
     !defined(LULZBOT_Gladiola_Mini) && \
@@ -910,7 +910,7 @@
 #endif
 #define LULZBOT_Z_PROBE_OFFSET_RANGE_MIN      -7
 #define LULZBOT_Z_PROBE_OFFSET_RANGE_MAX      5
-#define LULZBOT_XY_PROBE_SPEED                8000
+#define LULZBOT_XY_PROBE_SPEED                (60*60)
 #if defined (LULZBOT_BLTouch) 
   #define LULZBOT_Z_PROBE_SPEED_SLOW           (10*60)
   #define LULZBOT_Z_CLEARANCE_BETWEEN_PROBES    3

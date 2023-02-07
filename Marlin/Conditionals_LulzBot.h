@@ -2152,7 +2152,7 @@
     #if defined(LULZBOT_IS_TAZ)
         #if defined (LULZBOT_LONG_BED)
             #define LULZBOT_X_STALL_SENSITIVITY 6
-            #define LULZBOT_Y_STALL_SENSITIVITY 3
+            #define LULZBOT_Y_STALL_SENSITIVITY 6
         #else
             #define LULZBOT_X_STALL_SENSITIVITY 6
             #define LULZBOT_Y_STALL_SENSITIVITY 5

@@ -201,8 +201,8 @@ void ChangeFilamentScreen::onRedraw(draw_mode_t what) {
       cmd.font(font_small)
     #endif
        .tag(2) .TOG_STYLE(tog2) .button (BTN_POS(2,6), BTN_SIZE(1,1), F( STRINGIFY(LOW_TEMP)  "C (PLA)"))
-       .tag(3) .TOG_STYLE(tog3) .button (BTN_POS(2,5), BTN_SIZE(1,1), F( STRINGIFY(MED_TEMP)  "C (ABS)"))
-       .tag(4) .TOG_STYLE(tog4) .button (BTN_POS(2,4), BTN_SIZE(1,1), F( STRINGIFY(HIGH_TEMP) "C (High)"))
+       .tag(3) .TOG_STYLE(tog3) .button (BTN_POS(2,5), BTN_SIZE(1,1), F( STRINGIFY(MED_TEMP)  "C (TPU)"))
+       .tag(4) .TOG_STYLE(tog4) .button (BTN_POS(2,4), BTN_SIZE(1,1), F( STRINGIFY(HIGH_TEMP) "C (ABS)"))
        .colors(normal_btn)
 
     // Add tags to color gradient

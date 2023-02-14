@@ -228,7 +228,7 @@
     #define LULZBOT_TAZ_BED
     #define LULZBOT_TWO_PIECE_BED
     #define LULZBOT_USE_ARCHIM2
-    //#define LULZBOT_USE_AUTOLEVELING
+    #define LULZBOT_USE_AUTOLEVELING
     #define LULZBOT_BACKLASH_COMPENSATION
     #define LULZBOT_HAS_CALIBRATION_CUBE
     #define LULZBOT_CALIBRATION_GCODE
@@ -867,13 +867,17 @@
     #define LULZBOT_LAST_PROBE_POINT_ON_BACK_LEFT_CORNER
   #endif
 #endif
-
-#if BOTH(LULZBOT_LONG_BED, LULZBOT_BLTouch)
-  #define LULZBOT_GRID_MAX_POINTS_X            4
-  #define LULZBOT_GRID_MAX_POINTS_Y            8
+#if defined (LULZBOT_BLTouch)
+    #if defined (LULZBOT_LONG_BED)
+        #define LULZBOT_GRID_MAX_POINTS_X            4
+        #define LULZBOT_GRID_MAX_POINTS_Y            8
+    #else
+        #define LULZBOT_GRID_MAX_POINTS_X            3
+        #define LULZBOT_GRID_MAX_POINTS_Y            3
+    #endif
 #else
-  #define LULZBOT_GRID_MAX_POINTS_X            3
-  #define LULZBOT_GRID_MAX_POINTS_Y            3
+    #define LULZBOT_GRID_MAX_POINTS_X            2
+    #define LULZBOT_GRID_MAX_POINTS_Y            2
 #endif
 
 /* Make sure Marlin allows probe points outside of the bed area */
@@ -1445,6 +1449,7 @@
     #define LULZBOT_NUM_SERVOS                      2
     #define LULZBOT_SERVO_DELAY                    {1000, 1000}
     #define LULZBOT_SWITCHING_NOZZLE
+    #define LULZBOT_SWITCHING_NOZZLE_E0_SERVO_NR   0
     #define LULZBOT_SWITCHING_NOZZLE_E1_SERVO_NR   1
     #define LULZBOT_SWITCHING_NOZZLE_SERVO_ANGLES  { 55,   120}
     #define LULZBOT_SWITCHING_NOZZLE_OPPOSING_SERVOS
@@ -1462,18 +1467,19 @@
     #define LULZBOT_LCD_TOOLHEAD_NAME              "Twin Nebula"
 //          16 chars max                            ^^^^^^^^^^^^^^^
     #define LULZBOT_M115_EXTRUDER_TYPE             "DualExtruder"
-    #define LULZBOT_TOOLHEAD_X_MAX_ADJ             -21
-    #define LULZBOT_TOOLHEAD_X_MIN_ADJ             -21
-    #define LULZBOT_TOOLHEAD_Y_MAX_ADJ             -21
-    #define LULZBOT_TOOLHEAD_Y_MIN_ADJ             -21
-    #define LULZBOT_TOOLHEAD_Z_MAX_ADJ             -23.7
-    #define LULZBOT_TOOLHEAD_Z_MIN_ADJ             -23.7
+    #define LULZBOT_TOOLHEAD_X_MAX_ADJ             -12
+    #define LULZBOT_TOOLHEAD_X_MIN_ADJ             -12
+    #define LULZBOT_TOOLHEAD_Y_MAX_ADJ             -31
+    #define LULZBOT_TOOLHEAD_Y_MIN_ADJ             -23
+    #define LULZBOT_TOOLHEAD_Z_MAX_ADJ             -8
+    #define LULZBOT_TOOLHEAD_Z_MIN_ADJ             -8
     #define LULZBOT_EXTRUDERS                       2
     #define LULZBOT_TOOLCHANGE_ZRAISE               0
     #define LULZBOT_NUM_SERVOS                      2
     #define LULZBOT_SERVO_DELAY                    {500, 500}
     #define LULZBOT_SWITCHING_NOZZLE
-    #define LULZBOT_SWITCHING_NOZZLE_E1_SERVO_NR   1
+    #define LULZBOT_SWITCHING_NOZZLE_E0_SERVO_NR   1
+    #define LULZBOT_SWITCHING_NOZZLE_E1_SERVO_NR   0
     #define LULZBOT_SWITCHING_NOZZLE_SERVO_ANGLES  { 75,   125}
     #define LULZBOT_SWITCHING_NOZZLE_OPPOSING_SERVOS
     #define LULZBOT_HOTEND_OFFSET_X                {0.0, 44}
@@ -1482,8 +1488,8 @@
     #define LULZBOT_X_MAX_ENDSTOP_INVERTING        LULZBOT_NO_ENDSTOP
     #define LULZBOT_SLICE_MOS_PID
     #define LULZBOT_TEMP_SENSOR_1                  5
-    #define LULZBOT_MOTOR_CURRENT_E0               750 // mA
-    #define LULZBOT_MOTOR_CURRENT_E1               750 // mA
+    #define LULZBOT_MOTOR_CURRENT_E0               830 // mA
+    #define LULZBOT_MOTOR_CURRENT_E1               830 // mA
     #define SWITCHING_NOZZLE
 #endif /* TOOLHEAD_Twin_Nebula_175 */
 

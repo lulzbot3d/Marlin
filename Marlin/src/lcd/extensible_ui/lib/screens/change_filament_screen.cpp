@@ -215,7 +215,7 @@ void ChangeFilamentScreen::onRedraw(draw_mode_t what) {
     .cmd(COLOR_RGB(t_ok ? bg_text_enabled : bg_text_disabled))
     #if defined(USE_PORTRAIT_ORIENTATION)
        .font(font_large)
-       .tag(0)                              .text   (BTN_POS(1,8),  BTN_SIZE(1,1), F("Unload"))
+       .tag(0)                              .text   (BTN_POS(1,8),  BTN_SIZE(1,1), F("Unload/Retract"))
                                             .text   (BTN_POS(2,8),  BTN_SIZE(1,1), F("Load/Extrude"))
        .tag(5)                .enabled(t_ok).button (BTN_POS(1,9),  BTN_SIZE(1,1), F("Momentary"))
        .tag(6)                .enabled(t_ok).button (BTN_POS(2,9),  BTN_SIZE(1,1), F("Momentary"))

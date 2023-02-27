@@ -2311,7 +2311,7 @@
 /**
  * User-defined menu items that execute custom GCode
  */
-#if defined(TOOLHEAD_Universal_ToolHead)
+#if EITHER(TOOLHEAD_Universal_ToolHead, TOOLHEAD_Universal_X_series)
   #define CUSTOM_USER_MENUS 
 #endif
 #if ENABLED(CUSTOM_USER_MENUS)
@@ -2332,7 +2332,7 @@
     #define E_CURRENT_BMG  "960"
   #endif
 
-
+  #if defined(TOOLHEAD_Universal_ToolHead)
     #define MAIN_MENU_ITEM_1_DESC "M175v2|0.50mm|CRB CU"
     #define MAIN_MENU_ITEM_1_GCODE "M92E415\nM301P" charM175_DEFAULT_Kp "I" charM175_DEFAULT_Ki "D" charM175_DEFAULT_Kd "\nM906E" E_CURRENT_BMG "\nM500\nM117 M175v2|0.50mm|CRB CU"
 
@@ -2353,7 +2353,18 @@
 
     #define MAIN_MENU_ITEM_7_DESC "H175|0.50mm|NKL-PL CU"
     #define MAIN_MENU_ITEM_7_GCODE "M92E409\nM301P" charH175_DEFAULT_Kp "I" charH175_DEFAULT_Ki "D" charH175_DEFAULT_Kd "\nM906E" E_CURRENT_Aero "\nM500\nM117 H175|0.50mm|NKL-PL CU"
+  #endif
 
+  #if defined(TOOLHEAD_Universal_X_series)
+    #define MAIN_MENU_ITEM_1_DESC "ME175|CRB CU"
+    #define MAIN_MENU_ITEM_1_GCODE "M92E415\nM301P" charMETERORITE_DEFAULT_Kp "I" charMETERORITE_DEFAULT_Ki "D" charMETERORITE_DEFAULT_Kd "\nM906E" E_CURRENT_BMG "\nM500\nM117 ME175|0.25mm|CRB CU"
+
+    #define MAIN_MENU_ITEM_2_DESC "ME285|CRB CU"
+    #define MAIN_MENU_ITEM_2_GCODE "M92E452\nM301P" charMETERORITE_DEFAULT_Kp "I" charMETERORITE_DEFAULT_Ki "D" charMETERORITE_DEFAULT_Kd "\nM906E" E_CURRENT_Aero "\nM500\nM117 ME285|0.25mm|CRB CU"
+      
+    #define MAIN_MENU_ITEM_8_DESC "AST285|CRB CU"
+    #define MAIN_MENU_ITEM_8_GCODE "M92E452\nM301P" charASTEROID_DEFAULT_Kp "I" charASTEROID_DEFAULT_Ki "D" chaASTEROID_DEFAULT_Kd "\nM906E" E_CURRENT_Aero "\nM500\nM117 AST285|1.80mm|CRB CU"
+  #endif
 #endif
 
 /**

@@ -73,7 +73,7 @@
  *
  */
 
-#define LULZBOT_FW_VERSION ".144.9" // Change this with each update
+#define LULZBOT_FW_VERSION ".144.10" // Change this with each update
 
 #if ( \
     !defined(LULZBOT_Gladiola_Mini) && \
@@ -1568,10 +1568,23 @@
         #define LULZBOT_CALIBRATION_MEASURE_FRONT
     #endif
 
-#elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT)
+#elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT) && !defined(LULZBOT_LONG_BED)
     #ifdef LULZBOT_CALIBRATE_ON_CUBE
         #define LULZBOT_CALIBRATION_OBJECT_DIMENSIONS              {  10.0,  10.0,  10.0} // mm
         #define LULZBOT_CALIBRATION_OBJECT_CENTER                  { 261.0, -22.0,  -2.0} // mm
+
+        #define LULZBOT_CALIBRATION_OBJECT_TOP_CENTER_MEASUREMENT
+        #define LULZBOT_CALIBRATION_MEASURE_RIGHT
+        #if ANY(TOOLHEAD_Quiver_DualExtruder, TOOLHEAD_Twin_Nebula_175)
+            #define LULZBOT_CALIBRATION_MEASURE_FRONT
+        #endif
+        #define LULZBOT_CALIBRATION_MEASURE_LEFT
+        #define LULZBOT_CALIBRATION_MEASURE_BACK
+    #endif
+#elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT) && defined(LULZBOT_LONG_BED)
+    #ifdef LULZBOT_CALIBRATE_ON_CUBE
+        #define LULZBOT_CALIBRATION_OBJECT_DIMENSIONS              {  10.0,  10.0,  10.0} // mm
+        #define LULZBOT_CALIBRATION_OBJECT_CENTER                  { 265.0, -13.0,  -2.0} // mm
 
         #define LULZBOT_CALIBRATION_OBJECT_TOP_CENTER_MEASUREMENT
         #define LULZBOT_CALIBRATION_MEASURE_RIGHT
@@ -1868,9 +1881,9 @@
 
 #elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT) && defined(LULZBOT_LONG_BED)
     #define LULZBOT_STANDARD_X_MAX_POS         318
-    #define LULZBOT_STANDARD_X_MIN_POS          -6
+    #define LULZBOT_STANDARD_X_MIN_POS        -4.5
     #define LULZBOT_STANDARD_Y_MAX_POS         613
-    #define LULZBOT_STANDARD_Y_MIN_POS       -18.2//-15
+    #define LULZBOT_STANDARD_Y_MIN_POS        -18.2//-15
 
     #define LULZBOT_STANDARD_X_BED_SIZE        280
     #define LULZBOT_STANDARD_Y_BED_SIZE        570
@@ -2284,11 +2297,18 @@
     #endif
     #define LULZBOT_LEFT_WIPE_Z                        0
 
-    #if defined(LULZBOT_Quiver_TAZPro) || \
-    defined(LULZBOT_Gladiator_TAZProXT) 
+    #if defined(LULZBOT_Quiver_TAZPro) || defined(LULZBOT_Gladiator_TAZProXT) && !defined(LULZBOT_LONG_BED)
         // The Quiver has an wipe pad on the right side of the bed.
         #define LULZBOT_RIGHT_WIPE_X1                   296
         #define LULZBOT_RIGHT_WIPE_X2                   296
+        #define LULZBOT_RIGHT_WIPE_Y1                    95
+        #define LULZBOT_RIGHT_WIPE_Y2                    25
+        #define LULZBOT_RIGHT_WIPE_Z                      -2.5
+    #endif
+        #if defined(LULZBOT_Quiver_TAZPro) || defined(LULZBOT_Gladiator_TAZProXT) && defined(LULZBOT_LONG_BED)
+        // The Quiver has an wipe pad on the right side of the bed.
+        #define LULZBOT_RIGHT_WIPE_X1                   298
+        #define LULZBOT_RIGHT_WIPE_X2                   298
         #define LULZBOT_RIGHT_WIPE_Y1                    95
         #define LULZBOT_RIGHT_WIPE_Y2                    25
         #define LULZBOT_RIGHT_WIPE_Z                      -2.5

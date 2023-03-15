@@ -119,6 +119,7 @@
     !defined(TOOLHEAD_Lutefisk_M175v2)&&\
     !defined(TOOLHEAD_H175)&&\
     !defined(TOOLHEAD_Universal_ToolHead)&&\
+    !defined(TOOLHEAD_Universal_X_series)&&\
     !defined(TOOLHEAD_MUSKELLUNGE)\
 )
     #error Must specify toolhead. Please see "Configuration_LulzBot.h" for directions.
@@ -1314,6 +1315,17 @@
   #endif
 #endif
 
+#if defined(TOOLHEAD_Universal_X_series)
+    #define LULZBOT_EXTRUDERS                  1
+    #define LULZBOT_TOOLHEAD_X_MAX_ADJ         0
+    #define LULZBOT_TOOLHEAD_X_MIN_ADJ         0
+    #define LULZBOT_TOOLHEAD_Y_MAX_ADJ         0
+    #define LULZBOT_TOOLHEAD_Y_MIN_ADJ         0
+    #define LULZBOT_TOOLHEAD_Z_MAX_ADJ         0
+    #define LULZBOT_TOOLHEAD_Z_MIN_ADJ         0
+    #define LULZBOT_MOTOR_CURRENT_E          750 // mA
+#endif
+
 #if defined(TOOLHEAD_CecropiaSilk_SingleExtruderAeroV2)
     #define LULZBOT_LCD_TOOLHEAD_NAME              "SE 0.5mm"
 //          16 chars max                            ^^^^^^^^^^^^^^^
@@ -1404,6 +1416,16 @@
     #define LULZBOT_X_MAX_ENDSTOP_INVERTING        LULZBOT_NORMALLY_CLOSED_ENDSTOP
     #define LULZBOT_E3D_Titan_Aero_V6
     #define LULZBOT_E_STEPS                        420
+    #define LULZBOT_UNIVERSAL_MOUNT
+#endif
+
+#if defined(TOOLHEAD_Universal_X_serires)
+    #define LULZBOT_LCD_TOOLHEAD_NAME              "Universal X-Series"
+//          16 chars max                            ^^^^^^^^^^^^^^^
+    #define LULZBOT_M115_EXTRUDER_TYPE              "Universal X-Series"
+    #define LULZBOT_X_MAX_ENDSTOP_INVERTING        LULZBOT_NORMALLY_CLOSED_ENDSTOP
+    #define LULZBOT_E3D_Titan_Aero_V6
+    #define LULZBOT_E_STEPS                        410
     #define LULZBOT_UNIVERSAL_MOUNT
 #endif
 
@@ -1718,6 +1740,31 @@
     #define charHSHSPLUS_DEFAULT_Kp "37.55"
     #define charHSHSPLUS_DEFAULT_Ki "5.39"
     #define charHSHSPLUS_DEFAULT_Kd "65.36"
+
+  // MET175 Tool head (50W)
+    #define MET175_DEFAULT_Kp 26.90
+    #define MET175_DEFAULT_Ki 2.41
+    #define MET175_DEFAULT_Kd 75.19
+    #define charMET175_DEFAULT_Kp STRINGIFY(MET175_DEFAULT_Kp)
+    #define charMET175_DEFAULT_Ki STRINGIFY(MET175_DEFAULT_Ki)
+    #define charMET175_DEFAULT_Kd STRINGIFY(MET175_DEFAULT_Kd)
+
+  // MET285 Tool head (50W)
+    #define MET285_DEFAULT_Kp 14.00
+    #define MET285_DEFAULT_Ki 0.87
+    #define MET285_DEFAULT_Kd 56.4
+    #define charMET285_DEFAULT_Kp STRINGIFY(MET285_DEFAULT_Kp)
+    #define charMET285_DEFAULT_Ki STRINGIFY(MET285_DEFAULT_Ki)
+    #define charMET285_DEFAULT_Kd STRINGIFY(MET285_DEFAULT_Kd)
+  
+  // AST285 Tool head (50W)
+    #define AST285_DEFAULT_Kp 26.90
+    #define AST285_DEFAULT_Ki 2.41
+    #define AST285_DEFAULT_Kd 75.19
+    #define charAST285_DEFAULT_Kp STRINGIFY(AST285_DEFAULT_Kp)
+    #define charAST285_DEFAULT_Ki STRINGIFY(AST285_DEFAULT_Ki)
+    #define charAST285_DEFAULT_Kd STRINGIFY(AST285_DEFAULT_Kd)
+
   
   #if ENABLED(PID_PARAMS_PER_HOTEND)
     // Specify between 1 and HOTENDS values per array.

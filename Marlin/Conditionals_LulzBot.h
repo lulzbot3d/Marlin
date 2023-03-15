@@ -1419,7 +1419,8 @@
     #define LULZBOT_UNIVERSAL_MOUNT
 #endif
 
-#if defined(TOOLHEAD_Universal_X_serires)
+#if defined(TOOLHEAD_Universal_X_series)
+
     #define LULZBOT_LCD_TOOLHEAD_NAME              "Universal X-Series"
 //          16 chars max                            ^^^^^^^^^^^^^^^
     #define LULZBOT_M115_EXTRUDER_TYPE              "Universal X-Series"
@@ -1427,6 +1428,14 @@
     #define LULZBOT_E3D_Titan_Aero_V6
     #define LULZBOT_E_STEPS                        410
     #define LULZBOT_UNIVERSAL_MOUNT
+    #define LULZBOT_EXTRUDERS                  1
+    #define LULZBOT_TOOLHEAD_X_MAX_ADJ         0
+    #define LULZBOT_TOOLHEAD_X_MIN_ADJ         0
+    #define LULZBOT_TOOLHEAD_Y_MAX_ADJ         0
+    #define LULZBOT_TOOLHEAD_Y_MIN_ADJ         0
+    #define LULZBOT_TOOLHEAD_Z_MAX_ADJ         0
+    #define LULZBOT_TOOLHEAD_Z_MIN_ADJ         0
+    #define LULZBOT_MOTOR_CURRENT_E          750 // mA
 #endif
 
 // Using the V2 toolheads on the TAZ and older Minis requires an
@@ -1486,9 +1495,9 @@
 #endif /* TOOLHEAD_Quiver_DualExtruder */
 
 #if defined(TOOLHEAD_Twin_Nebula_175)
-    #define LULZBOT_LCD_TOOLHEAD_NAME              "Twin Nebula"
+    #define LULZBOT_LCD_TOOLHEAD_NAME              "Twin Nebula 1.75"
 //          16 chars max                            ^^^^^^^^^^^^^^^
-    #define LULZBOT_M115_EXTRUDER_TYPE             "DualExtruder"
+    #define LULZBOT_M115_EXTRUDER_TYPE             "Twin Nebula 1.75"
     #define LULZBOT_TOOLHEAD_X_MAX_ADJ             -12
     #define LULZBOT_TOOLHEAD_X_MIN_ADJ             -12
     #define LULZBOT_TOOLHEAD_Y_MAX_ADJ             -31
@@ -1510,8 +1519,38 @@
     #define LULZBOT_X_MAX_ENDSTOP_INVERTING        LULZBOT_NO_ENDSTOP
     #define LULZBOT_SLICE_MOS_PID
     #define LULZBOT_TEMP_SENSOR_1                  5
-    #define LULZBOT_MOTOR_CURRENT_E0               830 // mA
-    #define LULZBOT_MOTOR_CURRENT_E1               830 // mA
+    #define LULZBOT_MOTOR_CURRENT_E0               750 // mA
+    #define LULZBOT_MOTOR_CURRENT_E1               750 // mA
+    #define SWITCHING_NOZZLE
+#endif /* TOOLHEAD_Twin_Nebula_175 */
+
+#if defined(TOOLHEAD_Twin_Nebula_285)
+    #define LULZBOT_LCD_TOOLHEAD_NAME              "Twin Nebula 2.85"
+//          16 chars max                            ^^^^^^^^^^^^^^^
+    #define LULZBOT_M115_EXTRUDER_TYPE             "Twin Nebula 2.85"
+    #define LULZBOT_TOOLHEAD_X_MAX_ADJ             -12
+    #define LULZBOT_TOOLHEAD_X_MIN_ADJ             -12
+    #define LULZBOT_TOOLHEAD_Y_MAX_ADJ             -31
+    #define LULZBOT_TOOLHEAD_Y_MIN_ADJ             -23
+    #define LULZBOT_TOOLHEAD_Z_MAX_ADJ             -8
+    #define LULZBOT_TOOLHEAD_Z_MIN_ADJ             -8
+    #define LULZBOT_EXTRUDERS                       2
+    #define LULZBOT_TOOLCHANGE_ZRAISE               0
+    #define LULZBOT_NUM_SERVOS                      2
+    #define LULZBOT_SERVO_DELAY                    {500, 500}
+    #define LULZBOT_SWITCHING_NOZZLE
+    #define LULZBOT_SWITCHING_NOZZLE_E0_SERVO_NR   1
+    #define LULZBOT_SWITCHING_NOZZLE_E1_SERVO_NR   0
+    #define LULZBOT_SWITCHING_NOZZLE_SERVO_ANGLES  { 75,   125}
+    #define LULZBOT_SWITCHING_NOZZLE_OPPOSING_SERVOS
+    #define LULZBOT_HOTEND_OFFSET_X                {0.0, 44}
+    #define LULZBOT_HOTEND_OFFSET_Y                {0.0,  0}//M301 E1 P16.68 I1.07 D64.7
+    #define LULZBOT_E_STEPS                        410
+    #define LULZBOT_X_MAX_ENDSTOP_INVERTING        LULZBOT_NO_ENDSTOP
+    #define LULZBOT_SLICE_MOS_PID
+    #define LULZBOT_TEMP_SENSOR_1                  5
+    #define LULZBOT_MOTOR_CURRENT_E0               850 // mA
+    #define LULZBOT_MOTOR_CURRENT_E1               850 // mA
     #define SWITCHING_NOZZLE
 #endif /* TOOLHEAD_Twin_Nebula_175 */
 

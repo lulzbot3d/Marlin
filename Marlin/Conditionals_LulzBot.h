@@ -1645,7 +1645,7 @@
 #elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT) && defined(LULZBOT_LONG_BED)
     #ifdef LULZBOT_CALIBRATE_ON_CUBE
         #define LULZBOT_CALIBRATION_OBJECT_DIMENSIONS              {  10.0,  10.0,  10.0} // mm
-        #define LULZBOT_CALIBRATION_OBJECT_CENTER                  { 265.0, -13.0,  -2.0} // mm
+        #define LULZBOT_CALIBRATION_OBJECT_CENTER                  { 263.5, -17.5,  -2.0} // mm
 
         #define LULZBOT_CALIBRATION_OBJECT_TOP_CENTER_MEASUREMENT
         #define LULZBOT_CALIBRATION_MEASURE_RIGHT
@@ -2010,7 +2010,7 @@
 
 #elif defined(LULZBOT_IS_TAZ) && defined(LULZBOT_USE_Z_BELT) && defined(LULZBOT_LONG_BED)
     #define LULZBOT_STANDARD_Z_MIN_POS          -5
-    #define LULZBOT_STANDARD_Z_MAX_POS         292
+    #define LULZBOT_STANDARD_Z_MAX_POS         287.2
 
 #endif
 

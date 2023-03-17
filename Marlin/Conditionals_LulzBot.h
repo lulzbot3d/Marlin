@@ -621,6 +621,11 @@
 
 #define LULZBOT_SOURCE_CODE_URL "https://code.alephobjects.com/diffusion/MARLIN"
 
+#if ENABLED(LULZBOT_LONG_BED)
+    #define LULZBOT_BED_TYPE "Long Bed"
+#else
+    #define LULZBOT_BED_TYPE "Standard"
+#endif
 /******************** MOTHERBOARD AND PIN CONFIGURATION ***********************/
 
 #if defined(LULZBOT_USE_ARCHIM2)

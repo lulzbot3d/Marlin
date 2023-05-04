@@ -55,7 +55,7 @@ void LULZBOT_ON_STARTUP(void) {
     #if defined(LULZBOT_USE_Z_BELT)
         enable_Z();
         #if defined(LULZBOT_IS_TAZ)
-            queue.inject_P(PSTR("G28 Z"));
+            queue.inject_P(PSTR(LULZBOT_STARTUP_COMMANDS));
         #endif
     #endif
 }

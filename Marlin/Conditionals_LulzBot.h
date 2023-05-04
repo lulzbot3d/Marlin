@@ -585,6 +585,11 @@
 #define LULZBOT_M226_PIN_PROTECTION_WORKAROUND
 #define LULZBOT_M226_NON_ARDUINO_PINS_WORKAROUND
 
+#if defined(LULZBOT_HOME_ON_START)
+    #define LULZBOT_STARTUP_COMMANDS "G28 Z\nM117 Printer Ready"
+#else
+    #define LULZBOT_STARTUP_COMMANDS "M117 Printer Ready"
+#endif
 /************************* EXPERIMENTAL FEATURES ******************************/
 
 #if defined(LULZBOT_USE_EXPERIMENTAL_FEATURES)

@@ -56,7 +56,7 @@ BaseNumericAdjustmentScreen::widgets_t::widgets_t(draw_mode_t what) : _what(what
     #endif
        .colors(normal_btn);
   }
-  if (!ExtUI::isPrinting()) {
+  if (!ExtUI::isPrinting()) { // making sure the Tool Head Swap Position ia not avalible while printing
     CommandProcessor cmd;
     cmd.font(font_medium)
        .colors(normal_btn)

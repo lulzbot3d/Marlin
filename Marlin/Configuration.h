@@ -10,7 +10,8 @@
 //#define TazDualZ
 #define LULZBOT_FILAMENT_RUNOUT
 /************** Uncomment a Tool Head Option From Below *********************/
-#define LULZBOT_UNIVERSAL_TOOLHEAD
+//#define LULZBOT_UNIVERSAL_TOOLHEAD
+#define LULZBOT_GALAXY_SERIES
 //#define TOOLHEAD_SL_SE_HE
 //#define TOOLHEAD_HS_HSPLUS
 //#define TOOLHEAD_H175
@@ -408,6 +409,23 @@
 #elif defined(TOOLHEAD_SK285)
   #undef LULZBOT_M115_EXTRUDER_TYPE
   #define LULZBOT_M115_EXTRUDER_TYPE       "SK285"
+#endif
+#if defined(LULZBOT_GALAXY_SERIES) 
+  #define LULZBOT_UNIVERSAL_MOUNT
+  #define LULZBOT_EXTRUDERS                  1
+  #define LULZBOT_M115_EXTRUDER_TYPE         "Universal Galaxy-Series"
+  #define LULZBOT_E_STEPS                    410
+  #define LULZBOT_TOOLHEAD_X_MAX_ADJ         0
+  #define LULZBOT_TOOLHEAD_X_MIN_ADJ         0
+  #define LULZBOT_TOOLHEAD_Y_MAX_ADJ         0
+  #define LULZBOT_TOOLHEAD_Y_MIN_ADJ         0
+  #define LULZBOT_TOOLHEAD_Z_MAX_ADJ         0
+  #define LULZBOT_TOOLHEAD_Z_MIN_ADJ         0
+  #if ANY(TAZ6, Workhorse)
+    #define LULZBOT_MOTOR_CURRENT_E0         135 // Values 0-255 (RAMBO 135 = ~0.75A, 185 = ~1A)
+  #else
+    #define LULZBOT_MOTOR_CURRENT_E0         750 // mA
+  #endif
 #endif
 
 /*********************************** TAZ PRO TOOLHEADS ************************/
@@ -899,7 +917,31 @@
     #define charHSHSPLUS_DEFAULT_Kp "37.55"
     #define charHSHSPLUS_DEFAULT_Ki "5.39"
     #define charHSHSPLUS_DEFAULT_Kd "65.36"
+
+  // MET175 Tool head (50W)
+    #define MET175_DEFAULT_Kp 17.5
+    #define MET175_DEFAULT_Ki 1.25
+    #define MET175_DEFAULT_Kd 65.5
+    #define charMET175_DEFAULT_Kp STRINGIFY(MET175_DEFAULT_Kp)
+    #define charMET175_DEFAULT_Ki STRINGIFY(MET175_DEFAULT_Ki)
+    #define charMET175_DEFAULT_Kd STRINGIFY(MET175_DEFAULT_Kd)
+
+  // MET285 Tool head (50W)
+    #define MET285_DEFAULT_Kp 17.5
+    #define MET285_DEFAULT_Ki 1.25
+    #define MET285_DEFAULT_Kd 59.3
+    #define charMET285_DEFAULT_Kp STRINGIFY(MET285_DEFAULT_Kp)
+    #define charMET285_DEFAULT_Ki STRINGIFY(MET285_DEFAULT_Ki)
+    #define charMET285_DEFAULT_Kd STRINGIFY(MET285_DEFAULT_Kd)
   
+  // AST285 Tool head (50W)
+    #define AST285_DEFAULT_Kp 14.37
+    #define AST285_DEFAULT_Ki 0.86
+    #define AST285_DEFAULT_Kd 60.41
+    #define charAST285_DEFAULT_Kp STRINGIFY(AST285_DEFAULT_Kp)
+    #define charAST285_DEFAULT_Ki STRINGIFY(AST285_DEFAULT_Ki)
+    #define charAST285_DEFAULT_Kd STRINGIFY(AST285_DEFAULT_Kd)
+
   #if ENABLED(PID_PARAMS_PER_HOTEND)
     // Specify between 1 and HOTENDS values per array.
     // If fewer than EXTRUDER values are provided, the last element will be repeated.
@@ -943,6 +985,11 @@
       #define DEFAULT_Kp HSHSPLUS_DEFAULT_Kp 
       #define DEFAULT_Ki HSHSPLUS_DEFAULT_Ki 
       #define DEFAULT_Kd HSHSPLUS_DEFAULT_Kd 
+    
+    #elif ENABLED(LULZBOT_GALAXY_SERIES)
+      #define DEFAULT_Kp MET175_DEFAULT_Kp 
+      #define DEFAULT_Ki MET175_DEFAULT_Ki 
+      #define DEFAULT_Kd MET175_DEFAULT_Kd 
     #endif
   #endif
 #endif // PIDTEMP
@@ -2580,7 +2627,7 @@
   #if ENABLED(MiniV2)
     #define NOZZLE_CLEAN_START_POINT {  45, 175, 0 }
     #define NOZZLE_CLEAN_END_POINT   { 115, 177, 0 }
-  #elif ANY(TAZPro, TAZProXT) && ENABLED(LULZBOT_UNIVERSAL_TOOLHEAD)
+  #elif ANY(TAZPro, TAZProXT) && ANY(LULZBOT_UNIVERSAL_TOOLHEAD, LULZBOT_GALAXY_SERIES)
     #define NOZZLE_CLEAN_START_POINT { 298, 95, 1 }
     #define NOZZLE_CLEAN_END_POINT   { 300, 25, 1 }
   #elif ANY(TAZPro, TAZProXT) && ENABLED(TOOLHEAD_Quiver_DualExtruder) 
@@ -2618,7 +2665,7 @@
     #define WIPE_SEQUENCE_COMMANDS "G28O\nM117 Wiping nozzle\nT0\nG1 X-17 Y25 Z10 F4000\nG1 Z1\nM114\nG1 Y25\nG1 Y95\nG1 Y25\nG1 Y95\nG1 Y25\nG1 Y95\nG1 Y25\nG1 Y95\nG1 Y25\nG1 Y95\nG1 Y25\nG1 Y95\nG1 Z15\nM400\nM117 Wipe Complete"
   #elif ENABLED(Workhorse)
     #define WIPE_SEQUENCE_COMMANDS "G28O\nM117 Wiping nozzle\nT0\nG1 X-17 Y25 Z10 F4000\nG1 Z1\nM114\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 Z15\nM400\nM117 Wipe Complete"
-  #elif ANY(TAZPro, TAZProXT) && ENABLED(LULZBOT_UNIVERSAL_TOOLHEAD)
+  #elif ANY(TAZPro, TAZProXT) && ANY(LULZBOT_UNIVERSAL_TOOLHEAD, LULZBOT_GALAXY_SERIES)
     #define WIPE_SEQUENCE_COMMANDS "G28O\nM117 Wiping nozzle\nT0\nG1 X300 Y25 Z10 F4000\nG1 Z-1 F4000\nM114\nG1 Y25 F4000\nG1 Y95 F4000\nG1 Y25 F4000\nG1 Y95 F4000\nG1 Y25 F4000\nG1 Y95 F4000\nG1 Y25 F4000\nG1 Y95 F4000\nG1 Y25 F4000\nG1 Y95 F4000\nG1 Y25 F4000\nG1 Y95 F4000\nG1 Z15 F4000\nM400\nG0 Y-9.0 F4000\nM117 Wipe Complete"
   #elif ANY(TAZPro, TAZProXT) && ENABLED(TOOLHEAD_Quiver_DualExtruder) 
     #define WIPE_SEQUENCE_COMMANDS "G1 X-17 Y25 Z10 F4000\nT0\nG1 Z-1\nM114\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 Z15\nM400"
@@ -3578,3 +3625,17 @@
 
 // Edit servo angles with M281 and save to EEPROM with M500
 //#define EDITABLE_SERVO_ANGLES
+
+// Selection of tool head
+#if NONE(LULZBOT_UNIVERSAL_TOOLHEAD, LULZBOT_GALAXY_SERIES, TOOLHEAD_SL_SE_HE, TOOLHEAD_HS_HSPLUS, TOOLHEAD_H175, TOOLHEAD_M175, TOOLHEAD_SK175, TOOLHEAD_SK285,TOOLHEAD_Quiver_DualExtruder, TOOLHEAD_Twin_Nebula_175, TOOLHEAD_Twin_Nebula_285)
+  #error "Please select a Tool Head. See top of configuration.h for more information."
+#endif
+
+//Making sure universal_toolhead is not selected while defining specific heads
+#if ANY(TOOLHEAD_SK285, TOOLHEAD_SK175, TOOLHEAD_M175, TOOLHEAD_H175, TOOLHEAD_SL_SE_HE, TOOLHEAD_HS_HSPLUS) && ANY(LULZBOT_UNIVERSAL_TOOLHEAD, LULZBOT_GALAXY_SERIES)
+  #error "Can not have universal tool head while defining spectific tool head"
+#endif
+
+#if LULZBOT_EXTRUDERS == 2 && NONE(LULZBOT_Quiver_TAZPro, LULZBOT_Gladiator_TAZProXT)
+  #error "Tool Head Selected is not supported by Printer."
+#endif

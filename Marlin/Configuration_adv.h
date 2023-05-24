@@ -3014,7 +3014,7 @@
   #if EITHER(SENSORLESS_HOMING, SENSORLESS_PROBING)
     // TMC2209: 0...255. TMC2130: -64...63
     #if ANY(TAZPro, TAZProXT)
-      #if defined(LULZBOT_UNIVERSAL_TOOLHEAD)
+      #if ANY(LULZBOT_UNIVERSAL_TOOLHEAD, LULZBOT_GALAXY_SERIES)
         #define X_STALL_SENSITIVITY  3
         #define Y_STALL_SENSITIVITY  5
       #else      
@@ -3811,29 +3811,63 @@
  */
 
 // Custom Menu: Main Menu
-#if defined(LULZBOT_UNIVERSAL_TOOLHEAD)
-  
+#if ANY(LULZBOT_UNIVERSAL_TOOLHEAD, LULZBOT_GALAXY_SERIES)
   #define CUSTOM_MENU_MAIN
+#endif
+ #define CUSTOM_MENU_MAIN_TITLE "Tool Heads"
+#if ENABLED(CUSTOM_MENU_MAIN)
+ 
+  //#define CUSTOM_MENU_MAIN_SCRIPT_DONE "M117 Toolhead Changed"
+  #define CUSTOM_MENU_MAIN_SCRIPT_AUDIBLE_FEEDBACK
+  #define CUSTOM_MENU_MAIN_SCRIPT_RETURN   // Return to status screen after a script
+  #define CUSTOM_MENU_MAIN_ONLY_IDLE         // Only show custom menu when the machine is idle
 
-  #if ENABLED(CUSTOM_MENU_MAIN)
-    #define CUSTOM_MENU_MAIN_TITLE "Tool Heads"
-    //#define CUSTOM_MENU_MAIN_SCRIPT_DONE "M117 Tool Changed"
-    #define CUSTOM_MENU_MAIN_SCRIPT_AUDIBLE_FEEDBACK
-    #define CUSTOM_MENU_MAIN_SCRIPT_RETURN  // Return to status screen after a script
-    #define CUSTOM_MENU_MAIN_ONLY_IDLE         // Only show custom menu when the machine is idle
+  #define SK_DEFAULT_PID   "26.90I2.41D75.19"
+  #define TAZ6_DEFAULT_PID "P28.79I1.91D108.51"
+  #define DEFAULT_PID      "P21.0I1.78D61.93"
 
-    #define SK_DEFAULT_PID "26.90I2.41D75.19"
-    #define TAZ6_DEFAULT_PID "P28.79I1.91D108.51"
-    #define DEFAULT_PID "P21.0I1.78D61.93"
+  #if defined(Workhorse) //conversion to digipot units = ((mA-750)/5+135)
+    #define E_CURRENT_Aero "160" //((875-750)/5+135) = 160
+    #define E_CURRENT_Std  "135" //((750-750)/5+135) = 135
+    #define E_CURRENT_BMG  "160" //((875-750)/5+135) = 160
+    #define E_CURRENT_LGX175 "135" //((750-750)/5+135) = 135
+    #define E_CURRENT_LGX285 "155" //((850-750)/5+135) = 155
+  #else
+    #define E_CURRENT_Aero "960"
+    #define E_CURRENT_BMG  "960"
+    #define E_CURRENT_LGX175 "750"
+    #define E_CURRENT_LGX285 "850"
+  #endif
 
-    #if ANY(TAZ6, Workhorse) //conversion to digipot units = ((mA-750)/5+135)
-      #define E_CURRENT_Aero "160" //((875-750)/5+135) = 160
-      #define E_CURRENT_Std  "135" //((750-750)/5+135) = 135
-      #define E_CURRENT_BMG  "160" //((875-750)/5+135) = 160
+
+  #if defined(LULZBOT_GALAXY_SERIES)
+    #if DISABLED(Workhorse)
+      #define MAIN_MENU_ITEM_1_DESC "TH SWAP POSITION"
+      #define MAIN_MENU_ITEM_1_GCODE "G28O\nG0X80Z150"
+
+      #define MAIN_MENU_ITEM_2_DESC "Meteor - 1.75"
+      #define MAIN_MENU_ITEM_2_GCODE "M92E410\nM301P" charMET175_DEFAULT_Kp "I" charMET175_DEFAULT_Ki "D" charMET175_DEFAULT_Kd "\nM906E" E_CURRENT_LGX175 "\nM500\nM117 Meteorite - 1.75"
+
+      #define MAIN_MENU_ITEM_3_DESC "Meteor - 2.85"
+      #define MAIN_MENU_ITEM_3_GCODE "M92E439\nM301P" charMET285_DEFAULT_Kp "I" charMET285_DEFAULT_Ki "D" charMET285_DEFAULT_Kd "\nM906E" E_CURRENT_LGX285 "\nM500\nM117 Meteorite - 2.85"
+
+      #define MAIN_MENU_ITEM_4_DESC "Asteroid - 2.85"
+      #define MAIN_MENU_ITEM_4_GCODE "M92E439\nM301P" charAST285_DEFAULT_Kp "I" charAST285_DEFAULT_Ki "D" charAST285_DEFAULT_Kd "\nM906E" E_CURRENT_LGX285 "\nM500\nM117 Asteroid - 2.85"
     #else
-      #define E_CURRENT_Aero "960"
-      #define E_CURRENT_BMG  "960"
+      #define MAIN_MENU_ITEM_1_DESC "TH SWAP POSITION"
+      #define MAIN_MENU_ITEM_1_GCODE "G28O\nG0X140Z200"
+
+      #define MAIN_MENU_ITEM_2_DESC "Meteor - 1.75"
+      #define MAIN_MENU_ITEM_2_GCODE "M92E410\nM301P" charMET175_DEFAULT_Kp "I" charMET175_DEFAULT_Ki "D" charMET175_DEFAULT_Kd "\nM907E" E_CURRENT_LGX175 "\nM500\nM117 Meteorite - 1.75"
+
+      #define MAIN_MENU_ITEM_3_DESC "Meteor - 2.85"
+      #define MAIN_MENU_ITEM_3_GCODE "M92E439\nM301P" charMET285_DEFAULT_Kp "I" charMET285_DEFAULT_Ki "D" charMET285_DEFAULT_Kd "\nM907E" E_CURRENT_LGX285 "\nM500\nM117 Meteorite - 2.85"
+
+      #define MAIN_MENU_ITEM_4_DESC "Asteroid - 2.85"
+      #define MAIN_MENU_ITEM_4_GCODE "M92E439\nM301P" charAST285_DEFAULT_Kp "I" charAST285_DEFAULT_Ki "D" charAST285_DEFAULT_Kd "\nM907E" E_CURRENT_LGX285 "\nM500\nM117 Asteroid - 2.85"
     #endif
+
+  #elif defined(TOOLHEAD_Universal_ToolHead)
 
     #if ANY(Sidekick_289, Sidekick_747)
       #define MAIN_MENU_ITEM_1_DESC "SK175|0.50mm|BRASS"
@@ -3885,12 +3919,10 @@
       #define MAIN_MENU_ITEM_9_DESC "H175|0.50mm|NKL-PL CU"
       #define MAIN_MENU_ITEM_9_GCODE "M92E409\nM206Y0\nM301P" charH175_DEFAULT_Kp "I" charH175_DEFAULT_Ki "D" charH175_DEFAULT_Kd "\nM906E" E_CURRENT_Aero "\nM412 S1\nM500\nM117 H175|0.50mm|NKL-PL CU"
     #endif
-
     #if defined(TAZ6)
       #define MAIN_MENU_ITEM_1_DESC "Standard|0.5mm"
       #define MAIN_MENU_ITEM_1_GCODE "M92E833\nM206Y4\nM301P" charTAZ6_STD_DEFAULT_Kp "I" charTAZ6_STD_DEFAULT_Ki "D" charTAZ6_STD_DEFAULT_Kd "\nM907E" E_CURRENT_Std "\nM412 S0\nM500\nM117 Standard|0.5mm"
     #endif
-
   #endif
 #endif
 

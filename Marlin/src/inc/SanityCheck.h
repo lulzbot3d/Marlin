@@ -3670,8 +3670,3 @@ static_assert(   _ARR_TEST(3,0) && _ARR_TEST(3,1) && _ARR_TEST(3,2)
 #undef _TEST_PWM
 #undef _LINEAR_AXES_STR
 #undef _LOGICAL_AXES_STR
-
-//Making sure universal_toolhead is not selected while defining specific heads
-#if ANY(TOOLHEAD_SK285, TOOLHEAD_SK175, TOOLHEAD_M175, TOOLHEAD_H175, TOOLHEAD_SL_SE_HE, TOOLHEAD_HS_HSPLUS) && ENABLED (LULZBOT_UNIVERSAL_TOOLHEAD)
-  #error "Can not have universal tool head while defining spectific tool head"
-#endif

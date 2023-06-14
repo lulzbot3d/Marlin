@@ -60,7 +60,7 @@
 //#define LULZBOT_BLTouch
 //#define LULZBOT_LONG_BED
 
-#define LULZBOT_Quiver_TAZPro 
+#define LULZBOT_Quiver_TAZPro
 //#define TOOLHEAD_CecropiaSilk_AerostruderV2
 #define TOOLHEAD_Universal_X_series 
 

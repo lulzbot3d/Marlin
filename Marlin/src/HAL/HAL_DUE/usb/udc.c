@@ -53,6 +53,55 @@
 #include "udi.h"
 #include "udc.h"
 
+
+/*
+ * Reads the unique ID in the SAM3X8E.
+ * Adapted from code found on the Arduino forums at https://forum.arduino.cc/t/unique-id-within-the-underlying-sam3x8e-processor/314408/5
+ * By user ard_newbie
+ */
+
+#if defined USB_DEVICE_SERIAL_SAM3X8E_DYNAMIC
+
+	#define SAM3X8E_ID_SIZE 16
+	#define EEFC_FKEY 0x5A
+	#define EEFC_FMR_SCOD (0x1ul << 16) 
+	#define IFLASH0_ADDR 0x00080000                                   	// Flash memory begins at 0x00080000
+	#define IFLASH1_ADDR (IFLASH0_ADDR + IFLASH_SIZE / 2)             	// IFLASH1_ADDR  = 0x000C0000
+
+	__attribute__ ((section (".ramfunc")))
+	void ReadUniqueID( uint8_t * latch_buffer )
+	{
+		char __FWS;
+																		// Set bit 16 of EEFC_FMR : See chap. 49.1.1.2 page 1442   
+		EFC0->EEFC_FMR |= EEFC_FMR_SCOD;                              	// Sequential code optimization disable
+		
+	__FWS = (EFC0->EEFC_FMR & EEFC_FMR_FWS_Msk)>>EEFC_FMR_FWS_Pos ; 	// Save FWS value
+		EFC0->EEFC_FMR &=~ EEFC_FMR_FWS_Msk;
+		EFC0->EEFC_FMR |= EEFC_FMR_FWS(6);                            	// 6+1 wait states for read and write operations
+	
+		EFC0->EEFC_FMR &=~EEFC_FMR_FAM;                               	// 128-bit access in read Mode only, to enhance access speed.
+		
+		while(!(EFC0->EEFC_FSR & EEFC_FSR_FRDY));                     	// Send the  STUI command if FRDY bit is high to begin reading in flash
+		EFC0->EEFC_FCR = EEFC_FCR_FKEY(EEFC_FKEY) | EFC_FCMD_STUI ;    
+																		// Wait till FRDY falls down
+		while(EFC0->EEFC_FSR & EEFC_FSR_FRDY);   
+																		// The Unique Identifier is located in the first 128 bits of 
+																		// the Flash bank 0 in between 0x080000 and 0x08000C (and of the Flash bank 1 in between 0X0C0000 and 0x0C000C ??) 
+		memcpy(latch_buffer, (void*)IFLASH0_ADDR, SAM3X8E_ID_SIZE);   	// Read first 128 bits ( 16 first bytes) in one shot beginning at address IFLASHIndex_ADDR
+		
+																		// Send the SPUI command to stop reading in flash    
+		EFC0->EEFC_FCR = EEFC_FCR_FKEY(EEFC_FKEY) | EFC_FCMD_SPUI ;
+																		// Wait till FRDY rises up
+		while(!(EFC0->EEFC_FSR & EEFC_FSR_FRDY));
+																		// Clear bit 16 of EEFC_FMR : See chap. 49.1.1.2 page 1442
+		EFC0->EEFC_FMR &= ~EEFC_FMR_SCOD;                           	// Sequential code optimization enable
+		
+		EFC0->EEFC_FMR &=~ EEFC_FMR_FWS_Msk;                        	// Restore FWS value
+		EFC0->EEFC_FMR |= EEFC_FMR_FWS(__FWS);                        
+	}
+#endif
+
+
 /**
  * \ingroup udc_group
  * \defgroup udc_group_interne Implementation of UDC
@@ -145,6 +194,23 @@ static uint8_t udc_string_product_name[] = USB_DEVICE_PRODUCT_NAME;
 	}
 #  define USB_DEVICE_SERIAL_NAME_SIZE \
 	(sizeof(USB_DEVICE_SERIAL_NAME)-1)
+
+#elif defined USB_DEVICE_SERIAL_SAM3X8E_DYNAMIC
+	uint8_t unique_id_buffer[SAM3X8E_ID_SIZE];
+	uint8_t unique_id_buffer_hex[SAM3X8E_ID_SIZE * 2];
+	static const uint8_t *udc_get_string_serial_name(void)
+	{
+		ReadUniqueID(unique_id_buffer);
+		for (uint8_t i = 0; i < SAM3X8E_ID_SIZE; i++)
+		{
+			uint8_t n = unique_id_buffer[i];
+			unique_id_buffer_hex[i * 2]     = (n >> 4)  + ((n >> 4)  < 10 ? '0' : 'A' - 10);
+			unique_id_buffer_hex[i * 2 + 1] = (n & 0xF) + ((n & 0xF) < 10 ? '0' : 'A' - 10);
+		}
+		return unique_id_buffer_hex;
+	}
+	#define USB_DEVICE_SERIAL_NAME_SIZE (sizeof(unique_id_buffer_hex))
+
 #else
 #  define USB_DEVICE_SERIAL_NAME_SIZE  0
 #endif
@@ -636,7 +702,7 @@ static bool udc_req_std_dev_get_str_desc(void)
 		str = udc_string_product_name;
 		break;
 #endif
-#if defined USB_DEVICE_SERIAL_NAME || defined USB_DEVICE_GET_SERIAL_NAME_POINTER
+#if (defined USB_DEVICE_SERIAL_NAME || defined USB_DEVICE_GET_SERIAL_NAME_POINTER || defined USB_DEVICE_SERIAL_SAM3X8E_DYNAMIC)
 	case 3:
 		str_length = USB_DEVICE_SERIAL_NAME_SIZE;
 		str = udc_get_string_serial_name();

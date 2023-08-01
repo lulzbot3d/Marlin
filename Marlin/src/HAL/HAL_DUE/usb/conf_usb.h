@@ -77,7 +77,8 @@
 #else
   #define  USB_DEVICE_PRODUCT_NAME        "3D Printer"
 #endif
-#define  USB_DEVICE_SERIAL_NAME           "123985739853"
+//#define  USB_DEVICE_SERIAL_NAME           "123985739853"
+#define USB_DEVICE_SERIAL_SAM3X8E_DYNAMIC
 
 /**
  * Device speeds support

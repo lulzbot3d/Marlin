@@ -51,7 +51,7 @@
    Quiver Toolhead Choices:
       Quiver_DualExtruder               // Standard Dual Aerostruder (Quiver)
       Twin_Nebula_175
-
+    ` Twin_Nebula_285
 */
 
 // If compiling using the Arduino IDE, remove the "//" from the following lines and
@@ -62,6 +62,6 @@
 
 #define LULZBOT_Quiver_TAZPro
 //#define TOOLHEAD_CecropiaSilk_AerostruderV2
-#define TOOLHEAD_Universal_X_series 
+#define TOOLHEAD_Quiver_DualExtruder
 
 #endif /* CONFIGURATION_LULZBOT */

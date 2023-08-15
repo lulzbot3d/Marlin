@@ -44,8 +44,8 @@
       Uffda_MHF                         // MHF | 0.5 mm
       Magnus_LGX                        // LGX | 0.5 mm
       H175                              // H175| 0.5 mm
-      Universal_ToolHead                // Universal
-      Universal_X_series                // X-Series
+      Legacy_Universal                  // Legacy Universal
+      Galaxy_Universal                  // Galaxy Universal
       MUSKELLUNGE
       
    Quiver Toolhead Choices:
@@ -62,6 +62,6 @@
 
 #define LULZBOT_Quiver_TAZPro
 //#define TOOLHEAD_CecropiaSilk_AerostruderV2
-#define TOOLHEAD_Universal_X_series 
+#define TOOLHEAD_Galaxy_Universal 
 
 #endif /* CONFIGURATION_LULZBOT */

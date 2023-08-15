@@ -2311,7 +2311,7 @@
 /**
  * User-defined menu items that execute custom GCode
  */
-#if EITHER(TOOLHEAD_Universal_ToolHead, TOOLHEAD_Universal_X_series)
+#if EITHER(TOOLHEAD_Legacy_Universal, TOOLHEAD_Galaxy_Universal)
   #define CUSTOM_USER_MENUS 
 #endif
 #if ENABLED(CUSTOM_USER_MENUS)
@@ -2336,8 +2336,8 @@
     #define E_CURRENT_LGX285 "850"
   #endif
 
-  #if defined(TOOLHEAD_Universal_X_series)
-      #define MAIN_MENU_ITEM_1_DESC "Park for TH Swap"
+  #if defined(TOOLHEAD_Galaxy_Universal)
+      #define MAIN_MENU_ITEM_1_DESC "Park for Tool Head Swap"
       #define MAIN_MENU_ITEM_1_GCODE"G28O\nG0 X100 Y283 Z200"
       
       #define MAIN_MENU_ITEM_2_DESC "MET175|NKL-PL BRASS"
@@ -2347,10 +2347,10 @@
       #define MAIN_MENU_ITEM_3_GCODE "M92E439\nM301P" charMET285_DEFAULT_Kp "I" charMET285_DEFAULT_Ki "D" charMET285_DEFAULT_Kd "\nM906E" E_CURRENT_LGX285 "\nM900 K0\nM500\nM117 METEORITE-2.85|0.50mm|CRB CU"
 
       #define MAIN_MENU_ITEM_4_DESC "AST285|GM STEEL"
-      #define MAIN_MENU_ITEM_4_GCODE "M92E439\nM301P" charAST285_DEFAULT_Kp "I" charAST285_DEFAULT_Ki "D" charAST285_DEFAULT_Kd "\nM906E" E_CURRENT_LGX285 "\nM900 K0.05\nM500\nM117 METEORITE-2.85|0.50mm|CRB CU"
+      #define MAIN_MENU_ITEM_4_GCODE "M92E439\nM785 T1\nM301P" charAST285_DEFAULT_Kp "I" charAST285_DEFAULT_Ki "D" charAST285_DEFAULT_Kd "\nM906E" E_CURRENT_LGX285 "\nM900 K0.05\nM500\nM117 METEORITE-2.85|0.50mm|CRB CU"
 
-  #elif defined(TOOLHEAD_Universal_ToolHead)
-      #define MAIN_MENU_ITEM_1_DESC "Park for TH Swap"
+  #elif defined(TOOLHEAD_Legacy_Universal)
+      #define MAIN_MENU_ITEM_1_DESC "Park for Tool Head Swap"
       #define MAIN_MENU_ITEM_1_GCODE"G28O\nG0 X100 Y283 Z200"
 
       #define MAIN_MENU_ITEM_3_DESC "M175v2|0.50mm|CRB CU"

@@ -119,8 +119,8 @@
     !defined(TOOLHEAD_Lutefisk_M175) &&\
     !defined(TOOLHEAD_Lutefisk_M175v2)&&\
     !defined(TOOLHEAD_H175)&&\
-    !defined(TOOLHEAD_Universal_ToolHead)&&\
-    !defined(TOOLHEAD_Universal_X_series)&&\
+    !defined(TOOLHEAD_Legacy_Universal)&&\
+    !defined(TOOLHEAD_Galaxy_Universal)&&\
     !defined(TOOLHEAD_MUSKELLUNGE)&&\
     !defined(TOOLHEAD_whirlystruder)\
 )
@@ -1239,7 +1239,7 @@
     defined(TOOLHEAD_Lutefisk_M175) || \
     defined(TOOLHEAD_H175) || \
     defined(TOOLHEAD_Lutefisk_M175v2) || \
-    defined(TOOLHEAD_Universal_ToolHead) \
+    defined(TOOLHEAD_Legacy_Universal) \
    
    #if defined(TOOLHEAD_Lutefisk_M175) 
    
@@ -1327,7 +1327,7 @@
   #endif
 #endif
 
-#if defined(TOOLHEAD_Universal_X_series)
+#if defined(TOOLHEAD_Galaxy_Universal)
     #define LULZBOT_EXTRUDERS                  1
     #define LULZBOT_TOOLHEAD_X_MAX_ADJ         0
     #define LULZBOT_TOOLHEAD_X_MIN_ADJ         0
@@ -1421,7 +1421,7 @@
     #define LULZBOT_UNIVERSAL_MOUNT
 #endif
 
-#if defined(TOOLHEAD_Universal_ToolHead)
+#if defined(TOOLHEAD_Legacy_Universal)
     #define LULZBOT_LCD_TOOLHEAD_NAME              "Universal"
 //          16 chars max                            ^^^^^^^^^^^^^^^
     #define LULZBOT_M115_EXTRUDER_TYPE              "Universal"
@@ -1431,7 +1431,7 @@
     #define LULZBOT_UNIVERSAL_MOUNT
 #endif
 
-#if defined(TOOLHEAD_Universal_X_series)
+#if defined(TOOLHEAD_Galaxy_Universal)
 
     #define LULZBOT_LCD_TOOLHEAD_NAME              "Universal X-Series"
 //          16 chars max                            ^^^^^^^^^^^^^^^
@@ -2169,7 +2169,7 @@
 // Enable linear advance, but leave K at zero so
 // it is not used unless the user requests it.
 #define LULZBOT_LIN_ADVANCE
-#define LULZBOT_LIN_ADVANCE_K 0.0
+#define LULZBOT_LIN_ADVANCE_K 0.05
 
 #define LULZBOT_NO_VOLUMETRICS
 
@@ -2178,7 +2178,7 @@
     #define LULZBOT_NUM_RUNOUT_SENSORS LULZBOT_EXTRUDERS
     #define LULZBOT_FILAMENT_RUNOUT_SCRIPT "M25\n"
 
-    #define LULZBOT_RUNOUT_DISTANCE_MM 14
+    #define LULZBOT_RUNOUT_DISTANCE_MM 20
     #define LULZBOT_FILAMENT_MOTION_SENSOR
 
     #define LULZBOT_ACTION_ON_FILAMENT_RUNOUT "pause: filament_runout"

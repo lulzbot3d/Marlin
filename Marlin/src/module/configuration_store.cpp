@@ -94,6 +94,10 @@
   #include "../feature/backlash.h"
 #endif
 
+#if ENABLED(TOOL_HEAD_ID)
+  #include "../feature/tool_head_id.h"
+#endif
+
 #if HAS_FILAMENT_SENSOR
   #include "../feature/runout.h"
 #endif
@@ -326,6 +330,11 @@ typedef struct SettingsDataStruct {
   float backlash_distance_mm[XYZ];                      // M425 X Y Z
   uint8_t backlash_correction;                          // M425 F
   float backlash_smoothing_mm;                          // M425 S
+
+  //
+  // TOOL_HEAD_ID
+  //
+  float tool_head_id;                                   // M891 T
 
   //
   // EXTENSIBLE_UI
@@ -1233,6 +1242,14 @@ void MarlinSettings::postprocess() {
     }
 
     //
+    // TOOL_HEAD_ID
+    //
+    {
+      const float &tool_head_id = toolhead.id;
+      EEPROM_WRITE(tool_head_id);
+    }
+    
+    //
     // Extensible UI User Data
     //
     #if ENABLED(EXTENSIBLE_UI)
@@ -2035,6 +2052,14 @@ void MarlinSettings::postprocess() {
       }
 
       //
+      // TOOL_HEAD_ID
+      //
+      {
+        float &tool_head_id = toolhead.id;
+        EEPROM_READ(tool_head_id);
+      }
+      
+      //
       // Extensible UI User Data
       //
       #if ENABLED(EXTENSIBLE_UI)
@@ -2335,6 +2360,13 @@ void MarlinSettings::reset() {
     #ifdef BACKLASH_SMOOTHING_MM
       backlash.smoothing_mm = BACKLASH_SMOOTHING_MM;
     #endif
+  #endif
+
+  //
+  // TOOL_HEAD_ID
+  //
+  #if ENABLED(TOOL_HEAD_ID)
+    toolhead.id = TOOL_HEAD_ID;
   #endif
 
   #if ENABLED(EXTENSIBLE_UI)
@@ -3466,6 +3498,14 @@ void MarlinSettings::reset() {
         #ifdef BACKLASH_SMOOTHING_MM
           , " S", LINEAR_UNIT(backlash.smoothing_mm)
         #endif
+      );
+    #endif
+
+    #if ENABLED(TOOL_HEAD_ID)
+      CONFIG_ECHO_HEADING("Tool Head ID:");
+      CONFIG_ECHO_START();
+      SERIAL_ECHOLNPAIR(
+        "  M891 T", LINEAR_UNIT(toolhead.id)
       );
     #endif
 

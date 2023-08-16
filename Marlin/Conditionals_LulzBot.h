@@ -120,7 +120,7 @@
     !defined(TOOLHEAD_Lutefisk_M175v2)&&\
     !defined(TOOLHEAD_H175)&&\
     !defined(TOOLHEAD_Legacy_Universal)&&\
-    !defined(TOOLHEAD_Galaxy_Universal)&&\
+    !defined(TOOLHEAD_Galaxy_Series)&&\
     !defined(TOOLHEAD_MUSKELLUNGE)&&\
     !defined(TOOLHEAD_whirlystruder)\
 )
@@ -1327,7 +1327,7 @@
   #endif
 #endif
 
-#if defined(TOOLHEAD_Galaxy_Universal)
+#if defined(TOOLHEAD_Galaxy_Series)
     #define LULZBOT_EXTRUDERS                  1
     #define LULZBOT_TOOLHEAD_X_MAX_ADJ         0
     #define LULZBOT_TOOLHEAD_X_MIN_ADJ         0
@@ -1422,20 +1422,20 @@
 #endif
 
 #if defined(TOOLHEAD_Legacy_Universal)
-    #define LULZBOT_LCD_TOOLHEAD_NAME              "Universal"
+    #define LULZBOT_LCD_TOOLHEAD_NAME              "Legacy Universal"
 //          16 chars max                            ^^^^^^^^^^^^^^^
-    #define LULZBOT_M115_EXTRUDER_TYPE              "Universal"
+    #define LULZBOT_M115_EXTRUDER_TYPE              "Legacy Universal"
     #define LULZBOT_X_MAX_ENDSTOP_INVERTING        LULZBOT_NORMALLY_CLOSED_ENDSTOP
     #define LULZBOT_E3D_Titan_Aero_V6
     #define LULZBOT_E_STEPS                        420
     #define LULZBOT_UNIVERSAL_MOUNT
 #endif
 
-#if defined(TOOLHEAD_Galaxy_Universal)
+#if defined(TOOLHEAD_Galaxy_Series)
 
-    #define LULZBOT_LCD_TOOLHEAD_NAME              "Universal X-Series"
+    #define LULZBOT_LCD_TOOLHEAD_NAME              "Galaxy Series"
 //          16 chars max                            ^^^^^^^^^^^^^^^
-    #define LULZBOT_M115_EXTRUDER_TYPE              "Universal X-Series"
+    #define LULZBOT_M115_EXTRUDER_TYPE              "Galaxy Series"
     #define LULZBOT_X_MAX_ENDSTOP_INVERTING        LULZBOT_NORMALLY_CLOSED_ENDSTOP
     #define LULZBOT_E3D_Titan_Aero_V6
     #define LULZBOT_E_STEPS                        410

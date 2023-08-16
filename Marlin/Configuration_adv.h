@@ -2311,7 +2311,7 @@
 /**
  * User-defined menu items that execute custom GCode
  */
-#if EITHER(TOOLHEAD_Legacy_Universal, TOOLHEAD_Galaxy_Universal)
+#if EITHER(TOOLHEAD_Legacy_Universal, TOOLHEAD_Galaxy_Series)
   #define CUSTOM_USER_MENUS 
 #endif
 #if ENABLED(CUSTOM_USER_MENUS)
@@ -2336,7 +2336,7 @@
     #define E_CURRENT_LGX285 "850"
   #endif
 
-  #if defined(TOOLHEAD_Galaxy_Universal)
+  #if defined(TOOLHEAD_Galaxy_Series)
       #define MAIN_MENU_ITEM_1_DESC "Park for Tool Head Swap"
       #define MAIN_MENU_ITEM_1_GCODE"G28O\nG0 X100 Y283 Z200"
       

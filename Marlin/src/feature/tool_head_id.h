@@ -24,7 +24,6 @@
 #include "../inc/MarlinConfigPre.h"
 #include "../module/planner.h"
 
-constexpr uint8_t all_on = 0xFF, all_off = 0x00;
 
 class Toolhead {
 public:

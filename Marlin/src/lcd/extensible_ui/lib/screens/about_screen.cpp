@@ -25,7 +25,7 @@
 #if ENABLED(EXTENSIBLE_UI)
 
 #include "screens.h"
-
+#include "../../../../feature/tool_head_id.h"
 #define GRID_COLS 4
 #define GRID_ROWS 30
 
@@ -57,10 +57,10 @@ void AboutScreen::onRedraw(draw_mode_t) {
     if(toolhead.id == 1){
       #define TOOL_HEAD_NAME "MET175"
     }
-    elif(toolhead.id == 2){
+    if(toolhead.id == 2){
       #define TOOL_HEAD_NAME "MET285"
     }
-    elif(toolhead.id == 3){
+    if(toolhead.id == 3){
       #define TOOL_HEAD_NAME "AST285"  
     }
 

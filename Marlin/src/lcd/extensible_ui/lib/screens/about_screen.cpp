@@ -54,6 +54,16 @@ void AboutScreen::onRedraw(draw_mode_t) {
       #endif
   ), OPT_CENTER, font_xxlarge);
 
+    if(toolhead.id == 1){
+      #define TOOL_HEAD_NAME "MET175"
+    }
+    elif(toolhead.id == 2){
+      #define TOOL_HEAD_NAME "MET285"
+    }
+    elif(toolhead.id == 3){
+      #define TOOL_HEAD_NAME "AST285"  
+    }
+
   //cmd.tag(2);
   draw_text_box(cmd, BTN_POS(1,7), BTN_SIZE(4,3), F(
         "Firmware:"
@@ -67,7 +77,7 @@ void AboutScreen::onRedraw(draw_mode_t) {
     "Tool Head:"
   ), OPT_CENTER, font_xlarge);
   draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
-    ""LULZBOT_LCD_TOOLHEAD_NAME""
+    ""TOOL_HEAD_NAME""
   ), OPT_CENTER, font_xlarge);
 
   draw_text_box(cmd, BTN_POS(1,19), BTN_SIZE(4,3), F(

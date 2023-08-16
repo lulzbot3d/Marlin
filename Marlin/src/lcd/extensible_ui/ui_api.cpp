@@ -951,6 +951,11 @@ namespace ExtUI {
     #endif
   }
 
+  #if ENABLED(TOOL_HEAD_ID)
+    float getToolHeadId()                 { return toolhead.ID; }
+    void setToolHeadId(const float value) { toolhead.ID = clamp(value, 0, 10); }
+  #endif
+
 } // namespace ExtUI
 
 // At the moment, we piggy-back off the ultralcd calls, but this could be cleaned up in the future

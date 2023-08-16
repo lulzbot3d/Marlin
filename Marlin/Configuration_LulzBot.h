@@ -51,7 +51,7 @@
    Quiver Toolhead Choices:
       Quiver_DualExtruder               // Standard Dual Aerostruder (Quiver)
       Twin_Nebula_175
-
+    ` Twin_Nebula_285
 */
 
 // If compiling using the Arduino IDE, remove the "//" from the following lines and

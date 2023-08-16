@@ -1241,90 +1241,91 @@
     defined(TOOLHEAD_Lutefisk_M175v2) || \
     defined(TOOLHEAD_Legacy_Universal) \
    
-   #if defined(TOOLHEAD_Lutefisk_M175) 
-   
-    #if defined(LULZBOT_Gladiola_Mini) || \
-        defined(LULZBOT_Gladiola_MiniLCD)
-      #define LULZBOT_EXTRUDERS                  1
-      #define LULZBOT_TOOLHEAD_X_MAX_ADJ         -1    
-      #define LULZBOT_TOOLHEAD_X_MIN_ADJ         -6
-      #define LULZBOT_TOOLHEAD_Y_MAX_ADJ         -12
-      #define LULZBOT_TOOLHEAD_Y_MIN_ADJ         0
-      #define LULZBOT_TOOLHEAD_Z_MAX_ADJ         0 
-      #define LULZBOT_TOOLHEAD_Z_MIN_ADJ         0  
-      #define LULZBOT_MOTOR_CURRENT_E          960 // mA
-   #endif
-   #if defined(LULZBOT_Hibiscus_Mini2)
-    #define LULZBOT_EXTRUDERS                  1
-    #define LULZBOT_TOOLHEAD_X_MAX_ADJ         -1    
-    #define LULZBOT_TOOLHEAD_X_MIN_ADJ         -6
-    #define LULZBOT_TOOLHEAD_Y_MAX_ADJ         -13
-    #define LULZBOT_TOOLHEAD_Y_MIN_ADJ         0
-    #define LULZBOT_TOOLHEAD_Z_MAX_ADJ         0 
-    #define LULZBOT_TOOLHEAD_Z_MIN_ADJ         0  
-    #define LULZBOT_MOTOR_CURRENT_E          960 // mA
-   #endif
-   #if defined(LULZBOT_Redgum_TAZWorkhorse)
-    #define LULZBOT_EXTRUDERS                  1
-    #define LULZBOT_TOOLHEAD_X_MAX_ADJ         -5    
-    #define LULZBOT_TOOLHEAD_X_MIN_ADJ         -5
-    #define LULZBOT_TOOLHEAD_Y_MAX_ADJ         0
-    #define LULZBOT_TOOLHEAD_Y_MIN_ADJ         -13
-    #define LULZBOT_TOOLHEAD_Z_MAX_ADJ         1.5 
-    #define LULZBOT_TOOLHEAD_Z_MIN_ADJ         0  
-    #define LULZBOT_MOTOR_CURRENT_E          960 // mA
-   #endif
-   #if defined(LULZBOT_Quiver_TAZPro)
-    #define LULZBOT_EXTRUDERS                  1
-    #define LULZBOT_TOOLHEAD_X_MAX_ADJ         -3 
-    #define LULZBOT_TOOLHEAD_X_MIN_ADJ         -7
-    #define LULZBOT_TOOLHEAD_Y_MAX_ADJ         -10 
-    #define LULZBOT_TOOLHEAD_Y_MIN_ADJ         0 
-    #define LULZBOT_TOOLHEAD_Z_MAX_ADJ         0 
-    #define LULZBOT_TOOLHEAD_Z_MIN_ADJ         0  
-    #define LULZBOT_MOTOR_CURRENT_E          960 // mA
-   #endif
-      #if defined(LULZBOT_Gladiator_TAZProXT)
-    #define LULZBOT_EXTRUDERS                  1
-    #define LULZBOT_TOOLHEAD_X_MAX_ADJ         -3 
-    #define LULZBOT_TOOLHEAD_X_MIN_ADJ         -7
-    #define LULZBOT_TOOLHEAD_Y_MAX_ADJ         -10 
-    #define LULZBOT_TOOLHEAD_Y_MIN_ADJ         0 
-    #define LULZBOT_TOOLHEAD_Z_MAX_ADJ         0 
-    #define LULZBOT_TOOLHEAD_Z_MIN_ADJ         0  
-    #define LULZBOT_MOTOR_CURRENT_E          960 // mA
-   #endif
-   #if defined(LULZBOT_Juniper_TAZ5)
-    #define LULZBOT_EXTRUDERS                  1
-    #define LULZBOT_TOOLHEAD_X_MAX_ADJ         0    
-    #define LULZBOT_TOOLHEAD_X_MIN_ADJ         0
-    #define LULZBOT_TOOLHEAD_Y_MAX_ADJ         0
-    #define LULZBOT_TOOLHEAD_Y_MIN_ADJ         0
-    #define LULZBOT_TOOLHEAD_Z_MAX_ADJ         0 
-    #define LULZBOT_TOOLHEAD_Z_MIN_ADJ         0  
-    #define LULZBOT_MOTOR_CURRENT_E          960 // mA
-    #define LULZBOT_INVERT_E0_DIR              true
-   #endif
-   #if defined(LULZBOT_Oliveoil_TAZ6)
-    #define LULZBOT_EXTRUDERS                  1
-    #define LULZBOT_TOOLHEAD_X_MAX_ADJ         -5    
-    #define LULZBOT_TOOLHEAD_X_MIN_ADJ         -7
-    #define LULZBOT_TOOLHEAD_Y_MAX_ADJ        -12
-    #define LULZBOT_TOOLHEAD_Y_MIN_ADJ         0
-    #define LULZBOT_TOOLHEAD_Z_MAX_ADJ         2  
-    #define LULZBOT_TOOLHEAD_Z_MIN_ADJ         0  
-    #define LULZBOT_MOTOR_CURRENT_E          960 // mA
-   #endif
-  #else
-    #define LULZBOT_EXTRUDERS                  1
-    #define LULZBOT_TOOLHEAD_X_MAX_ADJ         0
-    #define LULZBOT_TOOLHEAD_X_MIN_ADJ         0
-    #define LULZBOT_TOOLHEAD_Y_MAX_ADJ         0
-    #define LULZBOT_TOOLHEAD_Y_MIN_ADJ         0
-    #define LULZBOT_TOOLHEAD_Z_MAX_ADJ         0
-    #define LULZBOT_TOOLHEAD_Z_MIN_ADJ         0
-    #define LULZBOT_MOTOR_CURRENT_E          960 // mA
-  #endif
+    #if defined(TOOLHEAD_Lutefisk_M175) 
+    
+        #if defined(LULZBOT_Gladiola_Mini) || defined(LULZBOT_Gladiola_MiniLCD)
+            #define LULZBOT_EXTRUDERS                  1
+            #define LULZBOT_TOOLHEAD_X_MAX_ADJ         -1    
+            #define LULZBOT_TOOLHEAD_X_MIN_ADJ         -6
+            #define LULZBOT_TOOLHEAD_Y_MAX_ADJ         -12
+            #define LULZBOT_TOOLHEAD_Y_MIN_ADJ         0
+            #define LULZBOT_TOOLHEAD_Z_MAX_ADJ         0 
+            #define LULZBOT_TOOLHEAD_Z_MIN_ADJ         0  
+            #define LULZBOT_MOTOR_CURRENT_E          960 // mA
+        #endif
+        #if defined(LULZBOT_Hibiscus_Mini2)
+            #define LULZBOT_EXTRUDERS                  1
+            #define LULZBOT_TOOLHEAD_X_MAX_ADJ         -1    
+            #define LULZBOT_TOOLHEAD_X_MIN_ADJ         -6
+            #define LULZBOT_TOOLHEAD_Y_MAX_ADJ         -13
+            #define LULZBOT_TOOLHEAD_Y_MIN_ADJ         0
+            #define LULZBOT_TOOLHEAD_Z_MAX_ADJ         0 
+            #define LULZBOT_TOOLHEAD_Z_MIN_ADJ         0  
+            #define LULZBOT_MOTOR_CURRENT_E          960 // mA
+        #endif
+        #if defined(LULZBOT_Redgum_TAZWorkhorse)
+            #define LULZBOT_EXTRUDERS                  1
+            #define LULZBOT_TOOLHEAD_X_MAX_ADJ         -5    
+            #define LULZBOT_TOOLHEAD_X_MIN_ADJ         -5
+            #define LULZBOT_TOOLHEAD_Y_MAX_ADJ         0
+            #define LULZBOT_TOOLHEAD_Y_MIN_ADJ         -13
+            #define LULZBOT_TOOLHEAD_Z_MAX_ADJ         1.5 
+            #define LULZBOT_TOOLHEAD_Z_MIN_ADJ         0  
+            #define LULZBOT_MOTOR_CURRENT_E          960 // mA
+        #endif
+        #if defined(LULZBOT_Quiver_TAZPro)
+            #define LULZBOT_EXTRUDERS                  1
+            #define LULZBOT_TOOLHEAD_X_MAX_ADJ         -3 
+            #define LULZBOT_TOOLHEAD_X_MIN_ADJ         -7
+            #define LULZBOT_TOOLHEAD_Y_MAX_ADJ         -10 
+            #define LULZBOT_TOOLHEAD_Y_MIN_ADJ         0 
+            #define LULZBOT_TOOLHEAD_Z_MAX_ADJ         0 
+            #define LULZBOT_TOOLHEAD_Z_MIN_ADJ         0  
+            #define LULZBOT_MOTOR_CURRENT_E          960 // mA
+        #endif
+        #if defined(LULZBOT_Gladiator_TAZProXT)
+            #define LULZBOT_EXTRUDERS                  1
+            #define LULZBOT_TOOLHEAD_X_MAX_ADJ         -3 
+            #define LULZBOT_TOOLHEAD_X_MIN_ADJ         -7
+            #define LULZBOT_TOOLHEAD_Y_MAX_ADJ         -10 
+            #define LULZBOT_TOOLHEAD_Y_MIN_ADJ         0 
+            #define LULZBOT_TOOLHEAD_Z_MAX_ADJ         0 
+            #define LULZBOT_TOOLHEAD_Z_MIN_ADJ         0  
+            #define LULZBOT_MOTOR_CURRENT_E          960 // mA
+        #endif
+        #if defined(LULZBOT_Juniper_TAZ5)
+            #define LULZBOT_EXTRUDERS                  1
+            #define LULZBOT_TOOLHEAD_X_MAX_ADJ         0    
+            #define LULZBOT_TOOLHEAD_X_MIN_ADJ         0
+            #define LULZBOT_TOOLHEAD_Y_MAX_ADJ         0
+            #define LULZBOT_TOOLHEAD_Y_MIN_ADJ         0
+            #define LULZBOT_TOOLHEAD_Z_MAX_ADJ         0 
+            #define LULZBOT_TOOLHEAD_Z_MIN_ADJ         0  
+            #define LULZBOT_MOTOR_CURRENT_E          960 // mA
+            #define LULZBOT_INVERT_E0_DIR              true
+        #endif
+        #if defined(LULZBOT_Oliveoil_TAZ6)
+            #define LULZBOT_EXTRUDERS                  1
+            #define LULZBOT_TOOLHEAD_X_MAX_ADJ         -5    
+            #define LULZBOT_TOOLHEAD_X_MIN_ADJ         -7
+            #define LULZBOT_TOOLHEAD_Y_MAX_ADJ        -12
+            #define LULZBOT_TOOLHEAD_Y_MIN_ADJ         0
+            #define LULZBOT_TOOLHEAD_Z_MAX_ADJ         2  
+            #define LULZBOT_TOOLHEAD_Z_MIN_ADJ         0  
+            #define LULZBOT_MOTOR_CURRENT_E          960 // mA
+        #endif
+    #else
+        #define LULZBOT_EXTRUDERS                  1
+        #define LULZBOT_TOOLHEAD_X_MAX_ADJ         0
+        #define LULZBOT_TOOLHEAD_X_MIN_ADJ         0
+        #define LULZBOT_TOOLHEAD_Y_MAX_ADJ         0
+        #define LULZBOT_TOOLHEAD_Y_MIN_ADJ         0
+        #define LULZBOT_TOOLHEAD_Z_MAX_ADJ         0
+        #define LULZBOT_TOOLHEAD_Z_MIN_ADJ         0
+        #define LULZBOT_MOTOR_CURRENT_E          960 // mA
+        #define TOOL_HEAD_ID                       1
+    #endif
+    
 #endif
 
 #if defined(TOOLHEAD_Galaxy_Series)
@@ -1336,6 +1337,7 @@
     #define LULZBOT_TOOLHEAD_Z_MAX_ADJ         0
     #define LULZBOT_TOOLHEAD_Z_MIN_ADJ         0
     #define LULZBOT_MOTOR_CURRENT_E          750 // mA
+    #define TOOL_HEAD_ID                       1
 #endif
 
 #if defined(TOOLHEAD_CecropiaSilk_SingleExtruderAeroV2)

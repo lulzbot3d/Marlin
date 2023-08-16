@@ -5,6 +5,7 @@
 /****************************************************************************
  *   Written By Mark Pelletier  2017 - Aleph Objects, Inc.                  *
  *   Written By Marcio Teixeira 2018 - Aleph Objects, Inc.                  *
+ *   Written By Brian Kahl 2023 - FAME3D                                    *
  *                                                                          *
  *   This program is free software: you can redistribute it and/or modify   *
  *   it under the terms of the GNU General Public License as published by   *
@@ -54,16 +55,6 @@ void AboutScreen::onRedraw(draw_mode_t) {
       #endif
   ), OPT_CENTER, font_xxlarge);
 
-    if(toolhead.id == 1){
-      #define TOOL_HEAD_NAME "MET175"
-    }
-    if(toolhead.id == 2){
-      #define TOOL_HEAD_NAME "MET285"
-    }
-    if(toolhead.id == 3){
-      #define TOOL_HEAD_NAME "AST285"  
-    }
-
   //cmd.tag(2);
   draw_text_box(cmd, BTN_POS(1,7), BTN_SIZE(4,3), F(
         "Firmware:"
@@ -76,9 +67,22 @@ void AboutScreen::onRedraw(draw_mode_t) {
   draw_text_box(cmd, BTN_POS(1,13), BTN_SIZE(4,3), F(
     "Tool Head:"
   ), OPT_CENTER, font_xlarge);
+
+  if(toolhead.id == 1){
   draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
-    ""TOOL_HEAD_NAME""
-  ), OPT_CENTER, font_xlarge);
+    "MET175"
+  ), OPT_CENTER, font_large); 
+  }
+  if(toolhead.id == 2){
+  draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
+    "MET285"
+  ), OPT_CENTER, font_large); 
+  }
+  if(toolhead.id == 3){
+  draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
+    "AST285"
+  ), OPT_CENTER, font_large); 
+  }
 
   draw_text_box(cmd, BTN_POS(1,19), BTN_SIZE(4,3), F(
         "Version:"

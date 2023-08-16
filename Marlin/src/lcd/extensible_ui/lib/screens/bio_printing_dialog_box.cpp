@@ -48,7 +48,7 @@ void BioPrintingDialogBox::onRedraw(draw_mode_t) {
      .text(BTN_POS(1,2), BTN_SIZE(2,1), F("Printing..."));
 
   cmd.tag(1)
-     .font(font_xlarge);
+     .font(font_xxlarge);
 
   draw_circular_progress(cmd, BTN_POS(1,3), BTN_SIZE(2,4), getProgress_percent(), theme_dark, theme_darkest);
 

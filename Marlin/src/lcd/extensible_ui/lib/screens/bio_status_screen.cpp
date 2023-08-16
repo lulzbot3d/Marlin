@@ -87,7 +87,7 @@ void StatusScreen::draw_temperature(draw_mode_t what) {
   if(what & FOREGROUND) {
     char bed_str[15];
 
-    cmd.font(font_xlarge)
+    cmd.font(font_xxlarge)
        .cmd(COLOR_RGB(bg_text_enabled));
 
     if(!isHeaterIdle(BED) && getTargetTemp_celsius(BED) > 0) {

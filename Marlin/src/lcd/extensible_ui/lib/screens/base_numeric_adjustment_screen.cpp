@@ -61,9 +61,9 @@ BaseNumericAdjustmentScreen::widgets_t::widgets_t(draw_mode_t what) : _what(what
     cmd.font(font_medium)
        .colors(normal_btn)
     #if defined(USE_PORTRAIT_ORIENTATION)
-       .tag(100).button( BTN_POS(1,9), BTN_SIZE(13,1), F("Tool Head Swap Position"))
+       .tag(100).button( BTN_POS(1,9), BTN_SIZE(13,1), F("Filament or Tool Head Swap"))
     #else
-       .tag(100).button( BTN_POS(15,7), BTN_SIZE(4,1), F("Tool Head Swap Position"))
+       .tag(100).button( BTN_POS(15,7), BTN_SIZE(4,1), F("Filament or Tool Head Swap"))
     #endif
     .colors(normal_btn);
   }

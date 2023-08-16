@@ -44,8 +44,8 @@
       Uffda_MHF                         // MHF | 0.5 mm
       Magnus_LGX                        // LGX | 0.5 mm
       H175                              // H175| 0.5 mm
-      Universal_ToolHead                // Universal
-      Universal_X_series                // X-Series
+      Legacy_Universal                  // Legacy Universal
+      Galaxy_Series                  // Galaxy Universal
       MUSKELLUNGE
       
    Quiver Toolhead Choices:
@@ -57,11 +57,11 @@
 // If compiling using the Arduino IDE, remove the "//" from the following lines and
 // set printer model and toolhead after the "LULZBOT_" and "TOOLHEAD_" respectively:
 
-//#define LULZBOT_BLTouch
-//#define LULZBOT_LONG_BED
+#define LULZBOT_BLTouch
+#define LULZBOT_LONG_BED
 
 #define LULZBOT_Quiver_TAZPro
 //#define TOOLHEAD_CecropiaSilk_AerostruderV2
-#define TOOLHEAD_Quiver_DualExtruder
+#define TOOLHEAD_Galaxy_Series 
 
 #endif /* CONFIGURATION_LULZBOT */

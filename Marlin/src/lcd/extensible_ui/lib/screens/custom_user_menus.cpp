@@ -72,12 +72,13 @@ void CustomUserMenus::onRedraw(draw_mode_t what) {
 
   if (what & FOREGROUND) {
     CommandProcessor cmd;
-    cmd.colors(normal_btn)
+    cmd.colors(accent_btn)
        .font(Theme::font_medium)
        #if defined(MAIN_MENU_ITEM_1_DESC)
         //_USER_ITEM(1)
         .tag(_ITEM_TAG(11)).button(USER_ITEM_POS(1), MAIN_MENU_ITEM_1_DESC) 
        #endif
+      .colors(normal_btn)
        #if defined(MAIN_MENU_ITEM_2_DESC)
         //_USER_ITEM(2)
         .tag(_ITEM_TAG(12)).button(USER_ITEM_POS(2), MAIN_MENU_ITEM_2_DESC) 

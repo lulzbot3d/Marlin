@@ -27,7 +27,7 @@
 #include "screens.h"
 
 #define GRID_COLS 4
-#define GRID_ROWS 9
+#define GRID_ROWS 30
 
 using namespace FTDI;
 using namespace Theme;
@@ -45,36 +45,44 @@ void AboutScreen::onRedraw(draw_mode_t) {
      .cmd(COLOR_RGB(bg_text_enabled))
      .tag(0);
 
-  draw_text_box(cmd, BTN_POS(1,1), BTN_SIZE(4,1), F(
-      #if defined(LULZBOT_LCD_MACHINE_NAME)
-      LULZBOT_LCD_MACHINE_NAME
-      #else
-      "Color Touch Panel"
-      #endif
-    ), OPT_CENTER, font_xlarge);
 
-  draw_text_box(cmd, BTN_POS(1,2), BTN_SIZE(4,1), F(
+  draw_text_box(cmd, BTN_POS(1,2), BTN_SIZE(4,5), F(
       #if defined(LULZBOT_LONG_BED)
-      "Long bed"
+      ""LULZBOT_LCD_MACHINE_NAME"\nWith Long bed"
       #elif defined(LULZBOT_BLTouch) && !defined(LULZBOT_LONG_BED)
-      "BLTouch Probe"
-      #else
-      "Standard"
+      ""LULZBOT_LCD_MACHINE_NAME"\nWith BLTouch"
       #endif
-    ), OPT_CENTER, font_large);
+  ), OPT_CENTER, font_xxlarge);
 
-  cmd.tag(2);
-  draw_text_box(cmd, BTN_POS(1,3), BTN_SIZE(4,3), F(
-      #if defined(LULZBOT_LCD_TOOLHEAD_NAME)
-        "Firmware for Tool Head:\n" LULZBOT_LCD_TOOLHEAD_NAME "\n\n"
-      #endif
-      "FAME 3D\n\nwww.lulzbot.com"
-  ), OPT_CENTER, font_medium);
+  //cmd.tag(2);
+  draw_text_box(cmd, BTN_POS(1,7), BTN_SIZE(4,3), F(
+        "Firmware:"
+  ), OPT_CENTER, font_xlarge);
 
-  cmd.tag(0);
-  draw_text_box(cmd, BTN_POS(1,6), BTN_SIZE(4,2), progmem_str(getFirmwareName_str()), OPT_CENTER, font_medium);
+  draw_text_box(cmd, BTN_POS(1,10), BTN_SIZE(4,2), F(
+         ""LULZBOT_LCD_TOOLHEAD_NAME""
+  ), OPT_CENTER, font_xlarge);
 
-  cmd.font(font_medium).colors(action_btn).tag(1).button(BTN_POS(2,8), BTN_SIZE(2,1), F("Okay"));
+  draw_text_box(cmd, BTN_POS(1,13), BTN_SIZE(4,3), F(
+    "Tool Head:"
+  ), OPT_CENTER, font_xlarge);
+  draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
+    ""LULZBOT_LCD_TOOLHEAD_NAME""
+  ), OPT_CENTER, font_xlarge);
+
+  draw_text_box(cmd, BTN_POS(1,19), BTN_SIZE(4,3), F(
+        "Version:"
+  ), OPT_CENTER, font_xlarge);
+
+  draw_text_box(cmd, BTN_POS(1,22), BTN_SIZE(4,2), F(
+    "Marlin "SHORT_BUILD_VERSION""
+  ), OPT_CENTER, font_xlarge);
+
+  draw_text_box(cmd, BTN_POS(1,24), BTN_SIZE(4,2), F(
+      "www.lulzbot.com"
+  ), OPT_CENTER, font_xlarge);
+
+  cmd.font(font_medium).colors(action_btn).tag(1).button(BTN_POS(2,27), BTN_SIZE(2,3), F("Okay"));
 }
 
 bool AboutScreen::onTouchEnd(uint8_t tag) {

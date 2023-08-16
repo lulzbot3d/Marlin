@@ -36,7 +36,7 @@ namespace Theme {
 
   constexpr uint32_t lulzbot_bg          = 0xDEEA5C;
   constexpr uint32_t lulzbot_fg          = 0xC1D82F;
-  constexpr uint32_t lulzbot_accent          = 0x828c3f;
+  constexpr uint32_t lulzbot_accent      = COLOR_CORRECTION(0xA8A845);
 
   constexpr uint32_t lulzbot_green       = COLOR_BLEND(0xC1DB2F,0x788814,0.33);
 

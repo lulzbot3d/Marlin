@@ -31,6 +31,7 @@ namespace Theme {
       constexpr int16_t  font_medium   = 30;
       constexpr int16_t  font_large    = 30;
       constexpr int16_t  font_xlarge   = 31;
+      constexpr int16_t  font_xxlarge  = 32;
     #else
       constexpr int16_t  font_tiny     = 27;
       constexpr int16_t  font_xsmall   = 29;

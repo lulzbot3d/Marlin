@@ -91,11 +91,11 @@ void LockScreen::onRedraw(draw_mode_t what) {
        .cmd(COLOR_RGB(bg_text_enabled))
        #if defined(USE_PORTRAIT_ORIENTATION)
        .text(BTN_POS(1,2), BTN_SIZE(1,1), message)
-       .font(font_xlarge)
+       .font(font_xxlarge)
        .text(BTN_POS(1,4), BTN_SIZE(1,1), screen_data.LockScreen.passcode)
        #else
        .text(BTN_POS(1,1), BTN_SIZE(1,1), message)
-       .font(font_xlarge)
+       .font(font_xxlarge)
        .text(BTN_POS(1,2), BTN_SIZE(1,1), screen_data.LockScreen.passcode)
        #endif
        .font(font_large)

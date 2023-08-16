@@ -24,6 +24,8 @@
 #if ENABLED(TOOL_HEAD_ID)
 
 #include "../../gcode.h"
+#include "../../../feature/tool_head_id.h"
+#include "../../../module/planner.h"
 /**
  * M891: Set the Tool Head ID value.
  *
@@ -31,7 +33,7 @@
  *
  * Type M891 without any arguments to show active value.
  */
-void GcodeSuite::MM891() {
+void GcodeSuite::M891() {
   bool noArgs = true;
   
   if (parser.seen('T')) {
@@ -44,5 +46,6 @@ void GcodeSuite::MM891() {
     SERIAL_ECHOPGM("1=MET175 2=MET285 3=AST285");
     SERIAL_ECHOLNPAIR("  Tool Head ID:", toolhead.id);
   }
+}
 
 #endif

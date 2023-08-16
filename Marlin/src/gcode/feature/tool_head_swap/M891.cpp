@@ -19,9 +19,11 @@
  *   location: <http://www.gnu.org/licenses/>.                              *
  ****************************************************************************/
 
-#include "../config.h"
-#include "../gcode.h"
+#include "../../../inc/MarlinConfig.h"
+
 #if ENABLED(TOOL_HEAD_ID)
+
+#include "../../gcode.h"
 /**
  * M891: Set the Tool Head ID value.
  *

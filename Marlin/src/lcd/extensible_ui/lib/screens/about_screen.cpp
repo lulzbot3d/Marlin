@@ -64,7 +64,7 @@ void AboutScreen::onRedraw(draw_mode_t) {
   ), OPT_CENTER, font_xlarge);
 
   draw_text_box(cmd, BTN_POS(1,13), BTN_SIZE(4,3), F(
-    "Place holder:"
+    "Tool Head:"
   ), OPT_CENTER, font_xlarge);
   draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
     ""LULZBOT_LCD_TOOLHEAD_NAME""

@@ -293,6 +293,7 @@
     #define USE_PORTRAIT_ORIENTATION
     #define LCD_800x480
     #define AO_EXP2_PINOUT_REV_C
+    #define SHOW_TOOLHEAD_NAME
 #endif
 
 /* Unsupported or unreleased experimental configurations. Use at your own risk. */

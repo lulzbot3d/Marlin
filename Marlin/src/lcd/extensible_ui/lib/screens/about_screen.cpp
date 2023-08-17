@@ -72,69 +72,59 @@ void AboutScreen::onRedraw(draw_mode_t) {
 
   #if ENABLED(TOOLHEAD_Galaxy_Series, SHOW_TOOLHEAD_NAME)
     switch(getToolHeadId()){
-      case : 1 {
+      case 1:
       draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
         "MET175"
       ), OPT_CENTER, font_large); 
       break;
-      }
-      case 2:{ 
+      case 2:
       draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
         "MET285"
       ), OPT_CENTER, font_large); 
       break;
-      }
-      case 3: {
+      case 3: 
       draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
         "AST285"
       ), OPT_CENTER, font_large); 
       break;
-      }
     }
   #elif ENABLED(TOOLHEAD_Legacy_Universal, SHOW_TOOLHEAD_NAME)
     switch(getToolheadID()){
-      case : 1 {
+      case 1: 
       draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
         "M175"
       ), OPT_CENTER, font_large); 
       break;
-      }
-      case 2: {
+      case 2: 
       draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
         "SL"
       ), OPT_CENTER, font_large); 
       break;
-      }
-      case 3: {
+      case 3: 
       draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
         "SE"
       ), OPT_CENTER, font_large); 
       break;
-      }
-      case 4: {
+      case 4: 
       draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
         "HE"
       ), OPT_CENTER, font_large); 
       break;
-      }
-      case 5 : {
+      case 5 : 
       draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
         "HS"
       ), OPT_CENTER, font_large); 
       break;
-      }
-      case 6: {
+      case 6: 
       draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
         "HS+"
       ), OPT_CENTER, font_large); 
       break;
-      }
-      case 7: {
+      case 7: 
       draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
         "H175"
       ), OPT_CENTER, font_large); 
       break;
-      }
     }
   #else
     char str[4];

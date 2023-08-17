@@ -257,6 +257,7 @@
     #define LCD_800x480
     #define AO_EXP2_PINOUT_REV_C
     #define LULZBOT_CUSTOM_USER_MENUS
+    #define SHOW_TOOLHEAD_NAME
 #endif
 
 #if defined(LULZBOT_Gladiator_TAZProXT)

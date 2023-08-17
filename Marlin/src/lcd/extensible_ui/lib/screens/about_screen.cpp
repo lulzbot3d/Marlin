@@ -26,7 +26,7 @@
 #if ENABLED(EXTENSIBLE_UI)
 
 #include "screens.h"
-#include "../../../../feature/tool_head_id.h"
+#include "../../ui_api.h"
 #define GRID_COLS 4
 #define GRID_ROWS 30
 
@@ -70,58 +70,78 @@ void AboutScreen::onRedraw(draw_mode_t) {
     "Tool Head:"
   ), OPT_CENTER, font_xlarge);
 
-  #if ENABLED(TOOLHEAD_Galaxy_Series)
-    if(toolhead.id == 1){
-    draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
-      "MET175"
-    ), OPT_CENTER, font_large); 
+  #if ENABLED(TOOLHEAD_Galaxy_Series, SHOW_TOOLHEAD_NAME)
+    switch(getToolHeadId()){
+      case : 1 {
+      draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
+        "MET175"
+      ), OPT_CENTER, font_large); 
+      break;
+      }
+      case 2:{ 
+      draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
+        "MET285"
+      ), OPT_CENTER, font_large); 
+      break;
+      }
+      case 3: {
+      draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
+        "AST285"
+      ), OPT_CENTER, font_large); 
+      break;
+      }
     }
-    if(toolhead.id == 2){
-    draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
-      "MET285"
-    ), OPT_CENTER, font_large); 
+  #elif ENABLED(TOOLHEAD_Legacy_Universal, SHOW_TOOLHEAD_NAME)
+    switch(getToolheadID()){
+      case : 1 {
+      draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
+        "M175"
+      ), OPT_CENTER, font_large); 
+      break;
+      }
+      case 2: {
+      draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
+        "SL"
+      ), OPT_CENTER, font_large); 
+      break;
+      }
+      case 3: {
+      draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
+        "SE"
+      ), OPT_CENTER, font_large); 
+      break;
+      }
+      case 4: {
+      draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
+        "HE"
+      ), OPT_CENTER, font_large); 
+      break;
+      }
+      case 5 : {
+      draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
+        "HS"
+      ), OPT_CENTER, font_large); 
+      break;
+      }
+      case 6: {
+      draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
+        "HS+"
+      ), OPT_CENTER, font_large); 
+      break;
+      }
+      case 7: {
+      draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
+        "H175"
+      ), OPT_CENTER, font_large); 
+      break;
+      }
     }
-    if(toolhead.id == 3){
+  #else
+    char str[4];
+    sprintf_P(str, PSTR("#%d"), getToolHeadId());
     draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
-      "AST285"
-    ), OPT_CENTER, font_large); 
-    }
-  #elif ENABLED(TOOLHEAD_Legacy_Universal)
-    if(toolhead.id == 1){
-    draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
-      "M175"
-    ), OPT_CENTER, font_large); 
-    }
-    if(toolhead.id == 2){
-    draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
-      "SL"
-    ), OPT_CENTER, font_large); 
-    }
-    if(toolhead.id == 3){
-    draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
-      "SE"
-    ), OPT_CENTER, font_large); 
-    }
-    if(toolhead.id == 4){
-    draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
-      "HE"
-    ), OPT_CENTER, font_large); 
-    }
-    if(toolhead.id == 5){
-    draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
-      "HS"
-    ), OPT_CENTER, font_large); 
-    }
-    if(toolhead.id == 6){
-    draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
-      "HS+"
-    ), OPT_CENTER, font_large); 
-    }
-    if(toolhead.id == 7){
-    draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
-      "H175"
-    ), OPT_CENTER, font_large); 
-    }
+      str
+    ), OPT_CENTER, font_large);
   #endif
 
   draw_text_box(cmd, BTN_POS(1,19), BTN_SIZE(4,3), F(

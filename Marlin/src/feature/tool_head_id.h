@@ -30,7 +30,7 @@ public:
  
 
     #ifdef TOOL_HEAD_ID
-      static float id;
+      static uint8_t id;
     #endif
 
 };

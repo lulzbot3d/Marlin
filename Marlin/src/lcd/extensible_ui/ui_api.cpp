@@ -956,7 +956,7 @@ namespace ExtUI {
   }
 
   #if ENABLED(TOOL_HEAD_ID)
-    float getToolHeadId()                 { return toolhead.id; }
+    uint8_t getToolHeadId()                 { return toolhead.id; }
     void setToolHeadId(const float value) { toolhead.id = clamp(value, 0, 10); }
   #endif
 

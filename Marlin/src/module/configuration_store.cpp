@@ -334,7 +334,7 @@ typedef struct SettingsDataStruct {
   //
   // TOOL_HEAD_ID
   //
-  float tool_head_id;                                   // M891 T
+  uint8_t tool_head_id;                                   // M891 T
 
   //
   // EXTENSIBLE_UI
@@ -1245,7 +1245,7 @@ void MarlinSettings::postprocess() {
     // TOOL_HEAD_ID
     //
     {
-      const float &tool_head_id = toolhead.id;
+      const uint8_t &tool_head_id = toolhead.id;
       EEPROM_WRITE(tool_head_id);
     }
     
@@ -2055,7 +2055,7 @@ void MarlinSettings::postprocess() {
       // TOOL_HEAD_ID
       //
       {
-        float &tool_head_id = toolhead.id;
+        uint8_t &tool_head_id = toolhead.id;
         EEPROM_READ(tool_head_id);
       }
       

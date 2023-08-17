@@ -29,16 +29,12 @@
 #include "../module/motion.h"
 #include "../module/planner.h"
 
-
 #if ENABLED(TOOL_HEAD_ID)
   #ifdef TOOL_HEAD_ID
-    float Toolhead::id = TOOL_HEAD_ID;
+    uint8_t Toolhead::id = TOOL_HEAD_ID;
   #endif
 #endif
 
-
-
 Toolhead toolhead;
-
 
 #endif // TOOL_HEAD_ID

@@ -229,7 +229,7 @@ namespace ExtUI {
   #endif
 
   #if ENABLED(TOOL_HEAD_ID)
-    float getToolHeadId();
+    uint8_t getToolHeadId();
     void setToolHeadId(const float);
   #endif
 

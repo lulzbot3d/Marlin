@@ -1,7 +1,3 @@
-/******************
- * M891.h *
- ******************/
-
 /****************************************************************************
  *   Written By Brian Kahl 2023 - FAME3D.                                   *
  *                                                                          *
@@ -43,7 +39,11 @@ void GcodeSuite::M891() {
     }
 
   if (noArgs) {
-    SERIAL_ECHOPGM("1=MET175 2=MET285 3=AST285");
+    #if ENABLED(TOOLHEAD_Galaxy_Series)
+      SERIAL_ECHOPGM("1=MET175 2=MET285 3=AST285");
+    #elif ENABLED(TOOLHEAD_Legacy_Universal)
+      SERIAL_ECHOPGM("1=SL 2=SE 3=HE 4=HS 5=HS+ 6=M175 7=H175");
+    #endif
     SERIAL_ECHOLNPAIR("  Tool Head ID:", toolhead.id);
   }
 }

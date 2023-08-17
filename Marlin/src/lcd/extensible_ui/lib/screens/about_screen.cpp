@@ -68,21 +68,59 @@ void AboutScreen::onRedraw(draw_mode_t) {
     "Tool Head:"
   ), OPT_CENTER, font_xlarge);
 
-  if(toolhead.id == 1){
-  draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
-    "MET175"
-  ), OPT_CENTER, font_large); 
-  }
-  if(toolhead.id == 2){
-  draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
-    "MET285"
-  ), OPT_CENTER, font_large); 
-  }
-  if(toolhead.id == 3){
-  draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
-    "AST285"
-  ), OPT_CENTER, font_large); 
-  }
+  #if ENABLED(TOOLHEAD_Galaxy_Series)
+    if(toolhead.id == 1){
+    draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
+      "MET175"
+    ), OPT_CENTER, font_large); 
+    }
+    if(toolhead.id == 2){
+    draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
+      "MET285"
+    ), OPT_CENTER, font_large); 
+    }
+    if(toolhead.id == 3){
+    draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
+      "AST285"
+    ), OPT_CENTER, font_large); 
+    }
+  #elif ENABLED(TOOLHEAD_Legacy_Universal)
+    if(toolhead.id == 1){
+    draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
+      "SL"
+    ), OPT_CENTER, font_large); 
+    }
+    if(toolhead.id == 2){
+    draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
+      "SE"
+    ), OPT_CENTER, font_large); 
+    }
+    if(toolhead.id == 3){
+    draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
+      "HE"
+    ), OPT_CENTER, font_large); 
+    }
+    if(toolhead.id == 4){
+    draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
+      "HS"
+    ), OPT_CENTER, font_large); 
+    }
+    if(toolhead.id == 5){
+    draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
+      "HS+"
+    ), OPT_CENTER, font_large); 
+    }
+    if(toolhead.id == 6){
+    draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
+      "M175"
+    ), OPT_CENTER, font_large); 
+    }
+    if(toolhead.id == 7){
+    draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
+      "H175"
+    ), OPT_CENTER, font_large); 
+    }
+  #endif
 
   draw_text_box(cmd, BTN_POS(1,19), BTN_SIZE(4,3), F(
         "Version:"

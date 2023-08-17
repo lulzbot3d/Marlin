@@ -5,6 +5,7 @@
 /****************************************************************************
  *   Written By Mark Pelletier  2017 - Aleph Objects, Inc.                  *
  *   Written By Marcio Teixeira 2018 - Aleph Objects, Inc.                  *
+ *   Written By Brian Kahl 2023 - FAME3D                                    *
  *                                                                          *
  *   This program is free software: you can redistribute it and/or modify   *
  *   it under the terms of the GNU General Public License as published by   *
@@ -25,7 +26,7 @@
 #if ENABLED(EXTENSIBLE_UI)
 
 #include "screens.h"
-
+#include "../../ui_api.h"
 #define GRID_COLS 4
 #define GRID_ROWS 30
 
@@ -48,9 +49,11 @@ void AboutScreen::onRedraw(draw_mode_t) {
 
   draw_text_box(cmd, BTN_POS(1,2), BTN_SIZE(4,5), F(
       #if defined(LULZBOT_LONG_BED)
-      ""LULZBOT_LCD_MACHINE_NAME"\nWith Long bed"
+        ""LULZBOT_LCD_MACHINE_NAME"\nWith Long bed"
       #elif defined(LULZBOT_BLTouch) && !defined(LULZBOT_LONG_BED)
-      ""LULZBOT_LCD_MACHINE_NAME"\nWith BLTouch"
+        ""LULZBOT_LCD_MACHINE_NAME"\nWith BLTouch"
+      #else
+        ""LULZBOT_LCD_MACHINE_NAME"\n "
       #endif
   ), OPT_CENTER, font_xxlarge);
 
@@ -66,9 +69,70 @@ void AboutScreen::onRedraw(draw_mode_t) {
   draw_text_box(cmd, BTN_POS(1,13), BTN_SIZE(4,3), F(
     "Tool Head:"
   ), OPT_CENTER, font_xlarge);
-  draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
-    ""LULZBOT_LCD_TOOLHEAD_NAME""
-  ), OPT_CENTER, font_xlarge);
+
+  #if ENABLED(TOOLHEAD_Galaxy_Series, SHOW_TOOLHEAD_NAME)
+    switch(getToolHeadId()){
+      case 1:
+      draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
+        "MET175"
+      ), OPT_CENTER, font_large); 
+      break;
+      case 2:
+      draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
+        "MET285"
+      ), OPT_CENTER, font_large); 
+      break;
+      case 3: 
+      draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
+        "AST285"
+      ), OPT_CENTER, font_large); 
+      break;
+    }
+  #elif ENABLED(TOOLHEAD_Legacy_Universal, SHOW_TOOLHEAD_NAME)
+    switch(getToolheadID()){
+      case 1: 
+      draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
+        "M175"
+      ), OPT_CENTER, font_large); 
+      break;
+      case 2: 
+      draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
+        "SL"
+      ), OPT_CENTER, font_large); 
+      break;
+      case 3: 
+      draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
+        "SE"
+      ), OPT_CENTER, font_large); 
+      break;
+      case 4: 
+      draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
+        "HE"
+      ), OPT_CENTER, font_large); 
+      break;
+      case 5 : 
+      draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
+        "HS"
+      ), OPT_CENTER, font_large); 
+      break;
+      case 6: 
+      draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
+        "HS+"
+      ), OPT_CENTER, font_large); 
+      break;
+      case 7: 
+      draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
+        "H175"
+      ), OPT_CENTER, font_large); 
+      break;
+    }
+  #else
+    char str[4];
+    sprintf_P(str, PSTR("#%d"), getToolHeadId());
+    draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
+      str
+    ), OPT_CENTER, font_large);
+  #endif
 
   draw_text_box(cmd, BTN_POS(1,19), BTN_SIZE(4,3), F(
         "Version:"

@@ -86,6 +86,10 @@
   #include "../../feature/backlash.h"
 #endif
 
+#if ENABLED(TOOL_HEAD_ID)
+  #include "../../feature/tool_head_id.h"
+#endif
+
 #if HAS_LEVELING
   #include "../../feature/bedlevel/bedlevel.h"
 #endif
@@ -950,6 +954,11 @@ namespace ExtUI {
       num_files = 0xFFFF;
     #endif
   }
+
+  #if ENABLED(TOOL_HEAD_ID)
+    uint8_t getToolHeadId()                 { return toolhead.id; }
+    void setToolHeadId(const float value) { toolhead.id = clamp(value, 0, 10); }
+  #endif
 
 } // namespace ExtUI
 

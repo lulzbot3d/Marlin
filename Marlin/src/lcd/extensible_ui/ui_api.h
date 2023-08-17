@@ -228,6 +228,11 @@ namespace ExtUI {
     #endif
   #endif
 
+  #if ENABLED(TOOL_HEAD_ID)
+    uint8_t getToolHeadId();
+    void setToolHeadId(const float);
+  #endif
+
   /**
    * Delay and timing routines
    * Should be used by the EXTENSIBLE_UI to safely pause or measure time

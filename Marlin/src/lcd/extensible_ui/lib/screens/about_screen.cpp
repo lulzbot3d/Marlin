@@ -49,9 +49,11 @@ void AboutScreen::onRedraw(draw_mode_t) {
 
   draw_text_box(cmd, BTN_POS(1,2), BTN_SIZE(4,5), F(
       #if defined(LULZBOT_LONG_BED)
-      ""LULZBOT_LCD_MACHINE_NAME"\nWith Long bed"
+        ""LULZBOT_LCD_MACHINE_NAME"\nWith Long bed"
       #elif defined(LULZBOT_BLTouch) && !defined(LULZBOT_LONG_BED)
-      ""LULZBOT_LCD_MACHINE_NAME"\nWith BLTouch"
+        ""LULZBOT_LCD_MACHINE_NAME"\nWith BLTouch"
+      #else
+        ""LULZBOT_LCD_MACHINE_NAME"\n "
       #endif
   ), OPT_CENTER, font_xxlarge);
 
@@ -87,32 +89,32 @@ void AboutScreen::onRedraw(draw_mode_t) {
   #elif ENABLED(TOOLHEAD_Legacy_Universal)
     if(toolhead.id == 1){
     draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
-      "SL"
+      "M175"
     ), OPT_CENTER, font_large); 
     }
     if(toolhead.id == 2){
     draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
-      "SE"
+      "SL"
     ), OPT_CENTER, font_large); 
     }
     if(toolhead.id == 3){
     draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
-      "HE"
+      "SE"
     ), OPT_CENTER, font_large); 
     }
     if(toolhead.id == 4){
     draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
-      "HS"
+      "HE"
     ), OPT_CENTER, font_large); 
     }
     if(toolhead.id == 5){
     draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
-      "HS+"
+      "HS"
     ), OPT_CENTER, font_large); 
     }
     if(toolhead.id == 6){
     draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
-      "M175"
+      "HS+"
     ), OPT_CENTER, font_large); 
     }
     if(toolhead.id == 7){

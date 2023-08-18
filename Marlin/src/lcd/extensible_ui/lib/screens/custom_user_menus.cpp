@@ -64,7 +64,11 @@ void CustomUserMenus::onRedraw(draw_mode_t what) {
     // #else
     //  #define _MORE_THAN_FIVE 0
     //#endif
-    #define GRID_ROWS 8
+    #if defined(TOOLHEAD_Legacy_Universal)
+      #define GRID_ROWS 9
+    #else
+      #define GRID_ROWS 8
+    #endif
     #define GRID_COLS 1
     #define USER_ITEM_POS(N) BTN_POS((1+((N-1)/7)), ((N-1) % 7 + 1)), BTN_SIZE(1,1)
     #define BACK_POS         BTN_POS(1,8), BTN_SIZE(GRID_COLS,1)

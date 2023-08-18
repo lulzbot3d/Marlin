@@ -127,6 +127,13 @@
     #error Must specify toolhead. Please see "Configuration_LulzBot.h" for directions.
 #endif
 
+#if ( \
+    defined(LULZBOT_LONG_BED) && \
+    !defined(LULZBOT_BLTouch)\
+)
+    #error LULZBOT_Quiver_TAZPro with LULZBOT_LONG_BED requires LULZBOT_BLTouch to be enabled.
+#endif
+
 /*********************** PRINTER MODEL CHARACTERISTICS **************************/
 
 #if defined(LULZBOT_Gladiola_Mini)
@@ -2434,21 +2441,22 @@
     #endif
     #define LULZBOT_LEFT_WIPE_Z                        0
 
-    #if defined(LULZBOT_Quiver_TAZPro) || defined(LULZBOT_Gladiator_TAZProXT) && !defined(LULZBOT_LONG_BED)
-        // The Quiver has an wipe pad on the right side of the bed.
-        #define LULZBOT_RIGHT_WIPE_X1                   296
-        #define LULZBOT_RIGHT_WIPE_X2                   296
-        #define LULZBOT_RIGHT_WIPE_Y1                    95
-        #define LULZBOT_RIGHT_WIPE_Y2                    25
-        #define LULZBOT_RIGHT_WIPE_Z                      -2.5
-    #endif
-        #if defined(LULZBOT_Quiver_TAZPro) || defined(LULZBOT_Gladiator_TAZProXT) && defined(LULZBOT_LONG_BED)
-        // The Quiver has an wipe pad on the right side of the bed.
-        #define LULZBOT_RIGHT_WIPE_X1                   298
-        #define LULZBOT_RIGHT_WIPE_X2                   298
-        #define LULZBOT_RIGHT_WIPE_Y1                    95
-        #define LULZBOT_RIGHT_WIPE_Y2                    25
-        #define LULZBOT_RIGHT_WIPE_Z                      -2.5
+    #if ANY(LULZBOT_Quiver_TAZPro, LULZBOT_Gladiator_TAZProXT) 
+        #if ENABLED(LULZBOT_LONG_BED)
+            // The Quiver has an wipe pad on the right side of the bed.
+            #define LULZBOT_RIGHT_WIPE_X1                    298
+            #define LULZBOT_RIGHT_WIPE_X2                    298
+            #define LULZBOT_RIGHT_WIPE_Y1                    95
+            #define LULZBOT_RIGHT_WIPE_Y2                    25
+            #define LULZBOT_RIGHT_WIPE_Z                    -2.5
+        #else
+            // The Quiver has an wipe pad on the right side of the bed.
+            #define LULZBOT_RIGHT_WIPE_X1                    295
+            #define LULZBOT_RIGHT_WIPE_X2                    295
+            #define LULZBOT_RIGHT_WIPE_Y1                    95
+            #define LULZBOT_RIGHT_WIPE_Y2                    25
+            #define LULZBOT_RIGHT_WIPE_Z                    -2.5
+        #endif
     #endif
 #endif
 
@@ -2558,7 +2566,7 @@ defined(LULZBOT_Gladiator_TAZProXT) && ANY(TOOLHEAD_Quiver_DualExtruder, TOOLHEA
     #define LULZBOT_WIPE_SEQUENCE_COMMANDS \
         "M117 Hot End Heating...\n"               /* Status message */ \
         LULZBOT_WIPE_HEAT_TEMP                    /* Preheat extruders */ \
-        "G28 O1\n"                                /* Home if needed */ \
+        "G28 O\n"                                 /* Home if needed */ \
         "G1 Y25 Z10 F5000\n"                      /* Move to pad while heating */ \
         "M117 Rewiping nozzle\n"                  /* Status message */ \
         LULZBOT_REWIPE_E0                         /* Wipe first extruder */ \
@@ -2566,7 +2574,7 @@ defined(LULZBOT_Gladiator_TAZProXT) && ANY(TOOLHEAD_Quiver_DualExtruder, TOOLHEA
         "M106 S255 \n"                            /* Turn on fan to blow away fuzzies */ \
         "G0 X0 Y0\n"                              /* Move to probe corner while blowing */ \
         LULZBOT_WIPE_DONE_TEMP                    /* Drop to probe temp */ \
-        "M107\n"                                  /* Turn off fan */
+        "M107"                                    /* Turn off fan */
 
     #if defined(LULZBOT_USE_Z_BELT)
         #define LULZBOT_G29_RECOVER_COMMANDS \

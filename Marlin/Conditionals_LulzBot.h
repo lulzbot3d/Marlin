@@ -2434,21 +2434,22 @@
     #endif
     #define LULZBOT_LEFT_WIPE_Z                        0
 
-    #if defined(LULZBOT_Quiver_TAZPro) || defined(LULZBOT_Gladiator_TAZProXT) && !defined(LULZBOT_LONG_BED)
-        // The Quiver has an wipe pad on the right side of the bed.
-        #define LULZBOT_RIGHT_WIPE_X1                   296
-        #define LULZBOT_RIGHT_WIPE_X2                   296
-        #define LULZBOT_RIGHT_WIPE_Y1                    95
-        #define LULZBOT_RIGHT_WIPE_Y2                    25
-        #define LULZBOT_RIGHT_WIPE_Z                      -2.5
-    #endif
-        #if defined(LULZBOT_Quiver_TAZPro) || defined(LULZBOT_Gladiator_TAZProXT) && defined(LULZBOT_LONG_BED)
-        // The Quiver has an wipe pad on the right side of the bed.
-        #define LULZBOT_RIGHT_WIPE_X1                   298
-        #define LULZBOT_RIGHT_WIPE_X2                   298
-        #define LULZBOT_RIGHT_WIPE_Y1                    95
-        #define LULZBOT_RIGHT_WIPE_Y2                    25
-        #define LULZBOT_RIGHT_WIPE_Z                      -2.5
+    #if ANY(LULZBOT_Quiver_TAZPro, LULZBOT_Gladiator_TAZProXT) 
+        #if ENABLED(LULZBOT_LONG_BED)
+            // The Quiver has an wipe pad on the right side of the bed.
+            #define LULZBOT_RIGHT_WIPE_X1                    298
+            #define LULZBOT_RIGHT_WIPE_X2                    298
+            #define LULZBOT_RIGHT_WIPE_Y1                    95
+            #define LULZBOT_RIGHT_WIPE_Y2                    25
+            #define LULZBOT_RIGHT_WIPE_Z                    -2.5
+        #else
+            // The Quiver has an wipe pad on the right side of the bed.
+            #define LULZBOT_RIGHT_WIPE_X1                    295
+            #define LULZBOT_RIGHT_WIPE_X2                    295
+            #define LULZBOT_RIGHT_WIPE_Y1                    95
+            #define LULZBOT_RIGHT_WIPE_Y2                    25
+            #define LULZBOT_RIGHT_WIPE_Z                    -2.5
+        #endif
     #endif
 #endif
 

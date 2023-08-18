@@ -2558,7 +2558,7 @@ defined(LULZBOT_Gladiator_TAZProXT) && ANY(TOOLHEAD_Quiver_DualExtruder, TOOLHEA
     #define LULZBOT_WIPE_SEQUENCE_COMMANDS \
         "M117 Hot End Heating...\n"               /* Status message */ \
         LULZBOT_WIPE_HEAT_TEMP                    /* Preheat extruders */ \
-        "G28 O1\n"                                /* Home if needed */ \
+        "G28 O\n"                                 /* Home if needed */ \
         "G1 Y25 Z10 F5000\n"                      /* Move to pad while heating */ \
         "M117 Rewiping nozzle\n"                  /* Status message */ \
         LULZBOT_REWIPE_E0                         /* Wipe first extruder */ \
@@ -2566,7 +2566,7 @@ defined(LULZBOT_Gladiator_TAZProXT) && ANY(TOOLHEAD_Quiver_DualExtruder, TOOLHEA
         "M106 S255 \n"                            /* Turn on fan to blow away fuzzies */ \
         "G0 X0 Y0\n"                              /* Move to probe corner while blowing */ \
         LULZBOT_WIPE_DONE_TEMP                    /* Drop to probe temp */ \
-        "M107"                                  /* Turn off fan */
+        "M107"                                    /* Turn off fan */
 
     #if defined(LULZBOT_USE_Z_BELT)
         #define LULZBOT_G29_RECOVER_COMMANDS \

@@ -127,6 +127,13 @@
     #error Must specify toolhead. Please see "Configuration_LulzBot.h" for directions.
 #endif
 
+#if ( \
+    defined(LULZBOT_LONG_BED) && \
+    !defined(LULZBOT_BLTouch)\
+)
+    #error LULZBOT_Quiver_TAZPro with LULZBOT_LONG_BED requires LULZBOT_BLTouch to be enabled.
+#endif
+
 /*********************** PRINTER MODEL CHARACTERISTICS **************************/
 
 #if defined(LULZBOT_Gladiola_Mini)

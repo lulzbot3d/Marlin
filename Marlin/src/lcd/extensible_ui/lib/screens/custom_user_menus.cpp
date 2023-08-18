@@ -71,7 +71,7 @@ void CustomUserMenus::onRedraw(draw_mode_t what) {
     #endif
     #define GRID_COLS 1
     #define USER_ITEM_POS(N) BTN_POS((1+((N-1)/7)), ((N-1) % 7 + 1)), BTN_SIZE(1,1)
-    #define BACK_POS         BTN_POS(1,8), BTN_SIZE(GRID_COLS,1)
+    #define BACK_POS         BTN_POS(1,GRID_ROWS), BTN_SIZE(GRID_COLS,1)
   #endif
 
   if (what & FOREGROUND) {
@@ -107,6 +107,10 @@ void CustomUserMenus::onRedraw(draw_mode_t what) {
         //_USER_ITEM(7)
         .tag(_ITEM_TAG(17)).button(USER_ITEM_POS(7), MAIN_MENU_ITEM_7_DESC) 
        #endif
+       #if defined(MAIN_MENU_ITEM_8_DESC)
+        //_USER_ITEM(8)
+        .tag(_ITEM_TAG(18)).button(BTN_POS(1,8), BTN_SIZE(GRID_COLS,1), MAIN_MENU_ITEM_8_DESC) 
+       #endif
       .colors(action_btn)
       .tag(1).button(BACK_POS, F(MSG_BACK));
   }
@@ -141,6 +145,10 @@ bool CustomUserMenus::onTouchEnd(uint8_t tag) {
     #if defined(MAIN_MENU_ITEM_7_DESC)
       //_USER_ACTION(7)
       case _ITEM_TAG(17): injectCommands_P(PSTR(MAIN_MENU_ITEM_7_GCODE));sound.play(chimes, PLAY_ASYNCHRONOUS); GOTO_SCREEN(StatusScreen);break;
+    #endif
+    #if defined(MAIN_MENU_ITEM_8_DESC)
+      //_USER_ACTION(8)
+      case _ITEM_TAG(18): injectCommands_P(PSTR(MAIN_MENU_ITEM_8_GCODE));sound.play(chimes, PLAY_ASYNCHRONOUS); GOTO_SCREEN(StatusScreen);break;
     #endif
 
     case 1: GOTO_PREVIOUS(); break;

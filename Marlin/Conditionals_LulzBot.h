@@ -2566,7 +2566,7 @@ defined(LULZBOT_Gladiator_TAZProXT) && ANY(TOOLHEAD_Quiver_DualExtruder, TOOLHEA
         "M106 S255 \n"                            /* Turn on fan to blow away fuzzies */ \
         "G0 X0 Y0\n"                              /* Move to probe corner while blowing */ \
         LULZBOT_WIPE_DONE_TEMP                    /* Drop to probe temp */ \
-        "M107\n"                                  /* Turn off fan */
+        "M107"                                  /* Turn off fan */
 
     #if defined(LULZBOT_USE_Z_BELT)
         #define LULZBOT_G29_RECOVER_COMMANDS \

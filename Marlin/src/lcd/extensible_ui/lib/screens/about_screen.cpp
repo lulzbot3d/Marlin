@@ -89,7 +89,7 @@ void AboutScreen::onRedraw(draw_mode_t) {
       break;
     }
   #elif ENABLED(TOOLHEAD_Legacy_Universal, SHOW_TOOLHEAD_NAME)
-    switch(getToolheadID()){
+    switch(getToolHeadId()){
       case 1: 
       draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
         "M175"

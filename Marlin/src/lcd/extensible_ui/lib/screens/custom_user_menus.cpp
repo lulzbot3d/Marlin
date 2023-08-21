@@ -93,7 +93,7 @@ void CustomUserMenus::onRedraw(draw_mode_t what) {
        #endif
        #if defined(MAIN_MENU_ITEM_8_DESC)
         //_USER_ITEM(8)
-        .tag(_ITEM_TAG(18)).button(BTN_POS(1,8), BTN_SIZE(GRID_COLS,1), MAIN_MENU_ITEM_8_DESC)
+        .tag(_ITEM_TAG(18)).button(USER_ITEM_POS(8), MAIN_MENU_ITEM_8_DESC)
        #endif
       .colors(action_btn)
       .tag(1).button(BACK_POS, F(MSG_BACK));

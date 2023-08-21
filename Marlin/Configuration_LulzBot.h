@@ -23,7 +23,7 @@
       Gladiola_SingleExtruder           // Standard Single Extruder (Gladiola)
       Albatross_Flexystruder            // Flexystruder (Albatross)
       Finch_Aerostruder                 // Titan Aerostruder v1 0.50 mm (Finch)
-      
+
 
    TAZ Toolhead Choices:
       Tilapia_SingleExtruder            // Standard Single Extruder (Tilapia)
@@ -45,23 +45,23 @@
       Magnus_LGX                        // LGX | 0.5 mm
       H175                              // H175| 0.5 mm
       Legacy_Universal                  // Legacy Universal
-      Galaxy_Series                  // Galaxy Universal
+      Galaxy_Series                     // Galaxy Universal
       MUSKELLUNGE
-      
+
    Quiver Toolhead Choices:
       Quiver_DualExtruder               // Standard Dual Aerostruder (Quiver)
       Twin_Nebula_175
-    ` Twin_Nebula_285
+      Twin_Nebula_285
 */
 
 // If compiling using the Arduino IDE, remove the "//" from the following lines and
 // set printer model and toolhead after the "LULZBOT_" and "TOOLHEAD_" respectively:
 
-#define LULZBOT_BLTouch
-#define LULZBOT_LONG_BED
+//#define LULZBOT_BLTouch
+//#define LULZBOT_LONG_BED
 
 #define LULZBOT_Quiver_TAZPro
 //#define TOOLHEAD_CecropiaSilk_AerostruderV2
-#define TOOLHEAD_Galaxy_Series 
+#define TOOLHEAD_Legacy_Universal
 
 #endif /* CONFIGURATION_LULZBOT */

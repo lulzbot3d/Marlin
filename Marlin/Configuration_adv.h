@@ -2312,7 +2312,7 @@
  * User-defined menu items that execute custom GCode
  */
 #if EITHER(TOOLHEAD_Legacy_Universal, TOOLHEAD_Galaxy_Series)
-  #define CUSTOM_USER_MENUS 
+  #define CUSTOM_USER_MENUS
 #endif
 #if ENABLED(CUSTOM_USER_MENUS)
   #define CUSTOM_USER_MENU_TITLE "Tool Heads"
@@ -2339,7 +2339,7 @@
   #if defined(TOOLHEAD_Galaxy_Series)
       #define MAIN_MENU_ITEM_1_DESC "Park for Tool Head Swap"
       #define MAIN_MENU_ITEM_1_GCODE"G28O\nG0 X100 Y283 Z200"
-      
+
       #define MAIN_MENU_ITEM_2_DESC "MET175|NKL-PL BRASS"
       #define MAIN_MENU_ITEM_2_GCODE "M891 T1\nM92E415\nM301P" charMET175_DEFAULT_Kp "I" charMET175_DEFAULT_Ki "D" charMET175_DEFAULT_Kd "\nM906E" E_CURRENT_LGX175 "\nM900 K0\nM500\nM117 MET-1.75|0.50mm|NKL-PL BRASS"
 
@@ -2358,7 +2358,7 @@
 
       #define MAIN_MENU_ITEM_3_DESC "SL|0.25mm|NKL-PL CU"
       #define MAIN_MENU_ITEM_3_GCODE "M891 T2\nM92E420\nM301P" charSLSEHE_DEFAULT_Kp "I" charSLSEHE_DEFAULT_Ki "D" charSLSEHE_DEFAULT_Kd "\nM906E" E_CURRENT_Aero "\nM500\nM117 SL|0.25mm|NKL-PL CU"
-      
+
       #define MAIN_MENU_ITEM_4_DESC "SE|0.50mm|NKL-PL CU"
       #define MAIN_MENU_ITEM_4_GCODE "M891 T3\nM92E420\nM301P" charSLSEHE_DEFAULT_Kp "I" charSLSEHE_DEFAULT_Ki "D" charSLSEHE_DEFAULT_Kd "\nM906E" E_CURRENT_Aero "\nM500\nM117 SE|0.50mm|NKL-PL CU"
 
@@ -2373,7 +2373,7 @@
 
       #define MAIN_MENU_ITEM_8_DESC "H175|0.50mm|NKL-PL CU"
       #define MAIN_MENU_ITEM_8_GCODE "M891 T7\nM92E409\nM301P" charH175_DEFAULT_Kp "I" charH175_DEFAULT_Ki "D" charH175_DEFAULT_Kd "\nM906E" E_CURRENT_Aero "\nM500\nM117 H175|0.50mm|NKL-PL CU"
-    
+
   #endif
 #endif
 

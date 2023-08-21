@@ -73,7 +73,7 @@
  *
  */
 
-#define LULZBOT_FW_VERSION ".144.11" // Change this with each update 
+#define LULZBOT_FW_VERSION ".144.11" // Change this with each update
 
 #if ( \
     !defined(LULZBOT_Gladiola_Mini) && \
@@ -1730,25 +1730,31 @@
 /*************************** TEMPERATURE SETTINGS *****************************/
 
 #if defined(LULZBOT_NO_EXTRUDER_HEATER)
-    #define LULZBOT_EXTRUDE_MINTEMP                      0
-    #define FAN_PIN                                     -1
+    #define LULZBOT_EXTRUDE_MINTEMP                 0
+    #define FAN_PIN                                -1
 #else
     #define LULZBOT_PREVENT_COLD_EXTRUSION
-    #define LULZBOT_EXTRUDE_MINTEMP                    120
+    #define LULZBOT_EXTRUDE_MINTEMP                 120
 #endif
 
-#define LULZBOT_TEMP_SENSOR_0                        5
-#define LULZBOT_TEMP_SENSOR_BED                      7
+#define LULZBOT_TEMP_SENSOR_0                       5
+#define LULZBOT_TEMP_SENSOR_BED                     7
 
-#define LULZBOT_TEMP_RESIDENCY_TIME                  1
+#define LULZBOT_TEMP_RESIDENCY_TIME                 1
 #define LULZBOT_TEMP_HYSTERESIS                     10
 #define LULZBOT_TEMP_WINDOW                         10
 
-#define LULZBOT_TEMP_BED_RESIDENCY_TIME              1
-#define LULZBOT_TEMP_BED_HYSTERESIS                  5
-#define LULZBOT_TEMP_BED_WINDOW                      5
+#define LULZBOT_TEMP_BED_RESIDENCY_TIME             1
+#define LULZBOT_TEMP_BED_HYSTERESIS                 5
+#define LULZBOT_TEMP_BED_WINDOW                     5
 
-#define LULZBOT_HEATER_MAXTEMP                     305
+#define LULZBOT_HEATER_MAXTEMP                      305
+
+#if DISABLED(LULZBOT_LONG_BED)
+    #define LULZBOT_BED_MAXTEMP                     150
+#else
+    #define LULZBOT_BED_MAXTEMP                     95     // Max settable temp to 85 and allow for 10 degrees before thermal runaway
+#endif
 
 #define LULZBOT_THERMAL_PROTECTION_PERIOD           15     // Seconds
 #define LULZBOT_THERMAL_PROTECTION_HYSTERESIS       30     // Degrees Celsius
@@ -1756,19 +1762,19 @@
 #define LULZBOT_THERMAL_PROTECTION_BED_PERIOD       15     // Seconds
 #define LULZBOT_THERMAL_PROTECTION_BED_HYSTERESIS   10     // Degrees Celsius
 
-#define LULZBOT_PREHEAT_1_TEMP_HOTEND              200     // PLA
+#define LULZBOT_PREHEAT_1_TEMP_HOTEND               200     // PLA
 
 #if defined(LULZBOT_IS_MINI)
     // Heater current: 24V/5.5 Ohms = 4.4A
-    #define LULZBOT_MAX_BED_POWER      255  // limits duty cycle to bed; 255=full current
-    #define LULZBOT_WATCH_TEMP_PERIOD   20  // Seconds
-    #define LULZBOT_WATCH_TEMP_INCREASE  2  // Degrees Celsius
+    #define LULZBOT_MAX_BED_POWER       255  // limits duty cycle to bed; 255=full current
+    #define LULZBOT_WATCH_TEMP_PERIOD   20   // Seconds
+    #define LULZBOT_WATCH_TEMP_INCREASE 2    // Degrees Celsius
 #elif defined(LULZBOT_IS_TAZ)
     // Heater current: 24V/1.6 Ohms = 15A
     // Set Max Bed Power to 80% for a safety margin on the 15A fuse.
-    #define LULZBOT_MAX_BED_POWER      206  // limits duty cycle to bed; 255=full current
-    #define LULZBOT_WATCH_TEMP_PERIOD   40  // Seconds
-    #define LULZBOT_WATCH_TEMP_INCREASE 10  // Degrees Celsius
+    #define LULZBOT_MAX_BED_POWER       206  // limits duty cycle to bed; 255=full current
+    #define LULZBOT_WATCH_TEMP_PERIOD   40   // Seconds
+    #define LULZBOT_WATCH_TEMP_INCREASE 10   // Degrees Celsius
 #endif
 
 /******************************** HEATING ELEMENTS *****************************/
@@ -1933,9 +1939,9 @@
 
 // Modular two piece bed (Mini 2+)
 #elif defined(LULZBOT_MINI_BED) && defined(LULZBOT_TWO_PIECE_BED)
-  #define LULZBOT_DEFAULT_bedKp                 384.33
+  #define LULZBOT_DEFAULT_bedKp                  384.33
   #define LULZBOT_DEFAULT_bedKi                  72.17
-  #define LULZBOT_DEFAULT_bedKd                 511.64
+  #define LULZBOT_DEFAULT_bedKd                  511.64
 #endif
 
 /************************** COOLING FAN CONFIGURATION ***************************/
@@ -1955,8 +1961,8 @@
 #endif
 
 #define LULZBOT_FAN_KICKSTART_TIME              100
-#define LULZBOT_FAN_MIN_PWM                      70
-#define LULZBOT_SOFT_PWM_SCALE                    4
+#define LULZBOT_FAN_MIN_PWM                     70
+#define LULZBOT_SOFT_PWM_SCALE                  4
 
 #define LULZBOT_USE_CONTROLLER_FAN
 #if defined(LULZBOT_USE_EINSY_RETRO)

@@ -453,7 +453,7 @@
 #define HEATER_3_MAXTEMP LULZBOT_HEATER_MAXTEMP
 #define HEATER_4_MAXTEMP LULZBOT_HEATER_MAXTEMP
 #define HEATER_5_MAXTEMP LULZBOT_HEATER_MAXTEMP
-#define BED_MAXTEMP      150
+#define BED_MAXTEMP      LULZBOT_BED_MAXTEMP
 
 //===========================================================================
 //============================= PID Settings ================================

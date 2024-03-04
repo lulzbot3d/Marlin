@@ -59,7 +59,7 @@
 #elif ENABLED(LULZBOT_BLTouch) && DISABLED(TAZProV2)
   #define SERVO0_PIN                            21  // D21 PB13 (Header J20 19)
   #define SERVO1_PIN                            20  // D20 PB12 (Header J20 20)
-#else
+#elif ENABLED(SWITCHING_NOZZLE)
   #define SERVO0_PIN                            20  // D20 PB12 (Header J20 20)
   #define SERVO1_PIN                            21  // D21 PB13 (Header J20 19)
 #endif
@@ -190,7 +190,11 @@
 //
 #define HEATER_0_PIN                           6  // D6 PC24 FET_PWM3
 #define HEATER_1_PIN                           7  // D7 PC23 FET_PWM4
-#define HEATER_2_PIN                           8  // D8 PC22 FET_PWM5
+#if ENABLED(TOOLHEAD_WhirlyStruder)
+  #define E0_AUTO_FAN_PIN                           8  // D8 PC22 FET_PWM5
+#else
+  #define HEATER_2_PIN                           8  // D8 PC22 FET_PWM5
+#endif
 #define HEATER_BED_PIN                         9  // D9 PC21 BED_PWM
 
 #ifndef FAN0_PIN

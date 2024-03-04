@@ -97,7 +97,7 @@ void AdvancedSettingsMenu::onRedraw(draw_mode_t what) {
       #if ENABLED(SENSORLESS_HOMING)
         .tag(14).button(TMC_HOMING_THRS_POS,  GET_TEXT_F(MSG_TMC_HOMING_THRS))
       #else
-        .tag(17).button(TMC_HOMING_THRS_POS,  GET_TEXT_F(MSG_CLEAN_NOZZLE))
+        .tag(17).enabled(ENABLED(LULZBOT_WIPE)).button(TMC_HOMING_THRS_POS,  GET_TEXT_F(MSG_CLEAN_NOZZLE))
       #endif
       .enabled(ENABLED(HAS_MULTI_HOTEND))
       .tag(4) .button(OFFSETS_POS,            GET_TEXT_F(MSG_OFFSETS_MENU))
@@ -147,7 +147,9 @@ bool AdvancedSettingsMenu::onTouchEnd(uint8_t tag) {
     #endif
     case 15: GOTO_SCREEN(DisplayTuningScreen); break;
     case 16: GOTO_SCREEN(FlowPercentScreen);   break;
+    #if ENABLED(LULZBOT_WIPE)
     case 17: injectCommands(F(CLEAN_SCRIPT));  break;
+    #endif
     default: return false;
   }
   return true;

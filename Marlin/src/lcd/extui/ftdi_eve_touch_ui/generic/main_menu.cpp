@@ -68,7 +68,7 @@ void MainMenu::onRedraw(draw_mode_t what) {
        .tag(2).button(MOVE_AXIS_POS,         GET_TEXT_F(MSG_MOVE_AXIS))
        .tag(3).button(DISABLE_STEPPERS_POS,  GET_TEXT_F(MSG_DISABLE_STEPPERS))
        .tag(4).button(BACKLASH_POS,          GET_TEXT_F(MSG_BACKLASH))
-       .tag(5).button(CLEAN_NOZZLE_POS,      GET_TEXT_F(MSG_CLEAN_NOZZLE))
+       .tag(5).enabled(ENABLED(LULZBOT_WIPE)).button(CLEAN_NOZZLE_POS,      GET_TEXT_F(MSG_CLEAN_NOZZLE))
        .tag(6).button(TEMPERATURE_POS,       GET_TEXT_F(MSG_TEMPERATURE))
           .enabled(DISABLED(TOUCH_UI_LULZBOT_BIO))
        .tag(7).button(ADVANCED_SETTINGS_POS, GET_TEXT_F(MSG_ADVANCED_SETTINGS))
@@ -88,7 +88,9 @@ bool MainMenu::onTouchEnd(uint8_t tag) {
     case 2:  GOTO_SCREEN(MoveAxisScreen);                                break;
     case 3:  injectCommands(F("M84"));                                   break;
     case 4:  GOTO_SCREEN(BacklashCompensationScreen);                    break;
-    case 5:  injectCommands(F(CLEAN_SCRIPT));                                   break;
+    #if ENABLED(LULZBOT_WIPE)
+    case 5:  injectCommands(F(CLEAN_SCRIPT));                            break;
+    #endif
     case 6:  GOTO_SCREEN(TemperatureScreen);                             break;
     case 7:  GOTO_SCREEN(AdvancedSettingsMenu);                          break;
     #if HAS_LEVELING

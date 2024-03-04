@@ -8,7 +8,7 @@
 /************** Uncomment a Tool Head Option From Below *********************/
 
 //#define TOOLHEAD_Legacy_Universal
-#define TOOLHEAD_Galaxy_Series
+//#define TOOLHEAD_Galaxy_Series
 //#define TOOLHEAD_SL_SE_HE
 //#define TOOLHEAD_HS_HSPLUS
 //#define TOOLHEAD_H175
@@ -18,6 +18,7 @@
 //#define TOOLHEAD_Quiver_DualExtruder            // TAZ Pro Dual Extruder
 //#define TOOLHEAD_Galaxy_DualExtruder            // TAZ Pro Galaxy-Series Dual Extruders
 //#define TOOLHEAD_KangarooPaw_SingleExtruder     // Bio Single syringe
+#define TOOLHEAD_WhirlyStruder                  // Experimental Tool Head System
 
 /************** Uncomment Options for Printer From Below *********************/
 #if ANY(TAZPro, TAZProXT, TAZProV2)
@@ -586,6 +587,28 @@
     #define LULZBOT_E_STEPS                        9448.8
     #define LULZBOT_EXTRUDERS                      1
 #endif /* TOOLHEAD_KangarooPaw_SingleExtruder */
+
+#if defined(TOOLHEAD_WhirlyStruder)
+    #define LULZBOT_LCD_TOOLHEAD_NAME              "WhirlyStruder"
+//          16 chars max                            ^^^^^^^^^^^^^^^
+    #define LULZBOT_M115_EXTRUDER_TYPE             "WhirlyStruder"
+    #define LULZBOT_MOTOR_CURRENT_E0               960 // mA
+    #define LULZBOT_MOTOR_CURRENT_E1               960 // mA
+    #define LULZBOT_X_MAX_ENDSTOP_INVERTING        LULZBOT_NORMALLY_CLOSED_ENDSTOP
+    #define LULZBOT_E_STEPS                        818.1
+    #define LULZBOT_TOOLHEAD_X_MAX_ADJ             0
+    #define LULZBOT_TOOLHEAD_X_MIN_ADJ             0
+    #define LULZBOT_TOOLHEAD_Y_MAX_ADJ             -41
+    #define LULZBOT_TOOLHEAD_Y_MIN_ADJ             -41
+    #define LULZBOT_TOOLHEAD_Z_MAX_ADJ             -158
+    #define LULZBOT_TOOLHEAD_Z_MIN_ADJ             -158
+    #define LULZBOT_EXTRUDERS                      2
+    #define LULZBOT_TEMP_SENSOR_1                  5
+    #define LULZBOT_HOTEND_OFFSET_X                {0.0, 0}
+    #define LULZBOT_HOTEND_OFFSET_Y                {0.0, 0}
+    #define TOOL_HEAD_ID                           13
+    #undef LULZBOT_WIPE
+#endif /* TOOLHEAD_WhirlyStruder */
 // This defines the number of extruders
 // :[0, 1, 2, 3, 4, 5, 6, 7, 8]
 #define EXTRUDERS LULZBOT_EXTRUDERS
@@ -1042,7 +1065,7 @@
  * PIDTEMP : PID temperature control (~4.1K)
  * MPCTEMP : Predictive Model temperature control. (~1.8K without auto-tune)
  */
-#if ANY(TOOLHEAD_Legacy_Universal, TOOLHEAD_Quiver_DualExtruder)
+#if ANY(TOOLHEAD_Legacy_Universal, TOOLHEAD_Quiver_DualExtruder, TOOLHEAD_WhirlyStruder)
   #define PIDTEMP           // See the PID Tuning Guide at https://reprap.org/wiki/PID_Tuning
 #elif ANY(TOOLHEAD_Galaxy_Series, TOOLHEAD_Galaxy_DualExtruder)
   #define MPCTEMP         // ** EXPERIMENTAL ** See https://marlinfw.org/docs/features/model_predictive_control.html
@@ -1149,6 +1172,10 @@
   #endif
 #else
   #define BANG_MAX 255    // Limit hotend current while in bang-bang mode; 255=full current
+#endif
+
+#if ENABLED(TOOLHEAD_WhirlyStruder)
+  #define BANG_MAX 127    // Limit hotend current while in bang-bang mode; 255=full current
 #endif
 
 /**
@@ -1324,9 +1351,13 @@
   //#define PID_DEBUG             // Sends debug data to the serial port. Use 'M303 D' to toggle activation.
   //#define PID_OPENLOOP          // Puts PID in open loop. M104/M140 sets the output power from 0 to PID_MAX
   //#define SLOW_PWM_HEATERS      // PWM with very low frequency (roughly 0.125Hz=8s) and minimum state time of approximately 1s useful for heaters driven by a relay
-  #define PID_FUNCTIONAL_RANGE 10 // If the temperature difference between the target temperature and the actual temperature
+  #if ENABLED(TOOLHEAD_WhirlyStruder)
+    #define PID_FUNCTIONAL_RANGE 40 // If the temperature difference between the target temperature and the actual temperature
                                   // is more than PID_FUNCTIONAL_RANGE then the PID will be shut off and the heater will be set to min/max.
-
+  #else
+    #define PID_FUNCTIONAL_RANGE 10 // If the temperature difference between the target temperature and the actual temperature
+                                  // is more than PID_FUNCTIONAL_RANGE then the PID will be shut off and the heater will be set to min/max.
+  #endif
   #define PID_EDIT_MENU         // Add PID editing to the "Advanced Settings" menu. (~700 bytes of flash)
   #define PID_AUTOTUNE_MENU     // Add PID auto-tuning to the "Advanced Settings" menu. (~250 bytes of flash)
 #endif
@@ -4618,7 +4649,7 @@
 #endif
 
 // Selection of tool head
-#if NONE(TOOLHEAD_Legacy_Universal, TOOLHEAD_Galaxy_Series, TOOLHEAD_SL_SE_HE, TOOLHEAD_HS_HSPLUS, TOOLHEAD_H175, TOOLHEAD_M175, TOOLHEAD_SK175, TOOLHEAD_SK285, TOOLHEAD_Quiver_DualExtruder, TOOLHEAD_Galaxy_DualExtruder)
+#if NONE(TOOLHEAD_WhirlyStruder, TOOLHEAD_Legacy_Universal, TOOLHEAD_Galaxy_Series, TOOLHEAD_SL_SE_HE, TOOLHEAD_HS_HSPLUS, TOOLHEAD_H175, TOOLHEAD_M175, TOOLHEAD_SK175, TOOLHEAD_SK285, TOOLHEAD_Quiver_DualExtruder, TOOLHEAD_Galaxy_DualExtruder)
   #error "Please select a Tool Head. See top of configuration.h for more information."
 #endif
 

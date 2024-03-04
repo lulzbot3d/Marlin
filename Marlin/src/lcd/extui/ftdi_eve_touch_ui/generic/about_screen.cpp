@@ -131,6 +131,11 @@ void AboutScreen::onRedraw(draw_mode_t) {
         "Twin Nebula 285"
       ), OPT_CENTER, font_large);
       break;
+      case 13:
+      draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
+        "WhirlyStruder"
+      ), OPT_CENTER, font_large);
+      break;
     }
   #endif
 

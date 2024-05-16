@@ -24,8 +24,9 @@
   #define SHOW_TOOL_HEAD_ID
 #endif
 #define LULZBOT_FILAMENT_RUNOUT
-//#define LULZBOT_BLTouch
+#define LULZBOT_BLTouch
 //#define LULZBOT_LONG_BED
+#define LULZBOT_LONG_BED_V2
 //#define TazDualZ
 #define AUTO_REPORT_TEMPERATURES
 
@@ -268,8 +269,10 @@
   #define LULZBOT_FILAMENT_RUNOUT                             // <-- changed
 #endif
 
-#if defined LULZBOT_LONG_BED
+#if ENABLED(LULZBOT_LONG_BED)
   #define LULZBOT_BED_TYPE " LONGBED"
+#elif ENABLED(LULZBOT_LONG_BED_V2)
+  #define LULZBOT_BED_TYPE " LONGBED V2"
 #else
   #define LULZBOT_BED_TYPE " STANDARD"
 #endif
@@ -1028,10 +1031,10 @@
 #define HEATER_5_MAXTEMP 275
 #define HEATER_6_MAXTEMP 275
 #define HEATER_7_MAXTEMP 275
-#if DISABLED(LULZBOT_LONG_BED)
-    #define BED_MAXTEMP  120
-#else
+#if ANY(LULZBOT_LONG_BED, LULZBOT_LONG_BED_V2)
     #define BED_MAXTEMP  95
+#else
+    #define BED_MAXTEMP  120
 #endif
 #define CHAMBER_MAXTEMP  60
 
@@ -1772,14 +1775,18 @@
 #elif ANY(Workhorse, TAZPro, TAZProXT)
   #if defined(LULZBOT_LONG_BED)
     #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 160, 500, LULZBOT_E_STEPS }
+  #elif defined(LULZBOT_LONG_BED_V2)
+    #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 207, 500, LULZBOT_E_STEPS }
   #else
     #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 100, 500, LULZBOT_E_STEPS }
   #endif
 #elif ENABLED(TAZProV2) //TAZProV2 used 5.1:1 Z motors
   #if defined(LULZBOT_LONG_BED)
-    #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 160, 510, LULZBOT_E_STEPS }
+    #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 160, 520, LULZBOT_E_STEPS }
+  #elif defined(LULZBOT_LONG_BED_V2)
+    #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 207, 520, LULZBOT_E_STEPS }
   #else
-    #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 100, 510, LULZBOT_E_STEPS }
+    #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 100, 520, LULZBOT_E_STEPS }
   #endif
 #endif
 
@@ -1842,7 +1849,7 @@
  */
 #if ANY(MiniV2, MiniV3, Sidekick_289, Sidekick_747)
   #define DEFAULT_ACCELERATION       2000    // X, Y, Z and E acceleration for printing moves
-#elif ENABLED(LULZBOT_LONG_BED)
+#elif ANY(LULZBOT_LONG_BED, LULZBOT_LONG_BED_V2)
   #define DEFAULT_ACCELERATION       750
 #elif ENABLED(TAZProXT)
   #define DEFAULT_ACCELERATION       500
@@ -2389,7 +2396,7 @@
 #else
   #define INVERT_X_DIR true
 #endif
-#if ANY(MiniV2, MiniV3)
+#if ANY(MiniV2, MiniV3, LULZBOT_LONG_BED_V2)
   #define INVERT_Y_DIR false
 #else
   #define INVERT_Y_DIR true
@@ -2564,6 +2571,16 @@
     #define LULZBOT_Y_MIN_POS -18.2//-15
     #define LULZBOT_Z_MIN_POS -9
     #define LULZBOT_Z_MAX_POS 289
+  #elif defined(LULZBOT_LONG_BED_V2)
+    #define X_BED_SIZE        280
+    #define Y_BED_SIZE        570
+    // Travel limits (mm) after homing, corresponding to endstop positions.
+    #define LULZBOT_X_MAX_POS 318
+    #define LULZBOT_X_MIN_POS -6
+    #define LULZBOT_Y_MAX_POS 613
+    #define LULZBOT_Y_MIN_POS -18.2//-15
+    #define LULZBOT_Z_MIN_POS -9
+    #define LULZBOT_Z_MAX_POS 289
   #else
     #define X_BED_SIZE 284
     #define Y_BED_SIZE 286
@@ -2606,6 +2623,16 @@
     #define LULZBOT_Y_MIN_POS -18.2//-15
     #define LULZBOT_Z_MIN_POS -9
     #define LULZBOT_Z_MAX_POS 592
+  #elif defined(LULZBOT_LONG_BED_V2)
+    #define X_BED_SIZE        280
+    #define Y_BED_SIZE        570
+    // Travel limits (mm) after homing, corresponding to endstop positions.
+    #define LULZBOT_X_MAX_POS 318
+    #define LULZBOT_X_MIN_POS -6
+    #define LULZBOT_Y_MAX_POS 613
+    #define LULZBOT_Y_MIN_POS -18.2//-15
+    #define LULZBOT_Z_MIN_POS -9
+    #define LULZBOT_Z_MAX_POS 592
   #else
     #define X_BED_SIZE 284
     #define Y_BED_SIZE 286
@@ -2619,35 +2646,49 @@
   #endif
 #elif ENABLED(TAZProV2)
   #if ENABLED(TOOLHEAD_Galaxy_DualExtruder)
-    #define X_BED_SIZE 285
-    #define Y_BED_SIZE 285
-    // Travel limits (mm) after homing, corresponding to endstop positions.
-    #define LULZBOT_X_MIN_POS -9 // <-- changed   change this
-    #define LULZBOT_Y_MIN_POS -39 // <-- changed
-    #define LULZBOT_X_MAX_POS 308 // <-- changed
-    #define LULZBOT_Y_MAX_POS 293 // <-- changed   change this
-    #define LULZBOT_Z_MIN_POS -9 // <-- changed
-    #define LULZBOT_Z_MAX_POS 301 // <-- changed
-  #elif defined(LULZBOT_LONG_BED)
-    #define X_BED_SIZE        280
-    #define Y_BED_SIZE        570
-    // Travel limits (mm) after homing, corresponding to endstop positions.
-    #define LULZBOT_X_MAX_POS 318
-    #define LULZBOT_X_MIN_POS -6
-    #define LULZBOT_Y_MAX_POS 613
-    #define LULZBOT_Y_MIN_POS -18.2//-15
-    #define LULZBOT_Z_MIN_POS -9
-    #define LULZBOT_Z_MAX_POS 293
+    #if defined(LULZBOT_LONG_BED_V2)
+      #define X_BED_SIZE        280
+      #define Y_BED_SIZE        570
+      // Travel limits (mm) after homing, corresponding to endstop positions.
+      #define LULZBOT_X_MAX_POS 318
+      #define LULZBOT_X_MIN_POS -6
+      #define LULZBOT_Y_MAX_POS 613
+      #define LULZBOT_Y_MIN_POS -18.2//-15
+      #define LULZBOT_Z_MIN_POS -9
+      #define LULZBOT_Z_MAX_POS 293
+    #else
+      #define X_BED_SIZE 285
+      #define Y_BED_SIZE 285
+      // Travel limits (mm) after homing, corresponding to endstop positions.
+      #define LULZBOT_X_MIN_POS -9 // <-- changed   change this
+      #define LULZBOT_Y_MIN_POS -39 // <-- changed
+      #define LULZBOT_X_MAX_POS 308 // <-- changed
+      #define LULZBOT_Y_MAX_POS 293 // <-- changed   change this
+      #define LULZBOT_Z_MIN_POS -9 // <-- changed
+      #define LULZBOT_Z_MAX_POS 301 // <-- changed
+    #endif
   #else
-    #define X_BED_SIZE 285
-    #define Y_BED_SIZE 285
-    // Travel limits (mm) after homing, corresponding to endstop positions.
-    #define LULZBOT_X_MIN_POS -6
-    #define LULZBOT_Y_MIN_POS -36
-    #define LULZBOT_X_MAX_POS 303
-    #define LULZBOT_Y_MAX_POS 293
-    #define LULZBOT_Z_MIN_POS -5
-    #define LULZBOT_Z_MAX_POS 299
+    #if defined(LULZBOT_LONG_BED_V2)
+      #define X_BED_SIZE        280
+      #define Y_BED_SIZE        570
+      // Travel limits (mm) after homing, corresponding to endstop positions.
+      #define LULZBOT_X_MAX_POS 318
+      #define LULZBOT_X_MIN_POS -6
+      #define LULZBOT_Y_MAX_POS 613
+      #define LULZBOT_Y_MIN_POS -18.2//-15
+      #define LULZBOT_Z_MIN_POS -9
+      #define LULZBOT_Z_MAX_POS 293
+    #else
+      #define X_BED_SIZE 285
+      #define Y_BED_SIZE 285
+      // Travel limits (mm) after homing, corresponding to endstop positions.
+      #define LULZBOT_X_MIN_POS -6
+      #define LULZBOT_Y_MIN_POS -36
+      #define LULZBOT_X_MAX_POS 303
+      #define LULZBOT_Y_MAX_POS 293
+      #define LULZBOT_Z_MIN_POS -5
+      #define LULZBOT_Z_MAX_POS 299
+    #endif
   #endif
 #elif defined(Sidekick_289)
   #define X_BED_SIZE 161
@@ -2984,7 +3025,7 @@
 #if ANY(AUTO_BED_LEVELING_LINEAR, AUTO_BED_LEVELING_BILINEAR)
 
   // Set the number of grid points per dimension.
-  #if defined (LULZBOT_LONG_BED)
+  #if ANY(LULZBOT_LONG_BED, LULZBOT_LONG_BED_V2)
     #define GRID_MAX_POINTS_X 4  //4x8 grid to account for entire long bed printable area
     #define GRID_MAX_POINTS_Y 8
   #else
@@ -3375,7 +3416,7 @@
     #define PRESENT_BED_GCODE "G28 O\nG0 Y231 F10000\nG0 Y233 F10000\nM117 Printer Ready"
   #elif ENABLED(TAZWorkhorse)
     #define PRESENT_BED_GCODE "G28 O\nG0 Y304 F10000\nG0 Y306 F10000\nM117 Printer Ready"
-  #elif ENABLED(LULZBOT_LONG_BED)
+  #elif ANY(LULZBOT_LONG_BED, LULZBOT_LONG_BED_V2)
     #define PRESENT_BED_GCODE "G28 O\nG0 Y511 F10000\nG0 Y513 F10000\nM117 Printer Ready"
   #else
     #define PRESENT_BED_GCODE "G28 O\nG0 Y311 F10000\nG0 Y313 F10000\nM117 Printer Ready"
@@ -4649,11 +4690,6 @@
   #define ARCHIM2_SPI_FLASH_EEPROM_BACKUP_SIZE 1000
 #endif
 
-#if defined(LULZBOT_LONG_BED) && !defined(LULZBOT_BLTouch)
-  #error The Longbed requires a BLTouch to probe the bed surface.
-#elif ENABLED(LULZBOT_BLTouch, SWITCHING_NOZZLE) && DISABLED(TAZProV2)
-  #error The BLTouch and dual servo motors are not compatible with selected printer.
-#endif
 
 //Pin definitions for Mini 3 with SKR3 motherboard and USB Flash Drive Support
 #if ENABLED(MiniV3) && (MOTHERBOARD == BOARD_BTT_SKR_V3_0_EZ)
@@ -4678,8 +4714,12 @@
   #error "Tool Head Selected is not supported by Printer."
 #endif
 
-#if defined(LULZBOT_LONG_BED) && !defined(LULZBOT_BLTouch)
-    #error LULZBOT_Quiver_TAZPro with LULZBOT_LONG_BED requires LULZBOT_BLTouch to be enabled.
+#if ANY(LULZBOT_LONG_BED, LULZBOT_LONG_BED_V2) && !defined(LULZBOT_BLTouch)
+  #error The Longbed requires a BLTouch to probe the bed surface.
+#endif
+
+#if ENABLED(LULZBOT_BLTouch, SWITCHING_NOZZLE) && DISABLED(TAZProV2)
+  #error The BLTouch and dual servo motors are not compatible with selected printer.
 #endif
 
 #if defined(TAZProV2) && defined(TOOLHEAD_Quiver_DualExtruder)

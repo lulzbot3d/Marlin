@@ -49,7 +49,9 @@ void AboutScreen::onRedraw(draw_mode_t) {
   draw_text_box(cmd, BTN_POS(1,1), BTN_SIZE(4,6), F(
       #if ENABLED(LULZBOT_LONG_BED)
         "" LULZBOT_LCD_MACHINE_NAME " \nWith Long Bed"
-      #elif ENABLED(LULZBOT_BLTouch) && NONE(LULZBOT_LONG_BED, TAZProV2)
+      #elif ENABLED(LULZBOT_LONG_BED_V2)
+        "" LULZBOT_LCD_MACHINE_NAME " \nWith Long Bed V2"
+      #elif ENABLED(LULZBOT_BLTouch) && NONE(LULZBOT_LONG_BED_V2, TAZProV2)
         "" LULZBOT_LCD_MACHINE_NAME " \nWith BLTouch"
       #else
         "" LULZBOT_LCD_MACHINE_NAME "\n"

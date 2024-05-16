@@ -342,7 +342,7 @@
    * As described above, except for the bed (M140/M190/M303).
    */
   #define WATCH_BED_TEMP_PERIOD                60 // (seconds)
-  #if ENABLED(LULZBOT_LONG_BED)
+  #if ANY(LULZBOT_LONG_BED, LULZBOT_LONG_BED_V2)
     #define WATCH_BED_TEMP_INCREASE               1 // (°C)
   #else
     #define WATCH_BED_TEMP_INCREASE               2 // (°C)
@@ -1464,7 +1464,7 @@
         #define CALIBRATION_OBJECT_CENTER     {261.5, -14.5, -2.0} //  mm
         #define CALIBRATION_OBJECT_DIMENSIONS {10.0, 10.0, 10.0} //  mm
         #define CALIBRATION_MEASURE_FRONT
-      #elif defined(LULZBOT_LONG_BED)
+      #elif ANY(LULZBOT_LONG_BED, LULZBOT_LONG_BED_V2)
         #define CALIBRATION_OBJECT_CENTER     {260,-18,-2.0} //  mm
         #define CALIBRATION_OBJECT_DIMENSIONS {10.0,  10.0, 10.0} //  mm
       #else
@@ -1507,7 +1507,7 @@
         #define CALIBRATION_OBJECT_CENTER     {143, -15.5, -1.0} //  mm
         #define CALIBRATION_OBJECT_DIMENSIONS {10.0, 10.0, 10.0} //  mm
         #define CALIBRATION_MEASURE_FRONT
-      #elif defined(LULZBOT_LONG_BED)
+      #elif ANY(LULZBOT_LONG_BED, LULZBOT_LONG_BED_V2)
         #define CALIBRATION_OBJECT_CENTER     {260,-18,-2.0} //  mm
         #define CALIBRATION_OBJECT_DIMENSIONS {10.0,  10.0, 10.0} //  mm
       #else

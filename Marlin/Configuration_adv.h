@@ -1314,9 +1314,9 @@
 #define SLOWDOWN
 #if ENABLED(SLOWDOWN)
   #if ANY(TAZPro, TAZProXT, TAXProV2)
-    #define BUFSIZE 16
+    #define SLOWDOWN_DIVISOR 16
   #else
-    #define BUFSIZE 8
+    #define SLOWDOWN_DIVISOR 8
   #endif
 #endif
 

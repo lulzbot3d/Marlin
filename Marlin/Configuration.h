@@ -2306,7 +2306,7 @@
 #define PROBE_OFFSET_XMAX  100   // (mm)
 //#define PROBE_OFFSET_YMIN -50   // (mm)
 #define PROBE_OFFSET_YMAX  71   // (mm)
-#define PROBE_OFFSET_ZMIN -4    // (mm)
+#define PROBE_OFFSET_ZMIN -6    // (mm)
 #define PROBE_OFFSET_ZMAX  5    // (mm)
 
 // Enable the M48 repeatability test to test probe accuracy

@@ -222,6 +222,7 @@ bool FilesScreen::onTouchEnd(uint8_t tag) {
     case 241: // Print highlighted file
       printFile(getSelectedShortFilename());
       GOTO_SCREEN(StatusScreen);
+      ExtUI::injectCommands(F("M300 T"));
       return true;
     case 242: // Previous page
       if (mydata.cur_page > 0) {

@@ -3655,12 +3655,9 @@
         #define X_STALL_SENSITIVITY  4
         #define Y_STALL_SENSITIVITY  4
       #endif
-    #elif ANY(MiniV2)
+    #elif ANY(MiniV2, Sidekick_289, Sidekick_747)
       #define X_STALL_SENSITIVITY  3
       #define Y_STALL_SENSITIVITY  3
-    #elif ANY(Sidekick_289, Sidekick_747)
-      #define X_STALL_SENSITIVITY  2
-      #define Y_STALL_SENSITIVITY  2
     #elif ANY(MiniV3)
       #define X_STALL_SENSITIVITY  140    //2209 Driver
       #define Y_STALL_SENSITIVITY  140    //2209 Driver

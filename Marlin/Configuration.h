@@ -1780,7 +1780,7 @@
   #else
     #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 100, 500, LULZBOT_E_STEPS }
   #endif
-#elif ENABLED(TAZProV2) //TAZProV2 used 5.1:1 Z motors
+#elif ENABLED(TAZProV2) //TAZProV2 used 5.2:1 Z motors
   #if defined(LULZBOT_LONG_BED)
     #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 160, 520, LULZBOT_E_STEPS }
   #elif defined(LULZBOT_LONG_BED_V2)

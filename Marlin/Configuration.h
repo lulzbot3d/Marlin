@@ -24,9 +24,9 @@
   #define SHOW_TOOL_HEAD_ID
 #endif
 #define LULZBOT_FILAMENT_RUNOUT
-#define LULZBOT_BLTouch
+//#define LULZBOT_BLTouch
 //#define LULZBOT_LONG_BED
-#define LULZBOT_LONG_BED_V2
+//#define LULZBOT_LONG_BED_V2
 //#define TazDualZ
 #define AUTO_REPORT_TEMPERATURES
 

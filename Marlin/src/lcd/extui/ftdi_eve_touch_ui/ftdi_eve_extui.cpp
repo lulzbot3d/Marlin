@@ -73,7 +73,9 @@ namespace ExtUI {
   void onStatusChanged(const char *lcd_msg) { StatusScreen::setStatusMessage(lcd_msg); }
 
   void onPrintTimerStarted() {
-    InterfaceSoundsScreen::playEventSound(InterfaceSoundsScreen::PRINTING_STARTED);
+    if (!isPrinting()) {
+      InterfaceSoundsScreen::playEventSound(InterfaceSoundsScreen::PRINTING_STARTED);
+    }
     current_screen.forget();
     PUSH_SCREEN(StatusScreen);
   }

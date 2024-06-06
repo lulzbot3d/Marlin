@@ -2565,7 +2565,7 @@
     #define X_BED_SIZE        280
     #define Y_BED_SIZE        570
     // Travel limits (mm) after homing, corresponding to endstop positions.
-    #define LULZBOT_X_MAX_POS 318
+    #define LULZBOT_X_MAX_POS 310
     #define LULZBOT_X_MIN_POS -6
     #define LULZBOT_Y_MAX_POS 613
     #define LULZBOT_Y_MIN_POS -18.2//-15
@@ -2575,7 +2575,7 @@
     #define X_BED_SIZE        280
     #define Y_BED_SIZE        570
     // Travel limits (mm) after homing, corresponding to endstop positions.
-    #define LULZBOT_X_MAX_POS 318
+    #define LULZBOT_X_MAX_POS 310
     #define LULZBOT_X_MIN_POS -6
     #define LULZBOT_Y_MAX_POS 613
     #define LULZBOT_Y_MIN_POS -18.2//-15
@@ -2587,8 +2587,8 @@
     // Travel limits (mm) after homing, corresponding to endstop positions.
     #define LULZBOT_X_MIN_POS -1
     #define LULZBOT_Y_MIN_POS -13.5
-    #define LULZBOT_X_MAX_POS 313
-    #define LULZBOT_Y_MAX_POS 318
+    #define LULZBOT_X_MAX_POS 310
+    #define LULZBOT_Y_MAX_POS 311
     #define LULZBOT_Z_MIN_POS -9
     #define LULZBOT_Z_MAX_POS 299
   #endif
@@ -2617,7 +2617,7 @@
     #define X_BED_SIZE        280
     #define Y_BED_SIZE        570
     // Travel limits (mm) after homing, corresponding to endstop positions.
-    #define LULZBOT_X_MAX_POS 318
+    #define LULZBOT_X_MAX_POS 310
     #define LULZBOT_X_MIN_POS -6
     #define LULZBOT_Y_MAX_POS 613
     #define LULZBOT_Y_MIN_POS -18.2//-15
@@ -2627,7 +2627,7 @@
     #define X_BED_SIZE        280
     #define Y_BED_SIZE        570
     // Travel limits (mm) after homing, corresponding to endstop positions.
-    #define LULZBOT_X_MAX_POS 318
+    #define LULZBOT_X_MAX_POS 310
     #define LULZBOT_X_MIN_POS -6
     #define LULZBOT_Y_MAX_POS 613
     #define LULZBOT_Y_MIN_POS -18.2//-15
@@ -2639,8 +2639,8 @@
     // Travel limits (mm) after homing, corresponding to endstop positions.
     #define LULZBOT_X_MIN_POS -1
     #define LULZBOT_Y_MIN_POS -9
-    #define LULZBOT_X_MAX_POS 313
-    #define LULZBOT_Y_MAX_POS 318
+    #define LULZBOT_X_MAX_POS 310
+    #define LULZBOT_Y_MAX_POS 311
     #define LULZBOT_Z_MIN_POS -9
     #define LULZBOT_Z_MAX_POS 599
   #endif

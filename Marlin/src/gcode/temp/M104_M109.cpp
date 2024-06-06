@@ -112,7 +112,7 @@ void GcodeSuite::M104_M109(const bool isM109) {
         thermalManager.setTargetHotend(temp ? temp + duplicate_extruder_temp_offset : 0, 1);
     #endif
 
-    #if ENABLED(PRINTJOB_TIMER_AUTOSTART)
+    #if ENABLED(PRINTJOB_TIMER_AUTOSTART) && DISABLED(M109_M190_DO_NOT_START_TIMER)
       /**
        * Use half EXTRUDE_MINTEMP to allow nozzles to be put into hot
        * standby mode, (e.g., in a dual extruder setup) without affecting

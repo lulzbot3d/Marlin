@@ -1477,7 +1477,7 @@ void MarlinUI::host_notify(const char * const cstr) {
     FSTR_P msg;
     if (printingIsPaused())
       msg = GET_TEXT_F(MSG_PRINT_PAUSED);
-    #if HAS_MEDIA
+    #if HAS_MEDIA && SHOW_FILE_NAME_ON_STATUS_RESET
       else if (IS_SD_PRINTING())
         return set_status_no_expire(card.longest_filename());
     #endif

@@ -3580,6 +3580,9 @@
  *   M77 - Stop the print job timer
  */
 #define PRINTJOB_TIMER_AUTOSTART
+#if ANY(TAZPro, TAZProXT, TAZProV2)
+  #define M109_M190_DO_NOT_START_TIMER
+#endif
 
 /**
  * End of Print Screen

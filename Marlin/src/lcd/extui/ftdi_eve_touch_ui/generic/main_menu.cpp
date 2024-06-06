@@ -89,7 +89,7 @@ bool MainMenu::onTouchEnd(uint8_t tag) {
     case 2:  GOTO_SCREEN(MoveAxisScreen);                                break;
     case 3:  injectCommands(F("M84"));                                   break;
     case 4:  GOTO_SCREEN(BacklashCompensationScreen);                    break;
-    case 5:  injectCommands(F(CLEAN_SCRIPT));                                   break;
+    case 5:  GOTO_SCREEN(StatusScreen); injectCommands(F(CLEAN_SCRIPT)); break;
     case 6:  GOTO_SCREEN(TemperatureScreen);                             break;
     case 7:  GOTO_SCREEN(AdvancedSettingsMenu);                          break;
     #if HAS_LEVELING

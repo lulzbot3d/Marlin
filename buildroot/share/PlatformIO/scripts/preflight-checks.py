@@ -5,8 +5,9 @@
 import pioutil
 if pioutil.is_pio_build():
 
-	import os,re,sys
-	Import("env")
+    import re, sys
+    from pathlib import Path
+    env = pioutil.env
 
 	def get_envs_for_board(board):
 		with open(os.path.join("Marlin", "src", "pins", "pins.h"), "r") as file:
@@ -64,10 +65,12 @@ if pioutil.is_pio_build():
 		config = env.GetProjectConfig()
 		result = check_envs("env:"+build_env, board_envs, config)
 
-		if not result:
-				err = "Error: Build environment '%s' is incompatible with %s. Use one of these environments: %s" % \
-						( build_env, motherboard, ", ".join([ e[4:] for e in board_envs if e.startswith("env:") ]) )
-				raise SystemExit(err)
+        # Make sure board is compatible with the build environment. Skip for _test,
+        # since the board is manipulated as each unit test is executed.
+        if not result and build_env != "linux_native_test":
+            err = "Error: Build environment '%s' is incompatible with %s. Use one of these environments: %s" % \
+                  ( build_env, motherboard, ", ".join([ e[4:] for e in board_envs if e.startswith("env:") ]) )
+            raise SystemExit(err)
 
 		#
 		# Check for Config files in two common incorrect places

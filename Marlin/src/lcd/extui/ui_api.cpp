@@ -347,7 +347,7 @@ namespace ExtUI {
     // This assumes the center is 0,0
     #if ENABLED(DELTA)
       if (axis != Z) {
-        max = SQRT(FLOAT_SQ(PRINTABLE_RADIUS) - sq(current_position[Y - axis])); // (Y - axis) == the other axis
+        max = SQRT(sq(float(PRINTABLE_RADIUS)) - sq(current_position[Y - axis])); // (Y - axis) == the other axis
         min = -max;
       }
     #endif
@@ -769,24 +769,6 @@ namespace ExtUI {
     }
   #endif
 
-  #if HAS_SHAPING
-    float getShapingZeta(const axis_t axis) {
-      return stepper.get_shaping_damping_ratio(AxisEnum(axis));
-    }
-    void setShapingZeta(const float zeta, const axis_t axis) {
-      if (!WITHIN(zeta, 0, 1)) return;
-      stepper.set_shaping_damping_ratio(AxisEnum(axis), zeta);
-    }
-    float getShapingFrequency(const axis_t axis) {
-      return stepper.get_shaping_frequency(AxisEnum(axis));
-    }
-    void setShapingFrequency(const float freq, const axis_t axis) {
-      constexpr float min_freq = float(uint32_t(STEPPER_TIMER_RATE) / 2) / shaping_time_t(-2);
-      if (freq == 0.0f || freq > min_freq)
-        stepper.set_shaping_frequency(AxisEnum(axis), freq);
-    }
-  #endif
-
   #if HAS_JUNCTION_DEVIATION
 
     float getJunctionDeviation_mm() { return planner.junction_deviation_mm; }
@@ -955,7 +937,6 @@ namespace ExtUI {
   #if HAS_BED_PROBE
     float getProbeOffset_mm(const axis_t axis) { return probe.offset.pos[axis]; }
     void setProbeOffset_mm(const_float_t val, const axis_t axis) { probe.offset.pos[axis] = val; }
-    probe_limits_t getBedProbeLimits() { return probe_limits_t({ probe.min_x(), probe.min_y(), probe.max_x(), probe.max_y() }); }
   #endif
 
   #if ENABLED(BACKLASH_GCODE)
@@ -1189,14 +1170,14 @@ namespace ExtUI {
   }
 
   bool isPrintingPaused() {
-    return isPrinting() && (isPrintingFromMediaPaused() || print_job_timer.isPaused() || did_pause_print) ;
+    return isPrinting() && (isPrintingFromMediaPaused() || print_job_timer.isPaused());
   }
 
   bool isOngoingPrintJob() {
     return isPrintingFromMedia() || printJobOngoing();
   }
 
-  bool isMediaMounted() { return TERN0(HAS_MEDIA, card.isMounted()); }
+  bool isMediaMounted() { return TERN0(HAS_MEDIA, IS_SD_INSERTED()); }
 
   // Pause/Resume/Stop are implemented in MarlinUI
   void pausePrint()  { ui.pause_print(); }

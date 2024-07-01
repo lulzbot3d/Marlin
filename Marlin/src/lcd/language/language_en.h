@@ -817,6 +817,7 @@ namespace LanguageNarrow_en {
   LSTR MSG_FILAMENT_CHANGE_INIT           = _UxGT(MSG_1_LINE("Please wait..."));
   LSTR MSG_FILAMENT_CHANGE_INSERT         = _UxGT(MSG_1_LINE("Insert and Click Resume"));
   LSTR MSG_FILAMENT_CHANGE_HEAT           = _UxGT(MSG_1_LINE("Click to heat"));
+  LSTR MSG_FILAMENT_CHANGE_RESUME_REHEAT  = _UxGT(MSG_1_LINE("Click Resume to reheat"));
   LSTR MSG_FILAMENT_CHANGE_HEATING        = _UxGT(MSG_1_LINE("Heating..."));
   LSTR MSG_FILAMENT_CHANGE_UNLOAD         = _UxGT(MSG_1_LINE("Ejecting..."));
   LSTR MSG_FILAMENT_CHANGE_LOAD           = _UxGT(MSG_1_LINE("Loading..."));

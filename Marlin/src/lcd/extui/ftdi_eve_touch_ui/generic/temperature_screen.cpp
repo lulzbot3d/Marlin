@@ -76,13 +76,12 @@ void TemperatureScreen::onRedraw(draw_mode_t what) {
   #define PREHEAT_1_POS         BTN_POS(1,(5+EXTRUDERS)), BTN_SIZE(1,1)
   #define PREHEAT_2_POS         BTN_POS(2,(5+EXTRUDERS)), BTN_SIZE(1,1)
   #define PREHEAT_3_POS         BTN_POS(1,(6+EXTRUDERS)), BTN_SIZE(1,1)
-  #define PREHEAT_4_POS         BTN_POS(2,(6+EXTRUDERS)), BTN_SIZE(1,1)
-  #define COOLDOWN_POS          BTN_POS(1,(7+EXTRUDERS)), BTN_SIZE(2,1)
-  #define TOOLHEAD_SWAP_POS     BTN_POS(1,(8+EXTRUDERS)), BTN_SIZE(2,1)
+  #define COOLDOWN_POS          BTN_POS(2,(6+EXTRUDERS)), BTN_SIZE(1,1)
+  #define TOOLHEAD_SWAP_POS     BTN_POS(1,(7+EXTRUDERS)), BTN_SIZE(2,1)
 
   if (what & FOREGROUND) {
     #define GRID_COLS 2
-    #define GRID_ROWS (9+EXTRUDERS)
+    #define GRID_ROWS (8+EXTRUDERS)
     if (!ExtUI::isOngoingPrintJob()) {
       cmd.font(Theme::font_medium)
           .colors(normal_btn)
@@ -90,7 +89,6 @@ void TemperatureScreen::onRedraw(draw_mode_t what) {
           .tag(32).button(PREHEAT_2_POS, GET_TEXT_F(MSG_PREHEAT_2))
           .tag(33).button(PREHEAT_3_POS, GET_TEXT_F(MSG_PREHEAT_3))
           .colors(cold_pull_btn)
-          .tag(34).button(PREHEAT_4_POS, GET_TEXT_F(MSG_PREHEAT_4))
           .tag(30).button(COOLDOWN_POS, GET_TEXT_F(MSG_COOLDOWN))
           .colors(normal_btn)
           .tag(35).button(TOOLHEAD_SWAP_POS, GET_TEXT_F(MSG_TOOL_HEAD_SWAP));
@@ -133,7 +131,6 @@ bool TemperatureScreen::onTouchHeld(uint8_t tag) {
     case 31: injectCommands_P(PSTR(PREHEAT_1_COMMAND)); GOTO_SCREEN(StatusScreen); break;
     case 32: injectCommands_P(PSTR(PREHEAT_2_COMMAND)); GOTO_SCREEN(StatusScreen); break;
     case 33: injectCommands_P(PSTR(PREHEAT_3_COMMAND)); GOTO_SCREEN(StatusScreen); break;
-    case 34: injectCommands_P(PSTR(PREHEAT_4_COMMAND)); GOTO_SCREEN(StatusScreen); break;
     case 35: injectCommands(F(PARKING_COMMAND_GCODE)); break;
     default:
       return false;

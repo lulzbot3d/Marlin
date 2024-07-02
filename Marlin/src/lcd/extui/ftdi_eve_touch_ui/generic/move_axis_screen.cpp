@@ -44,7 +44,7 @@ void BaseMoveAxisScreen::onEntry() {
   BaseNumericAdjustmentScreen::onEntry();
 }
 #define GRID_COLS 13
-#define GRID_ROWS (9+EXTRUDERS)
+#define GRID_ROWS (8+EXTRUDERS)
 
 void MoveAxisScreen::onRedraw(draw_mode_t what) {
   widgets_t w(what);
@@ -77,7 +77,7 @@ void MoveAxisScreen::onRedraw(draw_mode_t what) {
   if (!ExtUI::isPrinting()) { // making sure the Tool Head Swap Position is not avalible while printing
     cmd.font(font_medium)
        .colors(normal_btn)
-       .tag(25).button(BTN_POS(1,(8+EXTRUDERS)), BTN_SIZE(13,1), GET_TEXT_F(MSG_TOOL_HEAD_SWAP));
+       .tag(25).button(BTN_POS(1,(7+EXTRUDERS)), BTN_SIZE(13,1), GET_TEXT_F(MSG_TOOL_HEAD_SWAP));
 }
 }
 

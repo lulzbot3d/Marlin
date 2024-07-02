@@ -348,7 +348,7 @@ void StatusScreen::draw_interaction_buttons(draw_mode_t what) {
     #define TOOL_HEAD_POS         BTN_POS(1,11), BTN_SIZE(1,2)
     #define CHANGE_FILAMENT_POS   BTN_POS(2,11), BTN_SIZE(1,2)
     #define PREHEAT_POS           BTN_POS(1,13), BTN_SIZE(1,2)
-    #define Z_OFFSET_POS          BTN_POS(2,13), BTN_SIZE(1,2)
+    #define COOLDOWN_OFFSET_POS   BTN_POS(2,13), BTN_SIZE(1,2)
     #define MEDIA_BTN_POS         BTN_POS(1,15), BTN_SIZE(1,2)
     #define MENU_BTN_POS          BTN_POS(2,15), BTN_SIZE(1,2)
   #else
@@ -377,56 +377,64 @@ void StatusScreen::draw_interaction_buttons(draw_mode_t what) {
           draw_text_box(cmd, CHANGE_FILAMENT_POS, F("Change\nFilament"), OPT_CENTER, font_medium);
       cmd.colors(normal_btn)
           .font(font_medium)
-          .tag(20).button(PREHEAT_POS, GET_TEXT_F(MSG_PREHEAT))
-          .enabled(ENABLED(CUSTOM_MENU_MAIN)).tag(10).button(TOOL_HEAD_POS, F(""));
-
-          draw_text_box(cmd, TOOL_HEAD_POS, F("" CUSTOM_MENU_MAIN_TITLE " \n "), OPT_CENTER, font_medium);
-          switch(getToolHeadIdNumber()){
-            case 1:
-              draw_text_box(cmd, TOOL_HEAD_POS, F(" \n M175"), OPT_CENTER, font_small);
-              break;
-            case 2:
-              draw_text_box(cmd, TOOL_HEAD_POS, F(" \n SL"), OPT_CENTER, font_small);
-              break;
-            case 3:
-              draw_text_box(cmd, TOOL_HEAD_POS, F(" \n SE"), OPT_CENTER, font_small);
-              break;
-            case 4:
-              draw_text_box(cmd, TOOL_HEAD_POS, F(" \n HE"), OPT_CENTER, font_small);
-              break;
-            case 5:
-              draw_text_box(cmd, TOOL_HEAD_POS, F(" \n HS"), OPT_CENTER, font_small);
-              break;
-            case 6:
-              draw_text_box(cmd, TOOL_HEAD_POS, F(" \n HS+"), OPT_CENTER, font_small);
-              break;
-            case 7:
-              draw_text_box(cmd, TOOL_HEAD_POS, F(" \n H175"), OPT_CENTER, font_small);
-              break;
-            case 8:
-              draw_text_box(cmd, TOOL_HEAD_POS, F(" \n MET175"), OPT_CENTER, font_small);
-              break;
-            case 9:
-              draw_text_box(cmd, TOOL_HEAD_POS, F(" \n MET285"), OPT_CENTER, font_small);
-              break;
-            case 10:
-              draw_text_box(cmd, TOOL_HEAD_POS, F(" \n AST285"), OPT_CENTER, font_small);
-              break;
-            case 11:
-              draw_text_box(cmd, TOOL_HEAD_POS, F(" \n Twin Nebula 175"), OPT_CENTER, font_small);
-              break;
-            case 12:
-              draw_text_box(cmd, TOOL_HEAD_POS, F(" \n Twin Nebula 285"), OPT_CENTER, font_small);
-              break;
-            case 13:
-              draw_text_box(cmd, TOOL_HEAD_POS, F(" \n TAZ Dual Extruder"), OPT_CENTER, font_small);
-              break;
-          }
+          .tag(20).button(PREHEAT_POS, GET_TEXT_F(MSG_PREHEAT));
+      if(getToolHeadIdNumber() == 0){
+          cmd.colors(cancel_btn);
+      }
+      else{
+        cmd.colors(normal_btn);
+      }
+      cmd.enabled(ENABLED(CUSTOM_MENU_MAIN)).tag(10).button(TOOL_HEAD_POS, F(""));
+      draw_text_box(cmd, TOOL_HEAD_POS, F("" CUSTOM_MENU_MAIN_TITLE "\n "), OPT_CENTER, font_medium);
+      switch(getToolHeadIdNumber()){
+        case 0:
+          draw_text_box(cmd, TOOL_HEAD_POS, F(" \nNone Selected"), OPT_CENTER, font_small);
+          break;
+        case 1:
+          draw_text_box(cmd, TOOL_HEAD_POS, F(" \nM175"), OPT_CENTER, font_small);
+          break;
+        case 2:
+          draw_text_box(cmd, TOOL_HEAD_POS, F(" \nSL"), OPT_CENTER, font_small);
+          break;
+        case 3:
+          draw_text_box(cmd, TOOL_HEAD_POS, F(" \nSE"), OPT_CENTER, font_small);
+          break;
+        case 4:
+          draw_text_box(cmd, TOOL_HEAD_POS, F(" \nHE"), OPT_CENTER, font_small);
+          break;
+        case 5:
+          draw_text_box(cmd, TOOL_HEAD_POS, F(" \nHS"), OPT_CENTER, font_small);
+          break;
+        case 6:
+          draw_text_box(cmd, TOOL_HEAD_POS, F(" \nHS+"), OPT_CENTER, font_small);
+          break;
+        case 7:
+          draw_text_box(cmd, TOOL_HEAD_POS, F(" \nH175"), OPT_CENTER, font_small);
+          break;
+        case 8:
+          draw_text_box(cmd, TOOL_HEAD_POS, F(" \nMET175"), OPT_CENTER, font_small);
+          break;
+        case 9:
+          draw_text_box(cmd, TOOL_HEAD_POS, F(" \nMET285"), OPT_CENTER, font_small);
+          break;
+        case 10:
+          draw_text_box(cmd, TOOL_HEAD_POS, F(" \nAST285"), OPT_CENTER, font_small);
+          break;
+        case 11:
+          draw_text_box(cmd, TOOL_HEAD_POS, F(" \nTwin Nebula 175"), OPT_CENTER, font_small);
+          break;
+        case 12:
+          draw_text_box(cmd, TOOL_HEAD_POS, F(" \nTwin Nebula 285"), OPT_CENTER, font_small);
+          break;
+        case 13:
+          draw_text_box(cmd, TOOL_HEAD_POS, F(" \nTAZ Dual Extruder"), OPT_CENTER, font_small);
+          break;
+      }
     }
 
     cmd.colors(normal_btn)
        .font(Theme::font_medium)
-       .tag(15).button(Z_OFFSET_POS, GET_TEXT_F(MSG_ZOFFSET))
+       .tag(15).button(COOLDOWN_OFFSET_POS, isOngoingPrintJob() ? GET_TEXT_F(MSG_ZOFFSET) : GET_TEXT_F(MSG_COOLDOWN))
        .colors(has_media ? action_btn : normal_btn)
        .enabled(has_media || isOngoingPrintJob())
        .tag(isOngoingPrintJob() ? 19 : 3).button(MEDIA_BTN_POS, isOngoingPrintJob() ? GET_TEXT_F(MSG_BUTTON_CANCEL) : GET_TEXT_F(MSG_BUTTON_PRINT))
@@ -580,13 +588,21 @@ bool StatusScreen::onTouchEnd(uint8_t tag) {
     }
     case 14: GOTO_SCREEN(ChangeFilamentScreen);  break;
     case 15:
-            #if EXTRUDERS > 1
-              GOTO_SCREEN(NudgeNozzleScreen); break;
-            #else
-              GOTO_SCREEN(ZOffsetScreen); break;
-            #endif
+      if (ExtUI::isOngoingPrintJob()|| ExtUI::isPrintingPaused()) {
+        #if EXTRUDERS > 1
+          GOTO_SCREEN(NudgeNozzleScreen); break;
+        #else
+          GOTO_SCREEN(ZOffsetScreen); break;
+        #endif
+      }
+      else{
+        coolDown();
+        TERN_(HAS_HEATED_CHAMBER, setTargetTemp_celsius(0, CHAMBER));
+        GOTO_SCREEN(StatusScreen);
+        break;
+      }
     case 16: injectCommands(F(PRESENT_BED_GCODE)); break;
-    case 17: injectCommands(F("M117 Print Paused")); pausePrint();  break;
+    case 17: injectCommands(F("M117 Print 123 Paused")); pausePrint();  break;
     case 18: injectCommands(F("M117 Print Resumed")); resumePrint(); break;
     case 19:
       GOTO_SCREEN(ConfirmAbortPrintDialogBox);

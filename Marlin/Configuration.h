@@ -22,6 +22,7 @@
 /************** Uncomment Options for Printer From Below *********************/
 #if ANY(TAZPro, TAZProXT, TAZProV2)
   #define SHOW_TOOL_HEAD_ID
+  #define TOOL_HEAD_ID 0 //Set the ID to 0 so the user have to select the Tool Head
 #endif
 #define LULZBOT_FILAMENT_RUNOUT
 //#define LULZBOT_BLTouch
@@ -95,7 +96,7 @@
 // Author info of this build printed to the host during boot and M115
 #define STRING_CONFIG_H_AUTHOR "Lulzbot" // Who made the changes.
 #define CUSTOM_VERSION_FILE Version.h // Path from the root directory (no quotes)
-#define LULZBOT_FW_VERSION "2.1.3.0.31"
+#define LULZBOT_FW_VERSION "2.1.3.0.31_trial"
 #define CAPABILITIES_REPORT
 #define EXTENDED_CAPABILITIES_REPORT
 
@@ -459,7 +460,6 @@
   #define LULZBOT_TOOLHEAD_Y_MIN_ADJ         0
   #define LULZBOT_TOOLHEAD_Z_MAX_ADJ         0
   #define LULZBOT_TOOLHEAD_Z_MIN_ADJ         0
-  #define TOOL_HEAD_ID                       3
   #if ANY(TAZ6, Workhorse)
     #define LULZBOT_MOTOR_CURRENT_E0         177 // Values 0-255 (RAMBO 135 = ~0.75A, 185 = ~1A)
   #else
@@ -501,7 +501,6 @@
   #define LULZBOT_TOOLHEAD_Y_MIN_ADJ         0
   #define LULZBOT_TOOLHEAD_Z_MAX_ADJ         0
   #define LULZBOT_TOOLHEAD_Z_MIN_ADJ         0
-  #define TOOL_HEAD_ID                       9
   #if ANY(TAZ6, Workhorse)
     #define LULZBOT_MOTOR_CURRENT_E0         155 // Values 0-255 (RAMBO 135 = ~0.75A, 185 = ~1A)
   #else
@@ -546,7 +545,6 @@
     #define LULZBOT_MOTOR_CURRENT_E0               960 // mA
     #define LULZBOT_MOTOR_CURRENT_E1               960 // mA
     #define SWITCHING_NOZZLE
-    #define TOOL_HEAD_ID                           13
 #endif /* TOOLHEAD_Quiver_DualExtruder */
 
 #if defined(TOOLHEAD_Galaxy_DualExtruder)
@@ -576,7 +574,6 @@
     #define LULZBOT_MOTOR_CURRENT_E0               850 // mA
     #define LULZBOT_MOTOR_CURRENT_E1               850 // mA
     #define SWITCHING_NOZZLE
-    #define TOOL_HEAD_ID                           12
     /********************* MPC Settings **********************/
     #define LULZBOT_TOOLHEAD_WATT                 { 50.0f, 50.0f }
     #define LULZBOT_MPC_BLOCK_HEAT_CAPACITY       { 15.44f, 15.44f }
@@ -3343,25 +3340,26 @@
 //
 // Preheat Constants - Up to 10 are supported without changes
 //
-#define PREHEAT_1_LABEL       "PLA"
-#define PREHEAT_1_TEMP_HOTEND 180
-#define PREHEAT_1_TEMP_BED     60
-#define PREHEAT_1_TEMP_CHAMBER  0
-#define PREHEAT_1_FAN_SPEED     0 // Value from 0 to 255
+#define PREHEAT_1_LABEL          "PLA"
+#define PREHEAT_1_TEMP_HOTEND     180
+#define PREHEAT_1_LOW_TEMP_HOTEND 160
+#define PREHEAT_1_TEMP_BED         60
+#define PREHEAT_1_TEMP_CHAMBER      0
+#define PREHEAT_1_FAN_SPEED         0 // Value from 0 to 255
 
-#define PREHEAT_2_LABEL       "ABS"
+#define PREHEAT_2_LABEL      "ABS"
 #define PREHEAT_2_TEMP_HOTEND 220
 #define PREHEAT_2_TEMP_BED    110
 #define PREHEAT_2_TEMP_CHAMBER  0
 #define PREHEAT_2_FAN_SPEED     0 // Value from 0 to 255
 
-#define PREHEAT_3_LABEL       "TPU"
+#define PREHEAT_3_LABEL      "TPU"
 #define PREHEAT_3_TEMP_HOTEND 200
 #define PREHEAT_3_TEMP_BED     60
 #define PREHEAT_3_TEMP_CHAMBER 35
 #define PREHEAT_3_FAN_SPEED     0 // Value from 0 to 255
 
-#define PREHEAT_4_LABEL       "Cold Pull"
+#define PREHEAT_4_LABEL      "Cold Pull"
 #define PREHEAT_4_TEMP_HOTEND 145
 #define PREHEAT_4_TEMP_BED      0
 #define PREHEAT_4_TEMP_CHAMBER  0
@@ -3375,10 +3373,19 @@
 #define charPREHEAT_2_TEMP_BED STRINGIFY(PREHEAT_2_TEMP_BED)
 #define charPREHEAT_3_TEMP_BED STRINGIFY(PREHEAT_3_TEMP_BED)
 #define charPREHEAT_4_TEMP_BED STRINGIFY(PREHEAT_4_TEMP_BED)
-#define PREHEAT_1_COMMAND "M104 S" charPREHEAT_1_TEMP_HOTEND "\nM140 S" charPREHEAT_1_TEMP_BED ""
-#define PREHEAT_2_COMMAND "M104 S" charPREHEAT_2_TEMP_HOTEND "\nM140 S" charPREHEAT_2_TEMP_BED ""
-#define PREHEAT_3_COMMAND "M104 S" charPREHEAT_3_TEMP_HOTEND "\nM140 S" charPREHEAT_3_TEMP_BED ""
-#define PREHEAT_4_COMMAND "M104 S" charPREHEAT_4_TEMP_HOTEND ""
+#define charPREHEAT_1_LOW_TEMP_HOTEND STRINGIFY(PREHEAT_1_LOW_TEMP_HOTEND)
+
+#if LULZBOT_EXTRUDERS == 1
+  #define PREHEAT_1_COMMAND "M104 S" charPREHEAT_1_TEMP_HOTEND "\nM140 S" charPREHEAT_1_TEMP_BED ""
+  #define PREHEAT_2_COMMAND "M104 S" charPREHEAT_2_TEMP_HOTEND "\nM140 S" charPREHEAT_2_TEMP_BED ""
+  #define PREHEAT_3_COMMAND "M104 S" charPREHEAT_3_TEMP_HOTEND "\nM140 S" charPREHEAT_3_TEMP_BED ""
+  #define PREHEAT_4_COMMAND "M104 S" charPREHEAT_4_TEMP_HOTEND ""
+#else
+  #define PREHEAT_1_COMMAND "M104 T0 S" charPREHEAT_1_LOW_TEMP_HOTEND "\nM104 T1 S" charPREHEAT_1_LOW_TEMP_HOTEND "\n M140 S" charPREHEAT_1_TEMP_BED ""
+  #define PREHEAT_2_COMMAND "M104 T0 S" charPREHEAT_2_TEMP_HOTEND "\nM104 T1 S" charPREHEAT_2_TEMP_HOTEND "\n M140 S" charPREHEAT_2_TEMP_BED ""
+  #define PREHEAT_3_COMMAND "M104 T0 S" charPREHEAT_3_TEMP_HOTEND "\nM104 T1 S" charPREHEAT_3_TEMP_HOTEND "\n M140 S" charPREHEAT_3_TEMP_BED ""
+  #define PREHEAT_4_COMMAND "M104 T0 S" charPREHEAT_4_TEMP_HOTEND ""
+#endif
 // @section motion
 
 /**

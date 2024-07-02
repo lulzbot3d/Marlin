@@ -44,7 +44,8 @@ void MainMenu::onRedraw(draw_mode_t what) {
     #define DISABLE_STEPPERS_POS  BTN_POS(2,1), BTN_SIZE(1,1)
     #define BACKLASH_POS          BTN_POS(1,2), BTN_SIZE(1,1)
     #define CLEAN_NOZZLE_POS      BTN_POS(2,2), BTN_SIZE(1,1)
-    #define LEVELING_POS          BTN_POS(1,3), BTN_SIZE(2,1)
+    #define LEVELING_POS          BTN_POS(1,3), BTN_SIZE(1,1)
+    #define Z_OFFSET_POS          BTN_POS(2,3), BTN_SIZE(1,1)
     #define TEMPERATURE_POS       BTN_POS(1,4), BTN_SIZE(2,1)
     #define ABOUT_PRINTER_POS     BTN_POS(1,5), BTN_SIZE(2,1)
     #define ADVANCED_SETTINGS_POS BTN_POS(1,6), BTN_SIZE(2,1)
@@ -75,7 +76,8 @@ void MainMenu::onRedraw(draw_mode_t what) {
        .tag(7).button(ADVANCED_SETTINGS_POS, GET_TEXT_F(MSG_ADVANCED_SETTINGS))
           .enabled(ENABLED(HAS_LEVELING))
        .tag(8).button(LEVELING_POS,          GET_TEXT_F(MSG_LEVELING))
-       .tag(9).button(ABOUT_PRINTER_POS,     GET_TEXT_F(MSG_INFO_MENU))
+       .tag(9).button(Z_OFFSET_POS,          GET_TEXT_F(MSG_ZOFFSET))
+       .tag(10).button(ABOUT_PRINTER_POS,     GET_TEXT_F(MSG_INFO_MENU))
        .colors(action_btn)
        .tag(1).button(BACK_POS,               GET_TEXT_F(MSG_BUTTON_DONE));
   }
@@ -100,7 +102,13 @@ bool MainMenu::onTouchEnd(uint8_t tag) {
     #if HAS_LEVELING
       case 8:  GOTO_SCREEN(LevelingMenu);                                break;
     #endif
-    case 9: GOTO_SCREEN(AboutScreen);                                   break;
+    case 9:
+      #if EXTRUDERS > 1
+        GOTO_SCREEN(NudgeNozzleScreen); break;
+      #else
+        GOTO_SCREEN(ZOffsetScreen); break;
+      #endif
+    case 10: GOTO_SCREEN(AboutScreen);                                   break;
     default:
       return false;
   }

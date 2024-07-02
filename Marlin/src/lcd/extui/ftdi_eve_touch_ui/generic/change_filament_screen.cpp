@@ -34,14 +34,13 @@ constexpr static ChangeFilamentScreenData &mydata = screen_data.ChangeFilamentSc
 
 #ifdef TOUCH_UI_PORTRAIT
   #define GRID_COLS 4
-  #define GRID_ROWS 11
+  #define GRID_ROWS 10
   #define E0_TEMP_POS          BTN_POS(1,2),  BTN_SIZE(2,1)
   #define E1_TEMP_POS          BTN_POS(3,2),  BTN_SIZE(2,1)
   #define UNLOAD_POS           BTN_POS(3,7),  BTN_SIZE(2,2)
   #define LOAD_POS             BTN_POS(1,7),  BTN_SIZE(2,2)
-  #define COOLDOWN_POS         BTN_POS(1,9),  BTN_SIZE(4,1)
-  #define FILAMENT_SWAP_POS    BTN_POS(1,10), BTN_SIZE(4,1)
-  #define BACK_POS             BTN_POS(1,11), BTN_SIZE(4,1)
+  #define FILAMENT_SWAP_POS    BTN_POS(1,9),  BTN_SIZE(4,1)
+  #define BACK_POS             BTN_POS(1,10), BTN_SIZE(4,1)
 #else
   #define GRID_COLS 4
   #define GRID_ROWS 6
@@ -273,13 +272,12 @@ void ChangeFilamentScreen::onRedraw(draw_mode_t what) {
        .tag(7).TOG_STYLE(tog7).enabled(t_ok).button (UNLOAD_POS, GET_TEXT_F(MSG_UNLOAD))
        .tag(8).TOG_STYLE(tog8).enabled(t_ok).button (LOAD_POS, GET_TEXT_F(MSG_LOAD))
        .font(font_medium)
-       .tag(16).colors(cold_pull_btn)                                  .button (COOLDOWN_POS, GET_TEXT_F(MSG_COOLDOWN))
-       .tag(1).colors(action_btn)                                      .button (BACK_POS, GET_TEXT_F(MSG_BUTTON_DONE));
+       .tag(1).colors(action_btn).button (BACK_POS, GET_TEXT_F(MSG_BUTTON_DONE));
 
        if (ExtUI::isPrintingPaused()) {
         cmd.colors(normal_btn)
            .font(font_medium)
-           .tag(17).colors(normal_btn).button(FILAMENT_SWAP_POS, GET_TEXT_F(MSG_RESUME_PRINT));
+           .tag(16).colors(normal_btn).button(FILAMENT_SWAP_POS, GET_TEXT_F(MSG_RESUME_PRINT));
        }
        else{
         cmd.colors(normal_btn)
@@ -361,8 +359,7 @@ bool ChangeFilamentScreen::onTouchEnd(uint8_t tag) {
       setActiveTool(getExtruder(), true);
       break;
     case 15: GOTO_SCREEN(TemperatureScreen); break;
-    case 16: coolDown();                     break;
-    case 17:
+    case 16:
             if (ExtUI::isPrintingPaused()) {
               injectCommands(F("M117 Print Resumed")); resumePrint(); GOTO_SCREEN(StatusScreen); break;
             }

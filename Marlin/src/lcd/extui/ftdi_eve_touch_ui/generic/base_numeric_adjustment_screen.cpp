@@ -33,7 +33,7 @@ constexpr static BaseNumericAdjustmentScreenData &mydata = screen_data.BaseNumer
 
 #if ENABLED(TOUCH_UI_PORTRAIT)
   #define GRID_COLS 13
-  #define GRID_ROWS (9+EXTRUDERS)
+  #define GRID_ROWS (8+EXTRUDERS)
   #define LAYOUT_FONT font_small
 #else
   #define GRID_COLS 18

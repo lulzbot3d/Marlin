@@ -96,7 +96,14 @@ bool MainMenu::onTouchEnd(uint8_t tag) {
       ));
       break;
     case 4:  GOTO_SCREEN(BacklashCompensationScreen);                    break;
-    case 5:  GOTO_SCREEN(StatusScreen); injectCommands(F(CLEAN_SCRIPT)); break;
+    case 5:
+      GOTO_SCREEN(StatusScreen);
+      #if ENABLED(MANUAL_NOZZLE_CLEAN)
+        injectCommands(F("G12"));
+      #else
+         injectCommands(F(CLEAN_SCRIPT));
+      #endif
+      break;
     case 6:  GOTO_SCREEN(TemperatureScreen);                             break;
     case 7:  GOTO_SCREEN(AdvancedSettingsMenu);                          break;
     #if HAS_LEVELING
@@ -104,10 +111,11 @@ bool MainMenu::onTouchEnd(uint8_t tag) {
     #endif
     case 9:
       #if EXTRUDERS > 1
-        GOTO_SCREEN(NudgeNozzleScreen); break;
+        GOTO_SCREEN(NudgeNozzleScreen);
       #else
-        GOTO_SCREEN(ZOffsetScreen); break;
+        GOTO_SCREEN(ZOffsetScreen);
       #endif
+      break;
     case 10: GOTO_SCREEN(AboutScreen);                                   break;
     default:
       return false;

@@ -96,7 +96,7 @@
 // Author info of this build printed to the host during boot and M115
 #define STRING_CONFIG_H_AUTHOR "Lulzbot" // Who made the changes.
 #define CUSTOM_VERSION_FILE Version.h // Path from the root directory (no quotes)
-#define LULZBOT_FW_VERSION "2.1.3.0.31_trial"
+#define LULZBOT_FW_VERSION "2.1.3.0.31"
 #define CAPABILITIES_REPORT
 #define EXTENDED_CAPABILITIES_REPORT
 
@@ -253,7 +253,7 @@
   #define MACHINE_UUID "d9a2af86-894c-11ee-b9d1-0242ac120002" // <-- changed
   #define LULZBOT_BLTouch                                     // <-- changed
   #define LULZBOT_FILAMENT_RUNOUT                             // <-- changed
-  #define LULZBOT_WIPE
+  #define LULZBOT_MANUAL_NOZZLE_CLEAN
   #define TazDualZ
   #define REMOVE_STARING_PRINT_MESSAGES
 #elif ENABLED(Sidekick_289)
@@ -3569,6 +3569,15 @@
     #define CLEAN_NOZZLE_BUTTON_COMMANDS "M117 Wiping Nozzle\nG28\nM109 R170\nG12\nM104 S0\nM117 Wipe Complete"
   #endif
 
+  #if ENABLED(MANUAL_NOZZLE_CLEAN)
+    #if LULZBOT_EXTRUDERS == 1
+      #define MANUAL_NOZZLE_CLEAN_COMMANDS "M117 Starting Nozzle Wipe\nG28O"
+      #define END_MANUAL_NOZZLE_CLEAN_COMMANDS "M117 Nozzles Cleaned"
+    #else
+      #define MANUAL_NOZZLE_CLEAN_COMMANDS "M117 Starting Nozzle Wipe\nG28O\nM280 P1 S75\nM280 P2 S75"
+      #define END_MANUAL_NOZZLE_CLEAN_COMMANDS "M280 P2 S125\nM117 Nozzles Cleaned"
+    #endif
+  #endif
 #endif
 
 

@@ -118,7 +118,7 @@ namespace ExtUI {
 
   void onUserConfirmRequired(const char * const msg) {
     if (msg)
-      StatusScreen::setStatusMessage(msg);
+      ConfirmUserRequestAlertBox::show(msg);
     else
       ConfirmUserRequestAlertBox::show("Press Resume to Continue");
   }

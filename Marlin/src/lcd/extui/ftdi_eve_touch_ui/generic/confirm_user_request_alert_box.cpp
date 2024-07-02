@@ -41,7 +41,12 @@ bool ConfirmUserRequestAlertBox::onTouchEnd(uint8_t tag) {
       #ifdef FTDI_TUNE_MENU
         if (ExtUI::awaitingUserConfirm()) {
           // The TuneMenu will call ExtUI::setUserConfirmed()
-          GOTO_SCREEN(TuneMenu);
+          if (ExtUI::isOngoingPrintJob()){
+            GOTO_SCREEN(TuneMenu);
+          }
+          else{
+            GOTO_SCREEN(StatusScreen);
+          }
           current_screen.forget();
         }
         else

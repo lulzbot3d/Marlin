@@ -89,12 +89,7 @@ bool MainMenu::onTouchEnd(uint8_t tag) {
   switch (tag) {
     case 1:  SaveSettingsDialogBox::promptToSaveSettings();              break;
     case 2:  GOTO_SCREEN(MoveAxisScreen);                                break;
-    case 3:  injectCommands(F("M84 E"
-        TERN_(DISABLE_IDLE_X, " X")
-        TERN_(DISABLE_IDLE_Y, " Y")
-        TERN_(DISABLE_IDLE_Z, " Z")
-      ));
-      break;
+    case 3:  injectCommands(F("M84"));                                   break;
     case 4:  GOTO_SCREEN(BacklashCompensationScreen);                    break;
     case 5:
       GOTO_SCREEN(StatusScreen);

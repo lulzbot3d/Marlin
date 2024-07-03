@@ -3572,10 +3572,10 @@
   #if ENABLED(MANUAL_NOZZLE_CLEAN)
     #define NOZZLE_CLEAN_POSITION { X_CENTER, Y_CENTER, (Z_MAX_POS/2) }
     #if LULZBOT_EXTRUDERS == 1
-      #define MANUAL_NOZZLE_CLEAN_COMMANDS "M117 Starting Nozzle Wipe\nM300 T\nG28O"
+      #define MANUAL_NOZZLE_CLEAN_COMMANDS "M117 Starting Nozzle Wipe\nM300 T"
       #define END_MANUAL_NOZZLE_CLEAN_COMMANDS "M117 Nozzle Cleaned"
     #else
-      #define MANUAL_NOZZLE_CLEAN_COMMANDS "M117 Starting Nozzles Wipe\nG28O\nM300 T\nM280 P1 S75\nM280 P2 S75"
+      #define MANUAL_NOZZLE_CLEAN_COMMANDS "M117 Starting Nozzles Wipe\nM300 T\nM280 P1 S75\nM280 P2 S75"
       #define END_MANUAL_NOZZLE_CLEAN_COMMANDS "M280 P2 S125\nM117 Nozzles Cleaned"
     #endif
   #endif

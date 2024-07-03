@@ -51,18 +51,23 @@
 void GcodeSuite::G12() {
   #if ENABLED(MANUAL_NOZZLE_CLEAN)
     const uint8_t arrPos = ANY(SINGLENOZZLE, MIXING_EXTRUDER) ? 0 : active_extruder;
-    xyz_pos_t park_point NOZZLE_PARK_POINT;
-
+    xyz_pos_t park_point NOZZLE_CLEAN_POSITION;
     #if NOZZLE_CLEAN_MIN_TEMP > 20
-      if (thermalManager.degTargetHotend(arrPos) < NOZZLE_CLEAN_MIN_TEMP) {
-          SERIAL_ECHOLNPGM("Nozzle too Cold - Heating");
-          ui.set_status(GET_TEXT_F(MSG_NOZZLE_TOO_COLD));
-          //StatusScreen::setStatusMessage(GET_TEXT_F(MSG_NOZZLE_TOO_COLD);
-          thermalManager.setTargetHotend(NOZZLE_CLEAN_MIN_TEMP, arrPos);
-          thermalManager.wait_for_hotend(arrPos);
+      if (thermalManager.degTargetHotend(0) < NOZZLE_CLEAN_MIN_TEMP) {
+        thermalManager.setTargetHotend(NOZZLE_CLEAN_MIN_TEMP, 0);
+        SERIAL_ECHOLNPGM("Nozzle too Cold - Heating");
+        ui.set_status(GET_TEXT_F(MSG_NOZZLE_TOO_COLD));
       }
+      #if (HOTENDS == 2)
+        if (thermalManager.degTargetHotend(1) < NOZZLE_CLEAN_MIN_TEMP) {
+          thermalManager.setTargetHotend(NOZZLE_CLEAN_MIN_TEMP, 1);
+          SERIAL_ECHOLNPGM("Nozzles too Cold - Heating");
+          ui.set_status(GET_TEXT_F(MSG_NOZZLES_TOO_COLD));
+        }
+      #endif
+      home_if_needed();
+      thermalManager.wait_for_hotend(arrPos);
     #endif
-    home_if_needed();
     do_blocking_move_to(park_point);
     process_subcommands_now(F(MANUAL_NOZZLE_CLEAN_COMMANDS));
     KEEPALIVE_STATE(PAUSED_FOR_USER);

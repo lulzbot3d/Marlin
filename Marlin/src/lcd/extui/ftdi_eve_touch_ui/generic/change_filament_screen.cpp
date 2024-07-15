@@ -359,13 +359,8 @@ bool ChangeFilamentScreen::onTouchEnd(uint8_t tag) {
       setActiveTool(getExtruder(), true);
       break;
     case 15: GOTO_SCREEN(TemperatureScreen); break;
-    case 16:
-            if (ExtUI::isPrintingPaused()) {
-              injectCommands(F("M117 Print Resumed")); resumePrint(); GOTO_SCREEN(StatusScreen); break;
-            }
-            else{
-              injectCommands(F(PARKING_COMMAND_GCODE)); break;
-            }
+    case 16: injectCommands(F("M117 Print Resumed")); resumePrint(); GOTO_SCREEN(StatusScreen); break;
+    case 17: injectCommands(F(PARKING_COMMAND_GCODE)); break;
   }
   return true;
 }

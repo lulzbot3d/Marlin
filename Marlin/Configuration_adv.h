@@ -1494,8 +1494,8 @@
       #define CALIBRATION_MEASURE_BACK
     #elif ENABLED(TAZProV2)
       #if ENABLED(TOOLHEAD_Galaxy_DualExtruder)
-        #define CALIBRATION_OBJECT_CENTER     {143, -15.5, -1.0} //  mm
-        #define CALIBRATION_OBJECT_DIMENSIONS {10.0, 10.0, 10.0} //  mm
+        #define CALIBRATION_OBJECT_CENTER     {144, 303, -1.0} //  mm
+        #define CALIBRATION_OBJECT_DIMENSIONS {10.0, 5.0, 6.0} //  mm
         #define CALIBRATION_MEASURE_FRONT
       #elif ANY(LULZBOT_LONG_BED, LULZBOT_LONG_BED_V2)
         #define CALIBRATION_OBJECT_CENTER     {260,-18,-2.0} //  mm
@@ -1504,7 +1504,7 @@
         #define CALIBRATION_OBJECT_CENTER     {143, -15.5, -1.0} //  mm
         #define CALIBRATION_OBJECT_DIMENSIONS {10.0,  1.0, 10.0} //  mm
       #endif
-      #define LULZBOT_CALIBRATION_SCRIPT "M117 Starting Auto-Calibration\nG28\nG12\nG0 X150 Y150 Z25 F3500\nM117 Calibrating...\nG425\nM500\nM77\nM117 Calibration data saved"
+      #define LULZBOT_CALIBRATION_SCRIPT "M117 Starting Auto-Calibration\nG28\nG12\nG0 X144 Y303 Z25 F3500\nM117 Calibrating...\nG425\nM500\nM77\nM117 Calibration data saved"
         /* Status message */
         /* Auto-Home */
         /* Wipe the Nozzle */

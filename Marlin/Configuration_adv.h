@@ -1154,19 +1154,20 @@
  * Fixed-time-based Motion Control -- EXPERIMENTAL
  * Enable/disable and set parameters with G-code M493.
  */
-//#define FT_MOTION
+#define FT_MOTION
 #if ENABLED(FT_MOTION)
-  #define FTM_DEFAULT_MODE        ftMotionMode_DISABLED // Default mode of fixed time control. (Enums in ft_types.h)
-  #define FTM_DEFAULT_DYNFREQ_MODE dynFreqMode_DISABLED // Default mode of dynamic frequency calculation. (Enums in ft_types.h)
+  #define FTM_DEFAULT_MODE        ftMotionMode_DISABLED   // Default mode of fixed time control. (Enums in ft_types.h)
+  #define FTM_DEFAULT_X_COMPENSATOR ftMotionCmpnstr_NONE  // Default compensation / shaper mode on X axis.
+  #define FTM_DEFAULT_Y_COMPENSATOR ftMotionCmpnstr_NONE  // Default compensation / shaper mode on Y axis.  
   #define FTM_SHAPING_DEFAULT_X_FREQ   37.0f      // (Hz) Default peak frequency used by input shapers
   #define FTM_SHAPING_DEFAULT_Y_FREQ   37.0f      // (Hz) Default peak frequency used by input shapers
   #define FTM_LINEAR_ADV_DEFAULT_ENA   false      // Default linear advance enable (true) or disable (false)
   #define FTM_LINEAR_ADV_DEFAULT_K      0.0f      // Default linear advance gain
-  #define FTM_SHAPING_ZETA_X            0.1f      // Zeta used by input shapers for X axis
-  #define FTM_SHAPING_ZETA_Y            0.1f      // Zeta used by input shapers for Y axis
+  #define FTM_SHAPING_DEFAULT_ZETA_X    0.1f      // Zeta used by input shapers for X axis
+  #define FTM_SHAPING_DEFAULT_ZETA_Y    0.1f      // Zeta used by input shapers for Y axis
 
-  #define FTM_SHAPING_V_TOL_X           0.05f     // Vibration tolerance used by EI input shapers for X axis
-  #define FTM_SHAPING_V_TOL_Y           0.05f     // Vibration tolerance used by EI input shapers for Y axis
+  #define FTM_SHAPING_DEFAULT_V_TOL_X  0.05f      // Vibration tolerance used by EI input shapers for X axis
+  #define FTM_SHAPING_DEFAULT_V_TOL_Y  0.05f      // Vibration tolerance used by EI input shapers for Y axis
 
   //#define FT_MOTION_MENU                        // Provide a MarlinUI menu to set M493 parameters
 
@@ -1182,38 +1183,28 @@
   #endif
 
   #define FTM_FS                     1000         // (Hz) Frequency for trajectory generation. (Reciprocal of FTM_TS)
-  #define FTM_TS                        0.001f    // (s) Time step for trajectory generation. (Reciprocal of FTM_FS)
+  #define FTM_TS                     0.001f       // (s) Time step for trajectory generation. (Reciprocal of FTM_FS)
 
-  // These values may be configured to adjust the duration of loop().
-  #define FTM_STEPS_PER_LOOP           60         // Number of stepper commands to generate each loop()
-  #define FTM_POINTS_PER_LOOP         100         // Number of trajectory points to generate each loop()
+  #define FTM_STEPPER_FS           40000          // (Hz) Frequency for stepper I/O update
 
-  #if DISABLED(COREXY)
-    #define FTM_STEPPER_FS          20000         // (Hz) Frequency for stepper I/O update
-
-    // Use this to adjust the time required to consume the command buffer.
-    // Try increasing this value if stepper motion is choppy.
-    #define FTM_STEPPERCMD_BUFF_SIZE 3000         // Size of the stepper command buffers
-                                                  // (FTM_STEPS_PER_LOOP * FTM_POINTS_PER_LOOP) is a good start
-                                                  // If you run out of memory, fall back to 3000 and increase progressively
-  #else
-    // CoreXY motion needs a larger buffer size. These values are based on our testing.
-    #define FTM_STEPPER_FS          30000
-    #define FTM_STEPPERCMD_BUFF_SIZE 6000
-  #endif
+  // Use this to adjust the time required to consume the command buffer.
+  // Try increasing this value if stepper motion is choppy.
+  #define FTM_STEPPERCMD_BUFF_SIZE 12000          // Size of the stepper command buffers. Increase if there is any
+                                                  // stutter in stepper motion. Decrease if memory is an issue.
 
   #define FTM_STEPS_PER_UNIT_TIME (FTM_STEPPER_FS / FTM_FS)       // Interpolated stepper commands per unit time
   #define FTM_CTS_COMPARE_VAL (FTM_STEPS_PER_UNIT_TIME / 2)       // Comparison value used in interpolation algorithm
   #define FTM_MIN_TICKS ((STEPPER_TIMER_RATE) / (FTM_STEPPER_FS)) // Minimum stepper ticks between steps
 
-  #define FTM_MIN_SHAPE_FREQ           10         // Minimum shaping frequency
-  #define FTM_RATIO (FTM_FS / FTM_MIN_SHAPE_FREQ) // Factor for use in FTM_ZMAX. DON'T CHANGE.
-  #define FTM_ZMAX (FTM_RATIO * 2)                // Maximum delays for shaping functions (even numbers only!)
-                                                  // Calculate as:
-                                                  //   ZV       : FTM_RATIO / 2
-                                                  //   ZVD, MZV : FTM_RATIO
-                                                  //   2HEI     : FTM_RATIO * 3 / 2
-                                                  //   3HEI     : FTM_RATIO * 2
+  #define FTM_MIN_SHAPE_FREQ           10               // Minimum shaping frequency
+  #define FTM_N_IS_PERIOD (FTM_FS / FTM_MIN_SHAPE_FREQ) // Number of time steps of period of minimum shaper
+                                                        // frequency, for use in FTM_ZMAX. DON'T CHANGE.
+  #define FTM_ZMAX (FTM_N_IS_PERIOD * 2)                // Maximum delays for shaping functions (even numbers only!)
+                                                        // Calculate as:
+                                                        //   ZV       : FTM_N_IS_PERIOD / 2
+                                                        //   ZVD, MZV : FTM_N_IS_PERIOD
+                                                        //   2HEI     : FTM_N_IS_PERIOD * 3 / 2
+                                                        //   3HEI     : FTM_N_IS_PERIOD * 2
 #endif
 
 /**
@@ -1314,9 +1305,9 @@
 #define SLOWDOWN
 #if ENABLED(SLOWDOWN)
   #if ANY(TAZPro, TAZProXT, TAXProV2)
-    #define SLOWDOWN_DIVISOR 16
+    #define SLOWDOWN_DIVISOR 2
   #else
-    #define SLOWDOWN_DIVISOR 8
+    #define SLOWDOWN_DIVISOR 2
   #endif
 #endif
 
@@ -2760,7 +2751,7 @@
 // @section motion
 
 // Moves (or segments) with fewer steps than this will be joined with the next move
-#define MIN_STEPS_PER_SEGMENT 6
+#define MIN_STEPS_PER_SEGMENT 15
 
 /**
  * Minimum delay before and after setting the stepper DIR (in ns)
@@ -2818,11 +2809,11 @@
 
 // The number of linear moves that can be in the planner at once.
 #if ALL(HAS_MEDIA, DIRECT_STEPPING)
-  #define BLOCK_BUFFER_SIZE  8
+  #define BLOCK_BUFFER_SIZE  64
 #elif HAS_MEDIA
-  #define BLOCK_BUFFER_SIZE 16
+  #define BLOCK_BUFFER_SIZE 64
 #else
-  #define BLOCK_BUFFER_SIZE 16
+  #define BLOCK_BUFFER_SIZE 64
 #endif
 
 // @section serial
@@ -2830,9 +2821,9 @@
 // The ASCII buffer for serial input
 #define MAX_CMD_SIZE 96
 #if ANY(TAZPro, TAZProXT, TAXProV2)
-  #define BUFSIZE 16
+  #define BUFSIZE 64
 #else
-  #define BUFSIZE 8
+  #define BUFSIZE 64
 #endif
 
 // Transmission to Host Buffer Size
@@ -2848,7 +2839,7 @@
 // Without XON/XOFF flow control (see SERIAL_XON_XOFF below) 32 bytes should be enough.
 // To use flow control, set this buffer size to at least 1024 bytes.
 // :[0, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048]
-//#define RX_BUFFER_SIZE 1024
+#define RX_BUFFER_SIZE 2048
 
 #if RX_BUFFER_SIZE >= 1024
   // Enable to have the controller send XON/XOFF control characters to

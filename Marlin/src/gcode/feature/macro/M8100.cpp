@@ -56,63 +56,63 @@ void GcodeSuite::M8100()
             #if defined(MATERIAL_1_PURGE_PATTERN)
               process_subcommands_now(F(MATERIAL_1_PURGE_PATTERN));
             #else
-              SERIAL_ERROR_MSG(STR_UNKNOWM_FILAMENT_PURGE_PATTERN);
+              SERIAL_ERROR_MSG(STR_UNKNOWN_FILAMENT_PURGE_PATTERN);
             #endif
             break;
           case 2:
             #if defined(MATERIAL_2_PURGE_PATTERN)
               process_subcommands_now(F(MATERIAL_2_PURGE_PATTERN));
             #else
-              SERIAL_ERROR_MSG(STR_UNKNOWM_FILAMENT_PURGE_PATTERN);
+              SERIAL_ERROR_MSG(STR_UNKNOWN_FILAMENT_PURGE_PATTERN);
             #endif
             break;
           case 3:
             #if defined(MATERIAL_3_PURGE_PATTERN)
               process_subcommands_now(F(MATERIAL_3_PURGE_PATTERN));
             #else
-              SERIAL_ERROR_MSG(STR_UNKNOWM_FILAMENT_PURGE_PATTERN);
+              SERIAL_ERROR_MSG(STR_UNKNOWN_FILAMENT_PURGE_PATTERN);
             #endif
             break;
           case 4:
             #if defined(MATERIAL_4_PURGE_PATTERN)
               process_subcommands_now(F(MATERIAL_4_PURGE_PATTERN));
             #else
-              SERIAL_ERROR_MSG(STR_UNKNOWM_FILAMENT_PURGE_PATTERN);
+              SERIAL_ERROR_MSG(STR_UNKNOWN_FILAMENT_PURGE_PATTERN);
             #endif
             break;
           case 5:
             #if defined(MATERIAL_5_PURGE_PATTERN)
               process_subcommands_now(F(MATERIAL_5_PURGE_PATTERN));
             #else
-              SERIAL_ERROR_MSG(STR_UNKNOWM_FILAMENT_PURGE_PATTERN);
+              SERIAL_ERROR_MSG(STR_UNKNOWN_FILAMENT_PURGE_PATTERN);
             #endif
             break;
           case 6:
             #if defined(MATERIAL_6_PURGE_PATTERN)
               process_subcommands_now(F(MATERIAL_6_PURGE_PATTERN));
             #else
-              SERIAL_ERROR_MSG(STR_UNKNOWM_FILAMENT_PURGE_PATTERN);
+              SERIAL_ERROR_MSG(STR_UNKNOWN_FILAMENT_PURGE_PATTERN);
             #endif
             break;
           case 7:
             #if defined(MATERIAL_7_PURGE_PATTERN)
               process_subcommands_now(F(MATERIAL_7_PURGE_PATTERN));
             #else
-              SERIAL_ERROR_MSG(STR_UNKNOWM_FILAMENT_PURGE_PATTERN);
+              SERIAL_ERROR_MSG(STR_UNKNOWN_FILAMENT_PURGE_PATTERN);
             #endif
             break;
           case 8:
             #if defined(MATERIAL_8_PURGE_PATTERN)
               process_subcommands_now(F(MATERIAL_8_PURGE_PATTERN));
             #else
-              SERIAL_ERROR_MSG(STR_UNKNOWM_FILAMENT_PURGE_PATTERN);
+              SERIAL_ERROR_MSG(STR_UNKNOWN_FILAMENT_PURGE_PATTERN);
             #endif
             break;
           case 9:
             #if defined(MATERIAL_9_PURGE_PATTERN)
               process_subcommands_now(F(MATERIAL_9_PURGE_PATTERN));
             #else
-              SERIAL_ERROR_MSG(STR_UNKNOWM_FILAMENT_PURGE_PATTERN);
+              SERIAL_ERROR_MSG(STR_UNKNOWN_FILAMENT_PURGE_PATTERN);
             #endif
             break;
 

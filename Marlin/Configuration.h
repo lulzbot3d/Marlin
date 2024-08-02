@@ -3581,6 +3581,51 @@
   #endif
 #endif
 
+#define CUSTOM_MATERIAL_PURGE_PATTERN
+
+#if ENABLED(CUSTOM_MATERIAL_PURGE_PATTERN)
+
+  #define DEFAUL_PURGE_PATTERN_FEEDRATE 30
+
+  // Other Material
+  // _______________
+  //
+  #define MATERIAL_1_PURGE_PATTERN "M117 Purging...\nG91\nG1 Y100 E12\nG90"
+
+  // ABS
+  // _   _   _   _
+  //  \_/ \_/ \_/ \_
+  #define MATERIAL_2_PURGE_PATTERN "M117 Purging ABS...\nG91\nG1 Y10 E1.7\nG1 Y10 X10 E1.7\nG1 Y10 E1.7\nG1 Y10 X-10 E1.7\nG1 Y10 E1.7\nG1 Y10 X10 E1.7\nG1 Y10 E1.7\nG1 Y10 X-10 E1.7\nG1 Y10 E1.7\nG1 Y10 X10 E1.7\nG90"
+
+  // TPU
+  // \/\/\/\/\/\/\/
+  #define MATERIAL_3_PURGE_PATTERN "M117 Purging TPU...\nG91\nG1 X10 Y10 E1.7\nG1 X-10 Y10 E1.7\nG1 X10 Y10 E1.7\nG1 X-10 Y10 E1.7\nG1 X10 Y10 E1.7\nG1 X-10 Y10 E1.7\nG1 X10 Y10 E1.7\nG1 X-10 Y10 E1.7\nG1 X10 Y10 E1.7\nG90"
+
+  // PETg
+  //
+  // \|\|\|\|\|\|\|
+  #define MATERIAL_4_PURGE_PATTERN "M117 Purging PETg...\nG91\nG1 Y10 E1.1\nG1 Y20 X10 E2.2\nG1X-10 E1.1\nG1 Y20 X10 E2.2\nG1X-10 E1.1\nG1 Y20 X10 E2.2\nG1X-10 E1.1\nG1 Y20 X10 E2.2\nG90"
+
+  // PLA
+  //    _   _   _
+  // |_| |_| |_| |_|
+  #define MATERIAL_5_PURGE_PATTERN "M117 Purging PLA...\nG91\nG1 Y10 E0.85\nG1 X10 E0.85\nG1 Y10 E0.85\nG1 X-10 E0.85\nG1 Y10 E0.85\nG1 X10 E0.85\nG1 Y10 E0.85\nG1 X-10 E0.85\nG1 Y10 E0.85\nG1 X10 E0.85\nG1 Y10 E0.85\nG1 X-10 E0.85\nG1 Y10 E0.85\nG1 X10 E0.85\nG1 Y10 E0.85\nG1 X-10 E0.85\nG1 Y10 E0.85\nG1 X10 E0.85\nG1 Y10 E0.85\nG90"
+
+  // PVA
+  // __ ___ ___ ___
+  //  /_\ /_\ /_\ /_
+  //#define MATERIAL_6_PURGE_PATTERN "M117 Purging PVA...\nG91\n"
+
+  // PC
+  // __   __   __
+  //  /__/ /__/ /__/
+  //#define MATERIAL_7_PURGE_PATTERN "M117 Purging PC...\nG91\n"
+
+  // ASA
+  // _   _
+  //  \_/ \|\|\|\|\|
+  //#define MATERIAL_7_PURGE_PATTERN "M117 Purging ASA...\nG91\n"
+#endif
 
 // @section host
 

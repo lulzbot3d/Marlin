@@ -274,6 +274,7 @@
  * M702 - Unload filament (Requires FILAMENT_LOAD_UNLOAD_GCODES)
  * M808 - Set or Goto a Repeat Marker (Requires GCODE_REPEAT_MARKERS)
  * M810-M819 - Define/execute a G-code macro (Requires GCODE_MACROS)
+ * M8100 - Create Custom matiral purge lines (Requires CUSTOM_MATERIAL_PURGE_PATTERN)
  * M851 - Set Z probe's XYZ offsets in current units. (Negative values: X=left, Y=front, Z=below)
  * M852 - Set skew factors: "M852 [I<xy>] [J<xz>] [K<yz>]". (Requires SKEW_CORRECTION_GCODE, plus SKEW_CORRECTION_FOR_Z for IJ)
  *
@@ -1169,6 +1170,10 @@ private:
 
   #if ENABLED(GCODE_MACROS)
     static void M810_819();
+  #endif
+
+  #if ENABLED(CUSTOM_MATERIAL_PURGE_PATTERN)
+    static void M8100();
   #endif
 
   #if HAS_BED_PROBE

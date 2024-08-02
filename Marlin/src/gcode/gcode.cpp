@@ -993,6 +993,10 @@ void GcodeSuite::process_parsed_command(const bool no_ok/*=false*/) {
         M810_819(); break;                                        // M810-M819: Define/execute G-code macro
       #endif
 
+      #if ENABLED(CUSTOM_MATERIAL_PURGE_PATTERN)
+        case 8100: M8100(); break;                                // M8100: Create Custom matiral purge lines
+      #endif
+
       #if HAS_BED_PROBE
         case 851: M851(); break;                                  // M851: Set Z Probe Z Offset
       #endif

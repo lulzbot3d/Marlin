@@ -68,19 +68,11 @@
 //
 // Limit Switches
 //
+// Only use Diag Pins when SENSORLESS_HOMING is enabled for the TMC2130 drivers.
+// Otherwise use a physical endstop based configuration.
 
-#if ENABLED(SENSORLESS_HOMING)
-
-  // Only use Diag Pins when SENSORLESS_HOMING is enabled for the TMC2130 drivers.
-  // Otherwise use a physical endstop based configuration.
-
-  // TMC2130 Diag Pins
-  #define X_DIAG_PIN                          59  // PA4
-  #define Y_DIAG_PIN                          48  // PC15
-  #define Z_DIAG_PIN                          36  // PC4
-  #define E0_DIAG_PIN                         78  // PB23
-  #define E1_DIAG_PIN                         25  // PD0
-
+#if defined(X_STALL_SENSITIVITY)
+  #define X_DIAG_PIN                          59  // PA4 TMC2130 Diag Pins
   #if X_HOME_TO_MIN
     #define X_MIN_PIN                 X_DIAG_PIN
     #define X_MAX_PIN                         32
@@ -88,7 +80,15 @@
     #define X_MIN_PIN                         14
     #define X_MAX_PIN                 X_DIAG_PIN
   #endif
+#else
+  #define X_MIN_PIN                           14  // PD4 MIN ES1
+  #if DISABLED(TAZProV2)
+    #define X_MAX_PIN                         32  // PD10 MAX ES1
+  #endif
+#endif
 
+#if defined(Y_STALL_SENSITIVITY)
+  #define Y_DIAG_PIN                          48  // PC15 TMC2130 Diag Pins
   #if Y_HOME_TO_MIN
     #define Y_MIN_PIN                 Y_DIAG_PIN
     #define Y_MAX_PIN                         15
@@ -96,25 +96,27 @@
     #define Y_MIN_PIN                         29
     #define Y_MAX_PIN                 Y_DIAG_PIN
   #endif
-
 #else
-
-  #define X_MIN_PIN                           14  // PD4 MIN ES1
-  #if DISABLED(TAZProV2)
-    #define X_MAX_PIN                           32  // PD10 MAX ES1
-  #endif
   #define Y_MIN_PIN                           29  // PD6 MIN ES2
   #define Y_MAX_PIN                           15  // PD5 MAX ES2   NOTE: TAZProV2 uses this as second Z Max limit
 #endif
 
-#if ENABLED(LULZBOT_BLTouch, TAZProV2)
-  #define Z_MIN_PIN        108  // D108 PB9 (Header J20 13)
-#elif ENABLED(LULZBOT_BLTouch) && DISABLED(TAZProV2)
-  #define Z_MIN_PIN        63   // PB18/RD/PWML2/AD11 THERM AN2
+#if defined(Z_STALL_SENSITIVITY)
+  #define Z_DIAG_PIN                          36  // PC4 TMC2130 Diag Pins
 #else
-  #define Z_MIN_PIN        31   // PA7 MIN ES3
+  #if ENABLED(LULZBOT_BLTouch, TAZProV2)
+    #define Z_MIN_PIN        108  // D108 PB9 (Header J20 13)
+  #elif ENABLED(LULZBOT_BLTouch) && DISABLED(TAZProV2)
+    #define Z_MIN_PIN        63   // PB18/RD/PWML2/AD11 THERM AN2
+  #else
+    #define Z_MIN_PIN        31   // PA7 MIN ES3
+  #endif
+  #define Z_MAX_PIN                             30  // PD9 MAX ES3
 #endif
-#define Z_MAX_PIN                             30  // PD9 MAX ES3
+
+#define E0_DIAG_PIN                         78  // PB23
+#define E1_DIAG_PIN                         25  // PD0
+
 
 //
 // Z Probe (when not Z_MIN_PIN)

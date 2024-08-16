@@ -3624,13 +3624,17 @@
 
   #if ANY(SENSORLESS_HOMING, SENSORLESS_PROBING)
     // TMC2209: 0...255. TMC2130: -64...63
-    #if ANY(TAZPro, TAZProXT, TAZProV2)
-      #if ANY(TOOLHEAD_Legacy_Universal, TOOLHEAD_Galaxy_Series)
-        #define X_STALL_SENSITIVITY  4
-        #define Y_STALL_SENSITIVITY  4
+    #if ANY(TAZPro, TAZProXT)
+      #if ENABLED(LULZBOT_LONG_BED_V2)
+        #define X_STALL_SENSITIVITY  4 //only use X sensorless homing
       #else
-        #define X_STALL_SENSITIVITY  4
-        #define Y_STALL_SENSITIVITY  4
+        #if ANY(TOOLHEAD_Legacy_Universal, TOOLHEAD_Galaxy_Series)
+          #define X_STALL_SENSITIVITY  4
+          #define Y_STALL_SENSITIVITY  4
+        #else
+          #define X_STALL_SENSITIVITY  4
+          #define Y_STALL_SENSITIVITY  4
+        #endif
       #endif
     #elif ANY(MiniV2, Sidekick_289, Sidekick_747)
       #define X_STALL_SENSITIVITY  3

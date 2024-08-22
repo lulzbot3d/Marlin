@@ -391,7 +391,7 @@ void StatusScreen::draw_interaction_buttons(draw_mode_t what) {
           draw_text_box(cmd, TOOL_HEAD_POS, F(" \nNone Selected"), OPT_CENTER, font_small);
           break;
         case 1:
-          draw_text_box(cmd, TOOL_HEAD_POS, F(" \nM175"), OPT_CENTER, font_small);
+          draw_text_box(cmd, TOOL_HEAD_POS, F(" \nM175v2"), OPT_CENTER, font_small);
           break;
         case 2:
           draw_text_box(cmd, TOOL_HEAD_POS, F(" \nSL"), OPT_CENTER, font_small);

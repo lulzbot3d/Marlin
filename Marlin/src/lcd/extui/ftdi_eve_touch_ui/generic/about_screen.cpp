@@ -75,7 +75,7 @@ void AboutScreen::onRedraw(draw_mode_t) {
     switch(getToolHeadIdNumber()){
       case 1:
       draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
-        "M175"
+        "M175v2"
       ), OPT_CENTER, font_large);
       break;
       case 2:

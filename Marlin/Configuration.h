@@ -2410,7 +2410,7 @@
 #else
   #define INVERT_X_DIR true
 #endif
-#if ANY(MiniV2, MiniV3, LULZBOT_LONG_BED_V2)
+#if ANY(MiniV2, MiniV3)
   #define INVERT_Y_DIR false
 #else
   #define INVERT_Y_DIR true
@@ -2586,15 +2586,15 @@
     #define LULZBOT_Z_MIN_POS -9
     #define LULZBOT_Z_MAX_POS 289
   #elif defined(LULZBOT_LONG_BED_V2)
-    #define X_BED_SIZE        280
-    #define Y_BED_SIZE        570
+    #define X_BED_SIZE        294
+    #define Y_BED_SIZE        594
     // Travel limits (mm) after homing, corresponding to endstop positions.
-    #define LULZBOT_X_MAX_POS 310
-    #define LULZBOT_X_MIN_POS -6
-    #define LULZBOT_Y_MAX_POS 613
-    #define LULZBOT_Y_MIN_POS -18.2//-15
-    #define LULZBOT_Z_MIN_POS -9
-    #define LULZBOT_Z_MAX_POS 289
+    #define LULZBOT_X_MAX_POS 307
+    #define LULZBOT_X_MIN_POS -2
+    #define LULZBOT_Y_MAX_POS 615
+    #define LULZBOT_Y_MIN_POS -51//-15
+    #define LULZBOT_Z_MIN_POS -5
+    #define LULZBOT_Z_MAX_POS 297
   #else
     #define X_BED_SIZE 284
     #define Y_BED_SIZE 286
@@ -3488,7 +3488,7 @@
   #define NOZZLE_CLEAN_FEATURE
 #endif
 
-#if ENABLED(LULZBOT_MANUAL_NOZZLE_CLEAN)
+#if ANY(LULZBOT_MANUAL_NOZZLE_CLEAN, LULZBOT_LONG_BED_V2)
   #define MANUAL_NOZZLE_CLEAN
 #endif
 

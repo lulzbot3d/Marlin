@@ -1407,7 +1407,7 @@
   //#define CALIBRATION_REPORTING
 
   #if ENABLED(TAZProV2)
-    #define CALIBRATION_MEASUREMENT_UNKNOWN 2
+    #define CALIBRATION_MEASUREMENT_UNKNOWN 8
   #else
       #define CALIBRATION_MEASUREMENT_UNKNOWN 5
   #endif
@@ -1454,9 +1454,10 @@
         #define CALIBRATION_OBJECT_CENTER     {261.5, -14.5, -2.0} //  mm
         #define CALIBRATION_OBJECT_DIMENSIONS {10.0, 10.0, 10.0} //  mm
         #define CALIBRATION_MEASURE_FRONT
-      #elif ANY(LULZBOT_LONG_BED, LULZBOT_LONG_BED_V2)
-        #define CALIBRATION_OBJECT_CENTER     {260,-18,-2.0} //  mm
-        #define CALIBRATION_OBJECT_DIMENSIONS {10.0,  10.0, 10.0} //  mm
+      #elif ENABLED(LULZBOT_LONG_BED_V2)
+        #define CALIBRATION_OBJECT_CENTER     {269,-11, 2.0} //  mm
+        #define CALIBRATION_OBJECT_DIMENSIONS {10.0,  10.0, 5.0} //  mm
+        #define CALIBRATION_MEASURE_FRONT
       #else
         #define CALIBRATION_OBJECT_CENTER     {265,-13.5,-2.0} //  mm
         #define CALIBRATION_OBJECT_DIMENSIONS {10.0,  1.0, 10.0} //  mm

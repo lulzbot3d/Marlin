@@ -74,8 +74,7 @@ void MainMenu::onRedraw(draw_mode_t what) {
     cmd.tag(4).button(BACKLASH_POS,          GET_TEXT_F(MSG_BACKLASH))
        .tag(5).button(CLEAN_NOZZLE_POS,      GET_TEXT_F(MSG_CLEAN_NOZZLE))
        .tag(6).button(TEMPERATURE_POS,       GET_TEXT_F(MSG_TEMPERATURE))
-          .enabled(ENABLED(HAS_MULTI_HOTEND))
-       .tag(7).button(EXTRUDER_OFFSET_POS,   GET_TEXT_F(MSG_OFFSETS_MENU))
+       .tag(7).button(EXTRUDER_OFFSET_POS,   GET_TEXT_F(TERN(HAS_MULTI_HOTEND, MSG_OFFSETS_MENU, MSG_FILAMENT)))
           .enabled(DISABLED(TOUCH_UI_LULZBOT_BIO))
        .tag(8).button(ADVANCED_SETTINGS_POS, GET_TEXT_F(MSG_ADVANCED_SETTINGS))
           .enabled(ENABLED(HAS_LEVELING))
@@ -104,9 +103,7 @@ bool MainMenu::onTouchEnd(uint8_t tag) {
       #endif
       break;
     case 6:  GOTO_SCREEN(TemperatureScreen);                             break;
-    #if HAS_MULTI_HOTEND
-      case 7: GOTO_SCREEN(NozzleOffsetScreen);                           break;
-    #endif
+    case 7: GOTO_SCREEN(TERN(HAS_MULTI_HOTEND, NozzleOffsetScreen, FilamentMenu));                           break;
     case 8:  GOTO_SCREEN(AdvancedSettingsMenu);                          break;
     #if HAS_LEVELING
       case 9:  GOTO_SCREEN(LevelingMenu);                                break;

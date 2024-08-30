@@ -1142,6 +1142,7 @@ void tool_change(const uint8_t new_tool, bool no_move/*=false*/) {
 
   #elif HAS_MULTI_EXTRUDER
 
+    DEBUG_ECHOLNPGM("Current Pos on Tool Change Entry { ", current_position.x, ", ", current_position.y, ", ", current_position.z, " }");
     planner.synchronize();
 
     #if ENABLED(DUAL_X_CARRIAGE)  // Only T0 allowed if the Printer is in DXC_DUPLICATION_MODE or DXC_MIRRORED_MODE
@@ -1217,8 +1218,6 @@ void tool_change(const uint8_t new_tool, bool no_move/*=false*/) {
         }
       #endif
 
-      TERN_(SWITCHING_NOZZLE_TWO_SERVOS, raise_nozzle(old_tool));
-
       REMEMBER(fr, feedrate_mm_s, XY_PROBE_FEEDRATE_MM_S);
 
       #if HAS_SOFTWARE_ENDSTOPS
@@ -1282,20 +1281,29 @@ void tool_change(const uint8_t new_tool, bool no_move/*=false*/) {
         magnetic_switching_toolhead_tool_change(new_tool, no_move);
       #elif ENABLED(ELECTROMAGNETIC_SWITCHING_TOOLHEAD)                 // Magnetic Switching ToolChanger
         em_switching_toolhead_tool_change(new_tool, no_move);
-      #elif ENABLED(SWITCHING_NOZZLE) && !SWITCHING_NOZZLE_TWO_SERVOS   // Switching Nozzle (single servo)
+      #elif ENABLED(SWITCHING_NOZZLE)   // Switching Nozzle
         // Raise by a configured distance to avoid workpiece, except with
         // SWITCHING_NOZZLE_TWO_SERVOS, as both nozzles will lift instead.
+        TERN_(SWITCHING_NOZZLE_TWO_SERVOS, raise_nozzle(old_tool));
         if (!no_move) {
+          DEBUG_ECHOLNPGM("Current Pos Post Raise Nozzle { ", current_position.x, ", ", current_position.y, ", ", current_position.z, " }");
           const float newz = current_position.z + _MAX(-diff.z, 0.0);
-
+          DEBUG_ECHOLNPGM("Switching Offset Tool XYZ by { ", diff.x, ", ", diff.y, ", ", diff.z, " }");
           // Check if Z has space to compensate at least z_offset, and if not, just abort now
           const float maxz = _MIN(TERN(HAS_SOFTWARE_ENDSTOPS, soft_endstop.max.z, Z_MAX_POS), Z_MAX_POS);
           if (newz > maxz) return;
-
+          DEBUG_ECHOLNPGM("New / Max Z / Curr Z { ", newz, ", ", maxz ", ", current_position.z, " }");
           current_position.z = _MIN(newz + toolchange_settings.z_raise, maxz);
           fast_line_to_current(Z_AXIS);
         }
-        move_nozzle_servo(new_tool);
+
+        #if SWITCHING_NOZZLE_TWO_SERVOS
+         lower_nozzle(new_tool);
+        #else
+          move_nozzle_servo(new_tool);
+        #endif
+
+        DEBUG_ECHOLNPGM("Current Pos Post Lower Nozzle { ", current_position.x, ", ", current_position.y, ", ", current_position.z, " }");
       #elif ANY(MECHANICAL_SWITCHING_EXTRUDER, MECHANICAL_SWITCHING_NOZZLE)
         if (!no_move) {
           current_position.z = _MIN(current_position.z + toolchange_settings.z_raise, _MIN(TERN(HAS_SOFTWARE_ENDSTOPS, soft_endstop.max.z, Z_MAX_POS), Z_MAX_POS));

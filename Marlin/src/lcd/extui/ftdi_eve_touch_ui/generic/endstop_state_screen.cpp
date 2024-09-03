@@ -53,7 +53,7 @@ void EndstopStatesScreen::onRedraw(draw_mode_t) {
 
   cmd.font(TERN(TOUCH_UI_PORTRAIT, font_large, font_medium))
   .text(BTN_POS(1,1), BTN_SIZE(6,1), GET_TEXT_F(MSG_LCD_ENDSTOPS))
-  .font(font_tiny);
+  .font(font_small);
   #if USE_X_MAX
     PIN_ENABLED (1, 2, PSTR(STR_X_MAX), X_MAX, X_MAX_ENDSTOP_HIT_STATE)
   #else

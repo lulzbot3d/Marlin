@@ -685,6 +685,7 @@ namespace LanguageNarrow_en {
   LSTR MSG_MESH_LEVELING                  = _UxGT("Mesh Leveling");
   LSTR MSG_MESH_DONE                      = _UxGT("Mesh probing done");
   LSTR MSG_INFO_PRINTER_STATS_MENU        = _UxGT("Printer Stats");
+  LSTR MSG_INFO_3D_PRINTER_STATS_MENU     = _UxGT("3D Printer Stats");
   LSTR MSG_INFO_STATS_MENU                = _UxGT("Stats");
   LSTR MSG_RESET_STATS                    = _UxGT("Reset Print Stats?");
   LSTR MSG_INFO_BOARD_MENU                = _UxGT("Board Info");
@@ -722,9 +723,13 @@ namespace LanguageNarrow_en {
   LSTR MSG_PLEASE_PREHEAT                 = _UxGT("Please Preheat");          // ProUI
 
   LSTR MSG_INFO_PRINT_COUNT               = _UxGT("Prints");
+  LSTR MSG_INFO__STARTED_PRINT_COUNT      = _UxGT("Prints Started");
   LSTR MSG_INFO_PRINT_TIME                = _UxGT("Total");
+  LSTR MSG_INFO_PRINT_TIME_HOURS          = _UxGT("Total Print Hr");
   LSTR MSG_INFO_PRINT_LONGEST             = _UxGT("Longest");
+  LSTR MSG_INFO_PRINT_LONGEST_PRINT       = _UxGT("Longest Print");
   LSTR MSG_INFO_PRINT_FILAMENT            = _UxGT("Extruded");
+  LSTR MSG_INFO_PRINT_FILAMENT_USED       = _UxGT("Filament Used");
   LSTR MSG_INFO_COMPLETED_PRINTS          = _UxGT("Completed");
   LSTR MSG_INFO_MIN_TEMP                  = _UxGT("Min Temp");
   LSTR MSG_INFO_MAX_TEMP                  = _UxGT("Max Temp");

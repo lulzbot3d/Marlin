@@ -564,7 +564,7 @@
     #define LULZBOT_SERVO_E1_DELAY                  500
     #define LULZBOT_SWITCHING_NOZZLE
     #define LULZBOT_SWITCHING_NOZZLE_E1_SERVO_NR   1
-    #define LULZBOT_SWITCHING_NOZZLE_SERVO_ANGLES  { 75,   125}
+    #define LULZBOT_SWITCHING_NOZZLE_SERVO_ANGLES  { 73,   125}
     #define LULZBOT_SWITCHING_NOZZLE_OPPOSING_SERVOS
     #define LULZBOT_HOTEND_OFFSET_X                {0.0, 44}
     #define LULZBOT_HOTEND_OFFSET_Y                {0.0,  0}//M301 E1 P16.68 I1.07 D64.7
@@ -985,9 +985,9 @@
   #define MAX31865_CALIBRATION_OHMS_2 430
 #endif
 
-#define TEMP_RESIDENCY_TIME          5  // (seconds) Time to wait for hotend to "settle" in M109
-#define TEMP_WINDOW                  3  // (°C) Temperature proximity for the "temperature reached" timer
-#define TEMP_HYSTERESIS              3  // (°C) Temperature proximity considered "close enough" to the target
+#define TEMP_RESIDENCY_TIME          1  // (seconds) Time to wait for hotend to "settle" in M109
+#define TEMP_WINDOW                 10  // (°C) Temperature proximity for the "temperature reached" timer
+#define TEMP_HYSTERESIS             10  // (°C) Temperature proximity considered "close enough" to the target
 
 #define TEMP_BED_RESIDENCY_TIME      5  // (seconds) Time to wait for bed to "settle" in M190
 #define TEMP_BED_WINDOW              1  // (°C) Temperature proximity for the "temperature reached" timer
@@ -1780,7 +1780,7 @@
   #if defined(LULZBOT_LONG_BED)
     #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 160, 500, LULZBOT_E_STEPS }
   #elif defined(LULZBOT_LONG_BED_V2)
-    #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 207, 500, LULZBOT_E_STEPS }
+    #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 191.5, 500, LULZBOT_E_STEPS }  // using 5.18:1 for Y axis
   #else
     #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 100, 500, LULZBOT_E_STEPS }
   #endif
@@ -1813,7 +1813,11 @@
   #define Z_FEEDRATE   25             // <-- changed: LDO geared motor max feedrate
 #endif
 
-#define DEFAULT_MAX_FEEDRATE          { 500, 500, Z_FEEDRATE, 40 }
+#if ANY(LULZBOT_LONG_BED, LULZBOT_LONG_BED_V2)
+  #define DEFAULT_MAX_FEEDRATE          { 500, 125, Z_FEEDRATE, 40 }
+#else
+  #define DEFAULT_MAX_FEEDRATE          { 500, 500, Z_FEEDRATE, 40 }
+#endif
 
 #define LIMITED_MAX_FR_EDITING        // Limit edit via M203 or LCD to DEFAULT_MAX_FEEDRATE * 2
 #if ENABLED(LIMITED_MAX_FR_EDITING)
@@ -1836,7 +1840,11 @@
   #define X_Y_MAX_ACCELERATION   4000
 #endif
 
-#define DEFAULT_MAX_ACCELERATION      { X_Y_MAX_ACCELERATION, X_Y_MAX_ACCELERATION, 100, 9000 }
+#if ANY(LULZBOT_LONG_BED, LULZBOT_LONG_BED_V2)
+  #define DEFAULT_MAX_ACCELERATION      { X_Y_MAX_ACCELERATION, (X_Y_MAX_ACCELERATION/2), 100, 9000 }
+#else
+  #define DEFAULT_MAX_ACCELERATION      { X_Y_MAX_ACCELERATION, X_Y_MAX_ACCELERATION, 100, 9000 }
+#endif
 
 #define LIMITED_MAX_ACCEL_EDITING     // Limit edit via M201 or LCD to DEFAULT_MAX_ACCELERATION * 2
 #if ENABLED(LIMITED_MAX_ACCEL_EDITING)
@@ -2006,7 +2014,7 @@
 #if ENABLED(LULZBOT_BLTouch)
   #define BLTOUCH
   #define LULZBOT_PROBE_TYPE "BLTouch"
-  #if NONE(Sidekick_289, Sidekick_747)  // Machines that come stock with a BLTouch and do not need the identifier
+  #if NONE(Sidekick_289, Sidekick_747, TAZProV2)  // Machines that come stock with a BLTouch and do not need the identifier
     #define LULZBOT_SHORT_PROBE_TYPE " BT"
   #else
     #define LULZBOT_SHORT_PROBE_TYPE
@@ -2195,7 +2203,7 @@
 #elif ANY(TAZPro, TAZProXT) && DISABLED(LULZBOT_BLTouch)
   #define NOZZLE_TO_PROBE_OFFSET { 0, 0, -1.102 }
 #elif ANY(TAZPro, TAZProXT) && ENABLED(LULZBOT_BLTouch)
-  #define NOZZLE_TO_PROBE_OFFSET { -38, -2, -3.2 }
+  #define NOZZLE_TO_PROBE_OFFSET { -38, -2, 0 }
 #elif ENABLED(TAZProV2)
   #if ENABLED(TOOLHEAD_Galaxy_DualExtruder)
     #define NOZZLE_TO_PROBE_OFFSET { 48, 70, -3.2 }
@@ -2217,7 +2225,7 @@
 // Most probes should stay away from the edges of the bed, but
 // with NOZZLE_AS_PROBE this can be negative for a wider probing area.
 #if ANY(TazDualZ, LULZBOT_BLTouch)
-  #define PROBING_MARGIN 10
+  #define PROBING_MARGIN 20
 #else
   #if ENABLED(MiniV2)
     #define PROBING_MARGIN -4
@@ -2959,8 +2967,11 @@
  */
 //#define AUTO_BED_LEVELING_3POINT
 //#define AUTO_BED_LEVELING_LINEAR
-#define AUTO_BED_LEVELING_BILINEAR
-//#define AUTO_BED_LEVELING_UBL
+//#if NONE(TAZPro, TAZProXT, TAZProV2)
+  #define AUTO_BED_LEVELING_BILINEAR
+//#else
+  //#define AUTO_BED_LEVELING_UBL
+//#endif
 //#define MESH_BED_LEVELING
 
 /**
@@ -3084,7 +3095,7 @@
   //#define MESH_EDIT_GFX_OVERLAY   // Display a graphics overlay while editing the mesh
 
   #define MESH_INSET 0              // Set Mesh bounds as an inset region of the bed
-  #define GRID_MAX_POINTS_X 2      // Don't use more than 15 points per axis, implementation limited.
+  #define GRID_MAX_POINTS_X 8      // Don't use more than 15 points per axis, implementation limited.
   #define GRID_MAX_POINTS_Y GRID_MAX_POINTS_X
 
   //#define UBL_HILBERT_CURVE       // Use Hilbert distribution for less travel when probing multiple points
@@ -3098,7 +3109,7 @@
   //#define UBL_Z_RAISE_WHEN_OFF_MESH 2.5 // When the nozzle is off the mesh, this value is used
                                           // as the Z-Height correction value.
 
-  //#define UBL_MESH_WIZARD         // Run several commands in a row to get a complete mesh
+  #define UBL_MESH_WIZARD         // Run several commands in a row to get a complete mesh
 
   /**
    * Probing not allowed within the position of an obstacle.
@@ -3439,7 +3450,7 @@
   #elif ENABLED(TAZWorkhorse)
     #define PRESENT_BED_GCODE "G28 O\nG0 Y304 F10000\nG0 Y306 F10000\nM117 Printer Ready"
   #elif ANY(LULZBOT_LONG_BED, LULZBOT_LONG_BED_V2)
-    #define PRESENT_BED_GCODE "G28 O\nG0 Y511 F10000\nG0 Y513 F10000\nM117 Printer Ready"
+    #define PRESENT_BED_GCODE "G28 O\nG0 Y511 F7000\nG0 Y513 F4000\nM117 Printer Ready"
   #else
     #define PRESENT_BED_GCODE "G28 O\nG0 Y311 F10000\nG0 Y313 F10000\nM117 Printer Ready"
   #endif
@@ -3578,7 +3589,7 @@
       #define MANUAL_NOZZLE_CLEAN_COMMANDS "M117 Starting Nozzle Wipe\nM300 T"
       #define END_MANUAL_NOZZLE_CLEAN_COMMANDS "M117 Nozzle Cleaned"
     #else
-      #define MANUAL_NOZZLE_CLEAN_COMMANDS "M117 Starting Nozzles Wipe\nM300 T\nM280 P1 S75\nM280 P2 S75"
+      #define MANUAL_NOZZLE_CLEAN_COMMANDS "M117 Starting Nozzles Wipe\nM300 T\nM280 P1 S73\nM280 P2 S73"
       #define END_MANUAL_NOZZLE_CLEAN_COMMANDS "M280 P2 S125\nM117 Nozzles Cleaned"
     #endif
   #endif

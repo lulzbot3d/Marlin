@@ -1780,7 +1780,7 @@
   #if defined(LULZBOT_LONG_BED)
     #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 160, 500, LULZBOT_E_STEPS }
   #elif defined(LULZBOT_LONG_BED_V2)
-    #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 191.5, 500, LULZBOT_E_STEPS }  // using 5.18:1 for Y axis
+    #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 184.13, 500, LULZBOT_E_STEPS }  // using 5.18:1 and 30T 3mm pitched belt for Y axis
   #else
     #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 100, 500, LULZBOT_E_STEPS }
   #endif
@@ -1788,7 +1788,7 @@
   #if defined(LULZBOT_LONG_BED)
     #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 160, 518.18, LULZBOT_E_STEPS }
   #elif defined(LULZBOT_LONG_BED_V2)
-    #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 207, 518.18, LULZBOT_E_STEPS }
+    #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 184.13, 518.18, LULZBOT_E_STEPS } // using 5.18:1 and 30T 3mm pitched belt for Y axis
   #else
     #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 100, 518.18, LULZBOT_E_STEPS }
   #endif

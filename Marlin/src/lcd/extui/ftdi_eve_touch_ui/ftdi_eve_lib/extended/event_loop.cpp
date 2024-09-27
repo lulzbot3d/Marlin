@@ -136,6 +136,7 @@ namespace FTDI {
       case PAUSE_MESSAGE_STATUS: break;
       default: ExtUI::onUserConfirmRequired(PSTR("Confirm Continue")); break;
     }
+    lastPauseMsgState = ExtUI::pauseModeStatus;
   } else if (!ExtUI::awaitingUserConfirm() && !ExtUI::isPrintingPaused() && !ExtUI::getHostKeepaliveIsPaused()) {
     ConfirmUserRequestAlertBox::hide();
     FilamentPromptBox::hide();

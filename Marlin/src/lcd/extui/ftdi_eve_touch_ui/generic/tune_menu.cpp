@@ -58,7 +58,7 @@ void TuneMenu::onRedraw(draw_mode_t what) {
   #endif
 
   if (what & FOREGROUND) {
-    const bool sdOrHostPaused   = ExtUI::isPrintingPaused();
+    const bool sdOrHostPaused   = (ExtUI::isPrintingPaused() || ExtUI::awaitingUserConfirm());
 
     CommandProcessor cmd;
     cmd.colors(cancel_btn)
@@ -110,18 +110,18 @@ void TuneMenu::pausePrint() {
     // This
   sound.play(twinkle, PLAY_ASYNCHRONOUS);
 
-  if (ExtUI::isPrintingFromMedia())
-  {
+  //if (ExtUI::isPrintingFromMedia())
+  //{
     SERIAL_ECHOLNPGM("Pause: isPrintingFromMedia");
     ExtUI::pausePrint();
-  }
-  #ifdef ACTION_ON_PAUSE
-    else
-    {
-      SERIAL_ECHOLNPGM("Pause: hostui.pause");
-      hostui.pause();
-    }
-  #endif
+  //}
+  //#ifdef ACTION_ON_PAUSE
+  //  else
+  //  {
+  //    SERIAL_ECHOLNPGM("Pause: hostui.pause");
+  //    hostui.pause();
+  //  }
+  //#endif
   GOTO_SCREEN(StatusScreen);
 }
 
@@ -131,11 +131,12 @@ void TuneMenu::resumePrint() {
 
 
   // Something is wrong with this
-  if (ExtUI::awaitingUserConfirm() && ExtUI::isPrintingPaused())
+  if (ExtUI::awaitingUserConfirm())
   {
-     SERIAL_ECHOLNPGM("Resume: Awaiting User Confirm");
-     ExtUI::setPauseMenuResponse(PAUSE_RESPONSE_RESUME_PRINT);
-     ExtUI::setUserConfirmed();
+    SERIAL_ECHOLNPGM("Resume: Awaiting User Confirm");
+    if (ExtUI::pauseModeStatus == PAUSE_MESSAGE_PURGE ||ExtUI::pauseModeStatus == PAUSE_MESSAGE_OPTION)
+    ExtUI::setPauseMenuResponse(PAUSE_RESPONSE_RESUME_PRINT);
+    ExtUI::setUserConfirmed();
   }
   if (ExtUI::isPrintingFromMedia())
   {

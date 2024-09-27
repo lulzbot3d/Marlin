@@ -22,6 +22,7 @@
 /************** Uncomment Options for Printer From Below *********************/
 #if ANY(TAZPro, TAZProXT, TAZProV2)
   #define SHOW_TOOL_HEAD_ID
+  #define TOOL_HEAD_ID 0 //Set the ID to 0 so the user have to select the Tool Head
 #endif
 #define LULZBOT_FILAMENT_RUNOUT
 //#define LULZBOT_BLTouch
@@ -95,7 +96,7 @@
 // Author info of this build printed to the host during boot and M115
 #define STRING_CONFIG_H_AUTHOR "Lulzbot" // Who made the changes.
 #define CUSTOM_VERSION_FILE Version.h // Path from the root directory (no quotes)
-#define LULZBOT_FW_VERSION "2.1.3.0.31.5"
+#define LULZBOT_FW_VERSION "2.1.3.0.35"
 #define CAPABILITIES_REPORT
 #define EXTENDED_CAPABILITIES_REPORT
 
@@ -252,7 +253,7 @@
   #define MACHINE_UUID "d9a2af86-894c-11ee-b9d1-0242ac120002" // <-- changed
   #define LULZBOT_BLTouch                                     // <-- changed
   #define LULZBOT_FILAMENT_RUNOUT                             // <-- changed
-  #define LULZBOT_WIPE
+  #define LULZBOT_MANUAL_NOZZLE_CLEAN
   #define TazDualZ
   #define REMOVE_STARING_PRINT_MESSAGES
 #elif ENABLED(Sidekick_289)
@@ -293,9 +294,9 @@
  * Options: A4988, A5984, DRV8825, LV8729, TB6560, TB6600, TMC2100,
  *          TMC2130, TMC2130_STANDALONE, TMC2160, TMC2160_STANDALONE,
  *          TMC2208, TMC2208_STANDALONE, TMC2209, TMC2209_STANDALONE,
- *          TMC26X,  TMC26X_STANDALONE,  TMC2660, TMC2660_STANDALONE,
- *          TMC5130, TMC5130_STANDALONE, TMC5160, TMC5160_STANDALONE
- * :['A4988', 'A5984', 'DRV8825', 'LV8729', 'TB6560', 'TB6600', 'TMC2100', 'TMC2130', 'TMC2130_STANDALONE', 'TMC2160', 'TMC2160_STANDALONE', 'TMC2208', 'TMC2208_STANDALONE', 'TMC2209', 'TMC2209_STANDALONE', 'TMC26X', 'TMC26X_STANDALONE', 'TMC2660', 'TMC2660_STANDALONE', 'TMC5130', 'TMC5130_STANDALONE', 'TMC5160', 'TMC5160_STANDALONE']
+ *          TMC2660, TMC2660_STANDALONE, TMC5130, TMC5130_STANDALONE,
+ *          TMC5160, TMC5160_STANDALONE
+ * :['A4988', 'A5984', 'DRV8825', 'LV8729', 'TB6560', 'TB6600', 'TMC2100', 'TMC2130', 'TMC2130_STANDALONE', 'TMC2160', 'TMC2160_STANDALONE', 'TMC2208', 'TMC2208_STANDALONE', 'TMC2209', 'TMC2209_STANDALONE', 'TMC2660', 'TMC2660_STANDALONE', 'TMC5130', 'TMC5130_STANDALONE', 'TMC5160', 'TMC5160_STANDALONE']
  */
 #if ANY(TAZPro, TAZProXT, TAZProV2, MiniV2, Sidekick_289, Sidekick_747)
   #define X_DRIVER_TYPE  TMC2130
@@ -459,7 +460,6 @@
   #define LULZBOT_TOOLHEAD_Y_MIN_ADJ         0
   #define LULZBOT_TOOLHEAD_Z_MAX_ADJ         0
   #define LULZBOT_TOOLHEAD_Z_MIN_ADJ         0
-  #define TOOL_HEAD_ID                       3
   #if ANY(TAZ6, Workhorse)
     #define LULZBOT_MOTOR_CURRENT_E0         177 // Values 0-255 (RAMBO 135 = ~0.75A, 185 = ~1A)
   #else
@@ -501,7 +501,6 @@
   #define LULZBOT_TOOLHEAD_Y_MIN_ADJ         0
   #define LULZBOT_TOOLHEAD_Z_MAX_ADJ         0
   #define LULZBOT_TOOLHEAD_Z_MIN_ADJ         0
-  #define TOOL_HEAD_ID                       9
   #if ANY(TAZ6, Workhorse)
     #define LULZBOT_MOTOR_CURRENT_E0         155 // Values 0-255 (RAMBO 135 = ~0.75A, 185 = ~1A)
   #else
@@ -546,7 +545,6 @@
     #define LULZBOT_MOTOR_CURRENT_E0               960 // mA
     #define LULZBOT_MOTOR_CURRENT_E1               960 // mA
     #define SWITCHING_NOZZLE
-    #define TOOL_HEAD_ID                           13
 #endif /* TOOLHEAD_Quiver_DualExtruder */
 
 #if defined(TOOLHEAD_Galaxy_DualExtruder)
@@ -566,7 +564,7 @@
     #define LULZBOT_SERVO_E1_DELAY                  500
     #define LULZBOT_SWITCHING_NOZZLE
     #define LULZBOT_SWITCHING_NOZZLE_E1_SERVO_NR   1
-    #define LULZBOT_SWITCHING_NOZZLE_SERVO_ANGLES  { 75,   125}
+    #define LULZBOT_SWITCHING_NOZZLE_SERVO_ANGLES  { 73,   125}
     #define LULZBOT_SWITCHING_NOZZLE_OPPOSING_SERVOS
     #define LULZBOT_HOTEND_OFFSET_X                {0.0, 44}
     #define LULZBOT_HOTEND_OFFSET_Y                {0.0,  0}//M301 E1 P16.68 I1.07 D64.7
@@ -576,7 +574,6 @@
     #define LULZBOT_MOTOR_CURRENT_E0               850 // mA
     #define LULZBOT_MOTOR_CURRENT_E1               850 // mA
     #define SWITCHING_NOZZLE
-    #define TOOL_HEAD_ID                           12
     /********************* MPC Settings **********************/
     #define LULZBOT_TOOLHEAD_WATT                 { 50.0f, 50.0f }
     #define LULZBOT_MPC_BLOCK_HEAT_CAPACITY       { 15.44f, 15.44f }
@@ -802,9 +799,18 @@
   //#define PS_OFF_SOUND            // Beep 1s when power off
   #define PSU_ACTIVE_STATE LOW      // Set 'LOW' for ATX, 'HIGH' for X-Box
 
-  //#define PSU_DEFAULT_OFF               // Keep power off until enabled directly with M80
-  //#define PSU_POWERUP_DELAY      250    // (ms) Delay for the PSU to warm up to full power
-  //#define LED_POWEROFF_TIMEOUT 10000    // (ms) Turn off LEDs after power-off, with this amount of delay
+  //#define PSU_DEFAULT_OFF             // Keep power off until enabled directly with M80
+  //#define PSU_POWERUP_DELAY      250  // (ms) Delay for the PSU to warm up to full power
+  //#define LED_POWEROFF_TIMEOUT 10000  // (ms) Turn off LEDs after power-off, with this amount of delay
+
+  //#define PSU_OFF_REDUNDANT           // Second pin for redundant power control
+  //#define PSU_OFF_REDUNDANT_INVERTED  // Redundant pin state is the inverse of PSU_ACTIVE_STATE
+
+  //#define PS_ON1_PIN               6  // Redundant pin required to enable power in combination with PS_ON_PIN
+
+  //#define PS_ON_EDM_PIN            8  // External Device Monitoring pins for external power control relay feedback. Fault on mismatch.
+  //#define PS_ON1_EDM_PIN           9
+  #define PS_EDM_RESPONSE          250  // (ms) Time to allow for relay action
 
   //#define POWER_OFF_TIMER               // Enable M81 D<seconds> to power off after a delay
   //#define POWER_OFF_WAIT_FOR_COOLDOWN   // Enable M81 S to power off only after cooldown
@@ -979,9 +985,9 @@
   #define MAX31865_CALIBRATION_OHMS_2 430
 #endif
 
-#define TEMP_RESIDENCY_TIME          5  // (seconds) Time to wait for hotend to "settle" in M109
-#define TEMP_WINDOW                  3  // (°C) Temperature proximity for the "temperature reached" timer
-#define TEMP_HYSTERESIS              3  // (°C) Temperature proximity considered "close enough" to the target
+#define TEMP_RESIDENCY_TIME          1  // (seconds) Time to wait for hotend to "settle" in M109
+#define TEMP_WINDOW                 10  // (°C) Temperature proximity for the "temperature reached" timer
+#define TEMP_HYSTERESIS             10  // (°C) Temperature proximity considered "close enough" to the target
 
 #define TEMP_BED_RESIDENCY_TIME      5  // (seconds) Time to wait for bed to "settle" in M190
 #define TEMP_BED_WINDOW              1  // (°C) Temperature proximity for the "temperature reached" timer
@@ -1064,7 +1070,7 @@
 #if ANY(TOOLHEAD_Legacy_Universal, TOOLHEAD_Quiver_DualExtruder)
   #define PIDTEMP           // See the PID Tuning Guide at https://reprap.org/wiki/PID_Tuning
 #elif ANY(TOOLHEAD_Galaxy_Series, TOOLHEAD_Galaxy_DualExtruder)
-  #define MPCTEMP         // ** EXPERIMENTAL ** See https://marlinfw.org/docs/features/model_predictive_control.html
+  #define MPCTEMP         // See https://marlinfw.org/docs/features/model_predictive_control.html
 #endif
 
 #define PID_MAX  255      // Limit hotend current while PID is active (see PID_FUNCTIONAL_RANGE below); 255=full current
@@ -1517,9 +1523,6 @@
     // Radius around the center where the arm cannot reach
     #define MIDDLE_DEAD_ZONE_R   0  // (mm)
 
-    #define THETA_HOMING_OFFSET  0  // Calculated from Calibration Guide and M360 / M114. See https://www.morgan3dp.com/morgan-calibration-guide/
-    #define PSI_HOMING_OFFSET    0  // Calculated from Calibration Guide and M364 / M114. See https://www.morgan3dp.com/morgan-calibration-guide/
-
   #elif ENABLED(MP_SCARA)
 
     #define SCARA_OFFSET_THETA1  12 // degrees
@@ -1538,23 +1541,19 @@
   #define DEFAULT_SEGMENTS_PER_SECOND 200
 
   // Length of inner and outer support arms. Measure arm lengths precisely.
-  #define TPARA_LINKAGE_1 120       // (mm)
-  #define TPARA_LINKAGE_2 120       // (mm)
+  #define TPARA_LINKAGE_1 120     // (mm)
+  #define TPARA_LINKAGE_2 120     // (mm)
 
-  // SCARA tower offset (position of Tower relative to bed zero position)
-  // This needs to be reasonably accurate as it defines the printbed position in the SCARA space.
-  #define TPARA_OFFSET_X    0       // (mm)
-  #define TPARA_OFFSET_Y    0       // (mm)
-  #define TPARA_OFFSET_Z    0       // (mm)
+  // TPARA tower offset (position of Tower relative to bed zero position)
+  // This needs to be reasonably accurate as it defines the printbed position in the TPARA space.
+  #define TPARA_OFFSET_X    0     // (mm)
+  #define TPARA_OFFSET_Y    0     // (mm)
+  #define TPARA_OFFSET_Z    0     // (mm)
 
   #define FEEDRATE_SCALING        // Convert XY feedrate from mm/s to degrees/s on the fly
 
   // Radius around the center where the arm cannot reach
   #define MIDDLE_DEAD_ZONE_R   0  // (mm)
-
-  // Calculated from Calibration Guide and M360 / M114. See https://www.morgan3dp.com/morgan-calibration-guide/
-  #define THETA_HOMING_OFFSET  0
-  #define PSI_HOMING_OFFSET    0
 #endif
 
 // @section polar
@@ -1695,6 +1694,11 @@
   #define Y_MIN_ENDSTOP_HIT_STATE HIGH
 #endif
 
+#if ENABLED(LULZBOT_LONG_BED_V2)
+  #undef Y_MIN_ENDSTOP_HIT_STATE
+  #define Y_MIN_ENDSTOP_HIT_STATE HIGH
+#endif
+
 #if defined(LULZBOT_BLTouch)
   #define Z_MIN_PROBE_ENDSTOP_HIT_STATE HIGH
   #define Z_MIN_ENDSTOP_HIT_STATE HIGH
@@ -1776,17 +1780,17 @@
   #if defined(LULZBOT_LONG_BED)
     #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 160, 500, LULZBOT_E_STEPS }
   #elif defined(LULZBOT_LONG_BED_V2)
-    #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 207, 500, LULZBOT_E_STEPS }
+    #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 184.13, 500, LULZBOT_E_STEPS }  // using 5.18:1 and 30T 3mm pitched belt for Y axis
   #else
     #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 100, 500, LULZBOT_E_STEPS }
   #endif
 #elif ENABLED(TAZProV2) //TAZProV2 used 5.2:1 Z motors
   #if defined(LULZBOT_LONG_BED)
-    #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 160, 520, LULZBOT_E_STEPS }
+    #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 160, 518.18, LULZBOT_E_STEPS }
   #elif defined(LULZBOT_LONG_BED_V2)
-    #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 207, 520, LULZBOT_E_STEPS }
+    #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 184.13, 518.18, LULZBOT_E_STEPS } // using 5.18:1 and 30T 3mm pitched belt for Y axis
   #else
-    #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 100, 520, LULZBOT_E_STEPS }
+    #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 100, 518.18, LULZBOT_E_STEPS }
   #endif
 #endif
 
@@ -1809,7 +1813,11 @@
   #define Z_FEEDRATE   25             // <-- changed: LDO geared motor max feedrate
 #endif
 
-#define DEFAULT_MAX_FEEDRATE          { 500, 500, Z_FEEDRATE, 40 }
+#if ANY(LULZBOT_LONG_BED, LULZBOT_LONG_BED_V2)
+  #define DEFAULT_MAX_FEEDRATE          { 500, 125, Z_FEEDRATE, 40 }
+#else
+  #define DEFAULT_MAX_FEEDRATE          { 500, 500, Z_FEEDRATE, 40 }
+#endif
 
 #define LIMITED_MAX_FR_EDITING        // Limit edit via M203 or LCD to DEFAULT_MAX_FEEDRATE * 2
 #if ENABLED(LIMITED_MAX_FR_EDITING)
@@ -1832,7 +1840,11 @@
   #define X_Y_MAX_ACCELERATION   4000
 #endif
 
-#define DEFAULT_MAX_ACCELERATION      { X_Y_MAX_ACCELERATION, X_Y_MAX_ACCELERATION, 100, 9000 }
+#if ANY(LULZBOT_LONG_BED, LULZBOT_LONG_BED_V2)
+  #define DEFAULT_MAX_ACCELERATION      { X_Y_MAX_ACCELERATION, (X_Y_MAX_ACCELERATION/2), 100, 9000 }
+#else
+  #define DEFAULT_MAX_ACCELERATION      { X_Y_MAX_ACCELERATION, X_Y_MAX_ACCELERATION, 100, 9000 }
+#endif
 
 #define LIMITED_MAX_ACCEL_EDITING     // Limit edit via M201 or LCD to DEFAULT_MAX_ACCELERATION * 2
 #if ENABLED(LIMITED_MAX_ACCEL_EDITING)
@@ -1878,7 +1890,8 @@
     #define DEFAULT_YJERK 8.0
   #endif
   #define DEFAULT_ZJERK  0.4
-    //#define DEFAULT_IJERK  0.3
+  #define DEFAULT_EJERK  10.0
+  //#define DEFAULT_IJERK  0.3
   //#define DEFAULT_JJERK  0.3
   //#define DEFAULT_KJERK  0.3
   //#define DEFAULT_UJERK  0.3
@@ -1892,8 +1905,6 @@
     #define MAX_JERK_EDIT_VALUES { 20, 20, 0.6, 10 } // ...or, set your own edit limits
   #endif
 #endif
-
-#define DEFAULT_EJERK    10.0  // May be used by Linear Advance
 
 /**
  * Junction Deviation Factor
@@ -2003,7 +2014,7 @@
 #if ENABLED(LULZBOT_BLTouch)
   #define BLTOUCH
   #define LULZBOT_PROBE_TYPE "BLTouch"
-  #if NONE(Sidekick_289, Sidekick_747)  // Machines that come stock with a BLTouch and do not need the identifier
+  #if NONE(Sidekick_289, Sidekick_747, TAZProV2)  // Machines that come stock with a BLTouch and do not need the identifier
     #define LULZBOT_SHORT_PROBE_TYPE " BT"
   #else
     #define LULZBOT_SHORT_PROBE_TYPE
@@ -2049,6 +2060,17 @@
 #if ENABLED(BD_SENSOR)
   //#define BD_SENSOR_PROBE_NO_STOP // Probe bed without stopping at each probe point
 #endif
+
+/**
+ * BIQU MicroProbe
+ *
+ * A lightweight, solenoid-driven probe.
+ * For information about this sensor https://github.com/bigtreetech/MicroProbe
+ *
+ * Also requires: PROBE_ENABLE_DISABLE
+ */
+//#define BIQU_MICROPROBE_V1  // Triggers HIGH
+//#define BIQU_MICROPROBE_V2  // Triggers LOW
 
 // A probe that is deployed and stowed with a solenoid pin (SOL1_PIN)
 //#define SOLENOID_PROBE
@@ -2181,10 +2203,10 @@
 #elif ANY(TAZPro, TAZProXT) && DISABLED(LULZBOT_BLTouch)
   #define NOZZLE_TO_PROBE_OFFSET { 0, 0, -1.102 }
 #elif ANY(TAZPro, TAZProXT) && ENABLED(LULZBOT_BLTouch)
-  #define NOZZLE_TO_PROBE_OFFSET { -38, -2, -3.2 }
+  #define NOZZLE_TO_PROBE_OFFSET { -38, -2, 0 }
 #elif ENABLED(TAZProV2)
   #if ENABLED(TOOLHEAD_Galaxy_DualExtruder)
-    #define NOZZLE_TO_PROBE_OFFSET { 100, 70, -3.2 }
+    #define NOZZLE_TO_PROBE_OFFSET { 48, 70, -3.2 }
   #else
     #define NOZZLE_TO_PROBE_OFFSET { 23, 63, 0 }
   #endif
@@ -2202,10 +2224,8 @@
 
 // Most probes should stay away from the edges of the bed, but
 // with NOZZLE_AS_PROBE this can be negative for a wider probing area.
-#if ENABLED(TazDualZ)
-  #define PROBING_MARGIN 10
-#elif ENABLED(LULZBOT_BLTouch)
-  #define PROBING_MARGIN 50
+#if ANY(TazDualZ, LULZBOT_BLTouch)
+  #define PROBING_MARGIN 20
 #else
   #if ENABLED(MiniV2)
     #define PROBING_MARGIN -4
@@ -2396,7 +2416,7 @@
 #else
   #define INVERT_X_DIR true
 #endif
-#if ANY(MiniV2, MiniV3, LULZBOT_LONG_BED_V2)
+#if ANY(MiniV2, MiniV3)
   #define INVERT_Y_DIR false
 #else
   #define INVERT_Y_DIR true
@@ -2572,15 +2592,15 @@
     #define LULZBOT_Z_MIN_POS -9
     #define LULZBOT_Z_MAX_POS 289
   #elif defined(LULZBOT_LONG_BED_V2)
-    #define X_BED_SIZE        280
-    #define Y_BED_SIZE        570
+    #define X_BED_SIZE        294
+    #define Y_BED_SIZE        594
     // Travel limits (mm) after homing, corresponding to endstop positions.
-    #define LULZBOT_X_MAX_POS 310
-    #define LULZBOT_X_MIN_POS -6
-    #define LULZBOT_Y_MAX_POS 613
-    #define LULZBOT_Y_MIN_POS -18.2//-15
-    #define LULZBOT_Z_MIN_POS -9
-    #define LULZBOT_Z_MAX_POS 289
+    #define LULZBOT_X_MAX_POS 307
+    #define LULZBOT_X_MIN_POS -2
+    #define LULZBOT_Y_MAX_POS 615
+    #define LULZBOT_Y_MIN_POS -51//-15
+    #define LULZBOT_Z_MIN_POS -5
+    #define LULZBOT_Z_MAX_POS 297
   #else
     #define X_BED_SIZE 284
     #define Y_BED_SIZE 286
@@ -2657,13 +2677,13 @@
       #define LULZBOT_Z_MIN_POS -9
       #define LULZBOT_Z_MAX_POS 293
     #else
-      #define X_BED_SIZE 285
+      #define X_BED_SIZE 276
       #define Y_BED_SIZE 285
       // Travel limits (mm) after homing, corresponding to endstop positions.
-      #define LULZBOT_X_MIN_POS -9 // <-- changed   change this
-      #define LULZBOT_Y_MIN_POS -39 // <-- changed
-      #define LULZBOT_X_MAX_POS 308 // <-- changed
-      #define LULZBOT_Y_MAX_POS 293 // <-- changed   change this
+      #define LULZBOT_X_MIN_POS 10 // <-- changed
+      #define LULZBOT_Y_MIN_POS -24 // <-- changed
+      #define LULZBOT_X_MAX_POS 288 // <-- changed
+      #define LULZBOT_Y_MAX_POS 339 // <-- changed
       #define LULZBOT_Z_MIN_POS -9 // <-- changed
       #define LULZBOT_Z_MAX_POS 301 // <-- changed
     #endif
@@ -2947,8 +2967,11 @@
  */
 //#define AUTO_BED_LEVELING_3POINT
 //#define AUTO_BED_LEVELING_LINEAR
-#define AUTO_BED_LEVELING_BILINEAR
-//#define AUTO_BED_LEVELING_UBL
+//#if NONE(TAZPro, TAZProXT, TAZProV2)
+  #define AUTO_BED_LEVELING_BILINEAR
+//#else
+  //#define AUTO_BED_LEVELING_UBL
+//#endif
 //#define MESH_BED_LEVELING
 
 /**
@@ -3072,7 +3095,7 @@
   //#define MESH_EDIT_GFX_OVERLAY   // Display a graphics overlay while editing the mesh
 
   #define MESH_INSET 0              // Set Mesh bounds as an inset region of the bed
-  #define GRID_MAX_POINTS_X 2      // Don't use more than 15 points per axis, implementation limited.
+  #define GRID_MAX_POINTS_X 8      // Don't use more than 15 points per axis, implementation limited.
   #define GRID_MAX_POINTS_Y GRID_MAX_POINTS_X
 
   //#define UBL_HILBERT_CURVE       // Use Hilbert distribution for less travel when probing multiple points
@@ -3086,7 +3109,7 @@
   //#define UBL_Z_RAISE_WHEN_OFF_MESH 2.5 // When the nozzle is off the mesh, this value is used
                                           // as the Z-Height correction value.
 
-  //#define UBL_MESH_WIZARD         // Run several commands in a row to get a complete mesh
+  #define UBL_MESH_WIZARD         // Run several commands in a row to get a complete mesh
 
   /**
    * Probing not allowed within the position of an obstacle.
@@ -3139,7 +3162,7 @@
 #if ENABLED(LCD_BED_TRAMMING)
   #define BED_TRAMMING_INSET_LFRB { 30, 30, 30, 30 } // (mm) Left, Front, Right, Back insets
   #define BED_TRAMMING_HEIGHT      0.0        // (mm) Z height of nozzle at tramming points
-  #define BED_TRAMMING_Z_HOP       4.0        // (mm) Z height of nozzle between tramming points
+  #define BED_TRAMMING_Z_HOP       4.0        // (mm) Z raise between tramming points
   //#define BED_TRAMMING_INCLUDE_CENTER       // Move to the center after the last corner
   //#define BED_TRAMMING_USE_PROBE
   #if ENABLED(BED_TRAMMING_USE_PROBE)
@@ -3331,25 +3354,26 @@
 //
 // Preheat Constants - Up to 10 are supported without changes
 //
-#define PREHEAT_1_LABEL       "PLA"
-#define PREHEAT_1_TEMP_HOTEND 180
-#define PREHEAT_1_TEMP_BED     60
-#define PREHEAT_1_TEMP_CHAMBER  0
-#define PREHEAT_1_FAN_SPEED     0 // Value from 0 to 255
+#define PREHEAT_1_LABEL          "PLA"
+#define PREHEAT_1_TEMP_HOTEND     180
+#define PREHEAT_1_LOW_TEMP_HOTEND 160
+#define PREHEAT_1_TEMP_BED         60
+#define PREHEAT_1_TEMP_CHAMBER      0
+#define PREHEAT_1_FAN_SPEED         0 // Value from 0 to 255
 
-#define PREHEAT_2_LABEL       "ABS"
+#define PREHEAT_2_LABEL      "ABS"
 #define PREHEAT_2_TEMP_HOTEND 220
 #define PREHEAT_2_TEMP_BED    110
 #define PREHEAT_2_TEMP_CHAMBER  0
 #define PREHEAT_2_FAN_SPEED     0 // Value from 0 to 255
 
-#define PREHEAT_3_LABEL       "TPU"
+#define PREHEAT_3_LABEL      "TPU"
 #define PREHEAT_3_TEMP_HOTEND 200
 #define PREHEAT_3_TEMP_BED     60
 #define PREHEAT_3_TEMP_CHAMBER 35
 #define PREHEAT_3_FAN_SPEED     0 // Value from 0 to 255
 
-#define PREHEAT_4_LABEL       "Cold Pull"
+#define PREHEAT_4_LABEL      "Cold Pull"
 #define PREHEAT_4_TEMP_HOTEND 145
 #define PREHEAT_4_TEMP_BED      0
 #define PREHEAT_4_TEMP_CHAMBER  0
@@ -3363,10 +3387,19 @@
 #define charPREHEAT_2_TEMP_BED STRINGIFY(PREHEAT_2_TEMP_BED)
 #define charPREHEAT_3_TEMP_BED STRINGIFY(PREHEAT_3_TEMP_BED)
 #define charPREHEAT_4_TEMP_BED STRINGIFY(PREHEAT_4_TEMP_BED)
-#define PREHEAT_1_COMMAND "M104 S" charPREHEAT_1_TEMP_HOTEND "\nM140 S" charPREHEAT_1_TEMP_BED ""
-#define PREHEAT_2_COMMAND "M104 S" charPREHEAT_2_TEMP_HOTEND "\nM140 S" charPREHEAT_2_TEMP_BED ""
-#define PREHEAT_3_COMMAND "M104 S" charPREHEAT_3_TEMP_HOTEND "\nM140 S" charPREHEAT_3_TEMP_BED ""
-#define PREHEAT_4_COMMAND "M104 S" charPREHEAT_4_TEMP_HOTEND ""
+#define charPREHEAT_1_LOW_TEMP_HOTEND STRINGIFY(PREHEAT_1_LOW_TEMP_HOTEND)
+
+#if LULZBOT_EXTRUDERS == 1
+  #define PREHEAT_1_COMMAND "M104 S" charPREHEAT_1_TEMP_HOTEND "\nM140 S" charPREHEAT_1_TEMP_BED ""
+  #define PREHEAT_2_COMMAND "M104 S" charPREHEAT_2_TEMP_HOTEND "\nM140 S" charPREHEAT_2_TEMP_BED ""
+  #define PREHEAT_3_COMMAND "M104 S" charPREHEAT_3_TEMP_HOTEND "\nM140 S" charPREHEAT_3_TEMP_BED ""
+  #define PREHEAT_4_COMMAND "M104 S" charPREHEAT_4_TEMP_HOTEND ""
+#else
+  #define PREHEAT_1_COMMAND "M104 T0 S" charPREHEAT_1_LOW_TEMP_HOTEND "\nM104 T1 S" charPREHEAT_1_LOW_TEMP_HOTEND "\n M140 S" charPREHEAT_1_TEMP_BED ""
+  #define PREHEAT_2_COMMAND "M104 T0 S" charPREHEAT_2_TEMP_HOTEND "\nM104 T1 S" charPREHEAT_2_TEMP_HOTEND "\n M140 S" charPREHEAT_2_TEMP_BED ""
+  #define PREHEAT_3_COMMAND "M104 T0 S" charPREHEAT_3_TEMP_HOTEND "\nM104 T1 S" charPREHEAT_3_TEMP_HOTEND "\n M140 S" charPREHEAT_3_TEMP_BED ""
+  #define PREHEAT_4_COMMAND "M104 T0 S" charPREHEAT_4_TEMP_HOTEND ""
+#endif
 // @section motion
 
 /**
@@ -3417,7 +3450,7 @@
   #elif ENABLED(TAZWorkhorse)
     #define PRESENT_BED_GCODE "G28 O\nG0 Y304 F10000\nG0 Y306 F10000\nM117 Printer Ready"
   #elif ANY(LULZBOT_LONG_BED, LULZBOT_LONG_BED_V2)
-    #define PRESENT_BED_GCODE "G28 O\nG0 Y511 F10000\nG0 Y513 F10000\nM117 Printer Ready"
+    #define PRESENT_BED_GCODE "G28 O\nG0 Y511 F7000\nG0 Y513 F4000\nM117 Printer Ready"
   #else
     #define PRESENT_BED_GCODE "G28 O\nG0 Y311 F10000\nG0 Y313 F10000\nM117 Printer Ready"
   #endif
@@ -3464,7 +3497,7 @@
   #define NOZZLE_CLEAN_FEATURE
 #endif
 
-#if ENABLED(LULZBOT_MANUAL_NOZZLE_CLEAN)
+#if ANY(LULZBOT_MANUAL_NOZZLE_CLEAN, LULZBOT_LONG_BED_V2)
   #define MANUAL_NOZZLE_CLEAN
 #endif
 
@@ -3521,7 +3554,7 @@
   //#define NOZZLE_CLEAN_NO_Y
 
   // Require a minimum hotend temperature for cleaning
-  #define NOZZLE_CLEAN_MIN_TEMP 170
+  #define NOZZLE_CLEAN_MIN_TEMP 160
   //#define NOZZLE_CLEAN_HEATUP       // Heat up the nozzle instead of skipping wipe
 
   // Explicit wipe G-code script applies to a G12 with no arguments.
@@ -3550,8 +3583,63 @@
     #define CLEAN_NOZZLE_BUTTON_COMMANDS "M117 Wiping Nozzle\nG28\nM109 R170\nG12\nM104 S0\nM117 Wipe Complete"
   #endif
 
+  #if ENABLED(MANUAL_NOZZLE_CLEAN)
+    #define NOZZLE_CLEAN_POSITION { X_CENTER, Y_CENTER, (Z_MAX_POS/2) }
+    #if LULZBOT_EXTRUDERS == 1
+      #define MANUAL_NOZZLE_CLEAN_COMMANDS "M117 Starting Nozzle Wipe\nM300 T"
+      #define END_MANUAL_NOZZLE_CLEAN_COMMANDS "M117 Nozzle Cleaned"
+    #else
+      #define MANUAL_NOZZLE_CLEAN_COMMANDS "M117 Starting Nozzles Wipe\nM300 T\nM280 P1 S73\nM280 P2 S73"
+      #define END_MANUAL_NOZZLE_CLEAN_COMMANDS "M280 P2 S125\nM117 Nozzles Cleaned"
+    #endif
+  #endif
 #endif
 
+#define CUSTOM_MATERIAL_PURGE_PATTERN
+
+#if ENABLED(CUSTOM_MATERIAL_PURGE_PATTERN)
+
+  #define DEFAUL_PURGE_PATTERN_FEEDRATE 30
+
+  // Other Material
+  // _______________
+  //
+  #define MATERIAL_1_PURGE_PATTERN "M117 Purging...\nG91\nM83\nG1 Y100 E12\nG90\nM82"
+
+  // ABS
+  // _   _   _   _
+  //  \_/ \_/ \_/ \_
+  #define MATERIAL_2_PURGE_PATTERN "M117 Purging ABS...\nG91\nM83\nG1 Y10 E1.7\nG1 Y10 X10 E1.7\nG1 Y10 E1.7\nG1 Y10 X-10 E1.7\nG1 Y10 E1.7\nG1 Y10 X10 E1.7\nG1 Y10 E1.7\nG1 Y10 X-10 E1.7\nG1 Y10 E1.7\nG1 Y10 X10 E1.7\nG90\nM82"
+
+  // TPU
+  // \/\/\/\/\/\/\/
+  #define MATERIAL_3_PURGE_PATTERN "M117 Purging TPU...\nG91\nM83\nG1 X10 Y10 E1.7\nG1 X-10 Y10 E1.7\nG1 X10 Y10 E1.7\nG1 X-10 Y10 E1.7\nG1 X10 Y10 E1.7\nG1 X-10 Y10 E1.7\nG1 X10 Y10 E1.7\nG1 X-10 Y10 E1.7\nG1 X10 Y10 E1.7\nG90\nM82"
+
+  // PETg
+  //
+  // \|\|\|\|\|\|\|
+  #define MATERIAL_4_PURGE_PATTERN "M117 Purging PETg...\nG91\nM83\nG1 Y10 E1.1\nG1 Y20 X10 E2.2\nG1X-10 E1.1\nG1 Y20 X10 E2.2\nG1X-10 E1.1\nG1 Y20 X10 E2.2\nG1X-10 E1.1\nG1 Y20 X10 E2.2\nG90\nM82"
+
+  // PLA
+  //    _   _   _
+  // |_| |_| |_| |_|
+  #define MATERIAL_5_PURGE_PATTERN "M117 Purging PLA...\nG91\nM83\nG1 Y10 E0.85\nG1 X10 E0.85\nG1 Y10 E0.85\nG1 X-10 E0.85\nG1 Y10 E0.85\nG1 X10 E0.85\nG1 Y10 E0.85\nG1 X-10 E0.85\nG1 Y10 E0.85\nG1 X10 E0.85\nG1 Y10 E0.85\nG1 X-10 E0.85\nG1 Y10 E0.85\nG1 X10 E0.85\nG1 Y10 E0.85\nG1 X-10 E0.85\nG1 Y10 E0.85\nG1 X10 E0.85\nG1 Y10 E0.85\nG90\nM82"
+
+  // PVA
+  // __ ___ ___ ___
+  //  /_\ /_\ /_\ /_
+  //#define MATERIAL_6_PURGE_PATTERN "M117 Purging PVA...\nG91\n"
+
+  // PC
+  // __   __   __
+  //  /__/ /__/ /__/
+  //#define MATERIAL_7_PURGE_PATTERN "M117 Purging PC...\nG91\n"
+
+  // ASA
+  // _   _
+  //  \_/ \|\|\|\|\|
+  //#define MATERIAL_7_PURGE_PATTERN "M117 Purging ASA...\nG91\n"
+#endif
 
 // @section host
 
@@ -3692,9 +3780,9 @@
 #define DISPLAY_CHARSET_HD44780 JAPANESE
 
 /**
- * Info Screen Style (0:Classic, 1:Průša)
+ * Info Screen Style (0:Classic, 1:Průša, 2:CNC)
  *
- * :[0:'Classic', 1:'Průša']
+ * :[0:'Classic', 1:'Průša', 2:'CNC']
  */
 #define LCD_INFO_SCREEN_STYLE 0
 
@@ -4103,7 +4191,7 @@
 
 //
 // Factory display for Creality CR-10 / CR-7 / Ender-3
-// https://www.aliexpress.com/item/32833148327.html
+// https://marlinfw.org/docs/hardware/controllers.html#cr10_stockdisplay
 //
 // Connect to EXP1 on RAMPS and compatible boards.
 //
@@ -4481,8 +4569,9 @@
   #define BUTTON_DELAY_EDIT      50 // (ms) Button repeat delay for edit screens
   #define BUTTON_DELAY_MENU     250 // (ms) Button repeat delay for menus
 
-  //#define DISABLE_ENCODER         // Disable the click encoder, if any
-  //#define TOUCH_IDLE_SLEEP_MINS 5 // (minutes) Display Sleep after a period of inactivity. Set with M255 S.
+  #if ANY(TFT_CLASSIC_UI, TFT_COLOR_UI)
+    //#define NO_BACK_MENU_ITEM     // Don't display a top menu item to go back to the parent menu
+  #endif
 
   #define TOUCH_SCREEN_CALIBRATION
 

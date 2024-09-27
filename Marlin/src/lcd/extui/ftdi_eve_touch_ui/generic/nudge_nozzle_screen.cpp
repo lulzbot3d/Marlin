@@ -33,7 +33,7 @@ using namespace ExtUI;
 constexpr static NudgeNozzleScreenData &mydata = screen_data.NudgeNozzleScreen;
 
 #define GRID_COLS 13
-#define GRID_ROWS (9+EXTRUDERS)
+#define GRID_ROWS (8+EXTRUDERS)
 
 void NudgeNozzleScreen::onEntry() {
   mydata.show_offsets = false;
@@ -83,11 +83,13 @@ void NudgeNozzleScreen::onRedraw(draw_mode_t what) {
       #endif
     }
   #endif
-  if (what & FOREGROUND) {
-    cmd.colors(normal_btn)
-       .font(font_medium)
-       .tag(10).colors(action_btn).button(BTN_POS(1,GRID_ROWS), BTN_SIZE(GRID_COLS,1), GET_TEXT_F(MSG_BUTTON_DONE));
-  }
+
+  draw_text_box(cmd, BTN_POS(1,7), BTN_SIZE(13,3), F(
+        "Z Offset: (-) Lower / (+) Raise\n \n \n \n "
+  ), OPT_CENTERY, font_large);
+    draw_text_box(cmd, BTN_POS(1,7), BTN_SIZE(13,3), F(
+        " \n \nThis controls how close the nozzle is to\nthe print bed; adjusting this setting ensures the nozzle prints at the initial layer height.\n "
+  ), OPT_CENTERY, font_medium);
 }
 
 bool NudgeNozzleScreen::onTouchHeld(uint8_t tag) {

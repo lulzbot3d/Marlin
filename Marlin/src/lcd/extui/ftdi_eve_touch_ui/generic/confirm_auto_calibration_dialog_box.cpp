@@ -29,7 +29,11 @@ using namespace ExtUI;
 using namespace Theme;
 
 void ConfirmAutoCalibrationDialogBox::onRedraw(draw_mode_t) {
-  drawMessage(GET_TEXT_F(MSG_CALIBRATION_WARNING));
+  #if EXTRUDERS == 1
+    drawMessage(GET_TEXT_F(MSG_CALIBRATION_WARNING));
+  #else
+    drawMessage(GET_TEXT_F(MSG_DUAL_CALIBRATION_WARNING));
+  #endif
   drawYesNoButtons();
 }
 

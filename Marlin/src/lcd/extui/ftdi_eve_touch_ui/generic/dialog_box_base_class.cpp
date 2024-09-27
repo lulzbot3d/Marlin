@@ -83,6 +83,12 @@ void DialogBoxBaseClass::drawOkayButton() {
      .tag(1).button(BTN_POS(1,8), BTN_SIZE(2,1), GET_TEXT_F(MSG_BUTTON_OKAY));
 }
 
+void DialogBoxBaseClass::drawDoneButton() {
+  CommandProcessor cmd;
+  cmd.font(font_medium)
+     .tag(1).colors(action_btn).button(BTN_POS(1,8), BTN_SIZE(2,1), GET_TEXT_F(MSG_BUTTON_DONE));
+}
+
 template<typename T>
 void DialogBoxBaseClass::drawButton(T label) {
   CommandProcessor cmd;

@@ -121,7 +121,13 @@ bool AdvancedSettingsMenu::onTouchEnd(uint8_t tag) {
   switch (tag) {
     case  1: SaveSettingsDialogBox::promptToSaveSettings(); break;
     #if HAS_BED_PROBE
-    case  2: GOTO_SCREEN(ZOffsetScreen);              break;
+    case  2:
+      #if EXTRUDERS > 1
+        GOTO_SCREEN(NudgeNozzleScreen);
+      #else
+        GOTO_SCREEN(ZOffsetScreen);
+      #endif
+      break;
     #endif
     case  3: GOTO_SCREEN(StepsScreen);                break;
     #if HAS_MULTI_HOTEND
@@ -147,7 +153,14 @@ bool AdvancedSettingsMenu::onTouchEnd(uint8_t tag) {
     #endif
     case 15: GOTO_SCREEN(DisplayTuningScreen); break;
     case 16: GOTO_SCREEN(FlowPercentScreen);   break;
-    case 17: injectCommands(F(CLEAN_SCRIPT));  break;
+    case 17:
+      GOTO_SCREEN(StatusScreen);
+      #if ENABLED(MANUAL_NOZZLE_CLEAN)
+        injectCommands(F("G12"));
+      #else
+         injectCommands(F(CLEAN_SCRIPT));
+      #endif
+      break;
     default: return false;
   }
   return true;

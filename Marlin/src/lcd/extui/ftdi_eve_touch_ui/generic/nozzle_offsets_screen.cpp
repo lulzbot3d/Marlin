@@ -25,7 +25,11 @@
 
 #ifdef FTDI_NOZZLE_OFFSETS_SCREEN
 
+  #define GRID_COLS 13
+  #define GRID_ROWS (8+EXTRUDERS)
+
 using namespace FTDI;
+using namespace Theme;
 using namespace ExtUI;
 
 void NozzleOffsetScreen::onEntry() {
@@ -38,6 +42,7 @@ void NozzleOffsetScreen::onEntry() {
 
 void NozzleOffsetScreen::onRedraw(draw_mode_t what) {
   widgets_t w(what);
+  CommandProcessor cmd;
   w.precision(2).units(GET_TEXT_F(MSG_UNITS_MM));
 
   w.heading(                          GET_TEXT_F(MSG_OFFSETS_MENU));
@@ -48,6 +53,13 @@ void NozzleOffsetScreen::onRedraw(draw_mode_t what) {
   w.button(8, GET_TEXT_F(MSG_MEASURE_AUTOMATICALLY), !isPrinting());
   #endif
   w.increments();
+  draw_text_box(cmd, BTN_POS(1,7), BTN_SIZE(13,3), F(
+        "Right Extruder Adjustments:\n \n \n \n "
+  ), OPT_CENTERY, font_large);
+    draw_text_box(cmd, BTN_POS(1,7), BTN_SIZE(13,3), F(
+        " \nX-axis: (-) Right / (+) Left\nY-axis: (-) Back / (+) Front\nZ-axis: (-) Raise / (+) Lower"
+  ), OPT_CENTERY, font_medium);
+
 }
 
 bool NozzleOffsetScreen::onTouchHeld(uint8_t tag) {

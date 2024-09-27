@@ -43,15 +43,15 @@ void StatisticsScreen::onRedraw(draw_mode_t what) {
        .cmd(COLOR_RGB(bg_text_enabled))
        .tag(0)
 
+       .font(Theme::font_xxlarge)
+       .text(BTN_POS(1,1), BTN_SIZE(4,1), GET_TEXT_F(MSG_INFO_3D_PRINTER_STATS_MENU))
        .font(Theme::font_medium)
-       .text(BTN_POS(1,1), BTN_SIZE(4,1), GET_TEXT_F(MSG_INFO_PRINTER_STATS_MENU))
-       .font(Theme::font_small)
        .tag(0)
-       .text(BTN_POS(1,2), BTN_SIZE(2,1), GET_TEXT_F(MSG_INFO_PRINT_COUNT),      OPT_RIGHTX | OPT_CENTERY)
-       .text(BTN_POS(1,3), BTN_SIZE(2,1), GET_TEXT_F(MSG_INFO_COMPLETED_PRINTS), OPT_RIGHTX | OPT_CENTERY)
-       .text(BTN_POS(1,4), BTN_SIZE(2,1), GET_TEXT_F(MSG_INFO_PRINT_TIME),       OPT_RIGHTX | OPT_CENTERY)
-       .text(BTN_POS(1,5), BTN_SIZE(2,1), GET_TEXT_F(MSG_INFO_PRINT_LONGEST),    OPT_RIGHTX | OPT_CENTERY)
-       .text(BTN_POS(1,6), BTN_SIZE(2,1), GET_TEXT_F(MSG_INFO_PRINT_FILAMENT),   OPT_RIGHTX | OPT_CENTERY);
+       .text(BTN_POS(1,2), BTN_SIZE(2,1), GET_TEXT_F(MSG_INFO__STARTED_PRINT_COUNT),  OPT_RIGHTX | OPT_CENTERY)
+       .text(BTN_POS(1,3), BTN_SIZE(2,1), GET_TEXT_F(MSG_INFO_COMPLETED_PRINTS),      OPT_RIGHTX | OPT_CENTERY)
+       .text(BTN_POS(1,4), BTN_SIZE(2,1), GET_TEXT_F(MSG_INFO_PRINT_TIME_HOURS),      OPT_RIGHTX | OPT_CENTERY)
+       .text(BTN_POS(1,5), BTN_SIZE(2,1), GET_TEXT_F(MSG_INFO_PRINT_LONGEST_PRINT),   OPT_RIGHTX | OPT_CENTERY)
+       .text(BTN_POS(1,6), BTN_SIZE(2,1), GET_TEXT_F(MSG_INFO_PRINT_FILAMENT_USED),   OPT_RIGHTX | OPT_CENTERY);
     // Don't chain the following, it causes strange issues with evaluation ordering!
     cmd.text(BTN_POS(3,2), BTN_SIZE(2,1), getTotalPrints_str(buffer));
     cmd.text(BTN_POS(3,3), BTN_SIZE(2,1), getFinishedPrints_str(buffer));
@@ -61,7 +61,7 @@ void StatisticsScreen::onRedraw(draw_mode_t what) {
   }
 
   if (what & FOREGROUND) {
-    cmd.font(Theme::font_medium)
+    cmd.font(Theme::font_large)
        .colors(action_btn)
        .tag(1).button(BTN_POS(1,7), BTN_SIZE(4,1), GET_TEXT_F(MSG_BUTTON_DONE));
   }

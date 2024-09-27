@@ -32,7 +32,7 @@ using namespace Theme;
 
 #define SHEET_THICKNESS 0.1
 #define GRID_COLS 13
-#define GRID_ROWS (9+EXTRUDERS)
+#define GRID_ROWS (8+EXTRUDERS)
 
 constexpr static ZOffsetScreenData &mydata = screen_data.ZOffsetScreen;
 
@@ -58,11 +58,17 @@ void ZOffsetScreen::onRedraw(draw_mode_t what) {
   w.color(z_axis).adjuster(4, GET_TEXT_F(MSG_ZOFFSET), getZOffset_mm());
   w.increments();
   //w.button(2, GET_TEXT_F(MSG_PROBE_WIZARD), !isPrinting() && !wizardRunning());
-  if (what & FOREGROUND) {
-    cmd.colors(normal_btn)
+  draw_text_box(cmd, BTN_POS(1,5), BTN_SIZE(13,3), F(
+        "Z Offset: (-) Lower / (+) Raise\n \n \n \n "
+  ), OPT_CENTERY, font_large);
+    draw_text_box(cmd, BTN_POS(1,5), BTN_SIZE(13,3), F(
+        " \n \nThis controls how close the nozzle is to\nthe print bed; adjusting this setting ensures the nozzle prints at the initial layer height.\n "
+  ), OPT_CENTERY, font_medium);
+
+  cmd.colors(normal_btn)
        .font(font_medium)
        .tag(6).colors(action_btn).button(BTN_POS(1,GRID_ROWS), BTN_SIZE(GRID_COLS,1), GET_TEXT_F(MSG_BUTTON_DONE));
-  }
+
 }
 
 void ZOffsetScreen::move(float mm, int16_t steps) {
@@ -104,13 +110,13 @@ bool ZOffsetScreen::wizardRunning() {
 }
 
 bool ZOffsetScreen::onTouchHeld(uint8_t tag) {
-  const int16_t steps =   TERN(BABYSTEPPING, mmToWholeSteps(getIncrement(), Z), 0);
+  const int16_t steps =   TERN0(BABYSTEPPING, mmToWholeSteps(getIncrement(), Z));
   const float increment = TERN(BABYSTEPPING, mmFromWholeSteps(steps, Z), getIncrement());
   switch (tag) {
     case 2: runWizard(); break;
     case 4: UI_DECREMENT(ZOffset_mm); move(-increment, -steps); break;
     case 5: UI_INCREMENT(ZOffset_mm); move( increment,  steps); break;
-    case 6: GOTO_SCREEN(SaveSettingsDialogBox); break;
+    case 6: SaveSettingsDialogBox::promptToSaveSettings(); break;
     default:
       return false;
   }

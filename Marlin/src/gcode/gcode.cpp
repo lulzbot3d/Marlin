@@ -993,6 +993,10 @@ void GcodeSuite::process_parsed_command(const bool no_ok/*=false*/) {
         M810_819(); break;                                        // M810-M819: Define/execute G-code macro
       #endif
 
+      #if ENABLED(CUSTOM_MATERIAL_PURGE_PATTERN)
+        case 8100: M8100(); break;                                // M8100: Create Custom matiral purge lines
+      #endif
+
       #if HAS_BED_PROBE
         case 851: M851(); break;                                  // M851: Set Z Probe Z Offset
       #endif
@@ -1111,6 +1115,10 @@ void GcodeSuite::process_parsed_command(const bool no_ok/*=false*/) {
 
       #if DGUS_LCD_UI_MKS
         case 1002: M1002(); break;                                // M1002: [INTERNAL] Tool-change and Relative E Move
+      #endif
+
+      #if ENABLED(ONE_CLICK_PRINT)
+        case 1003: M1003(); break;                                // M1003: [INTERNAL] Set the current dir to /
       #endif
 
       #if ENABLED(UBL_MESH_WIZARD)

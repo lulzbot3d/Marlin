@@ -107,7 +107,8 @@ namespace Language_en {
   LSTR MSG_ERASE_FLASH_WARNING      = u8"Are you sure? SPI flash will be erased.";
   LSTR MSG_ERASING                  = u8"Erasing...";
   LSTR MSG_ERASED                   = u8"SPI flash erased";
-  LSTR MSG_CALIBRATION_WARNING      = u8"For best results, unload the filament and clean the hotend prior to starting calibration. Continue?";
+  LSTR MSG_CALIBRATION_WARNING      = u8"Unload filament and clean the extruder before starting.\n \nContinue with calibration?";
+  LSTR MSG_DUAL_CALIBRATION_WARNING = u8"Unload filament and clean the extruder before starting.\n \nNote: Calibration updates both Backlash and Extruder Offset values.\n \nContinue with calibration?";
   LSTR MSG_START_PRINT_CONFIRMATION = u8"Start printing %s?";
   LSTR MSG_ABORT_WARNING            = u8"Are you sure you want to cancel the print?";
   LSTR MSG_START_NEXT_PRINT         = u8"Start Next Print";

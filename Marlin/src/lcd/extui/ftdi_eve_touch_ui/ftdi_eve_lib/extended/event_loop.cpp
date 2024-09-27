@@ -73,7 +73,6 @@ void UIData::set_persistent_data(uint8_t value) {
   flags.value = value & get_persistent_data_mask();
 }
 
-
 void UIData::enable_touch_sounds(bool enabled) {
   UIData::flags.bits.touch_start_sound  = enabled;
   UIData::flags.bits.touch_end_sound    = enabled;
@@ -131,12 +130,13 @@ namespace FTDI {
       case PAUSE_MESSAGE_LOAD:     ExtUI::onStatusChanged(GET_TEXT_F(MSG_FILAMENT_CHANGE_LOAD)); break;
       case PAUSE_MESSAGE_PURGE:    ExtUI::onStatusChanged(GET_TEXT_F(TERN(ADVANCED_PAUSE_CONTINUOUS_PURGE, MSG_FILAMENT_CHANGE_CONT_PURGE, MSG_FILAMENT_CHANGE_PURGE))); break;
       case PAUSE_MESSAGE_RESUME:   ExtUI::onStatusChanged(GET_TEXT_F(MSG_FILAMENT_CHANGE_RESUME)); break;
-      case PAUSE_MESSAGE_HEAT:     ExtUI::onStatusChanged(GET_TEXT_F(MSG_FILAMENT_CHANGE_HEAT)); break;
+      case PAUSE_MESSAGE_HEAT:     ExtUI::onStatusChanged(GET_TEXT_F(MSG_FILAMENT_CHANGE_RESUME_REHEAT)); break;
       case PAUSE_MESSAGE_HEATING:  ExtUI::onStatusChanged(GET_TEXT_F(MSG_FILAMENT_CHANGE_HEATING)); break;
       case PAUSE_MESSAGE_OPTION:   FilamentPromptBox::show(); break;
       case PAUSE_MESSAGE_STATUS: break;
       default: ExtUI::onUserConfirmRequired(PSTR("Confirm Continue")); break;
     }
+    lastPauseMsgState = ExtUI::pauseModeStatus;
   } else if (!ExtUI::awaitingUserConfirm() && !ExtUI::isPrintingPaused() && !ExtUI::getHostKeepaliveIsPaused()) {
     ConfirmUserRequestAlertBox::hide();
     FilamentPromptBox::hide();

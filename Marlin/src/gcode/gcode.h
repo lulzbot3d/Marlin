@@ -144,7 +144,7 @@
  *        R<temp> Wait for extruder current temp to reach target temp. ** Wait for heating or cooling. **
  *        If AUTOTEMP is enabled, S<mintemp> B<maxtemp> F<factor>. Exit autotemp by any M109 without F
  *
- * M110 - Set the current line number. (Used by host printing)
+ * M110 - Get or set the current line number. (Used by host printing)
  * M111 - Set debug flags: "M111 S<flagbits>". See flag bits defined in enum.h.
  * M112 - Full Shutdown.
  *
@@ -274,6 +274,7 @@
  * M702 - Unload filament (Requires FILAMENT_LOAD_UNLOAD_GCODES)
  * M808 - Set or Goto a Repeat Marker (Requires GCODE_REPEAT_MARKERS)
  * M810-M819 - Define/execute a G-code macro (Requires GCODE_MACROS)
+ * M8100 - Create Custom matiral purge lines (Requires CUSTOM_MATERIAL_PURGE_PATTERN)
  * M851 - Set Z probe's XYZ offsets in current units. (Negative values: X=left, Y=front, Z=below)
  * M852 - Set skew factors: "M852 [I<xy>] [J<xz>] [K<yz>]". (Requires SKEW_CORRECTION_GCODE, plus SKEW_CORRECTION_FOR_Z for IJ)
  *
@@ -341,6 +342,12 @@
 
 #if ANY(IS_SCARA, POLAR) || defined(G0_FEEDRATE)
   #define HAS_FAST_MOVES 1
+#endif
+
+#if ENABLED(MARLIN_SMALL_BUILD)
+  #define GCODE_ERR_MSG(V...) "?"
+#else
+  #define GCODE_ERR_MSG(V...) "?" V
 #endif
 
 enum AxisRelative : uint8_t {
@@ -1165,6 +1172,10 @@ private:
     static void M810_819();
   #endif
 
+  #if ENABLED(CUSTOM_MATERIAL_PURGE_PATTERN)
+    static void M8100();
+  #endif
+
   #if HAS_BED_PROBE
     static void M851();
     static void M851_report(const bool forReplay=true);
@@ -1279,6 +1290,10 @@ private:
 
   #if DGUS_LCD_UI_MKS
     static void M1002();
+  #endif
+
+  #if ENABLED(ONE_CLICK_PRINT)
+    static void M1003();
   #endif
 
   #if ENABLED(UBL_MESH_WIZARD)

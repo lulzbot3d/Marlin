@@ -44,8 +44,6 @@ void CustomUserMenus::onRedraw(draw_mode_t what) {
   #if ENABLED(TOUCH_UI_PORTRAIT)
     #if defined(TOOLHEAD_Legacy_Universal)
       #define GRID_ROWS 10
-    #if defined(TOOLHEAD_Legacy_Universal)
-      #define GRID_ROWS 10
     #else
       #define GRID_ROWS 7
       #define GRID_ROWS 7

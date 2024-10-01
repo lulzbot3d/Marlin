@@ -811,11 +811,13 @@ void MarlinSettings::postprocess() {
 
   #define TWO_BYTE_HASH(A,B) uint16_t((uint16_t(A ^ 0xC3) << 4) ^ (uint16_t(B ^ 0xC3) << 12))
 
+  #define EEPROM_OFFSETOF(FIELD) (EEPROM_OFFSET + offsetof(SettingsData, FIELD))
+
   #if ENABLED(DEBUG_EEPROM_READWRITE)
     #define _FIELD_TEST(FIELD) \
       SERIAL_ECHOLNPGM("Field: " STRINGIFY(FIELD)); \
       EEPROM_ASSERT( \
-        eeprom_error || eeprom_index == offsetof(SettingsData, FIELD) + EEPROM_OFFSET, \
+        eeprom_error || eeprom_index == EEPROM_OFFSETOF(FIELD), \
         "Field " STRINGIFY(FIELD) " mismatch." \
       )
   #else
@@ -830,7 +832,7 @@ void MarlinSettings::postprocess() {
     #define EEPROM_READ_ALWAYS(V...) EEPROM_READ_ALWAYS_(V)
   #endif
 
-  const char version[4] = EEPROM_VERSION;
+  constexpr char version_str[4] = EEPROM_VERSION;
 
   #if ENABLED(EEPROM_INIT_NOW)
     constexpr uint32_t strhash32(const char *s, const uint32_t h=0) {
@@ -860,14 +862,14 @@ void MarlinSettings::postprocess() {
    */
   bool MarlinSettings::save() {
     float dummyf = 0;
-    MString<3> ver(F("ERR"));
 
     if (!EEPROM_START(EEPROM_OFFSET)) return false;
 
     EEPROM_Error eeprom_error = ERR_EEPROM_NOERR;
 
     // Write or Skip version. (Flash doesn't allow rewrite without erase.)
-    TERN(FLASH_EEPROM_EMULATION, EEPROM_SKIP, EEPROM_WRITE)(ver);
+    constexpr char dummy_version[] = "ERR";
+    TERN(FLASH_EEPROM_EMULATION, EEPROM_SKIP, EEPROM_WRITE)(dummy_version);
 
     #if ENABLED(EEPROM_INIT_NOW)
       EEPROM_SKIP(build_hash);  // Skip the hash slot which will be written later
@@ -1828,7 +1830,7 @@ void MarlinSettings::postprocess() {
       // Write the EEPROM header
       eeprom_index = EEPROM_OFFSET;
 
-      EEPROM_WRITE(version);
+      EEPROM_WRITE(version_str);
       #if ENABLED(EEPROM_INIT_NOW)
         EEPROM_WRITE(build_hash);
       #endif
@@ -1851,13 +1853,30 @@ void MarlinSettings::postprocess() {
 
     const bool success = (eeprom_error == ERR_EEPROM_NOERR);
     if (success) {
-      //LCD_MESSAGE(MSG_SETTINGS_SAVED);
-      TERN_(HOST_PROMPT_SUPPORT, hostui.notify(GET_TEXT_F(MSG_SETTINGS_SAVED)));
+      //LCD_MESSAGE(MSG_SETTINGS_STORED);
+      TERN_(HOST_PROMPT_SUPPORT, hostui.notify(GET_TEXT_F(MSG_SETTINGS_STORED)));
     }
 
     TERN_(EXTENSIBLE_UI, ExtUI::onSettingsStored(success));
 
     return success;
+  }
+
+  EEPROM_Error MarlinSettings::check_version() {
+    if (!EEPROM_START(EEPROM_OFFSET)) return ERR_EEPROM_NOPROM;
+    char stored_ver[4];
+    EEPROM_READ_ALWAYS(stored_ver);
+
+    // Version has to match or defaults are used
+    if (strncmp(stored_ver, version_str, 3) != 0) {
+      if (stored_ver[3] != '\0') {
+        stored_ver[0] = '?';
+        stored_ver[1] = '\0';
+      }
+      DEBUG_ECHO_MSG("EEPROM version mismatch (EEPROM=", stored_ver, " Marlin=" EEPROM_VERSION ")");
+      return ERR_EEPROM_VERSION;
+    }
+    return ERR_EEPROM_NOERR;
   }
 
   /**
@@ -1874,13 +1893,8 @@ void MarlinSettings::postprocess() {
     do { // A block to break out of on error
 
       // Version has to match or defaults are used
-      if (strncmp(version, stored_ver, 3) != 0) {
-        if (stored_ver[3] != '\0') {
-          stored_ver[0] = '?';
-          stored_ver[1] = '\0';
-        }
-        DEBUG_ECHO_MSG("EEPROM version mismatch (EEPROM=", stored_ver, " Marlin=" EEPROM_VERSION ")");
-        eeprom_error = ERR_EEPROM_VERSION;
+      if (check == ERR_EEPROM_VERSION) {
+        eeprom_error = check;
         break;
       }
 
@@ -2987,8 +3001,7 @@ void MarlinSettings::postprocess() {
       }
       else if (!validating) {
         DEBUG_ECHO_START();
-        DEBUG_ECHO(version);
-        DEBUG_ECHOLNPGM(" stored settings retrieved (", eeprom_total, " bytes; crc ", working_crc, ")");
+        DEBUG_ECHOLN(version_str, F(" stored settings retrieved ("), eeprom_total, F(" bytes; crc "), working_crc, ')');
         TERN_(HOST_EEPROM_CHITCHAT, hostui.notify(F("Stored settings retrieved")));
       }
 
@@ -3073,6 +3086,26 @@ void MarlinSettings::postprocess() {
 
     return (err == ERR_EEPROM_NOERR);
   }
+
+  #if HAS_EARLY_LCD_SETTINGS
+
+    #if HAS_LCD_CONTRAST
+      void MarlinSettings::load_contrast() {
+        uint8_t lcd_contrast; EEPROM_START(EEPROM_OFFSETOF(lcd_contrast)); EEPROM_READ(lcd_contrast);
+        DEBUG_ECHOLNPGM("LCD Contrast: ", lcd_contrast);
+        ui.contrast = lcd_contrast;
+      }
+    #endif
+
+    #if HAS_LCD_BRIGHTNESS
+      void MarlinSettings::load_brightness() {
+        uint8_t lcd_brightness; EEPROM_START(EEPROM_OFFSETOF(lcd_brightness)); EEPROM_READ(lcd_brightness);
+        DEBUG_ECHOLNPGM("LCD Brightness: ", lcd_brightness);
+        ui.brightness = lcd_brightness;
+      }
+    #endif
+
+  #endif // HAS_EARLY_LCD_SETTINGS
 
   bool MarlinSettings::load() {
     if (validate()) {
@@ -3223,6 +3256,25 @@ void MarlinSettings::postprocess() {
   }
 
 #endif // !EEPROM_SETTINGS
+
+#if HAS_EARLY_LCD_SETTINGS
+
+  void MarlinSettings::load_lcd_state() {
+    if (TERN0(EEPROM_SETTINGS, check_version() == ERR_EEPROM_NOERR)) {
+      #if ENABLED(EEPROM_SETTINGS)
+        TERN_(HAS_LCD_CONTRAST, load_contrast());
+        TERN_(HAS_LCD_BRIGHTNESS, load_brightness());
+      #endif
+    }
+    else {
+      TERN_(HAS_LCD_CONTRAST, ui.contrast = LCD_CONTRAST_DEFAULT);
+      TERN_(HAS_LCD_BRIGHTNESS, ui.brightness = LCD_BRIGHTNESS_DEFAULT);
+    }
+    TERN_(HAS_LCD_CONTRAST, ui.refresh_contrast());
+    TERN_(HAS_LCD_BRIGHTNESS, ui.refresh_brightness());
+  }
+
+#endif // HAS_EARLY_LCD_SETTINGS
 
 /**
  * M502 - Reset Configuration

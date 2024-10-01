@@ -1,24 +1,23 @@
-/**
- * Marlin 3D Printer Firmware
- * Copyright (c) 2020 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
- *
- * Based on Sprinter and grbl.
- * Copyright (c) 2011 Camiel Gubbels / Erik van der Zalm
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
- *
- */
+/*****************************
+ * custom_user_menu.cpp *
+ *****************************/
+
+/****************************************************************************
+ *   Written By Brian Kahl      2023 - FAME3D.                              *
+ *                                                                          *
+ *   This program is free software: you can redistribute it and/or modify   *
+ *   it under the terms of the GNU General Public License as published by   *
+ *   the Free Software Foundation, either version 3 of the License, or      *
+ *   (at your option) any later version.                                    *
+ *                                                                          *
+ *   This program is distributed in the hope that it will be useful,        *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+ *   GNU General Public License for more details.                           *
+ *                                                                          *
+ *   To view a copy of the GNU General Public License, go to the following  *
+ *   location: <https://www.gnu.org/licenses/>.                             *
+ ****************************************************************************/
 
 #include "../config.h"
 #include "../screens.h"
@@ -45,7 +44,10 @@ void CustomUserMenus::onRedraw(draw_mode_t what) {
   #if ENABLED(TOUCH_UI_PORTRAIT)
     #if defined(TOOLHEAD_Legacy_Universal)
       #define GRID_ROWS 10
+    #if defined(TOOLHEAD_Legacy_Universal)
+      #define GRID_ROWS 10
     #else
+      #define GRID_ROWS 7
       #define GRID_ROWS 7
     #endif
     #define GRID_COLS 1

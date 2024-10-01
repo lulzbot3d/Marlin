@@ -50,8 +50,8 @@ bool ConfirmUserRequestAlertBox::onTouchEnd(uint8_t tag) {
             GOTO_SCREEN(StatusScreen);
           }
           current_screen.forget();
+          return true;
         }
-        else
       #endif
       {
         GOTO_PREVIOUS();

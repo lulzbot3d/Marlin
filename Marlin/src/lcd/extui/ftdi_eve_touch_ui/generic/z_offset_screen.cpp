@@ -5,6 +5,7 @@
 /****************************************************************************
  *   Written By Mark Pelletier  2017 - Aleph Objects, Inc.                  *
  *   Written By Marcio Teixeira 2018 - Aleph Objects, Inc.                  *
+ *   Written By Brian Kahl      2023 - FAME3D.                              *
  *                                                                          *
  *   This program is free software: you can redistribute it and/or modify   *
  *   it under the terms of the GNU General Public License as published by   *
@@ -92,7 +93,7 @@ void ZOffsetScreen::runWizard() {
   dtostrf(TERN(Z_SAFE_HOMING,Z_SAFE_HOMING_X_POINT,X_CENTER), 3, 1, str);
   strcat(cmd, str);
   strcat_P(cmd, PSTR("Y"));
-  dtostrf(TERN(Z_SAFE_HOMING,Z_SAFE_HOMING_Y_POINT,Y_CENTER), 3, 1, str);
+  dtostrf(TERN(Z_SAFE_HOMING, Z_SAFE_HOMING_Y_POINT, Y_CENTER), 3, 1, str);
   strcat(cmd, str);
   strcat_P(cmd, PSTR("Z"));
   dtostrf(SHEET_THICKNESS, 3, 1, str);

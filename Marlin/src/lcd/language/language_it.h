@@ -151,6 +151,7 @@ namespace LanguageNarrow_it {
   LSTR MSG_EXTRUDE                        = _UxGT("Estrudi");
   LSTR MSG_RETRACT                        = _UxGT("Ritrai");
   LSTR MSG_MOVE_AXIS                      = _UxGT("Muovi asse");
+  LSTR MSG_PROBE_AND_LEVEL                = _UxGT("Sonda e livella");
   LSTR MSG_BED_LEVELING                   = _UxGT("Livellamento piatto");
   LSTR MSG_LEVEL_BED                      = _UxGT("Livella piatto");
   LSTR MSG_BED_TRAMMING                   = _UxGT("Tarat.fine piatto");
@@ -206,13 +207,10 @@ namespace LanguageNarrow_it {
   LSTR MSG_UBL_BC_INSERT2                 = _UxGT("Misura");
   LSTR MSG_UBL_BC_REMOVE                  = _UxGT("Rimuovi e mis.piatto");
   LSTR MSG_UBL_MOVING_TO_NEXT             = _UxGT("Spostamento succes.");
-  LSTR MSG_UBL_ACTIVATE_MESH              = _UxGT("Attiva UBL");
-  LSTR MSG_UBL_DEACTIVATE_MESH            = _UxGT("Disattiva UBL");
   LSTR MSG_UBL_SET_TEMP_BED               = _UxGT("Temp. piatto");
   LSTR MSG_UBL_BED_TEMP_CUSTOM            = _UxGT("Temp. piatto");
   LSTR MSG_UBL_SET_TEMP_HOTEND            = _UxGT("Temp. ugello");
   LSTR MSG_UBL_HOTEND_TEMP_CUSTOM         = _UxGT("Temp. ugello");
-  LSTR MSG_UBL_MESH_EDIT                  = _UxGT("Modifica mesh");
   LSTR MSG_UBL_EDIT_CUSTOM_MESH           = _UxGT("Modif.mesh personal.");
   LSTR MSG_UBL_FINE_TUNE_MESH             = _UxGT("Ritocca mesh");
   LSTR MSG_UBL_DONE_EDITING_MESH          = _UxGT("Modif.mesh fatta");
@@ -588,6 +586,7 @@ namespace LanguageNarrow_it {
   LSTR MSG_ZPROBE_XOFFSET                 = _UxGT("Offset X sonda");
   LSTR MSG_ZPROBE_YOFFSET                 = _UxGT("Offset Y sonda");
   LSTR MSG_ZPROBE_ZOFFSET                 = _UxGT("Offset Z sonda");
+  LSTR MSG_BABYSTEP_PROBE_Z               = _UxGT("Babystep sonda Z");
   LSTR MSG_ZPROBE_MARGIN                  = _UxGT("Margine sonda");
   LSTR MSG_Z_FEED_RATE                    = _UxGT("Velocità Z");
   LSTR MSG_ENABLE_HS_MODE                 = _UxGT("Abilita modo HS");
@@ -794,15 +793,7 @@ namespace LanguageNarrow_it {
   LSTR MSG_BACKLASH_SMOOTHING             = _UxGT("Appianamento");
 
   LSTR MSG_FIXED_TIME_MOTION              = _UxGT("Movimento a Tempo-Fisso");
-  LSTR MSG_FTM_MODE                       = _UxGT("Modo Movimento:");
-  //LSTR MSG_FTM_ZV                         = _UxGT("ZV");
-  //LSTR MSG_FTM_ZVD                        = _UxGT("ZVD");
-  //LSTR MSG_FTM_ZVDD                       = _UxGT("ZVDD");
-  //LSTR MSG_FTM_ZVDDD                      = _UxGT("ZVDDD");
-  //LSTR MSG_FTM_EI                         = _UxGT("EI");
-  //LSTR MSG_FTM_2HEI                       = _UxGT("2HEI");
-  //LSTR MSG_FTM_3HEI                       = _UxGT("3HEI");
-  //LSTR MSG_FTM_MZV                        = _UxGT("MZV");
+  LSTR MSG_FTM_CMPN_MODE                  = _UxGT("@ Modo Comp:");
   LSTR MSG_FTM_DYN_MODE                   = _UxGT("Modo DF:");
   LSTR MSG_FTM_Z_BASED                    = _UxGT("Base-Z");
   LSTR MSG_FTM_MASS_BASED                 = _UxGT("Base-Massa");

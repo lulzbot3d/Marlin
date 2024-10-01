@@ -6,6 +6,7 @@
  *   Written By Mark Pelletier  2017 - Aleph Objects, Inc.                  *
  *   Written By Marcio Teixeira 2018 - Aleph Objects, Inc.                  *
  *   Written By Marcio Teixeira 2019 - Cocoa Press                          *
+ *   Written By Brian Kahl      2023 - FAME3D.                              *
  *                                                                          *
  *   This program is free software: you can redistribute it and/or modify   *
  *   it under the terms of the GNU General Public License as published by   *
@@ -56,7 +57,10 @@ void MainMenu::onRedraw(draw_mode_t what) {
     #define GRID_ROWS 5
     #define ADVANCED_SETTINGS_POS BTN_POS(1,1), BTN_SIZE(3,1)
     #define ABOUT_PRINTER_POS     BTN_POS(4,1), BTN_SIZE(3,1)
+    #define BACKLASH_POS          BTN_POS(1,2), BTN_SIZE(1,1)
+    #define CLEAN_NOZZLE_POS      BTN_POS(2,2), BTN_SIZE(1,1)
     #define MOVE_AXIS_POS         BTN_POS(1,3), BTN_SIZE(3,1)
+    #define Z_OFFSET_POS          BTN_POS(2,3), BTN_SIZE(1,1)
     #define DISABLE_STEPPERS_POS  BTN_POS(4,3), BTN_SIZE(3,1)
     #define TEMPERATURE_POS     BTN_POS(1,4), BTN_SIZE(2,1)
     #define EXTRUDER_OFFSET_POS   BTN_POS(1,4), BTN_SIZE(2,1)
@@ -102,9 +106,9 @@ bool MainMenu::onTouchEnd(uint8_t tag) {
          injectCommands(F(CLEAN_SCRIPT));
       #endif
       break;
-    case 6:  GOTO_SCREEN(TemperatureScreen);                             break;
+    case 6: GOTO_SCREEN(TemperatureScreen);                             break;
     case 7: GOTO_SCREEN(TERN(HAS_MULTI_HOTEND, NozzleOffsetScreen, FilamentMenu));                           break;
-    case 8:  GOTO_SCREEN(AdvancedSettingsMenu);                          break;
+    case 8: GOTO_SCREEN(AdvancedSettingsMenu);                          break;
     #if HAS_LEVELING
       case 9:  GOTO_SCREEN(LevelingMenu);                                break;
     #endif

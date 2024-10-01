@@ -5,6 +5,7 @@
 /****************************************************************************
  *   Written By Mark Pelletier  2017 - Aleph Objects, Inc.                  *
  *   Written By Marcio Teixeira 2018 - Aleph Objects, Inc.                  *
+ *   Written By Brian Kahl      2023 - FAME3D.                              *
  *                                                                          *
  *   This program is free software: you can redistribute it and/or modify   *
  *   it under the terms of the GNU General Public License as published by   *
@@ -129,12 +130,12 @@ bool AdvancedSettingsMenu::onTouchEnd(uint8_t tag) {
       #endif
       break;
     #endif
-    case  3: GOTO_SCREEN(StepsScreen);                break;
+    case  3: GOTO_SCREEN(StepsScreen); break;
     #if HAS_MULTI_HOTEND
-    case  4: GOTO_SCREEN(NozzleOffsetScreen);         break;
+    case  4: GOTO_SCREEN(NozzleOffsetScreen); break;
     #endif
-    case  5: GOTO_SCREEN(MaxVelocityScreen);          break;
-    case  6: GOTO_SCREEN(DefaultAccelerationScreen);  break;
+    case  5: GOTO_SCREEN(MaxVelocityScreen); break;
+    case  6: GOTO_SCREEN(DefaultAccelerationScreen); break;
     case  7: GOTO_SCREEN(TERN(HAS_JUNCTION_DEVIATION, JunctionDeviationScreen, JerkScreen)); break;
     #if ENABLED(BACKLASH_GCODE)
     case  8: GOTO_SCREEN(BacklashCompensationScreen); break;

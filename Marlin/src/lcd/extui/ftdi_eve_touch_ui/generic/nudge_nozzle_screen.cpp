@@ -33,7 +33,7 @@ using namespace ExtUI;
 constexpr static NudgeNozzleScreenData &mydata = screen_data.NudgeNozzleScreen;
 
 #define GRID_COLS 13
-#define GRID_ROWS (8+EXTRUDERS)
+#define GRID_ROWS (9+EXTRUDERS)
 
 void NudgeNozzleScreen::onEntry() {
   mydata.show_offsets = false;

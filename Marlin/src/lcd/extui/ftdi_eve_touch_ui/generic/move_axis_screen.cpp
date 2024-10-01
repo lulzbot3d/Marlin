@@ -120,7 +120,9 @@ bool BaseMoveAxisScreen::onTouchHeld(const uint8_t tag) {
       #endif
     #endif
     case 23: SpinnerDialogBox::enqueueAndWait(F("G28")); break;
-    case 25: injectCommands(F(PARKING_COMMAND_GCODE)); break;
+    #ifdef PARKING_COMMAND_GCODE
+      case 25: injectCommands(F(PARKING_COMMAND_GCODE)); break;
+    #endif
     default:
       return false;
   }

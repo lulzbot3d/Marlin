@@ -55,8 +55,30 @@ if pioutil.is_pio_build():
 		if 'MARLIN_FEATURES' not in env:
 			raise SystemExit("Error: this script should be used after common Marlin scripts")
 
-		if 'MOTHERBOARD' not in env['MARLIN_FEATURES']:
-			raise SystemExit("Error: MOTHERBOARD is not defined in Configuration.h")
+        # Useful values
+        project_dir = Path(env['PROJECT_DIR'])
+        config_files = ("Configuration.h", "Configuration_adv.h")
+
+        #
+        # Update old macros BOTH and EITHER in configuration files
+        #
+        conf_modified = False
+        for f in config_files:
+            conf_path = project_dir / "Marlin" / f
+            if conf_path.is_file():
+                with open(conf_path, 'r', encoding="utf8") as file:
+                    text = file.read()
+                    modified_text = text.replace("BOTH(", "ALL(").replace("EITHER(", "ANY(")
+                    if text != modified_text:
+                        conf_modified = True
+                        with open(conf_path, 'w') as file:
+                            file.write(modified_text)
+
+        if conf_modified:
+            raise SystemExit('WARNING: Configuration files needed an update to remove incompatible items. Try the build again to use the updated files.')
+
+        if len(env['MARLIN_FEATURES']) == 0:
+            raise SystemExit("Error: Failed to parse Marlin features. See previous error messages.")
 
 		build_env = env['PIOENV']
 		motherboard = env['MARLIN_FEATURES']['MOTHERBOARD']
@@ -69,14 +91,14 @@ if pioutil.is_pio_build():
 						( build_env, motherboard, ", ".join([ e[4:] for e in board_envs if e.startswith("env:") ]) )
 				raise SystemExit(err)
 
-		#
-		# Check for Config files in two common incorrect places
-		#
-		for p in [ env['PROJECT_DIR'], os.path.join(env['PROJECT_DIR'], "config") ]:
-			for f in [ "Configuration.h", "Configuration_adv.h" ]:
-				if os.path.isfile(os.path.join(p, f)):
-					err = "ERROR: Config files found in directory %s. Please move them into the Marlin subfolder." % p
-					raise SystemExit(err)
+        #
+        # Check for Config files in two common incorrect places
+        #
+        for p in (project_dir, project_dir / "config"):
+            for f in config_files:
+                if (p / f).is_file():
+                    err = "ERROR: Config files found in directory %s. Please move them into the Marlin subfolder." % p
+                    raise SystemExit(err)
 
 		#
 		# Give warnings on every build
@@ -94,21 +116,21 @@ if pioutil.is_pio_build():
 			if os.path.exists(setfile):
 				os.remove(setfile)
 
-		#
-		# Check for old files indicating an entangled Marlin (mixing old and new code)
-		#
-		mixedin = []
-		p = os.path.join(env['PROJECT_DIR'], "Marlin", "src", "lcd", "dogm")
-		for f in [ "ultralcd_DOGM.cpp", "ultralcd_DOGM.h" ]:
-			if os.path.isfile(os.path.join(p, f)):
-				mixedin += [ f ]
-		p = os.path.join(env['PROJECT_DIR'], "Marlin", "src", "feature", "bedlevel", "abl")
-		for f in [ "abl.cpp", "abl.h" ]:
-			if os.path.isfile(os.path.join(p, f)):
-				mixedin += [ f ]
-		if mixedin:
-			err = "ERROR: Old files fell into your Marlin folder. Remove %s and try again" % ", ".join(mixedin)
-			raise SystemExit(err)
+        #
+        # Check for old files indicating an entangled Marlin (mixing old and new code)
+        #
+        mixedin = []
+        p = project_dir / "Marlin/src/lcd/dogm"
+        for f in [ "ultralcd_DOGM.cpp", "ultralcd_DOGM.h" ]:
+            if (p / f).is_file():
+                mixedin += [ f ]
+        p = project_dir / "Marlin/src/feature/bedlevel/abl"
+        for f in [ "abl.cpp", "abl.h" ]:
+            if (p / f).is_file():
+                mixedin += [ f ]
+        if mixedin:
+            err = "ERROR: Old files fell into your Marlin folder. Remove %s and try again" % ", ".join(mixedin)
+            raise SystemExit(err)
 
         #
         # Check FILAMENT_RUNOUT_SCRIPT has a %c parammeter when required
@@ -121,4 +143,5 @@ if pioutil.is_pio_build():
 										err = "ERROR: FILAMENT_RUNOUT_SCRIPT needs a %c parameter (e.g., \"M600 T%c\") when NUM_RUNOUT_SENSORS is > 1"
 										raise SystemExit(err)
 
-		sanity_check_target()
+
+    sanity_check_target()

@@ -626,7 +626,6 @@ void menu_backlash();
       #if ENABLED(X_AXIS_TWIST_COMPENSATION)
         SUBMENU(MSG_XATC, xatc_wizard_continue);
       #endif
-      
       queue.inject_P(PSTR("M500\nM117 Z Offset Saved"));
       END_MENU();
     }
@@ -701,7 +700,7 @@ void menu_advanced_settings() {
 
     // M593 - Acceleration items
     #if ENABLED(SHAPING_MENU)
-      if (!is_busy) SUBMENU(MSG_INPUT_SHAPING, menu_advanced_input_shaping);
+      SUBMENU(MSG_INPUT_SHAPING, menu_advanced_input_shaping);
     #endif
 
     #if ENABLED(CLASSIC_JERK)
@@ -711,11 +710,6 @@ void menu_advanced_settings() {
       EDIT_ITEM(float43, MSG_JUNCTION_DEVIATION, &planner.junction_deviation_mm, 0.001f, 0.3f
         OPTARG(HAS_LINEAR_E_JERK, planner.recalculate_max_e_jerk)
       );
-    #endif
-
-    // M851 - Z Probe Offsets
-    #if HAS_BED_PROBE
-      if (!is_busy) SUBMENU(MSG_ZPROBE_OFFSETS, menu_probe_offsets);
     #endif
 
   #endif // !SLIM_LCD_MENUS

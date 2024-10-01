@@ -48,12 +48,13 @@ void StatusScreen::draw_axis_position(draw_mode_t what) {
     #define Z_VAL_POS             BTN_POS(8,7), BTN_SIZE(2,2)
     #define ALL_VAL_POS           BTN_POS(1,7), BTN_SIZE(9,2)
   #else
-    #define X_LBL_POS  BTN_POS(1, 9), BTN_SIZE(1,2)
-    #define Y_LBL_POS  BTN_POS(2, 9), BTN_SIZE(1,2)
-    #define Z_LBL_POS  BTN_POS(3, 9), BTN_SIZE(1,2)
-    #define X_VAL_POS  BTN_POS(1,11), BTN_SIZE(1,2)
-    #define Y_VAL_POS  BTN_POS(2,11), BTN_SIZE(1,2)
-    #define Z_VAL_POS  BTN_POS(3,11), BTN_SIZE(1,2)
+    #define X_LBL_POS   BTN_POS(1, 9), BTN_SIZE(1, 2)
+    #define Y_LBL_POS   BTN_POS(2, 9), BTN_SIZE(1, 2)
+    #define Z_LBL_POS   BTN_POS(3, 9), BTN_SIZE(1, 2)
+    #define X_VAL_POS   BTN_POS(1,11), BTN_SIZE(1, 2)
+    #define Y_VAL_POS   BTN_POS(2,11), BTN_SIZE(1, 2)
+    #define Z_VAL_POS   BTN_POS(3,11), BTN_SIZE(1, 2)
+    #define ALL_VAL_POS BTN_POS(1, 9), BTN_SIZE(3,11)
   #endif
 
   #define _UNION_POS(x1,y1,w1,h1,x2,y2,w2,h2) x1,y1,max(x1+w1,x2+w2)-x1,max(y1+h1,y2+h2)-y1
@@ -267,6 +268,9 @@ void StatusScreen::draw_progress(draw_mode_t what) {
   #else
     #define GRID_COLS 6
     #define PROGRESSZONE_POS BTN_POS(5,1), BTN_SIZE(2,4)
+    #define PROGRESSZONE_POS_1 BTN_POS(1,9), BTN_SIZE(1,2)
+    #define PROGRESSZONE_POS_2 BTN_POS(2,9), BTN_SIZE(1,2)
+    #define CLEAR_PROGRESS_POS BTN_POS(0,6.75), BTN_SIZE(4,5)
     #if ENABLED(SHOW_REMAINING_TIME)
       #define TIME_POS       BTN_POS(5,1), BTN_SIZE(1,2)
       #define REMAINING_POS  BTN_POS(6,1), BTN_SIZE(1,2)
@@ -352,8 +356,12 @@ void StatusScreen::draw_interaction_buttons(draw_mode_t what) {
     #define MEDIA_BTN_POS         BTN_POS(1,15), BTN_SIZE(1,2)
     #define MENU_BTN_POS          BTN_POS(2,15), BTN_SIZE(1,2)
   #else
-    #define MEDIA_BTN_POS  BTN_POS(1,13), BTN_SIZE(1,4)
-    #define MENU_BTN_POS   BTN_POS(2,13), BTN_SIZE(1,4)
+    #define TOOL_HEAD_POS         BTN_POS(1,11), BTN_SIZE(1,2)
+    #define CHANGE_FILAMENT_POS   BTN_POS(2,11), BTN_SIZE(1,2)
+    #define PREHEAT_POS           BTN_POS(1,13), BTN_SIZE(1,2)
+    #define COOLDOWN_OFFSET_POS   BTN_POS(2,13), BTN_SIZE(1,2)
+    #define MEDIA_BTN_POS         BTN_POS(1,13), BTN_SIZE(1,4)
+    #define MENU_BTN_POS          BTN_POS(2,13), BTN_SIZE(1,4)
   #endif
 
     const bool has_media = isMediaMounted() && !isPrintingFromMedia();

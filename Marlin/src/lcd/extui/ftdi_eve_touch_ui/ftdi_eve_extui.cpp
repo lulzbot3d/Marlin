@@ -127,7 +127,7 @@ namespace ExtUI {
     if (msg)
       EndPrintScreenDialogBox::show(msg);
     else
-      EndPrintScreenDialogBox::hide();
+      EndPrintScreenDialogBox::show("Press Resume to Continue");
   }
 
   #if ENABLED(ADVANCED_PAUSE_FEATURE)

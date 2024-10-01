@@ -5,6 +5,7 @@
 /****************************************************************************
  *   Written By Mark Pelletier  2017 - Aleph Objects, Inc.                  *
  *   Written By Marcio Teixeira 2018 - Aleph Objects, Inc.                  *
+ *   Written By Brian Kahl      2023 - FAME3D.                              *
  *                                                                          *
  *   This program is free software: you can redistribute it and/or modify   *
  *   it under the terms of the GNU General Public License as published by   *
@@ -54,6 +55,7 @@ void TuneMenu::onRedraw(draw_mode_t what) {
     #define STOP_POS        BTN_POS(2,3), BTN_SIZE(1,1)
     #define FLOW_POS        BTN_POS(2,4), BTN_SIZE(1,1)
     #define ADVANCED_SETTINGS_POS BTN_POS(1,5), BTN_SIZE(1,1)
+    #define ABOUT_PRINTER_POS     BTN_POS(1,5), BTN_SIZE(2,1)
     #define BACK_POS        BTN_POS(2,5), BTN_SIZE(1,1)
   #endif
 

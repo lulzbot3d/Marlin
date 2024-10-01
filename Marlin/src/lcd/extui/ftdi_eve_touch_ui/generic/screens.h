@@ -120,7 +120,6 @@ enum {
 #include "about_screen.h"
 #include "kill_screen.h"
 #include "alert_dialog_box.h"
-#include "filament_prompt_dialog_box.h"
 #include "spinner_dialog_box.h"
 #include "restore_failsafe_dialog_box.h"
 #include "save_settings_dialog_box.h"

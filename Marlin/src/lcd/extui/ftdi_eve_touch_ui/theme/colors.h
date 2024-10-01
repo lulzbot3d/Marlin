@@ -158,7 +158,7 @@ namespace Theme {
   constexpr uint32_t feedrate               = axis_label;
   constexpr uint32_t other                  = axis_label;
   constexpr uint32_t cold_pull              = hsl_to_rgb(190, 0.5, 0.50);
-  constexpr uint32_t cancel              = hsl_to_rgb( 25, 0.7, 0.50);
+  constexpr uint32_t cancel                 = hsl_to_rgb( 25, 0.7, 0.50);
 
   // Status screen
   constexpr uint32_t progress               = axis_label;

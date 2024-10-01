@@ -5,6 +5,7 @@
 /****************************************************************************
  *   Written By Mark Pelletier  2017 - Aleph Objects, Inc.                  *
  *   Written By Marcio Teixeira 2018 - Aleph Objects, Inc.                  *
+ *   Written By Brian Kahl      2023 - FAME3D.                              *
  *                                                                          *
  *   This program is free software: you can redistribute it and/or modify   *
  *   it under the terms of the GNU General Public License as published by   *
@@ -350,8 +351,8 @@ bool ChangeFilamentScreen::onTouchEnd(uint8_t tag) {
     case 10:
     case 11:
       // Change extruder
-      mydata.e_tag      = tag;
-      mydata.t_tag      = 0;
+      mydata.e_tag = tag;
+      mydata.t_tag = 0;
       mydata.repeat_tag = 0;
       #if FILAMENT_UNLOAD_PURGE_LENGTH > 0
         mydata.need_purge = true;

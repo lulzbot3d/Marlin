@@ -123,9 +123,7 @@ void FilesScreen::drawFileButton(int x, int y, int w, int h, const char *filenam
   else
     draw_text_with_ellipsis(cmd, bx,by, bw - (is_dir ? 20 : 0), bh, filename, OPT_CENTERY, font_medium);
   if (is_dir && !is_highlighted) cmd.text(bx, by, bw, bh, F("> "),  OPT_CENTERY | OPT_RIGHTX);
-  #if ENABLED(SCROLL_LONG_FILENAMES)
-    if (is_highlighted) cmd.cmd(RESTORE_CONTEXT());
-  #endif
+  if (TERN0(SCROLL_LONG_FILENAMES, is_highlighted)) cmd.cmd(RESTORE_CONTEXT());
 }
 
 void FilesScreen::drawFileList() {

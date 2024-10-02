@@ -39,6 +39,11 @@
   #include "../../module/delta.h"
 #endif
 
+#if HAS_LEVELING
+  #include "../../module/planner.h" // for leveling_active, z_fade_height
+  #include "../../feature/bedlevel/bedlevel.h"
+#endif
+
 // Always show configurable options regardless of FT Motion active
 //#define FT_MOTION_NO_MENU_TOGGLE
 

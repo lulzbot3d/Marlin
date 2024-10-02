@@ -655,6 +655,7 @@ void wait_for_confirmation(const bool is_reload/*=false*/, const int8_t max_beep
  * - Resume the current SD print job, if any
  */
 void resume_print(
+  const bool      loading_filament/*=false*/,
   const_float_t   slow_load_length/*=0*/,
   const_float_t   fast_load_length/*=0*/,
   const_float_t   purge_length/*=ADVANCED_PAUSE_PURGE_LENGTH*/,

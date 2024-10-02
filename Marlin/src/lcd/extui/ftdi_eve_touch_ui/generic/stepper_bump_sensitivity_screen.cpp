@@ -25,18 +25,29 @@
 
 #ifdef FTDI_STEPPER_BUMP_SENSITIVITY_SCREEN
 
+#define GRID_COLS 13
+#define GRID_ROWS (8+EXTRUDERS)
+
 using namespace FTDI;
 using namespace ExtUI;
 using namespace Theme;
 
 void StepperBumpSensitivityScreen::onRedraw(draw_mode_t what) {
   widgets_t w(what);
+  CommandProcessor cmd;
   w.precision(0, BaseNumericAdjustmentScreen::DEFAULT_LOWEST);
   w.heading(                     GET_TEXT_F(MSG_TMC_HOMING_THRS));
   w.color(x_axis)  .adjuster( 2, GET_TEXT_F(MSG_AXIS_X),  getTMCBumpSensitivity(X), ENABLED(X_SENSORLESS));
   w.color(y_axis)  .adjuster( 4, GET_TEXT_F(MSG_AXIS_Y),  getTMCBumpSensitivity(Y), ENABLED(Y_SENSORLESS));
   w.color(z_axis)  .adjuster( 6, GET_TEXT_F(MSG_AXIS_Z),  getTMCBumpSensitivity(Z), ENABLED(Z_SENSORLESS));
   w.increments();
+
+  draw_text_box(cmd, BTN_POS(1,6), BTN_SIZE(13,3), F(
+        "Sensitivity:\n(+) Decrease / (-) Increase\n \n \n \n "
+  ), OPT_CENTER, font_large);
+    draw_text_box(cmd, BTN_POS(1,7), BTN_SIZE(13,3), F(
+        "Detects 3D printer limits by sensing motor resistance;\nno mechanical endstops or sensors needed."
+  ), OPT_CENTER, font_medium);
 }
 
 bool StepperBumpSensitivityScreen::onTouchHeld(uint8_t tag) {

@@ -2965,11 +2965,11 @@
  */
 //#define AUTO_BED_LEVELING_3POINT
 //#define AUTO_BED_LEVELING_LINEAR
-//#if NONE(TAZPro, TAZProXT, TAZProV2)
+#if NONE(TAZPro, TAZProXT, TAZProV2)
   #define AUTO_BED_LEVELING_BILINEAR
-//#else
-  //#define AUTO_BED_LEVELING_UBL
-//#endif
+#else
+  #define AUTO_BED_LEVELING_UBL
+#endif
 //#define MESH_BED_LEVELING
 
 /**

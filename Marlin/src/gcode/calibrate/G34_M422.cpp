@@ -191,9 +191,11 @@ void GcodeSuite::G34() {
         const int iter = iteration + 1;
         SERIAL_ECHOLNPGM("\nG34 Iteration: ", iter);
         #if HAS_STATUS_MESSAGE
-          char str[iter_str_len + 2 + 1];
-          sprintf_P(str, msg_iteration, iter);
-          ui.set_status(str);
+          #if ENABLED(DISPLAY_ITERATION_MESSAGES)
+            char str[iter_str_len + 2 + 1];
+            sprintf_P(str, msg_iteration, iter);
+            ui.set_status(str);
+          #endif
         #endif
 
         // Initialize minimum value

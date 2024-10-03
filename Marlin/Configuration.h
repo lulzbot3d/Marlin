@@ -2367,9 +2367,7 @@
 //#define DELAY_BEFORE_PROBING 200  // (ms) To prevent vibrations from triggering piezo sensors
 
 // Require minimum nozzle and/or bed temperature for probing
-#if ENABLED(LULZBOT_BLTouch)
-  #define PREHEAT_BEFORE_PROBING
-#endif
+//#define PREHEAT_BEFORE_PROBING
 #if ENABLED(PREHEAT_BEFORE_PROBING)
   //#define PROBING_NOZZLE_TEMP 160   // (°C) Only applies to E0 at this time
   //#define PROBING_BED_TEMP     50
@@ -2682,7 +2680,7 @@
       // Travel limits (mm) after homing, corresponding to endstop positions.
       #define LULZBOT_X_MIN_POS 10 // <-- changed
       #define LULZBOT_Y_MIN_POS -24 // <-- changed
-      #define LULZBOT_X_MAX_POS 288 // <-- changed
+      #define LULZBOT_X_MAX_POS 301 // <-- changed
       #define LULZBOT_Y_MAX_POS 339 // <-- changed
       #define LULZBOT_Z_MIN_POS -9 // <-- changed
       #define LULZBOT_Z_MAX_POS 301 // <-- changed

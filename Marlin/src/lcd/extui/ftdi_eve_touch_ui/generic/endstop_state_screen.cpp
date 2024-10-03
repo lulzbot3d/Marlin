@@ -52,7 +52,7 @@ void EndstopStatesScreen::onRedraw(draw_mode_t) {
      .tag(0);
 
   cmd.font(TERN(TOUCH_UI_PORTRAIT, font_large, font_medium))
-  .text(BTN_POS(1,1), BTN_SIZE(6,1), GET_TEXT_F(MSG_LCD_ENDSTOPS))
+  .text(BTN_POS(1,1), BTN_SIZE(6,1), GET_TEXT_F(MSG_ENDSTOP_STATE))
   .font(font_small);
   #if USE_X_MAX
     PIN_ENABLED (1, 2, PSTR(STR_X_MAX), X_MAX, X_MAX_ENDSTOP_HIT_STATE)
@@ -111,6 +111,10 @@ void EndstopStatesScreen::onRedraw(draw_mode_t) {
       #undef EDGE_R
       #define EDGE_R 0
   #endif
+
+  draw_text_box(cmd, BTN_POS(1,6), BTN_SIZE(6,1), F(
+    "LIGHT GREY means not triggered, and GREEN means triggered."
+  ), OPT_CENTER, font_medium);
 
   cmd.font(font_medium)
      .colors(action_btn)

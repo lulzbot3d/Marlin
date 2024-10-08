@@ -1154,7 +1154,7 @@
  * Enable/disable and set parameters with G-code M493.
  * See ft_types.h for named values used by FTM options.
  */
-//#define FT_MOTION
+#define FT_MOTION
 #if ENABLED(FT_MOTION)
   //#define FTM_IS_DEFAULT_MOTION                 // Use FT Motion as the factory default?
   #define FTM_DEFAULT_DYNFREQ_MODE dynFreqMode_DISABLED // Default mode of dynamic frequency calculation. (DISABLED, Z_BASED, MASS_BASED)
@@ -1187,11 +1187,11 @@
   #define FTM_TS                        0.001f    // (s) Time step for trajectory generation. (Reciprocal of FTM_FS)
 
   #if DISABLED(COREXY)
-    #define FTM_STEPPER_FS          20000         // (Hz) Frequency for stepper I/O update
+    #define FTM_STEPPER_FS          40000         // (Hz) Frequency for stepper I/O update
 
     // Use this to adjust the time required to consume the command buffer.
     // Try increasing this value if stepper motion is choppy.
-    #define FTM_STEPPERCMD_BUFF_SIZE 3000         // Size of the stepper command buffers
+    #define FTM_STEPPERCMD_BUFF_SIZE 12000         // Size of the stepper command buffers
 
   #else
     // CoreXY motion needs a larger buffer size. These values are based on our testing.
@@ -1310,9 +1310,9 @@
 #define SLOWDOWN
 #if ENABLED(SLOWDOWN)
   #if ANY(TAZPro, TAZProXT, TAXProV2)
-    #define SLOWDOWN_DIVISOR 16
+    #define SLOWDOWN_DIVISOR 2
   #else
-    #define SLOWDOWN_DIVISOR 8
+    #define SLOWDOWN_DIVISOR 2
   #endif
 #endif
 
@@ -2754,7 +2754,7 @@
 // @section motion
 
 // Moves (or segments) with fewer steps than this will be joined with the next move
-#define MIN_STEPS_PER_SEGMENT 6
+#define MIN_STEPS_PER_SEGMENT 15
 
 /**
  * Minimum delay before and after setting the stepper DIR (in ns)
@@ -2813,11 +2813,11 @@
 
 // The number of linear moves that can be in the planner at once.
 #if ALL(HAS_MEDIA, DIRECT_STEPPING)
-  #define BLOCK_BUFFER_SIZE  8
+  #define BLOCK_BUFFER_SIZE 64
 #elif HAS_MEDIA
-  #define BLOCK_BUFFER_SIZE 16
+  #define BLOCK_BUFFER_SIZE 64
 #else
-  #define BLOCK_BUFFER_SIZE 16
+  #define BLOCK_BUFFER_SIZE 64
 #endif
 
 // @section serial
@@ -2825,9 +2825,9 @@
 // The ASCII buffer for serial input
 #define MAX_CMD_SIZE 96
 #if ANY(TAZPro, TAZProXT, TAXProV2)
-  #define BUFSIZE 16
+  #define BUFSIZE 64
 #else
-  #define BUFSIZE 8
+  #define BUFSIZE 64
 #endif
 
 // Transmission to Host Buffer Size
@@ -2843,7 +2843,7 @@
 // Without XON/XOFF flow control (see SERIAL_XON_XOFF below) 32 bytes should be enough.
 // To use flow control, set this buffer size to at least 1024 bytes.
 // :[0, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048]
-//#define RX_BUFFER_SIZE 1024
+#define RX_BUFFER_SIZE 2048
 
 #if RX_BUFFER_SIZE >= 1024
   // Enable to have the controller send XON/XOFF control characters to

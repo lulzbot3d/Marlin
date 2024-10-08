@@ -37,6 +37,7 @@ FTMotion ftMotion;
 // Public variables.
 
 ft_config_t FTMotion::cfg;
+ftMotionTrajGenConfig_t FTMotion::traj_gen_cfg;
 bool FTMotion::busy; // = false
 ft_command_t FTMotion::stepperCmdBuff[FTM_STEPPERCMD_BUFF_SIZE] = {0U}; // Stepper commands buffer.
 int32_t FTMotion::stepperCmdBuff_produceIdx = 0, // Index of next stepper command write to the buffer.
@@ -156,14 +157,14 @@ void FTMotion::loop() {
     #endif
   }
 
-  if (blockProcRdy) {
+  if (blockProcRdy || traj_gen_cfg.mode) {
 
     if (!batchRdy) makeVector(); // Caution: Do not consolidate checks on blockProcRdy/batchRdy, as they are written by makeVector().
     // When makeVector is finished: either blockProcRdy has been set false (because the block is
     // done being processed) or batchRdy is set true, or both.
 
     // Check if the block has been completely converted:
-    if (!blockProcRdy) {
+    if (!blockProcRdy && !traj_gen_cfg.mode) {
       discard_planner_block_protected();
 
       // Check if the block needs to be runout:
@@ -395,6 +396,16 @@ void FTMotion::reset() {
   axis_move_end_ti.reset();
 }
 
+
+void FTMotion::setup_traj_gen(uint32_t intervals) {
+  // Extend the intervals by propagation time and some margin to 
+  // ensure motion is complete when completion message is sent.
+  max_intervals = FTM_BATCH_SIZE*(PROP_BATCHES+ceil(((float)(intervals)+FTM_FS*(0.5f+(float)(FTM_STEPPERCMD_BUFF_SIZE)/float(FTM_STEPPER_FS)))/FTM_BATCH_SIZE));
+  reset();
+  busy = true;
+}
+
+
 // Private functions.
 
 void FTMotion::discard_planner_block_protected() {
@@ -580,115 +591,156 @@ void FTMotion::loadBlockData(block_t * const current_block) {
 
 // Generate data points of the trajectory.
 void FTMotion::makeVector() {
-  float accel_k = 0.0f;                                 // (mm/s^2) Acceleration K factor
-  float tau = (makeVector_idx + 1) * (FTM_TS);          // (s) Time since start of block
-  float dist = 0.0f;                                    // (mm) Distance traveled
+  do {
+    if (traj_gen_cfg.mode == trajGenMode_SWEEPC_X || traj_gen_cfg.mode == trajGenMode_SWEEPC_Y) {
+      float s_ = 0.0f;
 
-  if (makeVector_idx < N1) {
-    // Acceleration phase
-    dist = (f_s * tau) + (0.5f * accel_P * sq(tau));    // (mm) Distance traveled for acceleration phase since start of block
-    accel_k = accel_P;                                  // (mm/s^2) Acceleration K factor from Accel phase
-  }
-  else if (makeVector_idx < (N1 + N2)) {
-    // Coasting phase
-    dist = s_1e + F_P * (tau - N1 * (FTM_TS));          // (mm) Distance traveled for coasting phase since start of block
-    //accel_k = 0.0f;
-  }
-  else {
-    // Deceleration phase
-    tau -= (N1 + N2) * (FTM_TS);                        // (s) Time since start of decel phase
-    dist = s_2e + F_P * tau + 0.5f * decel_P * sq(tau); // (mm) Distance traveled for deceleration phase since start of block
-    accel_k = decel_P;                                  // (mm/s^2) Acceleration K factor from Decel phase
-  }
+      const float tau = makeVector_idx * FTM_TS;
 
-  #define _SET_TRAJ(q) traj.q[makeVector_batchIdx] = startPosn.q + ratio.q * dist;
-  LOGICAL_AXIS_MAP_LC(_SET_TRAJ);
+      if ( tau <= traj_gen_cfg.pcws_ti[0] ){ s_ = 0.f; }
+      
+      else if ( tau <= traj_gen_cfg.pcws_ti[1] ){
+        const float tau_ = tau - traj_gen_cfg.pcws_ti[0];
+        if (tau_ < traj_gen_cfg.step_ti){ s_ = traj_gen_cfg.step_a_x_0p5 * sq(tau_); }
+        else if (tau_ < traj_gen_cfg.step_ti_x_3){ const float k_ = tau_ - traj_gen_cfg.step_ti_x_2; s_ = traj_gen_cfg.step_a_x_step_ti_x_step_ti - traj_gen_cfg.step_a_x_0p5 * sq(k_); }
+        else { const float k_ = tau_ - traj_gen_cfg.step_ti_x_4; s_ = traj_gen_cfg.step_a_x_0p5 * sq(k_); }
+      }
+      else if ( tau <= traj_gen_cfg.pcws_ti[2] ){ s_ = 0.0f; }
+      
+      else if ( tau <= traj_gen_cfg.pcws_ti[3] ){
+        const float tau_ = tau - traj_gen_cfg.pcws_ti[2];
+        const float tau_tau_ = sq(tau_);
+        const float tau_tau_tau_ = tau_ * tau_tau_;
+        const float k_ = 1.f / (2.f*traj_gen_cfg.k1*tau_ + traj_gen_cfg.k2);
+        const float A_ = ((tau_tau_tau_ < 1.f) ? tau_tau_tau_ : 1.f) * traj_gen_cfg.a * sq(k_);
+        s_ = A_ * sin( traj_gen_cfg.k1*tau_tau_ + traj_gen_cfg.k2*tau_ );
+      }
+      else if ( tau <= traj_gen_cfg.pcws_ti[4] ){ s_ = 0.f; }
 
-  #if HAS_EXTRUDERS
-    if (cfg.linearAdvEna) {
-      float dedt_adj = (traj.e[makeVector_batchIdx] - e_raw_z1) * (FTM_FS);
-      if (ratio.e > 0.0f) dedt_adj += accel_k * cfg.linearAdvK;
+      else if ( tau <= traj_gen_cfg.pcws_ti[5] ){
+        const float tau_ = tau - traj_gen_cfg.pcws_ti[4];
+        if (tau_ < traj_gen_cfg.step_ti){ s_ = -traj_gen_cfg.step_a_x_0p5 * sq(tau_); }
+        else if (tau_ < traj_gen_cfg.step_ti_x_3){ const float k_ = tau_ - traj_gen_cfg.step_ti_x_2; s_ = -traj_gen_cfg.step_a_x_step_ti_x_step_ti + traj_gen_cfg.step_a_x_0p5 * sq(k_); }
+        else { const float k_ = tau_ - traj_gen_cfg.step_ti_x_4; s_ = -traj_gen_cfg.step_a_x_0p5 * sq(k_); }
+      }
+      else { s_ = 0.f; }
 
-      e_raw_z1 = traj.e[makeVector_batchIdx];
-      e_advanced_z1 += dedt_adj * (FTM_TS);
-      traj.e[makeVector_batchIdx] = e_advanced_z1;
+      if (traj_gen_cfg.mode == trajGenMode_SWEEPC_X ) traj.x[makeVector_batchIdx] = s_;
+      else traj.y[makeVector_batchIdx] = s_;
+
+    } else { // Planner mode.
+      float accel_k = 0.0f;                                 // (mm/s^2) Acceleration K factor
+      float tau = (makeVector_idx + 1) * (FTM_TS);    // (s) Time since start of block
+      float dist = 0.0f;                                    // (mm) Distance traveled
+
+      if (makeVector_idx < N1) {
+        // Acceleration phase
+        dist = (f_s * tau) + (0.5f * accel_P * sq(tau));    // (mm) Distance traveled for acceleration phase since start of block
+        accel_k = accel_P;                                  // (mm/s^2) Acceleration K factor from Accel phase
+      }
+      else if (makeVector_idx < (N1 + N2)) {
+        // Coasting phase
+        dist = s_1e + F_P * (tau - N1 * (FTM_TS));          // (mm) Distance traveled for coasting phase since start of block
+        //accel_k = 0.0f;
+      }
+      else {
+        // Deceleration phase
+        tau -= (N1 + N2) * (FTM_TS);                        // (s) Time since start of decel phase
+        dist = s_2e + F_P * tau + 0.5f * decel_P * sq(tau); // (mm) Distance traveled for deceleration phase since start of block
+        accel_k = decel_P;                                  // (mm/s^2) Acceleration K factor from Decel phase
+      }
+
+      #define _SET_TRAJ(q) traj.q[makeVector_batchIdx] = startPosn.q + ratio.q * dist;
+      LOGICAL_AXIS_MAP_LC(_SET_TRAJ);
+
+      #if HAS_EXTRUDERS
+        if (cfg.linearAdvEna) {
+          float dedt_adj = (traj.e[makeVector_batchIdx] - e_raw_z1) * (FTM_FS);
+          if (ratio.e > 0.0f) dedt_adj += accel_k * cfg.linearAdvK;
+
+          e_raw_z1 = traj.e[makeVector_batchIdx];
+          e_advanced_z1 += dedt_adj * (FTM_TS);
+          traj.e[makeVector_batchIdx] = e_advanced_z1;
+        }
+      #endif
     }
-  #endif
 
-  // Update shaping parameters if needed.
+    // Update shaping parameters if needed.
 
-  switch (cfg.dynFreqMode) {
+    switch (cfg.dynFreqMode) {
 
-    #if HAS_DYNAMIC_FREQ_MM
-      case dynFreqMode_Z_BASED: {
-        static float oldz = 0.0f;
-        const float z = traj.z[makeVector_batchIdx];
-        if (z != oldz) { // Only update if Z changed.
-          oldz = z;
+      #if HAS_DYNAMIC_FREQ_MM
+        case dynFreqMode_Z_BASED: {
+          static float oldz = 0.0f;
+          const float z = traj.z[makeVector_batchIdx];
+          if (z != oldz) { // Only update if Z changed.
+            oldz = z;
+            #if HAS_X_AXIS
+              const float xf = cfg.baseFreq.x + cfg.dynFreqK.x * z;
+              shaping.x.set_axis_shaping_N(cfg.shaper.x, _MAX(xf, FTM_MIN_SHAPE_FREQ), cfg.zeta.x);
+            #endif
+            #if HAS_Y_AXIS
+              const float yf = cfg.baseFreq.y + cfg.dynFreqK.y * z;
+              shaping.y.set_axis_shaping_N(cfg.shaper.y, _MAX(yf, FTM_MIN_SHAPE_FREQ), cfg.zeta.y);
+            #endif
+          }
+        } break;
+      #endif
+
+      #if HAS_DYNAMIC_FREQ_G
+        case dynFreqMode_MASS_BASED:
+          // Update constantly. The optimization done for Z value makes
+          // less sense for E, as E is expected to constantly change.
           #if HAS_X_AXIS
-            const float xf = cfg.baseFreq.x + cfg.dynFreqK.x * z;
-            shaping.x.set_axis_shaping_N(cfg.shaper.x, _MAX(xf, FTM_MIN_SHAPE_FREQ), cfg.zeta.x);
+            shaping.x.set_axis_shaping_N(cfg.shaper.x, cfg.baseFreq.x + cfg.dynFreqK.x * traj.e[makeVector_batchIdx], cfg.zeta.x);
           #endif
           #if HAS_Y_AXIS
-            const float yf = cfg.baseFreq.y + cfg.dynFreqK.y * z;
-            shaping.y.set_axis_shaping_N(cfg.shaper.y, _MAX(yf, FTM_MIN_SHAPE_FREQ), cfg.zeta.y);
+            shaping.y.set_axis_shaping_N(cfg.shaper.y, cfg.baseFreq.y + cfg.dynFreqK.y * traj.e[makeVector_batchIdx], cfg.zeta.y);
           #endif
+          break;
+      #endif
+
+      default: break;
+    }
+
+    // Apply shaping if active on each axis
+    #if HAS_FTM_SHAPING
+      #if HAS_X_AXIS
+        if (shaping.x.ena) {
+          shaping.x.d_zi[shaping.zi_idx] = traj.x[makeVector_batchIdx];
+          traj.x[makeVector_batchIdx] *= shaping.x.Ai[0];
+          for (uint32_t i = 1U; i <= shaping.x.max_i; i++) {
+            const uint32_t udiffx = shaping.zi_idx - shaping.x.Ni[i];
+            traj.x[makeVector_batchIdx] += shaping.x.Ai[i] * shaping.x.d_zi[shaping.x.Ni[i] > shaping.zi_idx ? (FTM_ZMAX) + udiffx : udiffx];
+          }
         }
-      } break;
-    #endif
+      #endif
 
-    #if HAS_DYNAMIC_FREQ_G
-      case dynFreqMode_MASS_BASED:
-        // Update constantly. The optimization done for Z value makes
-        // less sense for E, as E is expected to constantly change.
-        #if HAS_X_AXIS
-          shaping.x.set_axis_shaping_N(cfg.shaper.x, cfg.baseFreq.x + cfg.dynFreqK.x * traj.e[makeVector_batchIdx], cfg.zeta.x);
-        #endif
-        #if HAS_Y_AXIS
-          shaping.y.set_axis_shaping_N(cfg.shaper.y, cfg.baseFreq.y + cfg.dynFreqK.y * traj.e[makeVector_batchIdx], cfg.zeta.y);
-        #endif
-        break;
-    #endif
-
-    default: break;
-  }
-
-  // Apply shaping if active on each axis
-  #if HAS_FTM_SHAPING
-    #if HAS_X_AXIS
-      if (shaping.x.ena) {
-        shaping.x.d_zi[shaping.zi_idx] = traj.x[makeVector_batchIdx];
-        traj.x[makeVector_batchIdx] *= shaping.x.Ai[0];
-        for (uint32_t i = 1U; i <= shaping.x.max_i; i++) {
-          const uint32_t udiffx = shaping.zi_idx - shaping.x.Ni[i];
-          traj.x[makeVector_batchIdx] += shaping.x.Ai[i] * shaping.x.d_zi[shaping.x.Ni[i] > shaping.zi_idx ? (FTM_ZMAX) + udiffx : udiffx];
+      #if HAS_Y_AXIS
+        if (shaping.y.ena) {
+          shaping.y.d_zi[shaping.zi_idx] = traj.y[makeVector_batchIdx];
+          traj.y[makeVector_batchIdx] *= shaping.y.Ai[0];
+          for (uint32_t i = 1U; i <= shaping.y.max_i; i++) {
+            const uint32_t udiffy = shaping.zi_idx - shaping.y.Ni[i];
+            traj.y[makeVector_batchIdx] += shaping.y.Ai[i] * shaping.y.d_zi[shaping.y.Ni[i] > shaping.zi_idx ? (FTM_ZMAX) + udiffy : udiffy];
+          }
         }
-      }
-    #endif
+      #endif
+      if (++shaping.zi_idx == (FTM_ZMAX)) shaping.zi_idx = 0;
+    #endif // HAS_FTM_SHAPING
 
-    #if HAS_Y_AXIS
-      if (shaping.y.ena) {
-        shaping.y.d_zi[shaping.zi_idx] = traj.y[makeVector_batchIdx];
-        traj.y[makeVector_batchIdx] *= shaping.y.Ai[0];
-        for (uint32_t i = 1U; i <= shaping.y.max_i; i++) {
-          const uint32_t udiffy = shaping.zi_idx - shaping.y.Ni[i];
-          traj.y[makeVector_batchIdx] += shaping.y.Ai[i] * shaping.y.d_zi[shaping.y.Ni[i] > shaping.zi_idx ? (FTM_ZMAX) + udiffy : udiffy];
-        }
-      }
-    #endif
-    if (++shaping.zi_idx == (FTM_ZMAX)) shaping.zi_idx = 0;
-  #endif // HAS_FTM_SHAPING
+    // Filled up the queue with regular and shaped steps
+    if (++makeVector_batchIdx == FTM_WINDOW_SIZE) {
+      makeVector_batchIdx = BATCH_SIDX_IN_WINDOW;
+      batchRdy = true;
+    }
 
-  // Filled up the queue with regular and shaped steps
-  if (++makeVector_batchIdx == FTM_WINDOW_SIZE) {
-    makeVector_batchIdx = BATCH_SIDX_IN_WINDOW;
-    batchRdy = true;
-  }
-
-  if (++makeVector_idx == max_intervals) {
-    blockProcRdy = false;
-    makeVector_idx = 0;
-  }
+    if (++makeVector_idx == max_intervals) {
+        if (traj_gen_cfg.mode) SERIAL_ECHOLN("M494 echo: profile ran to completion.");
+        blockProcRdy = false; traj_gen_cfg.mode = trajGenMode_NONE;
+      makeVector_idx = 0;
+    }
+  } while ((blockProcRdy || traj_gen_cfg.mode) && !batchRdy);
 }
 
 /**

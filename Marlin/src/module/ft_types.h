@@ -35,6 +35,34 @@ enum ftMotionShaper_t : uint8_t {
   ftMotionShaper_MZV   = 8  // Modified Zero Vibration
 };
 
+typedef enum FXDTICtrlTrajGenMode : uint8_t {
+  trajGenMode_NONE       =  0U,
+  trajGenMode_SWEEPC_X   =  1U,
+  trajGenMode_SWEEPC_Y   =  2U,
+  trajGenMode_ABORT      = 99U,
+} ftMotionTrajGenMode_t;
+
+typedef struct FXDTICtrlTrajGenConfig {
+  ftMotionTrajGenMode_t mode = trajGenMode_NONE;
+  float f0 = 0.0f,
+        f1 = 0.0f,
+        dfdt = 0.0f,
+        a = 0.0f,
+        pcws_ti[6] = {0.0f},
+        k1 = 0.0f,
+        k2 = 0.0f,
+        step_ti = 0.0f,
+        step_a = 0.0f,
+        dly1_ti = 0.0f,
+        dly2_ti = 0.0f,
+        dly3_ti = 0.0f,
+        step_a_x_0p5 = 0.0f,
+        step_a_x_step_ti_x_step_ti = 0.0f,
+        step_ti_x_2 = 0.0f,
+        step_ti_x_3 = 0.0f,
+        step_ti_x_4 = 0.0f;
+} ftMotionTrajGenConfig_t;
+
 enum dynFreqMode_t : uint8_t {
   dynFreqMode_DISABLED   = 0,
   dynFreqMode_Z_BASED    = 1,

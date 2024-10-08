@@ -70,6 +70,7 @@ class FTMotion {
 
     // Public variables
     static ft_config_t cfg;
+    static ftMotionTrajGenConfig_t traj_gen_cfg;
     static bool busy;
 
     static void set_defaults() {
@@ -129,6 +130,8 @@ class FTMotion {
 
     static void reset();                                  // Reset all states of the fixed time conversion to defaults.
 
+	static void setup_traj_gen(uint32_t intervals);
+	
     FORCE_INLINE static bool axis_is_moving(const AxisEnum axis) {
       return cfg.active ? PENDING(millis(), axis_move_end_ti[axis]) : stepper.axis_is_moving(axis);
     }
@@ -173,8 +176,8 @@ class FTMotion {
     #if HAS_FTM_SHAPING
 
       typedef struct AxisShaping {
-        bool ena = false;                 // Enabled indication.
-        float d_zi[FTM_ZMAX] = { 0.0f };  // Data point delay vector.
+        bool ena;                         // Enabled indication.
+        float d_zi[FTM_ZMAX];             // Data point delay vector.
         float Ai[5];                      // Shaping gain vector.
         uint32_t Ni[5];                   // Shaping time index vector.
         uint32_t max_i;                   // Vector length for the selected shaper.

@@ -51,7 +51,7 @@ void AboutScreen::onRedraw(draw_mode_t) {
         "" LULZBOT_LCD_MACHINE_NAME " \nWith Long Bed"
       #elif ENABLED(LULZBOT_LONG_BED_V2)
         "" LULZBOT_LCD_MACHINE_NAME " \nWith Long Bed V2"
-      #elif ENABLED(LULZBOT_BLTouch) && NONE(LULZBOT_LONG_BED_V2, TAZProV2)
+      #elif ENABLED(LULZBOT_BLTouch) && NONE(LULZBOT_LONG_BED_V2, TAZ8)
         "" LULZBOT_LCD_MACHINE_NAME " \nWith BLTouch"
       #else
         "" LULZBOT_LCD_MACHINE_NAME "\n"

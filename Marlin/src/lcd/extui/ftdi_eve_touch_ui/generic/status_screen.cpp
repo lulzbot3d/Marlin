@@ -602,8 +602,8 @@ bool StatusScreen::onTouchEnd(uint8_t tag) {
         break;
       }
     case 16: injectCommands(F(PRESENT_BED_GCODE)); break;
-    case 17: injectCommands(F("M117 Print 123 Paused")); pausePrint();  break;
-    case 18: injectCommands(F("M117 Print Resumed")); resumePrint(); break;
+    case 17: pausePrint(); break;
+    case 18: resumePrint(); break;
     case 19:
       GOTO_SCREEN(ConfirmAbortPrintDialogBox);
       current_screen.forget();

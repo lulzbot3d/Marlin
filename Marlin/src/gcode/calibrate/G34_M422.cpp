@@ -217,7 +217,7 @@ void GcodeSuite::G34() {
           const float z_probed_height = probe.probe_at_point(DIFF_TERN(HAS_HOME_OFFSET, ppos, xy_pos_t(home_offset)), raise_after, 0, true, false, (Z_PROBE_LOW_POINT) - z_probe * 0.5f, z_probe * 0.5f);
           if (isnan(z_probed_height)) {
             SERIAL_ECHOLNPGM(STR_ERR_PROBING_FAILED);
-            LCD_MESSAGE(MSG_LCD_PROBING_FAILED);
+            LCD_MESSAGE(MSG_LCD_TRAMMING_FAILED);
             err_break = true;
             break;
           }
@@ -385,7 +385,7 @@ void GcodeSuite::G34() {
 
         if (success_break) {
           SERIAL_ECHOLNPGM("Target accuracy achieved.");
-          LCD_MESSAGE(MSG_ACCURACY_ACHIEVED);
+          LCD_MESSAGE(MSG_TRAMMING_SUCCESSFUL);
           break;
         }
 

@@ -1138,16 +1138,16 @@ namespace ExtUI {
         //case PAUSE_MESSAGE_CHANGING: onUserConfirmRequired(GET_TEXT_F(MSG_FILAMENT_CHANGE_INIT)); break;
         //case PAUSE_MESSAGE_UNLOAD:   onUserConfirmRequired(GET_TEXT_F(MSG_FILAMENT_CHANGE_UNLOAD)); break;
         //case PAUSE_MESSAGE_WAITING:  onUserConfirmRequired(GET_TEXT_F(MSG_ADVANCED_PAUSE_WAITING)); break;
-        case PAUSE_MESSAGE_INSERT:   onUserConfirmRequired(GET_TEXT_F(MSG_FILAMENT_CHANGE_INSERT)); break;
+        //case PAUSE_MESSAGE_INSERT:   onUserConfirmRequired(GET_TEXT_F(MSG_FILAMENT_CHANGE_INSERT)); break;
         //case PAUSE_MESSAGE_LOAD:     onUserConfirmRequired(GET_TEXT_F(MSG_FILAMENT_CHANGE_LOAD)); break;
-        case PAUSE_MESSAGE_PURGE:    onUserConfirmRequired(
-                                       GET_TEXT_F(TERN(ADVANCED_PAUSE_CONTINUOUS_PURGE, MSG_FILAMENT_CHANGE_CONT_PURGE, MSG_FILAMENT_CHANGE_PURGE))
-                                     );
-                                     break;
+        //case PAUSE_MESSAGE_PURGE:    onUserConfirmRequired(
+        //                               GET_TEXT_F(TERN(ADVANCED_PAUSE_CONTINUOUS_PURGE, MSG_FILAMENT_CHANGE_CONT_PURGE, MSG_FILAMENT_CHANGE_PURGE))
+        //                             );
+        //                             break;
         //case PAUSE_MESSAGE_RESUME:   onUserConfirmRequired(GET_TEXT_F(MSG_FILAMENT_CHANGE_RESUME)); break;
-        case PAUSE_MESSAGE_HEAT:     onUserConfirmRequired(GET_TEXT_F(MSG_FILAMENT_CHANGE_HEAT)); break;
+        //case PAUSE_MESSAGE_HEAT:     onUserConfirmRequired(GET_TEXT_F(MSG_FILAMENT_CHANGE_HEAT)); break;
         //case PAUSE_MESSAGE_HEATING:  onUserConfirmRequired(GET_TEXT_F(MSG_FILAMENT_CHANGE_HEATING)); break;
-        case PAUSE_MESSAGE_OPTION:   onUserConfirmRequired(GET_TEXT_F(MSG_FILAMENT_CHANGE_OPTION_HEADER)); break;
+        //case PAUSE_MESSAGE_OPTION:   onUserConfirmRequired(GET_TEXT_F(MSG_FILAMENT_CHANGE_OPTION_HEADER)); break;
         case PAUSE_MESSAGE_STATUS:   break;
         default: break;
       }

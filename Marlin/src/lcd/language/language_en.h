@@ -108,6 +108,7 @@ namespace LanguageNarrow_en {
   LSTR MSG_ITERATION                      = _UxGT("G34 Iteration: %i");
   LSTR MSG_DECREASING_ACCURACY            = _UxGT("Accuracy Decreasing!");
   LSTR MSG_ACCURACY_ACHIEVED              = _UxGT("Accuracy Achieved");
+  LSTR MSG_TRAMMING_SUCCESSFUL            = _UxGT("Tramming Successful");
   LSTR MSG_LEVEL_BED_HOMING               = _UxGT("Homing XYZ");
   LSTR MSG_LEVEL_BED_WAITING              = _UxGT("Click to Begin");
   LSTR MSG_LEVEL_BED_NEXT_POINT           = _UxGT("Next Point");
@@ -548,6 +549,7 @@ namespace LanguageNarrow_en {
   LSTR MSG_DWELL                          = _UxGT("Sleep...");
   LSTR MSG_USERWAIT                       = _UxGT("Click to Resume...");
   LSTR MSG_PRINT_PAUSED                   = _UxGT("Print Paused");
+  LSTR MSG_PRINT_RESUMED                  = _UxGT("Print Resumed");
   LSTR MSG_PRINTING                       = _UxGT("Printing...");
   LSTR MSG_STOPPING                       = _UxGT("Stopping...");
   LSTR MSG_REMAINING_TIME                 = _UxGT("Remaining");
@@ -756,6 +758,7 @@ namespace LanguageNarrow_en {
   LSTR MSG_FANCHECK                       = _UxGT("Fan Tacho Check");
   LSTR MSG_KILL_HOMING_FAILED             = _UxGT("Homing Failed");
   LSTR MSG_LCD_PROBING_FAILED             = _UxGT("Probing Failed");
+  LSTR MSG_LCD_TRAMMING_FAILED            = _UxGT("Tramming Failed");
 
   LSTR MSG_MMU2_CHOOSE_FILAMENT_HEADER    = _UxGT("CHOOSE FILAMENT");
   LSTR MSG_MMU2_MENU                      = _UxGT("MMU");
@@ -819,12 +822,12 @@ namespace LanguageNarrow_en {
   LSTR MSG_PASSWORD_REMOVED               = _UxGT("Password Removed");
 
   // Filament Change screens show up to 2 lines on a 3-line display
-  LSTR MSG_ADVANCED_PAUSE_WAITING         = _UxGT(MSG_1_LINE("Click to continue"));
+  LSTR MSG_ADVANCED_PAUSE_WAITING         = _UxGT(MSG_1_LINE("Click Resume to Continue"));
   LSTR MSG_PAUSE_PRINT_PARKING            = _UxGT(MSG_1_LINE("Parking..."));
   LSTR MSG_FILAMENT_CHANGE_INIT           = _UxGT(MSG_1_LINE("Please wait..."));
-  LSTR MSG_FILAMENT_CHANGE_INSERT         = _UxGT(MSG_1_LINE("Insert and Click Resume"));
+  LSTR MSG_FILAMENT_CHANGE_INSERT         = _UxGT(MSG_1_LINE("Insert Filament and Click Resume"));
   LSTR MSG_FILAMENT_CHANGE_HEAT           = _UxGT(MSG_1_LINE("Click to heat"));
-  LSTR MSG_FILAMENT_CHANGE_RESUME_REHEAT  = _UxGT(MSG_1_LINE("Click Resume to reheat"));
+  LSTR MSG_FILAMENT_CHANGE_RESUME_REHEAT  = _UxGT(MSG_1_LINE("Click Resume to Reheat"));
   LSTR MSG_FILAMENT_CHANGE_HEATING        = _UxGT(MSG_1_LINE("Heating..."));
   LSTR MSG_FILAMENT_CHANGE_UNLOAD         = _UxGT(MSG_1_LINE("Ejecting..."));
   LSTR MSG_FILAMENT_CHANGE_LOAD           = _UxGT(MSG_1_LINE("Loading..."));
@@ -868,6 +871,7 @@ namespace LanguageNarrow_en {
   LSTR MSG_FTM_VTOL_N                     = _UxGT("@ Vib. Level");
 
   LSTR MSG_LEVEL_X_AXIS                   = _UxGT("Level X Axis");
+  LSTR MSG_TRAM_X_AXIS                    = _UxGT("Tram X Axis");
   LSTR MSG_AUTO_CALIBRATE                 = _UxGT("Auto Calibrate");
   LSTR MSG_FTDI_HEATER_TIMEOUT            = _UxGT("Idle timeout, temperature decreased. Press Okay to reheat and again to resume.");
   LSTR MSG_HEATER_TIMEOUT                 = _UxGT("Heater Timeout");
@@ -937,7 +941,7 @@ namespace LanguageNarrow_en {
   LSTR DGUS_MSG_RESET_EEPROM              = _UxGT("EEPROM reset");
   LSTR DGUS_MSG_WRITE_EEPROM_FAILED       = _UxGT("EEPROM write failed");
   LSTR DGUS_MSG_READ_EEPROM_FAILED        = _UxGT("EEPROM read failed");
-  LSTR DGUS_MSG_FILAMENT_RUNOUT           = _UxGT("Filament runout E%d");
+  LSTR DGUS_MSG_FILAMENT_RUNOUT           = _UxGT("Filament Error E%d\nClick Resume When Resolved");
 }
 
 namespace LanguageWide_en {

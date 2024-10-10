@@ -56,7 +56,7 @@ void NudgeNozzleScreen::onRedraw(draw_mode_t what) {
   w.color(y_axis).adjuster(4, GET_TEXT_F(MSG_AXIS_Y), mydata.rel.y / getAxisSteps_per_mm(Y));
   #endif
   w.color(z_axis).adjuster(6, GET_TEXT_F(MSG_AXIS_Z), mydata.rel.z / getAxisSteps_per_mm(Z));
-  w.increments();
+  w.increments_z_offset();
   #if HAS_MULTI_EXTRUDER
     w.toggle(8, GET_TEXT_F(MSG_ADJUST_BOTH_NOZZLES), mydata.link_nozzles);
   #endif

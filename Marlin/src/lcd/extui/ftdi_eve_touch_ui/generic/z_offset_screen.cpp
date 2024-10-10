@@ -56,7 +56,7 @@ void ZOffsetScreen::onRedraw(draw_mode_t what) {
 
   w.heading(                  GET_TEXT_F(MSG_ZOFFSET));
   w.color(z_axis).adjuster(4, GET_TEXT_F(MSG_ZOFFSET), getZOffset_mm());
-  w.increments();
+  w.increments_z_offset();
   //w.button(2, GET_TEXT_F(MSG_PROBE_WIZARD), !isPrinting() && !wizardRunning());
   draw_text_box(cmd, BTN_POS(1,5), BTN_SIZE(13,3), F(
         "Z Offset: (-) Lower / (+) Raise\n \n \n \n "

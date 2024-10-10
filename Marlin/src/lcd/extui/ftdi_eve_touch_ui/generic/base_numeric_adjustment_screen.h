@@ -77,6 +77,7 @@ class BaseNumericAdjustmentScreen : public BaseScreen {
         void toggle            (uint8_t tag,  FSTR_P label,                     bool value, bool is_enabled = true);
         void home_buttons      (uint8_t tag);
         void increments        ();
+        void increments_z_offset  ();
     };
 
     static float getIncrement();

@@ -52,7 +52,8 @@ void GcodeSuite::M2() {
   }
   else if (parser.seen('R')){
     #if ENABLED(EXTENSIBLE_UI)
-      ExtUI::onReprintScreen(GET_TEXT_F(MSG_USERWAIT));
+      if(ExtUI::isPrintingFromMedia())
+        ExtUI::onReprintScreen(GET_TEXT_F(MSG_USERWAIT));
     #endif
   }
   else{

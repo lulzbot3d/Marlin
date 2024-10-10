@@ -36,7 +36,8 @@ void ReprintScreenDialogBox::onRedraw(draw_mode_t) {
 bool ReprintScreenDialogBox::onTouchEnd(uint8_t tag) {
   switch (tag) {
     case 1:
-      GOTO_SCREEN(FilesScreen);
+      GOTO_SCREEN(StatusScreen);
+      printFile(FilesScreen::getSelectedShortFilename());
       return true;
     case 2:
       GOTO_SCREEN(StatusScreen);
@@ -55,6 +56,10 @@ void ReprintScreenDialogBox::show(const char *msg) {
 void ReprintScreenDialogBox::hide() {
   if (AT_SCREEN(ReprintScreenDialogBox))
     GOTO_PREVIOUS();
+}
+
+void ReprintScreenDialogBox::onMediaRemoved() {
+  if (AT_SCREEN(ReprintScreenDialogBox)) GOTO_SCREEN(StatusScreen);
 }
 
 #endif // FTDI_REPRINT_SCREEN

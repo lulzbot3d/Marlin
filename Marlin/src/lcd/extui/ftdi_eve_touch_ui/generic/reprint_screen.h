@@ -30,4 +30,5 @@ class ReprintScreenDialogBox : public DialogBoxBaseClass, public UncachedScreen 
     static bool onTouchEnd(uint8_t tag);
     static void hide();
     static void show(const char*);
+    static void onMediaRemoved();
 };

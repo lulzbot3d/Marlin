@@ -67,6 +67,7 @@ namespace ExtUI {
 
       StatusScreen::onMediaRemoved();
       FilesScreen::onMediaRemoved();
+      ReprintScreenDialogBox::onMediaRemoved();
     #endif
   }
 

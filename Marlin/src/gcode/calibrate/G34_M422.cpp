@@ -215,6 +215,8 @@ void GcodeSuite::G34() {
           // Probing sanity check is disabled, as it would trigger even in normal cases because
           // current_position.z has been manually altered in the "dirty trick" above.
           const float z_probed_height = probe.probe_at_point(DIFF_TERN(HAS_HOME_OFFSET, ppos, xy_pos_t(home_offset)), raise_after, 0, true, false, (Z_PROBE_LOW_POINT) - z_probe * 0.5f, z_probe * 0.5f);
+          SERIAL_ECHOLNPGM(PSTR("Probing X"), ppos.x, SP_Y_STR, ppos.y);
+          SERIAL_ECHOLNPGM("Height = ", z_probed_height);
           if (isnan(z_probed_height)) {
             SERIAL_ECHOLNPGM(STR_ERR_PROBING_FAILED);
             LCD_MESSAGE(MSG_LCD_TRAMMING_FAILED);

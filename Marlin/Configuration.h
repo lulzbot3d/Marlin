@@ -2866,7 +2866,7 @@
   // Commands to execute on filament runout.
   // With multiple runout sensors use the %c placeholder for the current tool in commands (e.g., "M600 T%c")
   // NOTE: After 'M412 H1' the host handles filament runout and this script does not apply.
-  #define FILAMENT_RUNOUT_SCRIPT "M600 E0 U0 L0"
+  #define FILAMENT_RUNOUT_SCRIPT "M125"
 
   //#define TOOL_SPECIFIC_SCRIPT  // Adding Tool specific commands to runout script
 

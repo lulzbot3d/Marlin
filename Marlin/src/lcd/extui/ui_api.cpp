@@ -1195,6 +1195,16 @@ namespace ExtUI {
     #endif
   }
 
+  void onReprintScreen(FSTR_P const fstr) {
+    #ifdef __AVR__
+      char msg[strlen_P(FTOP(fstr)) + 1];
+      strcpy_P(msg, FTOP(fstr));
+      onReprintScreen(msg);
+    #else
+      onReprintScreen(FTOP(fstr));
+    #endif
+  }
+
   void onPrintCompleteScreen(FSTR_P const fstr) {
     #ifdef __AVR__
       char msg[strlen_P(FTOP(fstr)) + 1];

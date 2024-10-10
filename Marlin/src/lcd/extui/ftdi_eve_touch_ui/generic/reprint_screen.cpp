@@ -1,9 +1,9 @@
-/************************************
- * confirm_abort_print_dialog_box.h *
- ************************************/
+/**************************************
+ * confirm_abort_print_dialog_box.cpp *
+ **************************************/
 
 /****************************************************************************
- *   Written By Brian Kahl 2023 - FAME3D.                                   *
+ *   Written By Brian Kahl 2024 - FAME3D.                                   *
  *                                                                          *
  *   This program is free software: you can redistribute it and/or modify   *
  *   it under the terms of the GNU General Public License as published by   *
@@ -19,15 +19,42 @@
  *   location: <https://www.gnu.org/licenses/>.                             *
  ****************************************************************************/
 
-#pragma once
+#include "../config.h"
+#include "../screens.h"
+#include "files_screen.h"
 
-#define FTDI_END_PRINT_SCREEN
-#define FTDI_END_PRINT_SCREEN_CLASS EndPrintScreenDialogBox
+#ifdef FTDI_REPRINT_SCREEN
 
-class EndPrintScreenDialogBox : public DialogBoxBaseClass, public UncachedScreen {
-  public:
-    static void onRedraw(draw_mode_t);
-    static bool onTouchEnd(uint8_t tag);
-    static void hide();
-    static void show(const char*);
-};
+#include "../../../../feature/host_actions.h"
+
+using namespace ExtUI;
+
+void ReprintScreenDialogBox::onRedraw(draw_mode_t) {
+  drawReprintButtons();
+}
+
+bool ReprintScreenDialogBox::onTouchEnd(uint8_t tag) {
+  switch (tag) {
+    case 1:
+      GOTO_SCREEN(FilesScreen);
+      return true;
+    case 2:
+      GOTO_SCREEN(StatusScreen);
+      return true;
+    default:
+      return DialogBoxBaseClass::onTouchEnd(tag);
+  }
+}
+
+void ReprintScreenDialogBox::show(const char *msg) {
+  drawMessage(msg);
+  if (!AT_SCREEN(ReprintScreenDialogBox))
+    GOTO_SCREEN(ReprintScreenDialogBox);
+}
+
+void ReprintScreenDialogBox::hide() {
+  if (AT_SCREEN(ReprintScreenDialogBox))
+    GOTO_PREVIOUS();
+}
+
+#endif // FTDI_REPRINT_SCREEN

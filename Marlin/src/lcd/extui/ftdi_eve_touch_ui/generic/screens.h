@@ -127,6 +127,7 @@ enum {
 #include "confirm_start_print_dialog_box.h"
 #include "confirm_abort_print_dialog_box.h"
 #include "confirm_user_request_alert_box.h"
+#include "reprint_screen.h"
 #include "end_print_screen.h"
 #include "filament_prompt_box.h"
 #include "touch_calibration_screen.h"

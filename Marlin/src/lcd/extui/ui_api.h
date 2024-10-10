@@ -523,6 +523,8 @@ namespace ExtUI {
 
   void onUserConfirmRequired(const char * const msg);
   void onUserConfirmRequired(FSTR_P const fstr);
+  void onReprintScreen(const char * const msg);
+  void onReprintScreen(FSTR_P const fstr);
   void onPrintCompleteScreen(const char * const msg);
   void onPrintCompleteScreen(FSTR_P const fstr);
   void filament_load_prompt(const char * const msg);

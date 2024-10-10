@@ -3,7 +3,7 @@
  ************************************/
 
 /****************************************************************************
- *   Written By Brian Kahl 2023 - FAME3D.                                   *
+ *   Written By Brian Kahl 2024 - FAME3D.                                   *
  *                                                                          *
  *   This program is free software: you can redistribute it and/or modify   *
  *   it under the terms of the GNU General Public License as published by   *
@@ -21,10 +21,10 @@
 
 #pragma once
 
-#define FTDI_END_PRINT_SCREEN
-#define FTDI_END_PRINT_SCREEN_CLASS EndPrintScreenDialogBox
+#define FTDI_REPRINT_SCREEN
+#define FTDI_REPRINT_SCREEN_CLASS ReprintScreenDialogBox
 
-class EndPrintScreenDialogBox : public DialogBoxBaseClass, public UncachedScreen {
+class ReprintScreenDialogBox : public DialogBoxBaseClass, public UncachedScreen {
   public:
     static void onRedraw(draw_mode_t);
     static bool onTouchEnd(uint8_t tag);

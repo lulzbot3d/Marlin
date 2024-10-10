@@ -123,6 +123,13 @@ namespace ExtUI {
       ConfirmUserRequestAlertBox::show("Press Resume to Continue");
   }
 
+  void onReprintScreen(const char * const msg) {
+    if (msg)
+      ReprintScreenDialogBox::show(msg);
+    else
+      ReprintScreenDialogBox::hide();
+  }
+
   void onPrintCompleteScreen(const char * const msg) {
     if (msg)
       EndPrintScreenDialogBox::show(msg);

@@ -2201,7 +2201,7 @@
 #elif ANY(TAZ6, Workhorse) && ENABLED(TOOLHEAD_Galaxy_Series)
   #define NOZZLE_TO_PROBE_OFFSET { 0, 0, 0 }
 #elif ANY(TAZPro, TAZProXT) && DISABLED(LULZBOT_BLTouch)
-  #define NOZZLE_TO_PROBE_OFFSET { 0, 0, -1.102 }
+  #define NOZZLE_TO_PROBE_OFFSET { 0, 0, -1.1 }
 #elif ANY(TAZPro, TAZProXT) && ENABLED(LULZBOT_BLTouch)
   #define NOZZLE_TO_PROBE_OFFSET { -38, -2, 0 }
 #elif ENABLED(TAZ8)

@@ -37,6 +37,8 @@ class DialogBoxBaseClass : public BaseScreen {
     static void drawOkayButton();
     static void drawDoneButton();
     static void drawFilamentButtons();
+    static void draw_temperature();
+    static void _format_time(char *outstr, uint32_t time);
 
     static void onRedraw(draw_mode_t) {}
 

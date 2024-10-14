@@ -28,12 +28,12 @@
 class StatusScreen : public BaseScreen, public CachedScreen<STATUS_SCREEN_CACHE,STATUS_SCREEN_DL_SIZE> {
   private:
     static void draw_axis_position(draw_mode_t);
-    static void draw_temperature(draw_mode_t);
     static void draw_progress(draw_mode_t);
     static void draw_interaction_buttons(draw_mode_t);
     static void draw_status_message(draw_mode_t, const char * const);
     static void _format_time(char *outstr, uint32_t time);
   public:
+    static void draw_temperature(draw_mode_t);
     static void loadBitmaps();
     static void setStatusMessage(const char *);
     static void setStatusMessage(FSTR_P);

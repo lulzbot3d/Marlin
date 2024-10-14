@@ -67,6 +67,7 @@ namespace ExtUI {
 
       StatusScreen::onMediaRemoved();
       FilesScreen::onMediaRemoved();
+      ReprintScreenDialogBox::onMediaRemoved();
     #endif
   }
 
@@ -121,6 +122,13 @@ namespace ExtUI {
       ConfirmUserRequestAlertBox::show(msg);
     else
       ConfirmUserRequestAlertBox::show("Press Resume to Continue");
+  }
+
+  void onReprintScreen(const char * const msg) {
+    if (msg)
+      ReprintScreenDialogBox::show(msg);
+    else
+      ReprintScreenDialogBox::hide();
   }
 
   void onPrintCompleteScreen(const char * const msg) {

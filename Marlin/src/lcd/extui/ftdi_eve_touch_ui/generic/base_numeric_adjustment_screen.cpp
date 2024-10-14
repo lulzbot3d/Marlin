@@ -179,6 +179,7 @@ void BaseNumericAdjustmentScreen::widgets_t::_draw_increment_btn(CommandProcesso
   switch (tag) {
     case 240: label = PSTR(   ".001"); pos = _decimals - 3; break;
     case 241: label = PSTR(   ".01" ); pos = _decimals - 2; break;
+    case 246: label = PSTR(   ".05" ); pos = _decimals - 2; break;
     case 242: label = PSTR(  "0.1"  ); pos = _decimals - 1; break;
     case 243: label = PSTR(  "1"    ); pos = _decimals + 0; break;
     case 244: label = PSTR( "10"    ); pos = _decimals + 1; break;
@@ -198,6 +199,32 @@ void BaseNumericAdjustmentScreen::widgets_t::_draw_increment_btn(CommandProcesso
       case 2: _button(cmd, tag, BTN_POS(15,4),    BTN_SIZE(4,1), FPSTR(label), true, highlight); break;
     #endif
   }
+}
+
+void BaseNumericAdjustmentScreen::widgets_t::increments_z_offset() {
+  CommandProcessor cmd;
+
+  cmd.font(LAYOUT_FONT);
+
+  if (_what & BACKGROUND) {
+    _button_style(cmd, TEXT_LABEL);
+    cmd.tag(0).text(
+      #if ENABLED(TOUCH_UI_PORTRAIT)
+        BTN_POS(1, _line), BTN_SIZE(4,1),
+      #else
+        BTN_POS(15,    1), BTN_SIZE(4,1),
+      #endif
+      GET_TEXT_F(MSG_INCREMENT)
+    );
+  }
+
+  _draw_increment_btn(cmd, _line+1, 243);
+  _draw_increment_btn(cmd, _line+1, 242);
+  _draw_increment_btn(cmd, _line+1, 246);
+
+  #if ENABLED(TOUCH_UI_PORTRAIT)
+    _line++;
+  #endif
 }
 
 void BaseNumericAdjustmentScreen::widgets_t::increments() {
@@ -384,7 +411,7 @@ bool BaseNumericAdjustmentScreen::onTouchEnd(uint8_t tag) {
   switch (tag) {
     case 1:           GOTO_PREVIOUS(); return true;
     case 100:         SpinnerDialogBox::enqueueAndWait(F(PARKING_COMMAND_GCODE)); break;
-    case 240 ... 245: mydata.increment = tag; break;
+    case 240 ... 246: mydata.increment = tag; break;
     default:          return current_screen.onTouchHeld(tag);
   }
   return true;
@@ -394,6 +421,7 @@ float BaseNumericAdjustmentScreen::getIncrement() {
   switch (mydata.increment) {
     case 240: return   0.001;
     case 241: return   0.01;
+    case 246: return   0.05;
     case 242: return   0.1;
     case 243: return   1.0;
     case 244: return  10.0;

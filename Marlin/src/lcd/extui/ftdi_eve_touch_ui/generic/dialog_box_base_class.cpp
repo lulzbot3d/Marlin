@@ -52,6 +52,31 @@ void DialogBoxBaseClass::drawYesNoButtons(uint8_t default_btn) {
      .colors(default_btn == 2 ? action_btn : normal_btn).tag(2).button(BTN_POS(1,8), BTN_SIZE(1,1), GET_TEXT_F(MSG_NO));
 }
 
+void DialogBoxBaseClass::drawReprintButtons(uint8_t default_btn) {
+  #undef GRID_COLS
+  #undef GRID_ROWS
+  #define GRID_COLS 1
+  #define GRID_ROWS 13
+
+  CommandProcessor cmd;
+
+  cmd.cmd(CMD_DLSTART)
+     .cmd(CLEAR_COLOR_RGB(bg_color))
+     .cmd(CLEAR(true,true,true))
+     .cmd(COLOR_RGB(bg_text_enabled))
+     .tag(0);
+  draw_text_box(cmd, BTN_POS(1,2), BTN_SIZE(1,3), GET_TEXT_F(MSG_PRINT_COMPLETE), OPT_CENTER, font_xlarge);
+  draw_text_box(cmd, BTN_POS(1,5), BTN_SIZE(1,3), GET_TEXT_F(MSG_PRINT_AREA_CLEAR), OPT_CENTER, font_large);
+  cmd.font(font_large)
+     .colors(normal_btn).tag(1).button(BTN_POS(1,9), BTN_SIZE(1,2), GET_TEXT_F(MSG_REPRINT_LAST_JOB))
+     .colors(action_btn).tag(2).button(BTN_POS(1,11), BTN_SIZE(1,2), GET_TEXT_F(MSG_MAIN_MENU));
+
+  #undef GRID_COLS
+  #undef GRID_ROWS
+  #define GRID_COLS 2
+  #define GRID_ROWS 8
+}
+
 void DialogBoxBaseClass::drawStartPrintButtons(uint8_t default_btn) {
   #undef GRID_COLS
   #undef GRID_ROWS

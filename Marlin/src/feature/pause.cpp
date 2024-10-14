@@ -149,7 +149,7 @@ static bool ensure_safe_temperature(const bool wait=true, const PauseMode mode=P
       thermalManager.setTargetHotend(thermalManager.extrude_min_temp, active_extruder);
   #endif
 
-  ui.pause_show_message(PAUSE_MESSAGE_HEATING, mode);
+  //ui.pause_show_message(PAUSE_MESSAGE_HEATING, mode);
 
   if (wait) return thermalManager.wait_for_hotend(active_extruder);
 
@@ -354,7 +354,7 @@ bool unload_filament(const_float_t unload_length, const bool show_lcd/*=false*/,
     return false;
   }
 
-  if (show_lcd) ui.pause_show_message(PAUSE_MESSAGE_UNLOAD, mode);
+  //if (show_lcd) ui.pause_show_message(PAUSE_MESSAGE_UNLOAD, mode);
 
   // Retract filament
   unscaled_e_move(-(FILAMENT_UNLOAD_PURGE_RETRACT) * mix_multiplier, (PAUSE_PARK_RETRACT_FEEDRATE) * mix_multiplier);
@@ -527,8 +527,10 @@ void wait_for_confirmation(const bool is_reload/*=false*/, const int8_t max_beep
   DEBUG_ECHOLNPGM("... is_reload:", is_reload, " maxbeep:", max_beep_count DXC_SAY);
 
   bool nozzle_timed_out = false;
+  static bool ranout = false;
 
-  show_continue_prompt(is_reload);
+  //if (runout.filament_ran_out != ranout)
+    show_continue_prompt(is_reload);
 
   first_impatient_beep(max_beep_count);
 
@@ -545,7 +547,7 @@ void wait_for_confirmation(const bool is_reload/*=false*/, const int8_t max_beep
 
   // Wait for filament insert by user and press button
   KEEPALIVE_STATE(PAUSED_FOR_USER);
-  TERN_(HOST_PROMPT_SUPPORT, hostui.continue_prompt(GET_TEXT_F(MSG_NOZZLE_PARKED)));
+  //TERN_(HOST_PROMPT_SUPPORT, hostui.continue_prompt(GET_TEXT_F(MSG_NOZZLE_PARKED)));
   //TERN_(EXTENSIBLE_UI, ExtUI::onUserConfirmRequired(GET_TEXT_F(MSG_NOZZLE_PARKED)));
 
   wait_for_user = true;    // LCD click or M108 will clear this
@@ -559,13 +561,13 @@ void wait_for_confirmation(const bool is_reload/*=false*/, const int8_t max_beep
     // Wait for the user to press the button to re-heat the nozzle, then
     // re-heat the nozzle, re-show the continue prompt, restart idle timers, start over
     if (nozzle_timed_out) {
-      ui.pause_show_message(PAUSE_MESSAGE_HEAT);
+      //ui.pause_show_message(PAUSE_MESSAGE_HEAT);
       SERIAL_ECHO_MSG(_PMSG(STR_FILAMENT_CHANGE_HEAT));
 
       TERN_(HOST_PROMPT_SUPPORT, hostui.prompt_do(PROMPT_USER_CONTINUE, GET_TEXT_F(MSG_HEATER_TIMEOUT), GET_TEXT_F(MSG_REHEAT)));
 
       #if ENABLED(TOUCH_UI_FTDI_EVE)
-        ExtUI::onUserConfirmRequired(GET_TEXT_F(MSG_FTDI_HEATER_TIMEOUT));
+        //ExtUI::onUserConfirmRequired(GET_TEXT_F(MSG_FTDI_HEATER_TIMEOUT));
       #elif ENABLED(EXTENSIBLE_UI)
         ExtUI::onUserConfirmRequired(GET_TEXT_F(MSG_HEATER_TIMEOUT));
       #endif
@@ -592,7 +594,7 @@ void wait_for_confirmation(const bool is_reload/*=false*/, const int8_t max_beep
 
       TERN_(HOST_PROMPT_SUPPORT, hostui.continue_prompt(GET_TEXT_F(MSG_REHEATDONE)));
       #if ENABLED(EXTENSIBLE_UI)
-        ExtUI::onUserConfirmRequired(GET_TEXT_F(MSG_REHEATDONE));
+        ExtUI::onUserConfirmRequired(GET_TEXT_F(MSG_ADVANCED_PAUSE_WAITING));
       #else
         LCD_MESSAGE(MSG_REHEATDONE);
       #endif
@@ -706,7 +708,7 @@ void resume_print(const bool loading_filament/*=false*/, const_float_t slow_load
   // Set extruder to saved position
   planner.set_e_position_mm((destination.e = current_position.e = resume_position.e));
 
-  ui.pause_show_message(PAUSE_MESSAGE_STATUS);
+  //ui.pause_show_message(PAUSE_MESSAGE_STATUS);
 
   #ifdef ACTION_ON_RESUMED
     hostui.resumed();

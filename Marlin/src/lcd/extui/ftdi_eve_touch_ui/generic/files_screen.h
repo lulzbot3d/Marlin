@@ -47,9 +47,6 @@ class FilesScreen : public BaseScreen, public CachedScreen<FILES_SCREEN_CACHE, F
     static uint16_t getFileForTag(uint8_t tag);
     static uint16_t getSelectedFileIndex();
 
-    inline static const char *getSelectedShortFilename() {return getSelectedFilename(true);}
-    static const char *getSelectedFilename(bool shortName = false);
-
     static void drawFileButton(int x, int y, int w, int h, const char *filename, uint8_t tag, bool is_dir, bool is_highlighted);
     static void drawFileButton(const char *filename, uint8_t tag, bool is_dir, bool is_highlighted);
     static void drawFileList();
@@ -60,6 +57,10 @@ class FilesScreen : public BaseScreen, public CachedScreen<FILES_SCREEN_CACHE, F
 
     static void gotoPage(uint8_t);
   public:
+
+    inline static const char *getSelectedShortFilename() {return getSelectedFilename(true);}
+    static const char *getSelectedFilename(bool shortName = false);
+
     static void onEntry();
     static void onRedraw(draw_mode_t);
     static bool onTouchEnd(uint8_t tag);

@@ -41,6 +41,8 @@
  *               "Would you like to start next print?"
  *               Yes and No buttons report back what decision was made.
  *
+ *  M2 R       - Brings up a Reprint last job screen
+ *
  *  M2 O       - Override the M2 end print page and bring the screen to Status Screen
  */
 void GcodeSuite::M2() {
@@ -48,10 +50,16 @@ void GcodeSuite::M2() {
   if (parser.seen('O')){
     GOTO_SCREEN(StatusScreen);
   }
+  else if (parser.seen('R')){
+    #if ENABLED(EXTENSIBLE_UI)
+      if(ExtUI::isPrintingFromMedia())
+        ExtUI::onReprintScreen(GET_TEXT_F(MSG_USERWAIT));
+    #endif
+  }
   else{
-  #if ENABLED(EXTENSIBLE_UI)
+    #if ENABLED(EXTENSIBLE_UI)
       ExtUI::onPrintCompleteScreen(GET_TEXT_F(MSG_USERWAIT));
-  #endif
+    #endif
   }
 }
 

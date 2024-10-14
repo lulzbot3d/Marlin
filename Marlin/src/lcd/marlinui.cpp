@@ -1768,6 +1768,7 @@ void MarlinUI::host_notify(const char * const cstr) {
       hostui.resume();
     #endif
     print_job_timer.start(); // Also called by M24
+    LCD_MESSAGE(MSG_PRINT_RESUMED);
   }
 
   #if HAS_TOUCH_BUTTONS

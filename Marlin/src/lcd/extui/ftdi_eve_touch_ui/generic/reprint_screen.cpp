@@ -3,7 +3,7 @@
  **************************************/
 
 /****************************************************************************
- *   Written By Brian Kahl 2023 - FAME3D.                                   *
+ *   Written By Brian Kahl 2024 - FAME3D.                                   *
  *                                                                          *
  *   This program is free software: you can redistribute it and/or modify   *
  *   it under the terms of the GNU General Public License as published by   *
@@ -21,41 +21,45 @@
 
 #include "../config.h"
 #include "../screens.h"
+#include "files_screen.h"
 
-#ifdef FTDI_END_PRINT_SCREEN
+#ifdef FTDI_REPRINT_SCREEN
 
 #include "../../../../feature/host_actions.h"
 
 using namespace ExtUI;
 
-void EndPrintScreenDialogBox::onRedraw(draw_mode_t) {
-  drawStartPrintButtons();
+void ReprintScreenDialogBox::onRedraw(draw_mode_t) {
+  drawReprintButtons();
 }
 
-bool EndPrintScreenDialogBox::onTouchEnd(uint8_t tag) {
+bool ReprintScreenDialogBox::onTouchEnd(uint8_t tag) {
   switch (tag) {
     case 1:
-      GOTO_PREVIOUS();
-      injectCommands(F("M117 Q60"));
+      GOTO_SCREEN(StatusScreen);
+      printFile(FilesScreen::getSelectedShortFilename());
       return true;
     case 2:
-      GOTO_PREVIOUS();
-      injectCommands(F("M117 Q60 S"));
+      GOTO_SCREEN(StatusScreen);
       return true;
     default:
       return DialogBoxBaseClass::onTouchEnd(tag);
   }
 }
 
-void EndPrintScreenDialogBox::show(const char *msg) {
+void ReprintScreenDialogBox::show(const char *msg) {
   drawMessage(msg);
-  if (!AT_SCREEN(EndPrintScreenDialogBox))
-    GOTO_SCREEN(EndPrintScreenDialogBox);
+  if (!AT_SCREEN(ReprintScreenDialogBox))
+    GOTO_SCREEN(ReprintScreenDialogBox);
 }
 
-void EndPrintScreenDialogBox::hide() {
-  if (AT_SCREEN(EndPrintScreenDialogBox))
+void ReprintScreenDialogBox::hide() {
+  if (AT_SCREEN(ReprintScreenDialogBox))
     GOTO_PREVIOUS();
 }
 
-#endif // FTDI_END_PRINT_SCREEN
+void ReprintScreenDialogBox::onMediaRemoved() {
+  if (AT_SCREEN(ReprintScreenDialogBox)) GOTO_SCREEN(StatusScreen);
+}
+
+#endif // FTDI_REPRINT_SCREEN

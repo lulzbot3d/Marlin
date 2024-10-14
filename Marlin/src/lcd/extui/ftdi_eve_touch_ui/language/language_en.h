@@ -111,6 +111,7 @@ namespace Language_en {
   LSTR MSG_DUAL_CALIBRATION_WARNING = u8"Unload filament and clean the extruder before starting.\n \nNote: Calibration updates both Backlash and Extruder Offset values.\n \nContinue with calibration?";
   LSTR MSG_START_PRINT_CONFIRMATION = u8"Start printing %s?";
   LSTR MSG_ABORT_WARNING            = u8"Are you sure you want to cancel the print?";
+  LSTR MSG_REPRINT_LAST_JOB         = u8"Reprint Last Job";
   LSTR MSG_START_NEXT_PRINT         = u8"Start Next Print";
   LSTR MSG_EXTRUDER_SELECTION       = u8"Extruder Selection";
   LSTR MSG_CURRENT_TEMPERATURE      = u8"Current Temp";

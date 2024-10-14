@@ -608,6 +608,7 @@ namespace LanguageNarrow_en {
   LSTR MSG_ZPROBE_OUT                     = _UxGT("Z Probe Past Bed");
   LSTR MSG_SKEW_FACTOR                    = _UxGT("Skew Factor");
   LSTR MSG_BLTOUCH                        = _UxGT("BLTouch");
+  LSTR MSG_BLTOUCH_MENU                   = _UxGT("BLTouch Menu");
   LSTR MSG_BLTOUCH_SELFTEST               = _UxGT("Self-Test");
   LSTR MSG_BLTOUCH_RESET                  = _UxGT("Reset");
   LSTR MSG_BLTOUCH_STOW                   = _UxGT("Stow");

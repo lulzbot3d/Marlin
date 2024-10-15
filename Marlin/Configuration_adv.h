@@ -581,7 +581,7 @@
  */
 #define USE_CONTROLLER_FAN
 #if ENABLED(USE_CONTROLLER_FAN)
-    #if ANY(MiniV2, MiniV3, Sidekick_289, Sidekick_747)
+  #if ANY(MiniV2, MiniV3, Sidekick_289, Sidekick_747)
     #define CONTROLLER_FAN_PIN FAN1_PIN        // Set a custom pin for the controller fan
   #else
     #define CONTROLLER_FAN_PIN FAN2_PIN        // Set a custom pin for the controller fan

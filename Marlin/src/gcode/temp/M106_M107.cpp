@@ -39,6 +39,9 @@
 #if ENABLED(SINGLENOZZLE)
   #define _ALT_P active_extruder
   #define _CNT_P EXTRUDERS
+#elif ENABLED(ALL_EXTRUDERS_USE_T0_PART_COOLING_FAN)
+  #define _ALT_P 1
+  #define _CNT_P EXTRUDERS
 #else
   #define _ALT_P _MIN(active_extruder, FAN_COUNT - 1)
   #define _CNT_P FAN_COUNT

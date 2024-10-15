@@ -423,6 +423,7 @@ void unified_bed_leveling::G29() {
   #if HAS_BED_PROBE
 
     if (parser.seen_test('J')) {
+      probe_bed_if_mesh_not_active(); // run M1004 if there is not a mesh
       save_ubl_active_state_and_disable();
       tilt_mesh_based_on_probed_grid(param.J_grid_size == 0); // Zero size does 3-Point
       restore_ubl_active_state();
@@ -1463,6 +1464,15 @@ void unified_bed_leveling::smart_fill_mesh() {
 }
 
 #if HAS_BED_PROBE
+
+  void unified_bed_leveling::probe_bed_if_mesh_not_active() {
+    if (!leveling_is_valid()) {
+      SERIAL_ECHO_MSG("mesh is not valid, probing bed");
+      gcode.process_subcommands_now(F("M1004"));
+    }
+    else
+      SERIAL_ECHO_MSG("mesh is valid");
+  }
 
   //#define VALIDATE_MESH_TILT
 

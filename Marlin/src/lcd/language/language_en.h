@@ -728,7 +728,7 @@ namespace LanguageNarrow_en {
 
   LSTR MSG_INFO_PRINT_COUNT               = _UxGT("Prints");
   LSTR MSG_INFO__STARTED_PRINT_COUNT      = _UxGT("Prints Started");
-  LSTR MSG_INFO_PRINT_TIME                = _UxGT("Total");
+  LSTR MSG_INFO_PRINT_TIME                = _UxGT("Print Time:");
   LSTR MSG_INFO_PRINT_TIME_HOURS          = _UxGT("Total Print Hr");
   LSTR MSG_INFO_PRINT_LONGEST             = _UxGT("Longest");
   LSTR MSG_INFO_PRINT_LONGEST_PRINT       = _UxGT("Longest Print");

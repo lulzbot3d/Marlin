@@ -31,4 +31,5 @@ class ReprintScreenDialogBox : public DialogBoxBaseClass, public UncachedScreen 
     static void hide();
     static void show(const char*);
     static void onMediaRemoved();
+    static void onIdle();
 };

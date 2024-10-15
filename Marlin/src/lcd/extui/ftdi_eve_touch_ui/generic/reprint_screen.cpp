@@ -61,5 +61,12 @@ void ReprintScreenDialogBox::hide() {
 void ReprintScreenDialogBox::onMediaRemoved() {
   if (AT_SCREEN(ReprintScreenDialogBox)) GOTO_SCREEN(StatusScreen);
 }
+void ReprintScreenDialogBox::onIdle() {
+  if (refresh_timer.elapsed(STATUS_UPDATE_INTERVAL)) {
+    onRefresh();
+    refresh_timer.start();
+  }
+  BaseScreen::onIdle();
+}
 
 #endif // FTDI_REPRINT_SCREEN

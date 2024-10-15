@@ -3101,8 +3101,13 @@
   //#define MESH_EDIT_GFX_OVERLAY   // Display a graphics overlay while editing the mesh
 
   #define MESH_INSET 5              // Set Mesh bounds as an inset region of the bed
-  #define GRID_MAX_POINTS_X 6      // Don't use more than 15 points per axis, implementation limited.
-  #define GRID_MAX_POINTS_Y GRID_MAX_POINTS_X
+  #if ANY(LULZBOT_LONG_BED, LULZBOT_LONG_BED_V2)
+    #define GRID_MAX_POINTS_X 6  //4x8 grid to account for entire long bed printable area
+    #define GRID_MAX_POINTS_Y 12
+  #else
+    #define GRID_MAX_POINTS_X 6      // Don't use more than 15 points per axis, implementation limited.
+    #define GRID_MAX_POINTS_Y GRID_MAX_POINTS_X
+  #endif
 
   #define UBL_HILBERT_CURVE       // Use Hilbert distribution for less travel when probing multiple points
 

@@ -299,7 +299,7 @@ void GcodeSuite::G34() {
         #endif
 
         msg.echoln();
-        ui.set_status(msg);
+        //ui.set_status(msg);
 
         auto decreasing_accuracy = [](const_float_t v1, const_float_t v2) {
           if (v1 < v2 * 0.7f) {

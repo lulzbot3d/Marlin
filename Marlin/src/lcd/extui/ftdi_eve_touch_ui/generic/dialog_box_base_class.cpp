@@ -94,10 +94,10 @@ void DialogBoxBaseClass::drawReprintButtons(uint8_t default_btn) {
      .cmd(CLEAR(true,true,true))
      .cmd(COLOR_RGB(bg_text_enabled))
      .tag(0);
-  draw_text_box(cmd, BTN_POS(1,5), BTN_SIZE(6,2), GET_TEXT_F(MSG_PRINT_COMPLETE), OPT_CENTER, font_xlarge);
-  draw_text_box(cmd, BTN_POS(1,7), BTN_SIZE(6,3), GET_TEXT_F(MSG_PRINT_CLEAR_FILAMENT), OPT_CENTER, font_large);
-  draw_text_box(cmd, BTN_POS(1,10), BTN_SIZE(3,2), GET_TEXT_F(MSG_INFO_PRINT_TIME), OPT_RIGHTX | OPT_CENTERY, font_large);
-  draw_text_box(cmd, BTN_POS(4,10), BTN_SIZE(3,2), elapsed_str, OPT_CENTER, font_large);
+  draw_text_box(cmd, BTN_POS(1,5), BTN_SIZE(6,3), GET_TEXT_F(MSG_PRINT_COMPLETE), OPT_CENTER, font_xlarge);
+  draw_text_box(cmd, BTN_POS(1,8), BTN_SIZE(6,3), GET_TEXT_F(MSG_PRINT_CLEAR_FILAMENT), OPT_CENTER, font_large);
+  draw_text_box(cmd, BTN_POS(1,11), BTN_SIZE(3,2), GET_TEXT_F(MSG_INFO_PRINT_TIME), OPT_RIGHTX | OPT_CENTERY, font_large);
+  draw_text_box(cmd, BTN_POS(4,11), BTN_SIZE(3,2), elapsed_str, OPT_CENTER, font_large);
   cmd.font(font_large)
      .colors(normal_btn).tag(1).button(BTN_POS(1,13), BTN_SIZE(6,2), GET_TEXT_F(MSG_REPRINT_LAST_JOB))
      .colors(action_btn).tag(2).button(BTN_POS(1,15), BTN_SIZE(6,2), GET_TEXT_F(MSG_MAIN_MENU));

@@ -2977,6 +2977,7 @@
   #define AUTO_BED_LEVELING_UBL
 #else
   #define AUTO_BED_LEVELING_BILINEAR
+#endif
 //#define MESH_BED_LEVELING
 
 /**

@@ -545,6 +545,7 @@
     #define LULZBOT_MOTOR_CURRENT_E0               960 // mA
     #define LULZBOT_MOTOR_CURRENT_E1               960 // mA
     #define SWITCHING_NOZZLE
+    #define ALL_EXTRUDERS_USE_T0_PART_COOLING_FAN
 #endif /* TOOLHEAD_Quiver_DualExtruder */
 
 #if defined(TOOLHEAD_Galaxy_DualExtruder)
@@ -574,6 +575,7 @@
     #define LULZBOT_MOTOR_CURRENT_E0               850 // mA
     #define LULZBOT_MOTOR_CURRENT_E1               850 // mA
     #define SWITCHING_NOZZLE
+    #define ALL_EXTRUDERS_USE_T0_PART_COOLING_FAN
     /********************* MPC Settings **********************/
     #define LULZBOT_TOOLHEAD_WATT                 { 50.0f, 50.0f }
     #define LULZBOT_MPC_BLOCK_HEAT_CAPACITY       { 15.44f, 15.44f }

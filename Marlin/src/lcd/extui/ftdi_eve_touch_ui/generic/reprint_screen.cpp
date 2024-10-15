@@ -62,6 +62,7 @@ void ReprintScreenDialogBox::onMediaRemoved() {
   if (AT_SCREEN(ReprintScreenDialogBox)) GOTO_SCREEN(StatusScreen);
 }
 void ReprintScreenDialogBox::onIdle() {
+  reset_menu_timeout();
   if (refresh_timer.elapsed(STATUS_UPDATE_INTERVAL)) {
     onRefresh();
     refresh_timer.start();

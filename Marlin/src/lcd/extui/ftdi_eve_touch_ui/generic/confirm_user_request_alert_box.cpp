@@ -36,10 +36,9 @@ bool ConfirmUserRequestAlertBox::onTouchEnd(uint8_t tag) {
   switch (tag) {
     case 1:
       SERIAL_ECHOLNPGM("Touch Case 1");
-      if (ExtUI::pauseModeStatus == PAUSE_MESSAGE_PURGE || ExtUI::pauseModeStatus == PAUSE_MESSAGE_OPTION) {
+      if (ExtUI::pauseModeStatus == PAUSE_MESSAGE_PURGE || ExtUI::pauseModeStatus == PAUSE_MESSAGE_OPTION)
         ExtUI::setPauseMenuResponse(PAUSE_RESPONSE_RESUME_PRINT);
       ExtUI::setUserConfirmed();
-      }
       #ifdef FTDI_TUNE_MENU
         if (ExtUI::awaitingUserConfirm()) {
           // The TuneMenu will call ExtUI::setUserConfirmed()

@@ -277,8 +277,8 @@ bool unified_bed_leveling::sanity_check() {
         thermalManager.wait_for_bed(false);
       }
     #endif
-
-    process_subcommands_now(FPSTR(G28_STR));      // Home
+    if (axes_should_home())
+      process_subcommands_now(FPSTR(G28_STR));    // Home if needed
     process_subcommands_now(F(ALIGN_GCODE         // Align multi z axis if available
                               PROBE_GCODE "\n"    // Build mesh with available hardware
                               "G29P3\nG29P3"));   // Ensure mesh is complete by running smart fill twice

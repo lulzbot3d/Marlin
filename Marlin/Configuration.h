@@ -2208,7 +2208,7 @@
   #define NOZZLE_TO_PROBE_OFFSET { -38, -2, 0 }
 #elif ENABLED(TAZ8)
   #if ENABLED(TOOLHEAD_Galaxy_DualExtruder)
-    #define NOZZLE_TO_PROBE_OFFSET { 48, 70, -3.2 }
+    #define NOZZLE_TO_PROBE_OFFSET { 48, 70, -1.2 }
   #else
     #define NOZZLE_TO_PROBE_OFFSET { 23, 63, 0 }
   #endif

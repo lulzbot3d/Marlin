@@ -8,7 +8,7 @@
 /************** Uncomment a Tool Head Option From Below *********************/
 
 //#define TOOLHEAD_Legacy_Universal
-#define TOOLHEAD_Galaxy_Series
+//#define TOOLHEAD_Galaxy_Series
 //#define TOOLHEAD_SL_SE_HE
 //#define TOOLHEAD_HS_HSPLUS
 //#define TOOLHEAD_H175
@@ -16,7 +16,7 @@
 //#define TOOLHEAD_SK175
 //#define TOOLHEAD_SK285
 //#define TOOLHEAD_Quiver_DualExtruder            // TAZ Pro Dual Extruder
-//#define TOOLHEAD_Galaxy_DualExtruder            // TAZ Pro Galaxy-Series Dual Extruders
+#define TOOLHEAD_Galaxy_DualExtruder            // TAZ Pro Galaxy-Series Dual Extruders
 //#define TOOLHEAD_KangarooPaw_SingleExtruder     // Bio Single syringe
 
 /************** Uncomment Options for Printer From Below *********************/
@@ -1782,7 +1782,7 @@
   #if defined(LULZBOT_LONG_BED)
     #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 160, 500, LULZBOT_E_STEPS }
   #elif defined(LULZBOT_LONG_BED_V2)
-    #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 184.13, 500, LULZBOT_E_STEPS }  // using 5.18:1 and 30T 3mm pitched belt for Y axis
+    #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 368.26, 500, LULZBOT_E_STEPS }  // using 5.18:1 and 30T 3mm pitched belt for Y axis
   #else
     #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 100, 500, LULZBOT_E_STEPS }
   #endif
@@ -1790,7 +1790,7 @@
   #if defined(LULZBOT_LONG_BED)
     #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 160, 518.18, LULZBOT_E_STEPS }
   #elif defined(LULZBOT_LONG_BED_V2)
-    #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 184.13, 518.18, LULZBOT_E_STEPS } // using 5.18:1 and 30T 3mm pitched belt for Y axis
+    #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 368.26, 518.18, LULZBOT_E_STEPS } // using 5.18:1 and 30T 3mm pitched belt for Y axis
   #else
     #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 100, 518.18, LULZBOT_E_STEPS }
   #endif
@@ -2208,7 +2208,7 @@
   #define NOZZLE_TO_PROBE_OFFSET { -38, -2, 0 }
 #elif ENABLED(TAZ8)
   #if ENABLED(TOOLHEAD_Galaxy_DualExtruder)
-    #define NOZZLE_TO_PROBE_OFFSET { 48, 70, -1.2 }
+    #define NOZZLE_TO_PROBE_OFFSET { 48, 70, -1 }
   #else
     #define NOZZLE_TO_PROBE_OFFSET { 23, 63, 0 }
   #endif
@@ -3102,10 +3102,10 @@
 
   //#define MESH_EDIT_GFX_OVERLAY   // Display a graphics overlay while editing the mesh
 
-  #define MESH_INSET 5              // Set Mesh bounds as an inset region of the bed
+  #define MESH_INSET 15              // Set Mesh bounds as an inset region of the bed
   #if ANY(LULZBOT_LONG_BED, LULZBOT_LONG_BED_V2)
     #define GRID_MAX_POINTS_X 6  //4x8 grid to account for entire long bed printable area
-    #define GRID_MAX_POINTS_Y 12
+    #define GRID_MAX_POINTS_Y 10
   #else
     #define GRID_MAX_POINTS_X 6      // Don't use more than 15 points per axis, implementation limited.
     #define GRID_MAX_POINTS_Y GRID_MAX_POINTS_X

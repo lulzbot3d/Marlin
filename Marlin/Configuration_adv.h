@@ -1306,8 +1306,8 @@
 // Increase the slowdown divisor for larger buffer sizes.
 #define SLOWDOWN
 #if ENABLED(SLOWDOWN)
-  #if ANY(TAZPro, TAZProXT, TAXProV2)
-    #define SLOWDOWN_DIVISOR 16
+  #if ANY(TAZPro, TAZProXT, TAZ8)
+    #define SLOWDOWN_DIVISOR 32
   #else
     #define SLOWDOWN_DIVISOR 8
   #endif
@@ -1393,7 +1393,7 @@
 
   #define CALIBRATION_FEEDRATE_SLOW             60    // mm/m
   #define CALIBRATION_FEEDRATE_FAST           1200    // mm/m
-  #define CALIBRATION_FEEDRATE_TRAVEL         3000    // mm/m
+  #define CALIBRATION_FEEDRATE_TRAVEL         1200    // mm/m
 
   // The following parameters refer to the conical section of the nozzle tip.
   #define CALIBRATION_NOZZLE_TIP_HEIGHT          1.0  // mm
@@ -2810,8 +2810,8 @@
 
 // The ASCII buffer for serial input
 #define MAX_CMD_SIZE 96
-#if ANY(TAZPro, TAZProXT, TAXProV2)
-  #define BUFSIZE 16
+#if ANY(TAZPro, TAZProXT, TAZ8)
+  #define BUFSIZE 64
 #else
   #define BUFSIZE 8
 #endif
@@ -3199,7 +3199,11 @@
   #if AXIS_IS_TMC_CONFIG(Y)
     #define Y_CURRENT       975
     #define Y_CURRENT_HOME  Y_CURRENT
-    #define Y_MICROSTEPS     16
+    #if ENABLED(LULZBOT_LONG_BED_V2)
+      #define Y_MICROSTEPS     32
+    #else
+      #define Y_MICROSTEPS     16
+    #endif
     #define Y_RSENSE        LULZBOT_RSENSE
     #define Y_CHAIN_POS      -1
     //#define Y_INTERPOLATE  true

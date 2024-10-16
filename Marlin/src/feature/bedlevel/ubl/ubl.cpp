@@ -289,7 +289,7 @@ bool unified_bed_leveling::sanity_check() {
       queue.inject(umw_gcode);
     }
 
-    process_subcommands_now(F("G29A\nG29F10\n"    // Set UBL Active & Fade 10
+    process_subcommands_now(F("G29A\n"            // Set UBL Active
                               "M140S0\nM104S0\n"  // Turn off heaters
                               "M500"));           // Store settings
   }

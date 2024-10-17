@@ -3152,7 +3152,10 @@
       #define PROBE_REACHABLE_COUNT 25
     #endif
   #elif ANY(TAZPro, TAZProXT)
-    #define PROBE_REACHABLE_COUNT 36
+    #if ENABLED(LULZBOT_LONG_BED_V2)
+      #define PROBE_REACHABLE_COUNT 50
+    #else
+        #define PROBE_REACHABLE_COUNT 36
   #endif
 
 #elif ENABLED(MESH_BED_LEVELING)

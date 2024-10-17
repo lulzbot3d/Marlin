@@ -759,6 +759,10 @@ void unified_bed_leveling::shift_mesh_height() {
     save_ubl_active_state_and_disable();  // No bed level correction so only raw data is obtained
     grid_count_t count = GRID_MAX_POINTS;
 
+    #ifndef PROBE_REACHABLE_COUNT
+      PROBE_REACHABLE_COUNT GRID_MAX_POINTS
+    #endif
+
     mesh_index_pair best;
     TERN_(EXTENSIBLE_UI, ExtUI::onMeshUpdate(best.pos, ExtUI::G29_START));
     do {
@@ -766,7 +770,7 @@ void unified_bed_leveling::shift_mesh_height() {
 
       const grid_count_t point_num = (GRID_MAX_POINTS - count) + 1;
       SERIAL_ECHOLNPGM("Probing mesh point ", point_num, "/", GRID_MAX_POINTS, ".");
-      TERN_(HAS_STATUS_MESSAGE, ui.status_printf(0, F(S_FMT " %i/%i"), GET_TEXT_F(MSG_PROBING_POINT), point_num, int(GRID_MAX_POINTS)));
+      TERN_(HAS_STATUS_MESSAGE, ui.status_printf(0, F(S_FMT " %i/%i"), GET_TEXT_F(MSG_PROBING_POINT), point_num, int(PROBE_REACHABLE_COUNT)));
       TERN_(HAS_BACKLIGHT_TIMEOUT, ui.refresh_backlight_timeout());
 
       #if HAS_MARLINUI_MENU

@@ -3145,6 +3145,14 @@
 
   #define BED_LEVELING_COMMANDS "M1004" // run UBL_MESH_WIZARD
 
+  #if ENABLED(TAZ8)
+    #if ENABLED(TOOLHEAD_Galaxy_DualExtruder)
+      #define PROBE_REACHABLE_COUNT 26
+    #else
+      #define PROBE_REACHABLE_COUNT 25
+    #endif
+  #endif
+
 #elif ENABLED(MESH_BED_LEVELING)
 
   //===========================================================================

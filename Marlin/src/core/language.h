@@ -329,31 +329,31 @@
 // Endstop Names used by Endstops::report_states
 //
 #if HAS_X_AXIS
-  #define STR_X_MIN                         "x_min"
-  #define STR_X_MAX                         "x_max"
+  #define STR_X_MIN                         "X Min"
+  #define STR_X_MAX                         "X Max"
   #define STR_X2_MIN                        "x2_min"
   #define STR_X2_MAX                        "x2_max"
 #endif
 
 #if HAS_Y_AXIS
-  #define STR_Y_MIN                         "y_min"
-  #define STR_Y_MAX                         "y_max"
+  #define STR_Y_MIN                         "Y Min"
+  #define STR_Y_MAX                         "Y Max"
   #define STR_Y2_MIN                        "y2_min"
   #define STR_Y2_MAX                        "y2_max"
 #endif
 
 #if HAS_Z_AXIS
-  #define STR_Z_MIN                         "z_min"
-  #define STR_Z_MAX                         "z_max"
-  #define STR_Z2_MIN                        "z2_min"
-  #define STR_Z2_MAX                        "z2_max"
+  #define STR_Z_MIN                         "Z Min"
+  #define STR_Z_MAX                         "Z Max"
+  #define STR_Z2_MIN                        "Z2 Min"
+  #define STR_Z2_MAX                        "Z2 Max"
   #define STR_Z3_MIN                        "z3_min"
   #define STR_Z3_MAX                        "z3_max"
   #define STR_Z4_MIN                        "z4_min"
   #define STR_Z4_MAX                        "z4_max"
 #endif
 
-#define STR_Z_PROBE                         "z_probe"
+#define STR_Z_PROBE                         "Z Probe"
 #define STR_PROBE_EN                        "probe_en"
 #define STR_FILAMENT                        "filament"
 

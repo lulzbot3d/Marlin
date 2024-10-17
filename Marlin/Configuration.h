@@ -7,7 +7,7 @@
 
 /************** Uncomment a Tool Head Option From Below *********************/
 
-//#define TOOLHEAD_Legacy_Universal
+#define TOOLHEAD_Legacy_Universal
 //#define TOOLHEAD_Galaxy_Series
 //#define TOOLHEAD_SL_SE_HE
 //#define TOOLHEAD_HS_HSPLUS
@@ -16,7 +16,7 @@
 //#define TOOLHEAD_SK175
 //#define TOOLHEAD_SK285
 //#define TOOLHEAD_Quiver_DualExtruder            // TAZ Pro Dual Extruder
-#define TOOLHEAD_Galaxy_DualExtruder            // TAZ Pro Galaxy-Series Dual Extruders
+//#define TOOLHEAD_Galaxy_DualExtruder            // TAZ Pro Galaxy-Series Dual Extruders
 //#define TOOLHEAD_KangarooPaw_SingleExtruder     // Bio Single syringe
 
 /************** Uncomment Options for Printer From Below *********************/
@@ -3147,10 +3147,12 @@
 
   #if ENABLED(TAZ8)
     #if ENABLED(TOOLHEAD_Galaxy_DualExtruder)
-      #define PROBE_REACHABLE_COUNT 26
+      #define PROBE_REACHABLE_COUNT 25
     #else
       #define PROBE_REACHABLE_COUNT 25
     #endif
+  #elif ANY(TAZPro, TAZProXT)
+    #define PROBE_REACHABLE_COUNT 36
   #endif
 
 #elif ENABLED(MESH_BED_LEVELING)

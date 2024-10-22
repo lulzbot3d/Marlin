@@ -45,7 +45,7 @@ void GcodeSuite::M891() {
       SERIAL_ECHOPGM("0=No Tool Head selected 1=M175v2 2=SL 3=SE 4=HE 5=HS 6=HS+ 7=H175");
     #elif ANY(TOOLHEAD_Twin_Nebula_175, TOOLHEAD_Twin_Nebula_285)
       SERIAL_ECHOPGM("0=No Tool Head selected 11=Twin Nebula 175, 12=Twin Nebula 285");
-    #elif ENABLED(TOOLHEAD_Quiver_DualExtruder)
+    #elif ENABLED(TOOLHEAD_Universal_DualExtruder)
       SERIAL_ECHOPGM("0=No Tool Head selected 13=Legacy Dual Extruder");
     #endif
     SERIAL_ECHOLNPGM("  Tool Head ID:", tool_head.getToolHeadId());

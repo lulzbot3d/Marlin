@@ -581,13 +581,13 @@
  */
 #define USE_CONTROLLER_FAN
 #if ENABLED(USE_CONTROLLER_FAN)
-  #if ANY(MiniV2, MiniV3, Sidekick_289, Sidekick_747)
+  #if ANY(MiniV2, MiniV3, SideKick_289, SideKick_747)
     #define CONTROLLER_FAN_PIN FAN1_PIN        // Set a custom pin for the controller fan
   #else
     #define CONTROLLER_FAN_PIN FAN2_PIN        // Set a custom pin for the controller fan
   #endif
   //#define CONTROLLER_FAN_USE_Z_ONLY    // With this option only the Z axis is considered
-  #if ANY(MiniV2, MiniV3, Sidekick_289, Sidekick_747)
+  #if ANY(MiniV2, MiniV3, SideKick_289, SideKick_747)
     #define CONTROLLER_FAN_IGNORE_Z      // Ignore Z stepper. Useful when stepper timeout is disabled.
   #endif
   #define CONTROLLERFAN_SPEED_MIN      100 // (0-255) Minimum speed. (If set below this value the fan is turned off.)
@@ -660,7 +660,7 @@
  *   PWM on pin OC2A. Only use this option if you don't need PWM on 0C2A. (Check your schematic.)
  *   USE_OCR2A_AS_TOP sacrifices duty cycle control resolution to achieve this broader range of frequencies.
  */
-#if ANY(MiniV2, MiniV3, TAZ6, Workhorse, Sidekick_289, Sidekick_747)
+#if ANY(MiniV2, MiniV3, TAZ6, Workhorse, SideKick_289, SideKick_747)
   #define FAST_PWM_FAN    // Increase the fan PWM frequency. Removes the PWM noise but increases heating in the FET/Arduino
 #endif
 
@@ -938,7 +938,7 @@
  * the position of the toolhead relative to the workspace.
  */
 
-#if ANY(MiniV2, MiniV3, TAZPro, TAZProXT, Sidekick_289, Sidekick_747)
+#if ANY(MiniV2, MiniV3, TAZPro, TAZProXT, SideKick_289, SideKick_747)
   #define SENSORLESS_BACKOFF_MM  { 4, 4 , 0}     // (mm) Backoff from endstops before sensorless homing
   #define HOMING_BACKOFF_POST_MM { 5, 5, 2 }  // (linear=mm, rotational=°) Backoff from endstops after homing
 #else
@@ -1047,7 +1047,7 @@
  * Z Steppers Auto-Alignment
  * Add the G34 command to align multiple Z steppers using a bed probe.
  */
-#if ENABLED(TazDualZ)
+#if ENABLED(TAZDualZ)
   #define Z_STEPPER_AUTO_ALIGN
 #endif
 #if ENABLED(Z_STEPPER_AUTO_ALIGN)
@@ -1403,7 +1403,7 @@
   //#define CALIBRATION_REPORTING
 
   #if ENABLED(TAZ8)
-    #define CALIBRATION_MEASUREMENT_UNKNOWN 8
+    #define CALIBRATION_MEASUREMENT_UNKNOWN 5
   #else
       #define CALIBRATION_MEASUREMENT_UNKNOWN 5
   #endif
@@ -1442,7 +1442,7 @@
     #define LULZBOT_CALIBRATION_SCRIPT "M117 Starting Auto-Calibration\nM104 S170\nG28\nM109 R170\nG12\nM117 Calibrating...\nG425\nM500\nM77\nM117 Calibration data saved"
   #else
     #if ANY(TAZPro, TAZProXT)
-      #if defined(TOOLHEAD_Quiver_DualExtruder)
+      #if defined(TOOLHEAD_Universal_DualExtruder)
         #define CALIBRATION_OBJECT_CENTER     {263, -21, -2.0} //  mm
         #define CALIBRATION_OBJECT_DIMENSIONS {10.0, 10.0, 10.0} //  mm
         #define CALIBRATION_MEASURE_FRONT
@@ -1491,7 +1491,7 @@
       #define CALIBRATION_MEASURE_BACK
     #elif ENABLED(TAZ8)
       #if ENABLED(TOOLHEAD_Galaxy_DualExtruder)
-        #define CALIBRATION_OBJECT_CENTER     {144, 303, -1.0} //  mm
+        #define CALIBRATION_OBJECT_CENTER     {144, 302, -1.0} //  mm
         #define CALIBRATION_OBJECT_DIMENSIONS {10.0, 5.0, 6.0} //  mm
         #define CALIBRATION_MEASURE_FRONT
       #elif ANY(LULZBOT_LONG_BED, LULZBOT_LONG_BED_V2)
@@ -1501,7 +1501,7 @@
         #define CALIBRATION_OBJECT_CENTER     {143, -15.5, -1.0} //  mm
         #define CALIBRATION_OBJECT_DIMENSIONS {10.0,  1.0, 10.0} //  mm
       #endif
-      #define LULZBOT_CALIBRATION_SCRIPT "M117 Starting Auto-Calibration\nG28\nG12\nG0 X144 Y303 Z25 F3500\nM117 Calibrating...\nG425\nM500\nM77\nM117 Calibration data saved"
+      #define LULZBOT_CALIBRATION_SCRIPT "M117 Starting Auto-Calibration\nG28\nG12\nM106 S255\nM104 S0 T0\nM104 S0 T1\nG0 X144 Y302 Z25 F3500\nM117 Calibrating...\nG425\nM500\nM77\nM117 Calibration data saved"
         /* Status message */
         /* Auto-Home */
         /* Wipe the Nozzle */
@@ -2139,7 +2139,7 @@
  * controller events, as there is a trade-off between reliable
  * printing performance versus fast display updates.
  */
-#if ANY(MiniV2, Sidekick_289, Sidekick_747, TAZ6, Workhorse, HAS_MARLINUI_U8GLIB)
+#if ANY(MiniV2, SideKick_289, SideKick_747, TAZ6, Workhorse, HAS_MARLINUI_U8GLIB)
   // Save many cycles by drawing a hollow frame or no frame on the Info Screen
   //#define XYZ_NO_FRAME
   #define XYZ_HOLLOW_FRAME
@@ -3223,7 +3223,7 @@
   #if AXIS_IS_TMC_CONFIG(Z)
     #define Z_CURRENT       975
     #define Z_CURRENT_HOME  Z_CURRENT
-    #if ANY(MiniV2, MiniV3, Sidekick_289, Sidekick_747)
+    #if ANY(MiniV2, MiniV3, SideKick_289, SideKick_747)
       #define Z_MICROSTEPS     32
     #else
       #define Z_MICROSTEPS     16
@@ -3641,7 +3641,7 @@
           #define Y_STALL_SENSITIVITY  4
         #endif
       #endif
-    #elif ANY(MiniV2, Sidekick_289, Sidekick_747)
+    #elif ANY(MiniV2, SideKick_289, SideKick_747)
       #define X_STALL_SENSITIVITY  3
       #define Y_STALL_SENSITIVITY  3
     #elif ANY(MiniV3)
@@ -4188,7 +4188,7 @@
  *
  * Execute certain G-code commands immediately after power-on.
  */
-#if ANY(Sidekick_289, Sidekick_747)
+#if ANY(SideKick_289, SideKick_747)
   #define STARTUP_COMMANDS "M17 Z\nM117 SideKick Ready" //"M906 Z450\nG91\nG0 Z20\nG90\nG28 X\nM906 Z975"
 #endif
 
@@ -4208,7 +4208,7 @@
  * User-defined menu items to run custom G-code.
  * Up to 25 may be defined, but the actual number is LCD-dependent.
  */
-#if ANY(TOOLHEAD_Legacy_Universal, TOOLHEAD_Quiver_DualExtruder, TOOLHEAD_Galaxy_Series, TOOLHEAD_Galaxy_DualExtruder)
+#if ANY(TOOLHEAD_Legacy_Universal, TOOLHEAD_Universal_DualExtruder, TOOLHEAD_Galaxy_Series, TOOLHEAD_Galaxy_DualExtruder)
   #define CUSTOM_MENU_MAIN
 #endif
  #define CUSTOM_MENU_MAIN_TITLE "Tool Heads"
@@ -4247,7 +4247,7 @@
     #define MAIN_MENU_ITEM_3_DESC "MET285|NKL-PL BRASS"
     #define MAIN_MENU_ITEM_3_GCODE "M891 T9\nM92E439\nM306 A0.0622 C15.44 F0.1844 P50 R0.1128\n" E_CURRENT_LGX285 "\nM900 K0.05\nM500\nM117 MET285|NKL-PL BRASS"
 
-    #if NONE(MiniV2, Sidekick_289) // Mini2 and 289 do not have the power to supply 100w to the tool head
+    #if NONE(MiniV2, SideKick_289) // Mini2 and 289 do not have the power to supply 100w to the tool head
       #define MAIN_MENU_ITEM_4_DESC "AST285|GM STEEL"
       #define MAIN_MENU_ITEM_4_GCODE "M891 T10\nM92E439\nM306 A0.0936 C36.2925 F0.1744 P100 R0.1143\n" E_CURRENT_LGX285 "\nM900 K0.03\nM500\nM117 AST285|GM STEEL"
     #endif
@@ -4259,7 +4259,7 @@
     #define MAIN_MENU_ITEM_3_DESC "TWNB285|NKL-PL BRASS"
     #define MAIN_MENU_ITEM_3_GCODE "M891 T12\nM92E439\n" E_CURRENT_TWNB285 "\nM500\nM117 TWNB285|NKL-PL BRASS"
 
-  #elif defined(TOOLHEAD_Quiver_DualExtruder)
+  #elif defined(TOOLHEAD_Universal_DualExtruder)
     #define MAIN_MENU_ITEM_2_DESC "DUAL|0.50mm|HRD STEEL"
     #define MAIN_MENU_ITEM_2_GCODE "M891 T13\nM92E420\n" E_CURRENT_DUAL "\nM500\nM117 DUAL|0.50mm|HRD STEEL"
 
@@ -4286,7 +4286,7 @@
       #define MAIN_MENU_ITEM_8_DESC "H175|0.50mm|NKL-PL CU"
       #define MAIN_MENU_ITEM_8_GCODE "M891 T7\nM92E409\nM301P" charH175_DEFAULT_Kp "I" charH175_DEFAULT_Ki "D" charH175_DEFAULT_Kd "\n" E_CURRENT_Aero "\nM900 K0.05\nM500\nM117 H175|0.50mm|NKL-PL CU"
 
-    #elif ANY(Sidekick_289, Sidekick_747)
+    #elif ANY(SideKick_289, SideKick_747)
       #define MAIN_MENU_ITEM_2_DESC "SK175|0.50mm|BRASS"
       #define MAIN_MENU_ITEM_2_GCODE "M92E420\nM301P" charSK175_DEFAULT_Kp "I" charSK175_DEFAULT_Ki "D" charSK175_DEFAULT_Kd"\n" E_CURRENT_Aero "\nM900 K0.05\nM500\nM117 SK175|0.50mm|BRASS"
 
@@ -4528,14 +4528,14 @@
  * Implemented as G34 because M915 is deprecated.
  * @section calibrate
  */
-#if ANY(MiniV2, MiniV3, Sidekick_289, Sidekick_747) && DISABLED(TazDualZ)
+#if ANY(MiniV2, MiniV3, SideKick_289, SideKick_747) && DISABLED(TAZDualZ)
   #define MECHANICAL_GANTRY_CALIBRATION
 #endif
 #if ENABLED(MECHANICAL_GANTRY_CALIBRATION)
   #define GANTRY_CALIBRATION_CURRENT    450                   // Default calibration current in ma - TMC
   #define GANTRY_CALIBRATION_FEEDRATE   500                   // Feedrate for correction move
 
-  #if ANY(Sidekick_289, Sidekick_747)
+  #if ANY(SideKick_289, SideKick_747)
     #define GANTRY_CALIBRATION_SAFE_POSITION  {X_CENTER, Y_MIN}  // Safe position for nozzle
     #define GANTRY_CALIBRATION_EXTRA_HEIGHT      15                   // Extra distance in mm past Z_###_POS to move
   #else
@@ -4552,7 +4552,7 @@
   #define GANTRY_CALIBRATION_COMMANDS_POST  "G28"
 #endif
 
-#if ANY(TAZPro,TAZProXT,Workhorse) && DISABLED(TazDualZ)
+#if ANY(TAZPro,TAZProXT,Workhorse) && DISABLED(TAZDualZ)
   #define X_LEVEL_SEQUENCE
 #endif
 #if defined (X_LEVEL_SEQUENCE)

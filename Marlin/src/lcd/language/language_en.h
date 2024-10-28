@@ -218,7 +218,7 @@ namespace LanguageNarrow_en {
   LSTR MSG_HOTEND_OFFSET_A                = _UxGT("2nd Nozzle @");
   LSTR MSG_UBL_DOING_G29                  = _UxGT("Doing G29");
   LSTR MSG_UBL_TOOLS                      = _UxGT("UBL Tools");
-  LSTR MSG_LCD_TILTING_MESH               = _UxGT("Tilting Point");
+  LSTR MSG_LCD_TILTING_MESH               = _UxGT("Mesh Validation");
   LSTR MSG_UBL_TILT_MESH                  = _UxGT("Tilt Mesh");
   LSTR MSG_UBL_TILTING_GRID               = _UxGT("Tilting Grid Size");
   LSTR MSG_UBL_MESH_TILTED                = _UxGT("Mesh Tilted");

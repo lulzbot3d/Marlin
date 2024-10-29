@@ -2031,7 +2031,7 @@
    *
    * [1] On AVR an interrupt-capable pin is best for UHS3 compatibility.
    */
-  #if ANY(TAZPro, TAZProXT, TAZ8, MiniV3)
+  #if ANY(TAZPro, TAZProXT, MiniV3)
     #define USB_FLASH_DRIVE_SUPPORT
   #endif
   #if ENABLED(USB_FLASH_DRIVE_SUPPORT)
@@ -2047,8 +2047,6 @@
      */
     #define USE_UHS2_USB
     //#define USE_UHS3_USB
-
-    #define DISABLE_DUE_SD_MMC // Disable USB Host access to USB Drive to prevent hangs on block access for DUE platform
 
     /**
      * Native USB Host supported by some boards (USB OTG)

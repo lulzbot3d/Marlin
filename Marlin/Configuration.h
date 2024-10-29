@@ -96,7 +96,7 @@
 // Author info of this build printed to the host during boot and M115
 #define STRING_CONFIG_H_AUTHOR "Lulzbot" // Who made the changes.
 #define CUSTOM_VERSION_FILE Version.h // Path from the root directory (no quotes)
-#define LULZBOT_FW_VERSION "2.1.3.0.35"
+#define LULZBOT_FW_VERSION "2.1.3.0.37"
 #define CAPABILITIES_REPORT
 #define EXTENDED_CAPABILITIES_REPORT
 
@@ -2586,7 +2586,7 @@
     #define LULZBOT_X_MIN_POS -6// <-- changed
     #define LULZBOT_Y_MIN_POS -15 // <-- changed
     #define LULZBOT_X_MAX_POS 298 // <-- changed
-    #define LULZBOT_Y_MAX_POS 318 // <-- changed
+    #define LULZBOT_Y_MAX_POS 317.5  // <-- changed
     #define LULZBOT_Z_MIN_POS  -9 // <-- changed
     #define LULZBOT_Z_MAX_POS 299 // <-- changed
   #elif defined(LULZBOT_LONG_BED)
@@ -2633,12 +2633,12 @@
     #define LULZBOT_Z_MAX_POS 599 // <-- changed
   #elif ENABLED(TOOLHEAD_Galaxy_DualExtruder)
     #define X_BED_SIZE 281
-    #define Y_BED_SIZE 283
+    #define Y_BED_SIZE 285
     // Travel limits (mm) after homing, corresponding to endstop positions.
     #define LULZBOT_X_MIN_POS -6// <-- changed
-    #define LULZBOT_Y_MIN_POS -13 // <-- changed
+    #define LULZBOT_Y_MIN_POS -15 // <-- changed
     #define LULZBOT_X_MAX_POS 298 // <-- changed
-    #define LULZBOT_Y_MAX_POS 315 // <-- changed
+    #define LULZBOT_Y_MAX_POS 317.5 // <-- changed
     #define LULZBOT_Z_MIN_POS -9 // <-- changed
     #define LULZBOT_Z_MAX_POS 599 // <-- changed
   #elif defined(LULZBOT_LONG_BED)
@@ -3479,7 +3479,7 @@
   #elif ENABLED(Workhorse)
     #define PRESENT_BED_GCODE "G28 O\nG0 Y304 F10000\nG0 Y306 F10000\nM117 Printer Ready"
   #elif ANY(LULZBOT_LONG_BED, LULZBOT_LONG_BED_V2)
-    #define PRESENT_BED_GCODE "G28 O\nG0 Y511 F7000\nG0 Y513 F4000\nM117 Printer Ready"
+    #define PRESENT_BED_GCODE "G28 O\nG0 Y511 F5500\nG0 Y513 F4000\nM117 Printer Ready"
   #else
     #define PRESENT_BED_GCODE "G28 O\nG0 Y311 F10000\nG0 Y313 F10000\nM117 Printer Ready"
   #endif

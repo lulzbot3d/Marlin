@@ -621,12 +621,12 @@ bool StatusScreen::onTouchEnd(uint8_t tag) {
 
 void StatusScreen::onMediaMounted() {
   if (AT_SCREEN(StatusScreen))
-    setStatusMessage(GET_TEXT_F(MSG_USB_INSERTED));
+    setStatusMessage(GET_TEXT_F(MSG_MEDIA_INSERTED));
 }
 
 void StatusScreen::onMediaRemoved() {
   if (AT_SCREEN(StatusScreen) || ExtUI::isPrintingFromMedia())
-    setStatusMessage(GET_TEXT_F(MSG_USB_REMOVED));
+    setStatusMessage(GET_TEXT_F(MSG_MEDIA_REMOVED));
 }
 
 #endif // FTDI_STATUS_SCREEN

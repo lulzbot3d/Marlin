@@ -77,6 +77,7 @@ private:
   static bool G29_parse_parameters() __O0;
   static void shift_mesh_height();
   static void probe_entire_mesh(const xy_pos_t &near, const bool do_ubl_mesh_map, const bool stow_probe, const bool do_furthest) __O0;
+  static void probe_bed_if_mesh_not_active();
   static void tilt_mesh_based_on_probed_grid(const bool do_ubl_mesh_map);
   static bool smart_fill_one(const uint8_t x, const uint8_t y, const int8_t xdir, const int8_t ydir);
   static bool smart_fill_one(const xy_uint8_t &pos, const xy_uint8_t &dir) {
@@ -301,8 +302,13 @@ public:
   #endif
 
   static bool mesh_is_valid() {
-    GRID_LOOP(x, y) if (isnan(z_values[x][y])) return false;
-    return true;
+    bool numSeen = false;
+    for (uint8_t x = 0; x < GRID_MAX_POINTS_X; ++x) for (uint8_t y = 0; y < GRID_MAX_POINTS_Y; ++y) {
+       if (isnan(z_values[x][y]))
+        return false;
+      if(z_values[x][y] != 0.0f) numSeen = true;
+    }
+    return numSeen;
   }
 
 }; // class unified_bed_leveling

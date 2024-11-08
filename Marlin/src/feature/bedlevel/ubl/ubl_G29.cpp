@@ -423,6 +423,7 @@ void unified_bed_leveling::G29() {
   #if HAS_BED_PROBE
 
     if (parser.seen_test('J')) {
+      probe_bed_if_mesh_not_active(); // run M1004 if there is not a mesh
       save_ubl_active_state_and_disable();
       tilt_mesh_based_on_probed_grid(param.J_grid_size == 0); // Zero size does 3-Point
       restore_ubl_active_state();
@@ -758,6 +759,10 @@ void unified_bed_leveling::shift_mesh_height() {
     save_ubl_active_state_and_disable();  // No bed level correction so only raw data is obtained
     grid_count_t count = GRID_MAX_POINTS;
 
+    #ifndef PROBE_REACHABLE_COUNT
+      PROBE_REACHABLE_COUNT GRID_MAX_POINTS
+    #endif
+
     mesh_index_pair best;
     TERN_(EXTENSIBLE_UI, ExtUI::onMeshUpdate(best.pos, ExtUI::G29_START));
     do {
@@ -765,7 +770,7 @@ void unified_bed_leveling::shift_mesh_height() {
 
       const grid_count_t point_num = (GRID_MAX_POINTS - count) + 1;
       SERIAL_ECHOLNPGM("Probing mesh point ", point_num, "/", GRID_MAX_POINTS, ".");
-      TERN_(HAS_STATUS_MESSAGE, ui.status_printf(0, F(S_FMT " %i/%i"), GET_TEXT_F(MSG_PROBING_POINT), point_num, int(GRID_MAX_POINTS)));
+      TERN_(HAS_STATUS_MESSAGE, ui.status_printf(0, F(S_FMT " %i/%i"), GET_TEXT_F(MSG_PROBING_POINT), point_num, int(PROBE_REACHABLE_COUNT)));
       TERN_(HAS_BACKLIGHT_TIMEOUT, ui.refresh_backlight_timeout());
 
       #if HAS_MARLINUI_MENU
@@ -1464,6 +1469,15 @@ void unified_bed_leveling::smart_fill_mesh() {
 
 #if HAS_BED_PROBE
 
+  void unified_bed_leveling::probe_bed_if_mesh_not_active() {
+    if (!leveling_is_valid()) {
+      SERIAL_ECHO_MSG("mesh is not valid, probing bed");
+      gcode.process_subcommands_now(F("M1004"));
+    }
+    else
+      SERIAL_ECHO_MSG("mesh is valid");
+  }
+
   //#define VALIDATE_MESH_TILT
 
   #include "../../../libs/vector_3.h"
@@ -1493,7 +1507,7 @@ void unified_bed_leveling::smart_fill_mesh() {
       #endif
 
       for (uint8_t i = 0; i < 3; ++i) {
-        SERIAL_ECHOLNPGM("Tilting mesh (", i + 1, "/3)");
+        SERIAL_ECHOLNPGM("Mesh Validation (", i + 1, "/3)");
         TERN_(HAS_STATUS_MESSAGE, ui.status_printf(0, F(S_FMT " %i/3"), GET_TEXT_F(MSG_LCD_TILTING_MESH), i + 1));
 
         measured_z = probe.probe_at_point(points[i], i < 2 ? PROBE_PT_RAISE : PROBE_PT_LAST_STOW, param.V_verbosity);
@@ -1549,7 +1563,7 @@ void unified_bed_leveling::smart_fill_mesh() {
             rpos = cpos.meshpos();
           #endif
 
-          SERIAL_ECHOLNPGM("Tilting mesh point ", point_num, "/", total_points, "\n");
+          SERIAL_ECHOLNPGM("Mesh validation point ", point_num, "/", total_points, "\n");
           TERN_(HAS_STATUS_MESSAGE, ui.status_printf(0, F(S_FMT " %i/%i"), GET_TEXT_F(MSG_LCD_TILTING_MESH), point_num, total_points));
 
           measured_z = probe.probe_at_point(rpos, parser.seen_test('E') ? PROBE_PT_STOW : PROBE_PT_RAISE, param.V_verbosity); // TODO: Needs error handling

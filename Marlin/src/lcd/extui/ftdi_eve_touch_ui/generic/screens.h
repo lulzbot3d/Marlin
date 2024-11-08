@@ -94,6 +94,9 @@ enum {
   INTERFACE_SETTINGS_SCREEN_CACHE,
   INTERFACE_SOUNDS_SCREEN_CACHE,
   LOCK_SCREEN_CACHE,
+  #if ENABLED(BLTOUCH)
+    BLTOUCH_SCREEN_CACHE,
+  #endif
   DISPLAY_TIMINGS_SCREEN_CACHE
 };
 
@@ -228,4 +231,8 @@ enum {
 
 #if NUM_LANGUAGES > 1
   #include "language_menu.h"
+#endif
+
+#if ENABLED(BLTOUCH)
+  #include "bltouch_menu.h"
 #endif

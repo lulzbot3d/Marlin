@@ -8,7 +8,7 @@
 /************** Uncomment a Tool Head Option From Below *********************/
 
 //#define TOOLHEAD_Legacy_Universal
-#define TOOLHEAD_Galaxy_Series
+//#define TOOLHEAD_Galaxy_Series
 //#define TOOLHEAD_SL_SE_HE
 //#define TOOLHEAD_HS_HSPLUS
 //#define TOOLHEAD_H175
@@ -16,7 +16,7 @@
 //#define TOOLHEAD_SK175
 //#define TOOLHEAD_SK285
 //#define TOOLHEAD_Universal_DualExtruder         // TAZ Pro Dual Extruder
-//#define TOOLHEAD_Galaxy_DualExtruder            // TAZ Pro Galaxy-Series Dual Extruders
+#define TOOLHEAD_Galaxy_DualExtruder            // TAZ Pro Galaxy-Series Dual Extruders
 //#define TOOLHEAD_KangarooPaw_SingleExtruder     // Bio Single syringe
 
 /************** Uncomment Options for Printer From Below *********************/
@@ -1782,7 +1782,7 @@
   #if defined(LULZBOT_LONG_BED)
     #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 160, 500, LULZBOT_E_STEPS }
   #elif defined(LULZBOT_LONG_BED_V2)
-    #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 184.13, 500, LULZBOT_E_STEPS }  // using 5.18:1 and 30T 3mm pitched belt for Y axis
+    #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 368.26, 500, LULZBOT_E_STEPS }  // using 5.18:1 and 30T 3mm pitched belt for Y axis
   #else
     #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 100, 500, LULZBOT_E_STEPS }
   #endif
@@ -1790,7 +1790,7 @@
   #if defined(LULZBOT_LONG_BED)
     #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 160, 518.18, LULZBOT_E_STEPS }
   #elif defined(LULZBOT_LONG_BED_V2)
-    #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 184.13, 518.18, LULZBOT_E_STEPS } // using 5.18:1 and 30T 3mm pitched belt for Y axis
+    #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 368.26, 518.18, LULZBOT_E_STEPS } // using 5.18:1 and 30T 3mm pitched belt for Y axis
   #else
     #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 100, 518.18, LULZBOT_E_STEPS }
   #endif
@@ -2208,7 +2208,7 @@
   #define NOZZLE_TO_PROBE_OFFSET { -38, -2, 0 }
 #elif ENABLED(TAZ8)
   #if ENABLED(TOOLHEAD_Galaxy_DualExtruder)
-    #define NOZZLE_TO_PROBE_OFFSET { 48, 70, -1.2 }
+    #define NOZZLE_TO_PROBE_OFFSET { 48, 70, -1 }
   #else
     #define NOZZLE_TO_PROBE_OFFSET { 23, 63, 0 }
   #endif
@@ -2227,7 +2227,11 @@
 // Most probes should stay away from the edges of the bed, but
 // with NOZZLE_AS_PROBE this can be negative for a wider probing area.
 #if ANY(TAZDualZ, LULZBOT_BLTouch)
-  #define PROBING_MARGIN 20
+  #if ANY(TAZPro, TAZProXT, TAZ8)
+    #define PROBING_MARGIN 3
+  #else
+    #define PROBING_MARGIN 20
+  #endif
 #else
   #if ENABLED(MiniV2)
     #define PROBING_MARGIN -4
@@ -2243,7 +2247,11 @@
 #endif
 
 // X and Y axis travel speed (mm/min) between probes
-#define XY_PROBE_FEEDRATE (150*60)
+#if ANY(TAZPro, TAZProXT, TAZ8) && ENABLED(LULZBOT_BLTouch)
+  #define XY_PROBE_FEEDRATE (250*60)
+#else
+  #define XY_PROBE_FEEDRATE (150*60)
+#endif
 
 // Feedrate (mm/min) for the first approach when double-probing (MULTIPLE_PROBING == 2)
 #if defined(LULZBOT_BLTouch)
@@ -2683,7 +2691,7 @@
       #define LULZBOT_X_MIN_POS 10 // <-- changed
       #define LULZBOT_Y_MIN_POS -24 // <-- changed
       #define LULZBOT_X_MAX_POS 301 // <-- changed
-      #define LULZBOT_Y_MAX_POS 339 // <-- changed
+      #define LULZBOT_Y_MAX_POS 338 // <-- changed
       #define LULZBOT_Z_MIN_POS -9 // <-- changed
       #define LULZBOT_Z_MAX_POS 301 // <-- changed
     #endif
@@ -3034,9 +3042,9 @@
    */
   //#define G26_MESH_VALIDATION
   #if ENABLED(G26_MESH_VALIDATION)
-    #define MESH_TEST_NOZZLE_SIZE    0.4  // (mm) Diameter of primary nozzle.
-    #define MESH_TEST_LAYER_HEIGHT   0.2  // (mm) Default layer height for G26.
-    #define MESH_TEST_HOTEND_TEMP  205    // (°C) Default nozzle temperature for G26.
+    #define MESH_TEST_NOZZLE_SIZE    0.5  // (mm) Diameter of primary nozzle.
+    #define MESH_TEST_LAYER_HEIGHT   0.25 // (mm) Default layer height for G26.
+    #define MESH_TEST_HOTEND_TEMP  215    // (°C) Default nozzle temperature for G26.
     #define MESH_TEST_BED_TEMP      60    // (°C) Default bed temperature for G26.
     #define G26_XY_FEEDRATE         20    // (mm/s) Feedrate for G26 XY moves.
     #define G26_XY_FEEDRATE_TRAVEL 100    // (mm/s) Feedrate for G26 XY travel moves.
@@ -3094,9 +3102,14 @@
 
   //#define MESH_EDIT_GFX_OVERLAY   // Display a graphics overlay while editing the mesh
 
-  #define MESH_INSET 0              // Set Mesh bounds as an inset region of the bed
-  #define GRID_MAX_POINTS_X 8      // Don't use more than 15 points per axis, implementation limited.
-  #define GRID_MAX_POINTS_Y GRID_MAX_POINTS_X
+  #define MESH_INSET 15              // Set Mesh bounds as an inset region of the bed
+  #if ANY(LULZBOT_LONG_BED, LULZBOT_LONG_BED_V2)
+    #define GRID_MAX_POINTS_X 6  //4x8 grid to account for entire long bed printable area
+    #define GRID_MAX_POINTS_Y 10
+  #else
+    #define GRID_MAX_POINTS_X 6      // Don't use more than 15 points per axis, implementation limited.
+    #define GRID_MAX_POINTS_Y GRID_MAX_POINTS_X
+  #endif
 
   //#define UBL_HILBERT_CURVE       // Use Hilbert distribution for less travel when probing multiple points
 
@@ -3120,14 +3133,30 @@
     #define CLIP_H  14  // Bed clip height, should be padded a few mm over its physical size
 
     // Obstacle Rectangles defined as { X1, Y1, X2, Y2 }
-    #define OBSTACLE1 { (X_BED_SIZE) / 4     - (CLIP_W) / 2,                       0, (X_BED_SIZE) / 4     + (CLIP_W) / 2, CLIP_H }
-    #define OBSTACLE2 { (X_BED_SIZE) * 3 / 4 - (CLIP_W) / 2,                       0, (X_BED_SIZE) * 3 / 4 + (CLIP_W) / 2, CLIP_H }
-    #define OBSTACLE3 { (X_BED_SIZE) / 4     - (CLIP_W) / 2, (Y_BED_SIZE) - (CLIP_H), (X_BED_SIZE) / 4     + (CLIP_W) / 2, Y_BED_SIZE }
-    #define OBSTACLE4 { (X_BED_SIZE) * 3 / 4 - (CLIP_W) / 2, (Y_BED_SIZE) - (CLIP_H), (X_BED_SIZE) * 3 / 4 + (CLIP_W) / 2, Y_BED_SIZE }
+    #define OBSTACLE1 { 294, 10, 306, 100}
+    //#define OBSTACLE2 { (X_BED_SIZE) * 3 / 4 - (CLIP_W) / 2,                       0, (X_BED_SIZE) * 3 / 4 + (CLIP_W) / 2, CLIP_H }
+    //#define OBSTACLE3 { (X_BED_SIZE) / 4     - (CLIP_W) / 2, (Y_BED_SIZE) - (CLIP_H), (X_BED_SIZE) / 4     + (CLIP_W) / 2, Y_BED_SIZE }
+    //#define OBSTACLE4 { (X_BED_SIZE) * 3 / 4 - (CLIP_W) / 2, (Y_BED_SIZE) - (CLIP_H), (X_BED_SIZE) * 3 / 4 + (CLIP_W) / 2, Y_BED_SIZE }
 
     // The probed grid must be inset for G29 J. This is okay, since it is
     // only used to compute a linear transformation for the mesh itself.
-    #define G29J_MESH_TILT_MARGIN ((CLIP_H) + 1)
+    #define G29J_MESH_TILT_MARGIN 40
+  #endif
+
+  #define BED_LEVELING_COMMANDS "M1004" // run UBL_MESH_WIZARD
+
+  #if ENABLED(TAZ8)
+    #if ENABLED(TOOLHEAD_Galaxy_DualExtruder)
+      #define PROBE_REACHABLE_COUNT 25
+    #else
+      #define PROBE_REACHABLE_COUNT 25
+    #endif
+  #elif ANY(TAZPro, TAZProXT)
+    #if ENABLED(LULZBOT_LONG_BED_V2)
+      #define PROBE_REACHABLE_COUNT 50
+    #else
+      #define PROBE_REACHABLE_COUNT 36
+    #endif
   #endif
 
 #elif ENABLED(MESH_BED_LEVELING)

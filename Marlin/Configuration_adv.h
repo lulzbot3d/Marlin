@@ -898,7 +898,7 @@
 #ifdef Z2_DRIVER_TYPE
   //#define INVERT_Z2_VS_Z_DIR        // Z2 direction signal is the opposite of Z
 
-  #define Z_MULTI_ENDSTOPS          // Other Z axes have their own endstops
+  //#define Z_MULTI_ENDSTOPS          // Other Z axes have their own endstops
   #if ENABLED(Z_MULTI_ENDSTOPS)
     #define Z2_STOP_PIN Y_MAX_PIN   // Z2 endstop pin override
     #define Z2_ENDSTOP_ADJUSTMENT 0   // Z2 offset relative to Z endstop
@@ -1101,7 +1101,7 @@
   #endif
 
   // On a 300mm bed a 5% grade would give a misalignment of ~1.5cm
-  #define G34_MAX_GRADE              15    // (%) Maximum incline that G34 will handle
+  #define G34_MAX_GRADE              4    // (%) Maximum incline that G34 will handle
   #define Z_STEPPER_ALIGN_ITERATIONS 5    // Number of iterations to apply during alignment
   #define Z_STEPPER_ALIGN_ACC        0.05 // Stop iterating early if the accuracy is better than this
   #define RESTORE_LEVELING_AFTER_G34      // Restore leveling after G34 is done?
@@ -2032,6 +2032,7 @@
    *
    * [1] On AVR an interrupt-capable pin is best for UHS3 compatibility.
    */
+  #define DISABLE_DUE_SD_MMC // Disable USB Host access to USB Drive to prevent hangs on block access for DUE platform
   #if ANY(TAZPro, TAZProXT, MiniV3)
     #define USB_FLASH_DRIVE_SUPPORT
   #endif
@@ -2048,6 +2049,8 @@
      */
     #define USE_UHS2_USB
     //#define USE_UHS3_USB
+
+    #define DISABLE_DUE_SD_MMC // Disable USB Host access to USB Drive to prevent hangs on block access for DUE platform
 
     /**
      * Native USB Host supported by some boards (USB OTG)
@@ -2443,6 +2446,7 @@
  */
 #define USE_WATCHDOG
 #if ENABLED(USE_WATCHDOG)
+  #define WATCHDOG_DURATION_8S
   //#define WATCHDOG_RESET_MANUAL
 #endif
 
@@ -2800,7 +2804,7 @@
 #if ALL(HAS_MEDIA, DIRECT_STEPPING)
   #define BLOCK_BUFFER_SIZE  8
 #elif HAS_MEDIA
-  #define BLOCK_BUFFER_SIZE 16
+  #define BLOCK_BUFFER_SIZE 32
 #else
   #define BLOCK_BUFFER_SIZE 16
 #endif

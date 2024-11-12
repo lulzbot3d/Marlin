@@ -578,10 +578,27 @@ void GCodeQueue::get_serial_commands() {
     if (!IS_SD_FETCHING()) return;
 
     int sd_count = 0;
+    int sd_error_count = 0;
     while (!ring_buffer.full() && !card.eof()) {
       const int16_t n = card.get();
       const bool card_eof = card.eof();
-      if (n < 0 && !card_eof) { SERIAL_ERROR_MSG(STR_SD_ERR_READ); continue; }
+      if (n < 0 && !card_eof) { 
+        SERIAL_ERROR_MSG(STR_SD_ERR_READ);
+        sd_error_count++;
+        if(sd_error_count == 15) {
+          card.release();
+          safe_delay(50);
+          card.mount();
+        }
+        if(sd_error_count >= 30) {
+          card.abortFilePrintNow();
+          break;
+        }
+        ui.refresh();
+        continue; 
+      }
+      else
+        sd_error_count = 0;
 
       CommandLine &command = ring_buffer.commands[ring_buffer.index_w];
       const char sd_char = (char)n;

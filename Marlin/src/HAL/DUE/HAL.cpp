@@ -47,11 +47,11 @@ uint16_t MarlinHAL::adc_result;
 #endif
 
 void MarlinHAL::init() {
-  #if HAS_SD_DETECT
-    OUT_WRITE(SD_DETECT_PIN, HIGH);   // SET_INPUT_PULLUP doesn't seem to work unless I do this first.
-    SET_INPUT_PULLUP(SD_DETECT_PIN);
-  #endif
   #if HAS_MEDIA
+    #if HAS_SD_DETECT
+      OUT_WRITE(SD_DETECT_PIN, HIGH);
+      SET_INPUT_PULLUP(SD_DETECT_PIN);
+    #endif
     OUT_WRITE(SDSS, HIGH);  // Try to set SDSS inactive before any other SPI users start up
   #endif
   usb_task_init();          // Initialize the USB stack

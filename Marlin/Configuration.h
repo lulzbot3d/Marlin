@@ -8,7 +8,7 @@
 /************** Uncomment a Tool Head Option From Below *********************/
 
 //#define TOOLHEAD_Legacy_Universal
-//#define TOOLHEAD_Galaxy_Series
+#define TOOLHEAD_Galaxy_Series
 //#define TOOLHEAD_SL_SE_HE
 //#define TOOLHEAD_HS_HSPLUS
 //#define TOOLHEAD_H175
@@ -16,7 +16,7 @@
 //#define TOOLHEAD_SK175
 //#define TOOLHEAD_SK285
 //#define TOOLHEAD_Universal_DualExtruder         // TAZ Pro Dual Extruder
-#define TOOLHEAD_Galaxy_DualExtruder            // TAZ Pro Galaxy-Series Dual Extruders
+//#define TOOLHEAD_Galaxy_DualExtruder            // TAZ Pro Galaxy-Series Dual Extruders
 //#define TOOLHEAD_KangarooPaw_SingleExtruder     // Bio Single syringe
 
 /************** Uncomment Options for Printer From Below *********************/
@@ -94,7 +94,7 @@
 // @section info
 
 // Author info of this build printed to the host during boot and M115
-#define STRING_CONFIG_H_AUTHOR "Lulzbot" // Who made the changes.
+#define STRING_CONFIG_H_AUTHOR "LulzBot" // Who made the changes.
 #define CUSTOM_VERSION_FILE Version.h // Path from the root directory (no quotes)
 #define LULZBOT_FW_VERSION "2.1.3.0.37"
 #define CAPABILITIES_REPORT
@@ -557,11 +557,7 @@
     #define LULZBOT_TOOLHEAD_Y_MAX_ADJ             -25.5
     #define LULZBOT_TOOLHEAD_Y_MIN_ADJ             -23
     #define LULZBOT_TOOLHEAD_Z_MAX_ADJ             -10
-    #if ENABLED(LULZBOT_BLTouch)
-      #define LULZBOT_TOOLHEAD_Z_MIN_ADJ             0
-    #else
-      #define LULZBOT_TOOLHEAD_Z_MIN_ADJ             -10
-    #endif
+    #define LULZBOT_TOOLHEAD_Z_MIN_ADJ             -10
     #define LULZBOT_EXTRUDERS                       2
     #define LULZBOT_TOOLCHANGE_ZRAISE               0
     #define LULZBOT_NUM_SERVOS                      2
@@ -1954,7 +1950,7 @@
 #endif
 
 // Force the use of the probe for Z-axis homing
-#define USE_PROBE_FOR_Z_HOMING
+//#define USE_PROBE_FOR_Z_HOMING
 
 /**
  * Z_MIN_PROBE_PIN
@@ -2337,7 +2333,7 @@
 //#define Z_AFTER_PROBING           5 // (mm) Z position after probing is done
 
 #if defined(LULZBOT_BLTouch)
-  #define Z_PROBE_LOW_POINT          -12 // Farthest distance below the trigger-point to go before stopping
+  #define Z_PROBE_LOW_POINT          -9 // Farthest distance below the trigger-point to go before stopping
 #else
   #define Z_PROBE_LOW_POINT          -4 // (mm) Farthest distance below the trigger-point to go before stopping
 #endif
@@ -2494,7 +2490,7 @@
 #else
   #define Y_HOME_DIR 1
 #endif
-#if ANY(MiniV2, MiniV3, TAZPro, TAZProXT, Workhorse, SideKick289, SideKick747)
+#if ANY(MiniV2, MiniV3, TAZPro, TAZProXT, TAZ8, Workhorse, SideKick289, SideKick747)
   #define Z_HOME_DIR 1
 #else
   #define Z_HOME_DIR -1
@@ -2686,7 +2682,7 @@
       #define LULZBOT_X_MIN_POS -6
       #define LULZBOT_Y_MAX_POS 613
       #define LULZBOT_Y_MIN_POS -18.2//-15
-      #define LULZBOT_Z_MIN_POS 0
+      #define LULZBOT_Z_MIN_POS -9
       #define LULZBOT_Z_MAX_POS 293
     #else
       #define X_BED_SIZE 276
@@ -2696,7 +2692,7 @@
       #define LULZBOT_Y_MIN_POS -24 // <-- changed
       #define LULZBOT_X_MAX_POS 301 // <-- changed
       #define LULZBOT_Y_MAX_POS 338 // <-- changed
-      #define LULZBOT_Z_MIN_POS 0 // <-- changed
+      #define LULZBOT_Z_MIN_POS -9 // <-- changed
       #define LULZBOT_Z_MAX_POS 301 // <-- changed
     #endif
   #else
@@ -2708,7 +2704,7 @@
       #define LULZBOT_X_MIN_POS -6
       #define LULZBOT_Y_MAX_POS 613
       #define LULZBOT_Y_MIN_POS -18.2//-15
-      #define LULZBOT_Z_MIN_POS 0
+      #define LULZBOT_Z_MIN_POS -9
       #define LULZBOT_Z_MAX_POS 293
     #else
       #define X_BED_SIZE 285
@@ -2718,7 +2714,7 @@
       #define LULZBOT_Y_MIN_POS -36
       #define LULZBOT_X_MAX_POS 303
       #define LULZBOT_Y_MAX_POS 293
-      #define LULZBOT_Z_MIN_POS 0
+      #define LULZBOT_Z_MIN_POS -5
       #define LULZBOT_Z_MAX_POS 299
     #endif
   #endif
@@ -3248,7 +3244,7 @@
  * - Allows Z homing only when XY positions are known and trusted.
  * - If stepper drivers sleep, XY homing may be required again before Z homing.
  */
-#if ANY(TAZ6, TAZ8, SideKick_289, SideKick_747)
+#if ANY(TAZ6, SideKick_289, SideKick_747)
   #define Z_SAFE_HOMING
 #endif
 
@@ -3455,10 +3451,10 @@
   #elif ENABLED(TAZ6)
     #define NOZZLE_PARK_POINT { X_CENTER, (Y_MAX_POS - 5), (10) }
   #else
-    #define NOZZLE_PARK_POINT { X_CENTER, (Y_MAX_POS - 5), 5 }
+    #define NOZZLE_PARK_POINT { X_CENTER, (Y_MAX_POS - 5), (Z_MAX_POS/2) }
   #endif
   #define NOZZLE_PARK_MOVE          0   // Park motion: 0 = XY Move, 1 = X Only, 2 = Y Only, 3 = X before Y, 4 = Y before X
-  #define NOZZLE_PARK_Z_RAISE_MIN  5   // (mm) Always raise Z by at least this distance
+  #define NOZZLE_PARK_Z_RAISE_MIN  10   // (mm) Always raise Z by at least this distance
   #define NOZZLE_PARK_XY_FEEDRATE 100   // (mm/s) X and Y axes feedrate (also used for delta Z axis)
   #define NOZZLE_PARK_Z_FEEDRATE  Z_FEEDRATE   // (mm/s) Z axis feedrate (not used for delta printers)
   #define PARK_NOZZLE_MENU_OPTION       // Adds an option to park the nozzle under motion menu

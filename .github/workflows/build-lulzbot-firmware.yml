@@ -1,0 +1,36 @@
+#
+# build-lulzbot-firmware.yml
+# - builds all firmware for all LulzBot configurations from the selected branch
+# - uses a provided version number
+#
+
+name: Build LulzBot Firmware
+
+on:
+    workflow_dispatch:
+        inputs:
+            version:
+                description: 'Semantic Version (2.1.3.0.35)'
+                required: true
+                type: string
+
+            ref_name:
+                description: 'Git ref (main, develop)'
+                required: false
+                default: 'main'
+                type: string
+
+permissions:
+    contents: read
+
+jobs:
+    build-firmware:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout Repo
+              uses: actions/checkout@v4
+              with:
+                repository: lulzbot3d/Marlin
+                ref: ${{ inputs.ref_name }}
+                fetch-depth: 1

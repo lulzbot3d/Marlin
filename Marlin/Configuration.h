@@ -3451,7 +3451,7 @@
   #elif ENABLED(TAZ6)
     #define NOZZLE_PARK_POINT { X_CENTER, (Y_MAX_POS - 5), (10) }
   #else
-    #define NOZZLE_PARK_POINT { X_CENTER, (Y_MAX_POS - 5), (Z_MAX_POS/2) }
+    #define NOZZLE_PARK_POINT { X_CENTER, (Y_MAX_POS / 2), (Z_MAX_POS / 2) }
   #endif
   #define NOZZLE_PARK_MOVE          0   // Park motion: 0 = XY Move, 1 = X Only, 2 = Y Only, 3 = X before Y, 4 = Y before X
   #define NOZZLE_PARK_Z_RAISE_MIN  10   // (mm) Always raise Z by at least this distance

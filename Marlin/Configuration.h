@@ -3628,7 +3628,7 @@
 
 #if ENABLED(CUSTOM_MATERIAL_PURGE_PATTERN)
 
-  #define DEFAUL_PURGE_PATTERN_FEEDRATE 30
+  #define DEFAULT_PURGE_PATTERN_FEEDRATE 30
 
   // Other Material
   // _______________
@@ -3667,7 +3667,7 @@
   // ASA
   // _   _
   //  \_/ \|\|\|\|\|
-  //#define MATERIAL_7_PURGE_PATTERN "M117 Purging ASA...\nG91\n"
+  //#define MATERIAL_8_PURGE_PATTERN "M117 Purging ASA...\nG91\n"
 #endif
 
 // @section host

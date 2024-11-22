@@ -34,10 +34,12 @@ void GcodeSuite::M8100()
 {
   const int16_t old_fp = planner.flow_percentage[active_extruder];
 
-  if (parser.seen('N'))
-     feedrate_mm_s = (DEFAUL_PURGE_PATTERN_FEEDRATE * (parser.floatval('N') * 2));
-  else
-    feedrate_mm_s = DEFAUL_PURGE_PATTERN_FEEDRATE;
+  if (parser.seen('N')){
+    feedrate_mm_s = (DEFAULT_PURGE_PATTERN_FEEDRATE / (max(parser.floatval('N'), 0.4) * 2));
+  }
+  else {
+    feedrate_mm_s = DEFAULT_PURGE_PATTERN_FEEDRATE;
+  }
 
   if (parser.seenval('F')){
     const float filament_diameter = parser.floatval('F');

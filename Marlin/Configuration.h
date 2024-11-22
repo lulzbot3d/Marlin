@@ -2229,6 +2229,10 @@
 #if ANY(TAZDualZ, LULZBOT_BLTouch)
   #if ANY(TAZPro, TAZProXT, TAZ8)
     #define PROBING_MARGIN 3
+    #if ANY(LULZBOT_LONG_BED_V2, LULZBOT_LONG_BED)
+      #define PROBING_MARGIN_FRONT 15
+      #define PROBING_MARGIN_BACK  25
+    #endif
   #else
     #define PROBING_MARGIN 20
   #endif

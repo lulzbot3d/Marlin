@@ -33,20 +33,25 @@
 void GcodeSuite::M8100()
 {
   const int16_t old_fp = planner.flow_percentage[active_extruder];
-
-  if (parser.seen('N')){
-    feedrate_mm_s = (DEFAULT_PURGE_PATTERN_FEEDRATE / (max(parser.floatval('N'), 0.4) * 2));
-  }
-  else {
-    feedrate_mm_s = DEFAULT_PURGE_PATTERN_FEEDRATE;
-  }
+  float flow_value = 1;
 
   if (parser.seenval('F')){
     const float filament_diameter = parser.floatval('F');
-    const float flow_value = (-56.636 * filament_diameter + 199.113);
-
-    planner.set_flow(active_extruder, flow_value); //if the filament diameter is 2.85 set flow to 37.7% to extrude the same amount as 1.75
+    flow_value = (-56.636 * filament_diameter + 199.113); //if the filament diameter is 2.85 set flow to 37.7% to extrude the same amount as 1.75
   }
+
+  if (parser.seen('N')){
+    const float nozzle_diameter = parser.floatval('N');
+    feedrate_mm_s = (DEFAULT_PURGE_PATTERN_FEEDRATE / (max(nozzle_diameter, 0.4) * 2));
+    float first_layer = (nozzle_diameter > 1) ? min(current_position.z, 2.0) : min(current_position.z , 0.6); // Cap the first layer height
+    flow_value = flow_value * ((first_layer * nozzle_diameter) / 0.2); // modify flow rate based on layer height and nozzle size
+  }
+  else {
+    feedrate_mm_s = DEFAULT_PURGE_PATTERN_FEEDRATE;
+    flow_value = flow_value * (min(current_position.z, 0.6) / 0.4); // modify flow rate based on just first layer height
+  }
+
+  planner.set_flow(active_extruder, flow_value);
 
   if (thermalManager.degTargetHotend(active_extruder) > EXTRUDE_MINTEMP) {
     if (parser.seen('M')){

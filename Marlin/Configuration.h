@@ -2745,7 +2745,8 @@
   #define LULZBOT_Z_MAX_POS  244.5
 #endif
 
-#define charZ_MAX_POS STRINGIFY(Z_MAX_POS) //Used for event of SD abort
+#define charZ_MAX_POS STRINGIFY(Z_MAX_POS) //Used for event of SD abort  -- This is broken, just puts "Z_MAX_POS" into charZ_MAX_POS because Z_MAX_POS isn't defined yet.
+                                                                         // and even if it was defined, it wouldn't evaluate the expression and stringify the result.
 
 #if ENABLED(LULZBOT_BLTouch, USE_LULZBOT_BLTouch_ADAPTER)
   #define LULZBOT_BLTOUCH_ADAPTER_OFFSET -10

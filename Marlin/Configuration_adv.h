@@ -1274,7 +1274,7 @@
  * The default timeout duration can be overridden with M18 and M84. Set to 0 for No Timeout.
  */
 #define DEFAULT_STEPPER_TIMEOUT_SEC 600
-#define DISABLE_IDLE_X
+//#define DISABLE_IDLE_X
 //#define DISABLE_IDLE_Y
 //#define DISABLE_IDLE_Z    // Disable if the nozzle could fall onto your printed part!
 //#define DISABLE_IDLE_I

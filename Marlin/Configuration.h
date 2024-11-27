@@ -2197,20 +2197,20 @@
  *     O-- FRONT --+
  */
 #if ANY(MiniV2, MiniV3)
-  #define NOZZLE_TO_PROBE_OFFSET { 0, 0, -1.1 }
+  #define NOZZLE_TO_PROBE_OFFSET { 0, 0, -1.2 }
 #elif ANY(TAZ6, Workhorse) && DISABLED(TOOLHEAD_Galaxy_Series)
   #define NOZZLE_TO_PROBE_OFFSET { 0, 0, -1.2 }
 #elif ANY(TAZ6, Workhorse) && ENABLED(TOOLHEAD_Galaxy_Series)
-  #define NOZZLE_TO_PROBE_OFFSET { 0, 0, 0 }
+  #define NOZZLE_TO_PROBE_OFFSET { 0, 0, -1.2 }
 #elif ANY(TAZPro, TAZProXT) && DISABLED(LULZBOT_BLTouch)
-  #define NOZZLE_TO_PROBE_OFFSET { 0, 0, -1.1 }
+  #define NOZZLE_TO_PROBE_OFFSET { 0, 0, -1.2 }
 #elif ANY(TAZPro, TAZProXT) && ENABLED(LULZBOT_BLTouch)
-  #define NOZZLE_TO_PROBE_OFFSET { -38, -2, 0 }
+  #define NOZZLE_TO_PROBE_OFFSET { -38, -2, -0.8 }
 #elif ENABLED(TAZ8)
   #if ENABLED(TOOLHEAD_Galaxy_DualExtruder)
-    #define NOZZLE_TO_PROBE_OFFSET { 48, 70, -1 }
+    #define NOZZLE_TO_PROBE_OFFSET { 48, 70, -0.8 }
   #else
-    #define NOZZLE_TO_PROBE_OFFSET { 23, 63, 0 }
+    #define NOZZLE_TO_PROBE_OFFSET { 23, 63, -0.8 }
   #endif
 #elif ANY(SideKick_289, SideKick_747)
   #define NOZZLE_TO_PROBE_OFFSET { -1, 50, -1.23 }

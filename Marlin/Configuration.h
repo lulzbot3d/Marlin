@@ -16,7 +16,7 @@
 //#define TOOLHEAD_SK175
 //#define TOOLHEAD_SK285
 //#define TOOLHEAD_Universal_DualExtruder         // TAZ Pro Dual Extruder
-//#define TOOLHEAD_Galaxy_DualExtruder            // TAZ Pro Galaxy-Series Dual Extruders
+#define TOOLHEAD_Galaxy_DualExtruder            // TAZ Pro Galaxy-Series Dual Extruders
 //#define TOOLHEAD_KangarooPaw_SingleExtruder     // Bio Single syringe
 
 /************** Uncomment Options for Printer From Below *********************/
@@ -3267,12 +3267,17 @@
 // Homing speeds (mm/min)
 #if ANY(MiniV2, MiniV3, SideKick_289, SideKick_747)
   #define HOMING_FEEDRATE_Z  (50*60)
-#elif ANY(Workhorse, TAZPro, TAZProXT, TAZ8)
+  #define HOMING_FEEDRATE_MM_M { (60*60), (60*60), HOMING_FEEDRATE_Z }
+#elif ANY(Workhorse, TAZPro, TAZProXT)
   #define HOMING_FEEDRATE_Z  (25*60)
+  #define HOMING_FEEDRATE_MM_M { (60*60), (60*60), HOMING_FEEDRATE_Z }
+#elif ANY(TAZ8)
+  #define HOMING_FEEDRATE_Z  (25*60)
+  #define HOMING_FEEDRATE_MM_M { (120*60), (120*60), HOMING_FEEDRATE_Z }
 #else
   #define HOMING_FEEDRATE_Z  (4*60)
+  #define HOMING_FEEDRATE_MM_M { (60*60), (60*60), HOMING_FEEDRATE_Z }
 #endif
-#define HOMING_FEEDRATE_MM_M { (60*60), (60*60), HOMING_FEEDRATE_Z }
 
 // Validate that endstops are triggered on homing moves
 #define VALIDATE_HOMING_ENDSTOPS

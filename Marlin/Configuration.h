@@ -259,7 +259,7 @@
 #elif ENABLED(TAZ8XT)
   #define CUSTOM_MACHINE_NAME "LulzBot TAZ 8 XT"
   #define LULZBOT_LCD_MACHINE_NAME "LulzBot TAZ 8 XT"
-  #define MACHINE_UUID
+  #define MACHINE_UUID "3caa78eb-6da6-4cd4-94a5-e8264381f9d3"
   #define LULZBOT_BLTouch
   #define LULZBOT_FILAMENT_RUNOUT
   #define LULZBOT_MANUAL_NOZZLE_CLEAN
@@ -1795,7 +1795,7 @@
   #else
     #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 100, 500, LULZBOT_E_STEPS }
   #endif
-#elif ENABLED(TAZ8, TAZ8XT) //TAZ8 used 5.2:1 Z motors
+#elif ANY(TAZ8, TAZ8XT) //TAZ8 used 5.2:1 Z motors
   #if defined(LULZBOT_LONG_BED)
     #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 160, 518.18, LULZBOT_E_STEPS }
   #elif defined(LULZBOT_LONG_BED_V2)
@@ -2009,7 +2009,7 @@
 /**
  * Z Servo Probe, such as an endstop switch on a rotating arm.
  */
-#if ENABLED(TAZ8, TAZ8XT)
+#if ANY(TAZ8, TAZ8XT)
   #define Z_PROBE_SERVO_NR 0
 #endif
 #ifdef Z_PROBE_SERVO_NR
@@ -2215,7 +2215,7 @@
   #define NOZZLE_TO_PROBE_OFFSET { 0, 0, -1.2 }
 #elif ANY(TAZPro, TAZProXT) && ENABLED(LULZBOT_BLTouch)
   #define NOZZLE_TO_PROBE_OFFSET { -38, -2, -0.8 }
-#elif ENABLED(TAZ8, TAZ8XT)
+#elif ANY(TAZ8, TAZ8XT)
   #if ENABLED(TOOLHEAD_Galaxy_DualExtruder)
     #define NOZZLE_TO_PROBE_OFFSET { 48, 70, -0.8 }
   #else
@@ -2461,7 +2461,7 @@
 #if ANY(Workhorse,TAZ6, TAZPro, TAZProXT)
   #define INVERT_E0_DIR true
   #define INVERT_E1_DIR true
-#elif ENABLED(TAZ8, TAZ8XT)
+#elif ANY(TAZ8, TAZ8XT)
   #define INVERT_E0_DIR true
   #define INVERT_E1_DIR false
 #else
@@ -3205,7 +3205,7 @@
 
   #define BED_LEVELING_COMMANDS "M1004" // run UBL_MESH_WIZARD
 
-  #if ENABLED(TAZ8, TAZ8XT)
+  #if ANY(TAZ8, TAZ8XT)
     #if ENABLED(TOOLHEAD_Galaxy_DualExtruder)
       #define PROBE_REACHABLE_COUNT 25
     #else
@@ -3621,10 +3621,10 @@
   #elif ANY(TAZPro, TAZProXT) && ANY(TOOLHEAD_Universal_DualExtruder, TOOLHEAD_Galaxy_DualExtruder)
     #define NOZZLE_CLEAN_START_POINT {{ -17, 95, 0 }, { 297, 95, 0 }}
     #define NOZZLE_CLEAN_END_POINT   {{ -17, 25, 0 }, { 297, 25, 0 }}
-  #elif ENABLED(TAZ8, TAZ8XT) && ANY(TOOLHEAD_Legacy_Universal, TOOLHEAD_Galaxy_Series)
+  #elif ANY(TAZ8, TAZ8XT) && ANY(TOOLHEAD_Legacy_Universal, TOOLHEAD_Galaxy_Series)
     #define NOZZLE_CLEAN_START_POINT { 125, 320, 0 }
     #define NOZZLE_CLEAN_END_POINT   { 170, 320, 0 }
-  #elif ENABLED(TAZ8, TAZ8XT) && ENABLED(TOOLHEAD_Galaxy_DualExtruder)
+  #elif ANY(TAZ8, TAZ8XT) && ENABLED(TOOLHEAD_Galaxy_DualExtruder)
     #define NOZZLE_CLEAN_START_POINT {{ 125, 320, 0 }, { 125, 320, 0 }}
     #define NOZZLE_CLEAN_END_POINT   {{ 170, 320, 0 }, { 170, 320, 0 }}
   #else
@@ -3663,9 +3663,9 @@
   #elif ANY(TAZPro, TAZProXT) && ANY(TOOLHEAD_Universal_DualExtruder, TOOLHEAD_Galaxy_DualExtruder)
     #define WIPE_SEQUENCE_COMMANDS "T0\nG1 X-17 Y25 Z15 F4000\nG1 Z0\nM114\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 Z15\nM400"
     #define WIPE_SEQUENCE_2_COMMANDS "G1 X150 Y95 Z15 F4000\nT1\nG1 X296 Y25 Z10 F4000\nG1 Z0\nM114\nG1 X296 Y25\nG1 X296 Y95\nG1 X296 Y25\nG1 X296 Y95\nG1 X296 Y25\nG1 X296 Y95\nG1 X296 Y25\nG1 X296 Y95\nG1 X296 Y25\nG1 X296 Y95\nG1 X296 Y25\nG1 X296 Y95\nG1 Z15\nG1 X150\nT0\nM400"
-  #elif ENABLED(TAZ8, TAZ8XT) && ANY(TOOLHEAD_Legacy_Universal, TOOLHEAD_Galaxy_Series)
+  #elif ANY(TAZ8, TAZ8XT) && ANY(TOOLHEAD_Legacy_Universal, TOOLHEAD_Galaxy_Series)
     #define WIPE_SEQUENCE_COMMANDS "G28O\nT0\nG1 X115 Y297.5 Z5 F4000\nG1 Z0 F6000\nG0 X160\nG0 X115\nG0 X160\nG0 X115\nG0 X160\nG0 X115\nG0 X160\nG0 X115\nG0 X160\nG0 X115\nG0 X160\nG0 X115\nG0 X160\nG0 X115\nG0 X160\nG0 X115\nM114"
-  #elif ENABLED(TAZ8, TAZ8XT) && ENABLED(TOOLHEAD_Galaxy_DualExtruder)
+  #elif ANY(TAZ8, TAZ8XT) && ENABLED(TOOLHEAD_Galaxy_DualExtruder)
     #define WIPE_SEQUENCE_COMMANDS "T0\nG1 X-17 Y25 Z15 F4000\nG1 Z0\nM114\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 Z15\nM400"
     #define WIPE_SEQUENCE_2_COMMANDS "G1 X150 Y95 Z15 F4000\nT1\nG1 X296 Y25 Z10 F4000\nG1 Z0\nM114\nG1 X296 Y25\nG1 X296 Y95\nG1 X296 Y25\nG1 X296 Y95\nG1 X296 Y25\nG1 X296 Y95\nG1 X296 Y25\nG1 X296 Y95\nG1 X296 Y25\nG1 X296 Y95\nG1 X296 Y25\nG1 X296 Y95\nG1 Z15\nG1 X150\nT0\nM400"
   #endif
@@ -4844,7 +4844,7 @@
  * Set this manually if there are extra servos needing manual control.
  * Set to 0 to turn off servo support.
  */
-#if ENABLED(TAZ8, TAZ8XT)
+#if ANY(TAZ8, TAZ8XT)
   #define PRINTER_MOUNTED_BLTouch 1
 #else
   #define PRINTER_MOUNTED_BLTouch 0
@@ -4857,7 +4857,7 @@
 // (ms) Delay before the next move will start, to give the servo time to reach its target angle.
 // 300ms is a good value but you can try less delay.
 // If the servo can't reach the requested position, increase it.
-#if ENABLED(TAZ8, TAZ8XT) && ENABLED(TOOLHEAD_Galaxy_DualExtruder)
+#if ANY(TAZ8, TAZ8XT) && ENABLED(TOOLHEAD_Galaxy_DualExtruder)
   #define SERVO_DELAY {100, LULZBOT_SERVO_E0_DELAY, LULZBOT_SERVO_E1_DELAY}
 #elif ANY(TOOLHEAD_Universal_DualExtruder, TOOLHEAD_Galaxy_DualExtruder)
   #define SERVO_DELAY {LULZBOT_SERVO_E0_DELAY, LULZBOT_SERVO_E1_DELAY}
@@ -4908,6 +4908,6 @@
   #error The BLTouch and dual servo motors are not compatible with selected printer.
 #endif
 
-#if defined(TAZ8, TAZ8XT) && defined(TOOLHEAD_Universal_DualExtruder)
+#if ANY(TAZ8, TAZ8XT) && defined(TOOLHEAD_Universal_DualExtruder)
     #error LULZBOT TAZ8 is not capatible with Legacy dual extruder, please select a different Tool Head.
 #endif

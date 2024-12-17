@@ -1403,7 +1403,7 @@
   // Uncomment to enable reporting (required for "G425 V", but consumes flash).
   //#define CALIBRATION_REPORTING
 
-  #if ENABLED(TAZ8, TAZ8XT)
+  #if ANY(TAZ8, TAZ8XT)
     #define CALIBRATION_MEASUREMENT_UNKNOWN 5
   #else
       #define CALIBRATION_MEASUREMENT_UNKNOWN 5
@@ -1490,7 +1490,7 @@
       //#define CALIBRATION_MEASURE_FRONT
       #define CALIBRATION_MEASURE_LEFT
       #define CALIBRATION_MEASURE_BACK
-    #elif ENABLED(TAZ8, TAZ8XT)
+    #elif ANY(TAZ8, TAZ8XT)
       #if ENABLED(TOOLHEAD_Galaxy_DualExtruder)
         #define CALIBRATION_OBJECT_CENTER     {144, 302, -1.0} //  mm
         #define CALIBRATION_OBJECT_DIMENSIONS {10.0, 5.0, 6.0} //  mm
@@ -1920,7 +1920,7 @@
    */
   //#define POWER_LOSS_RECOVERY
   #if ENABLED(POWER_LOSS_RECOVERY)
-    #if ENABLED(TAZ8, TAZ8XT)
+    #if ANY(TAZ8, TAZ8XT)
       #define PLR_ENABLED_DEFAULT       true // Power-Loss Recovery enabled by default. (Set with 'M413 Sn' & M500)
     #else
       #define PLR_ENABLED_DEFAULT       false // Power-Loss Recovery enabled by default. (Set with 'M413 Sn' & M500)

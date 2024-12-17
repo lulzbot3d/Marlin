@@ -52,7 +52,7 @@
 //
 // Servos
 //
-#if ENABLED(TAZ8, TAZ8XT)
+#if ANY(TAZ8, TAZ8XT)
   #define SERVO0_PIN                            53  // D53 PB14 (Header J20 17)
   #define SERVO1_PIN                            21  // D21 PB13 (Header J20 19)
   #define SERVO2_PIN                            20  // D20 PB12 (Header J20 20)
@@ -104,7 +104,7 @@
 #if defined(Z_STALL_SENSITIVITY)
   #define Z_DIAG_PIN                          36  // PC4 TMC2130 Diag Pins
 #else
-  #if ENABLED(LULZBOT_BLTouch, TAZ8, TAZ8XT)
+  #if ANY(LULZBOT_BLTouch, TAZ8, TAZ8XT)
     #define Z_MIN_PIN        108  // D108 PB9 (Header J20 13)
   #elif ENABLED(LULZBOT_BLTouch) && DISABLED(TAZ8, TAZ8XT)
     #define Z_MIN_PIN        63   // PB18/RD/PWML2/AD11 THERM AN2
@@ -165,7 +165,7 @@
 #define DRIVER_5_CS_PIN                             77
 #define DRIVER_5_DIAG_PIN                           103
 
-#if ENABLED(TAZ8, TAZ8XT)
+#if ANY(TAZ8, TAZ8XT)
   #define Z2_STEP_PIN        DRIVER_3_STEP_PIN    //107  // PB10 E1-STEP -AddOns *
   #define Z2_DIR_PIN         DRIVER_3_DIR_PIN     //96  // PC10 E1-DIR -AddOns *
   #define Z2_ENABLE_PIN      DRIVER_3_ENABLE_PIN  //105  // PB22 E1-EN -AddOns *
@@ -220,7 +220,7 @@
 // Temperature Sensors
 //
 #define TEMP_0_PIN                            10  // D10 PB19 THERM AN1 *
-#if DISABLED(LULZBOT_BLTouch) || ENABLED(TAZ8, TAZ8XT)
+#if DISABLED(LULZBOT_BLTouch) || ANY(TAZ8, TAZ8XT)
   #define TEMP_1_PIN        9   // D9 PB18 THERM AN2 *
 #endif
 #define TEMP_2_PIN                             8  // D8 PB17 THERM AN4 *

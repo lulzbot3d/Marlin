@@ -1872,8 +1872,11 @@
    *
    * :['SPI_HALF_SPEED', 'SPI_QUARTER_SPEED', 'SPI_EIGHTH_SPEED']
    */
-  #if ANY(TAZPro, TAZProXT, TAZ8)
+  #if ANY(TAZPro, TAZProXT)
     #define SD_SPI_SPEED SPI_SIXTEENTH_SPEED
+  #elif ANY(TAZ8)
+    #define SD_SPI_SPEED SPI_HALF_SPEED
+    #define CLCD_HW_SPI_SPEED 1000000
   #endif
 
   // The standard SD detect circuit reads LOW when media is inserted and HIGH when empty.

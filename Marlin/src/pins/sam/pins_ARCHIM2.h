@@ -253,11 +253,21 @@
 #define INT_MOSI_PIN                          73  // D73 PA21/MCDA0
 #define INT_SDSS                              55  // D55 PA24/MCDA3
 
-// External SD card reader on SC2
-#define SD_SCK_PIN                            76  // D76 PA27
-#define SD_MISO_PIN                           74  // D74 PA25
-#define SD_MOSI_PIN                           75  // D75 PA26
-#define SDSS                                  87  // D87 PA29
+#if ANY(TAZ8)
+  // External SD card reader on SC1
+  #define SD_SCK_PIN                            16  // D16 PA13_TXD1
+  #define SD_MISO_PIN                           23  // D23 PA14_RTS1
+  #define SD_MOSI_PIN                           54  // D54 PA16_SCK1
+  #define SDSS                                  17  // D17 PA12_RXD1
+  #define LULZBOT_SD_DETECT_PIN                 68  // D68 PA1_CANRX0
+#else
+  // External SD card reader on SC2
+  #define SD_SCK_PIN                            76  // D76 PA27
+  #define SD_MISO_PIN                           74  // D74 PA25
+  #define SD_MOSI_PIN                           75  // D75 PA26
+  #define SDSS                                  87  // D87 PA29
+  #define LULZBOT_SD_DETECT_PIN                  2  // D2  PB25_TIOA0
+#endif
 
 // Unused Digital GPIO J20 Pins
 #define GPIO_PB1_J20_5                        94  // D94 PB1 (Header J20 5)
@@ -300,9 +310,9 @@
 //
 
 #if ANY(HAS_WIRED_LCD, TOUCH_UI_ULTIPANEL, TOUCH_UI_FTDI_EVE)
-  #define BEEPER_PIN                          23  // D24 PA15_CTS1
+  #define BEEPER_PIN                          23  // D23 PA14_RTS1
   #define LCD_PINS_RS                         17  // D17 PA12_RXD1
-  #define LCD_PINS_EN                         24  // D23 PA14_RTS1
+  #define LCD_PINS_EN                         24  // D24 PA15_CTS1
   #define LCD_PINS_D4                         69  // D69 PA0_CANTX0
   #define LCD_PINS_D5                         54  // D54 PA16_SCK1
   #define LCD_PINS_D6                         68  // D68 PA1_CANRX0
@@ -317,6 +327,6 @@
 #endif
 
 #if ANY(HAS_WIRED_LCD, TOUCH_UI_ULTIPANEL, TOUCH_UI_FTDI_EVE)
-  #define SD_DETECT_PIN                        2  // D2  PB25_TIOA0
+  #define SD_DETECT_PIN                       LULZBOT_SD_DETECT_PIN
   #define DISABLE_DUE_SD_MMC
 #endif

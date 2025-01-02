@@ -943,7 +943,7 @@
   #define SENSORLESS_BACKOFF_MM  { 4, 4 , 0}     // (mm) Backoff from endstops before sensorless homing
   #define HOMING_BACKOFF_POST_MM { 5, 5, 2 }  // (linear=mm, rotational=°) Backoff from endstops after homing
 #else
-  #if ANY(Workhorse, TAZ8)
+  #if ANY(Workhorse, TAZ8, TAZ8XT)
     #define HOMING_BACKOFF_POST_MM { 2, 2, 2 }  // (mm) Backoff from endstops after homing
     #define QUICK_HOME                          // If G28 contains XY do a diagonal move first
   #elif defined(TAZ6)
@@ -1226,7 +1226,7 @@
  *
  * Tune with M593 D<factor> F<frequency>
  */
-#if ANY(TAZPro, TAZProXT, TAZ8)
+#if ANY(TAZPro, TAZProXT, TAZ8, TAZ8XT)
   #define INPUT_SHAPING_X
   #define INPUT_SHAPING_Y
 #endif
@@ -1288,7 +1288,7 @@
 // If the Nozzle or Bed falls when the Z stepper is disabled, set its resting position here.
 //#define Z_AFTER_DEACTIVATE Z_HOME_POS
 
-#if ANY(TAZPro, TAZProXT, TAZ8, MiniV2, MiniV3)
+#if ANY(TAZPro, TAZProXT, TAZ8, TAZ8XT, MiniV2, MiniV3)
   #define HOME_AFTER_DEACTIVATE  // Require rehoming after steppers are deactivated
 #endif
 
@@ -1307,7 +1307,7 @@
 // Increase the slowdown divisor for larger buffer sizes.
 #define SLOWDOWN
 #if ENABLED(SLOWDOWN)
-  #if ANY(TAZPro, TAZProXT, TAZ8)
+  #if ANY(TAZPro, TAZProXT, TAZ8, TAZ8XT)
     #define SLOWDOWN_DIVISOR 32
   #else
     #define SLOWDOWN_DIVISOR 8
@@ -1329,7 +1329,7 @@
 // Backlash Compensation
 // Adds extra movement to axes on direction-changes to account for backlash.
 //
-#if ANY(TAZPro, TAZProXT, Workhorse, TAZ8)
+#if ANY(TAZPro, TAZProXT, Workhorse, TAZ8, TAZ8XT)
   #define BACKLASH_COMPENSATION
 #endif
 
@@ -1384,7 +1384,7 @@
  * Note: HOTEND_OFFSET and CALIBRATION_OBJECT_CENTER must be set to within
  *       ±5mm of true values for G425 to succeed.
  */
-#if ANY(TAZPro, TAZProXT, Workhorse, TAZ8)
+#if ANY(TAZPro, TAZProXT, Workhorse, TAZ8, TAZ8XT)
   #define CALIBRATION_GCODE
 #endif
 #if ENABLED(CALIBRATION_GCODE)
@@ -1403,7 +1403,7 @@
   // Uncomment to enable reporting (required for "G425 V", but consumes flash).
   //#define CALIBRATION_REPORTING
 
-  #if ENABLED(TAZ8)
+  #if ANY(TAZ8, TAZ8XT)
     #define CALIBRATION_MEASUREMENT_UNKNOWN 5
   #else
       #define CALIBRATION_MEASUREMENT_UNKNOWN 5
@@ -1490,7 +1490,7 @@
       //#define CALIBRATION_MEASURE_FRONT
       #define CALIBRATION_MEASURE_LEFT
       #define CALIBRATION_MEASURE_BACK
-    #elif ENABLED(TAZ8)
+    #elif ANY(TAZ8, TAZ8XT)
       #if ENABLED(TOOLHEAD_Galaxy_DualExtruder)
         #define CALIBRATION_OBJECT_CENTER     {144, 302, -1.0} //  mm
         #define CALIBRATION_OBJECT_DIMENSIONS {10.0, 5.0, 6.0} //  mm
@@ -1539,7 +1539,7 @@
 
   // Define the pin to read during calibration
   #ifndef CALIBRATION_PIN
-    #if defined(LULZBOT_BLTouch) && ANY(TAZPro, TAZProXT, TAZ8)
+    #if defined(LULZBOT_BLTouch) && ANY(TAZPro, TAZProXT, TAZ8, TAZ8XT)
       #define CALIBRATION_PIN 31 // Override in pins.h or set to -1 to use your Z endstop
       #define CALIBRATION_PIN_INVERTING true // Set to true to invert the pin
     #else
@@ -1874,7 +1874,7 @@
    */
   #if ANY(TAZPro, TAZProXT)
     #define SD_SPI_SPEED SPI_SIXTEENTH_SPEED
-  #elif ANY(TAZ8)
+  #elif ANY(TAZ8, TAZ8XT)
     #define SD_SPI_SPEED SPI_HALF_SPEED
     #define CLCD_HW_SPI_SPEED 1000000
   #endif
@@ -1923,7 +1923,7 @@
    */
   //#define POWER_LOSS_RECOVERY
   #if ENABLED(POWER_LOSS_RECOVERY)
-    #if ENABLED(TAZ8)
+    #if ANY(TAZ8, TAZ8XT)
       #define PLR_ENABLED_DEFAULT       true // Power-Loss Recovery enabled by default. (Set with 'M413 Sn' & M500)
     #else
       #define PLR_ENABLED_DEFAULT       false // Power-Loss Recovery enabled by default. (Set with 'M413 Sn' & M500)
@@ -1998,7 +1998,7 @@
   //#define UTF_FILENAME_SUPPORT
 
   #define LONG_FILENAME_HOST_SUPPORT    // Get the long filename of a file/folder with 'M33 <dosname>' and list long filenames with 'M20 L'
-  #if ANY(TAZPro, TAZProXT, TAZ8)
+  #if ANY(TAZPro, TAZProXT, TAZ8, TAZ8XT)
     #define LONG_FILENAME_WRITE_SUPPORT   // Create / delete files with long filenames via M28, M30, and Binary Transfer Protocol
   #endif
   //#define M20_TIMESTAMP_SUPPORT         // Include timestamps by adding the 'T' flag to M20 commands
@@ -2488,7 +2488,7 @@
   #define BABYSTEP_ZPROBE_OFFSET          // Combine M851 Z and Babystepping
   #if ENABLED(BABYSTEP_ZPROBE_OFFSET)
     //#define BABYSTEP_HOTEND_Z_OFFSET      // For multiple hotends, babystep relative Z offsets
-    #if DISABLED(TAZPro, TAZProXT, TAZ8, MiniV3)
+    #if DISABLED(TAZPro, TAZProXT, TAZ8, TAZ8XT, MiniV3)
       #define BABYSTEP_GFX_OVERLAY          // Enable graphical overlay on Z-offset editor
     #endif
   #endif
@@ -2816,7 +2816,7 @@
 
 // The ASCII buffer for serial input
 #define MAX_CMD_SIZE 96
-#if ANY(TAZPro, TAZProXT, TAZ8)
+#if ANY(TAZPro, TAZProXT, TAZ8, TAZ8XT)
   #define BUFSIZE 64
 #else
   #define BUFSIZE 8
@@ -3436,7 +3436,7 @@
    * The default SW SPI pins are defined the respective pins files,
    * but you can override or define them here.
    */
-  #if ANY(TAZPro, TAZProXT, TAZ8)
+  #if ANY(TAZPro, TAZProXT, TAZ8, TAZ8XT)
     #define TMC_USE_SW_SPI
   #endif
   //#define TMC_SPI_MOSI  -1
@@ -3629,7 +3629,7 @@
    * Comment *_STALL_SENSITIVITY to disable sensorless homing for that axis.
    * @section tmc/stallguard
    */
-  #if DISABLED(TAZ8)
+  #if DISABLED(TAZ8, TAZ8XT)
     #define SENSORLESS_HOMING // StallGuard capable drivers only
   #endif
 
@@ -4241,7 +4241,7 @@
     #define E_CURRENT_TWNB285 "M906 T0 E850\n M906 T1 E850"
   #endif
 
-  #if DISABLED(TAZPro, TAZ8, TAZProXT)
+  #if DISABLED(TAZPro, TAZProXT, TAZ8, TAZ8XT)
     #define MAIN_MENU_ITEM_1_DESC "Park for TH Swap"
     #define MAIN_MENU_ITEM_1_GCODE "G28O\nG0 X100 Y283 Z200"
   #endif
@@ -4270,7 +4270,7 @@
     #define MAIN_MENU_ITEM_2_GCODE "M891 T13\nM92E420\n" E_CURRENT_DUAL "\nM500\nM117 DUAL|0.50mm|HRD STEEL"
 
   #elif defined(TOOLHEAD_Legacy_Universal)
-    #if ANY(MiniV2, Workhorse, TAZPro, TAZProXT, TAZ8)
+    #if ANY(MiniV2, Workhorse, TAZPro, TAZProXT, TAZ8, TAZ8XT)
       #define MAIN_MENU_ITEM_2_DESC "M175v2|0.50mm|CRB CU"
       #define MAIN_MENU_ITEM_2_GCODE "M891 T1\nM92E415\nM301P" charM175_DEFAULT_Kp "I" charM175_DEFAULT_Ki "D" charM175_DEFAULT_Kd "\n" E_CURRENT_BMG "\nM900 K0.05\nM500\nM117 M175v2|0.50mm|CRB CU"
 

@@ -2752,7 +2752,7 @@
       #define LULZBOT_X_MAX_POS 301 // <-- changed
       #define LULZBOT_Y_MAX_POS 338 // <-- changed
       #define LULZBOT_Z_MIN_POS -9 // <-- changed
-      #define LULZBOT_Z_MAX_POS 593 // <-- changed
+      #define LULZBOT_Z_MAX_POS 587 // <-- changed
     #endif
   #else
     #if defined(LULZBOT_LONG_BED_V2)
@@ -2774,7 +2774,7 @@
       #define LULZBOT_X_MAX_POS 303
       #define LULZBOT_Y_MAX_POS 293
       #define LULZBOT_Z_MIN_POS -5
-      #define LULZBOT_Z_MAX_POS 593
+      #define LULZBOT_Z_MAX_POS 587
     #endif
   #endif
 #elif defined(SideKick_289)

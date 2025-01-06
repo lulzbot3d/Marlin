@@ -7,56 +7,56 @@
 ******************
 *  TAZ Platform  *
 ******************
-Marlin_TAZPro_Galaxy_2.1.3.0.40_83ad355
-Marlin_TAZPro_Galaxy_BLTouch_2.1.3.0.40_83ad355
-Marlin_TAZPro_LongBed_Galaxy_BLTouch_2.1.3.0.40_83ad355
-Marlin_TAZPro_LongBedv2_Galaxy_BLTouch_2.1.3.0.40_83ad355
-Marlin_TAZProXT_Galaxy_2.1.3.0.40_83ad355
-Marlin_TAZProXT_Galaxy_BLTouch_2.1.3.0.40_83ad355
-Marlin_TAZProXT_LongBed_Galaxy_BLTouch_2.1.3.0.40_83ad355
-Marlin_TAZProXT_LongBedv2_Galaxy_BLTouch_2.1.3.0.40_83ad355
+Marlin_TAZPro_Galaxy_2.1.3.0.41_aabaeb5
+Marlin_TAZPro_Galaxy_BLTouch_2.1.3.0.41_aabaeb5
+Marlin_TAZPro_LongBed_Galaxy_BLTouch_2.1.3.0.41_aabaeb5
+Marlin_TAZPro_LongBedv2_Galaxy_BLTouch_2.1.3.0.41_aabaeb5
+Marlin_TAZProXT_Galaxy_2.1.3.0.41_aabaeb5
+Marlin_TAZProXT_Galaxy_BLTouch_2.1.3.0.41_aabaeb5
+Marlin_TAZProXT_LongBed_Galaxy_BLTouch_2.1.3.0.41_aabaeb5
+Marlin_TAZProXT_LongBedv2_Galaxy_BLTouch_2.1.3.0.41_aabaeb5
 
-Marlin_TAZPro_Universal_2.1.3.0.40_83ad355
-Marlin_TAZPro_Universal_BLTouch_2.1.3.0.40_83ad355
-Marlin_TAZPro_LongBed_Universal_BLTouch_2.1.3.0.40_83ad355
-Marlin_TAZPro_LongBedv2_Universal_BLTouch_2.1.3.0.40_83ad355
-Marlin_TAZProXT_Universal_2.1.3.0.40_83ad355
-Marlin_TAZProXT_Universal_BLTouch_2.1.3.0.40_83ad355
-Marlin_TAZProXT_LongBed_Universal_BLTouch_2.1.3.0.40_83ad355
-Marlin_TAZProXT_LongBedv2_Universal_BLTouch_2.1.3.0.40_83ad355
+Marlin_TAZPro_Universal_2.1.3.0.41_aabaeb5
+Marlin_TAZPro_Universal_BLTouch_2.1.3.0.41_aabaeb5
+Marlin_TAZPro_LongBed_Universal_BLTouch_2.1.3.0.41_aabaeb5
+Marlin_TAZPro_LongBedv2_Universal_BLTouch_2.1.3.0.41_aabaeb5
+Marlin_TAZProXT_Universal_2.1.3.0.41_aabaeb5
+Marlin_TAZProXT_Universal_BLTouch_2.1.3.0.41_aabaeb5
+Marlin_TAZProXT_LongBed_Universal_BLTouch_2.1.3.0.41_aabaeb5
+Marlin_TAZProXT_LongBedv2_Universal_BLTouch_2.1.3.0.41_aabaeb5
 
-Marlin_TAZPro_Galaxy_DualExtruder_2.1.3.0.40_83ad355
-Marlin_TAZProXT_Galaxy_DualExtruder_2.1.3.0.40_83ad355
+Marlin_TAZPro_Galaxy_DualExtruder_2.1.3.0.41_aabaeb5
+Marlin_TAZProXT_Galaxy_DualExtruder_2.1.3.0.41_aabaeb5
 
-Marlin_TAZPro_Universal_DualExtruder_2.1.3.0.40_83ad355
-Marlin_TAZProXT_Universal_DualExtruder_2.1.3.0.40_83ad355
+Marlin_TAZPro_Universal_DualExtruder_2.1.3.0.41_aabaeb5
+Marlin_TAZProXT_Universal_DualExtruder_2.1.3.0.41_aabaeb5
 
-Marlin_TAZ8_Galaxy_2.1.3.0.40_83ad355
-Marlin_TAZ8_Galaxy_DualExtruder_2.1.3.0.40_83ad355
-Marlin_TAZ8_LongBedv2_Galaxy_BLTouch_2.1.3.0.40_83ad355
-Marlin_TAZ8XT_Galaxy_2.1.3.0.40_83ad355
-Marlin_TAZ8XT_Galaxy_DualExtruder_2.1.3.0.40_83ad355
-Marlin_TAZ8XT_LongBedv2_Galaxy_BLTouch_2.1.3.0.40_83ad355
+Marlin_TAZ8_Galaxy_2.1.3.0.41_aabaeb5
+Marlin_TAZ8_Galaxy_DualExtruder_2.1.3.0.41_aabaeb5
+Marlin_TAZ8_LongBedv2_Galaxy_BLTouch_2.1.3.0.41_aabaeb5
+Marlin_TAZ8XT_Galaxy_2.1.3.0.41_aabaeb5
+Marlin_TAZ8XT_Galaxy_DualExtruder_2.1.3.0.41_aabaeb5
+Marlin_TAZ8XT_LongBedv2_Galaxy_BLTouch_2.1.3.0.41_aabaeb5
 
 ******************
 *    Workhorse   *
 ******************
-Marlin_Workhorse_Galaxy_2.1.3.0.40_83ad355
-Marlin_Workhorse_Universal_2.1.3.0.40_83ad355
+Marlin_Workhorse_Galaxy_2.1.3.0.41_aabaeb5
+Marlin_Workhorse_Universal_2.1.3.0.41_aabaeb5
 
 
 **********
 * Mini 2 *
 **********
-Marlin_Mini2_Galaxy_2.1.3.0.40_83ad355
-Marlin_Mini2_Universal_2.1.3.0.40_83ad355
+Marlin_Mini2_Galaxy_2.1.3.0.41_aabaeb5
+Marlin_Mini2_Universal_2.1.3.0.41_aabaeb5
 
 
 **********************
 *  SideKick Platform *
 **********************
-Marlin_289_Galaxy_2.1.3.0.40_83ad355
-Marlin_289_Universal_2.1.3.0.40_83ad355
+Marlin_289_Galaxy_2.1.3.0.41_aabaeb5
+Marlin_289_Universal_2.1.3.0.41_aabaeb5
 
-Marlin_747_Galaxy_2.1.3.0.40_83ad355
-Marlin_747_Universal_2.1.3.0.40_83ad355
+Marlin_747_Galaxy_2.1.3.0.41_aabaeb5
+Marlin_747_Universal_2.1.3.0.41_aabaeb5

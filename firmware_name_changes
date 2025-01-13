@@ -7,56 +7,56 @@
 ******************
 *  TAZ Platform  *
 ******************
-Marlin_TAZPro_Galaxy_2.1.3.0.41-Dev.2_c5998e2
-Marlin_TAZPro_Galaxy_BLTouch_2.1.3.0.41-Dev.2_c5998e2
-Marlin_TAZPro_LongBed_Galaxy_BLTouch_2.1.3.0.41-Dev.2_c5998e2
-Marlin_TAZPro_LongBedv2_Galaxy_BLTouch_2.1.3.0.41-Dev.2_c5998e2
-Marlin_TAZProXT_Galaxy_2.1.3.0.41-Dev.2_c5998e2
-Marlin_TAZProXT_Galaxy_BLTouch_2.1.3.0.41-Dev.2_c5998e2
-Marlin_TAZProXT_LongBed_Galaxy_BLTouch_2.1.3.0.41-Dev.2_c5998e2
-Marlin_TAZProXT_LongBedv2_Galaxy_BLTouch_2.1.3.0.41-Dev.2_c5998e2
+Marlin_TAZPro_Galaxy_2.1.3.0.41-Dev.3_e49912e
+Marlin_TAZPro_Galaxy_BLTouch_2.1.3.0.41-Dev.3_e49912e
+Marlin_TAZPro_LongBed_Galaxy_BLTouch_2.1.3.0.41-Dev.3_e49912e
+Marlin_TAZPro_LongBedv2_Galaxy_BLTouch_2.1.3.0.41-Dev.3_e49912e
+Marlin_TAZProXT_Galaxy_2.1.3.0.41-Dev.3_e49912e
+Marlin_TAZProXT_Galaxy_BLTouch_2.1.3.0.41-Dev.3_e49912e
+Marlin_TAZProXT_LongBed_Galaxy_BLTouch_2.1.3.0.41-Dev.3_e49912e
+Marlin_TAZProXT_LongBedv2_Galaxy_BLTouch_2.1.3.0.41-Dev.3_e49912e
 
-Marlin_TAZPro_Universal_2.1.3.0.41-Dev.2_c5998e2
-Marlin_TAZPro_Universal_BLTouch_2.1.3.0.41-Dev.2_c5998e2
-Marlin_TAZPro_LongBed_Universal_BLTouch_2.1.3.0.41-Dev.2_c5998e2
-Marlin_TAZPro_LongBedv2_Universal_BLTouch_2.1.3.0.41-Dev.2_c5998e2
-Marlin_TAZProXT_Universal_2.1.3.0.41-Dev.2_c5998e2
-Marlin_TAZProXT_Universal_BLTouch_2.1.3.0.41-Dev.2_c5998e2
-Marlin_TAZProXT_LongBed_Universal_BLTouch_2.1.3.0.41-Dev.2_c5998e2
-Marlin_TAZProXT_LongBedv2_Universal_BLTouch_2.1.3.0.41-Dev.2_c5998e2
+Marlin_TAZPro_Universal_2.1.3.0.41-Dev.3_e49912e
+Marlin_TAZPro_Universal_BLTouch_2.1.3.0.41-Dev.3_e49912e
+Marlin_TAZPro_LongBed_Universal_BLTouch_2.1.3.0.41-Dev.3_e49912e
+Marlin_TAZPro_LongBedv2_Universal_BLTouch_2.1.3.0.41-Dev.3_e49912e
+Marlin_TAZProXT_Universal_2.1.3.0.41-Dev.3_e49912e
+Marlin_TAZProXT_Universal_BLTouch_2.1.3.0.41-Dev.3_e49912e
+Marlin_TAZProXT_LongBed_Universal_BLTouch_2.1.3.0.41-Dev.3_e49912e
+Marlin_TAZProXT_LongBedv2_Universal_BLTouch_2.1.3.0.41-Dev.3_e49912e
 
-Marlin_TAZPro_Galaxy_DualExtruder_2.1.3.0.41-Dev.2_c5998e2
-Marlin_TAZProXT_Galaxy_DualExtruder_2.1.3.0.41-Dev.2_c5998e2
+Marlin_TAZPro_Galaxy_DualExtruder_2.1.3.0.41-Dev.3_e49912e
+Marlin_TAZProXT_Galaxy_DualExtruder_2.1.3.0.41-Dev.3_e49912e
 
-Marlin_TAZPro_Universal_DualExtruder_2.1.3.0.41-Dev.2_c5998e2
-Marlin_TAZProXT_Universal_DualExtruder_2.1.3.0.41-Dev.2_c5998e2
+Marlin_TAZPro_Universal_DualExtruder_2.1.3.0.41-Dev.3_e49912e
+Marlin_TAZProXT_Universal_DualExtruder_2.1.3.0.41-Dev.3_e49912e
 
-Marlin_TAZ8_Galaxy_2.1.3.0.41-Dev.2_c5998e2
-Marlin_TAZ8_Galaxy_DualExtruder_2.1.3.0.41-Dev.2_c5998e2
-Marlin_TAZ8_LongBedv2_Galaxy_2.1.3.0.41-Dev.2_c5998e2
-Marlin_TAZ8XT_Galaxy_2.1.3.0.41-Dev.2_c5998e2
-Marlin_TAZ8XT_Galaxy_DualExtruder_2.1.3.0.41-Dev.2_c5998e2
-Marlin_TAZ8XT_LongBedv2_Galaxy_2.1.3.0.41-Dev.2_c5998e2
+Marlin_TAZ8_Galaxy_2.1.3.0.41-Dev.3_e49912e
+Marlin_TAZ8_Galaxy_DualExtruder_2.1.3.0.41-Dev.3_e49912e
+Marlin_TAZ8_LongBedv2_Galaxy_2.1.3.0.41-Dev.3_e49912e
+Marlin_TAZ8XT_Galaxy_2.1.3.0.41-Dev.3_e49912e
+Marlin_TAZ8XT_Galaxy_DualExtruder_2.1.3.0.41-Dev.3_e49912e
+Marlin_TAZ8XT_LongBedv2_Galaxy_2.1.3.0.41-Dev.3_e49912e
 
 ******************
 *    Workhorse   *
 ******************
-Marlin_Workhorse_Galaxy_2.1.3.0.41-Dev.2_c5998e2
-Marlin_Workhorse_Universal_2.1.3.0.41-Dev.2_c5998e2
+Marlin_Workhorse_Galaxy_2.1.3.0.41-Dev.3_e49912e
+Marlin_Workhorse_Universal_2.1.3.0.41-Dev.3_e49912e
 
 
 **********
 * Mini 2 *
 **********
-Marlin_Mini2_Galaxy_2.1.3.0.41-Dev.2_c5998e2
-Marlin_Mini2_Universal_2.1.3.0.41-Dev.2_c5998e2
+Marlin_Mini2_Galaxy_2.1.3.0.41-Dev.3_e49912e
+Marlin_Mini2_Universal_2.1.3.0.41-Dev.3_e49912e
 
 
 **********************
 *  SideKick Platform *
 **********************
-Marlin_289_Galaxy_2.1.3.0.41-Dev.2_c5998e2
-Marlin_289_Universal_2.1.3.0.41-Dev.2_c5998e2
+Marlin_289_Galaxy_2.1.3.0.41-Dev.3_e49912e
+Marlin_289_Universal_2.1.3.0.41-Dev.3_e49912e
 
-Marlin_747_Galaxy_2.1.3.0.41-Dev.2_c5998e2
-Marlin_747_Universal_2.1.3.0.41-Dev.2_c5998e2
+Marlin_747_Galaxy_2.1.3.0.41-Dev.3_e49912e
+Marlin_747_Universal_2.1.3.0.41-Dev.3_e49912e

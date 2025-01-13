@@ -96,7 +96,7 @@
 // Author info of this build printed to the host during boot and M115
 #define STRING_CONFIG_H_AUTHOR "LulzBot" // Who made the changes.
 #define CUSTOM_VERSION_FILE Version.h // Path from the root directory (no quotes)
-#define LULZBOT_FW_VERSION "2.1.3.0.41-Dev.2"
+#define LULZBOT_FW_VERSION "2.1.3.0.41-Dev.4"
 #define CAPABILITIES_REPORT
 #define EXTENDED_CAPABILITIES_REPORT
 
@@ -2723,12 +2723,12 @@
       #define X_BED_SIZE 285
       #define Y_BED_SIZE 285
       // Travel limits (mm) after homing, corresponding to endstop positions.
-      #define LULZBOT_X_MIN_POS -6
-      #define LULZBOT_Y_MIN_POS -36
-      #define LULZBOT_X_MAX_POS 303
-      #define LULZBOT_Y_MAX_POS 293
-      #define LULZBOT_Z_MIN_POS -5
+      #define LULZBOT_X_MAX_POS 298
+      #define LULZBOT_X_MIN_POS -1
+      #define LULZBOT_Y_MAX_POS 298
+      #define LULZBOT_Y_MIN_POS -18
       #define LULZBOT_Z_MAX_POS 299
+      #define LULZBOT_Z_MIN_POS -5
     #endif
   #endif
 #elif ENABLED(TAZ8XT)
@@ -2769,12 +2769,12 @@
       #define X_BED_SIZE 285
       #define Y_BED_SIZE 285
       // Travel limits (mm) after homing, corresponding to endstop positions.
-      #define LULZBOT_X_MIN_POS -6
-      #define LULZBOT_Y_MIN_POS -36
-      #define LULZBOT_X_MAX_POS 303
-      #define LULZBOT_Y_MAX_POS 293
-      #define LULZBOT_Z_MIN_POS -5
+      #define LULZBOT_X_MAX_POS 298
+      #define LULZBOT_X_MIN_POS -1
+      #define LULZBOT_Y_MAX_POS 298
+      #define LULZBOT_Y_MIN_POS -18
       #define LULZBOT_Z_MAX_POS 587
+      #define LULZBOT_Z_MIN_POS -5
     #endif
   #endif
 #elif defined(SideKick_289)

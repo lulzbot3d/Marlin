@@ -1169,8 +1169,9 @@ void tool_change(const uint8_t new_tool, bool no_move/*=false*/) {
     const uint8_t old_tool = active_extruder;
     const bool can_move_away = !no_move && !idex_full_control;
 
-    #if ENABLED(AUTO_BED_LEVELING_UBL)
+    #if ANY(AUTO_BED_LEVELING_UBL, AUTO_BED_LEVELING_BILINEAR)
       // Workaround for UBL mesh boundary, possibly?
+      // This fixes the Z height stretching issue with bilinear bed leveling.
       TEMPORARY_BED_LEVELING_STATE(false);
     #endif
 

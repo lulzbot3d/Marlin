@@ -2237,7 +2237,7 @@
 // with NOZZLE_AS_PROBE this can be negative for a wider probing area.
 #if ANY(TAZDualZ, LULZBOT_BLTouch)
   #if ANY(TAZPro, TAZProXT, TAZ8, TAZ8XT)
-    #define PROBING_MARGIN 3
+    #define PROBING_MARGIN 10
     #if ANY(LULZBOT_LONG_BED_V2, LULZBOT_LONG_BED)
       #define PROBING_MARGIN_FRONT 15
       #define PROBING_MARGIN_BACK  25
@@ -2261,7 +2261,7 @@
 
 // X and Y axis travel speed (mm/min) between probes
 #if ANY(TAZPro, TAZProXT, TAZ8, TAZ8XT) && ENABLED(LULZBOT_BLTouch)
-  #define XY_PROBE_FEEDRATE (250*60)
+  #define XY_PROBE_FEEDRATE (200*60)
 #else
   #define XY_PROBE_FEEDRATE (150*60)
 #endif

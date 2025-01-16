@@ -51,10 +51,10 @@ void LinearAdvanceScreen::onRedraw(draw_mode_t what) {
     #endif
   #endif
   w.increments();
-  draw_text_box(cmd, BTN_POS(1,4), BTN_SIZE(13,5), F(
+  draw_text_box(cmd, BTN_POS(1,5), BTN_SIZE(13,5), F(
       "Linear Advance and K Value\n \n \n \n \n \n \n \n \n \n \n"
   ), OPT_CENTERY, font_large);
-    draw_text_box(cmd, BTN_POS(1,4), BTN_SIZE(13,5), F(" \n \nLinear Advance tunes filament flow according to the print head's speed. A higher K value sharpens precision but can lead to over-extrusion; a lower value promotes smoother flow but may result in under-extrusion. This adjustment enhances print quality. \n \nFor tuning instructions, visit the Linear Advance section on the Marlin Firmware website.\n "
+    draw_text_box(cmd, BTN_POS(1,5), BTN_SIZE(13,5), F(" \n \nLinear Advance tunes filament flow according to the print head's speed. A higher K value sharpens precision but can lead to over-extrusion; a lower value promotes smoother flow but may result in under-extrusion. This adjustment enhances print quality. \n \nFor tuning instructions, visit the Linear Advance section on the Marlin Firmware website.\n "
   ), OPT_CENTERY, font_medium);
 }
 

@@ -50,6 +50,7 @@
 
 #include "conf_usb.h"
 #include "udc.h"
+#include "../../../Lulzbot_Extras.h"
 
 #if HAS_MEDIA
   static volatile bool main_b_msc_enable = false;

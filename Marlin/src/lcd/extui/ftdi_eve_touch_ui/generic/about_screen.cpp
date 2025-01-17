@@ -165,6 +165,7 @@ bool AboutScreen::onTouchEnd(uint8_t tag) {
     case 3: GOTO_SCREEN(DeveloperMenu); return true;
     default:                           return false;
   }
+  return false;
 }
 
 #endif // EXTENSIBLE_UI

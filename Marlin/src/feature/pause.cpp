@@ -527,7 +527,7 @@ void wait_for_confirmation(const bool is_reload/*=false*/, const int8_t max_beep
   DEBUG_ECHOLNPGM("... is_reload:", is_reload, " maxbeep:", max_beep_count DXC_SAY);
 
   bool nozzle_timed_out = false;
-  static bool ranout = false;
+  //static bool ranout = false;
 
   //if (runout.filament_ran_out != ranout)
     show_continue_prompt(is_reload);

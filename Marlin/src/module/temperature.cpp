@@ -4436,8 +4436,8 @@ void Temperature::isr() {
 
   #if HAS_HOTEND && HAS_STATUS_MESSAGE
     void Temperature::set_heating_message(const uint8_t e, const bool isM104/*=false*/) {
-      const bool heating = isHeatingHotend(e);
       #if DISABLED(REMOVE_STARING_PRINT_MESSAGES)
+        const bool heating = isHeatingHotend(e);
         ui.status_printf(0,
           #if HAS_MULTI_HOTEND
             F("E%c " S_FMT), '1' + e

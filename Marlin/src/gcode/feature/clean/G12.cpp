@@ -85,7 +85,7 @@ void GcodeSuite::G12() {
         #if (HOTENDS == 1)
           process_subcommands_now(F(WIPE_SEQUENCE_COMMANDS));
         #else
-          process_subcommands_now(F(WIPE_SEQUENCE_COMMANDS"\n"WIPE_SEQUENCE_2_COMMANDS));
+          process_subcommands_now(F(WIPE_SEQUENCE_COMMANDS "\n" WIPE_SEQUENCE_2_COMMANDS));
         #endif
         return;
       }

@@ -33,8 +33,8 @@
 #include "../MarlinCore.h"
 #include "../gcode/gcode.h"
 
-//#define DEBUG_TOOL_CHANGE
-//#define DEBUG_TOOLCHANGE_FILAMENT_SWAP
+#define DEBUG_TOOL_CHANGE
+#define DEBUG_TOOLCHANGE_FILAMENT_SWAP
 
 #if HAS_MULTI_EXTRUDER
   toolchange_settings_t toolchange_settings;  // Initialized by settings.load()
@@ -1107,6 +1107,8 @@ void fast_line_to_current(const AxisEnum fr_axis) { _line_to_current(fr_axis, 0.
  */
 void tool_change(const uint8_t new_tool, bool no_move/*=false*/) {
 
+  DEBUG_ECHOLNPGM(planner.leveling_active ? "1)Bed leveling is ON" : "1)Bed leveling is OFF");
+
   if (TERN0(MAGNETIC_SWITCHING_TOOLHEAD, new_tool == active_extruder))
     return;
 
@@ -1142,6 +1144,9 @@ void tool_change(const uint8_t new_tool, bool no_move/*=false*/) {
 
   #elif HAS_MULTI_EXTRUDER
 
+    TEMPORARY_BED_LEVELING_STATE(false);
+    DEBUG_ECHOLNPGM(planner.leveling_active ? "2)Bed leveling is ON" : "2)Bed leveling is OFF");
+
     DEBUG_ECHOLNPGM("Current Pos on Tool Change Entry { ", current_position.x, ", ", current_position.y, ", ", current_position.z, " }");
     planner.synchronize();
 
@@ -1169,11 +1174,11 @@ void tool_change(const uint8_t new_tool, bool no_move/*=false*/) {
     const uint8_t old_tool = active_extruder;
     const bool can_move_away = !no_move && !idex_full_control;
 
-    #if ANY(AUTO_BED_LEVELING_UBL, AUTO_BED_LEVELING_BILINEAR)
+    //#if ANY(AUTO_BED_LEVELING_UBL, AUTO_BED_LEVELING_BILINEAR)
       // Workaround for UBL mesh boundary, possibly?
       // This fixes the Z height stretching issue with bilinear bed leveling.
-      TEMPORARY_BED_LEVELING_STATE(false);
-    #endif
+      //TEMPORARY_BED_LEVELING_STATE(false);
+    //#endif
 
     // First tool priming. To prime again, reboot the machine. -- Should only occur for first T0 after powerup!
     #if ENABLED(TOOLCHANGE_FS_PRIME_FIRST_USED)
@@ -1295,7 +1300,8 @@ void tool_change(const uint8_t new_tool, bool no_move/*=false*/) {
           if (newz > maxz) return;
           DEBUG_ECHOLNPGM("New / Max Z / Curr Z { ", newz, ", ", maxz, ", ", current_position.z, " }");
           current_position.z = _MIN(newz + toolchange_settings.z_raise, maxz);
-          fast_line_to_current(Z_AXIS);
+          //fast_line_to_current(Z_AXIS);
+          do_blocking_move_to_z(current_position.z, planner.settings.max_feedrate_mm_s[Z_AXIS]);
         }
 
         #if SWITCHING_NOZZLE_TWO_SERVOS
@@ -1516,6 +1522,7 @@ void tool_change(const uint8_t new_tool, bool no_move/*=false*/) {
     SERIAL_ECHOLNPGM(STR_ACTIVE_EXTRUDER, active_extruder);
 
   #endif // HAS_MULTI_EXTRUDER
+  DEBUG_ECHOLNPGM(planner.leveling_active ? "3)Bed leveling is ON" : "3)Bed leveling is OFF");
 }
 
 #if ENABLED(TOOLCHANGE_MIGRATION_FEATURE)

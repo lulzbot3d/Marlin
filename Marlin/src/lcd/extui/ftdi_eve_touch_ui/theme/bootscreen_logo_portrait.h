@@ -180,4 +180,4 @@ const PROGMEM uint16_t made_in_usa[] = {0x984A, 0xCB0F, 0x9BAF, 0xD206, 0x9BAF, 
   LOGO_PAINT_PATH(fg_action, triangle_fill) \
   LOGO_PAINT_PATH(black, triangle_border) \
   LOGO_PAINT_PATH(black, octo) \
-  LOGO_PAINT_PATH(white, made_in_usa) \
+  LOGO_PAINT_PATH(white, made_in_usa) 

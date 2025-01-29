@@ -3450,10 +3450,15 @@
 //
 #define PREHEAT_1_LABEL          "PLA"
 #define PREHEAT_1_TEMP_HOTEND     180
-#define PREHEAT_1_LOW_TEMP_HOTEND 160
 #define PREHEAT_1_TEMP_BED         60
 #define PREHEAT_1_TEMP_CHAMBER      0
 #define PREHEAT_1_FAN_SPEED         0 // Value from 0 to 255
+
+#if ANY(TAZPro, TAZProXT) && (EXTRUDERS > 1)
+  #define PREHEAT_1_LOW_TEMP_HOTEND 160
+#else
+  #define PREHEAT_1_LOW_TEMP_HOTEND 180
+#endif
 
 #define PREHEAT_2_LABEL      "ABS"
 #define PREHEAT_2_TEMP_HOTEND 220

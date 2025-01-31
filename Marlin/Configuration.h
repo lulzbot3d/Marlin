@@ -3662,7 +3662,7 @@
 
   // Explicit wipe G-code script applies to a G12 with no arguments.
   #if ANY(MiniV2, MiniV3)
-    #define WIPE_SEQUENCE_COMMANDS "G28O\nM117 Wiping nozzle\nG1 X115 Y177 Z10 F4000\\nG1 Z-1\nM114\nG1 X115 \nG1 X45 \nG1 X115 \nG1 X45 \nG1 X115 \nG1 X45 \nG1 X115 \nG1 X45 \nG1 X115 \nG1 X45 \nG1 X115 \nG1 X45 \nG1 Z15\nM400\nM117 Wipe Complete"
+    #define WIPE_SEQUENCE_COMMANDS "G28O\nM117 Wiping nozzle\nG1 X115 Y180 Z10 F4000\\nG1 Z-1\nM114\nG1 X115 \nG1 X45 \nG1 X115 \nG1 X45 \nG1 X115 \nG1 X45 \nG1 X115 \nG1 X45 \nG1 X115 \nG1 X45 \nG1 X115 \nG1 X45 \nG1 Z15\nM400\nM117 Wipe Complete"
   #elif ENABLED(TAZ6)
     #define WIPE_SEQUENCE_COMMANDS "G28O\nM117 Wiping nozzle\nT0\nG1 X-17 Y25 Z10 F4000\nG1 Z1\nM114\nG1 Y25\nG1 Y95\nG1 Y25\nG1 Y95\nG1 Y25\nG1 Y95\nG1 Y25\nG1 Y95\nG1 Y25\nG1 Y95\nG1 Y25\nG1 Y95\nG1 Z15\nM400\nM117 Wipe Complete"
   #elif ENABLED(Workhorse)

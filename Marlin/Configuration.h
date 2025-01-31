@@ -2235,7 +2235,11 @@
 
 // Most probes should stay away from the edges of the bed, but
 // with NOZZLE_AS_PROBE this can be negative for a wider probing area.
-#if ANY(TAZDualZ, LULZBOT_BLTouch)
+#if ENABLED(SideKick_747)
+    #define PROBING_MARGIN 20
+    #define PROBING_MARGIN_LEFT 15   // Gets grid more centered and is still
+    #define PROBING_MARGIN_RIGHT 5   // more than 20 in from the right edge.
+#elif ANY(TAZDualZ, LULZBOT_BLTouch)
   #if ANY(TAZPro, TAZProXT, TAZ8, TAZ8XT)
     #define PROBING_MARGIN 10
     #if ANY(LULZBOT_LONG_BED_V2, LULZBOT_LONG_BED)
@@ -3123,7 +3127,7 @@
     #if defined (SideKick_289)
       #define GRID_MAX_POINTS_X 3  //3x3 grid to avoid hitting the handle on the flex bed
     #elif defined(SideKick_747)
-      #define GRID_MAX_POINTS_X 3  //3x3 grid to increase startup speed
+      #define GRID_MAX_POINTS_X 4  //Back to 4x4 grid to avoid the nozzle hitting the grab handle
     #elif defined(LULZBOT_BLTouch) && ANY(TAZPro, TAZProXT, TAZ8, TAZ8XT, Workhorse, TAZ6)
       #define GRID_MAX_POINTS_X 3  //3x3 grid to increase startup speed
     #else

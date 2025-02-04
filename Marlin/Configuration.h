@@ -3133,6 +3133,8 @@
 
 #if ANY(AUTO_BED_LEVELING_LINEAR, AUTO_BED_LEVELING_BILINEAR)
 
+  #define BED_LEVELING_COMMANDS "G28 O\nG0 Z20 F1500\nG29"
+
   // Set the number of grid points per dimension.
   #if ANY(LULZBOT_LONG_BED, LULZBOT_LONG_BED_V2)
     #define GRID_MAX_POINTS_X 4  //4x8 grid to account for entire long bed printable area

@@ -1753,7 +1753,7 @@
 #endif
 
 // Check for stuck or disconnected endstops during homing moves.
-#if DISABLED(TAZPro, TAZProXT, TAZ8, TAZ8XT,  MiniV2, MiniV3, SideKick_289, SideKick_747)
+#if NONE(TAZPro, TAZProXT, TAZ8, TAZ8XT,  MiniV2, MiniV3, SideKick_289, SideKick_747)
   #define DETECT_BROKEN_ENDSTOP
 #endif
 
@@ -4180,7 +4180,7 @@
 // RepRapDiscount FULL GRAPHIC Smart Controller
 // https://reprap.org/wiki/RepRapDiscount_Full_Graphic_Smart_Controller
 //
-#if DISABLED(TAZPro, TAZProXT, TAZ8, TAZ8XT, MiniV3)
+#if NONE(TAZPro, TAZProXT, TAZ8, TAZ8XT, MiniV3)
   #define REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
 
   #define ST7920_DELAY_1 DELAY_NS(200) // After CLK LOW
@@ -4913,7 +4913,7 @@
   #error The Longbed requires a BLTouch to probe the bed surface.
 #endif
 
-#if ENABLED(LULZBOT_BLTouch, SWITCHING_NOZZLE) && DISABLED(TAZ8, TAZ8XT)
+#if ENABLED(LULZBOT_BLTouch, SWITCHING_NOZZLE) && NONE(TAZ8, TAZ8XT)
   #error The BLTouch and dual servo motors are not compatible with selected printer.
 #endif
 

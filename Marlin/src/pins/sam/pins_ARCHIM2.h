@@ -56,7 +56,7 @@
   #define SERVO0_PIN                            53  // D53 PB14 (Header J20 17)
   #define SERVO1_PIN                            21  // D21 PB13 (Header J20 19)
   #define SERVO2_PIN                            20  // D20 PB12 (Header J20 20)
-#elif ENABLED(LULZBOT_BLTouch) && DISABLED(TAZ8, TAZ8XT)
+#elif ENABLED(LULZBOT_BLTouch)
   #define SERVO0_PIN                            21  // D21 PB13 (Header J20 19)
   #define SERVO1_PIN                            20  // D20 PB12 (Header J20 20)
 #else
@@ -82,7 +82,7 @@
   #endif
 #else
   #define X_MIN_PIN                           14  // PD4 MIN ES1
-  #if DISABLED(TAZ8, TAZ8XT)
+  #if NONE(TAZ8, TAZ8XT)
     #define X_MAX_PIN                         32  // PD10 MAX ES1
   #endif
 #endif

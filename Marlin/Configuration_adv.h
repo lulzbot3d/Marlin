@@ -2488,7 +2488,7 @@
   #define BABYSTEP_ZPROBE_OFFSET          // Combine M851 Z and Babystepping
   #if ENABLED(BABYSTEP_ZPROBE_OFFSET)
     //#define BABYSTEP_HOTEND_Z_OFFSET      // For multiple hotends, babystep relative Z offsets
-    #if DISABLED(TAZPro, TAZProXT, TAZ8, TAZ8XT, MiniV3)
+    #if NONE(TAZPro, TAZProXT, TAZ8, TAZ8XT, MiniV3)
       #define BABYSTEP_GFX_OVERLAY          // Enable graphical overlay on Z-offset editor
     #endif
   #endif
@@ -3629,7 +3629,7 @@
    * Comment *_STALL_SENSITIVITY to disable sensorless homing for that axis.
    * @section tmc/stallguard
    */
-  #if DISABLED(TAZ8, TAZ8XT)
+  #if NONE(TAZ8, TAZ8XT)
     #define SENSORLESS_HOMING // StallGuard capable drivers only
   #endif
 
@@ -4241,7 +4241,7 @@
     #define E_CURRENT_TWNB285 "M906 T0 E850\n M906 T1 E850"
   #endif
 
-  #if DISABLED(TAZPro, TAZProXT, TAZ8, TAZ8XT)
+  #if NONE(TAZPro, TAZProXT, TAZ8, TAZ8XT)
     #define MAIN_MENU_ITEM_1_DESC "Park for TH Swap"
     #define MAIN_MENU_ITEM_1_GCODE "G28O\nG0 X100 Y283 Z200"
   #endif

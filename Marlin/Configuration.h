@@ -2239,8 +2239,22 @@
     #define PROBING_MARGIN 20
     #define PROBING_MARGIN_LEFT 15   // Gets grid more centered and is still
     #define PROBING_MARGIN_RIGHT 5   // more than 20 in from the right edge.
+#elif ANY(TAZ8, TAZ8XT) && ENABLED(TOOLHEAD_Galaxy_DualExtruder)
+  #define PROBING_MARGIN 10
+  // Need account for probe offset and home pos to stay off x and y limit switches because when
+  // you set a margin of 10, it tries to move the probe to 10 mm from the edge of the bed.
+  // We don't need a margin of 10 on the left and front because the offset is already more than that.
+  #define PROBING_MARGIN_LEFT 48     // (48 offset + 2 margin - 2 home pos)
+  #define PROBING_MARGIN_FRONT 25    // (70 offset + 2 margin - 47 home pos) 
+#elif ANY(TAZ8, TAZ8XT) && DISABLED(TOOLHEAD_Galaxy_DualExtruder)
+  #define PROBING_MARGIN 10
+  // Increase left margin to 5 to stay out of the angle of the front left bed corner.
+  #define PROBING_MARGIN_LEFT 27     // (23 offset + 5 margin - 1 home pos)
+  // Single extuder can't go forward enough to drop in front of corners and handles.
+  // A margin of 22 keeps the nozzle just behind the grab handles.
+  #define PROBING_MARGIN_FRONT 67    // (63 offset + 22 margin - 18 home pos)
 #elif ANY(TAZDualZ, LULZBOT_BLTouch)
-  #if ANY(TAZPro, TAZProXT, TAZ8, TAZ8XT)
+  #if ANY(TAZPro, TAZProXT))
     #define PROBING_MARGIN 10
     #if ANY(LULZBOT_LONG_BED_V2, LULZBOT_LONG_BED)
       #define PROBING_MARGIN_FRONT 15
@@ -2265,7 +2279,7 @@
 
 // X and Y axis travel speed (mm/min) between probes
 #if ANY(TAZPro, TAZProXT, TAZ8, TAZ8XT) && ENABLED(LULZBOT_BLTouch)
-  #define XY_PROBE_FEEDRATE (200*60)
+  #define XY_PROBE_FEEDRATE (300*60)
 #else
   #define XY_PROBE_FEEDRATE (150*60)
 #endif
@@ -2277,7 +2291,7 @@
   #define Z_PROBE_FEEDRATE_FAST (8*60)
 #endif
 // Feedrate (mm/min) for the "accurate" probe of each point
-#define Z_PROBE_FEEDRATE_SLOW (Z_PROBE_FEEDRATE_FAST / 2)
+#define Z_PROBE_FEEDRATE_SLOW Z_PROBE_FEEDRATE_FAST
 
 /**
  * Probe Activation Switch
@@ -3129,7 +3143,7 @@
     #elif defined(SideKick_747)
       #define GRID_MAX_POINTS_X 4  //Back to 4x4 grid to avoid the nozzle hitting the grab handle
     #elif defined(LULZBOT_BLTouch) && ANY(TAZPro, TAZProXT, TAZ8, TAZ8XT, Workhorse, TAZ6)
-      #define GRID_MAX_POINTS_X 3  //3x3 grid to increase startup speed
+      #define GRID_MAX_POINTS_X 4
     #else
       #define GRID_MAX_POINTS_X 2  //2x2 grid of mounted washers
     #endif

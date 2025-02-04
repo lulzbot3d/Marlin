@@ -104,9 +104,9 @@
 #if defined(Z_STALL_SENSITIVITY)
   #define Z_DIAG_PIN                          36  // PC4 TMC2130 Diag Pins
 #else
-  #if ANY(LULZBOT_BLTouch, TAZ8, TAZ8XT)
+  #if ANY(TAZ8, TAZ8XT)
     #define Z_MIN_PIN        108  // D108 PB9 (Header J20 13)
-  #elif ENABLED(LULZBOT_BLTouch) && DISABLED(TAZ8, TAZ8XT)
+  #elif ENABLED(LULZBOT_BLTouch)
     #define Z_MIN_PIN        63   // PB18/RD/PWML2/AD11 THERM AN2
   #else
     #define Z_MIN_PIN        31   // PA7 MIN ES3

@@ -1334,8 +1334,14 @@ void tool_change(const uint8_t new_tool, bool no_move/*=false*/) {
       DEBUG_ECHOLNPGM("D: Mesh Height at Current Pos { ", new_mesh_height, " }");
       mesh_height_diff = new_mesh_height - old_mesh_height;
       DEBUG_ECHOLNPGM("   Mesh Height Diff { ", mesh_height_diff, " }");
-      current_position.z -= mesh_height_diff;
-      
+      if (planner.leveling_active) {   // If mesh is on correct for height difference beteween tools.
+        current_position.z -= mesh_height_diff;
+        DEBUG_ECHOLNPGM("Mesh is on, correcting for difference.");
+      }
+      else {
+        DEBUG_ECHOLNPGM("Mesh is off, not correcting for difference.");
+      }
+
       // Tell the planner the new "current position"
       sync_plan_position();
 

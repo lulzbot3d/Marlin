@@ -1336,7 +1336,7 @@
 #if ENABLED(BACKLASH_COMPENSATION)
   // Define values for backlash distance and correction.
   // If BACKLASH_GCODE is enabled these values are the defaults.
-  #if ANY(TAZPro, TAZProXT)
+  #if ANY(TAZPro, TAZProXT, TAZ8, TAZ8XT)
     #define BACKLASH_DISTANCE_MM {0.25, 0.25, 0.04} // <-- changed:  (mm)
     #define BACKLASH_CORRECTION    1.0 // <-- changed:  0.0 = no correction; 1.0 = full correction
   #else

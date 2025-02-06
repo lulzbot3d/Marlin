@@ -1795,7 +1795,7 @@
   #else
     #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 100, 500, LULZBOT_E_STEPS }
   #endif
-#elif ANY(TAZ8, TAZ8XT) //TAZ8 used 5.2:1 Z motors
+#elif ANY(TAZ8, TAZ8XT) //TAZ8 uses 5.1818:1 Z motors
   #if defined(LULZBOT_LONG_BED)
     #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 160, 518.18, LULZBOT_E_STEPS }
   #elif defined(LULZBOT_LONG_BED_V2)

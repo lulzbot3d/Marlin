@@ -2254,7 +2254,7 @@
   // A margin of 22 keeps the nozzle just behind the grab handles.
   #define PROBING_MARGIN_FRONT 67    // (63 offset + 22 margin - 18 home pos)
 #elif ANY(TAZDualZ, LULZBOT_BLTouch)
-  #if ANY(TAZPro, TAZProXT))
+  #if ANY(TAZPro, TAZProXT)
     #define PROBING_MARGIN 10
     #if ANY(LULZBOT_LONG_BED_V2, LULZBOT_LONG_BED)
       #define PROBING_MARGIN_FRONT 15
@@ -3561,17 +3561,21 @@
 
 #if ENABLED(PRESENT_BED_FEATURE)
   #if ENABLED(MiniV2)
-    #define PRESENT_BED_GCODE "G28 O\nG0 Y188 F10000\nG0 Y190 F10000\nM117 Printer Ready"
+    #define PRESENT_BED_GCODE "G28 O\nG0 Y185 F10000\nG0 Y190 F10000\nM117 Printer Ready"
   #elif ENABLED(SideKick_289)
-    #define PRESENT_BED_GCODE "G28 O\nG0 Y158 F10000\nG0 Y160 F10000\nM117 Printer Ready"
+    #define PRESENT_BED_GCODE "G28 O\nG0 Y155 F10000\nG0 Y160 F10000\nM117 Printer Ready"
   #elif ENABLED(SideKick_747)
-    #define PRESENT_BED_GCODE "G28 O\nG0 Y231 F10000\nG0 Y233 F10000\nM117 Printer Ready"
+    #define PRESENT_BED_GCODE "G28 O\nG0 Y228 F10000\nG0 Y233 F10000\nM117 Printer Ready"
   #elif ENABLED(Workhorse)
-    #define PRESENT_BED_GCODE "G28 O\nG0 Y304 F10000\nG0 Y306 F10000\nM117 Printer Ready"
+    #define PRESENT_BED_GCODE "G28 O\nG0 Y301 F10000\nG0 Y306 F10000\nM117 Printer Ready"
   #elif ANY(LULZBOT_LONG_BED, LULZBOT_LONG_BED_V2)
-    #define PRESENT_BED_GCODE "G28 O\nG0 Y511 F5500\nG0 Y513 F4000\nM117 Printer Ready"
+    #define PRESENT_BED_GCODE "G28 O\nG0 Y508 F5500\nG0 Y513 F4000\nM117 Printer Ready"
+  #elif ANY(TAZ8, TAZ8XT) && ENABLED(TOOLHEAD_Galaxy_DualExtruder)
+    #define PRESENT_BED_GCODE "G28 O\nG0 Y305 F10000\nG0 Y310 F10000\nM117 Printer Ready"
+  #elif ANY(TAZ8, TAZ8XT) && DISABLED(TOOLHEAD_Galaxy_DualExtruder)
+    #define PRESENT_BED_GCODE "G28 O\nG0 Y291 F10000\nG0 Y296 F10000\nM117 Printer Ready"
   #else
-    #define PRESENT_BED_GCODE "G28 O\nG0 Y311 F10000\nG0 Y313 F10000\nM117 Printer Ready"
+    #define PRESENT_BED_GCODE "G28 O\nG0 Y285 F10000\nG0 Y290 F10000\nM117 Printer Ready"
   #endif
 #endif
 

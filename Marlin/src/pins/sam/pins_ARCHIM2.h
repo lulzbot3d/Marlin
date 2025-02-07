@@ -253,7 +253,7 @@
 #define INT_MOSI_PIN                          73  // D73 PA21/MCDA0
 #define INT_SDSS                              55  // D55 PA24/MCDA3
 
-#if ANY(TAZ8)
+#if ANY(TAZ8, TAZ8XT)
   // External SD card reader on SC1
   #define SD_SCK_PIN                            16  // D16 PA13_TXD1
   #define SD_MISO_PIN                           23  // D23 PA14_RTS1

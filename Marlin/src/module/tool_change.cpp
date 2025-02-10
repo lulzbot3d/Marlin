@@ -1143,7 +1143,6 @@ void tool_change(const uint8_t new_tool, bool no_move/*=false*/) {
   #elif HAS_MULTI_EXTRUDER
 
     DEBUG_ECHOLNPGM("Current Pos on Tool Change Entry { ", current_position.x, ", ", current_position.y, ", ", current_position.z, " }");
-    DEBUG_ECHOLNPGM("A: Mesh Height at Current Pos { ", bedlevel.get_z_correction(current_position), " }");
     planner.synchronize();
 
     #if ENABLED(DUAL_X_CARRIAGE)  // Only T0 allowed if the Printer is in DXC_DUPLICATION_MODE or DXC_MIRRORED_MODE
@@ -1170,10 +1169,6 @@ void tool_change(const uint8_t new_tool, bool no_move/*=false*/) {
     const uint8_t old_tool = active_extruder;
     const bool can_move_away = !no_move && !idex_full_control;
 
-    float old_mesh_height = 0.0f;
-    float new_mesh_height = 0.0f;
-    float mesh_height_diff = 0.0f;
-    
     //#if ANY(AUTO_BED_LEVELING_UBL, AUTO_BED_LEVELING_BILINEAR)
       // Workaround for UBL mesh boundary, possibly?
       // This fixes the Z height stretching issue with bilinear bed leveling.
@@ -1293,8 +1288,6 @@ void tool_change(const uint8_t new_tool, bool no_move/*=false*/) {
         TERN_(SWITCHING_NOZZLE_TWO_SERVOS, raise_nozzle(old_tool));
         if (!no_move) {
           DEBUG_ECHOLNPGM("Current Pos Post Raise Nozzle { ", current_position.x, ", ", current_position.y, ", ", current_position.z, " }");
-          old_mesh_height = bedlevel.get_z_correction(current_position);
-          DEBUG_ECHOLNPGM("B: Mesh Height at Current Pos { ", old_mesh_height, " }");
           const float newz = current_position.z + _MAX(-diff.z, 0.0);
           DEBUG_ECHOLNPGM("Switching Offset Tool XYZ by { ", diff.x, ", ", diff.y, ", ", diff.z, " }");
           // Check if Z has space to compensate at least z_offset, and if not, just abort now
@@ -1305,6 +1298,24 @@ void tool_change(const uint8_t new_tool, bool no_move/*=false*/) {
           fast_line_to_current(Z_AXIS);
         }
 
+        // If bed leveling is on move the Z to compensate for the difference in mesh height.
+        if (planner.leveling_active) {
+          DEBUG_ECHOLNPGM("Mesh is on, correcting for difference between tools.");
+          const float curr_z = current_position.z;
+          DEBUG_ECHOLNPGM("   Current Z Pos ", curr_z);
+          const float old_mesh_height = bedlevel.get_z_correction(current_position);
+          DEBUG_ECHOLNPGM("   Mesh Height at Current Pos { ", old_mesh_height, " }");
+          const float new_mesh_height = bedlevel.get_z_correction(current_position + diff);
+          DEBUG_ECHOLNPGM("   Mesh Height at New Pos { ", new_mesh_height, " }");
+          const float mesh_height_diff = new_mesh_height - old_mesh_height;
+          DEBUG_ECHOLNPGM("   Mesh Height Diff { ", mesh_height_diff, " }");
+          current_position.z += mesh_height_diff;
+          DEBUG_ECHOLNPGM("   Moving to Z = ", current_position.z);
+          fast_line_to_current(Z_AXIS);
+          current_position.z = curr_z;
+          DEBUG_ECHOLNPGM("   Setting Z Pos ", current_position.z);
+        }
+
         #if SWITCHING_NOZZLE_TWO_SERVOS
          lower_nozzle(new_tool);
         #else
@@ -1312,7 +1323,6 @@ void tool_change(const uint8_t new_tool, bool no_move/*=false*/) {
         #endif
 
         DEBUG_ECHOLNPGM("Current Pos Post Lower Nozzle { ", current_position.x, ", ", current_position.y, ", ", current_position.z, " }");
-        DEBUG_ECHOLNPGM("C: Mesh Height at Current Pos { ", bedlevel.get_z_correction(current_position), " }");
       #elif ANY(MECHANICAL_SWITCHING_EXTRUDER, MECHANICAL_SWITCHING_NOZZLE)
         if (!no_move) {
           current_position.z = _MIN(current_position.z + toolchange_settings.z_raise, _MIN(TERN(HAS_SOFTWARE_ENDSTOPS, soft_endstop.max.z, Z_MAX_POS), Z_MAX_POS));
@@ -1329,18 +1339,6 @@ void tool_change(const uint8_t new_tool, bool no_move/*=false*/) {
       // The newly-selected extruder XYZ is actually at...
       DEBUG_ECHOLNPGM("Offset Tool XYZ by { ", diff.x, ", ", diff.y, ", ", diff.z, " }");
       current_position += diff;
-
-      new_mesh_height = bedlevel.get_z_correction(current_position);
-      DEBUG_ECHOLNPGM("D: Mesh Height at Current Pos { ", new_mesh_height, " }");
-      mesh_height_diff = new_mesh_height - old_mesh_height;
-      DEBUG_ECHOLNPGM("   Mesh Height Diff { ", mesh_height_diff, " }");
-      if (planner.leveling_active) {   // If mesh is on correct for height difference beteween tools.
-        current_position.z -= mesh_height_diff;
-        DEBUG_ECHOLNPGM("Mesh is on, correcting for difference.");
-      }
-      else {
-        DEBUG_ECHOLNPGM("Mesh is off, not correcting for difference.");
-      }
 
       // Tell the planner the new "current position"
       sync_plan_position();
@@ -1432,7 +1430,6 @@ void tool_change(const uint8_t new_tool, bool no_move/*=false*/) {
         // Move back down. (Including when the new tool is higher.)
         if (!should_move)
           do_blocking_move_to_z(destination.z, planner.settings.max_feedrate_mm_s[Z_AXIS]);
-          DEBUG_ECHOLNPGM("E: Mesh Height at Current Pos { ", bedlevel.get_z_correction(current_position), " }");
       #endif
 
       TERN_(SWITCHING_NOZZLE_TWO_SERVOS, lower_nozzle(new_tool));

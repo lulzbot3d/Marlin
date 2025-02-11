@@ -3656,6 +3656,9 @@
   #elif ANY(TAZ8, TAZ8XT) && ENABLED(TOOLHEAD_Galaxy_DualExtruder)
     #define NOZZLE_CLEAN_START_POINT {{ 125, 320, 0 }, { 125, 320, 0 }}
     #define NOZZLE_CLEAN_END_POINT   {{ 170, 320, 0 }, { 170, 320, 0 }}
+  #elif ANY(Workhorse, TAZ6)
+    #define NOZZLE_CLEAN_START_POINT { -17, 95, 0 }
+    #define NOZZLE_CLEAN_END_POINT   { -17, 25, 0 }
   #else
     #define NOZZLE_CLEAN_START_POINT { 115, 297.5, 0 }
     #define NOZZLE_CLEAN_END_POINT   { 160, 297.5, 0 }

@@ -3627,7 +3627,11 @@
 #endif
 
 #if ENABLED(NOZZLE_CLEAN_FEATURE)
-  #define CLEAN_SCRIPT "M117 Cleaning nozzle...\nG28 O\nM109 S170\nG12\nM106 S255\nM109 S170\nM77\nM117 Nozzle clean"
+  #if EXTRUDERS == 1
+    #define CLEAN_SCRIPT "M117 Cleaning nozzle...\nM104 S170\nG28 O\nM109 S170\nG12\nM106 S255\nM77\nM117 Nozzle clean"
+  #else
+    #define CLEAN_SCRIPT "M117 Cleaning nozzles...\nM104 S170 T0\nM104 S170 T1\nG28 O\nM109 S170 T0\nM109 S170 T1\nG12\nM106 S255\nM77\nM117 Nozzles clean"
+  #endif
   #define NOZZLE_CLEAN_PATTERN_LINE     // Provide 'G12 P0' - a simple linear cleaning pattern
   #define NOZZLE_CLEAN_PATTERN_ZIGZAG   // Provide 'G12 P1' - a zigzag cleaning pattern
   #define NOZZLE_CLEAN_PATTERN_CIRCLE   // Provide 'G12 P2' - a circular cleaning pattern

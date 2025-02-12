@@ -2656,7 +2656,7 @@
     #define X_BED_SIZE 281
     #define Y_BED_SIZE 283
     // Travel limits (mm) after homing, corresponding to endstop positions.
-    #define LULZBOT_X_MIN_POS -6// <-- changed
+    #define LULZBOT_X_MIN_POS -7// <-- changed
     #define LULZBOT_Y_MIN_POS -13 // <-- changed
     #define LULZBOT_X_MAX_POS 308 // <-- changed
     #define LULZBOT_Y_MAX_POS 315 // <-- changed
@@ -2669,8 +2669,8 @@
     #define LULZBOT_X_MIN_POS -6// <-- changed
     #define LULZBOT_Y_MIN_POS -15 // <-- changed
     #define LULZBOT_X_MAX_POS 298 // <-- changed
-    #define LULZBOT_Y_MAX_POS 317.5 // <-- changed
-    #define LULZBOT_Z_MIN_POS -9 // <-- changed
+    #define LULZBOT_Y_MAX_POS 317.5  // <-- changed
+    #define LULZBOT_Z_MIN_POS  -9 // <-- changed
     #define LULZBOT_Z_MAX_POS 599 // <-- changed
   #elif defined(LULZBOT_LONG_BED)
     #define X_BED_SIZE        280
@@ -2683,21 +2683,21 @@
     #define LULZBOT_Z_MIN_POS -9
     #define LULZBOT_Z_MAX_POS 592
   #elif defined(LULZBOT_LONG_BED_V2)
-    #define X_BED_SIZE        280
-    #define Y_BED_SIZE        570
+    #define X_BED_SIZE        294
+    #define Y_BED_SIZE        594
     // Travel limits (mm) after homing, corresponding to endstop positions.
-    #define LULZBOT_X_MAX_POS 310
-    #define LULZBOT_X_MIN_POS -6
-    #define LULZBOT_Y_MAX_POS 613
-    #define LULZBOT_Y_MIN_POS -18.2//-15
-    #define LULZBOT_Z_MIN_POS -9
+    #define LULZBOT_X_MAX_POS 307
+    #define LULZBOT_X_MIN_POS -2
+    #define LULZBOT_Y_MAX_POS 615
+    #define LULZBOT_Y_MIN_POS -51//-15
+    #define LULZBOT_Z_MIN_POS -5
     #define LULZBOT_Z_MAX_POS 592
   #else
     #define X_BED_SIZE 284
     #define Y_BED_SIZE 286
     // Travel limits (mm) after homing, corresponding to endstop positions.
     #define LULZBOT_X_MIN_POS -1
-    #define LULZBOT_Y_MIN_POS -9
+    #define LULZBOT_Y_MIN_POS -13.5
     #define LULZBOT_X_MAX_POS 310
     #define LULZBOT_Y_MAX_POS 311
     #define LULZBOT_Z_MIN_POS -9
@@ -2795,6 +2795,7 @@
       #define LULZBOT_Z_MIN_POS -5
     #endif
   #endif
+  
 #elif defined(SideKick_289)
   #define X_BED_SIZE 161
   #define Y_BED_SIZE 161

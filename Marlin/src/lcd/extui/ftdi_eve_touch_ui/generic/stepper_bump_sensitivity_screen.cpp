@@ -45,7 +45,7 @@ void StepperBumpSensitivityScreen::onRedraw(draw_mode_t what) {
   draw_text_box(cmd, BTN_POS(1,6), BTN_SIZE(13,3), F(
         "Sensitivity:\n(+) Decrease / (-) Increase\n \n \n \n "
   ), OPT_CENTER, font_large);
-    draw_text_box(cmd, BTN_POS(1,7), BTN_SIZE(13,3), F(
+    draw_text_box(cmd, BTN_POS(1,7), BTN_SIZE(13,2), F(
         "Detects 3D printer limits by sensing motor resistance;\nno mechanical endstops or sensors needed."
   ), OPT_CENTER, font_medium);
 }

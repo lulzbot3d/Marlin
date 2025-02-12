@@ -30,7 +30,7 @@ using namespace ExtUI;
 using namespace Theme;
 
 #define GRID_COLS 13
-#define GRID_ROWS (8+EXTRUDERS)
+#define GRID_ROWS 13
 
 void FilamentRunoutScreen::onRedraw(draw_mode_t what) {
   widgets_t w(what);
@@ -46,10 +46,10 @@ void FilamentRunoutScreen::onRedraw(draw_mode_t what) {
     w.color(e_axis);
     w.adjuster( 10, FPSTR(NUL_STR), getFilamentRunoutDistance_mm(), getFilamentRunoutEnabled());
     w.increments();
-    draw_text_box(cmd, BTN_POS(1,6), BTN_SIZE(13,3), F(
+    draw_text_box(cmd, BTN_POS(1,8), BTN_SIZE(13,5), F(
         "Filament Jam & Runout Sensor\n \n \n \n \n \n "
     ), OPT_CENTERY, font_large);
-      draw_text_box(cmd, BTN_POS(1,6), BTN_SIZE(13,3), F(" \n \nAn encoder monitors filament, automatically pausing prints if it detects jams or runouts after a set Runout Distance in millimeters. This prevents waste and errors. \n \nFilament guide tube MUST be attached at both ends for proper operation.\n "
+      draw_text_box(cmd, BTN_POS(1,8), BTN_SIZE(13,5), F(" \n \nAn encoder monitors filament, automatically pausing prints if it detects jams or runouts after a set Runout Distance in millimeters. This prevents waste and errors. \n \nFilament guide tube MUST be attached at both ends for proper operation.\n "
     ), OPT_CENTERY, font_medium);
   #endif
 }

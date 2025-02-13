@@ -354,7 +354,7 @@ void GcodeSuite::G34() {
             if (decreasing_accuracy(last_z_align_move[zstepper], z_align_abs)) {
               if (DEBUGGING(LEVELING)) DEBUG_ECHOLNPGM("> Z", zstepper + 1, " last_z_align_move = ", last_z_align_move[zstepper]);
               if (DEBUGGING(LEVELING)) DEBUG_ECHOLNPGM("> Z", zstepper + 1, " z_align_abs = ", z_align_abs);
-              adjustment_reverse = !adjustment_reverse;
+              //adjustment_reverse = !adjustment_reverse;  //This seems to sometimes cause a runawy correction in the wrong direction, and doesn't seem to be necessary anyway
             }
 
             // Remember the alignment for the next iteration, but only if steppers move,

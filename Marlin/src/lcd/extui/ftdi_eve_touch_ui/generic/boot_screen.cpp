@@ -120,6 +120,9 @@ void BootScreen::showSplashScreen() {
 
   LOGO_PAINT_PATHS
 
+  // Add firmware version text at the top of the screen
+  draw_text_box(cmd, 5, 10, 470, 70, F("Marlin " SHORT_BUILD_VERSION), OPT_CENTER, font_large);
+
   cmd.cmd(DL::DL_DISPLAY);
   cmd.cmd(CMD_SWAP);
   cmd.execute();

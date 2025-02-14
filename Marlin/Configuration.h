@@ -20,7 +20,10 @@
 //#define TOOLHEAD_KangarooPaw_SingleExtruder     // Bio Single syringe
 
 /************** Uncomment Options for Printer From Below *********************/
-#if ANY(TAZPro, TAZProXT, TAZ8, TAZ8XT)
+#if ENABLED(TOOLHEAD_Universal_DualExtruder)
+  #define SHOW_TOOL_HEAD_ID
+  #define TOOL_HEAD_ID 13 //Since this is the only option for TAZ Pro Universal Dual Extruder fimrware, just set it.
+#elif ANY(TAZPro, TAZProXT, TAZ8, TAZ8XT)
   #define SHOW_TOOL_HEAD_ID
   #define TOOL_HEAD_ID 0 //Set the ID to 0 so the user have to select the Tool Head
 #endif

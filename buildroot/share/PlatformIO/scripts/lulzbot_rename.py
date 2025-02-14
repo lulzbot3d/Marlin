@@ -72,12 +72,12 @@ def rename_and_copy_firmware(*args, **kwargs):
             # Rename the firmware file
             if os.path.exists(new_firmware_path):
                 os.remove(new_firmware_path)  # Remove existing file to prevent errors
-            shutil.move(firmware_path, new_firmware_path)  # Move instead of rename
+            shutil.copy(firmware_path, new_firmware_path) # Copy the firmware to a new file
 
             # Copy renamed firmware to backup folder
             shutil.copy(new_firmware_path, backup_firmware_path)
 
-            print(f"Renamed firmware to {new_firmware_path}")
+            print(f"Copied and Renamed firmware to {new_firmware_path}")
             print(f"Copied firmware to {backup_firmware_path}")
         #else:
             #print(f"Warning: {firmware_path} not found.")

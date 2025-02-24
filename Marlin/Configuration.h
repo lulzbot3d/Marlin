@@ -3582,7 +3582,7 @@
   #elif ANY(TAZ8, TAZ8XT) && ENABLED(TOOLHEAD_Galaxy_DualExtruder)
     #define PRESENT_BED_GCODE "G28 O\nG0 Y305 F10000\nG0 Y310 F10000\nM117 Printer Ready"
   #elif ANY(TAZ8, TAZ8XT) && DISABLED(TOOLHEAD_Galaxy_DualExtruder)
-    #define PRESENT_BED_GCODE "G28 O\nG0 Y291 F10000\nG0 Y296 F10000\nM117 Printer Ready"
+    #define PRESENT_BED_GCODE "G28 O\nG0 Y335 F10000\nG0 Y340 F10000\nM117 Printer Ready"
   #else
     #define PRESENT_BED_GCODE "G28 O\nG0 Y285 F10000\nG0 Y290 F10000\nM117 Printer Ready"
   #endif

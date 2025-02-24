@@ -1502,8 +1502,8 @@
         #define CALIBRATION_OBJECT_CENTER     {260,-18,-2.0} //  mm
         #define CALIBRATION_OBJECT_DIMENSIONS {10.0,  10.0, 10.0} //  mm
       #else
-        #define CALIBRATION_OBJECT_CENTER     {143, -15.5, -1.0} //  mm
-        #define CALIBRATION_OBJECT_DIMENSIONS {10.0,  1.0, 10.0} //  mm
+        #define CALIBRATION_OBJECT_CENTER     {147, 303, -1.0} //  mm
+        #define CALIBRATION_OBJECT_DIMENSIONS {10.0,  5.0, 10.0} //  mm
       #endif
       #define LULZBOT_CALIBRATION_SCRIPT "M117 Starting Auto-Calibration\nG28\nG12\nM106 S255\nM104 S0 T0\nM104 S0 T1\nG0 X144 Y302 Z25 F3500\nM117 Calibrating...\nG425\nM500\nM77\nM117 Calibration data saved"
         /* Status message */

@@ -99,7 +99,7 @@
 // Author info of this build printed to the host during boot and M115
 #define STRING_CONFIG_H_AUTHOR "LulzBot" // Who made the changes.
 #define CUSTOM_VERSION_FILE Version.h // Path from the root directory (no quotes)
-#define LULZBOT_FW_VERSION "2.1.3.0.43-Dev.1"
+#define LULZBOT_FW_VERSION "2.1.3.0.43-Dev.2"
 #define CAPABILITIES_REPORT
 #define EXTENDED_CAPABILITIES_REPORT
 
@@ -2250,7 +2250,11 @@
   #define PROBING_MARGIN_LEFT 48     // (48 offset + 2 margin - 2 home pos)
   #define PROBING_MARGIN_FRONT 25    // (70 offset + 2 margin - 47 home pos) 
 #elif ANY(TAZ8, TAZ8XT) && DISABLED(TOOLHEAD_Galaxy_DualExtruder)
-  #define PROBING_MARGIN 10
+  #define PROBING_MARGIN_RIGHT 10
+  // Because of some weirdness in way that probe.h calculates mesh max_y, we would
+  // need to set back margin to -10 to get the probe to go 10 mm IN from the back of the bed.
+  // but we can't set it negative, so zero it is, until I figure this out.
+  #define PROBING_MARGIN_BACK  0
   // Increase left margin to 5 to stay out of the angle of the front left bed corner.
   #define PROBING_MARGIN_LEFT 27     // (23 offset + 5 margin - 1 home pos)
   // Single extuder can't go forward enough to drop in front of corners and handles.
@@ -2747,7 +2751,7 @@
       // Travel limits (mm) after homing, corresponding to endstop positions.
       #define LULZBOT_X_MAX_POS 298
       #define LULZBOT_X_MIN_POS -1
-      #define LULZBOT_Y_MAX_POS 298
+      #define LULZBOT_Y_MAX_POS 340
       #define LULZBOT_Y_MIN_POS -18
       #define LULZBOT_Z_MAX_POS 299
       #define LULZBOT_Z_MIN_POS -5

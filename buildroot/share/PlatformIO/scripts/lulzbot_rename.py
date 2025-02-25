@@ -28,7 +28,7 @@ os.makedirs(FIRMWARE_BACKUP_DIR, exist_ok=True)
 build_env = env["PIOENV"]
 
 # Path to configuration.h (Located in Marlin folder)
-config_file = os.path.join(PROJECT_DIR, "Marlin", "configuration.h")
+config_file = os.path.join(PROJECT_DIR, "Marlin", "Configuration.h")
 
 # Extract LULZBOT_FW_VERSION from configuration.h
 fw_version = "unknown"

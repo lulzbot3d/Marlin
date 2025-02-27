@@ -176,13 +176,13 @@ void GcodeSuite::G34() {
         bool adjustment_reverse = false;
       #endif
 
-      #if HAS_STATUS_MESSAGE
+      #if HAS_STATUS_MESSAGE && ENABLED(DISPLAY_ITERATION_MESSAGES)
         PGM_P const msg_iteration = GET_TEXT(MSG_ITERATION);
         const uint8_t iter_str_len = strlen_P(msg_iteration);
       #endif
 
       // Final z and iteration values will be used after breaking the loop
-      float z_measured_min;
+      float z_measured_min = 100000.0f;
       uint8_t iteration = 0;
       bool err_break = false; // To break out of nested loops
       while (iteration < z_auto_align_iterations) {
@@ -190,12 +190,10 @@ void GcodeSuite::G34() {
 
         const int iter = iteration + 1;
         SERIAL_ECHOLNPGM("\nG34 Iteration: ", iter);
-        #if HAS_STATUS_MESSAGE
-          #if ENABLED(DISPLAY_ITERATION_MESSAGES)
+        #if HAS_STATUS_MESSAGE && ENABLED(DISPLAY_ITERATION_MESSAGES)
             char str[iter_str_len + 2 + 1];
             sprintf_P(str, msg_iteration, iter);
             ui.set_status(str);
-          #endif
         #endif
 
         // Initialize minimum value

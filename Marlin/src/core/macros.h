@@ -96,6 +96,8 @@
 // Macros to constrain values
 #ifdef __cplusplus
 
+  #pragma GCC diagnostic push
+  #pragma GCC diagnostic ignored "-Wsign-compare"
   // C++11 solution that is standards compliant.
   template <class V, class N> static constexpr void NOLESS(V& v, const N n) {
     if (n > v) v = n;
@@ -107,7 +109,8 @@
     if (n1 > v) v = n1;
     else if (n2 < v) v = n2;
   }
-
+  #pragma GCC diagnostic pop
+  
 #else
 
   #define NOLESS(v, n) \

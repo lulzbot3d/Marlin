@@ -237,6 +237,10 @@ namespace ExtUI {
         case MPC_STARTED:
           StatusScreen::setStatusMessage(GET_TEXT_F(MSG_MPC_AUTOTUNE));
           break;
+        case MPC_TEMP_ERROR:   // Not sure what we should do here,
+        case MPC_INTERRUPTED:  // Just want to get rid of compiler warning
+        case MPC_DONE:
+          break;
       }
       GOTO_SCREEN(StatusScreen);
     }

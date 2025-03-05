@@ -241,6 +241,7 @@
   #define LULZBOT_FILAMENT_RUNOUT                             // <-- changed
   #define LULZBOT_WIPE
   #define REMOVE_STARING_PRINT_MESSAGES
+  #define SHOW_FILE_NAME_ON_STATUS_RESET
   #define USE_LULZBOT_BLTouch_ADAPTER
 #elif ENABLED(TAZProXT)
   #define CUSTOM_MACHINE_NAME "LulzBot TAZ ProXT"
@@ -249,6 +250,7 @@
   #define LULZBOT_FILAMENT_RUNOUT                             // <-- changed
   #define LULZBOT_WIPE
   #define REMOVE_STARING_PRINT_MESSAGES
+  #define SHOW_FILE_NAME_ON_STATUS_RESET
   #define USE_LULZBOT_BLTouch_ADAPTER
 #elif ENABLED(TAZ8)
   #define CUSTOM_MACHINE_NAME "LulzBot TAZ 8"
@@ -259,6 +261,7 @@
   #define LULZBOT_MANUAL_NOZZLE_CLEAN
   #define TAZDualZ
   #define REMOVE_STARING_PRINT_MESSAGES
+  #define SHOW_FILE_NAME_ON_STATUS_RESET
 #elif ENABLED(TAZ8XT)
   #define CUSTOM_MACHINE_NAME "LulzBot TAZ 8 XT"
   #define LULZBOT_LCD_MACHINE_NAME "LulzBot TAZ 8 XT"
@@ -268,6 +271,7 @@
   #define LULZBOT_MANUAL_NOZZLE_CLEAN
   #define TAZDualZ
   #define REMOVE_STARING_PRINT_MESSAGES
+  #define SHOW_FILE_NAME_ON_STATUS_RESET
 #elif ENABLED(SideKick_289)
   #define CUSTOM_MACHINE_NAME "SideKick 289"
   #define LULZBOT_LCD_MACHINE_NAME "SideKick 289"

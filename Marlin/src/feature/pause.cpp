@@ -593,7 +593,7 @@ void wait_for_confirmation(const bool is_reload/*=false*/, const int8_t max_beep
       HOTEND_LOOP() thermalManager.heater_idle[e].start(nozzle_timeout);
 
       TERN_(HOST_PROMPT_SUPPORT, hostui.continue_prompt(GET_TEXT_F(MSG_REHEATDONE)));
-      #if ENABLED(EXTENSIBLE_UI)
+      #if ENABLED(EXTENSIBLE_UI) && DISABLED(PAUSE_REHEAT_FAST_RESUME)
         ExtUI::onUserConfirmRequired(GET_TEXT_F(MSG_ADVANCED_PAUSE_WAITING));
       #else
         LCD_MESSAGE(MSG_REHEATDONE);

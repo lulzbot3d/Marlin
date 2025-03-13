@@ -36,7 +36,7 @@ constexpr static NudgeNozzleScreenData &mydata = screen_data.NudgeNozzleScreen;
 #define GRID_ROWS (8+EXTRUDERS)
 
 void NudgeNozzleScreen::onEntry() {
-  mydata.show_offsets = false;
+  mydata.show_offsets = true;
   #if HAS_MULTI_EXTRUDER
     mydata.link_nozzles = true;
   #endif
@@ -62,7 +62,7 @@ void NudgeNozzleScreen::onRedraw(draw_mode_t what) {
   #endif
 
   #if HAS_MULTI_EXTRUDER || HAS_BED_PROBE
-    w.toggle(9, GET_TEXT_F(MSG_SHOW_OFFSETS), mydata.show_offsets);
+    //w.toggle(9, GET_TEXT_F(MSG_SHOW_OFFSETS), mydata.show_offsets);
 
     if (mydata.show_offsets) {
       char str[19];

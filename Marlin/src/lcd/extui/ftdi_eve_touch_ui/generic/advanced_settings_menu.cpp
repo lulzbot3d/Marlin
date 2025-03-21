@@ -46,7 +46,7 @@ void AdvancedSettingsMenu::onRedraw(draw_mode_t what) {
       #define RESTORE_DEFAULTS_POS    BTN_POS(1,8), BTN_SIZE(2,1)
       #define DISPLAY_POS             BTN_POS(2,7), BTN_SIZE(1,1)
       #define INTERFACE_POS           BTN_POS(1,7), BTN_SIZE(1,1)
-      #define ZPROBE_ZOFFSET_POS      BTN_POS(1,1), BTN_SIZE(1,1)
+      #define CAL_INFO_POS            BTN_POS(1,1), BTN_SIZE(1,1)
       #define STEPS_PER_MM_POS        BTN_POS(1,2), BTN_SIZE(1,1)
       #define FILAMENT_POS            BTN_POS(1,3), BTN_SIZE(1,1)
       #define VELOCITY_POS            BTN_POS(2,1), BTN_SIZE(1,1)
@@ -66,7 +66,7 @@ void AdvancedSettingsMenu::onRedraw(draw_mode_t what) {
     #else
       #define GRID_COLS 3
       #define GRID_ROWS 6
-      #define ZPROBE_ZOFFSET_POS      BTN_POS(1,1), BTN_SIZE(1,1)
+      #define CAL_INFO_POS            BTN_POS(1,1), BTN_SIZE(1,1)
       #define FLOW_POS                BTN_POS(1,4), BTN_SIZE(1,1)
       #define STEPS_PER_MM_POS        BTN_POS(2,1), BTN_SIZE(1,1)
       #define TMC_CURRENT_POS         BTN_POS(3,1), BTN_SIZE(1,1)
@@ -89,7 +89,7 @@ void AdvancedSettingsMenu::onRedraw(draw_mode_t what) {
     cmd.colors(normal_btn)
        .font(Theme::font_medium)
       .enabled(ENABLED(HAS_BED_PROBE))
-      .tag(2) .button(ZPROBE_ZOFFSET_POS,     GET_TEXT_F(MSG_ZOFFSET))
+      .tag(2) .button(CAL_INFO_POS,           F("Active Settings"))
       .tag(16).button(FLOW_POS,               GET_TEXT_F(MSG_FLOW))
       .tag(3) .button(STEPS_PER_MM_POS,       GET_TEXT_F(MSG_STEPS_PER_MM))
       .enabled(ENABLED(HAS_TRINAMIC_CONFIG))
@@ -120,15 +120,7 @@ void AdvancedSettingsMenu::onRedraw(draw_mode_t what) {
 bool AdvancedSettingsMenu::onTouchEnd(uint8_t tag) {
   switch (tag) {
     case  1: SaveSettingsDialogBox::promptToSaveSettings(); break;
-    #if HAS_BED_PROBE
-    case  2:
-      #if EXTRUDERS > 1
-        GOTO_SCREEN(NudgeNozzleScreen);
-      #else
-        GOTO_SCREEN(ZOffsetScreen);
-      #endif
-      break;
-    #endif
+    case  2: GOTO_SCREEN(CalInfoScreen);              break;
     case  3: GOTO_SCREEN(StepsScreen);                break;
     #if HAS_MULTI_HOTEND
     case  4: GOTO_SCREEN(NozzleOffsetScreen);         break;

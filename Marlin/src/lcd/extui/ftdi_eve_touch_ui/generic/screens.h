@@ -150,6 +150,7 @@ enum {
 #include "display_tuning_screen.h"
 #include "media_player_screen.h"
 #include "flow_percent_screen.h"
+#include "cal_info_screen.h"
 
 #if ENABLED(PRINTCOUNTER)
   #include "statistics_screen.h"

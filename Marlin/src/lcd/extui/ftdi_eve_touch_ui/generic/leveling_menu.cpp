@@ -98,7 +98,7 @@ bool LevelingMenu::onTouchEnd(uint8_t tag) {
   switch (tag) {
     case 1: GOTO_PREVIOUS(); break;
     #if ANY(Z_STEPPER_AUTO_ALIGN,MECHANICAL_GANTRY_CALIBRATION)
-      case 2: SpinnerDialogBox::enqueueAndWait(F("G34")); break;
+      case 2: SpinnerDialogBox::enqueueAndWait(F("G30 X150 Y150\nG34")); break;
     #else
       case 2: SpinnerDialogBox::enqueueAndWait(F(LEVELING_COMMANDS)); break;
     #endif

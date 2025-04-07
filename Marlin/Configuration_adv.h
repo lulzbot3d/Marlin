@@ -1498,10 +1498,10 @@
         #define CALIBRATION_OBJECT_CENTER     {144, 302, -1.0} //  mm
         #define CALIBRATION_OBJECT_DIMENSIONS {10.0, 5.0, 6.0} //  mm
         #define CALIBRATION_MEASURE_FRONT
-      #elif ANY(LULZBOT_LONG_BED, LULZBOT_LONG_BED_V2)
-        #define CALIBRATION_OBJECT_CENTER     {260,-18,-2.0} //  mm
-        #define CALIBRATION_OBJECT_DIMENSIONS {10.0,  10.0, 10.0} //  mm
-      #else
+      #elif ENABLED(LULZBOT_LONG_BED_V2)  // with Galaxy Single Extruder
+        #define CALIBRATION_OBJECT_CENTER     {270, -14.5, 3.0} //  mm
+        #define CALIBRATION_OBJECT_DIMENSIONS {10.0, 10.0, 10.0} //  mm
+      #else  // Galaxy Single Extruder, normal bed
         #define CALIBRATION_OBJECT_CENTER     {147, 303, -1.0} //  mm
         #define CALIBRATION_OBJECT_DIMENSIONS {10.0,  5.0, 10.0} //  mm
       #endif

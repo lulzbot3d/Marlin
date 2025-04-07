@@ -99,7 +99,7 @@
 // Author info of this build printed to the host during boot and M115
 #define STRING_CONFIG_H_AUTHOR "LulzBot" // Who made the changes.
 #define CUSTOM_VERSION_FILE Version.h // Path from the root directory (no quotes)
-#define LULZBOT_FW_VERSION "2.1.3.0.45"
+#define LULZBOT_FW_VERSION "2.1.3.0.46-Dev.1"
 #define CAPABILITIES_REPORT
 #define EXTENDED_CAPABILITIES_REPORT
 
@@ -2469,6 +2469,8 @@
 #endif
 #if ANY(MiniV2, MiniV3)
   #define INVERT_Y_DIR false
+#elif ANY(TAZ8, TAZ8XT) && ENABLED(LULZBOT_LONG_BED_V2)
+  #define INVERT_Y_DIR false
 #else
   #define INVERT_Y_DIR true
 #endif
@@ -2720,14 +2722,13 @@
     #if defined(LULZBOT_LONG_BED_V2)
       #define X_BED_SIZE        280
       #define Y_BED_SIZE        570
-      // Travel limits (mm) after homing, corresponding to endstop positions.
       #define LULZBOT_X_MAX_POS 318
       #define LULZBOT_X_MIN_POS -6
       #define LULZBOT_Y_MAX_POS 613
       #define LULZBOT_Y_MIN_POS -18.2//-15
       #define LULZBOT_Z_MIN_POS -9
       #define LULZBOT_Z_MAX_POS 293
-    #else
+    #else  // Normal Bed
       #define X_BED_SIZE 276
       #define Y_BED_SIZE 285
       // Travel limits (mm) after homing, corresponding to endstop positions.
@@ -2738,27 +2739,25 @@
       #define LULZBOT_Z_MIN_POS -9 // <-- changed
       #define LULZBOT_Z_MAX_POS 301 // <-- changed
     #endif
-  #else
+  #else  // Galaxy Single Extruder
     #if defined(LULZBOT_LONG_BED_V2)
-      #define X_BED_SIZE        280
-      #define Y_BED_SIZE        570
-      // Travel limits (mm) after homing, corresponding to endstop positions.
-      #define LULZBOT_X_MAX_POS 318
-      #define LULZBOT_X_MIN_POS -6
+      #define X_BED_SIZE        294
+      #define Y_BED_SIZE        594
+      #define LULZBOT_X_MAX_POS 307
+      #define LULZBOT_X_MIN_POS  -2
       #define LULZBOT_Y_MAX_POS 613
-      #define LULZBOT_Y_MIN_POS -18.2//-15
-      #define LULZBOT_Z_MIN_POS -9
-      #define LULZBOT_Z_MAX_POS 293
-    #else
+      #define LULZBOT_Y_MIN_POS -51
+      #define LULZBOT_Z_MIN_POS  -5
+      #define LULZBOT_Z_MAX_POS 279
+    #else  // Normal Bed
       #define X_BED_SIZE 285
       #define Y_BED_SIZE 285
-      // Travel limits (mm) after homing, corresponding to endstop positions.
       #define LULZBOT_X_MAX_POS 298
-      #define LULZBOT_X_MIN_POS -1
+      #define LULZBOT_X_MIN_POS  -1
       #define LULZBOT_Y_MAX_POS 340
       #define LULZBOT_Y_MIN_POS -18
       #define LULZBOT_Z_MAX_POS 299
-      #define LULZBOT_Z_MIN_POS -5
+      #define LULZBOT_Z_MIN_POS  -5
     #endif
   #endif
 #elif ENABLED(TAZ8XT)
@@ -2766,17 +2765,15 @@
     #if defined(LULZBOT_LONG_BED_V2)
       #define X_BED_SIZE        280
       #define Y_BED_SIZE        570
-      // Travel limits (mm) after homing, corresponding to endstop positions.
       #define LULZBOT_X_MAX_POS 318
-      #define LULZBOT_X_MIN_POS -6
+      #define LULZBOT_X_MIN_POS  -6
       #define LULZBOT_Y_MAX_POS 613
-      #define LULZBOT_Y_MIN_POS -18.2//-15
-      #define LULZBOT_Z_MIN_POS -9
+      #define LULZBOT_Y_MIN_POS -18.2
+      #define LULZBOT_Z_MIN_POS  -9
       #define LULZBOT_Z_MAX_POS 593
-    #else
+    #else  // Normal Bed
       #define X_BED_SIZE 276
       #define Y_BED_SIZE 285
-      // Travel limits (mm) after homing, corresponding to endstop positions.
       #define LULZBOT_X_MIN_POS 10 // <-- changed
       #define LULZBOT_Y_MIN_POS -24 // <-- changed
       #define LULZBOT_X_MAX_POS 301 // <-- changed
@@ -2784,21 +2781,19 @@
       #define LULZBOT_Z_MIN_POS -9 // <-- changed
       #define LULZBOT_Z_MAX_POS 587 // <-- changed
     #endif
-  #else
+  #else  // Galaxy Single Extruder
     #if defined(LULZBOT_LONG_BED_V2)
-      #define X_BED_SIZE        280
-      #define Y_BED_SIZE        570
-      // Travel limits (mm) after homing, corresponding to endstop positions.
-      #define LULZBOT_X_MAX_POS 318
-      #define LULZBOT_X_MIN_POS -6
+      #define X_BED_SIZE        294
+      #define Y_BED_SIZE        594
+      #define LULZBOT_X_MAX_POS 307
+      #define LULZBOT_X_MIN_POS  -2
       #define LULZBOT_Y_MAX_POS 613
-      #define LULZBOT_Y_MIN_POS -18.2//-15
-      #define LULZBOT_Z_MIN_POS -9
+      #define LULZBOT_Y_MIN_POS -51
+      #define LULZBOT_Z_MIN_POS  -5
       #define LULZBOT_Z_MAX_POS 593
-    #else
+    #else  // Normal Bed
       #define X_BED_SIZE 285
       #define Y_BED_SIZE 285
-      // Travel limits (mm) after homing, corresponding to endstop positions.
       #define LULZBOT_X_MAX_POS 298
       #define LULZBOT_X_MIN_POS -1
       #define LULZBOT_Y_MAX_POS 298
@@ -3581,6 +3576,8 @@
     #define PRESENT_BED_GCODE "G28 O\nG0 Y228 F10000\nG0 Y233 F10000\nM117 Printer Ready"
   #elif ENABLED(Workhorse)
     #define PRESENT_BED_GCODE "G28 O\nG0 Y301 F10000\nG0 Y306 F10000\nM117 Printer Ready"
+  #elif ANY(TAZ8, TAZ8XT) && ENABLED(LULZBOT_LONG_BED_V2)
+    #define PRESENT_BED_GCODE "G28 O\nG0 Y605 F5500\nG0 Y610 F4000\nM117 Printer Ready"
   #elif ANY(LULZBOT_LONG_BED, LULZBOT_LONG_BED_V2)
     #define PRESENT_BED_GCODE "G28 O\nG0 Y508 F5500\nG0 Y513 F4000\nM117 Printer Ready"
   #elif ANY(TAZ8, TAZ8XT) && ENABLED(TOOLHEAD_Galaxy_DualExtruder)

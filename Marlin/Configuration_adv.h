@@ -1337,8 +1337,8 @@
   // Define values for backlash distance and correction.
   // If BACKLASH_GCODE is enabled these values are the defaults.
   #if ANY(TAZPro, TAZProXT, Workhorse)
-    #define BACKLASH_DISTANCE_MM {0.25, 0.25, 0.04} // <-- changed:  (mm)
-    #define BACKLASH_CORRECTION    1.0 // <-- changed:  0.0 = no correction; 1.0 = full correction
+    #define BACKLASH_DISTANCE_MM {0.25, 0.25, 0.04} // (mm)
+    #define BACKLASH_CORRECTION    1.0        // 0.0 = no correction; 1.0 = full correction
   #elif ANY(TAZ8, TAZ8XT)
     #define BACKLASH_DISTANCE_MM {0.06, 0.08, 0.30} // (mm)
     #define BACKLASH_CORRECTION    1.0
@@ -1610,7 +1610,7 @@
 #if ENABLED(TAZ6)
   #define DIGIPOT_MOTOR_CURRENT { 175,175,200,LULZBOT_MOTOR_CURRENT_E0, LULZBOT_MOTOR_CURRENT_E1 }   // Values 0-255 (RAMBO 135 = ~0.75A, 185 = ~1A)
 #elif ENABLED(Workhorse)
-  #define DIGIPOT_MOTOR_CURRENT {175, 175, 180, LULZBOT_MOTOR_CURRENT_E0, LULZBOT_MOTOR_CURRENT_E1} // <-- changed:  Values 0-255 (RAMBO 135 = ~0.75A, 185 = ~1A)
+  #define DIGIPOT_MOTOR_CURRENT {175, 175, 180, LULZBOT_MOTOR_CURRENT_E0, LULZBOT_MOTOR_CURRENT_E1}  // Values 0-255 (RAMBO 135 = ~0.75A, 185 = ~1A)
 #endif
 //#define DAC_MOTOR_CURRENT_DEFAULT { 70, 80, 90, 80 }    // Default drive percent - X, Y, Z, E axis
 

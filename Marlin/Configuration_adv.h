@@ -579,7 +579,10 @@
  * The fan turns on automatically whenever any driver is enabled and turns
  * off (or reduces to idle speed) shortly after drivers are turned off.
  */
-#define USE_CONTROLLER_FAN
+#if DISABLED(Workhorse2)
+  #define USE_CONTROLLER_FAN
+#endif
+
 #if ENABLED(USE_CONTROLLER_FAN)
   #if ANY(MiniV2, MiniV3, SideKick_289, SideKick_747)
     #define CONTROLLER_FAN_PIN FAN1_PIN        // Set a custom pin for the controller fan
@@ -660,7 +663,7 @@
  *   PWM on pin OC2A. Only use this option if you don't need PWM on 0C2A. (Check your schematic.)
  *   USE_OCR2A_AS_TOP sacrifices duty cycle control resolution to achieve this broader range of frequencies.
  */
-#if ANY(MiniV2, MiniV3, TAZ6, Workhorse, SideKick_289, SideKick_747)
+#if ANY(MiniV2, MiniV3, TAZ6, Workhorse, SideKick_289, SideKick_747, Workhorse2)
   #define FAST_PWM_FAN    // Increase the fan PWM frequency. Removes the PWM noise but increases heating in the FET/Arduino
 #endif
 
@@ -943,7 +946,7 @@
   #define SENSORLESS_BACKOFF_MM  { 4, 4 , 0}     // (mm) Backoff from endstops before sensorless homing
   #define HOMING_BACKOFF_POST_MM { 5, 5, 2 }  // (linear=mm, rotational=°) Backoff from endstops after homing
 #else
-  #if ANY(Workhorse, TAZ8, TAZ8XT)
+  #if ANY(Workhorse, TAZ8, TAZ8XT, Workhorse2)
     #define HOMING_BACKOFF_POST_MM { 2, 2, 2 }  // (mm) Backoff from endstops after homing
     #define QUICK_HOME                          // If G28 contains XY do a diagonal move first
   #elif defined(TAZ6)
@@ -1329,7 +1332,7 @@
 // Backlash Compensation
 // Adds extra movement to axes on direction-changes to account for backlash.
 //
-#if ANY(TAZPro, TAZProXT, Workhorse, TAZ8, TAZ8XT)
+#if ANY(TAZPro, TAZProXT, Workhorse, TAZ8, TAZ8XT, Workhorse2)
   #define BACKLASH_COMPENSATION
 #endif
 
@@ -1341,6 +1344,9 @@
     #define BACKLASH_CORRECTION    1.0 // <-- changed:  0.0 = no correction; 1.0 = full correction
   #elif ANY(TAZ8, TAZ8XT)
     #define BACKLASH_DISTANCE_MM {0.06, 0.08, 0.30} // (mm)
+    #define BACKLASH_CORRECTION    1.0
+  #elif ENABLED(Workhorse2)
+    #define BACKLASH_DISTANCE_MM {0.25, 0.08, 0.30} // (mm)
     #define BACKLASH_CORRECTION    1.0
   #else
     #define BACKLASH_DISTANCE_MM {0.25, 0.25, 0.04} // (mm)
@@ -1387,7 +1393,7 @@
  * Note: HOTEND_OFFSET and CALIBRATION_OBJECT_CENTER must be set to within
  *       ±5mm of true values for G425 to succeed.
  */
-#if ANY(TAZPro, TAZProXT, Workhorse, TAZ8, TAZ8XT)
+#if ANY(TAZPro, TAZProXT, Workhorse, TAZ8, TAZ8XT, Workhorse2)
   #define CALIBRATION_GCODE
 #endif
 #if ENABLED(CALIBRATION_GCODE)
@@ -1520,6 +1526,14 @@
       #define CALIBRATION_MEASURE_FRONT
       #define CALIBRATION_MEASURE_LEFT
       #define CALIBRATION_MEASURE_BACK
+    #elif ANY(Workhorse2)
+      #define CALIBRATION_OBJECT_CENTER     {144, 301, -1.0} //  mm
+      #define CALIBRATION_OBJECT_DIMENSIONS {10.0,  5.0, 10.0} //  mm
+      #define LULZBOT_CALIBRATION_SCRIPT "M117 Starting Auto-Calibration\nG28\nG12\nM106 S255\nM104 S0\nG0 X144 Y302 Z25 F3500\nM117 Calibrating...\nG425\nM500\nM77\nM117 Calibration data saved"
+      #define CALIBRATION_MEASURE_RIGHT
+      #define CALIBRATION_MEASURE_FRONT
+      #define CALIBRATION_MEASURE_LEFT
+      #define CALIBRATION_MEASURE_BACK
     #endif
   #endif
 
@@ -1545,6 +1559,9 @@
     #if defined(LULZBOT_BLTouch) && ANY(TAZPro, TAZProXT, TAZ8, TAZ8XT)
       #define CALIBRATION_PIN 31 // Override in pins.h or set to -1 to use your Z endstop
       #define CALIBRATION_PIN_INVERTING true // Set to true to invert the pin
+    #elif defined(LULZBOT_BLTouch) && ANY(Workhorse2)
+      #define CALIBRATION_PIN 10
+      #define CALIBRATION_PIN_INVERTING true
     #else
       #define CALIBRATION_PIN -1 // Override in pins.h or set to -1 to use your Z endstop
       #define CALIBRATION_PIN_INVERTING false // Set to true to invert the pin
@@ -2151,7 +2168,7 @@
  * controller events, as there is a trade-off between reliable
  * printing performance versus fast display updates.
  */
-#if ANY(MiniV2, SideKick_289, SideKick_747, TAZ6, Workhorse, HAS_MARLINUI_U8GLIB)
+#if ANY(MiniV2, SideKick_289, SideKick_747, TAZ6, Workhorse, HAS_MARLINUI_U8GLIB, Workhorse2)
   // Save many cycles by drawing a hollow frame or no frame on the Info Screen
   //#define XYZ_NO_FRAME
   #define XYZ_HOLLOW_FRAME
@@ -3636,7 +3653,7 @@
    * Comment *_STALL_SENSITIVITY to disable sensorless homing for that axis.
    * @section tmc/stallguard
    */
-  #if NONE(TAZ8, TAZ8XT)
+  #if NONE(TAZ8, TAZ8XT, Workhorse2)
     #define SENSORLESS_HOMING // StallGuard capable drivers only
   #endif
 
@@ -4203,6 +4220,8 @@
  */
 #if ANY(SideKick_289, SideKick_747)
   #define STARTUP_COMMANDS "M17 Z\nM117 SideKick Ready" //"M906 Z450\nG91\nG0 Z20\nG90\nG28 X\nM906 Z975"
+#elif ENABLED(Workhorse2)
+  #define STARTUP_COMMANDS "M117 Workhorse 2 Ready"
 #endif
 
 /**
@@ -4565,7 +4584,7 @@
   #define GANTRY_CALIBRATION_COMMANDS_POST  "G28"
 #endif
 
-#if ANY(TAZPro,TAZProXT,Workhorse) && DISABLED(TAZDualZ)
+#if ANY(TAZPro, TAZProXT, Workhorse, Workhorse2) && DISABLED(TAZDualZ)
   #define X_LEVEL_SEQUENCE
 #endif
 #if defined (X_LEVEL_SEQUENCE)

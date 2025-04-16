@@ -60,6 +60,12 @@
   #define X_MAX_PIN                           81  // X+
   #define Y_MAX_PIN                           57  // Y+
 
+  #if ENABLED(Workhorse2)
+    #define SERVO0_PIN                        62  // PK0 - BLTouch Signal
+    #define Z_MIN_PIN                         76  // PJ5 - BLTouch Output
+    #undef  X_MAX_PIN
+  #endif
+
 #else
 
   #if X_HOME_TO_MIN
@@ -100,7 +106,9 @@
 //
 // Filament Runout Sensor
 //
-#if ENABLED(FILAMENT_RUNOUT_SENSOR)
+#if ENABLED(Workhorse2)
+  #define FIL_RUNOUT_PIN                      81 //X+
+#elif ENABLED(FILAMENT_RUNOUT_SENSOR)
   #define FIL_RUNOUT_PIN                      12 //X-
 #endif
 

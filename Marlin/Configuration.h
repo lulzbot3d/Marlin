@@ -99,7 +99,7 @@
 // Author info of this build printed to the host during boot and M115
 #define STRING_CONFIG_H_AUTHOR "LulzBot" // Who made the changes.
 #define CUSTOM_VERSION_FILE Version.h // Path from the root directory (no quotes)
-#define LULZBOT_FW_VERSION "2.1.3.0.45"
+#define LULZBOT_FW_VERSION "2.1.3.0.45-Dev.2"
 #define CAPABILITIES_REPORT
 #define EXTENDED_CAPABILITIES_REPORT
 
@@ -127,7 +127,7 @@
 
 // Choose the name from boards.h that matches your setup
 #ifndef MOTHERBOARD
-  #if ANY(MiniV2, SideKick_289, SideKick_747)
+  #if ANY(MiniV2, SideKick_289, SideKick_747, Workhorse2)
     #define MOTHERBOARD BOARD_EINSY_RETRO
   #elif ANY(Workhorse, TAZ6)
     #define MOTHERBOARD BOARD_RAMBO
@@ -284,6 +284,13 @@
   #define MACHINE_UUID "5b3d61d6-80f8-41ed-bd8a-9c765f8d523d" // <-- changed
   #define LULZBOT_BLTouch                                     // <-- changed
   #define LULZBOT_FILAMENT_RUNOUT                             // <-- changed
+#elif ENABLED(Workhorse2)
+  #define CUSTOM_MACHINE_NAME "LulzBot Workhorse 2"
+  #define LULZBOT_LCD_MACHINE_NAME "Workhorse 2"
+  #define MACHINE_UUID "9e745ad7-7e18-445e-8788-703ee1e5f764"
+  #define LULZBOT_BLTouch
+  #define LULZBOT_FILAMENT_RUNOUT
+  //#define LULZBOT_MANUAL_NOZZLE_CLEAN -- doesn't work on GLCD yet.
 #endif
 
 #if ENABLED(LULZBOT_LONG_BED)
@@ -314,7 +321,7 @@
  *          TMC5160, TMC5160_STANDALONE
  * :['A4988', 'A5984', 'DRV8825', 'LV8729', 'TB6560', 'TB6600', 'TMC2100', 'TMC2130', 'TMC2130_STANDALONE', 'TMC2160', 'TMC2160_STANDALONE', 'TMC2208', 'TMC2208_STANDALONE', 'TMC2209', 'TMC2209_STANDALONE', 'TMC2660', 'TMC2660_STANDALONE', 'TMC5130', 'TMC5130_STANDALONE', 'TMC5160', 'TMC5160_STANDALONE']
  */
-#if ANY(TAZPro, TAZProXT, TAZ8, TAZ8XT, MiniV2, SideKick_289, SideKick_747)
+#if ANY(TAZPro, TAZProXT, TAZ8, TAZ8XT, MiniV2, SideKick_289, SideKick_747, Workhorse2)
   #define X_DRIVER_TYPE  TMC2130
   #define Y_DRIVER_TYPE  TMC2130
   #define Z_DRIVER_TYPE  TMC2130
@@ -1288,7 +1295,7 @@
     #define DEFAULT_bedKp 384.33
     #define DEFAULT_bedKi 72.17
     #define DEFAULT_bedKd 511.64
-  #elif ANY(Workhorse, TAZPro, TAZProXT, TAZ8, TAZ8XT)
+  #elif ANY(Workhorse, TAZPro, TAZProXT, TAZ8, TAZ8XT, Workhorse2)
     #define DEFAULT_bedKp 286.02
     #define DEFAULT_bedKi 54.55
     #define DEFAULT_bedKd 374.9
@@ -1696,7 +1703,7 @@
  * Endstop "Hit" State
  * Set to the state (HIGH or LOW) that applies to each endstop.
  */
-#if ANY(MiniV2, TAZPro, TAZProXT, SideKick_289, SideKick_747)    //Don't include MiniV3 here, it needs false for the 2209 diag pin bump sense.
+#if ANY(MiniV2, TAZPro, TAZProXT, SideKick_289, SideKick_747)
   #define X_MIN_ENDSTOP_HIT_STATE LOW
   #define Y_MAX_ENDSTOP_HIT_STATE LOW
 #else
@@ -1755,12 +1762,12 @@
  *
  * :[2,3,4,5,6,7]
  */
-#if NONE(TAZPro, TAZProXT, TAZ8, TAZ8XT, Workhorse, MiniV2, MiniV3, SideKick_289, SideKick_747)
+#if NONE(TAZPro, TAZProXT, TAZ8, TAZ8XT, Workhorse, MiniV2, MiniV3, SideKick_289, SideKick_747, Workhorse2)
   #define ENDSTOP_NOISE_THRESHOLD 2
 #endif
 
 // Check for stuck or disconnected endstops during homing moves.
-#if NONE(TAZPro, TAZProXT, TAZ8, TAZ8XT,  MiniV2, MiniV3, SideKick_289, SideKick_747)
+#if NONE(TAZPro, TAZProXT, TAZ8, TAZ8XT,  MiniV2, MiniV3, SideKick_289, SideKick_747, Workhorse2)
   #define DETECT_BROKEN_ENDSTOP
 #endif
 
@@ -1794,7 +1801,7 @@
   #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 100, 200, LULZBOT_E_STEPS }
 #elif ENABLED(TAZ6)
   #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 100, 1600, LULZBOT_E_STEPS }
-#elif ANY(Workhorse, TAZPro, TAZProXT)
+#elif ANY(Workhorse, TAZPro, TAZProXT, Workhorse2)
   #if defined(LULZBOT_LONG_BED)
     #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 160, 500, LULZBOT_E_STEPS }
   #elif defined(LULZBOT_LONG_BED_V2)
@@ -1827,7 +1834,7 @@
   #define Z_FEEDRATE   300
 #elif ENABLED(TAZ6)
   #define Z_FEEDRATE   5
-#elif ANY(Workhorse, TAZPro, TAZProXT, TAZ8, TAZ8XT)
+#elif ANY(Workhorse, TAZPro, TAZProXT, TAZ8, TAZ8XT, Workhorse2)
   #define Z_FEEDRATE   25             // <-- changed: LDO geared motor max feedrate
 #endif
 
@@ -1854,7 +1861,7 @@
   #define X_Y_MAX_ACCELERATION   5000
 #elif ENABLED(SideKick_747)
   #define X_Y_MAX_ACCELERATION   4750
-#elif ANY(Workhorse, TAZPro, TAZProXT, TAZ8, TAZ8XT)
+#elif ANY(Workhorse, TAZPro, TAZProXT, TAZ8, TAZ8XT, Workhorse2)
   #define X_Y_MAX_ACCELERATION   4000
 #endif
 
@@ -2032,7 +2039,7 @@
 #if ENABLED(LULZBOT_BLTouch)
   #define BLTOUCH
   #define LULZBOT_PROBE_TYPE "BLTouch"
-  #if NONE(SideKick_289, SideKick_747, TAZ8, TAZ8XT)  // Machines that come stock with a BLTouch and do not need the identifier
+  #if NONE(SideKick_289, SideKick_747, TAZ8, TAZ8XT, Workhorse2)  // Machines that come stock with a BLTouch and do not need the identifier
     #define LULZBOT_SHORT_PROBE_TYPE " BT"
   #else
     #define LULZBOT_SHORT_PROBE_TYPE
@@ -2230,6 +2237,8 @@
   #endif
 #elif ANY(SideKick_289, SideKick_747)
   #define NOZZLE_TO_PROBE_OFFSET { -1, 50, -1.23 }
+#elif ENABLED(Workhorse2)
+  #define NOZZLE_TO_PROBE_OFFSET { -37, 0, -0.8 }
 #endif
 
 
@@ -2462,18 +2471,18 @@
 // @section motion
 
 // Invert the stepper direction. Change (or reverse the motor connector) if an axis goes the wrong way.
-#if ANY(TAZ6, TAZPro, TAZProXT, TAZ8, TAZ8XT)
+#if ANY(TAZ6, TAZPro, TAZProXT, TAZ8, TAZ8XT, Workhorse2)
   #define INVERT_X_DIR false
 #else
   #define INVERT_X_DIR true
 #endif
-#if ANY(MiniV2, MiniV3)
+#if ANY(MiniV2, MiniV3, Workhorse2)
   #define INVERT_Y_DIR false
 #else
   #define INVERT_Y_DIR true
 #endif
 
-#if ANY(TAZ6,Workhorse, TAZPro, TAZProXT, TAZ8, TAZ8XT)
+#if ANY(TAZ6, Workhorse, TAZPro, TAZProXT, TAZ8, TAZ8XT)
   #define INVERT_Z_DIR false
 #else
   #define INVERT_Z_DIR true
@@ -2528,12 +2537,12 @@
 // Direction of endstops when homing; 1=MAX, -1=MIN
 // :[-1,1]
 #define X_HOME_DIR -1
-#if ANY(TAZPro, TAZProXT, TAZ8, TAZ8XT, Workhorse, SideKick_289, SideKick_747)
+#if ANY(TAZPro, TAZProXT, TAZ8, TAZ8XT, Workhorse, SideKick_289, SideKick_747, Workhorse2)
   #define Y_HOME_DIR -1
 #else
   #define Y_HOME_DIR 1
 #endif
-#if ANY(MiniV2, MiniV3, TAZPro, TAZProXT, TAZ8, TAZ8XT, Workhorse, SideKick289, SideKick747)
+#if ANY(MiniV2, MiniV3, TAZPro, TAZProXT, TAZ8, TAZ8XT, Workhorse, SideKick289, SideKick747, Workhorse2)
   #define Z_HOME_DIR 1
 #else
   #define Z_HOME_DIR -1
@@ -2610,6 +2619,17 @@
   #define LULZBOT_X_MAX_POS 290.5
   #define LULZBOT_Y_MAX_POS 308
   #define LULZBOT_Z_MAX_POS 297
+
+#elif ENABLED(Workhorse2)   // UPDATE ALL OF THESE WHEN I GET AN ACTUAL MACHINE
+  #define X_BED_SIZE 290
+  #define Y_BED_SIZE 290
+  // Travel limits (mm) after homing, corresponding to endstop positions.
+  #define LULZBOT_X_MIN_POS -6
+  #define LULZBOT_Y_MIN_POS -21
+  #define LULZBOT_Z_MIN_POS -5
+  #define LULZBOT_X_MAX_POS 328
+  #define LULZBOT_Y_MAX_POS 340
+  #define LULZBOT_Z_MAX_POS 298
 
 #elif ENABLED(TAZPro)
   #if defined(TOOLHEAD_Universal_DualExtruder)
@@ -3157,7 +3177,7 @@
       #define GRID_MAX_POINTS_X 3  //3x3 grid to avoid hitting the handle on the flex bed
     #elif defined(SideKick_747)
       #define GRID_MAX_POINTS_X 4  //Back to 4x4 grid to avoid the nozzle hitting the grab handle
-    #elif defined(LULZBOT_BLTouch) && ANY(TAZPro, TAZProXT, TAZ8, TAZ8XT, Workhorse, TAZ6)
+    #elif defined(LULZBOT_BLTouch) && ANY(TAZPro, TAZProXT, TAZ8, TAZ8XT, Workhorse, TAZ6, Workhorse2)
       #define GRID_MAX_POINTS_X 4
     #else
       #define GRID_MAX_POINTS_X 2  //2x2 grid of mounted washers
@@ -3359,7 +3379,7 @@
 #elif ANY(Workhorse, TAZPro, TAZProXT)
   #define HOMING_FEEDRATE_Z  (25*60)
   #define HOMING_FEEDRATE_MM_M { (60*60), (60*60), HOMING_FEEDRATE_Z }
-#elif ANY(TAZ8, TAZ8XT)
+#elif ANY(TAZ8, TAZ8XT, Workhorse2)
   #define HOMING_FEEDRATE_Z  (25*60)
   #define HOMING_FEEDRATE_MM_M { (120*60), (120*60), HOMING_FEEDRATE_Z }
 #else
@@ -3982,7 +4002,7 @@
 //
 //  Set this option if CLOCKWISE causes values to DECREASE
 //
-#if ANY(MiniV2, SideKick_289, SideKick_747)
+#if ANY(MiniV2, SideKick_289, SideKick_747, Workhorse2)
   #define REVERSE_ENCODER_DIRECTION
 #endif
 
@@ -4893,7 +4913,7 @@
  * Set this manually if there are extra servos needing manual control.
  * Set to 0 to turn off servo support.
  */
-#if ANY(TAZ8, TAZ8XT)
+#if ANY(TAZ8, TAZ8XT, Workhorse2)
   #define PRINTER_MOUNTED_BLTouch 1
 #else
   #define PRINTER_MOUNTED_BLTouch 0

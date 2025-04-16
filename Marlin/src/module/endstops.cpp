@@ -522,7 +522,7 @@ void __O2 Endstops::report_states() {
     print_es_state(READ(FIL_RUNOUT1_PIN) != FIL_RUNOUT1_STATE, F(STR_FILAMENT));
   #endif
 
-  TERN_(BLTOUCH, bltouch._reset_SW_mode());
+  //TERN_(BLTOUCH, bltouch._reset_SW_mode());
   TERN_(JOYSTICK_DEBUG, joystick.report());
 
 } // Endstops::report_states

@@ -330,3 +330,6 @@
   #define SD_DETECT_PIN                       LULZBOT_SD_DETECT_PIN
   #define DISABLE_DUE_SD_MMC
 #endif
+
+#define RED_LED_PIN     35
+#define YELLOW_LED_PIN  33

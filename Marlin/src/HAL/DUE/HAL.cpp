@@ -92,8 +92,12 @@ void MarlinHAL::reboot() { rstc_start_software_reset(RSTC); }
 
   // Reset watchdog. MUST be called at least every 4 seconds after the
   // first watchdog_init or AVR will go into emergency procedures.
-  void MarlinHAL::watchdog_refresh() { watchdogReset(); }
-
+  void MarlinHAL::watchdog_refresh() {
+    watchdogReset();
+    #if (MOTHERBOARD == BOARD_ARCHIM2)
+      TOGGLE(YELLOW_LED_PIN);
+    #endif
+  }
 #endif
 
 // Override Arduino runtime to either config or disable the watchdog

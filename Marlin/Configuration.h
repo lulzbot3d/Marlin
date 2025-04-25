@@ -2478,6 +2478,8 @@
 #endif
 #if ANY(MiniV2, MiniV3, Workhorse2)
   #define INVERT_Y_DIR false
+#elif ANY(TAZ8, TAZ8XT) && ENABLED(LULZBOT_LONG_BED_V2)
+  #define INVERT_Y_DIR false
 #else
   #define INVERT_Y_DIR true
 #endif

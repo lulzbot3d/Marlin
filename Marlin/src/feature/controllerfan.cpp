@@ -106,7 +106,7 @@ void ControllerFan::update() {
     #endif
 
     #if ENABLED(FAN_SOFT_PWM)
-      soft_pwm_speed = speed;
+      soft_pwm_speed = speed >> 1;   // For controller fan with soft PWM, 0-127 seems to be 0-100%, so cut the 0-255 range in half.
     #else
       if (PWM_PIN(CONTROLLER_FAN_PIN))
         hal.set_pwm_duty(pin_t(CONTROLLER_FAN_PIN), speed);

@@ -1511,7 +1511,7 @@
         #define CALIBRATION_OBJECT_CENTER     {147, 303, -1.0} //  mm
         #define CALIBRATION_OBJECT_DIMENSIONS {10.0,  5.0, 10.0} //  mm
       #endif
-      #define LULZBOT_CALIBRATION_SCRIPT "M117 Starting Auto-Calibration\nG28\nG12\nM106 S255\nM104 S0 T0\nM104 S0 T1\nG0 X144 Y302 Z25 F3500\nM117 Calibrating...\nG425\nM500\nM77\nM117 Calibration data saved"
+      #define LULZBOT_CALIBRATION_SCRIPT "M117 Starting Auto-Calibration\nG28\nG12\nM106 S255\nM104 S0 T0\nM104 S0 T1\nG0 X144 Y302 Z25 F3500\nM117 Calibrating...\nG425\nM107\nM500\nM77\nM117 Calibration data saved"
         /* Status message */
         /* Auto-Home */
         /* Wipe the Nozzle */
@@ -1529,7 +1529,7 @@
     #elif ANY(Workhorse2)
       #define CALIBRATION_OBJECT_CENTER     {144, 301, -1.0} //  mm
       #define CALIBRATION_OBJECT_DIMENSIONS {10.0,  5.0, 10.0} //  mm
-      #define LULZBOT_CALIBRATION_SCRIPT "M117 Starting Auto-Calibration\nG28\nG12\nM106 S255\nM104 S0\nG0 X144 Y302 Z25 F3500\nM117 Calibrating...\nG425\nM500\nM77\nM117 Calibration data saved"
+      #define LULZBOT_CALIBRATION_SCRIPT "M117 Starting Auto-Calibration\nG28\nG12\nM106 S255\nM104 S0\nG0 X144 Y302 Z25 F3500\nM117 Calibrating...\nG425\nM107\nM500\nM77\nM117 Calibration data saved"
       #define CALIBRATION_MEASURE_RIGHT
       #define CALIBRATION_MEASURE_FRONT
       #define CALIBRATION_MEASURE_LEFT

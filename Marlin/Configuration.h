@@ -2619,7 +2619,7 @@
   #define LULZBOT_Y_MAX_POS 308
   #define LULZBOT_Z_MAX_POS 297
 
-#elif ENABLED(Workhorse2)   // UPDATE ALL OF THESE WHEN I GET AN ACTUAL MACHINE
+#elif ENABLED(Workhorse2)
   #define X_BED_SIZE 290
   #define Y_BED_SIZE 290
   // Travel limits (mm) after homing, corresponding to endstop positions.
@@ -2747,7 +2747,7 @@
     #endif
   #else  // Galaxy Single Extruder
     #if defined(LULZBOT_LONG_BED_V2)
-      #define X_BED_SIZE        294
+      #define X_BED_SIZE        295
       #define Y_BED_SIZE        594
       #define LULZBOT_X_MAX_POS 307
       #define LULZBOT_X_MIN_POS  -2
@@ -2756,8 +2756,8 @@
       #define LULZBOT_Z_MIN_POS  -5
       #define LULZBOT_Z_MAX_POS 279
     #else  // Normal Bed
-      #define X_BED_SIZE        285
-      #define Y_BED_SIZE        285
+      #define X_BED_SIZE        295
+      #define Y_BED_SIZE        295
       #define LULZBOT_X_MAX_POS 298
       #define LULZBOT_X_MIN_POS  -1
       #define LULZBOT_Y_MAX_POS 340
@@ -2785,11 +2785,11 @@
       #define LULZBOT_X_MAX_POS 301
       #define LULZBOT_Y_MAX_POS 338
       #define LULZBOT_Z_MIN_POS  -9
-      #define LULZBOT_Z_MAX_POS 587
+      #define LULZBOT_Z_MAX_POS 585
     #endif
   #else  // Galaxy Single Extruder
     #if defined(LULZBOT_LONG_BED_V2)
-      #define X_BED_SIZE        294
+      #define X_BED_SIZE        295
       #define Y_BED_SIZE        594
       #define LULZBOT_X_MAX_POS 307
       #define LULZBOT_X_MIN_POS  -2
@@ -2798,13 +2798,13 @@
       #define LULZBOT_Z_MIN_POS  -5
       #define LULZBOT_Z_MAX_POS 593
     #else  // Normal Bed
-      #define X_BED_SIZE        285
-      #define Y_BED_SIZE        285
+      #define X_BED_SIZE        295
+      #define Y_BED_SIZE        295
       #define LULZBOT_X_MAX_POS 298
       #define LULZBOT_X_MIN_POS  -1
-      #define LULZBOT_Y_MAX_POS 298
+      #define LULZBOT_Y_MAX_POS 340
       #define LULZBOT_Y_MIN_POS -18
-      #define LULZBOT_Z_MAX_POS 587
+      #define LULZBOT_Z_MAX_POS 585
       #define LULZBOT_Z_MIN_POS  -5
     #endif
   #endif

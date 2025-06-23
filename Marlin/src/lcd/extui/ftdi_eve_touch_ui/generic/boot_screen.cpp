@@ -120,8 +120,18 @@ void BootScreen::showSplashScreen() {
 
   LOGO_PAINT_PATHS
 
-  // Add firmware version text at the top of the screen
-  draw_text_box(cmd, 5, 10, 470, 70, F("Marlin " SHORT_BUILD_VERSION), OPT_CENTER, font_large);
+  // Add firmware version text at the bottom of the screen
+  draw_text_box(cmd, 5, 740, 460, 70, F("Marlin " SHORT_BUILD_VERSION), OPT_CENTER, font_large);
+
+  // Add machine name text at the top of the screen
+  draw_text_box(cmd, 5, 5, 470, 50, F(LULZBOT_LCD_MACHINE_NAME), OPT_CENTER, font_xxlarge);
+  #if ENABLED(LULZBOT_LONG_BED)
+    draw_text_box(cmd, 5, 50, 470, 40, F("With Long Bed"), OPT_CENTER, font_large);
+  #elif ENABLED(LULZBOT_LONG_BED_V2)
+    draw_text_box(cmd, 5, 50, 470, 40, F("With Long Bed V2"), OPT_CENTER, font_large);
+  #elif ENABLED(LULZBOT_BLTouch) && NONE(LULZBOT_LONG_BED_V2, TAZ8, TAZ8XT)
+    draw_text_box(cmd, 5, 50, 470, 40, F("With BLTouch"), OPT_CENTER, font_large);
+  #endif
 
   cmd.cmd(DL::DL_DISPLAY);
   cmd.cmd(CMD_SWAP);

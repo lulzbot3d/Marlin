@@ -37,32 +37,35 @@ void AdvancedSettingsMenu::onRedraw(draw_mode_t what) {
   }
 
     #if ENABLED(TOUCH_UI_PORTRAIT)
-      #if ANY(HAS_MULTI_HOTEND, SENSORLESS_HOMING)
-        #define GRID_ROWS 9
-      #else
+      #if NONE(HAS_MULTI_HOTEND, SENSORLESS_HOMING)
         #define GRID_ROWS 8
+      #elif DISABLED(HAS_MULTI_HOTEND) && ENABLED(SENSORLESS_HOMING)
+        #define GRID_ROWS 9
+        #define TMC_HOMING_THRS_POS     BTN_POS(1,6), BTN_SIZE(2,1)
+      #elif ENABLED(HAS_MULTI_HOTEND) && DISABLED(SENSORLESS_HOMING)
+        #define GRID_ROWS 9
+        #define OFFSETS_POS             BTN_POS(1,6), BTN_SIZE(2,1)
+      #elif ENABLED(HAS_MULTI_HOTEND) && ENABLED(SENSORLESS_HOMING)
+        #define GRID_ROWS 9
+        #define OFFSETS_POS             BTN_POS(1,6), BTN_SIZE(1,1)
+        #define TMC_HOMING_THRS_POS     BTN_POS(2,6), BTN_SIZE(1,1)
       #endif
       #define GRID_COLS 2
-      #define RESTORE_DEFAULTS_POS    BTN_POS(1,8), BTN_SIZE(2,1)
-      #define DISPLAY_POS             BTN_POS(2,7), BTN_SIZE(1,1)
-      #define INTERFACE_POS           BTN_POS(1,7), BTN_SIZE(1,1)
       #define CAL_INFO_POS            BTN_POS(1,1), BTN_SIZE(1,1)
-      #define STEPS_PER_MM_POS        BTN_POS(1,2), BTN_SIZE(1,1)
-      #define FILAMENT_POS            BTN_POS(1,3), BTN_SIZE(1,1)
       #define VELOCITY_POS            BTN_POS(2,1), BTN_SIZE(1,1)
-      #define TMC_CURRENT_POS         BTN_POS(2,5), BTN_SIZE(1,1)
+      #define STEPS_PER_MM_POS        BTN_POS(1,2), BTN_SIZE(1,1)
       #define ACCELERATION_POS        BTN_POS(2,2), BTN_SIZE(1,1)
-      #define ENDSTOPS_POS            BTN_POS(1,5), BTN_SIZE(1,1)
+      #define FILAMENT_POS            BTN_POS(1,3), BTN_SIZE(1,1)
       #define JERK_POS                BTN_POS(2,3), BTN_SIZE(1,1)
-      #define FLOW_POS                BTN_POS(1,6), BTN_SIZE(1,1)
+      #define FLOW_POS                BTN_POS(1,4), BTN_SIZE(1,1)
       #define BACKLASH_POS            BTN_POS(2,4), BTN_SIZE(1,1)
-      #define OFFSETS_POS             BTN_POS(1,4), BTN_SIZE(1,1)
-      #define TMC_HOMING_THRS_POS     BTN_POS(2,6), BTN_SIZE(1,1)
-      #if ANY(HAS_MULTI_HOTEND, SENSORLESS_HOMING)
-        #define BACK_POS              BTN_POS(1,9), BTN_SIZE(2,1)
-      #else
-        #define BACK_POS              BTN_POS(1,8), BTN_SIZE(2,1)
-      #endif
+      #define ENDSTOPS_POS            BTN_POS(1,5), BTN_SIZE(1,1)
+      #define TMC_CURRENT_POS         BTN_POS(2,5), BTN_SIZE(1,1)
+
+      #define INTERFACE_POS           BTN_POS(1,GRID_ROWS-2), BTN_SIZE(1,1)
+      #define DISPLAY_POS             BTN_POS(2,GRID_ROWS-2), BTN_SIZE(1,1)
+      #define RESTORE_DEFAULTS_POS    BTN_POS(1,GRID_ROWS-1), BTN_SIZE(2,1)
+      #define BACK_POS                BTN_POS(1,GRID_ROWS),   BTN_SIZE(2,1)
     #else
       #define GRID_COLS 3
       #define GRID_ROWS 6
@@ -95,14 +98,13 @@ void AdvancedSettingsMenu::onRedraw(draw_mode_t what) {
       .enabled(ENABLED(HAS_TRINAMIC_CONFIG))
       .tag(13).button(TMC_CURRENT_POS,        GET_TEXT_F(MSG_TMC_CURRENT))
       #if ENABLED(SENSORLESS_HOMING)
-        .tag(14).button(TMC_HOMING_THRS_POS,  GET_TEXT_F(MSG_TMC_HOMING_THRS))
-      #else
-        .tag(17).button(TMC_HOMING_THRS_POS,  GET_TEXT_F(MSG_CLEAN_NOZZLE))
+      .tag(14).button(TMC_HOMING_THRS_POS,    GET_TEXT_F(MSG_TMC_HOMING_THRS))
       #endif
-      .enabled(ENABLED(HAS_MULTI_HOTEND))
+      #if ENABLED(HAS_MULTI_HOTEND)
       .tag(4) .button(OFFSETS_POS,            GET_TEXT_F(MSG_OFFSETS_MENU))
+      #endif
       .enabled(ANY(LIN_ADVANCE, FILAMENT_RUNOUT_SENSOR))
-      .tag(11).button(FILAMENT_POS,           GET_TEXT_F(MSG_FILAMENT))
+      .tag(11).button(FILAMENT_POS,           GET_TEXT_F(MSG_LINEAR_ADVANCE))
       .tag(12).button(ENDSTOPS_POS,           GET_TEXT_F(MSG_LCD_ENDSTOPS))
       .tag(15).button(DISPLAY_POS,            GET_TEXT_F(MSG_DISPLAY_MENU))
       .tag(9) .button(INTERFACE_POS,          GET_TEXT_F(MSG_INTERFACE))
@@ -134,7 +136,7 @@ bool AdvancedSettingsMenu::onTouchEnd(uint8_t tag) {
     case  9: GOTO_SCREEN(InterfaceSettingsScreen);  LockScreen::check_passcode(); break;
     case 10: GOTO_SCREEN(RestoreFailsafeDialogBox); LockScreen::check_passcode(); break;
     #if ANY(LIN_ADVANCE, FILAMENT_RUNOUT_SENSOR)
-    case 11: GOTO_SCREEN(FilamentMenu); break;
+    case 11: GOTO_SCREEN(LinearAdvanceScreen); break;
     #endif
     case 12: GOTO_SCREEN(EndstopStatesScreen); break;
     #if HAS_TRINAMIC_CONFIG

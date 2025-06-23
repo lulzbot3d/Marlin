@@ -42,12 +42,12 @@ void MainMenu::onRedraw(draw_mode_t what) {
 
     #define MOVE_AXIS_POS         BTN_POS(1,1), BTN_SIZE(1,1)
     #define DISABLE_STEPPERS_POS  BTN_POS(2,1), BTN_SIZE(1,1)
-    #define BACKLASH_POS          BTN_POS(1,2), BTN_SIZE(1,1)
+    #define BACKLASH_POS          BTN_POS(1,4), BTN_SIZE(1,1)
     #define CLEAN_NOZZLE_POS      BTN_POS(2,2), BTN_SIZE(1,1)
     #define LEVELING_POS          BTN_POS(1,3), BTN_SIZE(1,1)
     #define Z_OFFSET_POS          BTN_POS(2,3), BTN_SIZE(1,1)
-    #define TEMPERATURE_POS       BTN_POS(1,4), BTN_SIZE(1,1)
-    #define EXTRUDER_OFFSET_POS   BTN_POS(2,4), BTN_SIZE(1,1)
+    #define TEMPERATURE_POS       BTN_POS(1,2), BTN_SIZE(1,1)
+    #define EXTRUDER_OFFSET_POS   BTN_POS(1,4), BTN_SIZE(2,1)
     #define ABOUT_PRINTER_POS     BTN_POS(1,5), BTN_SIZE(2,1)
     #define ADVANCED_SETTINGS_POS BTN_POS(1,6), BTN_SIZE(2,1)
     #define BACK_POS              BTN_POS(1,7), BTN_SIZE(2,1)
@@ -58,7 +58,7 @@ void MainMenu::onRedraw(draw_mode_t what) {
     #define ABOUT_PRINTER_POS     BTN_POS(4,1), BTN_SIZE(3,1)
     #define MOVE_AXIS_POS         BTN_POS(1,3), BTN_SIZE(3,1)
     #define DISABLE_STEPPERS_POS  BTN_POS(4,3), BTN_SIZE(3,1)
-    #define TEMPERATURE_POS     BTN_POS(1,4), BTN_SIZE(2,1)
+    #define TEMPERATURE_POS       BTN_POS(1,4), BTN_SIZE(2,1)
     #define EXTRUDER_OFFSET_POS   BTN_POS(1,4), BTN_SIZE(2,1)
     #define LEVELING_POS          BTN_POS(1,5), BTN_SIZE(3,1)
     #define BACK_POS              BTN_POS(4,5), BTN_SIZE(3,1)
@@ -74,7 +74,7 @@ void MainMenu::onRedraw(draw_mode_t what) {
     cmd.tag(4).button(BACKLASH_POS,          GET_TEXT_F(MSG_BACKLASH))
        .tag(5).button(CLEAN_NOZZLE_POS,      GET_TEXT_F(MSG_CLEAN_NOZZLE))
        .tag(6).button(TEMPERATURE_POS,       GET_TEXT_F(MSG_TEMPERATURE))
-       .tag(7).button(EXTRUDER_OFFSET_POS,   GET_TEXT_F(TERN(HAS_MULTI_HOTEND, MSG_OFFSETS_MENU, MSG_FILAMENT)))
+       .tag(7).button(EXTRUDER_OFFSET_POS,   GET_TEXT_F(TERN(HAS_MULTI_HOTEND, MSG_OFFSETS_MENU, MSG_RUNOUT_SENSOR)))
           .enabled(DISABLED(TOUCH_UI_LULZBOT_BIO))
        .tag(8).button(ADVANCED_SETTINGS_POS, GET_TEXT_F(MSG_ADVANCED_SETTINGS))
           .enabled(ENABLED(HAS_LEVELING))
@@ -103,7 +103,7 @@ bool MainMenu::onTouchEnd(uint8_t tag) {
       #endif
       break;
     case 6:  GOTO_SCREEN(TemperatureScreen);                             break;
-    case 7: GOTO_SCREEN(TERN(HAS_MULTI_HOTEND, NozzleOffsetScreen, FilamentMenu));                           break;
+    case 7: GOTO_SCREEN(TERN(HAS_MULTI_HOTEND, NozzleOffsetScreen, FilamentRunoutScreen));   break;
     case 8:  GOTO_SCREEN(AdvancedSettingsMenu);                          break;
     #if HAS_LEVELING
       case 9:  GOTO_SCREEN(LevelingMenu);                                break;

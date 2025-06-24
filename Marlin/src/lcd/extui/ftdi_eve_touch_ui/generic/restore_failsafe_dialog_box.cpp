@@ -28,7 +28,24 @@
 using namespace ExtUI;
 
 void RestoreFailsafeDialogBox::onRedraw(draw_mode_t) {
-  drawMessage(GET_TEXT_F(MSG_EEPROM_RESET_WARNING));
+  drawMessage(F("\
+Reset to Firmware Defaults\n\
+\n\
+\n\
+This will erase all your custom settings, including but not limited to:\n\
+\n\
+- Printer calibration\n\
+- Bed leveling data\n\
+- PID settings\n\
+- Custom configurations\n\
+\n\
+This action cannot be undone.\n\
+\n\
+\n\
+\n\
+\n\
+Are you sure you want to reset the printer settings to their firmware defaults?\n\
+"));
   drawYesNoButtons();
 }
 

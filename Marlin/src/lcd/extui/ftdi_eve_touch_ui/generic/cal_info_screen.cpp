@@ -49,7 +49,7 @@ void CalInfoScreen::onRedraw(draw_mode_t) {
      .tag(0);
 
   // Not sure why I have to make all the text boxes two rows high to get the font size to work.
-  draw_text_box(cmd, BTN_POS(1,1),  BTN_SIZE(1,2), F("Active Settings"), OPT_CENTERX, font_xlarge);
+  draw_text_box(cmd, BTN_POS(1,1),  BTN_SIZE(1,2), F("Printer Settings Overview"), OPT_CENTERX, font_xlarge);
 
   char buffer[48];
 

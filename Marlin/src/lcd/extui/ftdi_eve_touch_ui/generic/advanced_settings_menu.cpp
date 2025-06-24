@@ -36,32 +36,29 @@ void AdvancedSettingsMenu::onRedraw(draw_mode_t what) {
        .cmd(CLEAR(true,true,true));
   }
 
+    #define GRID_COLS 2
     #if ENABLED(TOUCH_UI_PORTRAIT)
       #if NONE(HAS_MULTI_HOTEND, SENSORLESS_HOMING)
-        #define GRID_ROWS 8
+        #define GRID_ROWS 7
       #elif DISABLED(HAS_MULTI_HOTEND) && ENABLED(SENSORLESS_HOMING)
-        #define GRID_ROWS 9
-        #define TMC_HOMING_THRS_POS     BTN_POS(1,6), BTN_SIZE(2,1)
+        #define GRID_ROWS 8
+        #define TMC_HOMING_THRS_POS     BTN_POS(1,5), BTN_SIZE(2,1)
       #elif ENABLED(HAS_MULTI_HOTEND) && DISABLED(SENSORLESS_HOMING)
-        #define GRID_ROWS 9
-        #define OFFSETS_POS             BTN_POS(1,6), BTN_SIZE(2,1)
+        #define GRID_ROWS 8
+        #define OFFSETS_POS             BTN_POS(1,5), BTN_SIZE(2,1)
       #elif ENABLED(HAS_MULTI_HOTEND) && ENABLED(SENSORLESS_HOMING)
-        #define GRID_ROWS 9
-        #define OFFSETS_POS             BTN_POS(1,6), BTN_SIZE(1,1)
-        #define TMC_HOMING_THRS_POS     BTN_POS(2,6), BTN_SIZE(1,1)
+        #define GRID_ROWS 8
+        #define OFFSETS_POS             BTN_POS(1,5), BTN_SIZE(1,1)
+        #define TMC_HOMING_THRS_POS     BTN_POS(2,5), BTN_SIZE(1,1)
       #endif
-      #define GRID_COLS 2
-      #define CAL_INFO_POS            BTN_POS(1,1), BTN_SIZE(1,1)
+      #define BACKLASH_POS            BTN_POS(1,1), BTN_SIZE(1,1)
       #define VELOCITY_POS            BTN_POS(2,1), BTN_SIZE(1,1)
       #define STEPS_PER_MM_POS        BTN_POS(1,2), BTN_SIZE(1,1)
       #define ACCELERATION_POS        BTN_POS(2,2), BTN_SIZE(1,1)
       #define FILAMENT_POS            BTN_POS(1,3), BTN_SIZE(1,1)
       #define JERK_POS                BTN_POS(2,3), BTN_SIZE(1,1)
-      #define FLOW_POS                BTN_POS(1,4), BTN_SIZE(1,1)
-      #define BACKLASH_POS            BTN_POS(2,4), BTN_SIZE(1,1)
-      #define ENDSTOPS_POS            BTN_POS(1,5), BTN_SIZE(1,1)
-      #define TMC_CURRENT_POS         BTN_POS(2,5), BTN_SIZE(1,1)
-
+      #define ENDSTOPS_POS            BTN_POS(1,4), BTN_SIZE(1,1)
+      #define TMC_CURRENT_POS         BTN_POS(2,4), BTN_SIZE(1,1)
       #define INTERFACE_POS           BTN_POS(1,GRID_ROWS-2), BTN_SIZE(1,1)
       #define DISPLAY_POS             BTN_POS(2,GRID_ROWS-2), BTN_SIZE(1,1)
       #define RESTORE_DEFAULTS_POS    BTN_POS(1,GRID_ROWS-1), BTN_SIZE(2,1)
@@ -92,8 +89,6 @@ void AdvancedSettingsMenu::onRedraw(draw_mode_t what) {
     cmd.colors(normal_btn)
        .font(Theme::font_medium)
       .enabled(ENABLED(HAS_BED_PROBE))
-      .tag(2) .button(CAL_INFO_POS,           F("Active Settings"))
-      .tag(16).button(FLOW_POS,               GET_TEXT_F(MSG_FLOW))
       .tag(3) .button(STEPS_PER_MM_POS,       GET_TEXT_F(MSG_STEPS_PER_MM))
       .enabled(ENABLED(HAS_TRINAMIC_CONFIG))
       .tag(13).button(TMC_CURRENT_POS,        GET_TEXT_F(MSG_TMC_CURRENT))
@@ -109,7 +104,7 @@ void AdvancedSettingsMenu::onRedraw(draw_mode_t what) {
       .tag(15).button(DISPLAY_POS,            GET_TEXT_F(MSG_DISPLAY_MENU))
       .tag(9) .button(INTERFACE_POS,          GET_TEXT_F(MSG_INTERFACE))
       .tag(10).button(RESTORE_DEFAULTS_POS,   GET_TEXT_F(MSG_RESTORE_DEFAULTS))
-      .tag(5) .button(VELOCITY_POS,           GET_TEXT_F(MSG_MAX_VELOCITY))
+      .tag(5) .button(VELOCITY_POS,           F("Max Speed"))
       .tag(6) .button(ACCELERATION_POS,       GET_TEXT_F(MSG_ACCELERATION))
       .tag(7) .button(JERK_POS,               GET_TEXT_F(TERN(HAS_JUNCTION_DEVIATION, MSG_JUNCTION_DEVIATION, MSG_JERK)))
       .enabled(ENABLED(BACKLASH_GCODE))

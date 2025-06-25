@@ -59,9 +59,9 @@ void AdvancedSettingsMenu::onRedraw(draw_mode_t what) {
       #define JERK_POS                BTN_POS(2,3), BTN_SIZE(1,1)
       #define ENDSTOPS_POS            BTN_POS(1,4), BTN_SIZE(1,1)
       #define TMC_CURRENT_POS         BTN_POS(2,4), BTN_SIZE(1,1)
-      #define INTERFACE_POS           BTN_POS(1,GRID_ROWS-2), BTN_SIZE(1,1)
-      #define DISPLAY_POS             BTN_POS(2,GRID_ROWS-2), BTN_SIZE(1,1)
-      #define RESTORE_DEFAULTS_POS    BTN_POS(1,GRID_ROWS-1), BTN_SIZE(2,1)
+      #define RESTORE_DEFAULTS_POS    BTN_POS(1,GRID_ROWS-2), BTN_SIZE(2,1)
+      #define INTERFACE_POS           BTN_POS(1,GRID_ROWS-1), BTN_SIZE(1,1)
+      #define DISPLAY_POS             BTN_POS(2,GRID_ROWS-1), BTN_SIZE(1,1)
       #define BACK_POS                BTN_POS(1,GRID_ROWS),   BTN_SIZE(2,1)
     #else
       #define GRID_COLS 3
@@ -101,8 +101,8 @@ void AdvancedSettingsMenu::onRedraw(draw_mode_t what) {
       .enabled(ANY(LIN_ADVANCE, FILAMENT_RUNOUT_SENSOR))
       .tag(11).button(FILAMENT_POS,           GET_TEXT_F(MSG_LINEAR_ADVANCE))
       .tag(12).button(ENDSTOPS_POS,           GET_TEXT_F(MSG_LCD_ENDSTOPS))
-      .tag(15).button(DISPLAY_POS,            GET_TEXT_F(MSG_DISPLAY_MENU))
-      .tag(9) .button(INTERFACE_POS,          GET_TEXT_F(MSG_INTERFACE))
+      .tag(15).button(DISPLAY_POS,            F("Touch Calibrate"))
+      .tag(9) .button(INTERFACE_POS,          F("UI Settings"))
       .tag(10).button(RESTORE_DEFAULTS_POS,   GET_TEXT_F(MSG_RESTORE_DEFAULTS))
       .tag(5) .button(VELOCITY_POS,           F("Max Speed"))
       .tag(6) .button(ACCELERATION_POS,       GET_TEXT_F(MSG_ACCELERATION))

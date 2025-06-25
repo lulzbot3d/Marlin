@@ -64,7 +64,7 @@ void InterfaceSettingsScreen::onRedraw(draw_mode_t what) {
        .cmd(COLOR_RGB(bg_text_enabled))
        .tag(0)
        .font(font_medium)
-       .text(BTN_POS(1,1), BTN_SIZE(4,1), GET_TEXT_F(MSG_INTERFACE))
+       .text(BTN_POS(1,1), BTN_SIZE(4,1), F("UI Settings"))
     #undef EDGE_R
     #define EDGE_R 30
        .font(font_small)

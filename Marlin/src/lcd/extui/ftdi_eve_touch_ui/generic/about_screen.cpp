@@ -36,7 +36,7 @@ using namespace ExtUI;
 
 void AboutScreen::onEntry() {
   BaseScreen::onEntry();
-  sound.play(chimes, PLAY_ASYNCHRONOUS);
+  //sound.play(chimes, PLAY_ASYNCHRONOUS);
 }
 
 void AboutScreen::onRedraw(draw_mode_t) {
@@ -46,7 +46,7 @@ void AboutScreen::onRedraw(draw_mode_t) {
      .cmd(COLOR_RGB(bg_text_enabled))
      .tag(0);
 
-  draw_text_box(cmd, BTN_POS(1,1), BTN_SIZE(4,6), F(
+  draw_text_box(cmd, BTN_POS(1,1), BTN_SIZE(4,5), F(
       #if ENABLED(LULZBOT_LONG_BED)
         "" LULZBOT_LCD_MACHINE_NAME " \nWith Long Bed"
       #elif ENABLED(LULZBOT_LONG_BED_V2)
@@ -59,101 +59,74 @@ void AboutScreen::onRedraw(draw_mode_t) {
   ), OPT_CENTER, font_xxlarge);
 
   cmd.tag(3);
-  draw_text_box(cmd, BTN_POS(1,7), BTN_SIZE(4,3), F(
-        "Firmware:"
-  ), OPT_CENTER, font_xlarge);
+  draw_text_box(cmd, BTN_POS(1,6), BTN_SIZE(4,3), F("Firmware:"), OPT_CENTERX, font_xlarge);
 
-  draw_text_box(cmd, BTN_POS(1,10), BTN_SIZE(4,2), F(
-         "" LULZBOT_M115_EXTRUDER_TYPE ""
-  ), OPT_CENTER, font_xlarge);
+  draw_text_box(cmd, BTN_POS(1,8), BTN_SIZE(4,2), F(LULZBOT_M115_EXTRUDER_TYPE), OPT_CENTER, font_xlarge);
 
   #if ENABLED(SHOW_TOOL_HEAD_ID)
-    draw_text_box(cmd, BTN_POS(1,13), BTN_SIZE(4,3), F(
-      "Tool Head:"
-    ), OPT_CENTER, font_xlarge);
+    draw_text_box(cmd, BTN_POS(1,12), BTN_SIZE(4,3), F("Tool Head:"), OPT_CENTERX, font_xlarge);
 
     switch(getToolHeadIdNumber()){
       case 1:
-      draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
-        "M175v2"
-      ), OPT_CENTER, font_large);
-      break;
+        draw_text_box(cmd, BTN_POS(1,14), BTN_SIZE(4,2), F("M175v2"), OPT_CENTERX, font_large);
+        break;
       case 2:
-      draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
-        "SL"
-      ), OPT_CENTER, font_large);
-      break;
+        draw_text_box(cmd, BTN_POS(1,14), BTN_SIZE(4,2), F("SL"), OPT_CENTERX, font_large);
+        break;
       case 3:
-      draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
-        "SE"
-      ), OPT_CENTER, font_large);
-      break;
+        draw_text_box(cmd, BTN_POS(1,14), BTN_SIZE(4,2), F("SE"), OPT_CENTERX, font_large);
+        break;
       case 4:
-      draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
-        "HE"
-      ), OPT_CENTER, font_large);
-      break;
+        draw_text_box(cmd, BTN_POS(1,14), BTN_SIZE(4,2), F("HE"), OPT_CENTERX, font_large);
+        break;
       case 5:
-      draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
-        "HS"
-      ), OPT_CENTER, font_large);
-      break;
+        draw_text_box(cmd, BTN_POS(1,14), BTN_SIZE(4,2), F("HS"), OPT_CENTERX, font_large);
+        break;
       case 6:
-      draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
-        "HS+"
-      ), OPT_CENTER, font_large);
-      break;
+        draw_text_box(cmd, BTN_POS(1,14), BTN_SIZE(4,2), F("HS+"), OPT_CENTERX, font_large);
+        break;
       case 7:
-      draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
-        "H175"
-      ), OPT_CENTER, font_large);
-      break;
+        draw_text_box(cmd, BTN_POS(1,14), BTN_SIZE(4,2), F("H175"), OPT_CENTERX, font_large);
+        break;
       case 8:
-      draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
-        "MET175"
-      ), OPT_CENTER, font_large);
-      break;
+        draw_text_box(cmd, BTN_POS(1,14), BTN_SIZE(4,2), F("MET175"), OPT_CENTERX, font_large);
+        break;
       case 9:
-      draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
-        "MET285"
-      ), OPT_CENTER, font_large);
-      break;
+        draw_text_box(cmd, BTN_POS(1,14), BTN_SIZE(4,2), F("MET285"), OPT_CENTERX, font_large);
+        break;
       case 10:
-      draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
-        "AST285"
-      ), OPT_CENTER, font_large);
-      break;
+        draw_text_box(cmd, BTN_POS(1,14), BTN_SIZE(4,2), F("AST285"), OPT_CENTERX, font_large);
+        break;
       case 11:
-      draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
-        "Twin Nebula 175"
-      ), OPT_CENTER, font_large);
-      break;
+        draw_text_box(cmd, BTN_POS(1,14), BTN_SIZE(4,2), F("Twin Nebula 175"), OPT_CENTERX, font_large);
+        break;
       case 12:
-      draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
-        "Twin Nebula 285"
-      ), OPT_CENTER, font_large);
-      break;
+        draw_text_box(cmd, BTN_POS(1,14), BTN_SIZE(4,2), F("Twin Nebula 285"), OPT_CENTERX, font_large);
+        break;
       case 13:
-      draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,2), F(
-        "Legacy Dual"
-      ), OPT_CENTER, font_large);
-      break;
+        draw_text_box(cmd, BTN_POS(1,14), BTN_SIZE(4,2), F("Legacy Dual"), OPT_CENTERX, font_large);
+        break;
     }
   #endif
 
-  draw_text_box(cmd, BTN_POS(1,19), BTN_SIZE(4,3), F(
-        "Version:"
-  ), OPT_CENTER, font_xlarge);
+  //draw_text_box(cmd, BTN_POS(1,16), BTN_SIZE(4,3), F("Version:"), OPT_CENTER, font_xlarge);
+  draw_text_box(cmd, BTN_POS(1,10) - 15, BTN_SIZE(4,2), F("Marlin " SHORT_BUILD_VERSION ""), OPT_CENTERX, font_xlarge);
 
-  draw_text_box(cmd, BTN_POS(1,22), BTN_SIZE(4,2), F(
-    "Marlin " SHORT_BUILD_VERSION ""
-  ), OPT_CENTER, font_xlarge);
+  draw_text_box(cmd, BTN_POS(1,17) - 10, BTN_SIZE(4,2), F("support@lulzbot.com"), OPT_CENTERX, font_xlarge);
+  draw_text_box(cmd, BTN_POS(1,18), BTN_SIZE(4,2), F("+1-701-809-0800 ext 2"), OPT_CENTERX, font_xlarge);
+
+  // Display the QR code for the Quick Start Guide
+  draw_text_box(cmd, BTN_POS(1,20), BTN_SIZE(4,2), F("          Quick"), OPT_CENTERY, font_xlarge);
+  draw_text_box(cmd, BTN_POS(1,21), BTN_SIZE(4,2), F("          Start Guide:"), OPT_CENTERY, font_xlarge);
+  
+  cmd.cmd (BITMAP_SOURCE(Quickstart_QR_Info))
+     .cmd (BITMAP_LAYOUT(Quickstart_QR_Info))
+     .cmd (BITMAP_SIZE  (Quickstart_QR_Info))
+     .icon(295, 500, Quickstart_QR_Info.width*4, Quickstart_QR_Info.height*4, Quickstart_QR_Info, 4.0);
 
   #undef GRID_ROWS
   #define GRID_ROWS 9
-
   cmd.font(font_medium).colors(normal_btn).tag(1).button(BTN_POS(1,8), BTN_SIZE(4,1), GET_TEXT_F(MSG_INFO_3D_PRINTER_STATS_MENU));
-
   cmd.font(font_medium).colors(action_btn).tag(2).button(BTN_POS(1,9), BTN_SIZE(4,1), GET_TEXT_F(MSG_BUTTON_DONE));
 
 }

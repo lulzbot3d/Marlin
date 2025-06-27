@@ -6,6 +6,7 @@
  *   Written By Mark Pelletier  2017 - Aleph Objects, Inc.                  *
  *   Written By Marcio Teixeira 2018 - Aleph Objects, Inc.                  *
  *   Written By Brian Kahl 2023 - FAME3D                                    *
+ *   Written By Carl Smith 2025 - FAME3D                                    *
  *                                                                          *
  *   This program is free software: you can redistribute it and/or modify   *
  *   it under the terms of the GNU General Public License as published by   *
@@ -59,9 +60,9 @@ void AboutScreen::onRedraw(draw_mode_t) {
   ), OPT_CENTER, font_xxlarge);
 
   cmd.tag(3);
-
   draw_text_box(cmd, BTN_POS(1,6), BTN_SIZE(4,2), F(LULZBOT_M115_EXTRUDER_TYPE " Firmware"), OPT_CENTER, font_xlarge);
   draw_text_box(cmd, BTN_POS(1,8) - 15, BTN_SIZE(4,2), F("Marlin " SHORT_BUILD_VERSION ""), OPT_CENTERX, font_xlarge);
+  cmd.tag(0);
 
   #if ENABLED(SHOW_TOOL_HEAD_ID)
     draw_text_box(cmd, BTN_POS(1,10), BTN_SIZE(4,3), F("Tool Head:"), OPT_CENTERX, font_xlarge);
@@ -93,7 +94,7 @@ void AboutScreen::onRedraw(draw_mode_t) {
         draw_text_box(cmd, BTN_POS(1,TH_ROW), BTN_SIZE(4,2), F("MET175"), OPT_CENTERX, font_large);
         break;
       case 9:
-        draw_text_box(cmd, BTN_POS(1,14), BTN_SIZE(4,2), F("MET285"), OPT_CENTERX, font_large);
+        draw_text_box(cmd, BTN_POS(1,TH_ROW), BTN_SIZE(4,2), F("MET285"), OPT_CENTERX, font_large);
         break;
       case 10:
         draw_text_box(cmd, BTN_POS(1,TH_ROW), BTN_SIZE(4,2), F("AST285"), OPT_CENTERX, font_large);
@@ -110,21 +111,20 @@ void AboutScreen::onRedraw(draw_mode_t) {
     }
   #endif
 
-  draw_text_box(cmd, BTN_POS(1,21), BTN_SIZE(4,2), F("support@lulzbot.com"), OPT_CENTERX, font_xlarge);
-  draw_text_box(cmd, BTN_POS(1,23) - 15, BTN_SIZE(4,2), F("(701) 809-0800 x2"), OPT_CENTERX, font_xlarge);
-
   // Display the QR code for the Quick Start Guide
-  draw_text_box(cmd, BTN_POS(1,17), BTN_SIZE(4,2), F("            Manual:"), OPT_CENTERY, font_xlarge);
   cmd.cmd (BITMAP_SOURCE(Quickstart_QR_Info))
      .cmd (BITMAP_LAYOUT(Quickstart_QR_Info))
      .cmd (BITMAP_SIZE  (Quickstart_QR_Info))
-     .icon(250, 400, Quickstart_QR_Info.width*4, Quickstart_QR_Info.height*4, Quickstart_QR_Info, 4.0);
+     .icon(186, 365, Quickstart_QR_Info.width*4, Quickstart_QR_Info.height*4, Quickstart_QR_Info, 4.0);
+  draw_text_box(cmd, BTN_POS(1,19) -15, BTN_SIZE(4,2), F("Manual"), OPT_CENTER, font_xlarge);
+
+  draw_text_box(cmd, BTN_POS(1,21), BTN_SIZE(4,2), F("support@lulzbot.com"), OPT_CENTERX, font_xlarge);
+  draw_text_box(cmd, BTN_POS(1,23) - 15, BTN_SIZE(4,2), F("(701) 809-0800 x2"), OPT_CENTERX, font_xlarge);
 
   #undef GRID_ROWS
   #define GRID_ROWS 9
   cmd.font(font_medium).colors(normal_btn).tag(1).button(BTN_POS(1,8), BTN_SIZE(4,1), GET_TEXT_F(MSG_INFO_3D_PRINTER_STATS_MENU));
   cmd.font(font_medium).colors(action_btn).tag(2).button(BTN_POS(1,9), BTN_SIZE(4,1), GET_TEXT_F(MSG_BUTTON_DONE));
-
 }
 
 bool AboutScreen::onTouchEnd(uint8_t tag) {

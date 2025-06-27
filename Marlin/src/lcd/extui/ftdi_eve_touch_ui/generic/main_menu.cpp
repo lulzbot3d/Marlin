@@ -102,7 +102,7 @@ bool MainMenu::onTouchEnd(uint8_t tag) {
       #endif
       break;
     case 6:  GOTO_SCREEN(TemperatureScreen);                             break;
-    case 7: GOTO_SCREEN(TERN(HAS_MULTI_HOTEND, NozzleOffsetScreen, FilamentRunoutScreen));   break;
+    case 7:  GOTO_SCREEN(FilamentRunoutScreen);                          break;
     case 8:  GOTO_SCREEN(AdvancedSettingsMenu);                          break;
     #if HAS_LEVELING
       case 9:  GOTO_SCREEN(LevelingMenu);                                break;

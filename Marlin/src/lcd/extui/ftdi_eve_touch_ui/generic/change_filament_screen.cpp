@@ -264,7 +264,7 @@ void ChangeFilamentScreen::onRedraw(draw_mode_t what) {
        .text(GROUP_1_LABL_POS, F("PLA, PVA, PVB"))
        .text(GROUP_2_LABL_POS, F("TPU, Flexibles"))
        .text(GROUP_3_LABL_POS, F("ABS, PETg, ASA"))
-       .text(GROUP_4_LABL_POS, F("Nylon, PC"));
+       .text(GROUP_4_LABL_POS, F("Nylon, PC, PPS"));
 
     cmd.cmd(COLOR_RGB(t_ok ? bg_text_enabled : bg_text_disabled))
        .colors(normal_btn)

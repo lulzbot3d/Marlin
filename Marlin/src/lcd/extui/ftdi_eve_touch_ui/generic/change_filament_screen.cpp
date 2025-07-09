@@ -282,7 +282,7 @@ void ChangeFilamentScreen::onRedraw(draw_mode_t what) {
        else{
         cmd.colors(normal_btn)
            .font(font_medium)
-           .tag(17).colors(normal_btn).button(FILAMENT_SWAP_POS, GET_TEXT_F(MSG_FILAMENT_SWAP));
+           .tag(17).colors(normal_btn).enabled(t_ok).button(FILAMENT_SWAP_POS, F("Reposition Filament After Load"));
        }
   }
 }
@@ -360,7 +360,12 @@ bool ChangeFilamentScreen::onTouchEnd(uint8_t tag) {
       break;
     case 15: GOTO_SCREEN(TemperatureScreen); break;
     case 16: injectCommands(F("M117 Print Resumed")); resumePrint(); GOTO_SCREEN(StatusScreen); break;
-    case 17: injectCommands(F(PARKING_COMMAND_GCODE)); break;
+    case 17: 
+      // Retract 14 mm to match end of print retraction so print starts the same.
+      MoveAxisScreen::setManualFeedrate(getExtruder(), -14);
+      ExtUI::setAxisPosition_mm(ExtUI::getAxisPosition_mm(getExtruder()) - 14, getExtruder());
+      mydata.repeat_tag = 0;  //Turn off load and unload buttons
+      break;
   }
   return true;
 }

@@ -377,7 +377,7 @@ void StatusScreen::draw_interaction_buttons(draw_mode_t what) {
           draw_text_box(cmd, CHANGE_FILAMENT_POS, F("Change\nFilament"), OPT_CENTER, font_medium);
       cmd.colors(normal_btn)
           .font(font_medium)
-          .tag(20).button(PREHEAT_POS, GET_TEXT_F(MSG_PREHEAT));
+          .tag(20).button(PREHEAT_POS, F("Preheat & Park"));
       if(getToolHeadIdNumber() == 0){
           cmd.colors(cancel_btn);
       }
@@ -610,7 +610,7 @@ bool StatusScreen::onTouchEnd(uint8_t tag) {
       current_screen.forget();
       PUSH_SCREEN(StatusScreen);
       break;
-    case 20: injectCommands_P(PSTR(PREHEAT_1_COMMAND)); break;
+    case 20: injectCommands_P(PSTR(PREHEAT_1_COMMAND "\n" PARKING_COMMAND_GCODE)); break;
     default:
       return true;
   }

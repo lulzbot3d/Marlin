@@ -3560,7 +3560,8 @@
   #define NOZZLE_PARK_XY_FEEDRATE 100   // (mm/s) X and Y axes feedrate (also used for delta Z axis)
   #define NOZZLE_PARK_Z_FEEDRATE  Z_FEEDRATE   // (mm/s) Z axis feedrate (not used for delta printers)
   #define PARK_NOZZLE_MENU_OPTION       // Adds an option to park the nozzle under motion menu
-  #define PARKING_COMMAND_GCODE "G28O\nG0 X160 Y160 Z70 F5000"
+  //The purpose of going to x140 then x145 below is to make it wiggle if the park is pressed when already parked. Gives the user feedback that the park was pressed.
+  #define PARKING_COMMAND_GCODE "G28O\nG0 X140 Y145 Z70 F5000\nG0 X145"
 #endif
 
 /**

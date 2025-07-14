@@ -138,6 +138,7 @@ void ChangeFilamentScreen::onEntry() {
   #if FILAMENT_UNLOAD_PURGE_LENGTH > 0
     mydata.need_purge = true;
   #endif
+  mydata.allow_reposition = false;
 }
 
 void ChangeFilamentScreen::onExit() {
@@ -282,7 +283,7 @@ void ChangeFilamentScreen::onRedraw(draw_mode_t what) {
        else{
         cmd.colors(normal_btn)
            .font(font_medium)
-           .tag(17).colors(normal_btn).enabled(t_ok).button(FILAMENT_SWAP_POS, F("Reposition Filament After Load"));
+           .tag(17).colors(normal_btn).enabled(t_ok && mydata.allow_reposition).button(FILAMENT_SWAP_POS, F("Reposition Filament After Load"));
        }
   }
 }
@@ -341,15 +342,18 @@ bool ChangeFilamentScreen::onTouchEnd(uint8_t tag) {
       mydata.t_tag = tag;
       setTargetTemp_celsius(getSoftenTemp(), getExtruder());
       break;
-    case 7:
+    case 7:  //Unload
       mydata.repeat_tag = (mydata.repeat_tag == 7) ? 0 : 7;
+      mydata.allow_reposition = false;
       break;
-    case 8:
+    case 8:  //Load
       mydata.repeat_tag = (mydata.repeat_tag == 8) ? 0 : 8;
+      mydata.allow_reposition = true;  // Only allow reposition right after Load
       break;
     case 10:
     case 11:
       // Change extruder
+      mydata.allow_reposition = false;
       mydata.e_tag      = tag;
       mydata.t_tag      = 0;
       mydata.repeat_tag = 0;
@@ -360,12 +364,15 @@ bool ChangeFilamentScreen::onTouchEnd(uint8_t tag) {
       break;
     case 15: GOTO_SCREEN(TemperatureScreen); break;
     case 16: injectCommands(F("M117 Print Resumed")); resumePrint(); GOTO_SCREEN(StatusScreen); break;
-    case 17: 
-      // Retract 14 mm to match end of print retraction so print starts the same.
-      MoveAxisScreen::setManualFeedrate(getExtruder(), -14);
-      ExtUI::setAxisPosition_mm(ExtUI::getAxisPosition_mm(getExtruder()) - 14, getExtruder());
-      mydata.repeat_tag = 0;  //Turn off load and unload buttons
-      break;
+    case 17:
+      if(mydata.allow_reposition){
+        // Retract 14 mm to match end of print retraction so print starts the same.
+        MoveAxisScreen::setManualFeedrate(getExtruder(), -14);
+        ExtUI::setAxisPosition_mm(ExtUI::getAxisPosition_mm(getExtruder()) - 14, getExtruder());
+        mydata.repeat_tag = 0;  //Turn off load and unload buttons
+        mydata.allow_reposition = false;  // Repositioning is only allowed once after Load
+        break;
+      }
   }
   return true;
 }

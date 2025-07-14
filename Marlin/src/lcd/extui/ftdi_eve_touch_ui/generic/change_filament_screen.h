@@ -27,6 +27,7 @@
 
 struct ChangeFilamentScreenData {
   uint8_t e_tag, t_tag, repeat_tag;
+  bool allow_reposition;
   ExtUI::extruder_t saved_extruder;
   #if FILAMENT_UNLOAD_PURGE_LENGTH > 0
     bool need_purge;

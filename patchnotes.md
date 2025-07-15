@@ -2,6 +2,13 @@
 
 ## Current Version
 
+### 2.1.3.0.48
+- Added 14 mm retraction to cancel print button, to match retraction at the end of a normal print.
+- Changed Park button to Preheat & Park.
+- Added a new "Reposition Filament After Load" button to the Change Filament screen.
+- Changed default Z offset to -1.20 on everything.
+- Reduced X_MAX on TAZ8XT to prevent bumping right side and skipping the X motor.
+
 ### 2.1.3.0.47
 
 - New format About Printer screen that has a QR code that links to the online manual for TAZ 8 or TAZ Pro.

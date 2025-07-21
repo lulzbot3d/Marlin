@@ -139,6 +139,7 @@ void ChangeFilamentScreen::onEntry() {
     mydata.need_purge = true;
   #endif
   mydata.allow_reposition = false;
+  mydata.moved = 0;
 }
 
 void ChangeFilamentScreen::onExit() {
@@ -345,10 +346,12 @@ bool ChangeFilamentScreen::onTouchEnd(uint8_t tag) {
     case 7:  //Unload
       mydata.repeat_tag = (mydata.repeat_tag == 7) ? 0 : 7;
       mydata.allow_reposition = false;
+      mydata.moved = 0;
       break;
     case 8:  //Load
       mydata.repeat_tag = (mydata.repeat_tag == 8) ? 0 : 8;
       mydata.allow_reposition = true;  // Only allow reposition right after Load
+      mydata.moved = 0;
       break;
     case 10:
     case 11:
@@ -369,7 +372,7 @@ bool ChangeFilamentScreen::onTouchEnd(uint8_t tag) {
         // Retract 14 mm to match end of print retraction so print starts the same.
         MoveAxisScreen::setManualFeedrate(getExtruder(), -14);
         ExtUI::setAxisPosition_mm(ExtUI::getAxisPosition_mm(getExtruder()) - 14, getExtruder());
-        mydata.repeat_tag = 0;  //Turn off load and unload buttons
+        mydata.repeat_tag = 0;  // Turn off load and unload buttons
         mydata.allow_reposition = false;  // Repositioning is only allowed once after Load
         break;
       }
@@ -379,6 +382,10 @@ bool ChangeFilamentScreen::onTouchEnd(uint8_t tag) {
 
 bool ChangeFilamentScreen::onTouchHeld(uint8_t tag) {
   if (ExtUI::isMoving()) return false; // Don't allow moves to accumulate
+  if (++mydata.moved > 500) {  // Limit to 500 mm of movement on LOAD and UNLOAD buttons
+    mydata.repeat_tag = 0;     // Turn off load and unload
+    return false;
+  }
   constexpr float increment = 1;
   #define UI_INCREMENT_AXIS(axis) UI_INCREMENT(AxisPosition_mm, axis);
   #define UI_DECREMENT_AXIS(axis) UI_DECREMENT(AxisPosition_mm, axis);

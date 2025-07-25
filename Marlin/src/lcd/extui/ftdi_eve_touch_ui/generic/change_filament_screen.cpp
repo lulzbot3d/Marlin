@@ -370,10 +370,13 @@ bool ChangeFilamentScreen::onTouchEnd(uint8_t tag) {
     case 17:
       if(mydata.allow_reposition){
         // Retract 14 mm to match end of print retraction so print starts the same.
+        GOTO_SCREEN(StatusScreen);
+        ui.set_status_no_expire(F("Repositioning Filament..."));   //used set_status_no_expire because it displays immediately
         MoveAxisScreen::setManualFeedrate(getExtruder(), -14);
         ExtUI::setAxisPosition_mm(ExtUI::getAxisPosition_mm(getExtruder()) - 14, getExtruder());
-        mydata.repeat_tag = 0;  // Turn off load and unload buttons
-        mydata.allow_reposition = false;  // Repositioning is only allowed once after Load
+        mydata.repeat_tag = 0;                            // Turn off load and unload buttons
+        mydata.allow_reposition = false;                  // Repositioning is only allowed once after Load
+        injectCommands(F("M400\nM117 Ready to Print"));   // Used M400 and M117 here to make the message show after the move
         break;
       }
   }

@@ -138,8 +138,8 @@ void StatusScreen::draw_temperature(draw_mode_t what) {
   #define FAN_POS             BTN_POS(4,3),  BTN_SIZE(3,2)
   #define ALL_TEMP_POS        BTN_POS(1,1),  BTN_SIZE(6,4)
 
-  #define _ICON_POS(x,y,w,h) x, y, w/4, h               // I know this 3.8 should match the value below, but this aligns the icons better
-  #define _TEXT_POS(x,y,w,h) x + w/4, y, w - w/4, h   // Changed to 3.3 to widen the button so text won't shrink when temps go to three digits
+  #define _ICON_POS(x,y,w,h) x, y, w/4, h
+  #define _TEXT_POS(x,y,w,h) x + w/4, y, w - w/4, h
   #define ICON_POS(pos) _ICON_POS(pos)
   #define TEXT_POS(pos) _TEXT_POS(pos)
 

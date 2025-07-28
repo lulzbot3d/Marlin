@@ -40,13 +40,16 @@ void CustomUserMenus::onRedraw(draw_mode_t what) {
     CommandProcessor cmd;
     cmd.cmd(CLEAR_COLOR_RGB(Theme::bg_color))
        .cmd(CLEAR(true, true, true));
+    #if ANY(TAZ8, TAZ8XT)
+      draw_text_box(cmd, 15, 440, 450, 575, F("Warning: When switching between single and dual extruders, reposition the BLTouch to avoid damaging the probe pin."), 0, font_small);
+    #endif
   }
 
   #if ENABLED(TOUCH_UI_PORTRAIT)
     #if defined(TOOLHEAD_Legacy_Universal)
       #define GRID_ROWS 10
     #else
-      #define GRID_ROWS 7
+      #define GRID_ROWS 8
     #endif
     #define GRID_COLS 1
     #define TOOLHEAD_LABL_POS BTN_POS(1, 1), BTN_SIZE(GRID_COLS,1)

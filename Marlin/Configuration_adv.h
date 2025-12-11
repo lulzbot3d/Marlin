@@ -2627,14 +2627,8 @@
  */
 #if DISABLED(LULZBOT_BLTouch)
   #define G29_RETRY_AND_RECOVER
-#endif
-#if ENABLED(G29_RETRY_AND_RECOVER)
   #define G29_MAX_RETRIES 3
   #define G29_HALT_ON_FAILURE
-  /**
-   * Specify the GCODE commands that will be executed when leveling succeeds,
-   * between attempts, and after the maximum number of retries have been tried.
-   */
   #define G29_SUCCESS_COMMANDS ""
   #if ANY(MiniV2, MiniV3)
     #define G29_RECOVER_COMMANDS "M104 S170\nG28\nG0 Z5 F6000\nG0 X150 F9999\nG91\nM211 S0\nM400\nM906 Z600\nG0 Z-15 F500\nG0 Z5 F500\nM400\nG90\nM906 Z960\nM211 S1\nG28 Z0\nG28\nG12\nM109 R160\nM400\nM117 Probing bed"
@@ -2646,6 +2640,13 @@
     #define G29_RECOVER_COMMANDS "M104 S170 T0\nM104 S170 T1\nG0 Z5 F6000\nG0 X150 F9999\nG28 Z0\nG28\n" WIPE_SEQUENCE_COMMANDS "\nM109 R160\nM400\nM117 Probing bed"  //only wipe nozzle 1
   #endif
   #define G29_FAILURE_COMMANDS "M117 Bed leveling failed.\nG0 Z10\nG0 E0\nM300 P25 S880\nM300 P50 S0\nM300 P25 S880\nM300 P50 S0\nM300 P25 S880\nG4 S1"
+#else
+  #define G29_HALT_ON_FAILURE     // This doesn't seem to work without G29_RETRY_AND_RECOVER
+  #define G29_RETRY_AND_RECOVER
+  #define G29_MAX_RETRIES 3       // Actually let's retry     // But with BLTouch, if the probe is stuck, no point in retrying
+  #define G29_SUCCESS_COMMANDS "M117 Ready."
+  #define G29_RECOVER_COMMANDS "M117 Probe Fail. Retrying.\nG28\nM280 P0 S60\nM402\nM117 Probing Bed."   // Home, reset BLTouch, Stow probe
+  #define G29_FAILURE_COMMANDS "M117 Bed leveling failed.\nM300 P25 S880\nM300 P50 S0\nM300 P25 S880\nM300 P50 S0\nM300 P25 S880\nG4 S1"
 #endif
 
 // @section probes

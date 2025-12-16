@@ -561,7 +561,13 @@ void wait_for_confirmation(const bool is_reload/*=false*/, const int8_t max_beep
     // Wait for the user to press the button to re-heat the nozzle, then
     // re-heat the nozzle, re-show the continue prompt, restart idle timers, start over
     if (nozzle_timed_out) {
-      //ui.pause_show_message(PAUSE_MESSAGE_HEAT);
+
+      #if ENABLED(TOUCH_UI_FTDI_EVE)           // This may seem backawards, but we just want a
+        LCD_MESSAGE(MSG_HOTEND_IDLE_TIMEOUT);  // status message on the touch screen UI
+      #else
+        ui.pause_show_message(PAUSE_MESSAGE_HEAT);   // But on GLCD printers we want the full screen message.
+      #endif
+
       SERIAL_ECHO_MSG(_PMSG(STR_FILAMENT_CHANGE_HEAT));
 
       TERN_(HOST_PROMPT_SUPPORT, hostui.prompt_do(PROMPT_USER_CONTINUE, GET_TEXT_F(MSG_HEATER_TIMEOUT), GET_TEXT_F(MSG_REHEAT)));
@@ -576,7 +582,11 @@ void wait_for_confirmation(const bool is_reload/*=false*/, const int8_t max_beep
 
       TERN_(HOST_PROMPT_SUPPORT, hostui.prompt_do(PROMPT_INFO, GET_TEXT_F(MSG_REHEATING)));
 
-      LCD_MESSAGE(MSG_REHEATING);
+      #if ENABLED(TOUCH_UI_FTDI_EVE)  // This may seem backawards, but we just want a
+        LCD_MESSAGE(MSG_REHEATING);   // status message on the touch screen UI
+      #else
+        ui.pause_show_message(PAUSE_MESSAGE_HEATING);   // But on GLCD printers we want the full screen message.
+      #endif
 
       // Re-enable the heaters if they timed out
       HOTEND_LOOP() thermalManager.reset_hotend_idle_timer(e);

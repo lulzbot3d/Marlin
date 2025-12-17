@@ -34,6 +34,8 @@
   using namespace ExtUI;
 #endif
 
+#include "../../../lcd/marlinui.h"
+
 #if HAS_LEVELING
   #include "../../../module/planner.h"
   #include "../../../feature/bedlevel/bedlevel.h"
@@ -56,7 +58,11 @@ void GcodeSuite::G12() {
       if (thermalManager.degTargetHotend(0) < NOZZLE_CLEAN_MIN_TEMP) {
         thermalManager.setTargetHotend(NOZZLE_CLEAN_MIN_TEMP, 0);
         SERIAL_ECHOLNPGM("Nozzle too Cold - Heating");
-        ui.set_status(GET_TEXT_F(MSG_NOZZLE_TOO_COLD));
+        #if ENABLED(ADVANCED_PAUSE_FEATURE) && HAS_MARLINUI_MENU
+          ui.pause_show_message(PAUSE_MESSAGE_HEATING);
+        #else
+          ui.set_status(GET_TEXT_F(MSG_NOZZLE_TOO_COLD));
+        #endif
       }
       #if (HOTENDS == 2)
         if (thermalManager.degTargetHotend(1) < NOZZLE_CLEAN_MIN_TEMP) {
@@ -73,7 +79,11 @@ void GcodeSuite::G12() {
     KEEPALIVE_STATE(PAUSED_FOR_USER);
     wait_for_user = true;
     TERN_(EXTENSIBLE_UI, ExtUI::onUserConfirmRequired(GET_TEXT_F(MSG_CLEAN_NOZZLE)));
+    #if ENABLED(ADVANCED_PAUSE_FEATURE) && HAS_MARLINUI_MENU
+      ui.pause_show_message(PAUSE_MESSAGE_CLEAN_NOZZLE);
+    #endif
     while (wait_for_user) {idle_no_sleep();}
+    TERN_(HAS_MARLINUI_MENU, ui.return_to_status());
     process_subcommands_now(F(END_MANUAL_NOZZLE_CLEAN_COMMANDS));
   #else
     // Don't allow nozzle cleaning without homing first

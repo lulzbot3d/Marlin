@@ -290,7 +290,7 @@
   #define MACHINE_UUID "9e745ad7-7e18-445e-8788-703ee1e5f764"
   #define LULZBOT_BLTouch
   #define LULZBOT_FILAMENT_RUNOUT
-  //#define LULZBOT_MANUAL_NOZZLE_CLEAN -- doesn't work on GLCD yet.
+  #define LULZBOT_MANUAL_NOZZLE_CLEAN
 #endif
 
 #if ENABLED(LULZBOT_LONG_BED)

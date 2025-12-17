@@ -305,6 +305,7 @@ void lcd_pause_insert_message()   { _lcd_pause_message(GET_TEXT_F(MSG_FILAMENT_C
 void lcd_pause_load_message()     { _lcd_pause_message(GET_TEXT_F(MSG_FILAMENT_CHANGE_LOAD));    }
 void lcd_pause_waiting_message()  { _lcd_pause_message(GET_TEXT_F(MSG_ADVANCED_PAUSE_WAITING));  }
 void lcd_pause_resume_message()   { _lcd_pause_message(GET_TEXT_F(MSG_FILAMENT_CHANGE_RESUME));  }
+void lcd_pause_clean_message()    { _lcd_pause_message(GET_TEXT_F(MSG_CLEAN_NOZZLE)); }
 
 void lcd_pause_purge_message() {
   #if ENABLED(ADVANCED_PAUSE_CONTINUOUS_PURGE)
@@ -326,6 +327,7 @@ FORCE_INLINE screenFunc_t ap_message_screen(const PauseMessage message) {
     case PAUSE_MESSAGE_RESUME:   return lcd_pause_resume_message;
     case PAUSE_MESSAGE_HEAT:     return lcd_pause_heat_message;
     case PAUSE_MESSAGE_HEATING:  return lcd_pause_heating_message;
+    case PAUSE_MESSAGE_CLEAN_NOZZLE: return lcd_pause_clean_message;
     case PAUSE_MESSAGE_OPTION:   pause_menu_response = PAUSE_RESPONSE_WAIT_FOR;
                                  return menu_pause_option;
     case PAUSE_MESSAGE_STATUS:

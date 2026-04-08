@@ -2643,7 +2643,7 @@
 #else
   #define G29_HALT_ON_FAILURE     // This doesn't seem to work without G29_RETRY_AND_RECOVER
   #define G29_RETRY_AND_RECOVER
-  #define G29_MAX_RETRIES 3       // Actually let's retry     // But with BLTouch, if the probe is stuck, no point in retrying
+  #define G29_MAX_RETRIES 1       // With BLTouch, more than one retry is unlikely to help, if reset and re-homing doesn't work, the probe is probably stuck or bent.
   #define G29_SUCCESS_COMMANDS "M117 Ready."
   #define G29_RECOVER_COMMANDS "M117 Probe Fail. Retrying.\nG28\nM280 P0 S60\nM402\nM117 Probing Bed."   // Home, reset BLTouch, Stow probe
   #define G29_FAILURE_COMMANDS "M117 Bed leveling failed.\nM300 P25 S880\nM300 P50 S0\nM300 P25 S880\nM300 P50 S0\nM300 P25 S880\nG4 S1"

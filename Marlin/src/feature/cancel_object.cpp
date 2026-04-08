@@ -28,6 +28,10 @@
 #include "../gcode/gcode.h"
 #include "../lcd/marlinui.h"
 
+#if HAS_MARLINUI_MENU
+extern void menu_cancelobject();
+#endif
+
 CancelObject cancelable;
 
 int8_t CancelObject::object_count, // = 0
@@ -49,6 +53,11 @@ void CancelObject::set_active_object(const int8_t obj) {
       ui.set_status(MString<30>(GET_TEXT_F(MSG_PRINTING_OBJECT), ' ', active_object));
     else
       ui.reset_status();
+  #endif
+
+  #if HAS_MARLINUI_MENU
+    if (ui.currentScreen == menu_cancelobject)
+      ui.refresh();
   #endif
 }
 

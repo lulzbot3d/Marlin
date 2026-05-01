@@ -114,9 +114,9 @@ def get_git_modified():
             ["git", "status", "--porcelain"],
             stderr=subprocess.DEVNULL
         ).decode().strip()
-        return "modified" if status else ""
+        return "_modified" if status else ""
     except:
-        return "git_unknown"
+        return "_git_unknown"
 
 # --- Main hook -----------------------------------------------------------
 
@@ -128,7 +128,7 @@ def dump_config(source, target, env):
     fw_version = get_fw_version()
     git_modified = get_git_modified()
 
-    filename = f"Marlin_{env_name}_{fw_version}_{git_hash}_{git_modified}.config"
+    filename = f"Marlin_{env_name}_{fw_version}_{git_hash}{git_modified}.config"
     output_path = os.path.join(build_dir, filename)
 
     # This firmware directory should be the same as where lulzbot_rename.py copies the firmware builds to.

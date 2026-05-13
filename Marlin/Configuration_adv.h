@@ -3367,7 +3367,7 @@
   #if AXIS_IS_TMC_CONFIG(E1)
     #define E1_CURRENT      LULZBOT_MOTOR_CURRENT_E1
     #define E1_MICROSTEPS   E0_MICROSTEPS
-    #define E1_RSENSE         0.11
+    #define E1_RSENSE       LULZBOT_RSENSE
     #define E1_CHAIN_POS     -1
     //#define E1_INTERPOLATE true
     //#define E1_HOLD_MULTIPLIER 0.5

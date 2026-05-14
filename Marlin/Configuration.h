@@ -2726,14 +2726,14 @@
 #elif ENABLED(TAZ8)
   #if ENABLED(TOOLHEAD_Galaxy_DualExtruder)
     #if defined(LULZBOT_LONG_BED_V2)
-      #define X_BED_SIZE        280
+      #define X_BED_SIZE        290
       #define Y_BED_SIZE        570
-      #define LULZBOT_X_MAX_POS 318
-      #define LULZBOT_X_MIN_POS  -6
-      #define LULZBOT_Y_MAX_POS 613
-      #define LULZBOT_Y_MIN_POS -18.2
+      #define LULZBOT_X_MAX_POS 303
+      #define LULZBOT_X_MIN_POS  10
+      #define LULZBOT_Y_MAX_POS 612
+      #define LULZBOT_Y_MIN_POS -55
       #define LULZBOT_Z_MIN_POS  -9
-      #define LULZBOT_Z_MAX_POS 293
+      #define LULZBOT_Z_MAX_POS 283
     #else  // Normal Bed
       #define X_BED_SIZE        276
       #define Y_BED_SIZE        285

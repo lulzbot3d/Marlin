@@ -1839,7 +1839,7 @@
 #endif
 
 #if ANY(LULZBOT_LONG_BED, LULZBOT_LONG_BED_V2)
-  #define DEFAULT_MAX_FEEDRATE          { 500, 125, Z_FEEDRATE, 40 }
+  #define DEFAULT_MAX_FEEDRATE          { 500, 90, Z_FEEDRATE, 40 }
 #else
   #define DEFAULT_MAX_FEEDRATE          { 500, 500, Z_FEEDRATE, 40 }
 #endif

@@ -126,6 +126,18 @@ def get_git_modified():
     except:
         return "_git_unknown"
 
+def get_build_flags():
+    flags = []
+
+    # Compiler flags
+    flags += env.subst("$CCFLAGS").split()
+    flags += env.subst("$CXXFLAGS").split()
+
+    # Preprocessor defines
+    flags += format_defines_list(env.get("CPPDEFINES", []))
+
+    return flags
+
 # --- Main hook -----------------------------------------------------------
 
 def dump_config(source, target, env):
@@ -147,7 +159,16 @@ def dump_config(source, target, env):
 
     all_lines = []
 
-    all_lines.append("/* Configuration.h */")
+    all_lines.append(f"PIOENV: {env_name}")
+    all_lines.append(f"Git: {git_hash}{git_modified}")
+    all_lines.append(f"Firmware: {fw_version}")
+
+    all_lines.append("\n/* PlatformIO Build Flags */")
+
+    for flag in get_build_flags():
+        all_lines.append(flag)
+
+    all_lines.append("\n/* Configuration.h */")
     all_lines += preprocess_config(config_h)
 
     all_lines.append("\n/* Configuration_adv.h */")

@@ -11,7 +11,7 @@
 
 import os
 import subprocess
-import shutil 
+import tempfile
 from datetime import datetime
 
 Import("env")
@@ -58,55 +58,63 @@ def format_defines_list(defines):
     return result
 
 def preprocess_config(header):
-    build_dir = env.subst("$BUILD_DIR")
-    temp_cpp = os.path.join(build_dir, "macros.cpp")
-    temp_out = os.path.join(build_dir, "preprocessed.h")
+    with tempfile.TemporaryDirectory(prefix="marlin_cfg_") as tmpdir:
 
-    with open(temp_cpp, "w", encoding="utf-8") as f:
-        f.write('#include "../../../Marlin/src/inc/MarlinConfig.h"\n')
-        with open(header, "r", encoding="utf-8", errors="ignore") as h:
-            f.write(h.read())
+        temp_cpp = os.path.join(tmpdir, "macros.cpp")
+        temp_out = os.path.join(tmpdir, "preprocessed.h")
 
-    with open(temp_cpp, "r", encoding="utf-8", errors="ignore") as f:
-        content = f.read()
+        with open(temp_cpp, "w", encoding="utf-8") as f:
+            marlin_config = os.path.join(env["PROJECT_DIR"], "Marlin", "src", "inc", "MarlinConfig.h")
+            f.write(f'#include "{marlin_config}"\n')
+            with open(header, "r", encoding="utf-8", errors="ignore") as h:
+                f.write(h.read())
 
-    content = content.replace("#ifndef CONFIGURATION_H", "#ifndef FOO")
-    content = content.replace("#ifndef CONFIGURATION_ADV_H", "#ifndef FOO")
+        with open(temp_cpp, "r", encoding="utf-8", errors="ignore") as f:
+            content = f.read()
 
-    import re
-    content = re.sub(r'^\s*#pragma once.*$', '', content, flags=re.MULTILINE)
-    content = re.sub(r"#define\s+(\w+)", r"pound_defined_\1", content)
+        content = content.replace("#ifndef CONFIGURATION_H", "#ifndef FOO")
+        content = content.replace("#ifndef CONFIGURATION_ADV_H", "#ifndef FOO")
 
-    with open(temp_cpp, "w", encoding="utf-8") as f:
-        f.write(content)
+        import re
+        content = re.sub(r'^\s*#pragma once.*$', '', content, flags=re.MULTILINE)
+        content = re.sub(r"#define\s+(\w+)", r"pound_defined_\1", content)
 
-    # Run preprocessor
-    cmd = [
-        env.subst("$CXX"),
-        *env.subst("$CCFLAGS").split(),
-        *env.subst("$CXXFLAGS").split(),
-        *format_defines_list(env.get("CPPDEFINES", [])),
-        *[f'-I{env.subst(p)}' for p in env.get("CPPPATH", [])],
-        "-E",
-        temp_cpp,
-        "-o",
-        temp_out
-    ]
+        with open(temp_cpp, "w", encoding="utf-8") as f:
+            f.write(content)
 
-    result = subprocess.run(cmd)
-    if result.returncode != 0:
-        raise RuntimeError("Preprocessing failed")
+        # Run preprocessor
+        cmd = [
+            env.subst("$CXX"),
+            *env.subst("$CCFLAGS").split(),
+            *env.subst("$CXXFLAGS").split(),
+            *format_defines_list(env.get("CPPDEFINES", [])),
+            *[f'-I{env.subst(p)}' for p in env.get("CPPPATH", [])],
+            "-E",
+            temp_cpp,
+            "-o",
+            temp_out
+        ]
 
-    # Extract defines
-    defines = []
-    with open(temp_out, "r", encoding="utf-8", errors="ignore") as f:
-        for line in f:
-            if "pound_defined_" in line:
-                line = line.strip()
-                line = re.sub(r"\s*pound_defined_(\w+)", r"#define \1", line)
-                defines.append(line)
+        result = subprocess.run(
+            cmd,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            check=True
+        )
 
-    return defines
+        if result.returncode != 0:
+            raise RuntimeError("Preprocessing failed")
+
+        # Extract defines
+        defines = []
+        with open(temp_out, "r", encoding="utf-8", errors="ignore") as f:
+            for line in f:
+                if "pound_defined_" in line:
+                    line = line.strip()
+                    line = re.sub(r"\s*pound_defined_(\w+)", r"#define \1", line)
+                    defines.append(line)
+
+        return defines
 
 def get_git_modified():
     try:
@@ -121,7 +129,6 @@ def get_git_modified():
 # --- Main hook -----------------------------------------------------------
 
 def dump_config(source, target, env):
-    build_dir = env.subst("$BUILD_DIR")
     env_name = env.subst("$PIOENV")
 
     git_hash = get_git_hash()
@@ -129,11 +136,11 @@ def dump_config(source, target, env):
     git_modified = get_git_modified()
 
     filename = f"Marlin_{env_name}_{fw_version}_{git_hash}{git_modified}.config"
-    output_path = os.path.join(build_dir, filename)
 
     # This firmware directory should be the same as where lulzbot_rename.py copies the firmware builds to.
     firmware_backup_dir = os.path.join(env["PROJECT_DIR"], "firmware_builds")
-    firmware_backup_file = os.path.join(firmware_backup_dir, filename)
+    os.makedirs(firmware_backup_dir, exist_ok=True)
+    output_path = os.path.join(firmware_backup_dir, filename)
 
     config_h = env.subst("$PROJECT_DIR/Marlin/Configuration.h")
     config_adv = env.subst("$PROJECT_DIR/Marlin/Configuration_adv.h")
@@ -150,13 +157,6 @@ def dump_config(source, target, env):
         f.write("\n".join(all_lines))
 
     print(f"Config snapshot written to: {output_path}")
-
-    # Ensure the firmware backup folder exists
-    os.makedirs(firmware_backup_dir, exist_ok=True)
-
-    # Copy config snapshot to firmware backup folder
-    shutil.copy(output_path, firmware_backup_file)
-    print(f"Config snapshot copied to: {firmware_backup_file}")
 
 # Run after build
 env.AddPostAction("buildprog", dump_config)

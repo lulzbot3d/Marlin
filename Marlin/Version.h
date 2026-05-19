@@ -34,7 +34,7 @@
  * Verbose version identifier which should contain a reference to the location
  * from where the binary was downloaded or the source code was compiled.
  */
-#define DETAILED_BUILD_VERSION " FIRMWARE_VERSION:" LULZBOT_FW_VERSION " EXTRUDER_TYPE:" LULZBOT_M115_EXTRUDER_TYPE " PROBE_TYPE:" LULZBOT_PROBE_TYPE "BED_TYPE:" LULZBOT_BED_TYPE
+#define DETAILED_BUILD_VERSION " FIRMWARE_VERSION:" LULZBOT_FW_VERSION " EXTRUDER_TYPE:" LULZBOT_M115_EXTRUDER_TYPE " PROBE_TYPE:" LULZBOT_PROBE_TYPE " BED_TYPE:" LULZBOT_BED_TYPE
 
 /**
  * The STRING_DISTRIBUTION_DATE represents when the binary file was built,

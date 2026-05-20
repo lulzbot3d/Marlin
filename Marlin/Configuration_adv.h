@@ -1501,9 +1501,17 @@
       #define CALIBRATION_MEASURE_BACK
     #elif ANY(TAZ8, TAZ8XT)
       #if ENABLED(TOOLHEAD_Galaxy_DualExtruder)
-        #define CALIBRATION_OBJECT_CENTER     {144, 302, -1.0} //  mm
-        #define CALIBRATION_OBJECT_DIMENSIONS {10.0, 5.0, 6.0} //  mm
-        #define CALIBRATION_MEASURE_FRONT
+        #if ENABLED(LULZBOT_LONG_BED_V2)
+          // NOTE: This is for the right front cal cube position.  The Galaxy Dual on LBv2 can't reach the back center position.
+          //       Move or mount a second cube in this position or calibrate manually.
+          #define CALIBRATION_OBJECT_CENTER     {267,  -10, 5.0} //  mm
+          #define CALIBRATION_OBJECT_DIMENSIONS {10.0, 5.0, 6.0} //  mm
+          #define CALIBRATION_MEASURE_FRONT
+        #else  // normal bed
+          #define CALIBRATION_OBJECT_CENTER     {144, 302, -1.0} //  mm
+          #define CALIBRATION_OBJECT_DIMENSIONS {10.0, 5.0, 6.0} //  mm
+          #define CALIBRATION_MEASURE_FRONT
+        #endif
       #elif ENABLED(LULZBOT_LONG_BED_V2)  // with Galaxy Single Extruder
         #define CALIBRATION_OBJECT_CENTER     {147, 601, 3.0} //  mm
         #define CALIBRATION_OBJECT_DIMENSIONS {10.0, 5.0, 10.0} //  mm

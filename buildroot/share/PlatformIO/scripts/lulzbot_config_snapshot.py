@@ -16,6 +16,11 @@ from datetime import datetime
 
 Import("env")
 
+if env.IsIntegrationDump():
+   # stop the current script execution
+   # see: https://docs.platformio.org/en/latest/scripting/launch_types.html
+   Return()
+
 # --- Helpers -------------------------------------------------------------
 
 def get_git_hash():
